@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <script>
+      (function () {
+        const storedTheme = localStorage.getItem("theme");
+        if (storedTheme === "dark") {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+
+    <meta charset="UTF-8" />
+    <title>Pierre-Louis &ndash; Web Dev</title>
+    <meta name="author" content="Pierre-Louis" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      name="description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      property="og:description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+    <meta property="og:url" content="https://thu-le.com/" />
+    <meta property="og:image" content="assets/social-media-preview.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta name="twitter:creator" content="@_tple" />
+    <meta name="twitter:site" content="@_tple" />
+    <meta
+      name="twitter:description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+    <meta name="twitter:image" content="assets/social-media-preview.png" />
+
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link rel="apple-touch-icon" href="assets/apple-icon.png" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz@0,6..72;1,6..72&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <nav class="sticky-nav">
+      <div class="menu-container">
+        <div class="nav-left">
+          <a class="home-button" href="/">Pierre-Louis</a>
+          <div class="nav-links"></div>
+        </div>
+        <div class="nav-right">
+          <div class="theme-switcher-container">
+            <button
+              title="Toggle theme"
+              id="theme-switcher"
+              onclick="toggleTheme(); clicky.log('#theme-switcher', 'Theme switched', 'click');"
+            >
+              <ion-icon alt="Theme switcher icon" name="moon"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <header>
+      <div class="homepage-header">
+        <div class="avatar-container">
+          <img
+            class="avatar"
+            src="assets/avatar.png"
+            alt="Avatar"
+            title="That's me"
+          />
+        </div>
+        <h1 class="homepage">
+          Web Designer crafting
+          <span class="header-em italic">pleasingly ingeneous</span>
+          and
+          <span class="header-em italic">simple</span> experiences.
+        </h1>
+        <p>
+          I'm currently studying engineering at
+          <a href="https://www.ec-lyon.fr/" target="_blank">Centrale Lyon</a
+          ><br />and designing websites by passion in my free time.
+        </p>
+        <p class="links">
+          <a
+            class="inline-icon"
+            href="https://www.linkedin.com/in/pierrelouis-cmrt/"
+            target="_blank"
+            >Linkedin<svg
+              stroke="currentColor"
+              fill="none"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              class="ml-1 text-sm text-neutral-500"
+              height="0.8em"
+              width="0.8em"
+              style="margin-left: 0.2em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"
+              ></path></svg
+          ></a>
+          <a
+            class="inline-icon"
+            href="https://github.com/ProjectAdonis"
+            target="_blank"
+            >GitHub<svg
+              stroke="currentColor"
+              fill="none"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              class="ml-1 text-sm text-neutral-500"
+              height="0.8em"
+              width="0.8em"
+              style="margin-left: 0.2em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"
+              ></path></svg
+          ></a>
+          <a
+            class="inline-icon"
+            href="https://www.instagram.com/pierre_louis.cmrt/"
+            target="_blank"
+            >Instagram<svg
+              stroke="currentColor"
+              fill="none"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              class="ml-1 text-sm text-neutral-500"
+              height="0.8em"
+              width="0.8em"
+              style="margin-left: 0.2em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"
+              ></path></svg
+          ></a>
+        </p>
+      </div>
+    </header>
+    <main>
+      <section id="work">
+        <h2 class="section-title italic">Featured Projects</h2>
+        <div class="project-block">
+          <a title="View project" class="project-item" href="" target="_blank">
+            <div class="project-item-box">
+              <h4 class="project-title">
+                Project Adonis<ion-icon
+                  alt="Arrow icon"
+                  name="arrow-forward-outline"
+                ></ion-icon>
+              </h4>
+              <p class="project-description">
+                My old portfolio, now used to showcase all the personal projects
+                I have worked on.
+              </p>
+            </div>
+          </a>
+          <a title="View project" class="project-item" href="" target="_blank">
+            <div class="project-item-box">
+              <h4 class="project-title">
+                Ada Tech<ion-icon
+                  alt="Arrow icon"
+                  name="arrow-forward-outline"
+                ></ion-icon>
+              </h4>
+              <p class="project-description">
+                I designed and developed the Ada Tech website, which connects
+                our Discord community for tech support, PC building advice, and
+                IT discussions.
+              </p>
+            </div>
+          </a>
+          <a title="View project" class="project-item" href="" target="_blank">
+            <div class="project-item-box">
+              <h4 class="project-title">
+                Zeirea Hosting's style tile<ion-icon
+                  alt="Arrow icon"
+                  name="arrow-forward-outline"
+                ></ion-icon>
+              </h4>
+              <p class="project-description">
+                I designed and developed the Zeirea Hosting dashboard, which
+                helps users to manage their servers.
+              </p>
+            </div>
+          </a>
+        </div>
+      </section>
+      <section id="blog">
+        <h2 class="section-title italic">Blog</h2>
+        <p>
+          <a
+            class="inline-icon"
+            href="https://medium.com/@pierrelouis-cmrt/ia-militaire-lhumanisme-face-aux-d%C3%A9cisions-l%C3%A9tales-automatis%C3%A9es-28d6a74bf1ee"
+            target="_blank"
+            rel="noopener"
+            >IA militaire : l'humanisme face aux décisions létales
+            automatisées<ion-icon
+              alt="Open icon"
+              name="open-outline"
+            ></ion-icon>
+          </a>
+        </p>
+      </section>
+    </main>
+    <footer>
+      <p class="links">
+        <span class="tooltip-container">
+          <a class="email inline-icon" href="javascript:void(0);">
+            <span class="email-text">Email</span>
+            <ion-icon alt="Copy icon" name="copy-outline"></ion-icon>
+          </a>
+          <span class="tooltip"
+            >Copy <i style="opacity: 0.75">me@pierrelouis.net</i></span
+          >
+        </span>
+
+        <a
+          class="inline-icon"
+          rel="noopener"
+          href="https://posts.cv/tple"
+          target="_blank"
+          >Medium</a
+        >
+
+        <a
+          class="inline-icon"
+          rel="noopener"
+          href="https://www.babelio.com/monprofil.php?id_user=1814190"
+          target="_blank"
+          >Babelio</a
+        >
+
+        <a
+          class="inline-icon"
+          rel="noopener"
+          href="https://letterboxd.com/Pierre_Louis/"
+          target="_blank"
+          >LetterBoxd</a
+        >
+
+        <a
+          class="inline-icon"
+          rel="noopener"
+          href="https://www.last.fm/user/pierrelouis-c"
+          target="_blank"
+          >LastFM</a
+        >
+      </p>
+      <div class="footer-container">
+        <p class="footer-text-left">
+          Pierre-Louis <span class="subtle">&#183;</span> Designed
+          <span class="subtle">by</span>
+          <a href="https://thu-le.com/">Thu Le</a>
+          <span class="subtle">&#183;</span> Modified by Pierre-Louis
+        </p>
+        <p class="footer-text-right">Updated Aug 27, 2024</p>
+      </div>
+    </footer>
+    <script src="js/theme-switcher.js" defer></script>
+    <script src="js/copy-email.js" defer></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>
