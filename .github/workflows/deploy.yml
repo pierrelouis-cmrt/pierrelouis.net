@@ -15,8 +15,8 @@ jobs:
 
       - name: Append Last.fm API key to PHP file
         run: |
-          # Use sed to replace the API key placeholder in the /src/nowplaying.php file
-          sed -i "s/\$api_key = '';/\$api_key = '${{ secrets.LASTFM_API_KEY }}';/" /src/nowplaying.php
+          # Use sed to replace the API key placeholder in the src/nowplaying.php file
+          sed -i "s/\$api_key = '';/\$api_key = '${{ secrets.LASTFM_API_KEY }}';/" src/nowplaying.php
 
           # Check if any changes were made
           git diff --exit-code || exit 0
@@ -25,10 +25,6 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add /src/nowplaying.php
+          git add src/nowplaying.php
           git commit -m "Appended Last.fm API key from secrets" || echo "No changes to commit"
           git push || echo "No changes to push"
-
-      - name: Deploy to Hostinger via Webhook
-        run: |
-          curl -X POST 'https://example.com/hooks/deploy?key=abc123'  # Replace with your Hostinger webhook URL
