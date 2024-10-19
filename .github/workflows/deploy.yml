@@ -15,7 +15,7 @@ jobs:
 
       - name: Append Last.fm API key to PHP file
         run: |
-          sed -i "s/\$api_key = '';/\$api_key = '${{ secrets.LASTFM_API_KEY }}';/" nowplaying.php
+          sed -i "s/\$api_key = '';/\$api_key = '${{ secrets.LASTFM_API_KEY }}';/" src/nowplaying.php
 
       - name: Commit changes to GitHub
         run: |
