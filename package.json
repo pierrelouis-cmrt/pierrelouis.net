@@ -1,0 +1,23 @@
+{
+  "name": "pierrelouis.net",
+  "version": "1.0.0",
+  "description": "[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build.js",
+    "serve": "npx http-server ./public -o",
+    "build:serve": "npm run build && npm run serve"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "fs-extra": "^11.2.0"
+  },
+  "devdependencies": {},
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

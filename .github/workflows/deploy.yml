@@ -1,0 +1,41 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - production # Déclencher le déploiement uniquement sur la branche production
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Inject Last.fm API key into PHP file
+        run: |
+          echo "<?php
+          header('Content-Type: application/json');
+          \$api_key = '${{ secrets.LASTFM_API_KEY }}'; // Clé API injectée via GitHub Secrets
+          \$user = 'pierrelouis-c'; // Remplace par ton nom d'utilisateur Last.fm
+
+          \$url = 'http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=' . \$user . '&api_key=' . \$api_key . '&format=json';
+
+          \$response = file_get_contents(\$url);
+
+          if (\$response === FALSE) {
+              http_response_code(500);
+              echo json_encode(array('error' => 'Failed to fetch data from Last.fm'));
+          } else {
+              echo \$response;
+          }
+          ?>" > /nowplaying.php
+
+      - name: Push changes to GitHub
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add path_to_your_project/nowplaying.php
+          git commit -m "Updated nowplaying.php with Last.fm API key"
+          git push
