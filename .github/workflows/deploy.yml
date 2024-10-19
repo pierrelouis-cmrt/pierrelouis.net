@@ -3,7 +3,7 @@ name: Deploy to Hostinger
 on:
   push:
     branches:
-      - production # Trigger on the production branch
+      - main
 
 jobs:
   deploy:
