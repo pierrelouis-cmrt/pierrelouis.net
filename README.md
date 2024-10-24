@@ -12,6 +12,6 @@ MIT License
 Designed by Thu Le, modified by Pierre-Louis
 
 ## Last Update
-August 27, 2024
+October 24, 2024
 
 Feel free to open an issue or submit a pull request if you'd like to contribute!
