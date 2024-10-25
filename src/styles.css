@@ -746,7 +746,7 @@ hr.divider {
   }
 
   .cover {
-    transform: translateY(4px);
+    transform: translateY(2px);
   }
 
   .info {
