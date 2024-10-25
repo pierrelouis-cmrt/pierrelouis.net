@@ -20,6 +20,7 @@
   --avatar: rgba(255, 255, 255, 0.15);
   --stroke: #404040;
   --stroke-secondary: #aeaeae;
+  --stroke-lighter: #d9d9d9;
 }
 
 .dark {
@@ -32,8 +33,9 @@
   --secondary: #8a8a8a;
   --caption-metadata: #c7c7c7;
   --avatar: rgba(0, 0, 0, 0.15);
-  --stroke: #f2f2f2;
-  --stroke-secondary: #8a8a8a;
+  --stroke: #dcdcdc;
+  --stroke-secondary: #646464;
+  --stroke-lighter: #858585;
 }
 
 body {
@@ -677,12 +679,16 @@ hr.divider {
 }
 
 .title {
-  color: var(--stroke);
+  color: var(--stroke) !important;
   font-size: 16px;
   font-weight: 600;
   margin: 0;
   overflow: hidden;
   transition: color 120ms ease-in-out;
+}
+
+.title a {
+  color: var(--stroke);
 }
 
 .artist {
@@ -703,7 +709,7 @@ hr.divider {
   align-items: center;
   padding: 3px 15px;
   border-radius: 25px;
-  border: 2px solid var(--stroke-secondary);
+  border: 2px solid var(--stroke-lighter);
   background: var(--background);
   height: auto;
   line-height: normal;
@@ -771,7 +777,6 @@ hr.divider {
   .music {
     font-size: small;
     padding: 2px 8px;
-    top: -12px;
   }
 
   .music p {
@@ -782,47 +787,33 @@ hr.divider {
 .equalizer {
   display: flex;
   align-items: flex-end;
-  gap: 1.5px;
+  gap: 2px;
   width: 25px;
-  height: 30px;
-  transition: transform 120ms ease-in-out;
+  height: 20px;
 }
 
 .bar {
   width: 2px;
   background-color: var(--stroke-secondary);
-  animation: smooth-bounce 1.8s infinite ease-in-out;
+  animation: smooth-bounce 1s infinite ease-in-out;
 }
 
-.bar:nth-child(1) {
-  animation-delay: -0.2s;
-}
-.bar:nth-child(2) {
-  animation-delay: -2.3s;
-}
-.bar:nth-child(3) {
-  animation-delay: -1.3s;
-}
-.bar:nth-child(4) {
-  animation-delay: -0.1s;
-}
-.bar:nth-child(5) {
-  animation-delay: -0.5s;
-}
-
+/* Keyframes are set up as placeholders, with random heights being injected by JavaScript */
 @keyframes smooth-bounce {
-  0%,
-  100% {
+  0% {
     height: 20%;
   }
   25% {
-    height: 70%;
+    height: 40%;
   }
   50% {
-    height: 30%;
+    height: 60%;
   }
   75% {
-    height: 60%;
+    height: 40%;
+  }
+  100% {
+    height: 20%;
   }
 }
 

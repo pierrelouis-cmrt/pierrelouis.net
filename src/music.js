@@ -74,3 +74,48 @@ getCurrentlyPlayingTrack();
 
 // Set up the interval to refresh every refreshInterval milliseconds
 setInterval(getCurrentlyPlayingTrack, refreshInterval);
+
+//----------------------------------------------------
+
+function randomizeBars() {
+  document.querySelectorAll(".bar").forEach((bar) => {
+    // Generate random heights for keyframes
+    const randomHeights = Array.from(
+      { length: 4 },
+      () => Math.random() * 80 + 20
+    ); // Between 20% and 100%
+
+    // Apply a unique animation to each bar with random timings
+    const randomDuration = (Math.random() * 0.5 + 0.8).toFixed(2); // Random duration between 0.8s and 1.3s
+    const randomDelay = (Math.random() * -1).toFixed(2); // Random delay up to -1s
+
+    // Set custom keyframes using inline CSS for each bar
+    bar.style.animationDuration = `${randomDuration}s`;
+    bar.style.animationDelay = `${randomDelay}s`;
+
+    // Inject unique keyframes for each bar to vary the animation heights
+    const keyframes = `
+      @keyframes custom-bounce-${bar.dataset.index} {
+        0% { height: ${randomHeights[0]}%; }
+        25% { height: ${randomHeights[1]}%; }
+        50% { height: ${randomHeights[2]}%; }
+        75% { height: ${randomHeights[3]}%; }
+        100% { height: ${randomHeights[0]}%; }
+      }
+    `;
+    const styleSheet = document.createElement("style");
+    styleSheet.type = "text/css";
+    styleSheet.innerText = keyframes;
+    document.head.appendChild(styleSheet);
+
+    // Apply the newly created keyframes to each bar
+    bar.style.animationName = `custom-bounce-${bar.dataset.index}`;
+  });
+}
+
+// Assign unique data-index for each bar and randomize animations
+document.querySelectorAll(".bar").forEach((bar, index) => {
+  bar.dataset.index = index;
+});
+
+randomizeBars();
