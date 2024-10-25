@@ -795,25 +795,58 @@ hr.divider {
 .bar {
   width: 2px;
   background-color: var(--stroke-secondary);
-  animation: smooth-bounce 1s infinite ease-in-out;
+  transition: height 0.15s ease-in-out;
 }
 
-/* Keyframes are set up as placeholders, with random heights being injected by JavaScript */
-@keyframes smooth-bounce {
+.bar:nth-child(4n + 1) {
+  animation: equaliser-wave 2s 1s ease-out alternate infinite;
+}
+
+.bar:nth-child(4n + 2) {
+  animation: equaliser-wave 2s 0.5s ease-out alternate infinite;
+}
+
+.bar:nth-child(4n + 3) {
+  animation: equaliser-wave 2s 1.5s ease-out alternate infinite;
+}
+
+.bar:nth-child(4n + 4) {
+  animation: equaliser-wave 2s 0.25s ease-out alternate infinite;
+}
+
+@keyframes equaliser-wave {
   0% {
+    height: 10%;
+  }
+  10% {
+    height: 30%;
+  }
+  20% {
+    height: 50%;
+  }
+  30% {
     height: 20%;
   }
-  25% {
-    height: 40%;
+  40% {
+    height: 70%;
   }
   50% {
-    height: 60%;
+    height: 90%;
   }
-  75% {
-    height: 40%;
+  60% {
+    height: 30%;
+  }
+  70% {
+    height: 80%;
+  }
+  80% {
+    height: 50%;
+  }
+  90% {
+    height: 30%;
   }
   100% {
-    height: 20%;
+    height: 10%;
   }
 }
 
