@@ -7,5 +7,4 @@
     "build": "npx tailwindcss -i ./src/styles.css -o ./src/output.css",
     "dev": "npx tailwindcss -i ./src/styles.css -o ./src/output.css --watch"
   }
-
 }

@@ -18,8 +18,10 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install dependencies and set permissions
+        run: |
+          npm install
+          chmod +x ./node_modules/.bin/tailwindcss
 
       - name: Build Tailwind CSS
         run: npx tailwindcss -i ./src/styles.css -o ./src/output.css
