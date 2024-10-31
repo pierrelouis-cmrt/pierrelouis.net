@@ -30,6 +30,6 @@ jobs:
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
-          git add -f src/output.css
+          git add src/output.css
           git commit -m 'Build Tailwind output.css'
           git push
