@@ -919,7 +919,7 @@ a.email:hover {
   fill: var(--brand-color);
   stroke: var(--brand-color);
   opacity: 1;
-  z-index: 99;
+  z-index: 10;
 }
 
 .username {

@@ -7,6 +7,7 @@ module.exports = {
     "./now/*.html",
     "./colophon/*.html",
     "./uses/*.html",
+    "./projects/*.html",
   ],
   theme: {
     extend: {},
