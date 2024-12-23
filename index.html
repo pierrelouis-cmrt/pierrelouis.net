@@ -142,7 +142,7 @@
                   x-transition:leave="ease-in duration-300"
                   x-transition:leave-start="opacity-100"
                   x-transition:leave-end="opacity-0"
-                  class="absolute inset-0 w-full h-full bg-[rgba(0,0,0,0.6)]"
+                  class="absolute inset-0 w-full h-full bg-[rgba(0,0,0,0.4)] backdrop-blur-sm"
                 ></div>
                 <div
                   x-show="commandOpen"
@@ -167,21 +167,18 @@
               title: 'About me (Who am I?)',
               value: 'about',
               icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-user w-4 h-4 mr-2\'><path d=\'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2\'/><circle cx=\'12\' cy=\'7\' r=\'4\'/></svg>',
-              right: 'A',
               default: true,
           },
           {
               title: 'My Projects (What have I been working on?)',
               value: 'projects',
               icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-user w-4 h-4 mr-2\'><path d=\'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2\'/><circle cx=\'12\' cy=\'7\' r=\'4\'/></svg>',
-              right: 'A',
               default: true,
           },
           {
               title: 'Now (What am I upto at the moment?)',
               value: 'now',
               icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-hourglass w-4 h-4 mr-2\'><path d=\'M5 22h14\'/><path d=\'M5 2h14\'/><path d=\'M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22\'/><path d=\'M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2\'/></svg>',
-              right: 'N',
               default: true,
           },
           {
@@ -210,7 +207,7 @@
               title: 'Send me an email',
               value: 'email',
               icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-at-sign w-4 h-4 mr-2\'><circle cx=\'12\' cy=\'12\' r=\'4\'/><path d=\'M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8\'/></svg>',
-              right: 'E',
+              right: 'S',
               default: true,
           },
       ],
@@ -339,9 +336,22 @@
                     x-transition:leave="transition ease-in duration-200"
                     x-transition:leave-start="translate-y-0 opacity-100 sm:scale-100"
                     x-transition:leave-end="translate-y-full sm:translate-y-4 opacity-0 sm:scale-95"
-                    class="fixed sm:relative bottom-0 sm:bottom-auto box-border border-2 border-b-0 sm:border-2 border-[var(--stroke-secondary)] flex flex-col w-full h-[70vh] sm:h-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--background)] rounded-t-[25px] sm:rounded-[25px] shadow-md drop-shadow-md backdrop-blur-sm"
+                    class="fixed bottom-0 left-1/2 -translate-x-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--stroke-secondary)] flex flex-col w-full h-[70vh] sm:h-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--background)] rounded-t-[25px] sm:rounded-[25px] shadow-md drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:-translate-x-0 overflow-visible transform z-[9999]"
                     @click.stop
                   >
+                    <div
+                      x-show="commandOpen"
+                      x-transition:enter="transition ease-out duration-300"
+                      x-transition:enter-start="opacity-0 -translate-y-2"
+                      x-transition:enter-end="opacity-100 translate-y-0"
+                      x-transition:leave="transition ease-in duration-200"
+                      x-transition:leave-start="opacity-100 translate-y-0"
+                      x-transition:leave-end="opacity-0 -translate-y-2"
+                      class="absolute top-[-15px] left-5 px-4 py-1 border-2 rounded-full border-[var(--stroke-lighter)] bg-[var(--background)]"
+                    >
+                      <p class="m-0 text-sm p-0">Command</p>
+                    </div>
+
                     <div
                       class="flex items-center px-3 border-dotted border-b border-[var(--box-hover)]"
                     >
@@ -912,7 +922,7 @@
           </svg>
           <span class="subtle">by</span> Pierre-Louis
         </p>
-        <p class="footer-text-right">Updated Nov 01, 2024</p>
+        <p class="footer-text-right">Updated Dec 23, 2024</p>
       </div>
     </footer>
     <script defer src="/src/script.js"></script>

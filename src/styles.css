@@ -805,6 +805,10 @@ a.email:hover {
 }
 
 @media screen and (max-width: 640px) {
+  .command {
+    top: 258px;
+    left: 30px;
+  }
 }
 
 @media (max-width: 480px) {
