@@ -1150,6 +1150,9 @@ body h4 .lucide {
 body p .lucide {
   color: hsl(from var(--body) h s l / 30%);
   margin-left: 0.3125rem;
+  width: 1.25rem;
+  min-width: 1.25rem;
+  max-width: 1.25rem;
 }
 
 body strong {
