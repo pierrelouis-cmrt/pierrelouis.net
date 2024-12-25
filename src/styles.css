@@ -340,6 +340,28 @@ a.inline-icon:not(:hover) .lucide {
   margin-right: 0.5rem;
 }
 
+/* Command Pill */
+
+.command {
+  position: absolute;
+  top: -15px;
+  left: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3px 15px;
+  border-radius: 25px;
+  border: 2px solid var(--stroke-lighter);
+  background: var(--background);
+  line-height: normal;
+  transition: all 400ms ease-in-out;
+  z-index: 9999;
+}
+
+.command p {
+  margin: 0;
+}
+
 /* Avatar */
 
 .avatar-container {
