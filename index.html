@@ -131,12 +131,51 @@
             </button>
 
             <template x-teleport="body">
+              <!--Wrapper div-->
               <div
+                x-data="{
+  isDragging: false,
+  startY: 0,
+  currentY: 0,
+  offsetY: 0,
+  threshold: 100,
+  onTouchStart(event) {
+    this.isDragging = true;
+    this.startY = event.touches[0].clientY;
+  },
+  onTouchMove(event) {
+    if (!this.isDragging) return;
+    this.currentY = event.touches[0].clientY;
+    let deltaY = this.currentY - this.startY;
+    this.offsetY = deltaY > 0 ? deltaY : 0;
+  },
+  onTouchEnd() {
+    this.isDragging = false;
+    if (this.offsetY > this.threshold) {
+      commandOpen = false;
+    } else {
+      this.offsetY = 0;
+    }
+  }
+}"
+                x-init="
+  $watch('commandOpen', (value) => {
+    if (value === true) {
+      // Drawer is opening
+      offsetY = 0; // Reset offset
+      document.body.classList.add('overflow-hidden'); // Lock body scroll
+    } else {
+      // Drawer is closing
+      document.body.classList.remove('overflow-hidden'); // Unlock body scroll
+    }
+  });
+"
                 x-show="commandOpen"
                 class="fixed inset-0 z-[99] flex sm:items-center sm:justify-center w-screen h-screen"
-                @click="commandOpen=false"
+                @click="commandOpen = false"
                 x-cloak
               >
+                <!--Backdrop-->
                 <div
                   x-show="commandOpen"
                   x-transition:enter="ease-out duration-300"
@@ -147,9 +186,9 @@
                   x-transition:leave-end="opacity-0"
                   class="absolute inset-0 w-full h-full bg-[rgba(0,0,0,0.4)] backdrop-blur-sm"
                 ></div>
+                <!--Content data-->
                 <div
                   x-show="commandOpen"
-                  x-trap.inert.noscroll="commandOpen"
                   x-transition:enter="ease-out duration-300"
                   x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                   x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
@@ -331,26 +370,32 @@
                   class="flex min-h-[370px] justify-center w-full max-w-xl items-end sm:items-start relative"
                   x-cloak
                 >
+                  <!--Drawer container-->
                   <div
                     x-show="commandOpen"
-                    x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="translate-y-full sm:translate-y-4 opacity-0 sm:scale-95"
-                    x-transition:enter-end="translate-y-0 opacity-100 sm:scale-100"
-                    x-transition:leave="transition ease-in duration-200"
-                    x-transition:leave-start="translate-y-0 opacity-100 sm:scale-100"
-                    x-transition:leave-end="translate-y-full sm:translate-y-4 opacity-0 sm:scale-95"
-                    class="fixed bottom-0 left-1/2 -translate-x-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--stroke-secondary)] flex flex-col w-full h-[70vh] sm:h-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--background)] rounded-t-[25px] sm:rounded-[25px] shadow-md drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:-translate-x-0 overflow-visible transform z-[9999]"
+                    :style="`transform: translateY(${offsetY}px)`"
+                    :class="{'transition-transform duration-300': !isDragging}"
+                    class="bottom-0 left-1/2 -translate-x-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--stroke-secondary)] flex flex-col w-full h-[70vh] sm:h-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--background)] rounded-t-[25px] sm:rounded-[25px] shadow-md drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:-translate-x-0 overflow-visible z-[9999]"
+                    style="
+                      padding-bottom: env(safe-area-inset-bottom) !important;
+                    "
                     @click.stop
                   >
+                    <!--Handle-->
                     <div
-                      x-show="commandOpen"
-                      x-transition:enter="transition ease-out duration-300"
-                      x-transition:enter-start="opacity-0 -translate-y-2"
-                      x-transition:enter-end="opacity-100 translate-y-0"
-                      x-transition:leave="transition ease-in duration-200"
-                      x-transition:leave-start="opacity-100 translate-y-0"
-                      x-transition:leave-end="opacity-0 -translate-y-2"
-                      class="absolute top-[-15px] left-5 px-4 py-1 border-2 rounded-full border-[var(--stroke-lighter)] bg-[var(--background)]"
+                      class="block sm:hidden w-full h-[30px]"
+                      @touchstart="onTouchStart($event)"
+                      @touchmove="onTouchMove($event)"
+                      @touchend="onTouchEnd()"
+                    >
+                      <div
+                        class="mx-auto w-16 h-1 bg-[var(--stroke-secondary)] rounded-full"
+                      ></div>
+                    </div>
+
+                    <!--Command pill-->
+                    <div
+                      class="absolute top-[-15px] left-5 px-4 py-1 border-2 rounded-full border-[var(--stroke-lighter)] bg-[var(--background)] hidden sm:block"
                     >
                       <p class="m-0 text-sm p-0">Command</p>
                     </div>
@@ -384,9 +429,10 @@
                         spellcheck="false"
                       />
                     </div>
+                    <!--Actual content-->
                     <div
                       x-ref="commandItemsList"
-                      class="overflow-y-auto overflow-x-hidden command-items-list"
+                      class="grow overflow-y-scroll scrolling-touch overflow-x-hidden pb-20 sm:pb-0"
                     >
                       <template
                         x-for="(item, index) in commandItemsFiltered"

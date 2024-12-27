@@ -340,27 +340,7 @@ a.inline-icon:not(:hover) .lucide {
   margin-right: 0.5rem;
 }
 
-/* Command Pallette */
-
-/* If you want to ensure the container respects safe area insets: 
-.mobile-safe-area {
-  padding-bottom: env(safe-area-inset-bottom, 0);
-}*/
-
-/* Or if you want the container to fully expand to the dynamic viewport: */
-.full-dvh {
-  height: 100dvh; /* modern browsers support dvh */
-  max-height: 100dvh;
-  /* Use a fallback for older browsers that don't support dvh: */
-  height: 100vh;
-  max-height: 100vh;
-}
-
-/*.drawer-full {
-  height: 100dvh;
-  max-height: 100dvh;
-  padding-bottom: env(safe-area-inset-bottom);
-}*/
+/* Command pill in palette */
 
 .command {
   position: absolute;
