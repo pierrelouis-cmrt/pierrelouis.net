@@ -1251,23 +1251,10 @@ body a:hover {
 }
 
 hr.divider {
-  max-width: 264px;
+  max-width: 220px;
   border: 0.5px solid hsl(from var(--default) h s l / 15%);
-  margin: 3.5rem auto;
+  margin: 0.75rem auto 3.5rem auto;
   transition: border-color 400ms ease-in-out;
-}
-
-hr.divider2 {
-  max-width: 600px;
-  border: none;
-  height: 3px;
-  margin: 1.5rem auto 3rem auto;
-  background: linear-gradient(
-    to right,
-    hsl(from var(--default) h s l / 15%),
-    var(--background)
-  );
-  transition: background-color 400ms ease-in-out;
 }
 
 /* Now Page */
@@ -1282,6 +1269,10 @@ hr.divider3 {
 
 .p-now-page {
   max-width: 600px;
+}
+
+.center {
+  text-align: center;
 }
 
 /* Links */
