@@ -190,67 +190,6 @@ hr.divider {
   transition: border-color 400ms ease-in-out;
 }
 
-/* Now Page */
-
-hr.divider3 {
-  max-width: 600px;
-  height: 0;
-  border-top: 1px dashed hsl(from var(--default) h s l / 20%);
-  margin: 0.75rem auto;
-  transition: border-color 400ms ease-in-out;
-}
-
-.p-now-page {
-  max-width: 600px;
-}
-
-.center {
-  text-align: center;
-}
-
-/* Carousel */
-
-.carousel {
-  position: relative;
-  overflow: hidden;
-}
-
-.carousel .item img {
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  object-position: center;
-  max-height: 200px;
-}
-
-/*
-.carousel .owl-theme .custom-nav {
-  position: absolute;
-  top: 20%;
-  left: 0;
-  right: 0;
-}
-
-.carousel .owl-theme .custom-nav .owl-prev,
-.carousel .owl-theme .custom-nav .owl-next {
-  position: absolute;
-  height: 100px;
-  color: inherit;
-  background: none;
-  border: none;
-  z-index: 100;
-}
-.carousel .owl-theme .custom-nav .owl-prev i,
-.carousel .owl-theme .custom-nav .owl-next i {
-  font-size: 2.5rem;
-  color: #cecece;
-}
-.carousel .owl-theme .custom-nav .owl-prev {
-  left: 0;
-}
-.carousel .owl-theme .custom-nav .owl-next {
-  right: 0;
-}*/
-
 /* Links */
 
 p.links a:hover {
@@ -839,7 +778,93 @@ a.email:hover {
   stroke: var(--stroke);
 }
 
-/* Media queries */
+/*----------------------------  PAGES  --------------------------------------*/
+
+/* Now Page */
+
+hr.divider3 {
+  max-width: 600px;
+  height: 0;
+  border-top: 1px dashed hsl(from var(--default) h s l / 20%);
+  margin: 0.75rem auto;
+  transition: border-color 400ms ease-in-out;
+}
+
+.p-now-page {
+  max-width: 600px;
+}
+
+.center {
+  text-align: center;
+}
+
+/* Carousel */
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel .item img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center;
+  max-height: 200px;
+}
+
+/*
+.carousel .owl-theme .custom-nav {
+  position: absolute;
+  top: 20%;
+  left: 0;
+  right: 0;
+}
+
+.carousel .owl-theme .custom-nav .owl-prev,
+.carousel .owl-theme .custom-nav .owl-next {
+  position: absolute;
+  height: 100px;
+  color: inherit;
+  background: none;
+  border: none;
+  z-index: 100;
+}
+.carousel .owl-theme .custom-nav .owl-prev i,
+.carousel .owl-theme .custom-nav .owl-next i {
+  font-size: 2.5rem;
+  color: #cecece;
+}
+.carousel .owl-theme .custom-nav .owl-prev {
+  left: 0;
+}
+.carousel .owl-theme .custom-nav .owl-next {
+  right: 0;
+}*/
+
+/* About */
+
+.about p {
+  max-width: 500px !important;
+}
+
+.header-img {
+  display: block;
+  margin: 0 auto;
+  max-width: 300px; /* Set your desired width */
+  height: 300px; /* Set your desired height */
+  border-radius: 5%;
+  background-image: url("/about/me-still.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: background-image 0.3s ease; /* Optional: Smooth transition */
+}
+
+.header-img:hover {
+  background-image: url("/about/me.gif");
+}
+
+/*----------------------------  MEDIA QUERIES  --------------------------------------*/
 
 @media screen and (max-width: 768px) {
   body {
