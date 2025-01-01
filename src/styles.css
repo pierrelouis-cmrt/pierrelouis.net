@@ -190,6 +190,33 @@ hr.divider {
   transition: border-color 400ms ease-in-out;
 }
 
+hr.divider2 {
+  max-width: 600px;
+  border: none;
+  height: 3px;
+  margin: 1.5rem auto 3rem auto;
+  background: linear-gradient(
+    to right,
+    hsl(from var(--default) h s l / 15%),
+    var(--background)
+  );
+  transition: background-color 400ms ease-in-out;
+}
+
+/* Now Page */
+
+hr.divider3 {
+  max-width: 600px;
+  height: 0;
+  border-top: 1px dashed hsl(from var(--default) h s l / 20%);
+  margin: 0.75rem auto;
+  transition: border-color 400ms ease-in-out;
+}
+
+.p-now-page {
+  max-width: 600px;
+}
+
 /* Links */
 
 p.links a:hover {
