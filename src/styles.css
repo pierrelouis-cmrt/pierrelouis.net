@@ -274,7 +274,7 @@ a.inline-icon:not(:hover) .lucide {
   display: flex;
   align-items: center;
   color: var(--default);
-  font-weight: 500;
+  font-weight: 600;
   margin-right: 1.5rem;
   transition: all 120ms ease-in-out;
   text-decoration: none;
