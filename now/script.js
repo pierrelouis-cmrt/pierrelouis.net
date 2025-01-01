@@ -62,3 +62,28 @@ document.addEventListener("alpine:init", () => {
     },
   });
 });
+
+// Carousel
+
+$(".carousel .owl-carousel").owlCarousel({
+  stagePadding: 50,
+  loop: true,
+  margin: 10,
+  nav: false,
+  // navText: [
+  //   '<i class="fa fa-angle-left" aria-hidden="true"></i>',
+  //   '<i class="fa fa-angle-right" aria-hidden="true"></i>',
+  // ],
+  // navContainer: ".carousel .custom-nav",
+  responsive: {
+    0: {
+      items: 1,
+    },
+    600: {
+      items: 3,
+    },
+    1000: {
+      items: 5,
+    },
+  },
+});

@@ -208,6 +208,49 @@ hr.divider3 {
   text-align: center;
 }
 
+/* Carousel */
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel .item img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center;
+  max-height: 200px;
+}
+
+/*
+.carousel .owl-theme .custom-nav {
+  position: absolute;
+  top: 20%;
+  left: 0;
+  right: 0;
+}
+
+.carousel .owl-theme .custom-nav .owl-prev,
+.carousel .owl-theme .custom-nav .owl-next {
+  position: absolute;
+  height: 100px;
+  color: inherit;
+  background: none;
+  border: none;
+  z-index: 100;
+}
+.carousel .owl-theme .custom-nav .owl-prev i,
+.carousel .owl-theme .custom-nav .owl-next i {
+  font-size: 2.5rem;
+  color: #cecece;
+}
+.carousel .owl-theme .custom-nav .owl-prev {
+  left: 0;
+}
+.carousel .owl-theme .custom-nav .owl-next {
+  right: 0;
+}*/
+
 /* Links */
 
 p.links a:hover {

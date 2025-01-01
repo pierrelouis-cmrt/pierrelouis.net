@@ -60,6 +60,18 @@
     <meta name="theme-color" content="#ffffff" />
 
     <link rel="stylesheet" href="/src/output.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -132,7 +144,7 @@
                 <path d="m21 21-4.3-4.3" />
               </svg>
               <span
-                class="flex-1 mr-5 text-left text-[var(--body)] font-medium hidden sm:inline"
+                class="flex-1 mr-5 text-left text-[var(--body)] hidden sm:inline"
                 >Search...</span
               >
               <span
@@ -573,11 +585,41 @@
     <main>
       <h2 class="section-title center">What am I up to atm?</h2>
       <hr class="divider" />
+      <div class="carousel">
+        <div class="owl-carousel owl-theme">
+          <div class="item">
+            <img src="pics/architecture1.webp" alt="Picture 1" />
+          </div>
+          <div class="item">
+            <img src="pics/architecture2.webp" alt="Picture 2" />
+          </div>
+          <div class="item">
+            <img src="pics/cat.webp" alt="Picture 3" />
+          </div>
+          <div class="item">
+            <img src="pics/sky1.webp" alt="Picture 4" />
+          </div>
+          <div class="item">
+            <img src="pics/sky2.webp" alt="Picture 5" />
+          </div>
+          <div class="item">
+            <img src="pics/sky3.webp" alt="Picture 6" />
+          </div>
+          <div class="item">
+            <img src="pics/squirrel.webp" alt="Picture 7" />
+          </div>
+        </div>
+        <div class="owl-theme">
+          <div class="owl-controls">
+            <div class="custom-nav owl-nav"></div>
+          </div>
+        </div>
+      </div>
       <p class="p-now-page">Currently studying engineering at Centrale Lyon</p>
       <hr class="divider3" />
 
       <p class="p-now-page">
-        Living in Saint-Étienne (France), Unesco Creative City of Design
+        Living in Saint-Étienne (France), Unesco Creative City of Design 🎨
       </p>
       <hr class="divider3" />
 
@@ -609,7 +651,7 @@
       </p>
       <hr class="divider3" />
 
-      <p class="p-now-page">Learning more and more about AI everyday</p>
+      <p class="p-now-page">Learning more and more about AI everyday 🤖</p>
       <hr class="divider3" />
 
       <p class="p-now-page">Staying up to date with the latest news in tech</p>
@@ -619,7 +661,6 @@
         Gaming occasionally when my free time is free-timing
       </p>
       <hr class="divider3" />
-      1
 
       <p class="p-now-page">Switching browser literally every few months</p>
     </main>
@@ -649,6 +690,14 @@
         <p class="footer-text-right">Updated Nov 01, 2024</p>
       </div>
     </footer>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+      defer
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+      defer
+    ></script>
     <script defer src="script.js"></script>
     <script
       defer
