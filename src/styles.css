@@ -805,6 +805,11 @@ hr.divider3 {
   overflow: hidden;
 }
 
+.item {
+  background: transparent url(/src/assets/loading.webp) no-repeat center center;
+  background-size: 100px 100px;
+}
+
 .carousel .item img {
   aspect-ratio: 1 / 1;
   object-fit: cover;
