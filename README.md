@@ -14,8 +14,6 @@ MIT License
 
 Inspired by Thu Le.
 
-## Last Update
-
-Dec 23, 2024
+---
 
 Feel free to open an issue or submit a pull request if you'd like to contribute
