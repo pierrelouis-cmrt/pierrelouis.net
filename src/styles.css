@@ -850,18 +850,31 @@ hr.divider3 {
 .header-img {
   display: block;
   margin: 0 auto;
-  max-width: 300px; /* Set your desired width */
-  height: 300px; /* Set your desired height */
+  max-width: 300px;
+  height: 300px;
   border-radius: 5%;
   background-image: url("/about/me-still.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  transition: background-image 0.3s ease; /* Optional: Smooth transition */
+  transition: background-image 0.3s ease;
+  opacity: 0.85;
 }
 
 .header-img:hover {
   background-image: url("/about/me.gif");
+}
+
+.signature {
+  display: block;
+  margin: 2rem auto;
+  width: 500px;
+}
+
+.signature svg {
+  display: block;
+  max-width: 200px;
+  max-height: 200px;
 }
 
 /*----------------------------  MEDIA QUERIES  --------------------------------------*/
