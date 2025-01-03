@@ -1971,6 +1971,10 @@ hr.divider3 {
     padding: 0;
   }
 
+  .signature {
+    padding-left: 1.25rem;
+  }
+
   .command {
     display: none;
   }
