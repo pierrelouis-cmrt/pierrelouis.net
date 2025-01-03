@@ -1130,6 +1130,7 @@ body {
   -webkit-font-smoothing: antialiased;
   hanging-punctuation: first allow-end last;
   transition: background-color 400ms ease-in-out, color 400ms ease-in-out;
+  overflow-x: hidden;
 }
 
 main {
