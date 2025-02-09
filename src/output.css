@@ -1879,8 +1879,6 @@ hr.divider3 {
   text-align: center;
 }
 
-/* Carousel */
-
 .carousel {
   position: relative;
   overflow: hidden;
@@ -1964,6 +1962,26 @@ hr.divider3 {
   max-width: 200px;
   max-height: 200px;
 }
+
+/* WIP
+.highlight {
+  position: relative;
+  color: var(--background);
+}
+
+.highlight::before {
+  background-color: var(--accent);
+  border-radius: 6px;
+
+  content: "";
+  position: absolute;
+  width: calc(100% + 4px);
+  height: 100%;
+  left: -2px;
+  bottom: 0;
+  z-index: -1;
+}
+*/
 
 /*----------------------------  MEDIA QUERIES  --------------------------------------*/
 
