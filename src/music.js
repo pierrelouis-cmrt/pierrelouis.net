@@ -1,6 +1,6 @@
 const apiKey = "71608a96243f764afe28114be64c6e01";
 const user = "pierrelouis-c";
-const refreshInterval = 2000; // 2 seconds interval
+const refreshInterval = 10000; // 2 seconds interval
 const maxRetries = 3; // Maximum number of retries per track
 const retryDelay = 3000; // 3 seconds delay between retries
 

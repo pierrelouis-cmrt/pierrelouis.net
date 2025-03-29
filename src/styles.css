@@ -735,6 +735,59 @@ body footer {
   margin: 4rem auto 0;
 }
 
+footer .links {
+  margin-bottom: 0.8rem;
+  padding: 0;
+  max-height: 30px;
+  overflow: visible;
+}
+
+footer .links p {
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+footer .links a {
+  margin-right: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+footer .inline-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2em;
+}
+
+.tooltip-container {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.footer-decoration {
+  display: block;
+  margin-left: auto;
+  max-width: 125px;
+  height: 125px;
+  background-image: url("/src/assets/cat.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: background-image 0.3s ease;
+  transform: translate(1.4rem, -3.7rem);
+  opacity: 0.7;
+}
+
+.footer-decoration:hover {
+  background-image: url("/src/assets/cat_awake.png");
+}
+
+.dark .footer-decoration {
+  filter: invert(1) hue-rotate(180deg);
+  transition: filter 400ms ease-in-out;
+}
+
 .footer-container {
   display: flex;
   margin: 0 auto;
@@ -759,7 +812,7 @@ body footer {
   color: var(--secondary);
   font-size: 0.8125rem;
   letter-spacing: normal;
-  margin: 0;
+  margin: 0 1rem 0 0;
 }
 
 /* Email copy */
@@ -875,10 +928,15 @@ hr.divider3 {
   width: 500px;
 }
 
-.signature svg {
+.signature img {
   display: block;
-  max-width: 200px;
-  max-height: 200px;
+  max-width: 175px;
+  max-height: auto;
+}
+
+.dark .signature img {
+  filter: invert(1) hue-rotate(180deg);
+  transition: filter 400ms ease-in-out;
 }
 
 /* WIP
@@ -934,6 +992,10 @@ hr.divider3 {
 
   footer p.links {
     padding: 0;
+  }
+
+  .footer-decoration {
+    display: none;
   }
 
   img.avatar {
