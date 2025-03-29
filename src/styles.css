@@ -1236,11 +1236,15 @@ hr.divider3 {
   display: block;
   max-width: 175px;
   max-height: auto;
-  transition: all 0.5s ease;
+  transition: all 400ms ease;
 }
 
-.signature:hover .sign-image {
-  transform: scale(1.05);
+.dark .signature .sign-image {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.sign-image:hover {
+  transform: rotate(-3deg) scale(0.95);
 }
 
 /* -------- Links -------- */
