@@ -72,49 +72,50 @@
     <nav class="sticky-nav">
       <div class="menu-container">
         <div class="nav-left">
-          <a class="home-button" href="/"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-circle-arrow-left back"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <path d="M16 12H8" />
-              <path d="m12 8-4 4 4 4" />
-            </svg>
-            Back Home</a
-          >
+          <a class="home-button" href="/">Pierre-Louis</a>
           <div class="nav-links"></div>
         </div>
         <div class="nav-right">
           <div
-            x-data="{ commandOpen: false }"
+            x-data="{ commandOpen: false, isTouchDevice: 'ontouchstart' in window }"
             x-init="
-    $watch('commandOpen', function(value){
-      if(value === true){
-        $nextTick(() => { window.dispatchEvent(new CustomEvent('command-input-focus', {})); });
-      }
-    })
-  "
+          $watch('commandOpen', function(value){
+            if(value === true){
+              $nextTick(() => { window.dispatchEvent(new CustomEvent('command-input-focus', {})); });
+            }
+          })
+        "
             @keydown.escape.window="commandOpen = false"
             @keydown.window="
-    if (($event.ctrlKey || $event.metaKey) && $event.key === 'k') {
-      $event.preventDefault();
-      commandOpen = true;
-    }
-  "
+          if (($event.ctrlKey || $event.metaKey) && $event.key === 'k') {
+            $event.preventDefault();
+            commandOpen = true;
+          } else if (!$event.ctrlKey && !$event.metaKey && !$event.altKey && !$event.shiftKey) {
+            // Single key shortcuts
+            if ($event.key === 'h' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+              window.location.href = '/';
+            } else if ($event.key === 'a' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+              window.location.href = '/about';
+            } else if ($event.key === 'p' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+              window.location.href = '/projects';
+            } else if ($event.key === 'n' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+              window.location.href = '/now';
+            } else if ($event.key === 'u' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+              window.location.href = '/uses';
+            } else if ($event.key === 'c' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+              window.location.href = '/colophon';
+            } else if ($event.key === 'l' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+              window.location.href = '/links';
+            } else if ($event.key === 't' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+              $store.theme.toggle();
+            }
+          }
+        "
             class="relative z-50 w-auto h-auto"
           >
             <button
               @click="commandOpen = true"
-              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium transition-colors bg-[var(--box-hover)] rounded-l-xl rounded-r-sm hover:bg-[var(--stroke-secondary)] active:bg-[var(--stroke-lighter)] disabled:opacity-50 disabled:pointer-events-none"
+              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium bg-[var(--box-hover)] rounded-l-xl rounded-r-sm hover:bg-[var(--stroke-secondary)] active:bg-[var(--stroke-lighter)] disabled:opacity-50 disabled:pointer-events-none transition-colors duration-100"
             >
               <svg
                 class="w-4 h-4 mr-0 sm:mr-2 text-[var(--body)] shrink-0"
@@ -149,248 +150,275 @@
               <!--Wrapper div-->
               <div
                 x-data="{
-  isDragging: false,
-  startY: 0,
-  currentY: 0,
-  offsetY: 0,
-  threshold: 100,
-  onTouchStart(event) {
-    this.isDragging = true;
-    this.startY = event.touches[0].clientY;
-  },
-  onTouchMove(event) {
-    if (!this.isDragging) return;
-    this.currentY = event.touches[0].clientY;
-    let deltaY = this.currentY - this.startY;
-    this.offsetY = deltaY > 0 ? deltaY : 0;
-  },
-  onTouchEnd() {
-    this.isDragging = false;
-    if (this.offsetY > this.threshold) {
-      commandOpen = false;
-    } else {
-      this.offsetY = 0;
-    }
-  }
-}"
+              isDragging: false,
+              startY: 0,
+              currentY: 0,
+              offsetY: 0,
+              threshold: 80,
+              onTouchStart(event) {
+                this.isDragging = true;
+                this.startY = event.touches[0].clientY;
+              },
+              onTouchMove(event) {
+                if (!this.isDragging) return;
+                this.currentY = event.touches[0].clientY;
+                let deltaY = this.currentY - this.startY;
+                this.offsetY = deltaY > 0 ? deltaY : 0;
+              },
+              onTouchEnd() {
+                this.isDragging = false;
+                if (this.offsetY > this.threshold) {
+                  commandOpen = false;
+                } else {
+                  this.offsetY = 0;
+                }
+              }
+            }"
                 x-init="
-  $watch('commandOpen', (value) => {
-    if (value === true) {
-      // Drawer is opening
-      offsetY = 0; // Reset offset
-      document.body.classList.add('overflow-hidden'); // Lock body scroll
-    } else {
-      // Drawer is closing
-      document.body.classList.remove('overflow-hidden'); // Unlock body scroll
-    }
-  });
-"
+              $watch('commandOpen', (value) => {
+                if (value === true) {
+                  offsetY = 0;
+                  document.body.classList.add('overflow-hidden');
+                } else {
+                  document.body.classList.remove('overflow-hidden');
+                }
+              });
+            "
                 x-show="commandOpen"
                 class="fixed inset-0 z-[99] flex sm:items-center sm:justify-center w-screen h-screen"
                 @click="commandOpen = false"
                 x-cloak
               >
-                <!--Backdrop-->
+                <!--Backdrop with reduced animation complexity-->
                 <div
                   x-show="commandOpen"
-                  x-transition:enter="ease-out duration-300"
+                  x-transition:enter="ease-out duration-150"
                   x-transition:enter-start="opacity-0"
                   x-transition:enter-end="opacity-100"
-                  x-transition:leave="ease-in duration-300"
+                  x-transition:leave="ease-in duration-100"
                   x-transition:leave-start="opacity-100"
                   x-transition:leave-end="opacity-0"
-                  class="absolute inset-0 w-full h-full bg-[rgba(0,0,0,0.4)] backdrop-blur-sm"
+                  class="absolute inset-0 w-full h-full bg-[rgba(0,0,0,0.4)] backdrop-blur-sm will-change-opacity"
                 ></div>
                 <!--Content data-->
                 <div
                   x-show="commandOpen"
-                  x-transition:enter="ease-out duration-300"
+                  x-transition:enter="ease-out duration-150 transform"
                   x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                   x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                  x-transition:leave="ease-in duration-200"
+                  x-transition:leave="ease-in duration-100 transform"
                   x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                   x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                   x-data="{
-    commandItems: {
-      pages : [
-          {
-              title: 'Home',
-              value: 'home',
-              icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-house w-4 h-4 mr-2\'><path d=\'M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8\'/><path d=\'M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\'/></svg>',
-              right: 'H',
-              default: true,
-          },
-          {
-              title: 'About me (Who am I?)',
-              value: 'about',
-              icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-user w-4 h-4 mr-2\'><path d=\'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2\'/><circle cx=\'12\' cy=\'7\' r=\'4\'/></svg>',
-              default: true,
-          },
-          {
-              title: 'My Projects (What have I been working on?)',
-              value: 'projects',
-              icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-user w-4 h-4 mr-2\'><path d=\'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2\'/><circle cx=\'12\' cy=\'7\' r=\'4\'/></svg>',
-              default: true,
-          },
-          {
-              title: 'Now (What am I upto at the moment?)',
-              value: 'now',
-              icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-hourglass w-4 h-4 mr-2\'><path d=\'M5 22h14\'/><path d=\'M5 2h14\'/><path d=\'M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22\'/><path d=\'M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2\'/></svg>',
-              default: true,
-          },
-          {
-              title: 'Uses (My toolkit, tech stacks...)',
-              value: 'uses',
-              icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-drafting-compass w-4 h-4 mr-2\'><path d=\'m12.99 6.74 1.93 3.44\'/><path d=\'M19.136 12a10 10 0 0 1-14.271 0\'/><path d=\'m21 21-2.16-3.84\'/><path d=\'m3 21 8.02-14.26\'/><circle cx=\'12\' cy=\'5\' r=\'2\'/></svg>',
-              default: true,
-          },
-          {
-              title: 'Colophon (What\'s this all about?)',
-              value: 'colophon',
-              icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-code-xml w-4 h-4 mr-2\'><path d=\'m18 16 4-4-4-4\'/><path d=\'m6 8-4 4 4 4\'/><path d=\'m14.5 4-5 16\'/></svg>',
-              default: true,
-          },
-          
-      ],
-      network : [
-        {
-              title: 'Links (My socials)',
-              value: 'links',
-              icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-link w-4 h-4 mr-2\'><path d=\'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71\'/><path d=\'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71\'/></svg>',
-              right: 'L',
-              default: true,
-          },
-          {
-              title: 'Send me an email',
-              value: 'email',
-              icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-at-sign w-4 h-4 mr-2\'><circle cx=\'12\' cy=\'12\' r=\'4\'/><path d=\'M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8\'/></svg>',
-              right: 'S',
-              default: true,
-          },
-      ],
-      settings: [
-          {
-              title: 'Toggle Theme',
-              value: 'theme',
-              icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-paintbrush-vertical w-4 h-4 mr-2\'><path d=\'M10 2v2\'/><path d=\'M14 2v4\'/><path d=\'M17 2a1 1 0 0 1 1 1v9H6V3a1 1 0 0 1 1-1z\'/><path d=\'M6 12a1 1 0 0 0-1 1v1a2 2 0 0 0 2 2h2a1 1 0 0 1 1 1v2.9a2 2 0 1 0 4 0V17a1 1 0 0 1 1-1h2a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1\'/></svg>',
-              right: 'T',
-              default: true,
-          }
-      ]
-    },
-    commandItemsFiltered: [],
-    commandItemActive: null,
-    commandItemSelected: null,
-    commandId: $id('command'),
-    commandSearch: '',
-    commandSearchIsEmpty() {
-      return this.commandSearch.length == 0;
-    },
-    commandItemIsActive(item) {
-      return this.commandItemActive && this.commandItemActive.value == item.value;
-    },
-    commandItemActiveNext() {
-      let index = this.commandItemsFiltered.indexOf(this.commandItemActive);
-      if (index < this.commandItemsFiltered.length - 1) {
-        this.commandItemActive = this.commandItemsFiltered[index + 1];
-        this.commandScrollToActiveItem();
-      }
-    },
-    commandItemActivePrevious() {
-      let index = this.commandItemsFiltered.indexOf(this.commandItemActive);
-      if (index > 0) {
-        this.commandItemActive = this.commandItemsFiltered[index - 1];
-        this.commandScrollToActiveItem();
-      }
-    },
-    commandScrollToActiveItem() {
-      if (this.commandItemActive) {
-        activeElement = document.getElementById(this.commandItemActive.value + '-' + this.commandId);
-        if (!activeElement) return;
-
-        newScrollPos = (activeElement.offsetTop + activeElement.offsetHeight) - this.$refs.commandItemsList.offsetHeight;
-        if (newScrollPos > 0) {
-          this.$refs.commandItemsList.scrollTop = newScrollPos;
-        } else {
-          this.$refs.commandItemsList.scrollTop = 0;
-        }
-      }
-    },
-    commandSearchItems() {
-      if (!this.commandSearchIsEmpty()) {
-        searchTerm = this.commandSearch.replace(/\*/g, '').toLowerCase();
-        this.commandItemsFiltered = this.commandItems.filter(item => item.title.toLowerCase().startsWith(searchTerm));
-
-        this.commandScrollToActiveItem();
-      } else {
-        this.commandItemsFiltered = this.commandItems.filter(item => item.default);
-      }
-      this.commandItemActive = this.commandItemsFiltered[0];
-    },
-    commandShowCategory(item, index) {
-      if (index == 0) return true;
-      if (typeof this.commandItems[index - 1] === 'undefined') return false;
-      return item.category != this.commandItems[index - 1].category;
-    },
-    commandCategoryCapitalize(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    },
-    commandItemsReorganize() {
-      commandItemsOriginal = this.commandItems;
-      keys = Object.keys(this.commandItems);
-      this.commandItems = [];
-      keys.forEach((key, index) => {
-        for (i = 0; i < commandItemsOriginal[key].length; i++) {
-          commandItemsOriginal[key][i].category = key;
-          this.commandItems.push(commandItemsOriginal[key][i]);
-        }
-      });
-    }
-  }"
+                commandItems: {
+                  pages : [
+                    {
+                      title: 'Home',
+                      value: 'home',
+                      icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-house w-4 h-4 mr-2\'><path d=\'M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8\'/><path d=\'M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\'/></svg>',
+                      right: 'H',
+                      default: true,
+                    },
+                    {
+                      title: 'About me (Who am I?)',
+                      value: 'about',
+                      icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-user w-4 h-4 mr-2\'><path d=\'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2\'/><circle cx=\'12\' cy=\'7\' r=\'4\'/></svg>',
+                      right: 'A',
+                      default: true,
+                    },
+                    {
+                      title: 'My Projects (What have I been working on?)',
+                      value: 'projects',
+                      icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-briefcase w-4 h-4 mr-2\'><rect width=\'20\' height=\'14\' x=\'2\' y=\'7\' rx=\'2\' /><path d=\'M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16\' /></svg>',
+                      right: 'P',
+                      default: true,
+                    },
+                    {
+                      title: 'Now (What am I upto at the moment?)',
+                      value: 'now',
+                      icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-hourglass w-4 h-4 mr-2\'><path d=\'M5 22h14\'/><path d=\'M5 2h14\'/><path d=\'M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22\'/><path d=\'M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2\'/></svg>',
+                      right: 'N',
+                      default: true,
+                    },
+                    {
+                      title: 'Uses (My toolkit, tech stacks...)',
+                      value: 'uses',
+                      icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-drafting-compass w-4 h-4 mr-2\'><path d=\'m12.99 6.74 1.93 3.44\'/><path d=\'M19.136 12a10 10 0 0 1-14.271 0\'/><path d=\'m21 21-2.16-3.84\'/><path d=\'m3 21 8.02-14.26\'/><circle cx=\'12\' cy=\'5\' r=\'2\'/></svg>',
+                      right: 'U',
+                      default: true,
+                    },
+                    {
+                      title: 'Colophon (What\'s this all about?)',
+                      value: 'colophon',
+                      icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-code-xml w-4 h-4 mr-2\'><path d=\'m18 16 4-4-4-4\'/><path d=\'m6 8-4 4 4 4\'/><path d=\'m14.5 4-5 16\'/></svg>',
+                      right: 'C',
+                      default: true,
+                    },
+                    
+                  ],
+                  network : [
+                    {
+                      title: 'Links (My socials)',
+                      value: 'links',
+                      icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-link w-4 h-4 mr-2\'><path d=\'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71\'/><path d=\'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71\'/></svg>',
+                      right: 'L',
+                      default: true,
+                    },
+                    {
+                      title: 'Send me an email',
+                      value: 'email',
+                      icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-at-sign w-4 h-4 mr-2\'><circle cx=\'12\' cy=\'12\' r=\'4\'/><path d=\'M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8\'/></svg>',
+                      right: 'E',
+                      default: true,
+                    },
+                  ],
+                  settings: [
+                    {
+                      title: 'Toggle Theme',
+                      value: 'theme',
+                      icon: '<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\' class=\'lucide lucide-paintbrush-vertical w-4 h-4 mr-2\'><path d=\'M10 2v2\'/><path d=\'M14 2v4\'/><path d=\'M17 2a1 1 0 0 1 1 1v9H6V3a1 1 0 0 1 1-1z\'/><path d=\'M6 12a1 1 0 0 0-1 1v1a2 2 0 0 0 2 2h2a1 1 0 0 1 1 1v2.9a2 2 0 1 0 4 0V17a1 1 0 0 1 1-1h2a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1\'/></svg>',
+                      right: 'T',
+                      default: true,
+                    }
+                  ]
+                },
+                commandItemsFiltered: [],
+                commandItemActive: null,
+                commandItemSelected: null,
+                commandId: $id('command'),
+                commandSearch: '',
+                isTouchDevice: 'ontouchstart' in window,
+                itemsCache: {},
+                commandSearchIsEmpty() {
+                  return this.commandSearch.length == 0;
+                },
+                commandItemIsActive(item) {
+                  return this.commandItemActive && this.commandItemActive.value == item.value;
+                },
+                commandItemActiveNext() {
+                  let index = this.commandItemsFiltered.indexOf(this.commandItemActive);
+                  if (index < this.commandItemsFiltered.length - 1) {
+                    this.commandItemActive = this.commandItemsFiltered[index + 1];
+                    this.$nextTick(() => this.commandScrollToActiveItem());
+                  }
+                },
+                commandItemActivePrevious() {
+                  let index = this.commandItemsFiltered.indexOf(this.commandItemActive);
+                  if (index > 0) {
+                    this.commandItemActive = this.commandItemsFiltered[index - 1];
+                    this.$nextTick(() => this.commandScrollToActiveItem());
+                  }
+                },
+                commandScrollToActiveItem() {
+                  if (this.commandItemActive) {
+                    const activeElement = document.getElementById(this.commandItemActive.value + '-' + this.commandId);
+                    if (!activeElement) return;
+                    
+                    // Pre-calculate values for better performance
+                    const containerHeight = this.$refs.commandItemsList.offsetHeight;
+                    const elementTop = activeElement.offsetTop;
+                    const elementHeight = activeElement.offsetHeight;
+                    const scrollTop = this.$refs.commandItemsList.scrollTop;
+                    
+                    // Check if element is below the visible area
+                    if (elementTop + elementHeight > scrollTop + containerHeight) {
+                      this.$refs.commandItemsList.scrollTop = elementTop + elementHeight - containerHeight;
+                    } 
+                    // Check if element is above the visible area
+                    else if (elementTop < scrollTop) {
+                      this.$refs.commandItemsList.scrollTop = elementTop;
+                    }
+                  }
+                },
+                commandSearchItems() {
+                  // Cache search results for performance
+                  const cacheKey = this.commandSearch.toLowerCase();
+                  
+                  if (this.itemsCache[cacheKey]) {
+                    this.commandItemsFiltered = this.itemsCache[cacheKey];
+                  } else {
+                    if (!this.commandSearchIsEmpty()) {
+                      const searchTerm = cacheKey.replace(/\*/g, '');
+                      this.commandItemsFiltered = this.commandItems.filter(item => 
+                        item.title.toLowerCase().includes(searchTerm));
+                      this.itemsCache[cacheKey] = this.commandItemsFiltered;
+                    } else {
+                      this.commandItemsFiltered = this.commandItems.filter(item => item.default);
+                      this.itemsCache[''] = this.commandItemsFiltered;
+                    }
+                  }
+                  
+                  this.commandItemActive = this.commandItemsFiltered[0] || null;
+                },
+                commandShowCategory(item, index) {
+                  if (index == 0) return true;
+                  if (typeof this.commandItems[index - 1] === 'undefined') return false;
+                  return item.category != this.commandItems[index - 1].category;
+                },
+                commandCategoryCapitalize(string) {
+                  return string.charAt(0).toUpperCase() + string.slice(1);
+                },
+                commandItemsReorganize() {
+                  const commandItemsOriginal = this.commandItems;
+                  const keys = Object.keys(this.commandItems);
+                  this.commandItems = [];
+                  keys.forEach((key) => {
+                    for (let i = 0; i < commandItemsOriginal[key].length; i++) {
+                      commandItemsOriginal[key][i].category = key;
+                      this.commandItems.push(commandItemsOriginal[key][i]);
+                    }
+                  });
+                  
+                  // Pre-populate cache for empty search
+                  this.itemsCache[''] = this.commandItems.filter(item => item.default);
+                }
+              }"
                   x-init="
-    commandItemsReorganize();
-    commandSearchItems();
-    $watch('commandSearch', value => commandSearchItems());
-    $watch('commandItemSelected', function(item){
-      if(item){
-        if (item.value === 'theme') {
-          $store.theme.toggle();
-        } else if (item.value === 'home') {
-          window.location.href = '/';
-        } else if (item.value === 'about') {
-          window.location.href = '/about';
-        } else if (item.value === 'now') {
-          window.location.href = '/now';
-        } else if (item.value === 'uses') {
-          window.location.href = '/uses';
-        } else if (item.value === 'colophon') {
-          window.location.href = '/colophon';
-        } else if (item.value === 'links') {
-          window.location.href = '/links';
-        } else if (item.value === 'projects') {
-          window.location.href = '/projects';
-        } else if (item.value === 'email') {
-          window.location.href = 'mailto:contact@pierrelouis.net?subject=Just%20wanted%20to%20say%20hi';
-        }
-        commandItemSelected = null;
-      }
-      
-
-    });
-  "
+                commandItemsReorganize();
+                commandSearchItems();
+                $watch('commandSearch', value => commandSearchItems());
+                $watch('commandItemSelected', function(item){
+                  if(item){
+                    if (item.value === 'theme') {
+                      $store.theme.toggle();
+                      commandItemSelected = null; // Only reset selection without closing for theme toggle
+                    } else {
+                      if (item.value === 'home') {
+                        window.location.href = '/';
+                      } else if (item.value === 'about') {
+                        window.location.href = '/about';
+                      } else if (item.value === 'now') {
+                        window.location.href = '/now';
+                      } else if (item.value === 'uses') {
+                        window.location.href = '/uses';
+                      } else if (item.value === 'colophon') {
+                        window.location.href = '/colophon';
+                      } else if (item.value === 'links') {
+                        window.location.href = '/links';
+                      } else if (item.value === 'projects') {
+                        window.location.href = '/projects';
+                      } else if (item.value === 'email') {
+                        window.location.href = 'mailto:contact@pierrelouis.net?subject=Just%20wanted%20to%20say%20hi';
+                      }
+                      commandItemSelected = null;
+                      commandOpen = false; // Close palette only for navigation actions
+                    }
+                  }
+                });
+              "
                   @keydown.down="event.preventDefault(); commandItemActiveNext();"
                   @keydown.up="event.preventDefault(); commandItemActivePrevious()"
                   @keydown.enter="commandItemSelected=commandItemActive;"
                   @command-input-focus.window="$refs.commandInput.focus();"
-                  class="flex min-h-[370px] justify-center w-full max-w-xl items-end sm:items-start relative"
+                  class="flex min-h-[370px] justify-center w-full max-w-xl items-end sm:items-start relative will-change-transform"
                   x-cloak
                 >
                   <!--Drawer container-->
                   <div
                     x-show="commandOpen"
                     :style="`transform: translateY(${offsetY}px)`"
-                    :class="{'transition-transform duration-300': !isDragging}"
-                    class="bottom-0 left-1/2 -translate-x-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--stroke-secondary)] flex flex-col w-full h-[70vh] sm:h-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--background)] rounded-t-[25px] sm:rounded-[25px] shadow-md drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:-translate-x-0 overflow-visible z-[9999]"
+                    x-bind:class="{'transition-transform duration-150 ease-out will-change-transform': !isDragging}"
+                    class="bottom-0 left-1/2 -translate-x-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--stroke-secondary)] flex flex-col w-full h-[70vh] sm:h-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--background)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:-translate-x-0 overflow-visible z-[9999]"
                     style="
                       padding-bottom: env(safe-area-inset-bottom) !important;
                     "
@@ -447,11 +475,11 @@
                     <!--Actual content-->
                     <div
                       x-ref="commandItemsList"
-                      class="grow overflow-y-scroll scrolling-touch overflow-x-hidden pb-20 sm:pb-0"
+                      class="grow overflow-y-auto overflow-x-hidden pb-20 sm:pb-0 overscroll-contain"
                     >
                       <template
                         x-for="(item, index) in commandItemsFiltered"
-                        :key="'item-' + index"
+                        :key="item.value"
                       >
                         <div class="pb-1 space-y-1">
                           <template x-if="commandShowCategory(item, index)">
@@ -469,18 +497,15 @@
                               <div
                                 :id="item.value + '-' + commandId"
                                 @click="commandItemSelected=item"
-                                @mousemove="commandItemActive=item"
-                                :class="{ 
-        'bg-[var(--box-hover)] text-[var(--body)]': commandItemIsActive(item), 
-        'text-[var(--caption)]': !commandItemIsActive(item)
-    }"
-                                class="relative flex cursor-pointer select-none items-center rounded-[10px] px-2 py-1.5 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                                @mouseenter="commandItemActive=item"
+                                x-bind:class="commandItemIsActive(item) ? 'bg-[var(--box-hover)] text-[var(--body)]' : 'text-[var(--caption)]'"
+                                class="relative flex cursor-pointer select-none items-center rounded-[10px] px-2 py-2.5 md:py-1 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
                               >
                                 <span x-html="item.icon"></span>
                                 <span
                                   x-text="item.value === 'theme' ? ('Toggle Theme (current: ' + $store.theme.mode + ')') : item.title"
                                 ></span>
-                                <template x-if="item.right">
+                                <template x-if="item.right && !isTouchDevice">
                                   <span
                                     class="ml-auto text-xs px-l-2 px-1 py-1 tracking-widest text-[var(--body)] border border-[var(--box-hover)] rounded-md"
                                     x-text="item.right"
@@ -569,6 +594,7 @@
         </div>
       </div>
     </nav>
+
     <main>
       <div class="social-links">
         <div class="social-link">
