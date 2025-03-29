@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -113,7 +115,7 @@ body strong {
 }
 
 body em {
-  font-family: "Newsreader", serif;
+  font-family: "Playfair Display", serif;
   font-size: 1.125rem;
   letter-spacing: normal;
   line-height: normal;
@@ -442,7 +444,7 @@ h1.homepage {
 
 h1.main-title {
   font-size: 1.75rem;
-  font-family: "Newsreader", serif;
+  font-family: "Playfair Display", serif;
   line-height: 1.125;
 }
 
@@ -454,7 +456,7 @@ h1.main-title {
 
 h2.section-title {
   font-size: 1.75rem;
-  font-family: "Newsreader", serif;
+  font-family: "Playfair Display", serif;
   line-height: 1.125;
   margin: 3.5rem auto 0.75rem;
 }
@@ -471,7 +473,7 @@ h2.section-title_process {
 }
 
 .header-em {
-  font-family: "Newsreader", serif;
+  font-family: "Playfair Display", serif;
   color: var(--caption);
   font-size: 1.75rem;
   letter-spacing: -0.00625rem;
