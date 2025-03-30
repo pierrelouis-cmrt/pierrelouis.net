@@ -2548,15 +2548,36 @@ hr.divider3 {
   }
 }
 
+/* -------- Colophon -------- */
+
+.subtitle {
+  font-size: 1.2rem;
+  font-family: "Newsreader", serif;
+  line-height: 1.125;
+  margin: 1.5rem auto 0.75rem;
+}
+
+.colophon-credits {
+  max-width: 600px;
+  margin: 1rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Two columns on medium screens */
+
 @media (max-width: 768px) {
-  .social-links {
-    max-width: 90%;
+  .colophon-credits {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 600px) {
-  .username {
-    display: none;
+/* One column on small screens */
+
+@media (max-width: 480px) {
+  .colophon-credits {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -2621,6 +2642,10 @@ hr.divider3 {
   .footer-text-right {
     padding: 0;
   }
+
+  .social-links {
+    max-width: 90%;
+  }
 }
 
 @media screen and (max-width: 640px) {
@@ -2628,6 +2653,12 @@ hr.divider3 {
     top: 258px;
     left: 30px;
   }*/
+}
+
+@media (max-width: 600px) {
+  .username {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {

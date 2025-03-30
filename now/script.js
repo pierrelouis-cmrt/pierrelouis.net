@@ -87,3 +87,32 @@ $(".carousel .owl-carousel").owlCarousel({
     },
   },
 });
+
+// Content interaction
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Set up scroll animations
+  const observerOptions = {
+    root: null,
+    rootMargin: "0px",
+    threshold: 0.1,
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll(".animate-on-scroll").forEach((element) => {
+    observer.observe(element);
+  });
+
+  // Initialize floating tags
+  document.querySelectorAll(".tag").forEach((tag, index) => {
+    tag.style.setProperty("--delay", index);
+  });
+});
