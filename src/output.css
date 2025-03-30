@@ -1793,33 +1793,64 @@ a.project-item:not(:hover) .lucide {
 }
 
 .equalizer {
+  position: relative;
+  align-items: center;
   display: flex;
-  align-items: flex-end;
-  gap: 4px;
-  width: 25px;
   height: 20px;
+  justify-content: space-between;
+  overflow: hidden;
+  width: 25px;
 }
 
 .bar {
+  position: absolute;
+  bottom: 0;
   width: 2px;
   background-color: var(--stroke-secondary);
-  transition: height 0.15s ease-in-out, color 120ms ease-in-out;
+  transition: height 0.15s ease-in-out, background-color 120ms ease-in-out;
+  will-change: height;
+  transform-origin: bottom;
+  height: 10%;
 }
 
-.bar:nth-child(4n + 1) {
-  animation: equaliser-wave 2s 1s ease-out alternate infinite;
+.bar:nth-child(1) {
+  left: 0;
 }
 
-.bar:nth-child(4n + 2) {
-  animation: equaliser-wave 2s 0.5s ease-out alternate infinite;
+.bar:nth-child(2) {
+  left: 4px;
 }
 
-.bar:nth-child(4n + 3) {
-  animation: equaliser-wave 2s 1.5s ease-out alternate infinite;
+.bar:nth-child(3) {
+  left: 8px;
 }
 
-.bar:nth-child(4n + 4) {
-  animation: equaliser-wave 2s 0.25s ease-out alternate infinite;
+.bar:nth-child(4) {
+  left: 12px;
+}
+
+.bar:nth-child(5) {
+  left: 16px;
+}
+
+.bar:nth-child(1) {
+  animation: equaliser-wave 2s 1s ease-in-out alternate infinite;
+}
+
+.bar:nth-child(2) {
+  animation: equaliser-wave 2s 0.5s ease-in-out alternate infinite;
+}
+
+.bar:nth-child(3) {
+  animation: equaliser-wave 2s 1.5s ease-in-out alternate infinite;
+}
+
+.bar:nth-child(4) {
+  animation: equaliser-wave 2s 0.25s ease-in-out alternate infinite;
+}
+
+.bar:nth-child(5) {
+  animation: equaliser-wave 2s 0.75s ease-in-out alternate infinite;
 }
 
 @keyframes equaliser-wave {
