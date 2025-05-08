@@ -2680,7 +2680,7 @@ hr.divider3 {
 }
 
 .action {
-  width: 120px;
+  max-width: 130px;
   text-align: right;
   display: inline-flex;
   align-items: center;
