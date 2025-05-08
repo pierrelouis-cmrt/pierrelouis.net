@@ -91,3 +91,29 @@ document.addEventListener("DOMContentLoaded", function () {
     tag.style.setProperty("--delay", index);
   });
 });
+
+// Simple lightbox functionality
+function openLightbox(src) {
+  document.getElementById("lightbox-img").src = src;
+  document.getElementById("lightbox").style.display = "flex";
+  document.body.style.overflow = "hidden"; // Prevent scrolling
+}
+
+function closeLightbox() {
+  document.getElementById("lightbox").style.display = "none";
+  document.body.style.overflow = "auto"; // Re-enable scrolling
+}
+
+// Close lightbox when clicking outside the image
+window.onclick = function (event) {
+  if (event.target === document.getElementById("lightbox")) {
+    closeLightbox();
+  }
+};
+
+// Close lightbox with ESC key
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape") {
+    closeLightbox();
+  }
+});
