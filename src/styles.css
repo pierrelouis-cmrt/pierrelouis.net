@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -118,8 +120,8 @@ body strong {
 }
 
 body em {
-  font-family: "Newsreader", serif;
-  font-size: 1.125rem;
+  font-family: "Libre Baskerville", serif;
+  font-size: 1rem;
   letter-spacing: normal;
   line-height: normal;
 }
@@ -449,8 +451,8 @@ h1.homepage {
 }
 
 h1.main-title {
-  font-size: 1.75rem;
-  font-family: "Newsreader", serif;
+  font-size: 1.625rem;
+  font-family: "Libre Baskerville", serif;
   line-height: 1.125;
 }
 
@@ -461,8 +463,8 @@ h1.main-title {
 /* Sections */
 
 h2.section-title {
-  font-size: 1.75rem;
-  font-family: "Newsreader", serif;
+  font-size: 1.5rem;
+  font-family: "Libre Baskerville", serif;
   line-height: 1.125;
   margin: 3.5rem auto 0.75rem;
 }
@@ -479,9 +481,9 @@ h2.section-title_process {
 }
 
 .header-em {
-  font-family: "Newsreader", serif;
+  font-family: "Libre Baskerville", serif;
   color: var(--caption);
-  font-size: 1.75rem;
+  font-size: 1.425rem;
   letter-spacing: -0.00625rem;
   line-height: normal;
   transition: color 400ms ease-in-out;
@@ -1628,8 +1630,8 @@ hr.divider3 {
 /* -------- Colophon -------- */
 
 .subtitle {
-  font-size: 1.2rem;
-  font-family: "Newsreader", serif;
+  font-size: 1.075rem;
+  font-family: "Libre Baskerville", serif;
   line-height: 1.125;
   margin: 1.5rem auto 0.75rem;
 }
@@ -1793,6 +1795,198 @@ hr.divider3 {
   font-size: 30px;
   font-weight: bold;
   cursor: pointer;
+}
+
+/* -------- Arsenal (Uses) Page -------- */
+
+.arsenal-sections {
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+  margin: 3rem auto;
+  max-width: 600px;
+}
+
+.arsenal-category {
+  max-width: 300px;
+}
+
+/* Category headers */
+.category-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.category-number {
+  font-size: 0.75rem;
+  color: var(--secondary);
+  background: var(--background);
+  border: 1px solid var(--stroke-lighter);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  transition: all 120ms ease-in-out;
+}
+
+.category-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--default);
+  margin: 0 1rem 0 0;
+  transition: color 400ms ease-in-out;
+}
+
+/* Arsenal list */
+.arsenal-list {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.arsenal-list::before {
+  content: "";
+  position: absolute;
+  left: 13px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--stroke-lighter);
+  transition: background-color 400ms ease-in-out;
+}
+
+/* Arsenal items */
+.arsenal-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0;
+  text-decoration: none;
+  position: relative;
+  transition: all 120ms ease-in-out;
+  border-radius: 4px;
+  margin: 0 -0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.arsenal-item::before {
+  position: absolute;
+  left: 9px;
+  width: 8px;
+  height: 8px;
+  background: var(--background);
+  border: 2px solid var(--stroke-lighter);
+  border-radius: 50%;
+  transition: all 120ms ease-in-out;
+}
+
+.arsenal-item:hover {
+  transform: translateX(2px);
+}
+
+.arsenal-item:hover::before {
+  background: var(--secondary);
+  border-color: var(--secondary);
+}
+
+/* Item icon */
+.item-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1.5rem;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.item-icon img,
+.item-icon svg {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  color: var(--secondary);
+  transition: all 120ms ease-in-out;
+}
+
+.arsenal-item:hover .item-icon svg {
+  color: var(--default);
+}
+
+/* Dark mode logo inversion */
+.dark .logo-needs-invert {
+  filter: invert(1);
+}
+
+/* Item name */
+.item-name {
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--default);
+  transition: color 120ms ease-in-out;
+}
+
+.arsenal-item:hover .item-name {
+  color: var(--body);
+}
+
+/* Footer */
+.arsenal-footer {
+  max-width: 600px;
+  margin: 4rem auto 2rem;
+  text-align: center;
+  padding-top: 1.5rem;
+  transition: border-color 400ms ease-in-out;
+}
+
+.footer-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.footer-dots span {
+  width: 3px;
+  height: 3px;
+  background: var(--secondary);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+  .arsenal-category {
+    margin-left: 1.25rem;
+    margin-right: 1.25rem;
+    width: calc(100% - 2.5rem);
+  }
+
+  .arsenal-item {
+    margin: 0 -0.25rem;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .category-number {
+    width: 24px;
+    height: 24px;
+    font-size: 0.6875rem;
+  }
+
+  .category-title {
+    font-size: 0.9375rem;
+  }
+
+  .item-name {
+    font-size: 0.875rem;
+  }
 }
 
 /*----------------------------  MEDIA QUERIES  --------------------------------------*/
