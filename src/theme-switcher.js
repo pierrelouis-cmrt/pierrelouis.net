@@ -22,7 +22,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function toggleTheme() {
     const isDark = !document.documentElement.classList.contains("dark");
     applyTheme(isDark);
-    localStorage.setItem("theme", isDark ? "dark" : "");
+    // Persist the user's explicit theme choice
+    // Store "light" instead of an empty string so page loaders
+    // correctly detect the preference on subsequent visits
+    localStorage.setItem("theme", isDark ? "dark" : "light");
 
     const currentTheme = isDark ? "dark" : "light";
     document.body.classList.add("theme-transition");
