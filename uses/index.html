@@ -58,6 +58,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="/src/output.css" as="style">
 
     <link rel="stylesheet" href="/src/output.css" />
   </head>
@@ -401,7 +404,7 @@
                     }
                     
                     this.commandItemActive = this.commandItemsFiltered[0] || null;
-                  }, 50); // Small debounce for typing
+                  }, 100); // Small debounce for typing
                 },
                 
                 // Optimized category display check
