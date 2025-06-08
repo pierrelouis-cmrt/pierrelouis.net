@@ -2259,6 +2259,7 @@ hr.divider3 {
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
+  touch-action: pan-y;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   gap: 10px;
@@ -2270,6 +2271,7 @@ hr.divider3 {
 
 .carousel-track.dragging {
   cursor: grabbing;
+  scroll-behavior: auto;
 }
 
 .carousel-track::-webkit-scrollbar {
