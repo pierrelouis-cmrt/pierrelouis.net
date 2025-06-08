@@ -1110,6 +1110,8 @@ hr.divider3 {
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   gap: 10px;
   scrollbar-width: none;

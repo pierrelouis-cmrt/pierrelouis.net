@@ -227,11 +227,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY) || e.shiftKey;
       if (horizontal) {
         e.preventDefault();
-        track.scrollLeft += e.deltaX || e.deltaY;
+        track.scrollBy({ left: e.deltaX || e.deltaY, behavior: "smooth" });
       }
     },
     { passive: false }
   );
+
+  // Ensure the first slide stays in view when resizing the page
+  window.addEventListener("resize", () => {
+    if (track.scrollLeft !== 0) track.scrollTo({ left: 0 });
+  });
 });
 
 // Lightweight lightbox helpers for the projects page
