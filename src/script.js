@@ -201,3 +201,33 @@ document.addEventListener('DOMContentLoaded', () => {
     img.setAttribute('loading', 'lazy');
   });
 });
+
+// Lightweight lightbox helpers for the projects page
+function openLightbox(src) {
+  const img = document.getElementById('lightbox-img');
+  const box = document.getElementById('lightbox');
+  if (!img || !box) return;
+  img.src = src;
+  box.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  const box = document.getElementById('lightbox');
+  if (!box) return;
+  box.style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+
+window.addEventListener('click', (e) => {
+  const box = document.getElementById('lightbox');
+  if (box && e.target === box) {
+    closeLightbox();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeLightbox();
+  }
+});
