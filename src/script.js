@@ -207,13 +207,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const track = document.querySelector(".carousel-track");
   if (!track) return;
 
-  // Prevent vertical wheel movements from scrolling the carousel
+  // Allow horizontal wheel or Shift + wheel to control the carousel
+  // while letting vertical scrolling move the page
   track.addEventListener(
     "wheel",
     (e) => {
-      const mainlyVertical = Math.abs(e.deltaY) > Math.abs(e.deltaX);
-      if (mainlyVertical && !e.shiftKey) {
+      const horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY) || e.shiftKey;
+      if (horizontal) {
         e.preventDefault();
+        track.scrollLeft += e.deltaX || e.deltaY;
       }
     },
     { passive: false }
