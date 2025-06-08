@@ -245,14 +245,16 @@ document.addEventListener("DOMContentLoaded", () => {
   track.addEventListener("pointerup", endDrag);
   track.addEventListener("pointercancel", endDrag);
 
-  // Allow horizontal wheel or Shift + wheel to control the carousel
+  // Allow Shift + wheel to control the carousel while keeping native
+  // trackpad scrolling smooth. Only intercept vertical wheel movements
+  // modified by the Shift key so horizontal gestures keep their inertia.
   track.addEventListener(
     "wheel",
     (e) => {
-      const horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY) || e.shiftKey;
-      if (horizontal) {
+      const shiftVertical = e.shiftKey && Math.abs(e.deltaY) > Math.abs(e.deltaX);
+      if (shiftVertical) {
         e.preventDefault();
-        track.scrollBy({ left: e.deltaX || e.deltaY, behavior: "smooth" });
+        track.scrollLeft += e.deltaY;
       }
     },
     { passive: false }
