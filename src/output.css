@@ -2263,7 +2263,6 @@ hr.divider3 {
   -webkit-overflow-scrolling: touch;
   gap: 10px;
   scrollbar-width: none;
-  cursor: grab;
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
