@@ -2012,8 +2012,8 @@ a.project-item:not(:hover) .lucide {
   margin: 0.75rem;
   z-index: 10;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   border-radius: 10px;
   border: 2px solid var(--stroke-lighter);
   background-color: var(--background);
@@ -2265,8 +2265,8 @@ hr.divider3 {
   scrollbar-width: none;
   cursor: grab;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
 .carousel-track.dragging {
