@@ -203,22 +203,34 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Initialize Owl Carousel on pages that include it
-document.addEventListener('DOMContentLoaded', () => {
-  const carousel = document.querySelector('.carousel .owl-carousel');
-  if (carousel && typeof window.jQuery !== 'undefined' &&
-      typeof window.jQuery(carousel).owlCarousel === 'function') {
-    window.jQuery(carousel).owlCarousel({
-      stagePadding: 50,
-      loop: true,
-      margin: 10,
-      nav: false,
-      responsive: {
-        0: { items: 1 },
-        600: { items: 3 },
-        1000: { items: 5 }
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof window.jQuery === "undefined") return;
+  const $carousel = $(".carousel .owl-carousel");
+  if (!$carousel.length) return;
+  const owl = $carousel.owlCarousel({
+    stagePadding: 50,
+    loop: true,
+    margin: 10,
+    nav: false,
+    responsive: {
+      0: { items: 1 },
+      600: { items: 3 },
+      1000: { items: 5 },
+    },
+  });
+
+  // Allow horizontal wheel scrolling to navigate the carousel
+  $carousel.on("wheel", function (e) {
+    const evt = e.originalEvent;
+    if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY) || e.shiftKey) {
+      e.preventDefault();
+      if (evt.deltaX > 0 || (evt.deltaX === 0 && evt.deltaY > 0)) {
+        owl.trigger("next.owl");
+      } else if (evt.deltaX < 0 || (evt.deltaX === 0 && evt.deltaY < 0)) {
+        owl.trigger("prev.owl");
       }
-    });
-  }
+    }
+  });
 });
 
 // Lightweight lightbox helpers for the projects page
