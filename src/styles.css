@@ -2059,7 +2059,8 @@ hr.divider3 {
   body footer,
   .colophon-credits,
   .project-thumbnails,
-  .project-meta {
+  .project-meta,
+  .arsenal-sections {
     padding: 0 1.25rem;
   }
 
