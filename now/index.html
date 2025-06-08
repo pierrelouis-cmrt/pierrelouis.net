@@ -126,15 +126,16 @@
           })
         "
             @keydown.escape.window="commandOpen = false"
+            @open-command-palette.window="commandOpen = true"
             @keydown.window="
           if (($event.ctrlKey || $event.metaKey) && $event.key === 'k') {
             $event.preventDefault();
             commandOpen = true;
           } else if (!$event.ctrlKey && !$event.metaKey && !$event.altKey && !$event.shiftKey) {
             const key = $event.key.toLowerCase();
-            if (shortcutMap[key] && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+            if (shortcutMap[key] && (!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)||commandOpen)) {
               window.location.href = shortcutMap[key];
-            } else if (key === 't' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+            } else if (key === 't' && (!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)||commandOpen)) {
               $store.theme.toggle();
             }
           }
@@ -143,7 +144,7 @@
           >
             <button
               @click="commandOpen = true"
-              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium bg-[var(--box-hover)] rounded-l-xl rounded-r-sm hover:bg-[var(--stroke-secondary)] active:bg-[var(--stroke-lighter)] disabled:opacity-50 disabled:pointer-events-none transition-colors duration-100"
+              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium bg-[var(--box-hover)] rounded-l-xl rounded-r-sm hover:bg-[var(--stroke-secondary)] active:bg-[var(--stroke-lighter)] disabled:opacity-50 disabled:pointer-events-none"
             >
               <svg
                 class="w-4 h-4 mr-0 sm:mr-2 text-[var(--body)] shrink-0"
