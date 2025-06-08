@@ -1996,6 +1996,7 @@ hr.divider3 {
   .arsenal-category {
     margin-left: 1.25rem;
     margin-right: 1.25rem;
+    max-width: none;
     width: calc(100% - 2.5rem);
   }
 
@@ -2054,6 +2055,13 @@ hr.divider3 {
   .project-thumbnails,
   .project-meta {
     padding: 0 1.25rem;
+  }
+
+  .arsenal-sections {
+    flex-direction: column;
+    gap: 2rem;
+    max-width: none;
+    margin: 2rem auto;
   }
 
   footer p.links {
