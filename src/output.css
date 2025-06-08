@@ -1009,6 +1009,11 @@ video {
   text-align: left;
 }
 
+.text-base{
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 .text-sm{
   font-size: 0.875rem;
   line-height: 1.25rem;
@@ -3502,6 +3507,11 @@ hr.divider3 {
 
   .sm\:pb-0{
     padding-bottom: 0px;
+  }
+
+  .sm\:text-sm{
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   }
 }
 
