@@ -1993,9 +1993,16 @@ hr.divider3 {
 
 /* Responsive design */
 @media screen and (max-width: 768px) {
+  .arsenal-sections {
+    flex-direction: column;
+    gap: 2rem;
+    max-width: none;
+    margin: 2rem auto;
+  }
   .arsenal-category {
     margin-left: 1.25rem;
     margin-right: 1.25rem;
+    max-width: none;
     width: calc(100% - 2.5rem);
   }
 
