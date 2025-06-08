@@ -202,18 +202,18 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Enable natural horizontal scrolling for the now page carousel
+// Restrict carousel to horizontal scrolling only
 document.addEventListener("DOMContentLoaded", () => {
   const track = document.querySelector(".carousel-track");
   if (!track) return;
 
-  // Translate vertical wheel movements into horizontal scrolling
+  // Prevent vertical wheel movements from scrolling the carousel
   track.addEventListener(
     "wheel",
     (e) => {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      const mainlyVertical = Math.abs(e.deltaY) > Math.abs(e.deltaX);
+      if (mainlyVertical && !e.shiftKey) {
         e.preventDefault();
-        track.scrollLeft += e.deltaY;
       }
     },
     { passive: false }
