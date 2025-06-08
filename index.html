@@ -105,18 +105,6 @@
           if (($event.ctrlKey || $event.metaKey) && !$event.shiftKey && $event.key.toLowerCase() === 'k') {
             $event.preventDefault();
             commandOpen = true;
-          } else if (($event.ctrlKey || $event.metaKey) && $event.shiftKey && !$event.altKey) {
-            const key = $event.key.toLowerCase();
-            const active = document.activeElement.tagName;
-            if (commandOpen || !['INPUT','TEXTAREA'].includes(active)) {
-              if (shortcutMap[key]) {
-                $event.preventDefault();
-                window.location.href = shortcutMap[key];
-              } else if (key === 't') {
-                $event.preventDefault();
-                $store.theme.toggle();
-              }
-            }
           }
         "
             class="relative z-50 w-auto h-auto"
