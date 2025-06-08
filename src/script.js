@@ -251,3 +251,11 @@ document.addEventListener('keydown', (e) => {
     closeLightbox();
   }
 });
+
+// Global keyboard shortcut to toggle the command palette
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    window.dispatchEvent(new CustomEvent('open-command-palette'));
+  }
+});
