@@ -1115,6 +1115,12 @@ hr.divider3 {
   -webkit-overflow-scrolling: touch;
   gap: 10px;
   scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.carousel-track.dragging {
+  cursor: grabbing;
 }
 
 .carousel-track::-webkit-scrollbar {
@@ -1129,6 +1135,7 @@ hr.divider3 {
   width: 200px;
   height: 200px;
   overflow: hidden;
+  user-select: none;
 }
 
 .carousel .item img {
