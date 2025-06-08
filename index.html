@@ -88,7 +88,8 @@
             'n': '/now',
             'u': '/uses',
             'c': '/colophon',
-            'l': '/links'
+            'l': '/links',
+            'e': 'mailto:contact@pierrelouis.net?subject=Just%20wanted%20to%20say%20hi'
           }
         }"
             x-init="
@@ -101,15 +102,20 @@
             @keydown.escape.window="commandOpen = false"
             @open-command-palette.window="commandOpen = true"
             @keydown.window="
-          if (($event.ctrlKey || $event.metaKey) && $event.key === 'k') {
+          if (($event.ctrlKey || $event.metaKey) && !$event.shiftKey && $event.key.toLowerCase() === 'k') {
             $event.preventDefault();
             commandOpen = true;
-          } else if (!$event.ctrlKey && !$event.metaKey && !$event.altKey && !$event.shiftKey) {
+          } else if (($event.ctrlKey || $event.metaKey) && $event.shiftKey && !$event.altKey) {
             const key = $event.key.toLowerCase();
-            if (shortcutMap[key] && (!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)||commandOpen)) {
-              window.location.href = shortcutMap[key];
-            } else if (key === 't' && (!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)||commandOpen)) {
-              $store.theme.toggle();
+            const active = document.activeElement.tagName;
+            if (commandOpen || !['INPUT','TEXTAREA'].includes(active)) {
+              if (shortcutMap[key]) {
+                $event.preventDefault();
+                window.location.href = shortcutMap[key];
+              } else if (key === 't') {
+                $event.preventDefault();
+                $store.theme.toggle();
+              }
             }
           }
         "

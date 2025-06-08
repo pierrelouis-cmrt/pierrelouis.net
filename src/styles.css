@@ -365,7 +365,7 @@ a.inline-icon:not(:hover) .lucide {
   border: 2px solid var(--stroke-lighter);
   background: var(--background);
   line-height: normal;
-  transition: background-color 150ms ease-in-out, border-color 150ms ease-in-out, transform 150ms ease-in-out;
+  transition: none;
   z-index: 9999;
 }
 
