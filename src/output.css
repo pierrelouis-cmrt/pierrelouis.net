@@ -2244,6 +2244,8 @@ hr.divider3 {
 .carousel {
   position: relative;
   margin-bottom: 50px;
+  width: 100%;
+  overflow: hidden;
 }
 
 .carousel-track {
@@ -2251,9 +2253,19 @@ hr.divider3 {
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   gap: 10px;
   scrollbar-width: none;
+  cursor: grab;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+.carousel-track.dragging {
+  cursor: grabbing;
 }
 
 .carousel-track::-webkit-scrollbar {
@@ -2268,6 +2280,9 @@ hr.divider3 {
   width: 200px;
   height: 200px;
   overflow: hidden;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 
 .carousel .item img {
