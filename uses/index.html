@@ -243,7 +243,12 @@
                 isTouchDevice: 'ontouchstart' in window,
                 itemsCache: {},
                 actionMap: window.COMMAND_ACTION_MAP,
-                
+
+                // Optimized empty search check
+                commandSearchIsEmpty() {
+                  return !this.commandSearch || this.commandSearch.length === 0;
+                },
+
                 // Optimized active item check
                 commandItemIsActive(item) {
                   return this.commandItemActive && this.commandItemActive.value === item.value;
