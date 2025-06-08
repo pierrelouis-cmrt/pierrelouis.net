@@ -873,7 +873,9 @@ a.project-item:not(:hover) .lucide {
   right: 1px;
   margin: 0.75rem;
   z-index: 10;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   border-radius: 10px;
   border: 2px solid var(--stroke-lighter);
   background-color: var(--background);
@@ -1115,6 +1117,14 @@ hr.divider3 {
   -webkit-overflow-scrolling: touch;
   gap: 10px;
   scrollbar-width: none;
+  cursor: grab;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+.carousel-track.dragging {
+  cursor: grabbing;
 }
 
 .carousel-track::-webkit-scrollbar {
@@ -1129,6 +1139,7 @@ hr.divider3 {
   width: 200px;
   height: 200px;
   overflow: hidden;
+  user-select: none;
 }
 
 .carousel .item img {

@@ -219,8 +219,33 @@ document.addEventListener("DOMContentLoaded", () => {
   const track = document.querySelector(".carousel-track");
   if (!track) return;
 
+  let dragging = false;
+  let startX = 0;
+  let startScroll = 0;
+
+  const endDrag = () => {
+    dragging = false;
+    track.classList.remove("dragging");
+  };
+
+  track.addEventListener("pointerdown", (e) => {
+    dragging = true;
+    startX = e.clientX;
+    startScroll = track.scrollLeft;
+    track.classList.add("dragging");
+    track.setPointerCapture(e.pointerId);
+  });
+
+  track.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    track.scrollLeft = startScroll - dx;
+  });
+
+  track.addEventListener("pointerup", endDrag);
+  track.addEventListener("pointercancel", endDrag);
+
   // Allow horizontal wheel or Shift + wheel to control the carousel
-  // while letting vertical scrolling move the page
   track.addEventListener(
     "wheel",
     (e) => {
