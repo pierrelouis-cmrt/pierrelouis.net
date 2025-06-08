@@ -2244,6 +2244,8 @@ hr.divider3 {
 .carousel {
   position: relative;
   margin-bottom: 50px;
+  width: 100%;
+  overflow: hidden;
 }
 
 .carousel-track {
