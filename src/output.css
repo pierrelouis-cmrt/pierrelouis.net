@@ -2243,21 +2243,40 @@ hr.divider3 {
 
 .carousel {
   position: relative;
+  margin-bottom: 50px;
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  gap: 10px;
+  scrollbar-width: none;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel .item {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  background: transparent url(/src/assets/loading.webp) no-repeat center center;
+  background-size: 100px 100px;
+  width: 200px;
+  height: 200px;
   overflow: hidden;
 }
 
-.item {
-  background: transparent url(/src/assets/loading.webp) no-repeat center center;
-  background-size: 100px 100px;
-}
-
 .carousel .item img {
-  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
   -o-object-position: center;
      object-position: center;
-  max-height: 200px;
 }
 
 /* About */
