@@ -146,3 +146,107 @@ document.addEventListener("DOMContentLoaded", function () {
     tag.style.setProperty("--delay", index);
   });
 });
+
+// Global command palette data for reuse across pages
+window.COMMAND_ITEMS_DATA = {
+  pages: [
+    { title: 'Home', value: 'home', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house w-4 h-4 mr-2"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>', right: 'H', default: true },
+    { title: 'About me (Who am I?)', value: 'about', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user w-4 h-4 mr-2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>', right: 'A', default: true },
+    { title: 'My Projects (What have I been working on?)', value: 'projects', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-briefcase w-4 h-4 mr-2"><rect width="20" height="14" x="2" y="7" rx="2" /><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /></svg>', right: 'P', default: true },
+    { title: 'Now (What am I upto at the moment?)', value: 'now', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hourglass w-4 h-4 mr-2"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>', right: 'N', default: true },
+    { title: 'Uses (My toolkit, tech stacks...)', value: 'uses', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-drafting-compass w-4 h-4 mr-2"><path d="m12.99 6.74 1.93 3.44"/><path d="M19.136 12a10 10 0 0 1-14.271 0"/><path d="m21 21-2.16-3.84"/><path d="m3 21 8.02-14.26"/><circle cx="12" cy="5" r="2"/></svg>', right: 'U', default: true },
+    { title: "Colophon (What's this all about?)", value: 'colophon', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml w-4 h-4 mr-2"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>', right: 'C', default: true }
+  ],
+  network: [
+    { title: 'Links (My socials)', value: 'links', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link w-4 h-4 mr-2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>', right: 'L', default: true },
+    { title: 'Send me an email', value: 'email', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-at-sign w-4 h-4 mr-2"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"/></svg>', right: 'E', default: true }
+  ],
+  settings: [
+    { title: 'Toggle Theme', value: 'theme', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paintbrush-vertical w-4 h-4 mr-2"><path d="M10 2v2"/><path d="M14 2v4"/><path d="M17 2a1 1 0 0 1 1 1v9H6V3a1 1 0 0 1 1-1z"/><path d="M6 12a1 1 0 0 0-1 1v1a2 2 0 0 0 2 2h2a1 1 0 0 1 1 1v2.9a2 2 0 1 0 4 0V17a1 1 0 0 1 1-1h2a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1"/></svg>', right: 'T', default: true }
+  ]
+};
+
+window.COMMAND_ACTION_MAP = {
+  home: '/',
+  about: '/about',
+  projects: '/projects',
+  now: '/now',
+  uses: '/uses',
+  colophon: '/colophon',
+  links: '/links',
+  email: 'mailto:contact@pierrelouis.net?subject=Just%20wanted%20to%20say%20hi'
+};
+
+// Prefetch internal pages on hover for snappier navigation
+document.addEventListener('DOMContentLoaded', () => {
+  const cache = new Set();
+  document.querySelectorAll('a[href]').forEach(link => {
+    const url = link.href;
+    if (url.startsWith(location.origin) && !link.target && !url.includes('#')) {
+      link.addEventListener('pointerenter', () => {
+        if (cache.has(url)) return;
+        cache.add(url);
+        const l = document.createElement('link');
+        l.rel = 'prefetch';
+        l.href = url;
+        document.head.appendChild(l);
+      }, { passive: true });
+    }
+  });
+});
+
+// Lazy load images that do not specify a loading attribute
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('img:not([loading])').forEach(img => {
+    img.setAttribute('loading', 'lazy');
+  });
+});
+
+// Initialize Owl Carousel on pages that include it
+document.addEventListener('DOMContentLoaded', () => {
+  const carousel = document.querySelector('.carousel .owl-carousel');
+  if (carousel && typeof window.jQuery !== 'undefined' &&
+      typeof window.jQuery(carousel).owlCarousel === 'function') {
+    window.jQuery(carousel).owlCarousel({
+      stagePadding: 50,
+      loop: true,
+      margin: 10,
+      nav: false,
+      responsive: {
+        0: { items: 1 },
+        600: { items: 3 },
+        1000: { items: 5 }
+      }
+    });
+  }
+});
+
+// Lightweight lightbox helpers for the projects page
+function openLightbox(src) {
+  const img = document.getElementById('lightbox-img');
+  const box = document.getElementById('lightbox');
+  if (!img || !box) return;
+  img.src = src;
+  box.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  const box = document.getElementById('lightbox');
+  if (!box) return;
+  box.style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+
+window.addEventListener('click', (e) => {
+  const box = document.getElementById('lightbox');
+  if (box && e.target === box) {
+    closeLightbox();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeLightbox();
+  }
+});
