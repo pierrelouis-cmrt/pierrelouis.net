@@ -65,7 +65,7 @@ document.addEventListener("alpine:init", () => {
 
 // Carousel
 
-$(".carousel .owl-carousel").owlCarousel({
+const owl = $(".carousel .owl-carousel").owlCarousel({
   stagePadding: 50,
   loop: true,
   margin: 10,
@@ -86,6 +86,19 @@ $(".carousel .owl-carousel").owlCarousel({
       items: 5,
     },
   },
+});
+
+// Allow horizontal wheel scrolling to navigate the carousel
+$(".carousel .owl-carousel").on("wheel", function (e) {
+  const evt = e.originalEvent;
+  if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY) || e.shiftKey) {
+    e.preventDefault();
+    if (evt.deltaX > 0 || (evt.deltaX === 0 && evt.deltaY > 0)) {
+      owl.trigger("next.owl");
+    } else if (evt.deltaX < 0 || (evt.deltaX === 0 && evt.deltaY < 0)) {
+      owl.trigger("prev.owl");
+    }
+  }
 });
 
 // Content interaction

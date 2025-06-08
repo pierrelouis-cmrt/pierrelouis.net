@@ -146,3 +146,36 @@ document.addEventListener("DOMContentLoaded", function () {
     tag.style.setProperty("--delay", index);
   });
 });
+
+// Carousel
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof window.jQuery === "undefined") return;
+  const $carousel = $(".carousel .owl-carousel");
+  if (!$carousel.length) return;
+  const owl = $carousel.owlCarousel({
+    stagePadding: 50,
+    loop: true,
+    margin: 10,
+    nav: false,
+    responsive: {
+      0: { items: 1 },
+      600: { items: 3 },
+      1000: { items: 5 },
+    },
+  });
+
+  // Allow horizontal wheel scrolling to navigate the carousel
+  $carousel.on("wheel", function (e) {
+    const evt = e.originalEvent;
+    if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY) || e.shiftKey) {
+      e.preventDefault();
+      if (evt.deltaX > 0 || (evt.deltaX === 0 && evt.deltaY > 0)) {
+        owl.trigger("next.owl");
+      } else if (evt.deltaX < 0 || (evt.deltaX === 0 && evt.deltaY < 0)) {
+        owl.trigger("prev.owl");
+      }
+    }
+  });
+});
+
