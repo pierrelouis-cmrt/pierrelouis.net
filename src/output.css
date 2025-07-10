@@ -1378,6 +1378,17 @@ a.inline-icon:not(:hover) .lucide {
   text-decoration: none;
 }
 
+/* ensure back icon matches link color */
+
+.nav-left .home-button .back {
+  color: inherit;
+  transition: color 120ms ease-in-out;
+}
+
+.nav-left .home-button:hover .back {
+  color: inherit;
+}
+
 .nav-left .home-button:hover {
   color: var(--secondary);
   text-decoration-line: none;
