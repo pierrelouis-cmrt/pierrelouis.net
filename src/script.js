@@ -141,10 +141,6 @@ document.addEventListener("DOMContentLoaded", function () {
     observer.observe(element);
   });
 
-  // Initialize floating tags
-  document.querySelectorAll(".tag").forEach((tag, index) => {
-    tag.style.setProperty("--delay", index);
-  });
 });
 
 // Global command palette data for reuse across pages
@@ -219,13 +215,38 @@ document.addEventListener("DOMContentLoaded", () => {
   const track = document.querySelector(".carousel-track");
   if (!track) return;
 
+  const carousel = track.closest(".carousel");
+  const originalItems = Array.from(track.children);
+  let setWidth = 0;
+  let totalSets = 1;
+
+  const buildLoop = () => {
+    while (track.scrollWidth < carousel.offsetWidth * 2) {
+      originalItems.forEach((item) => track.appendChild(item.cloneNode(true)));
+    }
+    totalSets = Math.ceil(track.children.length / originalItems.length);
+    setWidth = track.scrollWidth / totalSets;
+  };
+
+  window.addEventListener("load", buildLoop);
+
   let dragging = false;
   let startX = 0;
   let startScroll = 0;
 
+  const adjustLoop = () => {
+    if (!setWidth) return;
+    if (track.scrollLeft >= setWidth * (totalSets - 1)) {
+      track.scrollLeft -= setWidth;
+    } else if (track.scrollLeft <= 0) {
+      track.scrollLeft += setWidth;
+    }
+  };
+
   const endDrag = () => {
     dragging = false;
     track.classList.remove("dragging");
+    adjustLoop();
   };
 
   track.addEventListener("pointerdown", (e) => {
@@ -245,6 +266,10 @@ document.addEventListener("DOMContentLoaded", () => {
   track.addEventListener("pointerup", endDrag);
   track.addEventListener("pointercancel", endDrag);
 
+  track.addEventListener("scroll", () => {
+    if (!dragging) adjustLoop();
+  });
+
   // Allow Shift + wheel to control the carousel while keeping native
   // trackpad scrolling smooth. Only intercept vertical wheel movements
   // modified by the Shift key so horizontal gestures keep their inertia.
@@ -255,6 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (shiftVertical) {
         e.preventDefault();
         track.scrollLeft += e.deltaY;
+        adjustLoop();
       }
     },
     { passive: false }
@@ -263,6 +289,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Ensure the first slide stays in view when resizing the page
   window.addEventListener("resize", () => {
     if (track.scrollLeft !== 0) track.scrollTo({ left: 0 });
+    buildLoop();
+    adjustLoop();
   });
 });
 
