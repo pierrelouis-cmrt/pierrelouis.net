@@ -94,11 +94,6 @@ body h4 {
   text-wrap: balance;
 }
 
-p.links a {
-  margin-right: 1.25rem;
-  margin-bottom: 0.25rem;
-}
-
 body h4 .lucide {
   color: hsl(from var(--default) h s l / 30%);
   margin-left: 0.25rem;
@@ -164,7 +159,9 @@ body figcaption {
   font-size: 0.8125rem;
 }
 
-body a {
+/* Links */
+
+a {
   display: inline;
   color: var(--secondary);
   text-decoration: underline;
@@ -180,19 +177,21 @@ body a {
   transition: all 120ms ease-in-out;
 }
 
-body a h4 {
+a h4 {
   color: var(--default);
   transition: color 400ms ease-in-out;
 }
 
-body a:hover {
+a:hover {
   color: var(--body);
   text-decoration-color: hsl(from var(--body) h s l / 50%);
   -webkit-text-decoration-color: hsl(from var(--body) h s l / 40%);
 }
 
-
-/* Links */
+p.links a {
+  margin-right: 1.25rem;
+  margin-bottom: 0.25rem;
+}
 
 p.links a:hover {
   color: var(--body);
@@ -480,7 +479,7 @@ h2.section-title_process {
 }
 
 .homepage-header p {
-  max-width: 50ch;
+  max-width: 44ch;
   margin-left: 0;
 }
 
@@ -656,7 +655,8 @@ a.project-item:not(:hover) .lucide {
   background: var(--background);
   height: auto;
   line-height: normal;
-  transition: background-color 150ms ease-in-out, border-color 150ms ease-in-out, transform 150ms ease-in-out;
+  transition: background-color 150ms ease-in-out, border-color 150ms ease-in-out,
+    transform 150ms ease-in-out;
 }
 
 .music p {
@@ -821,7 +821,8 @@ a.project-item:not(:hover) .lucide {
   background: var(--background);
   height: auto;
   line-height: normal;
-  transition: background-color 150ms ease-in-out, border-color 150ms ease-in-out, transform 150ms ease-in-out;
+  transition: background-color 150ms ease-in-out, border-color 150ms ease-in-out,
+    transform 150ms ease-in-out;
 }
 
 .map p {
@@ -878,8 +879,8 @@ a.project-item:not(:hover) .lucide {
   margin: 0.75rem;
   z-index: 10;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   border-radius: 10px;
   border: 2px solid var(--stroke-lighter);
   background-color: var(--background);
@@ -1122,8 +1123,8 @@ hr.divider3 {
   gap: 10px;
   scrollbar-width: none;
   -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
 .carousel-track.dragging {
@@ -1154,24 +1155,11 @@ hr.divider3 {
 
 /* About */
 
-.about p {
-  max-width: 500px !important;
-  position: relative;
-}
-
-.profile-container {
-  position: relative;
-  width: 300px;
-  height: 300px;
-  margin: 0 auto;
-}
-
 .header-img {
   display: block;
-  margin: 0 auto;
-  width: 300px;
+  width: 150px;
   height: 300px;
-  border-radius: 5%;
+  border-radius: 10px;
   background-image: url("/about/me-still.png");
   background-size: cover;
   background-repeat: no-repeat;
@@ -1179,10 +1167,15 @@ hr.divider3 {
   transition: all 0.5s ease;
   opacity: 0.85;
   position: relative;
-  transform-style: preserve-3d;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  float: left;
+  margin-right: 20px;
+  margin-bottom: 5px;
 }
 
+.header-img:hover {
+  background-image: url("/about/me.gif");
+}
 
 /* Content styling */
 .content-wrapper {
@@ -1190,6 +1183,18 @@ hr.divider3 {
   margin: 0 auto;
 }
 
+.about p {
+  text-align: justify;
+}
+
+/* Clear floats after the content */
+.content-wrapper::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Rest of your existing CSS remains the same */
 .animate-on-scroll {
   opacity: 0;
   transform: translateY(30px);
@@ -1201,35 +1206,96 @@ hr.divider3 {
   transform: translateY(0);
 }
 
-
-/* Enhanced signature */
-.signature {
+.signature-container {
   display: block;
-  margin: 3rem auto;
-  max-width: 500px;
+  margin: 0 auto;
+  max-width: 600px;
   position: relative;
 }
 
-.sign-image {
-  display: block;
-  max-width: 175px;
-  max-height: auto;
-  transition: all 400ms ease;
+.signature-main {
+  display: flex;
+  min-height: 80px;
+  max-width: fit-content;
+  justify-content: left;
+  align-items: left;
+  cursor: pointer;
+  transition: all 0.6s ease;
+  padding: 20px;
+  border-radius: 24px;
 }
 
-.dark .signature .sign-image {
-  filter: invert(1) hue-rotate(180deg);
+.signature-main svg path {
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-width: 1.5;
+  stroke: var(--stroke);
+  fill: none;
+  transition: stroke-dashoffset 0.8s ease;
 }
 
-.sign-image:hover {
-  transform: rotate(-3deg) scale(0.95);
+.letter-bank {
+  display: none;
 }
 
+.up,
+.lo {
+  display: inline-block;
+  max-height: 65px;
+  width: auto;
+}
+
+/* Uppercase letter spacing */
+.up.p {
+  margin: 0 -12px 0 -3px;
+}
+.up.l {
+  margin: 0 -12px 0 -3px;
+  transform: translateY(2px);
+}
+
+/* Lowercase letter spacing */
+.lo.i {
+  margin: 0 -3.5px 0 0;
+}
+.lo.e {
+  margin: 0 -4px 0 0;
+}
+.lo.r {
+  margin: 0 -3px 0 -1px;
+}
+.lo.o {
+  margin: 0 -2.5px 0 0;
+}
+.lo.u {
+  margin: 0 -4.5px 0 0;
+}
+.lo.s {
+  margin: 0 -4px 0 -4px;
+}
+
+.word-space {
+  min-width: 30px;
+}
+
+/* Generic path styling */
+.signature-main svg path {
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-width: 1.5;
+  stroke: var(--stroke);
+  fill: none;
+  transition: stroke-dashoffset 0.8s ease;
+  /* we set these from JS, but a fall-back keeps the path visible
+     if JS is disabled */
+  stroke-dasharray: 0;
+  stroke-dashoffset: 0;
+}
 /* -------- Links -------- */
 
 .social-links {
   max-width: 600px;
-  margin: 6rem auto;
+  margin: 0 auto;
   font-size: large;
 }
 
@@ -1766,10 +1832,6 @@ hr.divider3 {
     padding: 0;
   }
 
-  .signature {
-    padding-left: 1.25rem;
-  }
-
   .command {
     display: none;
   }
@@ -1790,7 +1852,8 @@ hr.divider3 {
   .colophon-credits,
   .project-thumbnails,
   .project-meta,
-  .arsenal-sections {
+  .arsenal-sections,
+  .signature {
     padding: 0 1.25rem;
   }
 
@@ -1802,7 +1865,8 @@ hr.divider3 {
     display: none;
   }
 
-  img.avatar {
+  img.avatar,
+  .header-img {
     margin-left: 1.25rem;
   }
 
@@ -1940,6 +2004,12 @@ hr.divider3 {
     100% {
       transform: translate(200px, -20px) rotate(30deg);
     }
+  }
+
+  .header-img {
+    width: auto;
+    height: 200px;
+    float: none;
   }
 }
 

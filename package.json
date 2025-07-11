@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "nodemon": "^3.1.7",
+    "nodemon": "^3.1.10",
     "tailwindcss": "^3.4.14"
   },
   "scripts": {
