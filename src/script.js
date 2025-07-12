@@ -272,19 +272,19 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!dragging) adjustLoop();
   });
 
-  // Allow Shift + wheel to control the carousel while keeping native
-  // trackpad scrolling smooth. Only intercept vertical wheel movements
-  // modified by the Shift key so horizontal gestures keep their inertia.
+  // Allow wheel to control the carousel while keeping native
+  // trackpad scrolling smooth.
   track.addEventListener(
     "wheel",
     (e) => {
-      const shiftVertical =
-        e.shiftKey && Math.abs(e.deltaY) > Math.abs(e.deltaX);
-      if (shiftVertical) {
-        e.preventDefault();
+      // If the user is holding shift, we scroll horizontally and a bit faster
+      if (e.shiftKey) {
+        track.scrollLeft += e.deltaY * 1.25;
+      } else {
         track.scrollLeft += e.deltaY;
-        adjustLoop();
       }
+      e.preventDefault();
+      adjustLoop();
     },
     { passive: false }
   );
