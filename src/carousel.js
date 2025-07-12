@@ -3,59 +3,59 @@ document.addEventListener("DOMContentLoaded", () => {
   const track = document.querySelector(".carousel-track");
   if (!track) return;
 
-  let isDown = false;
-  let startX;
-  let scrollLeft;
+  const baseItems = Array.from(track.children);
 
-  // Mouse event listeners
-  track.addEventListener("mousedown", (e) => {
-    isDown = true;
-    track.classList.add("active");
-    startX = e.pageX - track.offsetLeft;
-    scrollLeft = track.scrollLeft;
-  });
+  function ensureLoop() {
+    const item = track.querySelector(".item");
+    if (!item) return;
 
-  track.addEventListener("mouseleave", () => {
-    isDown = false;
-    track.classList.remove("active");
-  });
+    const style = getComputedStyle(track);
+    const gap = parseFloat(style.gap) || 0;
+    const itemWidth = item.getBoundingClientRect().width + gap;
+    const minItems = Math.ceil(window.innerWidth / itemWidth) + 1;
 
-  track.addEventListener("mouseup", () => {
-    isDown = false;
-    track.classList.remove("active");
-  });
-
-  track.addEventListener("mousemove", (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - track.offsetLeft;
-    const walk = (x - startX) * 2; // Adjust multiplier for scroll speed
-    track.scrollLeft = scrollLeft - walk;
-  });
-
-  // Touch event listeners
-  track.addEventListener("touchstart", (e) => {
-    isDown = true;
-    startX = e.touches[0].pageX - track.offsetLeft;
-    scrollLeft = track.scrollLeft;
-  });
-
-  track.addEventListener("touchend", () => {
-    isDown = false;
-  });
-
-  track.addEventListener("touchmove", (e) => {
-    if (!isDown) return;
-    const x = e.touches[0].pageX - track.offsetLeft;
-    const walk = (x - startX) * 2;
-    track.scrollLeft = scrollLeft - walk;
-  });
-
-  // Horizontal scroll with Shift + Wheel
-  track.addEventListener("wheel", (e) => {
-    if (e.shiftKey) {
-      track.scrollLeft += e.deltaY;
-      e.preventDefault();
+    while (track.children.length < minItems) {
+      baseItems.forEach((el) => track.appendChild(el.cloneNode(true)));
     }
+  }
+
+  ensureLoop();
+  window.addEventListener("resize", ensureLoop);
+
+  let isDragging = false;
+  let startX = 0;
+  let scrollLeft = 0;
+
+  track.addEventListener("pointerdown", (e) => {
+    isDragging = true;
+    startX = e.clientX;
+    scrollLeft = track.scrollLeft;
+    track.classList.add("dragging");
+    track.setPointerCapture(e.pointerId);
   });
+
+  track.addEventListener("pointermove", (e) => {
+    if (!isDragging) return;
+    const walk = e.clientX - startX;
+    track.scrollLeft = scrollLeft - walk;
+  });
+
+  const endDrag = () => {
+    isDragging = false;
+    track.classList.remove("dragging");
+  };
+
+  track.addEventListener("pointerup", endDrag);
+  track.addEventListener("pointercancel", endDrag);
+
+  track.addEventListener(
+    "wheel",
+    (e) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY) || e.shiftKey) {
+        track.scrollLeft += e.deltaX || e.deltaY;
+        e.preventDefault();
+      }
+    },
+    { passive: false }
+  );
 });

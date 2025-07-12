@@ -2277,10 +2277,12 @@ hr.divider3 {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
+  touch-action: pan-y;
 }
 
 .carousel-track.dragging {
   cursor: grabbing;
+  cursor: -webkit-grabbing;
 }
 
 .carousel-track::-webkit-scrollbar {
@@ -2292,8 +2294,8 @@ hr.divider3 {
   scroll-snap-align: start;
   background: transparent url(/src/assets/loading.webp) no-repeat center center;
   background-size: 100px 100px;
-  width: 200px;
-  height: 200px;
+  width: clamp(180px, 70vw, 250px);
+  height: clamp(180px, 70vw, 250px);
   overflow: hidden;
   -webkit-user-select: none;
      -moz-user-select: none;
