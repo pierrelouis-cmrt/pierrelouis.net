@@ -59,9 +59,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="/src/output.css" as="style">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="/src/output.css" as="style" />
 
     <link rel="stylesheet" href="/src/output.css" />
   </head>
@@ -577,334 +577,845 @@
       </p>
       <hr class="divider3" />
 
-      <div class="arsenal-sections">
-        <!-- Category: Apps & Services -->
-        <section class="arsenal-category">
-          <div class="category-header">
-            <span class="category-number">01</span>
-            <h2 class="category-title">Apps &amp; Services</h2>
-          </div>
-
-          <div class="arsenal-list">
-            <!-- VS Code -->
+      <div
+        class="arsenal-sections w-full flex flex-col overflow-clip"
+        id="arsenal-sections"
+      >
+        <div
+          class="arsenal-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
+          style="border-bottom: 1px solid var(--stroke-lighter)"
+        >
+          <span
+            class="arsenal-label text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
+            >Languages
+            <hr
+              class="arsenal-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--stroke-lighter)]"
+          /></span>
+          <div
+            class="arsenal-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
+          >
             <a
-              href="https://code.visualstudio.com/"
-              class="arsenal-item"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div class="item-icon">
-                <img
-                  src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg"
-                  alt="VS Code"
-                />
-              </div>
-              <span class="item-name">Visual Studio Code</span>
-            </a>
-
-            <!-- The Apple Suite -->
-            <a
-              href="https://www.apple.com/iwork/"
-              class="arsenal-item"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div class="item-icon">
-                <svg
-                  role="img"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="var(--body)"
-                >
-                  <title>Apple</title>
-                  <path
-                    d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"
-                  />
-                </svg>
-              </div>
-              <span class="item-name"
-                >The Apple Suite (Reminders, Mail, Calendar)</span
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://en.wikipedia.org/wiki/CSS"
+              ><img
+                alt="Favicon"
+                name="CSS"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Official_CSS_Logo.svg/120px-Official_CSS_Logo.svg.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
               >
-            </a>
-
-            <!-- Zen Browser -->
-            <a
-              href="https://zenbrowser.com/"
-              class="arsenal-item"
-              target="_blank"
-              rel="noopener noreferrer"
+                <span class="font-medium">CSS</span>
+              </div></a
             >
-              <div class="item-icon">
-                <svg
-                  role="img"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#F76F53"
-                >
-                  <title>Zen Browser</title>
-                  <path
-                    d="M24 12c0 6.627-5.373 12-12 12S0 18.627 0 12 5.373 0 12 0s12 5.373 12 12zm-12 9.846c5.438 0 9.846-4.408 9.846-9.846S17.438 2.154 12 2.154 2.154 6.562 2.154 12 6.562 21.846 12 21.846zM20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0zm-8 6.462a6.462 6.462 0 1 0 0-12.924 6.462 6.462 0 0 0 0 12.924zm0-1.847a4.615 4.615 0 1 0 0-9.23 4.615 4.615 0 0 0 0 9.23zM15.692 12a3.692 3.692 0 1 1-7.384 0 3.692 3.692 0 0 1 7.384 0z"
-                  />
-                </svg>
-              </div>
-              <span class="item-name">Zen Browser</span>
-            </a>
-
-            <!-- Obsidian -->
             <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://sass-lang.com/"
+              ><img
+                alt="Favicon"
+                name="SCSS"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://sass-lang.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">SCSS</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://en.wikipedia.org/wiki/JavaScript"
+              ><img
+                alt="Favicon"
+                name="JavaScript"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Javascript-736400_960_720.png/250px-Javascript-736400_960_720.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Javascript</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.python.org/"
+              ><img
+                alt="Favicon"
+                name="Python"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.python.org/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Python</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)"
+              ><img
+                alt="Favicon"
+                name="Bash"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJFDJLaUHfkk5JOqF2RTfK4m3RgHi3kM7Txw&s"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Bash</span>
+              </div></a
+            >
+          </div>
+        </div>
+        <div
+          class="arsenal-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
+          style="border-bottom: 1px solid var(--stroke-lighter)"
+        >
+          <span
+            class="arsenal-label text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
+            >Tools/Saas
+            <hr
+              class="arsenal-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--stroke-lighter)]"
+          /></span>
+          <div
+            class="arsenal-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
+          >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://prettier.io/"
+              ><img
+                alt="Favicon"
+                name="Prettier"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://prettier.io/icon.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Prettier</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.docker.com/"
+              ><img
+                alt="Favicon"
+                name="Docker"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.docker.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Docker</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://tailwindcss.com/"
+              ><img
+                alt="Favicon"
+                name="Tailwind CSS"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://tailwindcss.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Tailwind</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://alpinejs.dev/"
+              ><img
+                alt="Favicon"
+                name="AlpineJS"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://alpinejs.dev/favicon.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Alpine JS</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://github.com/"
+              ><img
+                alt="Favicon"
+                name="GitHub"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbqj9Ii13d6hx5a9kyLnC5A8A96LDSaSZv_w&s"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">GitHub</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://openai.com/"
+              ><img
+                alt="Favicon"
+                name="OpenAI"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://openai.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">ChatGPT o3 / 4.1</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.anthropic.com/"
+              ><img
+                alt="Favicon"
+                name="Anthropic"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.anthropic.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Claude 4 sonnet reasonning</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://gemini.google.com/"
+              ><img
+                alt="Favicon"
+                name="Gemini"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.gstatic.com/lamda/images/gemini_aurora_icon_4g_53fff55fa07630c47cc6c.svg"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Gemini 2.5 pro / 2.5 flash</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://huggingface.co/"
+              ><img
+                alt="Favicon"
+                name="Hugging Face"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://huggingface.co/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Hugging Face</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://t3.chat/"
+              ><img
+                alt="Favicon"
+                name="T3 Chat"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://t3.chat/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">T3 Chat</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.hostinger.com/"
+              ><img
+                alt="Favicon"
+                name="Hostinger"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.hostinger.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Hostinger</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.last.fm/"
+              ><img
+                alt="Favicon"
+                name="Last.fm"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.last.fm/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Last FM</span>
+              </div></a
+            >
+          </div>
+        </div>
+        <div
+          class="arsenal-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
+          style="border-bottom: 1px solid var(--stroke-lighter)"
+        >
+          <span
+            class="arsenal-label text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
+            >Apps
+            <hr
+              class="arsenal-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--stroke-lighter)]"
+          /></span>
+          <div
+            class="arsenal-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
+          >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://code.visualstudio.com/"
+              ><img
+                alt="Favicon"
+                name="Visual Studio Code"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://code.visualstudio.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Visual Studio Code</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://cider.sh/"
+              ><img
+                alt="Favicon"
+                name="Cider"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://cider.sh/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Cider</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.apple.com/fr/apple-music/"
+              ><img
+                alt="Favicon"
+                name="Apple Music"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apple_Music_icon.svg/120px-Apple_Music_icon.svg.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Apple Music</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
               href="https://obsidian.md/"
-              class="arsenal-item"
-              target="_blank"
-              rel="noopener noreferrer"
+              ><img
+                alt="Favicon"
+                name="Obsidian"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://obsidian.md/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Obsidian</span>
+              </div></a
             >
-              <div class="item-icon">
-                <svg
-                  role="img"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#7C3AED"
-                >
-                  <title>Obsidian</title>
-                  <path
-                    d="M19.355 18.538a68.967 68.959 0 0 0 1.858-2.954.81.81 0 0 0-.062-.9c-.516-.685-1.504-2.075-2.042-3.362-.553-1.321-.636-3.375-.64-4.377a1.707 1.707 0 0 0-.358-1.05l-3.198-4.064a3.744 3.744 0 0 1-.076.543c-.106.503-.307 1.004-.536 1.5-.134.29-.29.6-.446.914l-.31.626c-.516 1.068-.997 2.227-1.132 3.59-.124 1.26.046 2.73.815 4.481.128.011.257.025.386.044a6.363 6.363 0 0 1 3.326 1.505c.916.79 1.744 1.922 2.415 3.5zM8.199 22.569c.073.012.146.02.22.02.78.024 2.095.092 3.16.29.87.16 2.593.64 4.01 1.055 1.083.316 2.198-.548 2.355-1.664.114-.814.33-1.735.725-2.58l-.01.005c-.67-1.87-1.522-3.078-2.416-3.849a5.295 5.295 0 0 0-2.778-1.257c-1.54-.216-2.952.19-3.84.45.532 2.218.368 4.829-1.425 7.531zM5.533 9.938c-.023.1-.056.197-.098.29L2.82 16.059a1.602 1.602 0 0 0 .313 1.772l4.116 4.24c2.103-3.101 1.796-6.02.836-8.3-.728-1.73-1.832-3.081-2.55-3.831zM9.32 14.01c.615-.183 1.606-.465 2.745-.534-.683-1.725-.848-3.233-.716-4.577.154-1.552.7-2.847 1.235-3.95.113-.235.223-.454.328-.664.149-.297.288-.577.419-.86.217-.47.379-.885.46-1.27.08-.38.08-.72-.014-1.043-.095-.325-.297-.675-.68-1.06a1.6 1.6 0 0 0-1.475.36l-4.95 4.452a1.602 1.602 0 0 0-.513.952l-.427 2.83c.672.59 2.328 2.316 3.335 4.711.09.21.175.43.253.653z"
-                  />
-                </svg>
-              </div>
-              <span class="item-name">Obsidian</span>
-            </a>
-
-            <!-- Raycast -->
             <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://zen-browser.app/"
+              ><img
+                alt="Favicon"
+                name="Zen Browser"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://zen-browser.app/favicon.svg"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Zen Browser</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://bitwarden.com/"
+              ><img
+                alt="Favicon"
+                name="Bitwarden"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://bitwarden.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Bitwarden</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.icloud.com/"
+              ><img
+                alt="Favicon"
+                name="iCloud"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://help.apple.com/assets/677EB6990E35CFE25809758B/677EB69E5AFECC5ECD0B4978/en_AU/dc4bdf1973030717f16d02d3e44e3793.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">iCloud</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
               href="https://www.raycast.com/"
-              class="arsenal-item"
-              target="_blank"
-              rel="noopener noreferrer"
+              ><img
+                alt="Favicon"
+                name="Raycast"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.raycast.com/favicon-production.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Raycast</span>
+              </div></a
             >
-              <div class="item-icon">
-                <svg
-                  role="img"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#FF6363"
-                >
-                  <title>Raycast</title>
-                  <path
-                    d="M6.004 15.492v2.504L0 11.992l1.258-1.249Zm2.504 2.504H6.004L12.008 24l1.253-1.253zm14.24-4.747L24 11.997 12.003 0 10.75 1.251 15.491 6h-2.865L9.317 2.692 8.065 3.944l2.06 2.06H8.691v9.31H18v-1.432l2.06 2.06 1.252-1.252-3.312-3.32V8.506ZM6.63 5.372 5.38 6.625l1.342 1.343 1.251-1.253Zm10.655 10.655-1.247 1.251 1.342 1.343 1.253-1.251zM3.944 8.059 2.692 9.31l3.312 3.314v-2.506zm9.936 9.937h-2.504l3.314 3.312 1.25-1.252z"
-                  />
-                </svg>
-              </div>
-              <span class="item-name">Raycast</span>
-            </a>
-
-            <!-- Dropover -->
             <a
-              href="https://dropover.app/"
-              class="arsenal-item"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div class="item-icon">
-                <img
-                  src="https://dropoverapp.com/assets/images/favicon-48x48.png"
-                  alt="Dropover"
-                />
-              </div>
-              <span class="item-name">Dropover</span>
-            </a>
-
-            <!-- Overleaf -->
-            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
               href="https://www.overleaf.com/"
-              class="arsenal-item"
-              target="_blank"
-              rel="noopener noreferrer"
+              ><img
+                alt="Favicon"
+                name="Overleaf"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.overleaf.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Overleaf</span>
+              </div></a
             >
-              <div class="item-icon">
-                <svg
-                  role="img"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="#47A141"
-                >
-                  <title>Overleaf</title>
-                  <path
-                    d="M22.3515.7484C19.1109-.5101 7.365-.982 7.3452 6.0266c-3.4272 2.194-5.6967 5.768-5.6967 9.598a8.373 8.373 0 0 0 13.1225 6.898 8.373 8.373 0 0 0-1.7668-14.7194c-.6062-.2339-1.9234-.6481-2.9753-.559-1.5007.9544-3.3308 2.9155-4.1949 4.8693 2.5894-3.082 7.5046-2.425 9.1937 1.2287 1.6892 3.6538-.9944 7.8237-5.0198 7.7998a5.4995 5.4995 0 0 1-4.1949-1.9328c-1.485-1.7483-1.8678-3.6444-1.5615-5.4975 1.057-6.4947 8.759-10.1894 14.486-11.6094-1.8677.989-5.2373 2.6134-7.5948 4.3837C18.015 9.1382 19.1308 3.345 22.3515.7484z"
-                  />
-                </svg>
-              </div>
-              <span class="item-name">Overleaf</span>
-            </a>
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://dropoverapp.com/"
+              ><img
+                alt="Favicon"
+                name="Dropover"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://dropoverapp.com/assets/images/favicon-32x32.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Dropover</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.figma.com/"
+              ><img
+                alt="Favicon"
+                name="Figma"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://static.figma.com/app/icon/1/favicon.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Figma</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://raindrop.io/"
+              ><img
+                alt="Favicon"
+                name="Raindrop.io"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://raindrop.io/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Raindrop.io</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://apps.apple.com/us/app/focuspomo-pomodoro-timer/id1528322796"
+              ><img
+                alt="Favicon"
+                name="FocusPomo"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/2e/77/bd/2e77bd3b-1ec1-bc66-70c1-da73a8de8c80/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.jpg"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">FocusPomo</span>
+              </div></a
+            >
           </div>
-        </section>
-
-        <!-- Category: Hardware -->
-        <section class="arsenal-category">
-          <div class="category-header">
-            <span class="category-number">02</span>
-            <h2 class="category-title">Hardware</h2>
+        </div>
+        <div
+          class="arsenal-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
+        >
+          <span
+            class="arsenal-label text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
+            >Hardware
+            <hr
+              class="arsenal-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--stroke-lighter)]"
+          /></span>
+          <div
+            class="arsenal-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
+          >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.apple.com/fr/macbook-air/"
+              ><img
+                alt="Favicon"
+                name="iPhone 15 Pro (Daily Driver)"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.apple.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">iPhone 15 Pro (Daily Driver)</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.apple.com/fr/macbook-air/"
+              ><img
+                alt="Favicon"
+                name="AirPods Pro 2 (Daily Carry)"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.apple.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">AirPods Pro 2 (Daily Carry)</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.anker.com/"
+              ><img
+                alt="Favicon"
+                name="Anker 622 MagGo 5000mAh"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.anker.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Anker 622 MagGo 5000mAh</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.apple.com/fr/macbook-air/"
+              ><img
+                alt="Favicon"
+                name="MacBook Air M4"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.apple.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">MacBook Air M4</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.apple.com/fr/ipad-air/"
+              ><img
+                alt="Favicon"
+                name="iPad Air M3 11 inch"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.apple.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">iPad Air M3 11 inch</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.samsung.com/fr/smartphones/galaxy-s24/"
+              ><img
+                alt="Favicon"
+                name="Samsung Galaxy S24"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.samsung.com/etc.clientlibs/samsung/clientlibs/consumer/global/clientlib-common/resources/images/Favicon.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Samsung Galaxy S24</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.shure.com/en-US"
+              ><img
+                alt="Favicon"
+                name="Shure MV7+"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.shure.com/en-US/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Shure MV7+</span>
+              </div></a
+            >
           </div>
-
-          <div class="arsenal-list">
-            <a
-              href="https://www.apple.com/macbook-air/"
-              class="arsenal-item"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div class="item-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="feather feather-monitor"
-                >
-                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-                  <line x1="8" y1="21" x2="16" y2="21" />
-                  <line x1="12" y1="17" x2="12" y2="21" />
-                </svg>
-              </div>
-              <span class="item-name">MacBook Air M4 (2025)</span>
-            </a>
-
-            <a
-              href="https://www.apple.com/airpods-pro/"
-              class="arsenal-item"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div class="item-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="feather feather-headphones"
-                >
-                  <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
-                  <path
-                    d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"
-                  ></path>
-                </svg>
-              </div>
-              <span class="item-name">AirPods Pro 2 (Daily Carry)</span>
-            </a>
-
-            <a
-              href="https://www.apple.com/iphone-15-pro/"
-              class="arsenal-item"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div class="item-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="feather feather-smartphone"
-                >
-                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
-                  <line x1="12" y1="18" x2="12.01" y2="18" />
-                </svg>
-              </div>
-              <span class="item-name">iPhone 15 Pro (Daily Carry)</span>
-            </a>
-
-            <a
-              href="https://www.samsung.com/us/smartphones/galaxy-s24/"
-              class="arsenal-item"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div class="item-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="feather feather-smartphone"
-                >
-                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
-                  <line x1="12" y1="18" x2="12.01" y2="18" />
-                </svg>
-              </div>
-              <span class="item-name">Samsung Galaxy S24</span>
-            </a>
-
-            <a
-              href="https://www.apple.com/ipad-9th-generation/"
-              class="arsenal-item"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div class="item-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="feather feather-tablet"
-                >
-                  <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
-                  <line x1="12" y1="18" x2="12.01" y2="18" />
-                </svg>
-              </div>
-              <span class="item-name">iPad 9th Gen w/ Apple Pencil</span>
-            </a>
-
-            <a
-              href="https://remarkable.com/"
-              class="arsenal-item"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div class="item-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="feather feather-tablet"
-                >
-                  <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
-                  <line x1="12" y1="18" x2="12.01" y2="18" />
-                </svg>
-              </div>
-              <span class="item-name">reMarkable Paper Pro</span>
-            </a>
-          </div>
-        </section>
+        </div>
       </div>
 
       <footer class="arsenal-footer">
@@ -950,6 +1461,15 @@
             month: "short",
           })}`;
         }
+      });
+    </script>
+    <script>
+      // Select all <a> inside the div with id="arsenal-sections"
+      const links = document.querySelectorAll("#arsenal-sections a");
+      links.forEach((link) => {
+        link.setAttribute("target", "_blank");
+        // optional: add rel="noopener" for security/performance
+        link.setAttribute("rel", "noopener");
       });
     </script>
     <script defer src="/src/script.js"></script>

@@ -177,15 +177,15 @@ a {
   transition: all 120ms ease-in-out;
 }
 
-a h4 {
-  color: var(--default);
-  transition: color 400ms ease-in-out;
-}
-
 a:hover {
   color: var(--body);
   text-decoration-color: hsl(from var(--body) h s l / 50%);
   -webkit-text-decoration-color: hsl(from var(--body) h s l / 40%);
+}
+
+a h4 {
+  color: var(--default);
+  transition: color 400ms ease-in-out;
 }
 
 p.links a {
@@ -1194,6 +1194,11 @@ hr.divider3 {
   text-align: justify;
 }
 
+.reach-out {
+  display: inline-flex;
+  align-items: center;
+}
+
 /* Clear floats after the content */
 .content-wrapper::after {
   content: "";
@@ -1298,6 +1303,7 @@ hr.divider3 {
   stroke-dasharray: 0;
   stroke-dashoffset: 0;
 }
+
 /* -------- Links -------- */
 
 .social-links {
@@ -1640,138 +1646,36 @@ hr.divider3 {
 
 .arsenal-sections {
   display: flex;
-  flex-direction: row;
-  gap: 3rem;
+  flex-direction: column;
   margin: 3rem auto;
   max-width: 600px;
 }
 
-.arsenal-category {
-  max-width: 300px;
-}
+@media (max-width: 480px) {
+  .arsenal-section {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+  }
 
-/* Category headers */
-.category-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
+  .arsenal-label {
+    width: auto;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+  }
 
-.category-number {
-  font-size: 0.75rem;
-  color: var(--secondary);
-  background: var(--background);
-  border: 1px solid var(--stroke-lighter);
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 1rem;
-  transition: all 120ms ease-in-out;
-}
+  .arsenal-separator {
+    display: none;
+  }
 
-.category-title {
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--default);
-  margin: 0 1rem 0 0;
-  transition: color 400ms ease-in-out;
-}
+  .arsenal-items {
+    gap: 0.75rem 0.75rem;
+  }
 
-/* Arsenal list */
-.arsenal-list {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.arsenal-list::before {
-  content: "";
-  position: absolute;
-  left: 13px;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: var(--stroke-lighter);
-  transition: background-color 400ms ease-in-out;
-}
-
-/* Arsenal items */
-.arsenal-item {
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 0;
-  text-decoration: none;
-  position: relative;
-  transition: all 120ms ease-in-out;
-  border-radius: 4px;
-  margin: 0 -0.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-}
-
-.arsenal-item::before {
-  position: absolute;
-  left: 9px;
-  width: 8px;
-  height: 8px;
-  background: var(--background);
-  border: 2px solid var(--stroke-lighter);
-  border-radius: 50%;
-  transition: all 120ms ease-in-out;
-}
-
-.arsenal-item:hover {
-  transform: translateX(2px);
-}
-
-.arsenal-item:hover::before {
-  background: var(--secondary);
-  border-color: var(--secondary);
-}
-
-/* Item icon */
-.item-icon {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 1.5rem;
-  margin-right: 0.75rem;
-  flex-shrink: 0;
-}
-
-.item-icon img,
-.item-icon svg {
-  width: 18px;
-  height: 18px;
-  object-fit: contain;
-  color: var(--secondary);
-  transition: all 120ms ease-in-out;
-}
-
-.arsenal-item:hover .item-icon svg {
-  color: var(--default);
-}
-
-/* Dark mode logo inversion */
-.dark .logo-needs-invert {
-  filter: invert(1);
-}
-
-/* Item name */
-.item-name {
-  font-size: 0.9375rem;
-  font-weight: 400;
-  color: var(--default);
-  transition: color 120ms ease-in-out;
-}
-
-.arsenal-item:hover .item-name {
-  color: var(--body);
+  .arsenal-items a {
+    line-height: normal;
+  }
 }
 
 /* Footer */
@@ -1799,21 +1703,6 @@ hr.divider3 {
 
 /* Responsive design */
 @media screen and (max-width: 768px) {
-  .arsenal-sections {
-    flex-direction: column;
-    gap: 2rem;
-    margin: 2rem auto;
-  }
-  .arsenal-category {
-    max-width: none;
-    width: calc(100% - 2.5rem);
-  }
-
-  .arsenal-item {
-    margin: 0 -0.25rem;
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
-  }
 }
 
 @media screen and (max-width: 480px) {
