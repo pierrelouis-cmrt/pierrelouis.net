@@ -947,12 +947,6 @@ video {
   overscroll-behavior: contain;
 }
 
-.truncate{
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .rounded-\[0\.375em\]{
   border-radius: 0.375em;
 }
