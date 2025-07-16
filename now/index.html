@@ -59,11 +59,14 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="/src/output.css" as="style">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="/src/output.css" as="style" />
     <link rel="stylesheet" href="/src/output.css" />
-
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
   </head>
 
   <body>
@@ -572,88 +575,73 @@
     <main>
       <h2 class="section-title">What am I up to atm?</h2>
       <hr class="divider3" />
-      <div class="carousel">
-        <div class="carousel-track">
-          <div class="item">
+
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
             <img src="pics/architecture1.webp" alt="Picture 1" />
           </div>
-          <div class="item">
+          <div class="swiper-slide">
             <img src="pics/architecture2.webp" alt="Picture 2" />
           </div>
-          <div class="item">
+          <div class="swiper-slide">
             <img src="pics/cat.webp" alt="Picture 3" />
           </div>
-          <div class="item">
+          <div class="swiper-slide">
             <img src="pics/sky1.webp" alt="Picture 4" />
           </div>
-          <div class="item">
+          <div class="swiper-slide">
             <img src="pics/sky2.webp" alt="Picture 5" />
           </div>
-          <div class="item">
+          <div class="swiper-slide">
             <img src="pics/sky3.webp" alt="Picture 6" />
           </div>
-          <div class="item">
+          <div class="swiper-slide">
             <img src="pics/squirrel.webp" alt="Picture 7" />
           </div>
         </div>
+
+        <div class="swiper-pagination"></div>
       </div>
+
       <div class="animate-on-scroll">
         <p class="p-now-page">
-          Currently studying engineering at Centrale Lyon — send help (or
-          snacks)
+          Currently studying engineering at Centrale Lyon
         </p>
-        <hr class="divider3" />
+        <hr class="divider2" />
 
         <p class="p-now-page">
-          Living in Saint-Étienne (France), UNESCO Creative City of Design 🎨 —
-          fitting, right?
+          Living in Saint-Étienne (France), UNESCO Creative City of Design
         </p>
-        <hr class="divider3" />
+        <hr class="divider2" />
 
         <p class="p-now-page">Designing websites in my free time</p>
-        <hr class="divider3" />
+        <hr class="divider2" />
+
+        <p class="p-now-page">Listening to pop music on repeat</p>
+
+        <hr class="divider2" />
 
         <p class="p-now-page">
-          Listening to pop music on repeat (mostly Dua Lipa ngl)
+          Learning more about AI everyday, it's kinda becoming my whole
+          personality lol
         </p>
+        <hr class="divider2" />
 
-        <hr class="divider3" />
+        <p class="p-now-page">Keeping up with tech news</p>
+        <hr class="divider2" />
 
         <p class="p-now-page">
-          My fav 2024 book:
-          <a
-            href="https://en.wikipedia.org/wiki/Lessons_in_Chemistry_(novel)"
-            target="_blank"
-            >Lessons in Chemistry</a
-          >
-          by Bonnie Garmus.
+          Gaming occasionally when my free time is free-timing
         </p>
-        <hr class="divider3" />
+        <hr class="divider2" />
 
         <p class="p-now-page">
-          Learning more about AI everyday 🤖 — it's kinda becoming my whole
-          personality.
+          Logging every movie I watch on Letterboxd like it's serious business
         </p>
-        <hr class="divider3" />
+        <hr class="divider2" />
 
-        <p class="p-now-page">Keeping up with tech news — yes, FOMO is real.</p>
-        <hr class="divider3" />
-
-        <p class="p-now-page">
-          Gaming occasionally when my free time is free-timing — which is rare
-          but sacred.
-        </p>
-        <hr class="divider3" />
-
-        <p class="p-now-page">
-          Logging every movie I watch on Letterboxd like it's serious business.
-        </p>
-        <hr class="divider3" />
-
-        <p class="p-now-page">
-          Slightly obsessed with my Last.fm stats — yes, I do want to know my
-          top artist every week.
-        </p>
+        <p class="p-now-page">Slightly obsessed with my Last.fm stats</p>
       </div>
     </main>
 
@@ -682,12 +670,15 @@
         <p class="footer-text-right">© 2025</p>
       </div>
     </footer>
+
     <script defer src="/src/script.js"></script>
     <script defer src="/src/carousel.js"></script>
+
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"
     ></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   </body>
 </html>
