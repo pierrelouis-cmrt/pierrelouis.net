@@ -1746,7 +1746,7 @@ h2.section-title_process {
 
 div.project-block {
   max-width: 600px;
-  margin: auto;
+  margin: 1.2rem auto 0;
 }
 
 .project-title {
@@ -1757,14 +1757,40 @@ div.project-block {
   margin: 0;
 }
 
+.project-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  text-decoration: none;
+  -webkit-text-decoration: none;
+  padding: 0.5rem 0;
+}
+
+.project-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.project-icon svg {
+  width: 18px;
+  height: 18px;
+  color: var(--secondaryi);
+}
+
 div.project-item-box {
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
   border: none;
-  padding: 0.5rem 0;
+  padding: 0;
   margin-bottom: 0.5rem;
   transition: background-color 120ms ease-in-out;
+  flex-grow: 1;
 }
 
 p.project-description {
