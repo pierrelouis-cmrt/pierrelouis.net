@@ -2996,27 +2996,6 @@ hr.divider2 {
   opacity: 0.5;
 }
 
-/* Responsive design */
-
-@media screen and (max-width: 768px) {
-}
-
-@media screen and (max-width: 480px) {
-  .category-number {
-    width: 24px;
-    height: 24px;
-    font-size: 0.6875rem;
-  }
-
-  .category-title {
-    font-size: 0.9375rem;
-  }
-
-  .item-name {
-    font-size: 0.875rem;
-  }
-}
-
 /*----------------------------  MEDIA QUERIES  --------------------------------------*/
 
 @media screen and (max-width: 768px) {
@@ -3043,10 +3022,19 @@ hr.divider2 {
   body footer,
   .colophon-credits,
   .project-thumbnails,
-  .project-meta,
-  .arsenal-sections,
-  .signature {
+  .signature,
+  .project-button {
     padding: 0 1.25rem;
+  }
+
+  .project-item {
+    padding: 0.3rem 1.25rem;
+  }
+
+  .project-title,
+  .project-description {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   footer p.links {
@@ -3204,6 +3192,20 @@ hr.divider2 {
     width: auto;
     height: 200px;
     float: none;
+  }
+
+  .category-number {
+    width: 24px;
+    height: 24px;
+    font-size: 0.6875rem;
+  }
+
+  .category-title {
+    font-size: 0.9375rem;
+  }
+
+  .item-name {
+    font-size: 0.875rem;
   }
 }
 
