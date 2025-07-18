@@ -1,0 +1,28 @@
+[
+  {
+    "year": 2024,
+    "month": "Aug",
+    "link": "https://www.tooooools.app/",
+    "title": "Tooooools",
+    "meta": {
+      "text": "www.tooooools.app",
+      "icon": "https://icons.duckduckgo.com/ip3/www.tooooools.app.ico"
+    },
+    "description": "Discover free minimalist and lo-fi effects for image processing online",
+    "image": "https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630",
+    "tag": "Tools"
+  },
+  {
+    "year": 2024,
+    "month": "Jun",
+    "link": "https://youtube.com/playlist?list=PLmmYSbUCWJ4x1GO839azG_BBw8rkh-zOj&si=kSFIXOYbKrQcamIb",
+    "title": "Clean Code - Uncle Bob",
+    "meta": {
+      "text": "youtube.com",
+      "icon": "https://icons.duckduckgo.com/ip3/youtube.com.ico"
+    },
+    "description": "A series of lessons on how to write clean code",
+    "image": "",
+    "tag": "Videos"
+  }
+]

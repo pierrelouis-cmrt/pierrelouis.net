@@ -2996,6 +2996,326 @@ hr.divider2 {
   opacity: 0.5;
 }
 
+/* -------- Posts Page -------- */
+
+/* Bookmarks Page */
+
+.bookmarks-page {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.bookmark-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 3rem auto 2rem;
+}
+
+.bookmark-filter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-weight: 500;
+  transition: all 120ms ease-in-out;
+  border: 1px solid var(--stroke-secondary);
+  background-color: var(--tag);
+  border-radius: 25px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  color: var(--caption);
+  text-decoration: none;
+}
+
+.bookmark-filter:hover {
+  border-color: var(--stroke-lighter);
+  background-color: var(--box-hover);
+  color: var(--body);
+}
+
+.bookmark-filter svg {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.4rem;
+}
+
+.bookmark-filter:first-child {
+  margin-right: 1.25rem;
+}
+
+.bookmark-filter:last-child {
+  margin-left: 1.25rem;
+}
+
+.bookmark-filter.active {
+  background-color: var(--box-hover);
+  border-color: var(--default);
+  color: var(--default);
+}
+
+.bookmark-item[style*="display: none"] {
+  margin: 0;
+  /* remove leftover spacing when hidden */
+}
+
+.bookmarks-timeline {
+  border-top: 1px solid hsl(from var(--default) h s l / 10%);
+}
+
+.timeline-header {
+  display: flex;
+}
+
+.timeline-year {
+  width: 10%;
+  min-width: 2ch;
+}
+
+/* Base sticky styles for both year and month headers */
+
+.timeline-year h2,
+.month-header h3 {
+  position: sticky;
+  background-color: var(--background);
+  padding: 0.25rem 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--caption);
+  font-weight: 500;
+  margin: 1rem 0;
+  /* Default margin for desktop */
+}
+
+/* Year is always the top-most sticky element */
+
+.timeline-year h2 {
+  top: 56px;
+  /* Stick right below the 56px navbar */
+  z-index: 11;
+}
+
+/* Month sticks at the same level on desktop/tablet, but will be pushed down on mobile */
+
+.month-header h3 {
+  top: 56px;
+  z-index: 10;
+}
+
+.timeline-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-month {
+  display: flex;
+  border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
+}
+
+.timeline-month:last-child {
+  border-bottom: none;
+}
+
+.month-header {
+  width: 10%;
+  min-width: 2ch;
+}
+
+.month-items {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.bookmark-item {
+  border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
+}
+
+.bookmark-item:last-child {
+  border-bottom: none;
+}
+
+.bookmark-item a {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 120ms ease-in-out;
+}
+
+.bookmark-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.bookmark-title span:first-child {
+  color: var(--default);
+  text-decoration: underline;
+  text-decoration-color: var(--stroke-secondary);
+  transition: all 120ms ease-in-out;
+}
+
+.bookmark-item a:hover .bookmark-title span:first-child {
+  text-decoration-color: var(--default);
+}
+
+.external-icon {
+  margin-left: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--secondary);
+  transition: color 120ms ease-in-out;
+}
+
+.bookmark-item a:hover .external-icon {
+  color: var(--default);
+}
+
+.bookmark-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.bookmark-meta img {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.125rem;
+}
+
+.bookmark-meta span {
+  flex-shrink: 0;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  color: var(--caption);
+}
+
+.bookmark-description {
+  margin-top: 0.75rem;
+  flex-shrink: 0;
+  border-left: 2px solid var(--stroke-lighter);
+  padding-left: 1rem;
+  font-size: 0.875rem;
+  color: var(--caption);
+}
+
+.bookmark-preview {
+  margin-top: 0.75rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.bookmark-preview figure {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: 0;
+  border-radius: 0.5rem;
+  background-color: var(--tag);
+  padding: 0 !important;
+}
+
+.bookmark-preview img {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: inherit;
+  transition: all 120ms ease-in-out;
+}
+
+/* Medium screens - year column + scrolling content with sticky month headers */
+
+@media screen and (max-width: 640px) {
+  .timeline-year {
+    width: 20%;
+    min-width: 4ch;
+    padding-right: 1rem;
+  }
+
+  /* Adjust header margins for smaller screens */
+
+  .timeline-year h2,
+  .month-header h3 {
+    margin: 0.5rem 0;
+  }
+
+  /* Removing `position: relative` ensures sticky positioning is relative to the viewport */
+
+  .timeline-content {
+    flex: 1;
+  }
+
+  .timeline-month {
+    display: block;
+    border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
+  }
+
+  .timeline-month:last-child {
+    border-bottom: none;
+  }
+
+  .month-header {
+    width: 100%;
+    border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
+  }
+
+  .month-items {
+    display: block;
+  }
+
+  .bookmark-item a {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .full-year {
+    display: inline;
+  }
+}
+
+/* Very small screens - single column with STACKED sticky headers */
+
+@media screen and (max-width: 475px) {
+  .bookmarks-timeline,
+  .timeline-header,
+  .timeline-content,
+  .timeline-month,
+  .month-items {
+    display: block;
+    /* Force single column layout */
+  }
+
+  .timeline-year {
+    width: 100%;
+    padding-right: 0;
+    border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
+  }
+
+  /* In this view, the month header must stick BELOW the year header */
+
+  .month-header h3 {
+    /* top = 56px (navbar) + height of h2 (1.8125rem) */
+    top: calc(56px + 1.8125rem);
+  }
+
+  .month-header {
+    width: 100%;
+    border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
+  }
+}
+
+/* Ensure proper spacing on larger screens */
+
+@media screen and (min-width: 641px) {
+  .full-year {
+    display: none;
+  }
+}
+
 /*----------------------------  MEDIA QUERIES  --------------------------------------*/
 
 @media screen and (max-width: 768px) {
@@ -3023,7 +3343,8 @@ hr.divider2 {
   .colophon-credits,
   .project-thumbnails,
   .signature,
-  .project-button {
+  .project-button,
+  .bookmarks-page {
     padding: 0 1.25rem;
   }
 
