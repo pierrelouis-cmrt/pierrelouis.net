@@ -1513,10 +1513,17 @@ hr.divider2 {
 
 .colophon-credits {
   max-width: 600px;
-  margin: 1rem auto;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  margin: 2rem auto 1rem;
+  padding-left: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+
+.colophon-credits a:before {
+  position: absolute;
+  content: "‒";
+  left: -1em;
 }
 
 /* -------- Projects Page -------- */
