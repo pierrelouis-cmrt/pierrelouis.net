@@ -1260,7 +1260,7 @@ video {
   --stroke: rgba(64, 64, 64, 1);
   --stroke-secondary: rgba(174, 174, 174, 1);
   --stroke-lighter: rgba(217, 217, 217, 1);
-  --tag: rgba(240, 240, 240);
+  --tag: rgba(240, 240, 240, 1);
   --swiper-pagination-color: #ffffff;
   --swiper-pagination-bullet-inactive-color: rgba(255, 255, 255, 0.75);
 }
@@ -1279,7 +1279,7 @@ video {
   --stroke: rgba(220, 220, 220, 1);
   --stroke-secondary: rgba(100, 100, 100, 1);
   --stroke-lighter: rgba(133, 133, 133, 1);
-  --tag: rgba(40, 40, 40);
+  --tag: rgba(40, 40, 40, 1);
 }
 
 body {
@@ -2788,8 +2788,8 @@ hr.divider2 {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding-bottom: 2.5rem;
-  border-bottom: 1px solid hsl(from var(--default) h s l / 15%);
+  padding-bottom: 2rem;
+  border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
   max-width: 600px;
 }
 
@@ -2992,8 +2992,6 @@ hr.divider2 {
 
 /* -------- Posts Page -------- */
 
-/* Bookmarks Page */
-
 .bookmarks-page {
   max-width: 600px;
   margin: 0 auto;
@@ -3003,7 +3001,7 @@ hr.divider2 {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin: 3rem auto 2rem;
+  margin: 3rem auto 1rem;
 }
 
 .bookmark-filter {
@@ -3014,28 +3012,25 @@ hr.divider2 {
   font-weight: 500;
   transition: all 120ms ease-in-out;
   border: 1px solid var(--stroke-secondary);
-  background-color: var(--tag);
+  background-color: var(--background);
   border-radius: 25px;
   padding: 0.25rem 0.5rem;
   font-size: 0.75rem;
   color: var(--caption);
   text-decoration: none;
+  cursor: pointer;
 }
 
 .bookmark-filter:hover {
-  border-color: var(--stroke-lighter);
-  background-color: var(--box-hover);
+  border-color: var(--secondary);
+  background-color: var(--tag);
   color: var(--body);
 }
 
 .bookmark-filter svg {
   width: 1rem;
   height: 1rem;
-  margin-right: 0.4rem;
-}
-
-.bookmark-filter:first-child {
-  margin-right: 1.25rem;
+  margin-right: 0.35rem;
 }
 
 .bookmark-filter:last-child {
@@ -3147,8 +3142,8 @@ hr.divider2 {
 
 .bookmark-title span:first-child {
   color: var(--default);
-  text-decoration: underline;
-  text-decoration-color: var(--stroke-secondary);
+  -webkit-text-decoration: underline solid var(--stroke-secondary);
+          text-decoration: underline solid var(--stroke-secondary);
   transition: all 120ms ease-in-out;
 }
 
@@ -3175,8 +3170,8 @@ hr.divider2 {
 }
 
 .bookmark-meta img {
-  width: 1rem;
-  height: 1rem;
+  width: 18px;
+  height: 18px;
   border-radius: 0.125rem;
 }
 
@@ -3185,6 +3180,7 @@ hr.divider2 {
   font-size: 0.875rem;
   line-height: 1.75;
   color: var(--caption);
+  padding-bottom: 2px;
 }
 
 .bookmark-description {
