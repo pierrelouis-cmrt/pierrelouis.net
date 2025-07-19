@@ -180,7 +180,7 @@ window.SHORTCUT_MAP = {
   u: "/uses",
   c: "/colophon",
   l: "/links",
-  e: "mailto:contact@pierrelouis.net?subject=Just%20wanted%20to%20say%20hi",
+  e: "mailto:contact@pierrelouis.net?subject=Hi,%20I'm%20....%20and...%20",
 };
 
 // Prefetch internal pages on hover for snappier navigation
@@ -211,7 +211,6 @@ document.addEventListener("DOMContentLoaded", () => {
     img.setAttribute("loading", "lazy");
   });
 });
-
 
 // Lightweight lightbox helpers for the projects page
 function openLightbox(src) {
