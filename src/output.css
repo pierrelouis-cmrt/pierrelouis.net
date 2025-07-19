@@ -1827,12 +1827,6 @@ a.project-item:not(:hover) .lucide {
   border: 2px solid var(--stroke-secondary);
 }
 
-/* Blog */
-
-#blog p {
-  margin-inline: auto;
-}
-
 /* Now playing */
 
 .now-playing {
@@ -2415,7 +2409,7 @@ hr.divider2 {
   align-items: center;
   justify-content: center;
   transition: transform 0.4s ease;
-  transform: scale(0.95);
+  transform: scale(1);
 }
 
 .swiper-slide-active {
