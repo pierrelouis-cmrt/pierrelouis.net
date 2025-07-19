@@ -95,17 +95,7 @@
           <div
             x-data="{ 
           commandOpen: false, 
-          isTouchDevice: 'ontouchstart' in window,
-          shortcutMap: {
-            'h': '/',
-            'a': '/about',
-            'p': '/projects',
-            'n': '/now',
-            'u': '/uses',
-            'c': '/colophon',
-            'l': '/links',
-            'e': 'mailto:contact@pierrelouis.net?subject=Just%20wanted%20to%20say%20hi'
-          }
+          isTouchDevice: 'ontouchstart' in window
         }"
             x-init="
           $watch('commandOpen', function(value){
