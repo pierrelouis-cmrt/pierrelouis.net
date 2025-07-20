@@ -62,11 +62,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preload" href="/src/output.css" as="style" />
+
     <link rel="stylesheet" href="/src/output.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-    />
   </head>
 
   <body>
@@ -224,12 +221,12 @@
                 isTouchDevice: 'ontouchstart' in window,
                 itemsCache: {},
                 actionMap: window.COMMAND_ACTION_MAP,
-                
+
                 // Optimized empty search check
                 commandSearchIsEmpty() {
                   return !this.commandSearch || this.commandSearch.length === 0;
                 },
-                
+
                 // Optimized active item check
                 commandItemIsActive(item) {
                   return this.commandItemActive && this.commandItemActive.value === item.value;
@@ -563,102 +560,42 @@
     </nav>
 
     <main>
-      <h2 class="section-title">What am I up to atm?</h2>
+      <h2 class="section-title">Bookmarks</h2>
+      <p class="subtitle italic">This is where I share interesting things.</p>
       <hr class="divider3" />
+      <p>
+        An irregularly updated personal list of hand-picked sites, tools,
+        resources, posts, videos, and other share-worthy links from across the
+        web.
+      </p>
 
-      <div class="swiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="pics/architecture1.webp" alt="Picture 1" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/architecture2.webp" alt="Picture 2" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/cat.webp" alt="Picture 3" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/cat2.webp" alt="Picture 4" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/cat3.webp" alt="Picture 5" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/cat4.webp" alt="Picture 6" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/sky.webp" alt="Picture 7" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/sky2.webp" alt="Picture 8" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/sky3.webp" alt="Picture 9" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/sky4.webp" alt="Picture 10" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/squirrel.webp" alt="Picture 11" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/squirrel2.webp" alt="Picture 12" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/eye.webp" alt="Picture 13" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/landscape.webp" alt="Picture 14" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/landscape2.webp" alt="Picture 15" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/rainbow.webp" alt="Picture 16" />
-          </div>
+      <div class="posts-page">
+        <!-- Category filters -->
+        <div class="post-filters">
+          <a class="post-filter" data-tag="Reading">Reading</a>
+          <a class="post-filter" data-tag="Videos">Videos</a>
+          <a class="post-filter" data-tag="Inspiration">Inspiration</a>
+          <a class="post-filter" data-tag="Tools/Ressources"
+            >Tools/Ressources</a
+          >
+          <a class="post-filter" id="clear-filter" style="display: none"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" /></svg
+            >Clear</a
+          >
         </div>
 
-        <div class="swiper-pagination"></div>
-      </div>
-
-      <div class="animate-on-scroll">
-        <p class="p-now-page">
-          Currently studying engineering at Centrale Lyon
-        </p>
-        <hr class="divider2" />
-
-        <p class="p-now-page">
-          Living in Saint-Étienne (France), UNESCO Creative City of Design
-        </p>
-        <hr class="divider2" />
-
-        <p class="p-now-page">Designing websites in my free time</p>
-        <hr class="divider2" />
-
-        <p class="p-now-page">Listening to pop music on repeat</p>
-
-        <hr class="divider2" />
-
-        <p class="p-now-page">
-          Learning more about AI everyday, it's kinda becoming my whole
-          personality lol
-        </p>
-        <hr class="divider2" />
-
-        <p class="p-now-page">Keeping up with tech news</p>
-        <hr class="divider2" />
-
-        <p class="p-now-page">
-          Gaming occasionally when my free time is free-timing
-        </p>
-        <hr class="divider2" />
-
-        <p class="p-now-page">
-          Logging every movie I watch on Letterboxd like it's serious business
-        </p>
-        <hr class="divider2" />
-
-        <p class="p-now-page">Slightly obsessed with my Last.fm stats</p>
+        <!-- Timeline is filled by JS -->
+        <div class="posts-timeline" id="posts-timeline"></div>
       </div>
     </main>
 
@@ -687,15 +624,13 @@
         <p class="footer-text-right">© 2025</p>
       </div>
     </footer>
-
     <script defer src="/src/script.js"></script>
-    <script defer src="carousel.js"></script>
+    <script type="module" src="bookmarks.js"></script>
 
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"
     ></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   </body>
 </html>

@@ -1,9 +1,9 @@
-/* posts.js — generate timeline from /posts/posts.json  */
-const DATA_URL = "/posts/posts.json";
+/* bookmarks.js — generate timeline from /bookmarks/bookmarks.json  */
+const DATA_URL = "/bookmarks/bookmarks.json";
 
-const filters = document.querySelector(".bookmark-filters");
+const filters = document.querySelector(".post-filters");
 const clearBtn = document.getElementById("clear-filter");
-const timeline = document.getElementById("bookmarks-timeline");
+const timeline = document.getElementById("posts-timeline");
 
 const noResultMsg = el(
   "p",
@@ -22,13 +22,18 @@ let activeTag = "";
 fetch(DATA_URL)
   .then((r) => r.json())
   .then(renderTimeline)
-  .catch((err) => console.error("Bookmark JSON load failed:", err));
+  .catch((err) => console.error("JSON load failed:", err));
 
 /* ---------------- EVENTS ---------------- */
 filters.addEventListener("click", (e) => {
-  const btn = e.target.closest(".bookmark-filter");
-  if (!btn || btn.id === "clear-filter") return;
-  activeTag = btn.dataset.tag;
+  const btn = e.target.closest(".post-filter");
+  if (!btn) return;
+  if (btn.id === "clear-filter" || btn.dataset.tag === activeTag) {
+    activeTag = "";
+  } else {
+    activeTag = btn.dataset.tag;
+  }
+
   applyFilter();
 });
 
@@ -87,7 +92,7 @@ function makeMonthColumn(items) {
 
 function makeItem(b) {
   const item = el("div", {
-    className: "bookmark-item",
+    className: "post-item",
     dataset: { tag: b.tag },
   });
   const a = el("a", {
@@ -100,28 +105,28 @@ function makeItem(b) {
   a.append(
     el(
       "div",
-      { className: "bookmark-title" },
-      el("span", {}, b.title),
+      { className: "post-title" },
+      el("span", { className: "link-text" }, b.title),
       el("span", { className: "external-icon" }, "↗")
     ),
     /* meta */
     el(
       "div",
-      { className: "bookmark-meta" },
+      { className: "post-meta" },
       el("img", { src: b.meta.icon, width: 16, height: 16, alt: "" }),
       el("span", {}, b.meta.text)
     )
   );
 
   if (b.description) {
-    a.append(el("div", { className: "bookmark-description" }, b.description));
+    a.append(el("div", { className: "post-description" }, b.description));
   }
 
   if (b.image) {
     a.append(
       el(
         "div",
-        { className: "bookmark-preview" },
+        { className: "post-preview" },
         el(
           "figure",
           {},
@@ -147,14 +152,14 @@ function applyFilter() {
   );
 
   /* show / hide items */
-  timeline.querySelectorAll(".bookmark-item").forEach((it) => {
+  timeline.querySelectorAll(".post-item").forEach((it) => {
     it.style.display = !activeTag || it.dataset.tag === activeTag ? "" : "none";
   });
 
   /* hide empty months */
   timeline.querySelectorAll(".timeline-month").forEach((month) => {
     const hasVisible = month.querySelector(
-      '.bookmark-item:not([style*="display: none"])'
+      '.post-item:not([style*="display: none"])'
     );
     month.style.display = hasVisible ? "" : "none";
   });

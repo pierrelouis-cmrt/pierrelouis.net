@@ -2992,19 +2992,19 @@ hr.divider2 {
 
 /* -------- Posts Page -------- */
 
-.bookmarks-page {
+.posts-page {
   max-width: 600px;
   margin: 0 auto;
 }
 
-.bookmark-filters {
+.post-filters {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   margin: 3rem auto 1rem;
 }
 
-.bookmark-filter {
+.post-filter {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -3021,34 +3021,34 @@ hr.divider2 {
   cursor: pointer;
 }
 
-.bookmark-filter:hover {
+.post-filter:last-child {
+  margin-left: 1.25rem;
+}
+
+.post-filter:hover {
   border-color: var(--secondary);
   background-color: var(--tag);
   color: var(--body);
 }
 
-.bookmark-filter svg {
-  width: 1rem;
-  height: 1rem;
-  margin-right: 0.35rem;
-}
-
-.bookmark-filter:last-child {
-  margin-left: 1.25rem;
-}
-
-.bookmark-filter.active {
+.post-filter.active {
   background-color: var(--box-hover);
   border-color: var(--default);
   color: var(--default);
 }
 
-.bookmark-item[style*="display: none"] {
+.post-filter svg {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.35rem;
+}
+
+.post-item[style*="display: none"] {
   margin: 0;
   /* remove leftover spacing when hidden */
 }
 
-.bookmarks-timeline {
+.posts-timeline {
   border-top: 1px solid hsl(from var(--default) h s l / 10%);
 }
 
@@ -3117,15 +3117,15 @@ hr.divider2 {
   flex-direction: column;
 }
 
-.bookmark-item {
+.post-item {
   border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
 }
 
-.bookmark-item:last-child {
+.post-item:last-child {
   border-bottom: none;
 }
 
-.bookmark-item a {
+.post-item a {
   display: flex;
   flex-direction: column;
   padding: 1rem 0.5rem;
@@ -3134,21 +3134,35 @@ hr.divider2 {
   transition: all 120ms ease-in-out;
 }
 
-.bookmark-title {
+.post-title {
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem;
 }
 
-.bookmark-title span:first-child {
+.post-title svg {
+  width: 22px;
+  height: 22px;
+  margin-right: 0.5rem;
+  color: var(--secondary);
+  transition: color 120ms ease-in-out;
+}
+
+.post-title .link-text {
   color: var(--default);
   -webkit-text-decoration: underline solid var(--stroke-secondary);
           text-decoration: underline solid var(--stroke-secondary);
   transition: all 120ms ease-in-out;
 }
 
-.bookmark-item a:hover .bookmark-title span:first-child {
+.post-item a:hover .link-text {
   text-decoration-color: var(--default);
+}
+
+.post-title .external-icon {
+  display: inline-block;
+  margin-left: 0.25em;
+  text-decoration: none;
 }
 
 .external-icon {
@@ -3158,24 +3172,24 @@ hr.divider2 {
   transition: color 120ms ease-in-out;
 }
 
-.bookmark-item a:hover .external-icon {
+.post-item a:hover .external-icon {
   color: var(--default);
 }
 
-.bookmark-meta {
+.post-meta {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
 
-.bookmark-meta img {
+.post-meta img {
   width: 18px;
   height: 18px;
   border-radius: 0.125rem;
 }
 
-.bookmark-meta span {
+.post-meta span {
   flex-shrink: 0;
   font-size: 0.875rem;
   line-height: 1.75;
@@ -3183,7 +3197,7 @@ hr.divider2 {
   padding-bottom: 2px;
 }
 
-.bookmark-description {
+.post-description {
   margin-top: 0.75rem;
   flex-shrink: 0;
   border-left: 2px solid var(--stroke-lighter);
@@ -3192,13 +3206,17 @@ hr.divider2 {
   color: var(--caption);
 }
 
-.bookmark-preview {
+#posts .post-description {
+  margin-top: 0.25rem;
+}
+
+.post-preview {
   margin-top: 0.75rem;
   display: grid;
   gap: 0.5rem;
 }
 
-.bookmark-preview figure {
+.post-preview figure {
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -3208,7 +3226,7 @@ hr.divider2 {
   padding: 0 !important;
 }
 
-.bookmark-preview img {
+.post-preview img {
   width: 100%;
   height: auto;
   max-height: 300px;
@@ -3258,7 +3276,7 @@ hr.divider2 {
     display: block;
   }
 
-  .bookmark-item a {
+  .post-item a {
     padding: 0.75rem 0.5rem;
   }
 
@@ -3270,7 +3288,7 @@ hr.divider2 {
 /* Very small screens - single column with STACKED sticky headers */
 
 @media screen and (max-width: 475px) {
-  .bookmarks-timeline,
+  .posts-timeline,
   .timeline-header,
   .timeline-content,
   .timeline-month,
@@ -3334,7 +3352,7 @@ hr.divider2 {
   .project-thumbnails,
   .signature,
   .project-button,
-  .bookmarks-page {
+  .posts-page {
     padding: 0 1.25rem;
   }
 

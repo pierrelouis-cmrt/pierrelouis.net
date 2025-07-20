@@ -561,24 +561,52 @@
 
     <main>
       <h2 class="section-title">Posts</h2>
-      <p class="subtitle italic">This is where i share interesting things.</p>
+      <p class="subtitle italic">This is where I share my thoughts.</p>
       <hr class="divider3" />
       <p>
-        An irregularly updated personal list of hand-picked sites, tools,
-        resources, posts, videos, and other share-worthy links from across the
-        web.
+        This is my personal blog. On here you'll find
+        <strong>notes</strong> (aka fleeting thoughts) and
+        <strong>articles</strong> (aka longer, more polished posts).
       </p>
 
-      <div class="bookmarks-page">
+      <div class="posts-page" id="posts">
         <!-- Category filters -->
-        <div class="bookmark-filters">
-          <a class="bookmark-filter" data-tag="Reading">Reading</a>
-          <a class="bookmark-filter" data-tag="Videos">Videos</a>
-          <a class="bookmark-filter" data-tag="Inspiration">Inspiration</a>
-          <a class="bookmark-filter" data-tag="Tools/Ressources"
-            >Tools/Ressources</a
+        <div class="post-filters">
+          <a class="post-filter" data-tag="Notes"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"
+              />
+              <path d="M15 3v4a2 2 0 0 0 2 2h4" /></svg
+            >Notes</a
           >
-          <a class="bookmark-filter" id="clear-filter" style="display: none"
+          <a class="post-filter" data-tag="Articles"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M15 18h-5" />
+              <path d="M18 14h-8" />
+              <path
+                d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2"
+              />
+              <rect width="8" height="4" x="10" y="6" rx="1" /></svg
+            >Articles</a
+          >
+          <a class="post-filter" id="clear-filter" style="display: none"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -595,10 +623,7 @@
         </div>
 
         <!-- Timeline is filled by JS -->
-        <div class="bookmarks-timeline" id="bookmarks-timeline"></div>
-
-        <!-- one and only script for this page -->
-        <script type="module" src="/src/posts.js"></script>
+        <div class="posts-timeline" id="posts-timeline"></div>
       </div>
     </main>
 
@@ -628,11 +653,12 @@
       </div>
     </footer>
     <script defer src="/src/script.js"></script>
+    <script type="module" src="posts.js"></script>
+
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"
     ></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
-    <script type="module" src="/src/posts.js"></script>
   </body>
 </html>

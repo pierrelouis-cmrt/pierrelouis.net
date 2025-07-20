@@ -1,0 +1,354 @@
+[
+  {
+    "year": 2025,
+    "month": "Jul",
+    "link": "https://www.youtube.com/watch?v=m_4zaXSLW5U",
+    "title": "The incredible design of the ISS",
+    "meta": {
+      "text": "by Fern",
+      "icon": "https://icons.duckduckgo.com/ip3/youtube.com.ico"
+    },
+    "description": "A super interesting video about the ISS by Fern.",
+    "image": "",
+    "tag": "Videos"
+  },
+  {
+    "year": 2025,
+    "month": "Jul",
+    "link": "https://www.youtube.com/watch?v=v5YlreKsUGY",
+    "title": "What is the future of art?",
+    "meta": {
+      "text": "by Answer in Progress",
+      "icon": "https://icons.duckduckgo.com/ip3/youtube.com.ico"
+    },
+    "description": "A look at different opinions about AI art and the broader definition of art.",
+    "image": "",
+    "tag": "Videos"
+  },
+  {
+    "year": 2025,
+    "month": "Jul",
+    "link": "https://x.com/joshm/status/1945860833306673409",
+    "title": "The “Mac vs PC” era of AI",
+    "meta": {
+      "text": "by Josh Miller",
+      "icon": "https://icons.duckduckgo.com/ip3/thebrowser.company.ico"
+    },
+    "description": "An interesting take on the two paths of AI development: the agents and the personal apps.",
+    "image": "",
+    "tag": "Reading"
+  },
+  {
+    "year": 2025,
+    "month": "Jun",
+    "link": "https://www.youtube.com/watch?v=IrGYUq1mklk",
+    "title": "Liquid Glass ",
+    "meta": {
+      "text": "by Apple Developer",
+      "icon": "https://icons.duckduckgo.com/ip3/youtube.com.ico"
+    },
+    "description": "A video addressing the alleged accessibility issues of the upcoming iOS 26 update. It clearly defines the philosophy of this new design language. We've reached a point where this design process is closer to a physical approach than a software one.",
+    "image": "https://media.licdn.com/dms/image/v2/D5612AQFjDO-bM9vmWg/article-cover_image-shrink_720_1280/B56ZdoVPjvGoAI-/0/1749802094973?e=2147483647&v=beta&t=9xro6iRnWNnoppSKN3SAAs9fnY7z62sbS5AUqporZ-8",
+    "tag": "Videos"
+  },
+  {
+    "year": 2025,
+    "month": "May",
+    "link": "https://x.com/mrexits/status/1917247659561066558",
+    "title": "The Objects of Our Life",
+    "meta": {
+      "text": "from Steve Jobs",
+      "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+    },
+    "description": "Steve's talk at the 1983 International Design Conference in Aspen. He explains what a computer is, how software works, and what the next decades of advancements could look like, all with incredible foresight.",
+    "image": "",
+    "tag": "Videos"
+  },
+  {
+    "year": 2025,
+    "month": "May",
+    "link": "https://x.com/kimmonismus/status/1920594810286571640",
+    "title": "Automated Cleaning",
+    "meta": {
+      "text": "by @kimmonismus on X",
+      "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+    },
+    "description": "A very important breakthrough: cleaning robots. Hygiene is what leads to healthier and longer living societies.",
+    "image": "https://www.startupticker.ch/assets/images/articles/Loki_Robotics_robot.png",
+    "tag": "Reading"
+  },
+  {
+    "year": 2025,
+    "month": "May",
+    "link": "https://www.aboutamazon.com/news/operations/amazon-vulcan-robot-pick-stow-touch",
+    "title": "Vulcan robots: the next genreration warehouse",
+    "meta": {
+      "text": "by Amazon Robotics",
+      "icon": "https://icons.duckduckgo.com/ip3/amazon.com.ico"
+    },
+    "description": "In addition to the real time vision systems, those robots can feel the environment arount them using sensors and tactile feedback. This is a huge step and allow the robots to grab stuff more efficiently without damaging them.",
+    "image": "",
+    "tag": "Reading"
+  },
+  {
+    "year": 2025,
+    "month": "May",
+    "link": "https://www.reddit.com/r/interestingasfuck/comments/1lk73vi/the_bbc_uses_robocameras_disguised_as_dung_heaps/",
+    "title": "A new way to film widelife",
+    "meta": {
+      "text": "from the BBC",
+      "icon": "https://icons.duckduckgo.com/ip3/reddit.com.ico"
+    },
+    "description": "The BBC used robots looking like dung heaps to film close up shots of wild animals without scaring them away. This is a funny outcome of the recent advancements in robotics!",
+    "image": "https://images.techeblog.com/wp-content/uploads/2025/05/09150947/bbc-dung-cam-elephants-2.jpg",
+    "tag": "Videos"
+  },
+  {
+    "year": 2025,
+    "month": "Apr",
+    "link": "https://www.youtube.com/watch?v=7QR9otLcnf0",
+    "title": "Bill Gates' 1993 prediction for the future of computers",
+    "meta": {
+      "text": "by the BBC",
+      "icon": "https://icons.duckduckgo.com/ip3/youtube.com.ico"
+    },
+    "description": "Bill Gates and Paul Allen launched computing giant Microsoft 50 years ago. In 1993, he talked to the BBC about the online innovations that would define the 21st Century. He was truly a visionary.",
+    "image": "",
+    "tag": "Videos"
+  },
+  {
+    "year": 2025,
+    "month": "Apr",
+    "link": "https://x.com/kimmonismus/status/1913559452730658871",
+    "title": "Beyond Human Training",
+    "meta": {
+      "text": "by @kimmonismus on X",
+      "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+    },
+    "description": "Google DeepMind's new “Streams” AI learns directly from the real world, discarding human data all by itself. This means the AI can come up with ideas that people might never have imagined or fully understood.",
+    "image": "",
+    "tag": "Reading"
+  },
+  {
+    "year": 2025,
+    "month": "Apr",
+    "link": "https://blog.google/products/google-cloud/ironwood-tpu-age-of-inference/",
+    "title": "Google's advantage",
+    "meta": {
+      "text": "by Amin Vahdat",
+      "icon": "https://icons.duckduckgo.com/ip3/google.com.ico"
+    },
+    "description": "Google decided to lean heavily towards TPU instead of GPU for their AI infrastructure. This is a bold move that will allow them to have a more efficient and powerful system in the long run. You could comapare that with Apple's M1 chip, which was a game changer for the company. Google won't have to rely on Nvidia at all for example.",
+    "image": "",
+    "tag": "Reading"
+  },
+  {
+    "year": 2025,
+    "month": "Apr",
+    "link": "https://www.youtube.com/watch?v=DfznnKUwywQ",
+    "title": "The design of mechanical characters",
+    "meta": {
+      "text": "Paper from Disney",
+      "icon": "https://icons.duckduckgo.com/ip3/youtube.com.ico"
+    },
+    "description": "In 2013, Disney published a paper on the design of mechanical characters. It's basically an interactive design system that lets anyone (even without engineering experience) turn a digital, articulated character into a 3-D-printable mechanical toy/figure. It works for a wide range of characters and movements, from simple 2D to complex 3D animations.",
+    "image": "",
+    "tag": "Videos"
+  },
+  {
+    "year": 2025,
+    "month": "Jul",
+    "link": "https://x.com/lostdoesart/status/1917334803176907086",
+    "title": "Folders 📁",
+    "meta": {
+      "text": "Made by @lostdoesart on X",
+      "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+    },
+    "description": "",
+    "image": "https://pbs.twimg.com/media/Gpu9zrxWIAAoifH?format=jpg&name=small",
+    "tag": "Inspiration"
+  },
+  {
+    "year": 2025,
+    "month": "Jul",
+    "link": "https://x.com/yashwanth941v/status/1917929934737281108",
+    "title": "Notification",
+    "meta": {
+      "text": "by @yashwanth941v on X",
+      "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+    },
+    "description": "",
+    "image": "https://pbs.twimg.com/media/Gp3bGyoawAA5vPO?format=jpg&name=large",
+    "tag": "Inspiration"
+  },
+  {
+    "year": 2025,
+    "month": "Jul",
+    "link": "https://x.com/yashwanth941v/status/1916811810746851376",
+    "title": "Minimal Folder Design",
+    "meta": {
+      "text": "by @yashwanth941v on X",
+      "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+    },
+    "description": "",
+    "image": "https://pbs.twimg.com/media/GpniKi5asAAQ_No?format=jpg&name=small",
+    "tag": "Inspiration"
+  },
+  {
+    "year": 2025,
+    "month": "Jun",
+    "link": "https://x.com/dhruvdeora2/status/1916120373990723973",
+    "title": "Landing Page",
+    "meta": {
+      "text": "by @dhruvdeora2 on X",
+      "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+    },
+    "description": "",
+    "image": "https://pbs.twimg.com/media/GpdtFZ_XYAIVVRJ?format=jpg&name=large",
+    "tag": "Inspiration"
+  },
+  {
+    "year": 2025,
+    "month": "May",
+    "link": "https://x.com/samstooff/status/1910665385051119979",
+    "title": "Nice graphic design with the help of GPT Image Gen",
+    "meta": {
+      "text": "by @samstooff on X",
+      "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+    },
+    "description": "",
+    "image": "https://pbs.twimg.com/media/Gn4J9r8WkAA6cWQ?format=jpg&name=4096x4096",
+    "tag": "Inspiration"
+  },
+  {
+    "year": 2025,
+    "month": "Apr",
+    "link": "https://x.com/neybell_/status/1908878149611565176",
+    "title": "Graphic - tokyo",
+    "meta": {
+      "text": "by @neybell_ on X",
+      "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+    },
+    "description": "",
+    "image": "https://pbs.twimg.com/media/Gn2yTmhbkAASUAM?format=jpg&name=900x900",
+    "tag": "Inspiration"
+  },
+  {
+    "year": 2025,
+    "month": "Jan",
+    "link": "https://freedium.cfd/https://medium.muz.li/ui-design-trends-in-2025-34987ed805c9",
+    "title": "UI Design Trends In 2025",
+    "meta": {
+      "text": "by Souptik Debnath",
+      "icon": "https://icons.duckduckgo.com/ip3/medium.com.ico"
+    },
+    "description": "Interesting article.",
+    "image": "https://miro.medium.com/v2/resize:fit:700/1*sOkarKseqH84zxnaXlFdOQ.png",
+    "tag": "Reading"
+  },
+  {
+    "year": 2025,
+    "month": "Mar",
+    "link": "https://medium.com/@disco_lu/saying-bye-to-4px-spacing-and-hello-to-fibonacci-58477e3ecca3",
+    "title": "Fibonacci in design",
+    "meta": {
+      "text": "by Luis Ouriach",
+      "icon": "https://icons.duckduckgo.com/ip3/medium.com.ico"
+    },
+    "description": "Saying bye to 4px spacing and hello to Fibonacci. Very useful article about spacing in web design.",
+    "image": "",
+    "tag": "Reading"
+  },
+  {
+    "year": 2025,
+    "month": "Apr",
+    "link": "https://x.com/damonxart/status/1908832026297577477",
+    "title": "Poster - graphic design",
+    "meta": {
+      "text": "by @damonxart on X",
+      "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+    },
+    "description": "",
+    "image": "https://pbs.twimg.com/media/Gn2ImxXa4AAv3xV?format=jpg&name=900x900",
+    "tag": "Inspiration"
+  },
+  {
+    "year": 2025,
+    "month": "Apr",
+    "link": "https://x.com/damonxart/status/1908832026297577477",
+    "title": "Poster - graphic design",
+    "meta": {
+      "text": "by @damonxart on X",
+      "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+    },
+    "description": "",
+    "image": "https://pbs.twimg.com/media/Gn2IjZobAAA3fCI?format=jpg&name=900x900",
+    "tag": "Inspiration"
+  },
+
+  {
+    "year": 2025,
+    "month": "Mar",
+    "link": "https://lucide.dev/",
+    "title": "Open-source Icons",
+    "meta": {
+      "text": "lucide.dev",
+      "icon": "https://icons.duckduckgo.com/ip3/lucide.dev.ico"
+    },
+    "description": "Free, open-source and consistent. I use those icons in most of my projects.",
+    "image": "",
+    "tag": "Tools/Ressources"
+  },
+  {
+    "year": 2025,
+    "month": "Feb",
+    "link": "https://fontjoy.com/",
+    "title": "Font pairing made easy",
+    "meta": {
+      "text": "fontjoy.com",
+      "icon": "https://icons.duckduckgo.com/ip3/fontjoy.com.ico"
+    },
+    "description": "Fontjoy is a tool that helps you find 3 complementary fonts that work well together. It uses a neural network and is very fun to play with.",
+    "image": "",
+    "tag": "Tools/Ressources"
+  },
+  {
+    "year": 2025,
+    "month": "Jun",
+    "link": "https://penpot.app/penpothub/libraries-templates",
+    "title": "Open-source figma alternative",
+    "meta": {
+      "text": "penpot.app",
+      "icon": "https://icons.duckduckgo.com/ip3/penpot.app.ico"
+    },
+    "description": "Penpot is a free and open-source design and prototyping platform. It is a great alternative to Figma!",
+    "image": "",
+    "tag": "Tools/Ressources"
+  },
+  {
+    "year": 2025,
+    "month": "Jul",
+    "link": "https://fmhy.xyz/",
+    "title": "freemediaheckyeah",
+    "meta": {
+      "text": "fmhy.xyz",
+      "icon": "https://icons.duckduckgo.com/ip3/fmhy.xyz.ico"
+    },
+    "description": "The largest collection of free stuff on the internet!",
+    "image": "",
+    "tag": "Tools/Ressources"
+  },
+  {
+    "year": 2025,
+    "month": "Jul",
+    "link": "https://www.realtimecolors.com/",
+    "title": "Color and font visualizer",
+    "meta": {
+      "text": "realtimecolors.com",
+      "icon": "https://icons.duckduckgo.com/ip3/realtimecolors.com.ico"
+    },
+    "description": "Realtime Colors is a tool that lets you visualize the colors and fonts used on a dummy website in real-time. It is very useful for designers wanting to know if colors work and check for accessibility. It allows you to setup a light and dark mode, and then export the css.",
+    "image": "",
+    "tag": "Tools/Ressources"
+  }
+]
