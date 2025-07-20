@@ -8,6 +8,9 @@ module.exports = {
     "./colophon/*.html",
     "./uses/*.html",
     "./projects/*.html",
+    "./posts/*.html",
+    "./posts/**/*.html",
+    "./bookmarks/*.html",
   ],
   theme: {
     extend: {},
