@@ -350,5 +350,18 @@
     "description": "Realtime Colors is a tool that lets you visualize the colors and fonts used on a dummy website in real-time. It is very useful for designers wanting to know if colors work and check for accessibility. It allows you to setup a light and dark mode, and then export the css.",
     "image": "",
     "tag": "Tools/Ressources"
+  },
+  {
+    "year": 2025,
+    "month": "Jul",
+    "link": "https://www.youtube.com/watch?v=2b1a3c4d8e0",
+    "title": "When Your Body Attacks Itself – Autoimmune",
+    "meta": {
+      "text": "by Kurzgesagt",
+      "icon": "https://icons.duckduckgo.com/ip3/youtube.com.ico"
+    },
+    "description": "What happens when your immune system, designed to protect you, turns against you? And why does this happen?",
+    "image": "",
+    "tag": "Videos"
   }
 ]
