@@ -1,0 +1,38 @@
+name: Build Posts
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-posts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build posts
+        run: npm run build:posts
+
+      - name: Commit and push generated posts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add posts/articles posts/notes src/assets || true
+          git commit -m 'Build posts' || echo "No changes to commit"
+          git push
