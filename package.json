@@ -1,10 +1,14 @@
 {
   "devDependencies": {
+    "concurrently": "^9.2.0",
+    "live-server": "^1.2.0",
     "nodemon": "^3.1.10",
     "tailwindcss": "^3.4.14"
   },
   "scripts": {
-    "build": "npx tailwindcss -i ./src/styles.css -o ./src/output.css",
+    "build:css": "tailwindcss -o public/assets/output.css",
+    "build:posts": "node scripts/buildPosts.js",
+    "build": "npm run build:css && npm run build:posts",
     "dev": "nodemon --watch ./src/styles.css --exec \"npx tailwindcss -i ./src/styles.css -o ./src/output.css\""
   }
 }
