@@ -3,19 +3,19 @@
     "year": 2025,
     "month": "Jul",
     "day": 15,
-    "link": "/posts/2025-07-15-my-first-post",
-    "title": "My First Post",
-    "description": "First Description",
+    "link": "#",
+    "title": "Coming Soon",
+    "description": "Coming Soon",
     "tag": "Notes"
   },
   {
     "year": 2025,
     "month": "Jul",
     "day": 15,
-    "link": "/posts/2025-07-15-my-second-post",
-    "title": "My Second Post",
-    "description": "Second Description",
-    "image": "https://picsum.photos/470/300",
+    "link": "#",
+    "title": "Coming Soon",
+    "description": "Coming Soon",
+    "image": "",
     "tag": "Articles"
   }
 ]
