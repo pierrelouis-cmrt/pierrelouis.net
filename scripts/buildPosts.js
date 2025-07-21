@@ -76,7 +76,7 @@ function timelineItem(p) {
 
   return `
     <div class="post-item" data-tag="${p.tag}">
-      <a href="${p.link}" target="_blank" rel="noopener noreferrer">
+      <a href="${p.link}" rel="noopener noreferrer">
         <div class="post-title">
           ${SVG_ICONS[p.tag] || ""}
           <span class="link-text">${p.title}</span>
@@ -93,7 +93,7 @@ function latestItem(p) {
     <div class="post__item">
       <a class="inline-icon post__link" href="${
         p.link
-      }" target="_blank" rel="noopener noreferrer">
+      }" rel="noopener noreferrer">
         <div class="post-title">
           ${SVG_ICONS[p.tag] || ""}
           <span class="link-text">${p.title}</span>
