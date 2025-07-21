@@ -25,8 +25,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build Tailwind + posts
-        run: npm run build # <- runs both build:css and build:posts
+      - name: Build Tailwind + posts + bookmarks
+        run: npm run build # <- runs both build:css, build:posts and build::bookmarks
 
       # OPTIONAL ─── if you commit the built HTML/CSS back to the repo
       - name: Commit & push changes

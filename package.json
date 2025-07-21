@@ -6,9 +6,9 @@
     "tailwindcss": "^3.4.14"
   },
   "scripts": {
-    "build:css": "tailwindcss -o public/assets/output.css",
-    "build:posts": "node scripts/buildPosts.js",
-    "build": "npm run build:css && npm run build:posts",
-    "dev": "nodemon --watch ./src/styles.css --exec \"npx tailwindcss -i ./src/styles.css -o ./src/output.css\""
+    "build:css":      "tailwindcss -o public/assets/output.css",
+    "build:posts":    "node scripts/buildPosts.js",
+    "build:bookmarks":"node scripts/buildBookmarks.js",
+    "build":          "npm run build:css && npm run build:posts && npm run build:bookmarks"
   }
 }
