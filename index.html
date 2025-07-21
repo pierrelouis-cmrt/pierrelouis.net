@@ -70,6 +70,8 @@
   </head>
 
   <body>
+    <script defer src="/posts/posts.js"></script>
+
     <nav class="sticky-nav">
       <div class="menu-container">
         <div class="nav-left">
@@ -773,115 +775,29 @@
         </div>
       </section>
       <section id="blog" class="animate-on-scroll">
-        <h2 class="section-title italic">Blog</h2>
-        <p>
-          <a
-            class="inline-icon"
-            href="https://medium.com/@pierrelouis-cmrt/ia-militaire-lhumanisme-face-aux-d%C3%A9cisions-l%C3%A9tales-automatis%C3%A9es-28d6a74bf1ee"
-            target="_blank"
-            rel="noopener"
-            >IA militaire : l'humanisme face aux décisions létales
-            automatisées<svg
+        <h2 class="section-title italic">Latest Posts</h2>
+
+        <div class="post__block" id="latest-posts"></div>
+
+        <div class="project-button">
+          <a class="inline-icon project-link" href="/posts"
+            >All posts<svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
+              height="1em"
+              width="1em"
+              style="margin-left: 0.2em"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="lucide lucide-external-link"
+              class="lucide lucide-arrow-up-right"
             >
-              <path d="M15 3h6v6" />
-              <path d="M10 14 21 3" />
-              <path
-                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-              />
-            </svg>
-          </a>
-        </p>
-        <p>
-          <a
-            class="inline-icon"
-            href="https://pierrelouis-cmrt.medium.com/en-quoi-la-nourriture-irradi%C3%A9e-peut-elle-prot%C3%A9ger-notre-sant%C3%A9-9d6f9d0bab9c"
-            target="_blank"
-            rel="noopener"
-            >En quoi la nourriture irradiée peut-elle protéger notre santé ?
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-external-link"
-            >
-              <path d="M15 3h6v6" />
-              <path d="M10 14 21 3" />
-              <path
-                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-              />
-            </svg>
-          </a>
-        </p>
-        <p>
-          <a
-            class="inline-icon"
-            href="https://medium.com/@pierrelouis-cmrt/dans-quelle-mesure-le-travail-dada-lovelace-a-t-il-influencé-les-mathématiques-contemporaines-46c2900df021"
-            target="_blank"
-            rel="noopener"
-            >Regardons de plus près le travail fascinant d’Ada Lovelace
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-external-link"
-            >
-              <path d="M15 3h6v6" />
-              <path d="M10 14 21 3" />
-              <path
-                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-              />
-            </svg>
-          </a>
-        </p>
-        <p>
-          <a
-            class="inline-icon"
-            href="https://medium.com/@pierrelouis-cmrt/ios-ipados-supervision-removal-6979eb1dac48"
-            target="_blank"
-            rel="noopener"
-            >iOS & iPadOS Supervision Removal
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-external-link"
-            >
-              <path d="M15 3h6v6" />
-              <path d="M10 14 21 3" />
-              <path
-                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-              />
-            </svg>
-          </a>
-        </p>
+              <path d="M7 7h10v10" />
+              <path d="M7 17 17 7" /></svg
+          ></a>
+        </div>
       </section>
       <section id="connect" class="animate-on-scroll">
         <h2 class="section-title italic">Connect</h2>
