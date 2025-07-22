@@ -3289,7 +3289,17 @@ article h1 {
   line-height: 1.125;
   margin-top: 3rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--stroke-lighter);
+  border-bottom: 1px dashed hsl(from var(--default) h s l / 20%);
+}
+
+article .post-meta h1 {
+  margin: 2rem 0 1rem;
+  width: 100%;
+}
+
+article .post-date {
+  width: content;
+  transform: translateY(27px);
 }
 
 article h2 {
@@ -3565,7 +3575,7 @@ article .callout .content > * {
 article hr {
   max-width: 600px;
   height: 0;
-  border-top: 1px dashed hsl(from var(--default) h s l / 20%);
+  border-top: 1px solid hsl(from var(--default) h s l / 10%);
   margin: 2rem auto;
   transition: border-color 400ms ease-in-out;
 }
@@ -3678,23 +3688,6 @@ article tbody tr:nth-child(even) {
 
 article tbody tr:last-child td {
   border-bottom: none;
-}
-
-/* Links without arrows */
-
-article a {
-  color: var(--secondary);
-  text-decoration: underline;
-  text-decoration-style: dashed;
-  text-decoration-color: hsl(from var(--body) h s l / 30%);
-  text-decoration-thickness: 0.1rem;
-  text-underline-offset: 0.25rem;
-  transition: all 120ms ease-in-out;
-}
-
-article a:hover {
-  color: var(--body);
-  text-decoration-color: hsl(from var(--body) h s l / 50%);
 }
 
 /* Clickable images with lightbox */
@@ -3812,15 +3805,6 @@ article dd::before {
   opacity: 0.7;
 }
 
-/* Abbreviations */
-
-article abbr {
-  -webkit-text-decoration: underline dotted;
-          text-decoration: underline dotted;
-  text-decoration-color: var(--stroke-secondary);
-  cursor: help;
-}
-
 /* Sub/Superscript */
 
 article sub,
@@ -3847,8 +3831,11 @@ article .footnote-ref {
   font-weight: 500;
   font-size: 0.8125rem;
   padding: 0.1rem 0.25rem;
-  background: rgba(var(--accent-rgb), 0.1);
   border-radius: 3px;
+}
+
+article .footnote-ref a {
+  text-decoration: none;
 }
 
 article .footnotes {
@@ -3878,6 +3865,7 @@ article .footnotes li::before {
   left: 0;
   color: var(--accent);
   font-weight: 600;
+  padding-top: 4px;
 }
 
 article .footnote-backref {
@@ -3897,13 +3885,39 @@ article .footnote-backref:hover {
   color: var(--body);
 }
 
-article .footnote-backref::before {
-  content: "";
-  width: 0.875rem;
-  height: 0.875rem;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23707070' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 14 4 9l5-5'/%3E%3Cpath d='M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11'/%3E%3C/svg%3E")
-    no-repeat center;
-  background-size: contain;
+article .footnotes-sep {
+  display: none;
+}
+
+/* Checkboxes */
+
+/* 1 — turn the <ul> into a bullet-free list */
+
+ul.task-list,
+ul.contains-task-list {
+  /* both class names occur in the wild :contentReference[oaicite:0]{index=0} */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* 2 — kill the pseudo-bullet many renderers add */
+
+li.task-list-item::before,       /* old GitHub style         */
+li.task-list-item::marker {
+  /* modern browsers prefer this */
+  content: none !important;
+}
+
+/* 3 — tidy up spacing (optional) */
+
+.task-list-item {
+  margin-left: -0.4em;
+  /* lines checkbox with text */
+}
+
+.task-list-item-checkbox {
+  margin-right: 0.4em;
 }
 
 /*----------------------------  MEDIA QUERIES  --------------------------------------*/
