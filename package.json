@@ -7,7 +7,8 @@
     "build:css": "tailwindcss -o public/assets/output.css",
     "build:posts": "node scripts/buildPosts.js",
     "build:bookmarks": "node scripts/buildBookmarks.js",
-    "build": "npm run build:css && npm run build:posts && npm run build:bookmarks",
+    "cachebust:css":   "node scripts/bumpCssVersion.js",
+    "build": "npm run build:css && npm run build:posts && npm run build:bookmarks && npm run cachebust:css",
     "dev": "nodemon --watch ./src/styles.css --exec \"npx tailwindcss -i ./src/styles.css -o ./src/output.css\""
   }
 }
