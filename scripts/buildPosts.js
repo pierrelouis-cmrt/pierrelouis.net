@@ -75,7 +75,7 @@ function timelineItem(p) {
     : "";
 
   return `
-    <div class="post-item" data-tag="${p.tag}">
+    <div class="post-item animate-on-scroll" data-tag="${p.tag}">
       <a href="${p.link}" rel="noopener noreferrer">
         <div class="post-title">
           ${SVG_ICONS[p.tag] || ""}

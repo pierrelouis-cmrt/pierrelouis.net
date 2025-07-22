@@ -52,7 +52,7 @@ function bookmarkItem(b) {
     : "";
 
   return `
-    <div class="post-item" data-tag="${b.tag}">
+    <div class="post-item animate-on-scroll" data-tag="${b.tag}">
       <a href="${b.link}" target="_blank" rel="noopener noreferrer">
         <div class="post-title">
           <span class="link-text">${b.title}</span>
