@@ -1560,7 +1560,6 @@ a.inline-icon:not(:hover) .lucide {
   border-bottom-right-radius: 0.75rem;
   border-top-left-radius: 0.125rem;
   border-bottom-left-radius: 0.125rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
 
@@ -1853,25 +1852,10 @@ a.project-item:not(:hover) .lucide {
   transition: none;
 }
 
-@media (min-width: 768px) {
-  .post__item {
-    flex-direction: row;
-    align-items: center;
-    gap: 0.75rem;
-    /* gap-3 */
-  }
-}
-
 .post__title {
   display: flex;
   justify-content: space-between;
   width: 100%;
-}
-
-@media (min-width: 768px) {
-  .post__title {
-    width: auto;
-  }
 }
 
 .post__link {
@@ -3005,33 +2989,6 @@ hr.divider2 {
   max-width: 600px;
 }
 
-@media (max-width: 480px) {
-  .arsenal-section {
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.5rem 0;
-  }
-
-  .arsenal-label {
-    width: auto;
-    margin-top: 2rem;
-    margin-bottom: 0.5rem;
-    position: relative;
-  }
-
-  .arsenal-separator {
-    display: none;
-  }
-
-  .arsenal-items {
-    gap: 0.75rem 0.75rem;
-  }
-
-  .arsenal-items a {
-    line-height: normal;
-  }
-}
-
 /* Footer */
 
 .arsenal-footer {
@@ -3301,94 +3258,6 @@ hr.divider2 {
      object-fit: cover;
   border-radius: inherit;
   transition: all 120ms ease-in-out;
-}
-
-/* Medium screens - year column + scrolling content with sticky month headers */
-
-@media screen and (max-width: 640px) {
-  .timeline-year {
-    width: 20%;
-    min-width: 4ch;
-    padding-right: 1rem;
-  }
-
-  /* Adjust header margins for smaller screens */
-
-  .timeline-year h2,
-  .month-header h3 {
-    margin: 0.5rem 0;
-  }
-
-  /* Removing `position: relative` ensures sticky positioning is relative to the viewport */
-
-  .timeline-content {
-    flex: 1;
-  }
-
-  .timeline-month {
-    display: block;
-    border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
-  }
-
-  .timeline-month:last-child {
-    border-bottom: none;
-  }
-
-  .month-header {
-    width: 100%;
-    border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
-  }
-
-  .month-items {
-    display: block;
-  }
-
-  .post-item a {
-    padding: 0.75rem 0.5rem;
-  }
-
-  .full-year {
-    display: inline;
-  }
-}
-
-/* Very small screens - single column with STACKED sticky headers */
-
-@media screen and (max-width: 475px) {
-  .posts-timeline,
-  .timeline-header,
-  .timeline-content,
-  .timeline-month,
-  .month-items {
-    display: block;
-    /* Force single column layout */
-  }
-
-  .timeline-year {
-    width: 100%;
-    padding-right: 0;
-    border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
-  }
-
-  /* In this view, the month header must stick BELOW the year header */
-
-  .month-header h3 {
-    /* top = 56px (navbar) + height of h2 (1.8125rem) */
-    top: calc(56px + 1.8125rem);
-  }
-
-  .month-header {
-    width: 100%;
-    border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
-  }
-}
-
-/* Ensure proper spacing on larger screens */
-
-@media screen and (min-width: 641px) {
-  .full-year {
-    display: none;
-  }
 }
 
 /* -------- Article Styles -------- */
@@ -4037,35 +3906,6 @@ article .footnote-backref::before {
   background-size: contain;
 }
 
-/* Mobile responsiveness */
-
-@media screen and (max-width: 768px) {
-  article h1 {
-    font-size: 1.5rem;
-  }
-
-  article h2 {
-    font-size: 1.25rem;
-  }
-
-  article table {
-    font-size: 0.875rem;
-  }
-
-  article th,
-  article td {
-    padding: 0.5rem;
-  }
-
-  .image-lightbox-close {
-    top: 1rem;
-    right: 1rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    font-size: 1.5rem;
-  }
-}
-
 /*----------------------------  MEDIA QUERIES  --------------------------------------*/
 
 @media screen and (max-width: 768px) {
@@ -4147,13 +3987,78 @@ article .footnote-backref::before {
   .social-links {
     max-width: 90%;
   }
+
+  .post-filter:last-child {
+    margin-left: 0;
+  }
+
+  article h1 {
+    font-size: 1.5rem;
+  }
+
+  article h2 {
+    font-size: 1.25rem;
+  }
+
+  article table {
+    font-size: 0.875rem;
+  }
+
+  article th,
+  article td {
+    padding: 0.5rem;
+  }
+
+  .image-lightbox-close {
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.5rem;
+  }
 }
 
 @media screen and (max-width: 640px) {
-  /*.command {
-    top: 258px;
-    left: 30px;
-  }*/
+  .timeline-year {
+    width: 20%;
+    min-width: 4ch;
+    padding-right: 1rem;
+  }
+
+  .timeline-year h2,
+  .month-header h3 {
+    margin: 0.5rem 0;
+  }
+
+  .timeline-content {
+    flex: 1;
+  }
+
+  .timeline-month {
+    display: block;
+    border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
+  }
+
+  .timeline-month:last-child {
+    border-bottom: none;
+  }
+
+  .month-header {
+    width: 100%;
+    border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
+  }
+
+  .month-items {
+    display: block;
+  }
+
+  .post-item a {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .full-year {
+    display: inline;
+  }
 }
 
 @media (max-width: 600px) {
@@ -4280,6 +4185,54 @@ article .footnote-backref::before {
   .item-name {
     font-size: 0.875rem;
   }
+
+  .arsenal-section {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+  }
+
+  .arsenal-label {
+    width: auto;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+  }
+
+  .arsenal-separator {
+    display: none;
+  }
+
+  .arsenal-items {
+    gap: 0.75rem 0.75rem;
+  }
+
+  .arsenal-items a {
+    line-height: normal;
+  }
+
+  .posts-timeline,
+  .timeline-header,
+  .timeline-content,
+  .timeline-month,
+  .month-items {
+    display: block;
+  }
+
+  .timeline-year {
+    width: 100%;
+    padding-right: 0;
+    border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
+  }
+
+  .month-header h3 {
+    top: calc(56px + 1.8125rem);
+  }
+
+  .month-header {
+    width: 100%;
+    border-bottom: 1px solid hsl(from var(--default) h s l / 10%);
+  }
 }
 
 @media (max-width: 320px) {
@@ -4293,6 +4246,24 @@ article .footnote-backref::before {
 
   .status {
     display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .post__item {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .post__title {
+    width: auto;
+  }
+}
+
+@media (min-width: 640px) {
+  .full-year {
+    display: none;
   }
 }
 
