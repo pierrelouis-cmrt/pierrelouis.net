@@ -53,6 +53,12 @@ const SVG_ICONS = {
 /* -------------------------------------------------------------------------- */
 const monthAbbr = (m) => m.slice(0, 3);
 const monthIndex = (m) => new Date(`${m} 1 2000`).getMonth();
+const slugify = (t) =>
+  t
+    .toLowerCase()
+    .replace(/[^a-z0-9 _-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
 
 const groupBy = (arr, key) =>
   arr.reduce((map, obj) => {
@@ -163,6 +169,10 @@ function replaceBlock(html, tag, content) {
   /* 1. Load JSON ----------------------------------------------------------- */
   const raw = await readFile(JSON_PATH, "utf8");
   const items = JSON.parse(raw);
+  for (const p of items) {
+    const dir = p.tag === "Notes" ? "notes" : "articles";
+    p.link = `/posts/${dir}/${slugify(p.title)}.html`;
+  }
 
   /* 2. Filter out future-dated posts -------------------------------------- */
   const today = new Date();
