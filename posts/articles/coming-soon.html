@@ -62,11 +62,34 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preload" href="/src/output.css?023" as="style" />
+
     <link rel="stylesheet" href="/src/output.css?023" />
     <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
+    <script>
+      window.MathJax = {
+        tex: {
+          /* inline:  \( … \)  or  $ … $  */
+          inlineMath: [
+            ["\\(", "\\)"],
+            ["$", "$"],
+          ],
+
+          /* display:  \[ … \]  or  $$ … $$ */
+          displayMath: [
+            ["\\[", "\\]"],
+            ["$$", "$$"],
+          ],
+        },
+      };
+    </script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
   </head>
 
   <body>
@@ -90,7 +113,7 @@
               <path d="M16 12H8" />
               <path d="m12 8-4 4 4 4" />
             </svg>
-            Back Home</a
+            Back to all posts</a
           >
           <div class="nav-links"></div>
         </div>
@@ -563,103 +586,9 @@
     </nav>
 
     <main>
-      <h2 class="section-title">What am I up to atm?</h2>
-      <hr class="divider3" />
-
-      <div class="swiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="pics/architecture1.webp" alt="Picture 1" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/architecture2.webp" alt="Picture 2" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/cat.webp" alt="Picture 3" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/cat2.webp" alt="Picture 4" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/cat3.webp" alt="Picture 5" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/cat4.webp" alt="Picture 6" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/sky.webp" alt="Picture 7" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/sky2.webp" alt="Picture 8" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/sky3.webp" alt="Picture 9" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/sky4.webp" alt="Picture 10" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/squirrel.webp" alt="Picture 11" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/squirrel2.webp" alt="Picture 12" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/eye.webp" alt="Picture 13" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/landscape.webp" alt="Picture 14" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/landscape2.webp" alt="Picture 15" />
-          </div>
-          <div class="swiper-slide">
-            <img src="pics/rainbow.webp" alt="Picture 16" />
-          </div>
-        </div>
-
-        <div class="swiper-pagination"></div>
-      </div>
-
-      <div class="animate-on-scroll">
-        <p class="p-now-page">
-          Currently studying engineering at Centrale Lyon
-        </p>
-        <hr class="divider2" />
-
-        <p class="p-now-page">
-          Living in Saint-Étienne (France), UNESCO Creative City of Design
-        </p>
-        <hr class="divider2" />
-
-        <p class="p-now-page">Designing websites in my free time</p>
-        <hr class="divider2" />
-
-        <p class="p-now-page">Listening to pop music on repeat</p>
-
-        <hr class="divider2" />
-
-        <p class="p-now-page">
-          Learning more about AI everyday, it's kinda becoming my whole
-          personality lol
-        </p>
-        <hr class="divider2" />
-
-        <p class="p-now-page">Keeping up with tech news</p>
-        <hr class="divider2" />
-
-        <p class="p-now-page">
-          Gaming occasionally when my free time is free-timing
-        </p>
-        <hr class="divider2" />
-
-        <p class="p-now-page">
-          Logging every movie I watch on Letterboxd like it's serious business
-        </p>
-        <hr class="divider2" />
-
-        <p class="p-now-page">Slightly obsessed with my Last.fm stats</p>
-      </div>
+      <article><div class="post-meta"><h1>Coming Soon</h1>
+<span class="post-date">July 22, 2025</span></div> <p>Coming Soon.</p>
+</article>
     </main>
 
     <footer>
@@ -688,14 +617,21 @@
       </div>
     </footer>
 
-    <script defer src="/src/script.js"></script>
-    <script defer src="carousel.js"></script>
+    <!-- Image lightbox -->
+    <div id="lightbox" class="lightbox">
+      <span class="lightbox-close" onclick="closeLightbox()">×</span>
+      <img id="lightbox-img" class="lightbox-content" loading="lazy" />
+    </div>
 
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+    <script defer src="/src/script.js"></script>
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"
     ></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   </body>
 </html>
