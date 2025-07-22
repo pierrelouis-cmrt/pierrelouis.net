@@ -1,7 +1,7 @@
 // scripts/buildBookmarks.js
 // -----------------------------------------------------------------------------
-// Generate static HTML for /bookmarks/index.html from /bookmarks/bookmarks.json
-// Idempotent: every run fully replaces the previous AUTO-GEN block.
+// Generate static HTML for /bookmarks/index.html from /bookmarks/bookmarks.json,
+// skipping any bookmark dated in a FUTURE month (or year) relative to today.
 // -----------------------------------------------------------------------------
 
 import { readFile, writeFile } from "fs/promises";
@@ -20,8 +20,7 @@ const BOOKMARKS_HTML = path.join(root, "bookmarks", "index.html");
 /* -------------------------------------------------------------------------- */
 /*  Helpers                                                                   */
 /* -------------------------------------------------------------------------- */
-const monthAbbr = (m) => m.slice(0, 3);
-
+const monthIndex = (m) => new Date(`${m} 1 2000`).getMonth();
 const groupBy = (arr, key) =>
   arr.reduce((map, obj) => {
     (map[obj[key]] ||= []).push(obj);
@@ -120,18 +119,28 @@ function replaceBlock(html, tag, content) {
 /*  Main                                                                      */
 /* -------------------------------------------------------------------------- */
 (async () => {
-  const items = JSON.parse(await readFile(JSON_PATH, "utf8"));
+  const raw = await readFile(JSON_PATH, "utf8");
+  const items = JSON.parse(raw);
 
-  // Sort newest first: year, then month (no day field in original code)
-  items.sort(
-    (a, b) =>
-      b.year - a.year ||
-      new Date(`${b.month} 1 2000`) - new Date(`${a.month} 1 2000`)
+  /* Filter out future months ---------------------------------------------- */
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth(); // 0-based
+
+  const filtered = items.filter((b) => {
+    if (b.year > currentYear) return false; // future year
+    if (b.year < currentYear) return true; // past year
+    return monthIndex(b.month) <= currentMonth; // same year, past or current month
+  });
+
+  /* Sort newest first: year, then month ----------------------------------- */
+  filtered.sort(
+    (a, b) => b.year - a.year || monthIndex(b.month) - monthIndex(a.month)
   );
 
-  /* Update bookmarks/index.html ------------------------------------------- */
+  /* Render ---------------------------------------------------------------- */
   const htmlIn = await readFile(BOOKMARKS_HTML, "utf8");
-  const htmlOut = replaceBlock(htmlIn, "BOOKMARKS", buildTimeline(items));
+  const htmlOut = replaceBlock(htmlIn, "BOOKMARKS", buildTimeline(filtered));
   await writeFile(BOOKMARKS_HTML, htmlOut);
   console.log("✔  bookmarks timeline updated");
 })();

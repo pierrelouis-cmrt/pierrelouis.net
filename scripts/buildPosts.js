@@ -3,6 +3,7 @@
 // Generate static HTML for the full timeline (posts/index.html) and for the
 // “latest 3 posts” block (index.html).  Idempotent: each run fully replaces
 // the previous generated content between the START/END markers.
+// Items dated after TODAY are ignored.
 // -----------------------------------------------------------------------------
 //
 // Prerequisites: Node ≥ 18 (for native ESM and fs/promises)
@@ -51,6 +52,7 @@ const SVG_ICONS = {
 /*  Helper functions                                                          */
 /* -------------------------------------------------------------------------- */
 const monthAbbr = (m) => m.slice(0, 3);
+const monthIndex = (m) => new Date(`${m} 1 2000`).getMonth();
 
 const groupBy = (arr, key) =>
   arr.reduce((map, obj) => {
@@ -158,28 +160,40 @@ function replaceBlock(html, tag, content) {
 /*  Main build process                                                        */
 /* -------------------------------------------------------------------------- */
 (async () => {
-  /* 1. Load & sort JSON ----------------------------------------------------- */
-  const items = JSON.parse(await readFile(JSON_PATH, "utf8"));
+  /* 1. Load JSON ----------------------------------------------------------- */
+  const raw = await readFile(JSON_PATH, "utf8");
+  const items = JSON.parse(raw);
 
-  // Global newest-first sort (year, month, day)
-  items.sort(
+  /* 2. Filter out future-dated posts -------------------------------------- */
+  const today = new Date();
+  const isPastOrToday = (p) => {
+    const date = new Date(`${p.month} ${p.day} ${p.year}`);
+    return !Number.isNaN(date) && date <= today;
+  };
+
+  const filtered = items.filter(isPastOrToday);
+
+  /* 3. Sort newest first (year, month, day) ------------------------------- */
+  filtered.sort(
     (a, b) =>
       b.year - a.year ||
-      new Date(`${b.month} 1 2000`) - new Date(`${a.month} 1 2000`) ||
+      monthIndex(b.month) - monthIndex(a.month) ||
       b.day - a.day
   );
 
-  /* 2. Update /posts/index.html -------------------------------------------- */
+  /* 4. Render pages -------------------------------------------------------- */
+
+  // /posts/index.html
   {
     const htmlIn = await readFile(POSTS_HTML, "utf8");
-    const htmlOut = replaceBlock(htmlIn, "TIMELINE", buildTimeline(items));
+    const htmlOut = replaceBlock(htmlIn, "TIMELINE", buildTimeline(filtered));
     await writeFile(POSTS_HTML, htmlOut);
     console.log("✔  timeline updated in posts/index.html");
   }
 
-  /* 3. Update /index.html --------------------------------------------------- */
+  // /index.html (home)
   {
-    const latest3 = items.slice(0, 3).map(latestItem).join("");
+    const latest3 = filtered.slice(0, 3).map(latestItem).join("");
     const htmlIn = await readFile(HOME_HTML, "utf8");
     const htmlOut = replaceBlock(htmlIn, "LATEST", latest3);
     await writeFile(HOME_HTML, htmlOut);
