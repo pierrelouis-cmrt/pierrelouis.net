@@ -1,8 +1,5 @@
 const swiper = new Swiper(".swiper", {
-  // Make dragging work even when grabbing empty space between slides
   touchEventsTarget: "container",
-
-  // Existing options
   grabCursor: true,
   slideToClickedSlide: true,
   centeredSlides: true,
@@ -12,11 +9,77 @@ const swiper = new Swiper(".swiper", {
   },
   pagination: {
     el: ".swiper-pagination",
-    clickable: true,
+    clickable: false,
+    renderBullet: function () {
+      return "";
+    },
   },
   breakpoints: {
     320: { slidesPerView: 1.5, spaceBetween: 15 },
     768: { slidesPerView: 2.5, spaceBetween: 20 },
     1200: { slidesPerView: 3.5, spaceBetween: 25 },
   },
+});
+
+// Simple pagination system
+const totalSlides = swiper.slides.length;
+const paginationEl = document.querySelector(".swiper-pagination");
+
+function createSimplePagination() {
+  paginationEl.innerHTML = `
+    <div class="dots-viewport">
+      <div class="dots-container"></div>
+    </div>
+  `;
+
+  const dotsContainer = paginationEl.querySelector(".dots-container");
+
+  // Create exactly totalSlides dots
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement("div");
+    dot.className = "pagination-dot";
+    dot.addEventListener("click", () => swiper.slideToLoop(i));
+    dotsContainer.appendChild(dot);
+  }
+}
+
+function updateSimplePagination(activeIndex) {
+  const dotsContainer = paginationEl.querySelector(".dots-container");
+  const dots = dotsContainer.querySelectorAll(".pagination-dot");
+  const viewport = paginationEl.querySelector(".dots-viewport");
+
+  // Calculate position to center active dot in viewport
+  const dotSpacing = 24; // 8px + 16px gap
+  const viewportWidth = parseInt(
+    getComputedStyle(viewport).getPropertyValue("--viewport-width")
+  );
+  const viewportCenter = viewportWidth / 2;
+  const offset = viewportCenter - activeIndex * dotSpacing - 4; // -4 to center the dot
+
+  dotsContainer.style.transform = `translateX(${offset}px)`;
+
+  // Update active states
+  dots.forEach((dot, index) => {
+    dot.className = "pagination-dot";
+
+    if (index === activeIndex) {
+      dot.classList.add("active");
+    }
+
+    // Add edge styling for dots near viewport edges
+    const dotPosition = offset + index * dotSpacing;
+    const fadeZone = 25; // Distance from edge where fading starts
+    if (dotPosition < fadeZone || dotPosition > viewportWidth - fadeZone) {
+      dot.classList.add("edge");
+    }
+  });
+}
+
+// Initialize
+createSimplePagination();
+updateSimplePagination(0);
+
+// Update on slide change
+swiper.on("slideChange", function () {
+  updateSimplePagination(swiper.realIndex);
 });

@@ -2447,9 +2447,9 @@ hr.divider2 {
 }
 
 .swiper {
-  width: 100%;
+  width: 100vw;
+  margin-left: calc(50% - 50vw) !important;
   height: clamp(250px, 40vw, 400px);
-  /* The grab cursor will now apply to the entire container */
   cursor: grab;
   margin-bottom: 4rem;
 }
@@ -2480,7 +2480,6 @@ hr.divider2 {
 
 .swiper-pagination {
   bottom: 10px !important;
-  padding: 6px 10px;
   left: 50% !important;
   transform: translateX(-50%) !important;
   width: -moz-fit-content !important;
@@ -2489,6 +2488,56 @@ hr.divider2 {
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   border-radius: 20px;
+  position: relative;
+  height: 24px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.dots-viewport {
+  --viewport-width: 120px;
+  /* 120px for 5 dots, 72px for 3 dots */
+  width: var(--viewport-width);
+  height: 16px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dots-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.3s ease;
+  position: absolute;
+}
+
+.pagination-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.pagination-dot.active {
+  background-color: rgba(255, 255, 255, 1);
+  transform: scale(1.3);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+}
+
+.pagination-dot.edge {
+  transform: scale(0.7);
+  opacity: 0.6;
+}
+
+.pagination-dot.edge.active {
+  transform: scale(0.9);
+  opacity: 1;
 }
 
 /* About */
