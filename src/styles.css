@@ -1340,13 +1340,12 @@ hr.divider2 {
   margin: 0 -12px 0 -3px;
 }
 .up.l {
-  margin: 0 -12px 0 -3px;
-  transform: translateY(2px);
+  margin: 0 -15px 0 -10px;
 }
 
 /* Lowercase letter spacing */
 .lo.i {
-  margin: 0 -3.5px 0 0;
+  margin: 0 -3.5px 0 1px;
 }
 .lo.e {
   margin: 0 -4px 0 0;
@@ -1365,7 +1364,7 @@ hr.divider2 {
 }
 
 .word-space {
-  min-width: 30px;
+  min-width: 0;
 }
 
 /* Generic path styling */

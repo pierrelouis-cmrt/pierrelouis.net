@@ -62,16 +62,24 @@ function initPathAnimation(letterEl, animate, index) {
   if (!path) return;
 
   const len = path.getTotalLength();
-
-  // Store so we can reuse it later without recalculating
   path.dataset.len = len;
   path.style.strokeDasharray = len;
-  path.style.strokeDashoffset = animate ? len : 0;
 
   if (animate) {
+    /* 1. Start hidden with NO transition, so there’s no visible flash */
+    path.style.transition = "none";
+    path.style.strokeDashoffset = len;
+
+    /* 2. Force the browser to acknowledge the style change */
+    path.getBoundingClientRect(); // <-- reflow
+
+    /* 3. Now turn the transition back on and draw the stroke */
     setTimeout(() => {
+      path.style.transition = "stroke-dashoffset 0.8s ease";
       path.style.strokeDashoffset = 0;
     }, index * 200);
+  } else {
+    path.style.strokeDashoffset = 0; // static version (e.g. after hover replay)
   }
 }
 
