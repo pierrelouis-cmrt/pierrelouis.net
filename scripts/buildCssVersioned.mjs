@@ -1,12 +1,12 @@
 // scripts/buildCssVersioned.mjs
 // -----------------------------------------------------------------------------
 // One script, two modes:
-//   • Production  (default) → output-vNNN.css  + minified  + full cache‑bust
-//   • Development ( --dev ) → output-dev.css    *no* versioning, keeps dev fast
+//   • Production  (default) → output‑vNNN.css  + minified  + full cache‑bust.
+//     ‑‑ Also removes all stale css: any output‑v*.css and output‑dev.css.
+//   • Development ( --dev ) → output‑dev.css no versioning, keeps dev fast.
 //
-// Production mode additionally removes old versioned CSS files.
-// Both modes re‑link *every* HTML file – single‑ or double‑quoted, absolute or
-// relative – to the freshly‑chosen CSS file.
+// Both modes re‑link every HTML file – single‑ or double‑quoted, absolute or
+// relative – to the freshly‑chosen CSS file, so nothing is ever missed.
 //
 // Requires Node ≥ 18 (ESM) plus Tailwind CLI and `glob` (npm i -D glob).
 // -----------------------------------------------------------------------------
@@ -41,13 +41,20 @@ if (devMode) {
   const tag = String(version).padStart(3, "0");
   outFile = `src/output-v${tag}.css`;
 
-  /* ----- Remove stale versioned files ------------------------------------ */
+  /* ----- Remove stale versioned + dev files ------------------------------ */
   for (const file of await glob("src/output-v*.css", {
     cwd: root,
     absolute: true,
   })) {
     await unlink(file);
     console.log("✖  removed", path.relative(root, file));
+  }
+  // clean stray output-dev.css, if someone committed one accidentally
+  try {
+    await unlink(path.join(root, "src/output-dev.css"));
+    console.log("✖  removed src/output-dev.css");
+  } catch {
+    /* fine if it didn't exist */
   }
 }
 
