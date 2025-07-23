@@ -2079,14 +2079,20 @@ article h1 {
   border-bottom: 1px dashed hsl(from var(--default) h s l / 20%);
 }
 
+article .post-meta {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
 article .post-meta h1 {
   margin: 2rem 0 1rem;
-  width: 100%;
+  flex: 1;
 }
 
 article .post-date {
-  width: content;
-  transform: translateY(27px);
+  padding-bottom: 0.4rem;
+  white-space: nowrap;
 }
 
 article h2 {
@@ -2620,18 +2626,18 @@ article .footnotes li::before {
   left: 0;
   color: var(--accent);
   font-weight: 600;
-  padding-top: 4px;
+  padding: 1px 3px 0 0;
 }
 
 article .footnote-backref {
   color: var(--caption);
   text-decoration: none;
-  margin-left: 0.5rem;
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.2rem 0.4rem;
   border-radius: 3px;
+  padding-left: 0.5rem;
+  transform: translateY(1px);
   transition: all 120ms ease-in-out;
 }
 
@@ -2690,17 +2696,20 @@ li.task-list-item::marker {
   body h2,
   body h3,
   body h4,
+  article h5,
+  article h6,
   body p,
   body ul,
+  body ol,
   body figure,
   body footer,
-  article,
+  article dl,
   .colophon-credits,
   .project-thumbnails,
   .signature,
   .project-button,
   .posts-page {
-    padding: 0 1.25rem;
+    padding: 0 1.25rem !important;
   }
 
   .project-item,
@@ -2758,6 +2767,7 @@ li.task-list-item::marker {
 
   article h1 {
     font-size: 1.5rem;
+    padding: 0 0 0.75rem 0 !important;
   }
 
   article h2 {
@@ -2771,6 +2781,32 @@ li.task-list-item::marker {
   article th,
   article td {
     padding: 0.5rem;
+  }
+
+  article .post-meta {
+    padding: 0 1.25rem;
+  }
+
+  article blockquote,
+  article pre,
+  article .callout {
+    margin-left: 1.25rem !important;
+    margin-right: 1.25rem !important;
+  }
+
+  article table,
+  article img,
+  article video {
+    width: calc(100% - 2.5rem);
+  }
+
+  article blockquote p {
+    padding: 0 0;
+  }
+
+  article .footnotes li {
+    padding: 0;
+    margin: 0;
   }
 
   .image-lightbox-close {

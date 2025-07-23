@@ -70,11 +70,8 @@ for (const p of JSON.parse(await readFile(JSON_PATH, "utf8"))) {
 }
 
 /* ---------- SVG icon for the ‘info’ call-out ---------------------------- */
-const INFO_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-  stroke-linecap="round" stroke-linejoin="round">
-  <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
-</svg>`;
+const INFO_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`;
+const FOOTNOTE_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>`;
 
 /* ---------- Markdown-it set-up ------------------------------------------ */
 const md = new MarkdownIt({ html: true, breaks: true, linkify: true })
@@ -92,6 +89,17 @@ const md = new MarkdownIt({ html: true, breaks: true, linkify: true })
         : "</div></div></div>\n";
     },
   });
+
+/* -- custom footnote back-reference renderer ----------------------------- */
+md.renderer.rules.footnote_anchor = (tokens, idx, options, env, renderer) => {
+  let id = Number(tokens[idx].meta.id + 1).toString();
+
+  if (tokens[idx].meta.subId > 0) {
+    id += `:${tokens[idx].meta.subId}`;
+  }
+
+  return ` <a href="#fnref${id}" class="footnote-backref">${FOOTNOTE_ICON}</a>`;
+};
 
 /* -- custom renderer: images + mp4/webm ---------------------------------- */
 const defaultImg = md.renderer.rules.image;
