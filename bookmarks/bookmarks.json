@@ -363,5 +363,18 @@
     "description": "Autoimmunity. What happens when your immune system, designed to protect you, turns against you? And why does this happen?",
     "image": "",
     "tag": "Videos"
+  },
+  {
+    "year": 2025,
+    "month": "Jul",
+    "link": "https://www.youtube.com/@CleoAbram",
+    "title": "Cleo Abram",
+    "meta": {
+      "text": "@CleoAbram on YouTube",
+      "icon": "/src/assets/profile.png"
+    },
+    "description": "Video journalist behind the show 'Huge If True', delivering optimistic and beautifully produced science & tech explainers.",
+    "image": "",
+    "tag": "People"
   }
 ]
