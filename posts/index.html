@@ -61,34 +61,16 @@
     <meta name="theme-color" content="#ffffff" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" href="/src/output-dev.css" as="style" />
+    <link rel="preload" href="/src/output-v045.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-dev.css" />
+    <link rel="stylesheet" href="/src/output-v045.css" />
   </head>
 
   <body>
     <nav class="sticky-nav">
       <div class="menu-container">
         <div class="nav-left">
-          <a class="home-button" href="/"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-circle-arrow-left back"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <path d="M16 12H8" />
-              <path d="m12 8-4 4 4 4" />
-            </svg>
-            Back Home</a
-          >
+          <a class="home-button" href="/">Pierre-Louis</a>
           <div class="nav-links"></div>
         </div>
         <div class="nav-right">
@@ -155,6 +137,9 @@
               currentY: 0,
               offsetY: 0,
               threshold: 80,
+              isMobile: window.innerWidth < 640,
+              dynamicBottomPadding: 0,
+              
               onTouchStart(event) {
                 this.isDragging = true;
                 this.startY = event.touches[0].clientY;
@@ -172,13 +157,67 @@
                 } else {
                   this.offsetY = 0;
                 }
+              },
+              
+              getDynamicHeight() {
+                return this.isMobile ? 'height: 70vh; height: 70dvh;' : '';
+              },
+              
+              isSafari() {
+                return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+              },
+              
+              calculateSafariPadding() {
+                if (!this.isMobile || !this.isSafari()) {
+                  this.dynamicBottomPadding = 0;
+                  return;
+                }
+                
+                // Create test element to detect Safari bottom UI
+                let testDiv = document.createElement('div');
+                testDiv.style.cssText = 'position:fixed;bottom:0;height:100vh;width:1px;pointer-events:none;visibility:hidden;';
+                document.body.appendChild(testDiv);
+                
+                // Calculate the difference
+                let viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+                let computedHeight = testDiv.offsetHeight;
+                let safariUIOffset = Math.max(0, computedHeight - viewportHeight);
+                
+                // Clean up
+                document.body.removeChild(testDiv);
+                
+                // Set padding (add extra 20px buffer)
+                this.dynamicBottomPadding = Math.max(20, safariUIOffset + 20);
+              },
+              
+              setupSafariDetection() {
+                if (!this.isMobile) return;
+                
+                // Listen for visual viewport changes (Safari UI show/hide)
+                if (window.visualViewport) {
+                  window.visualViewport.addEventListener('resize', () => {
+                    setTimeout(() => this.calculateSafariPadding(), 100);
+                  });
+                }
+                
+                // Fallback for orientation/resize
+                window.addEventListener('resize', () => {
+                  setTimeout(() => this.calculateSafariPadding(), 100);
+                });
+                
+                // Initial calculation
+                this.$nextTick(() => {
+                  setTimeout(() => this.calculateSafariPadding(), 200);
+                });
               }
             }"
                 x-init="
+              setupSafariDetection();
               $watch('commandOpen', (value) => {
                 if (value === true) {
                   offsetY = 0;
                   document.body.classList.add('overflow-hidden');
+                  setTimeout(() => calculateSafariPadding(), 100);
                 } else {
                   document.body.classList.remove('overflow-hidden');
                 }
@@ -221,12 +260,12 @@
                 isTouchDevice: 'ontouchstart' in window,
                 itemsCache: {},
                 actionMap: window.COMMAND_ACTION_MAP,
-
+                
                 // Optimized empty search check
                 commandSearchIsEmpty() {
                   return !this.commandSearch || this.commandSearch.length === 0;
                 },
-
+                
                 // Optimized active item check
                 commandItemIsActive(item) {
                   return this.commandItemActive && this.commandItemActive.value === item.value;
@@ -375,26 +414,30 @@
                   class="flex min-h-[370px] justify-center w-full max-w-xl items-end sm:items-start relative will-change-transform"
                   x-cloak
                 >
-                  <!-- Drawer container with optimized touch handling -->
+                  <!-- LARGE TOUCH AREA - Positioned outside the clipped drawer -->
+                  <div
+                    x-show="commandOpen && isTouchDevice"
+                    class="block sm:hidden fixed bottom-0 left-1/2 -translate-x-1/2 w-[95%] max-w-xl h-[120px] z-[10000]"
+                    style="background: transparent; pointer-events: auto"
+                    @touchstart.passive="onTouchStart($event)"
+                    @touchmove.passive="onTouchMove($event)"
+                    @touchend.passive="onTouchEnd()"
+                  ></div>
+
+                  <!-- Drawer container with smart dvh -->
                   <div
                     x-show="commandOpen"
-                    :style="`transform: translateY(${offsetY}px)`"
+                    :style="`transform: translateY(${offsetY}px); ${getDynamicHeight()}`"
                     x-bind:class="{'transition-transform duration-150 ease-out will-change-transform': !isDragging}"
-                    class="bottom-0 left-1/2 -translate-x-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--stroke-secondary)] flex flex-col w-full h-[70vh] sm:h-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--background)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:-translate-x-0 overflow-visible z-[9999]"
-                    style="
-                      padding-bottom: env(safe-area-inset-bottom) !important;
-                    "
+                    class="bottom-0 left-1/2 -translate-x-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--stroke-secondary)] flex flex-col w-full sm:h-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--background)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:-translate-x-0 overflow-visible z-[9999]"
                     @click.stop
                   >
-                    <!-- Mobile handle with optimized touch events -->
+                    <!-- Mobile handle - Visual indicator only -->
                     <div
-                      class="block sm:hidden w-full h-[30px]"
-                      @touchstart.passive="onTouchStart($event)"
-                      @touchmove.passive="onTouchMove($event)"
-                      @touchend.passive="onTouchEnd()"
+                      class="block sm:hidden w-full h-[30px] flex items-center justify-center"
                     >
                       <div
-                        class="mx-auto w-16 h-1 bg-[var(--stroke-secondary)] rounded-full"
+                        class="w-16 h-1 bg-[var(--stroke-secondary)] rounded-full"
                       ></div>
                     </div>
 
@@ -436,10 +479,11 @@
                       />
                     </div>
 
-                    <!-- Content list with optimized rendering -->
+                    <!-- Content list with SMART DYNAMIC PADDING -->
                     <div
                       x-ref="commandItemsList"
-                      class="grow overflow-y-auto overflow-x-hidden pb-20 sm:pb-0 overscroll-contain"
+                      :style="`padding-bottom: ${dynamicBottomPadding}px`"
+                      class="grow overflow-y-auto overflow-x-hidden sm:pb-0 overscroll-contain"
                     >
                       <template
                         x-for="(item, index) in commandItemsFiltered"
