@@ -2,16 +2,16 @@
 
 ## 1  Project Snapshot
 
-- **What it is:** A static personal website (HTML + CSS) with light Alpine.js for small interactions.
+- **What it is:** A static personal website (HTML + CSS) with light Alpine.js + tailwind for small interactions.
 - **Why it matters:** Fast, no backend, easy to host, easy to edit.
 
 ## 2  Directory Map
 
 ```
-/               root files, index.html, AGENTS.md, config
+/                root files, index.html, AGENTS.md, config
 /about/          about/index.html
 /projects/       projects/index.html
-/posts/          blog posts (one folder per post)
+/posts/          blog posts
 /src/            styles.css  → compiled → output.css
 /assets/         images, icons
 /media/          fonts
@@ -21,11 +21,11 @@
 
 ```bash
 npm install      # first‑time setup
-npm run build    # compile Tailwind into src/output.css (purges unused classes)
+npm run build    # compile Tailwind into src/output.css (purges unused classes) + create posts and bookmarks
 # open index.html (or use any static server) to preview
 ```
 
-_`npm run dev`_\* watches **`styles.css`** and auto‑rebuilds.\*
+_`npm run dev`_ watches **`styles.css`** and auto‑rebuilds.
 
 ## 4  Styling Rules
 
