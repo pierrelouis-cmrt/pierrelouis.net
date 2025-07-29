@@ -193,6 +193,8 @@ window.SHORTCUT_MAP = {
   a: "/about",
   p: "/projects",
   n: "/now",
+  w: "/posts",
+  b: "/bookmarks",
   u: "/uses",
   c: "/colophon",
   l: "/links",
