@@ -40,7 +40,6 @@
   --table-stripe: rgba(246, 246, 246, 1);
 
   --avatar-scale: 0.25;
-  --bg-secondary: hsl(0, 0%, 98%);
   --text-secondary: hsl(0, 0%, 50%);
 }
 
@@ -1128,7 +1127,7 @@ footer .inline-icon {
   top: -40px;
   left: -40px;
   border-radius: 100%;
-  background: var(--bg-secondary);
+  background: var(--background);
   border: 4px solid var(--text-secondary);
   box-shadow: inset 10px -10px 16px var(--text-secondary);
   transform: scale(var(--avatar-scale));
