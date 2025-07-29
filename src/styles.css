@@ -39,7 +39,6 @@
 
   --table-stripe: rgba(246, 246, 246, 1);
 
-  --avatar-scale: 0.25;
   --text-secondary: hsl(0, 0%, 50%);
 }
 
@@ -1130,7 +1129,7 @@ footer .inline-icon {
   background: var(--background);
   border: 4px solid var(--text-secondary);
   box-shadow: inset 10px -10px 16px var(--text-secondary);
-  transform: scale(var(--avatar-scale));
+  transform: scale(0.25);
   transform-origin: center center;
   animation: head-rotation 8s infinite ease;
   cursor: pointer;
@@ -1142,7 +1141,9 @@ footer .inline-icon {
   transform-style: preserve-3d;
 
   /* Force hardware acceleration with 3D transform */
-  transform: scale(var(--avatar-scale)) translateZ(0);
+  transform: scale(0.25) translateZ(0);
+  -webkit-transform: scale(0.25) translateZ(0);
+  -moz-transform: scale(0.25) translateZ(0);
 
   /* Crisp rendering hints */
   image-rendering: -webkit-optimize-contrast;
@@ -1158,16 +1159,15 @@ footer .inline-icon {
   contain: layout style paint;
   isolation: isolate;
 
-  /* Sub-pixel positioning fix */
-  -webkit-transform: scale(var(--avatar-scale)) translateZ(0);
-  -moz-transform: scale(var(--avatar-scale)) translateZ(0);
-  -ms-transform: scale(var(--avatar-scale)) translateZ(0);
-
   /* Force integer pixel positioning */
   transform-box: border-box;
 
   /* No transition during movement - we'll handle it in JS */
   transition: none;
+
+  /* Prevent FOUC (Flash of Unstyled Content) */
+  opacity: 1;
+  visibility: visible;
 }
 
 .mini-avatar .avatar::before,
