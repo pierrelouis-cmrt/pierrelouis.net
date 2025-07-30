@@ -1196,28 +1196,35 @@ footer .inline-icon {
   left: 72px;
 }
 
-/* INTENSE ANIMATION ON HOVER */
-.mini-avatar .avatar.intense::before {
+.mini-avatar .avatar:hover,
+.mini-avatar .avatar:focus-visible {
+  animation: intense-shadow 1s infinite ease-in-out;
+  outline: none;
+}
+
+.mini-avatar .avatar:hover::before,
+.mini-avatar .avatar:focus-visible::before,
+.mini-avatar .avatar:hover::after,
+.mini-avatar .avatar:focus-visible::after {
   animation: intense-stare 0.5s infinite ease-in-out;
+}
+
+.mini-avatar .avatar:hover::before,
+.mini-avatar .avatar:focus-visible::before {
   width: 16px;
   height: 16px;
   top: 36px;
   left: 36px;
 }
 
-.mini-avatar .avatar.intense::after {
-  animation: intense-stare 0.5s infinite ease-in-out;
+.mini-avatar .avatar:hover::after,
+.mini-avatar .avatar:focus-visible::after {
   width: 16px;
   height: 16px;
   top: 36px;
   left: 68px;
 }
 
-.mini-avatar .avatar.intense {
-  animation: intense-shadow 1s infinite ease-in-out;
-}
-
-/* Original keyframes */
 @keyframes head-rotation {
   0% {
     box-shadow: inset 10px -10px 16px var(--text-secondary);
@@ -1307,7 +1314,7 @@ footer .inline-icon {
   color: var(--secondary);
   font-size: 0.8125rem;
   letter-spacing: normal;
-  margin: 0 1rem 0 0;
+  margin: 0;
 }
 
 /* Email copy */
