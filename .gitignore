@@ -4,3 +4,7 @@ node_modules/
 article-template/
 src/fonts/
 src/output-dev.css
+
+/_cache/*
+!/_cache/.htaccess
+!/_cache/.gitkeep

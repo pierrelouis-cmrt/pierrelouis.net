@@ -1,0 +1,9 @@
+# Enable mod_rewrite
+RewriteEngine On
+
+# (Optional) If your site lives at the domain root, this can help some setups.
+# RewriteBase /
+
+# Map clean endpoints to your PHP proxy
+RewriteRule "^api/now-playing$" "/api/lastfm.php?endpoint=now-playing" [QSA,L]
+RewriteRule "^api/cover$"       "/api/lastfm.php?endpoint=cover"       [QSA,L]

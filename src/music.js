@@ -1,7 +1,7 @@
 "use strict";
 
 /** ===== Config ===== */
-const API_KEY = "71608a96243f764afe28114be64c6e01"; // Consider moving server-side
+// No API key here. It's on the server now.
 const USER = "pierrelouis-c";
 
 // Polling cadence (ms)
@@ -11,8 +11,8 @@ const INTERVALS = {
   hidden: 120000, // when tab is hidden
 };
 
-const API_BASE = "https://ws.audioscrobbler.com/2.0/";
 const REQUEST_TIMEOUT_MS = 8000; // hard timeout per request
+const PROXY_BASE = "/api"; // adjust if your API lives elsewhere
 
 /** ===== DOM ===== */
 const titleEl = document.querySelector(".now-playing .title");
@@ -52,19 +52,8 @@ function lastNonEmptyImageUrl(images) {
 
 function looksLikeLastfmPlaceholder(url) {
   if (!url) return true;
-  // Last.fm default placeholder commonly contains this hash file
+  // Known Last.fm placeholder hash used across sizes
   return url.includes("2a96cbd8b46e442fc41c2b86b821562f.png");
-}
-
-function buildUrl(method, params = {}) {
-  const u = new URL(API_BASE);
-  u.searchParams.set("method", method);
-  u.searchParams.set("api_key", API_KEY);
-  u.searchParams.set("format", "json");
-  for (const [k, v] of Object.entries(params)) {
-    if (v !== undefined && v !== null) u.searchParams.set(k, String(v));
-  }
-  return u.toString();
 }
 
 async function fetchJsonWithRetry(
@@ -86,7 +75,6 @@ async function fetchJsonWithRetry(
         ) {
           throw new Error(`HTTP ${res.status}`);
         }
-        // Other errors: stop
       }
       const json = await res.json();
       return json;
@@ -112,9 +100,10 @@ function preloadImage(url) {
   });
 }
 
-/** ===== API wrappers ===== */
+/** ===== API wrappers (via your PHP proxy) ===== */
 async function getRecentNowPlaying() {
-  const url = buildUrl("user.getrecenttracks", { user: USER, limit: 1 });
+  // PHP caches this briefly; much lower Last.fm traffic
+  const url = `${PROXY_BASE}/now-playing`;
   const data = await fetchJsonWithRetry(url, { retries: 2 });
   const list = data?.recenttracks?.track;
   if (!Array.isArray(list) || list.length === 0) return null;
@@ -124,7 +113,8 @@ async function getRecentNowPlaying() {
 }
 
 async function getTrackInfoCover(artist, track) {
-  const url = buildUrl("track.getInfo", { artist, track });
+  const params = new URLSearchParams({ artist, track });
+  const url = `${PROXY_BASE}/cover?${params.toString()}`;
   const data = await fetchJsonWithRetry(url, { retries: 2 });
   const images = data?.track?.album?.image;
   const urlCandidate = lastNonEmptyImageUrl(images);
@@ -134,7 +124,6 @@ async function getTrackInfoCover(artist, track) {
 /** ===== Rendering ===== */
 function setLink(el, text, url) {
   if (!el) return;
-  // Reuse / update existing anchor if present
   let a = el.querySelector("a");
   if (!a) {
     a = document.createElement("a");
@@ -190,7 +179,7 @@ async function resolveCoverForTrack(track) {
 
   if (coverCache.has(key)) return coverCache.get(key);
 
-  // try image from recenttracks first
+  // Try image from recenttracks first
   const recentUrl = lastNonEmptyImageUrl(track?.image);
   const okRecent = await preloadImage(recentUrl);
   if (okRecent) {
@@ -198,7 +187,7 @@ async function resolveCoverForTrack(track) {
     return okRecent;
   }
 
-  // de-duplicate concurrent getInfo calls per track
+  // De-duplicate concurrent getInfo calls per track
   if (!inflightCover.has(key)) {
     inflightCover.set(
       key,
@@ -207,7 +196,6 @@ async function resolveCoverForTrack(track) {
         if (ok) coverCache.set(key, ok);
         return ok; // might be null
       })().finally(() => {
-        // Keep the promise around only while in flight
         setTimeout(() => inflightCover.delete(key), 0);
       })
     );
@@ -226,7 +214,6 @@ function scheduleNext(ms) {
 }
 
 async function pollOnce() {
-  // cancel any prior in-flight poll
   if (currentController) currentController.abort();
   currentController = new AbortController();
 
@@ -234,14 +221,11 @@ async function pollOnce() {
     const track = await getRecentNowPlaying();
 
     if (!track) {
-      // nothing playing
       if (currentTrackKey !== null) currentTrackKey = null;
-
       setText(titleEl, "Nothing right now");
       setText(artistEl, "I'm not currently listening to any music");
       setCover(null);
       showStatus(false);
-
       scheduleNext(nextInterval({ isPlaying: false }));
       return;
     }
@@ -254,7 +238,6 @@ async function pollOnce() {
     const changed = key !== currentTrackKey;
     currentTrackKey = key;
 
-    // Update text/link only if changed
     if (changed || lastRendered.title !== name || lastRendered.url !== url) {
       setLink(titleEl, name, url);
       lastRendered.title = name;
@@ -265,30 +248,21 @@ async function pollOnce() {
       lastRendered.artist = artist;
     }
 
-    // Cover: prefer cache, then resolve once (preload validated)
     const coverUrl = await resolveCoverForTrack(track);
     if (changed || lastRendered.cover !== (coverUrl || "")) {
-      if (coverUrl) {
-        setCover(coverUrl);
-      } else {
-        // fallback to default svg
-        setCover(null);
-      }
+      setCover(coverUrl || null);
       lastRendered.cover = coverUrl || "";
     }
 
     showStatus(true);
     scheduleNext(nextInterval({ isPlaying: true }));
-  } catch (err) {
-    // Network/API issue: show previous UI if any; back off
-    // Optionally, log err.message
+  } catch (_err) {
     scheduleNext(Math.min(120000, INTERVALS.idle * 2)); // mild backoff
   }
 }
 
 /** Visibility-aware polling */
 document.addEventListener("visibilitychange", () => {
-  // Re-schedule immediately with the appropriate interval when visibility changes
   scheduleNext(nextInterval({ isPlaying: currentTrackKey !== null }));
 });
 
