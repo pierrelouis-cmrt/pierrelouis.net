@@ -2875,13 +2875,16 @@ li.task-list-item::marker {
   body figure,
   body footer,
   article dl,
-  .colophon-credits,
   .project-thumbnails,
   .signature,
   .project-button,
   .posts-page,
   .arsenal-sections {
     padding: 0 1.25rem !important;
+  }
+
+  .colophon-credits {
+    padding-left: calc(1.25rem + 15px) !important;
   }
 
   .project-item,
