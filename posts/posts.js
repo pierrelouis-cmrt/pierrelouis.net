@@ -13,7 +13,7 @@
       id: "no-result",
       className: "no-result",
       style:
-        "display:none;text-align:center;margin-top:2rem;color:var(--caption);",
+        "display:none;text-align:center;margin-top:2rem;color:var(--text-muted);",
       textContent: "No result",
     });
     timeline.after(noResultMsg);

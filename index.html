@@ -61,9 +61,9 @@
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
 
-    <link rel="preload" href="/src/output-v080.css" as="style" />
+    <link rel="preload" href="/src/output-v081.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v080.css" />
+    <link rel="stylesheet" href="/src/output-v081.css" />
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
@@ -124,10 +124,10 @@
             <button
               aria-label="Open command palette"
               @click="commandOpen = true"
-              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium bg-[var(--box-hover)] rounded-l-xl rounded-r-sm hover:bg-[var(--stroke-secondary)] active:bg-[var(--stroke-lighter)] disabled:opacity-50 disabled:pointer-events-none"
+              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium bg-[var(--bg-hover)] rounded-l-xl rounded-r-sm hover:bg-[var(--border-secondary)] active:bg-[var(--border-light)] disabled:opacity-50 disabled:pointer-events-none"
             >
               <svg
-                class="w-4 h-4 mr-0 sm:mr-2 text-[var(--body)] shrink-0"
+                class="w-4 h-4 mr-0 sm:mr-2 text-[var(--text-body)] shrink-0"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -142,11 +142,11 @@
                 <path d="m21 21-4.3-4.3" />
               </svg>
               <span
-                class="flex-1 mr-5 text-left text-[var(--body)] hidden sm:inline"
+                class="flex-1 mr-5 text-left text-[var(--text-body)] hidden sm:inline"
                 >Search...</span
               >
               <span
-                class="ml-auto text-xs text-[var(--secondary)] border border-dashed border-[var(--stroke-lighter)] rounded-md px-1 hidden sm:inline"
+                class="ml-auto text-xs text-[var(--text-subtle)] border border-dashed border-[var(--border-light)] rounded-md px-1 hidden sm:inline"
               >
                 <span x-text="isMac ? '⌘' : 'Ctrl'"></span>
                 &nbsp;+&nbsp;K
@@ -453,7 +453,7 @@
                     x-show="commandOpen"
                     :style="`transform: translateY(${offsetY}px); ${getDynamicHeight()}`"
                     x-bind:class="{'transition-transform duration-150 ease-out will-change-transform': !isDragging}"
-                    class="bottom-0 left-1/2 -translate-x-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--stroke-secondary)] flex flex-col w-full sm:h-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--background)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:-translate-x-0 overflow-visible z-[9999]"
+                    class="bottom-0 left-1/2 -translate-x-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--border-secondary)] flex flex-col w-full sm:h-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--bg-primary)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:-translate-x-0 overflow-visible z-[9999]"
                     @click.stop
                   >
                     <!-- Mobile handle - Visual indicator only -->
@@ -461,23 +461,23 @@
                       class="block sm:hidden w-full h-[30px] flex items-center justify-center"
                     >
                       <div
-                        class="w-16 h-1 bg-[var(--stroke-secondary)] rounded-full"
+                        class="w-16 h-1 bg-[var(--border-secondary)] rounded-full"
                       ></div>
                     </div>
 
                     <!-- Command pill -->
                     <div
-                      class="absolute top-[-15px] left-5 px-4 py-1 border-2 rounded-full border-[var(--stroke-lighter)] bg-[var(--background)] hidden sm:block"
+                      class="absolute top-[-15px] left-5 px-4 py-1 border-2 rounded-full border-[var(--border-light)] bg-[var(--bg-primary)] hidden sm:block"
                     >
                       <p class="m-0 text-sm p-0">Command</p>
                     </div>
 
                     <!-- Search input with optimized event handling -->
                     <div
-                      class="flex items-center px-3 border-dotted border-b border-[var(--box-hover)]"
+                      class="flex items-center px-3 border-dotted border-b border-[var(--bg-hover)]"
                     >
                       <svg
-                        class="w-4 h-4 mr-0 text-[var(--stroke-secondary)] shrink-0"
+                        class="w-4 h-4 mr-0 text-[var(--border-secondary)] shrink-0"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
@@ -495,7 +495,7 @@
                         type="text"
                         x-ref="commandInput"
                         x-model="commandSearch"
-                        class="flex w-full px-2 py-3 text-base sm:text-sm bg-transparent border-0 rounded-md outline-none focus:outline-none focus:ring-0 focus:border-0 placeholder:text-[var(--stroke-secondary)] h-11 disabled:cursor-not-allowed disabled:opacity-50"
+                        class="flex w-full px-2 py-3 text-base sm:text-sm bg-transparent border-0 rounded-md outline-none focus:outline-none focus:ring-0 focus:border-0 placeholder:text-[var(--border-secondary)] h-11 disabled:cursor-not-allowed disabled:opacity-50"
                         placeholder="Type a command or search..."
                         autocomplete="off"
                         autocorrect="off"
@@ -517,7 +517,7 @@
                           <template x-if="commandShowCategory(item, index)">
                             <div class="px-1 overflow-hidden">
                               <div
-                                class="px-2 py-1 my-1 text-xs font-medium text-[var(--default)]"
+                                class="px-2 py-1 my-1 text-xs font-medium text-[var(--text-primary)]"
                                 x-text="commandCategoryCapitalize(item.category)"
                               ></div>
                             </div>
@@ -530,7 +530,7 @@
                                 :id="item.value + '-' + commandId"
                                 @click="commandItemSelected=item"
                                 @mouseenter="commandItemActive=item"
-                                x-bind:class="commandItemIsActive(item) ? 'bg-[var(--box-hover)] text-[var(--body)]' : 'text-[var(--caption)]'"
+                                x-bind:class="commandItemIsActive(item) ? 'bg-[var(--bg-hover)] text-[var(--text-body)]' : 'text-[var(--text-muted)]'"
                                 class="relative flex cursor-pointer select-none items-center rounded-[10px] px-2 py-2.5 md:py-1 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
                               >
                                 <span x-html="item.icon"></span>
@@ -539,7 +539,7 @@
                                 ></span>
                                 <template x-if="item.right && !isTouchDevice">
                                   <span
-                                    class="ml-auto text-xs px-l-2 px-1 py-1 tracking-widest text-[var(--body)] border border-[var(--box-hover)] rounded-md"
+                                    class="ml-auto text-xs px-l-2 px-1 py-1 tracking-widest text-[var(--text-body)] border border-[var(--bg-hover)] rounded-md"
                                     x-text="item.right"
                                   ></span>
                                 </template>
@@ -571,7 +571,7 @@
                 height="18"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="var(--body)"
+                stroke="var(--text-body)"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -589,7 +589,7 @@
                 height="18"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="var(--body)"
+                stroke="var(--text-body)"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -613,7 +613,7 @@
                 height="18"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="var(--body)"
+                stroke="var(--text-body)"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -954,22 +954,22 @@
               >
                 <path
                   d="M25 40.625C25 42.0063 24.4513 43.3311 23.4745 44.3078C22.4978 45.2846 21.173 45.8333 19.7917 45.8333C18.4103 45.8333 17.0856 45.2846 16.1088 44.3078C15.1321 43.3311 14.5833 42.0063 14.5833 40.625C14.5833 39.2437 15.1321 37.9189 16.1088 36.9422C17.0856 35.9654 18.4103 35.4167 19.7917 35.4167C21.173 35.4167 22.4978 35.9654 23.4745 36.9422C24.4513 37.9189 25 39.2437 25 40.625ZM45.8333 36.4583C45.8333 37.8397 45.2846 39.1644 44.3078 40.1412C43.3311 41.1179 42.0063 41.6667 40.625 41.6667C39.2437 41.6667 37.9189 41.1179 36.9421 40.1412C35.9654 39.1644 35.4167 37.8397 35.4167 36.4583C35.4167 35.077 35.9654 33.7522 36.9421 32.7755C37.9189 31.7987 39.2437 31.25 40.625 31.25C42.0063 31.25 43.3311 31.7987 44.3078 32.7755C45.2846 33.7522 45.8333 35.077 45.8333 36.4583Z"
-                  stroke="var(--stroke)"
+                  stroke="var(--border-primary)"
                   stroke-width="3.125"
                 />
                 <path
                   d="M45.8333 16.6667L25 25"
-                  stroke="var(--stroke)"
+                  stroke="var(--border-primary)"
                   stroke-width="3.125"
                   stroke-linecap="round"
                 />
                 <path
                   d="M26.5625 39.5833V18.4312H23.4375V39.5833H26.5625ZM47.3958 35.7354V16.6896H44.2708V35.7375L47.3958 35.7354ZM30.7187 12.1875L34.8854 10.4437L33.6792 7.56041L29.5125 9.30416L30.7187 12.1875ZM47.3958 16.6896C47.3958 13.9125 47.4 11.6458 47.1458 9.9375C46.8896 8.19375 46.3125 6.63958 44.8417 5.65833L43.1083 8.26041C43.4937 8.51666 43.8479 8.99583 44.0562 10.3937C44.2667 11.8229 44.2708 13.8062 44.2708 16.6896H47.3958ZM34.8854 10.4437C37.5437 9.33125 39.3771 8.56875 40.7771 8.21041C42.1458 7.8625 42.725 8.00416 43.1104 8.26041L44.8417 5.65833C43.3687 4.67916 41.7104 4.74791 40.0062 5.18333C38.3292 5.61041 36.2437 6.4875 33.6792 7.56041L34.8854 10.4437ZM26.5625 18.4312C26.5625 17.0521 26.5646 16.1458 26.6396 15.4458C26.7125 14.7854 26.8375 14.4583 26.9979 14.2167L24.3979 12.4875C23.8604 13.2937 23.6354 14.1646 23.5333 15.1083C23.4354 16.0167 23.4375 17.1208 23.4375 18.4312H26.5625ZM29.5125 9.30416C28.3042 9.81041 27.2833 10.2354 26.4833 10.6771C25.65 11.1354 24.9354 11.6792 24.3979 12.4875L26.9979 14.2167C27.1583 13.9771 27.4125 13.7333 27.9937 13.4125C28.6104 13.0729 29.4479 12.7187 30.7187 12.1875L29.5125 9.30416Z"
-                  fill="var(--stroke)"
+                  fill="var(--border-primary)"
                 />
                 <path
                   d="M14.5833 22.9167V4.16666C14.5833 8.48125 18.2437 10.4167 20.8333 10.4167M14.5833 21.875C14.5833 23.2563 14.0346 24.5811 13.0578 25.5578C12.0811 26.5346 10.7563 27.0833 9.375 27.0833C7.99366 27.0833 6.6689 26.5346 5.69215 25.5578C4.7154 24.5811 4.16666 23.2563 4.16666 21.875C4.16666 20.4937 4.7154 19.1689 5.69215 18.1921C6.6689 17.2154 7.99366 16.6667 9.375 16.6667C10.7563 16.6667 12.0811 17.2154 13.0578 18.1921C14.0346 19.1689 14.5833 20.4937 14.5833 21.875Z"
-                  stroke="var(--stroke-secondary)"
+                  stroke="var(--border-secondary)"
                   stroke-width="3.125"
                   stroke-linecap="round"
                   stroke-linejoin="round"
