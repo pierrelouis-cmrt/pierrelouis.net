@@ -113,9 +113,10 @@
         <div class="nav-right">
           <div
             x-data="{ 
-          commandOpen: false, 
-          isTouchDevice: 'ontouchstart' in window
-        }"
+              commandOpen: false,
+              isTouchDevice: 'ontouchstart' in window,
+              isMac: /(Mac|iPhone|iPad|iPod)/i.test(navigator.platform) || (navigator.maxTouchPoints > 1 && /Mac/i.test(navigator.platform))
+            }"
             x-init="
           $watch('commandOpen', function(value){
             if(value === true){
@@ -134,6 +135,7 @@
             class="relative z-50 w-auto h-auto"
           >
             <button
+              aria-label="Open command palette"
               @click="commandOpen = true"
               class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium bg-[var(--box-hover)] rounded-l-xl rounded-r-sm hover:bg-[var(--stroke-secondary)] active:bg-[var(--stroke-lighter)] disabled:opacity-50 disabled:pointer-events-none"
             >
@@ -159,10 +161,8 @@
               <span
                 class="ml-auto text-xs text-[var(--secondary)] border border-dashed border-[var(--stroke-lighter)] rounded-md px-1 hidden sm:inline"
               >
-                <script>
-                  document.write(isMac ? "⌘" : "Ctrl");
-                </script>
-                + K
+                <span x-text="isMac ? '⌘' : 'Ctrl'"></span>
+                &nbsp;+&nbsp;K
               </span>
             </button>
 
@@ -570,6 +570,7 @@
 
           <div class="theme-toggle">
             <button
+              aria-label="Toggle theme"
               class="theme-toggle"
               x-data
               x-init="$store.theme.init()"
