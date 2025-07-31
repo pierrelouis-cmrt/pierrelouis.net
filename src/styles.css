@@ -922,8 +922,12 @@ a.project-item:not(:hover) .lucide {
 .cloud-image {
   position: absolute;
   animation: cloud 120s linear infinite;
-  opacity: 0.75;
   filter: blur(4px);
+}
+
+.dark .cloud-image {
+  opacity: 0.2;
+  transition: filter 400ms ease-in-out;
 }
 
 .plane-image {
@@ -949,11 +953,6 @@ a.project-item:not(:hover) .lucide {
 
 .dark .map-image {
   content: url("/src/assets/map/map_dark.webp");
-}
-
-.dark .cloud-image {
-  opacity: 0.2;
-  transition: filter 400ms ease-in-out;
 }
 
 /* Location Link Style */
