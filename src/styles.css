@@ -484,7 +484,7 @@ h1.main-title {
 /* Sections */
 
 h2.section-title {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-family: "Libre Baskerville", serif;
   line-height: 1.125;
   margin: 3.5rem auto 0.75rem;
@@ -504,8 +504,6 @@ h2.section-title_process {
 .header-em {
   font-family: "Libre Baskerville", serif;
   color: var(--caption);
-  font-size: 1.425rem;
-  letter-spacing: -0.00625rem;
   line-height: normal;
   transition: color 400ms ease-in-out;
 }
@@ -528,7 +526,6 @@ h2.section-title_process {
 }
 
 .project-title {
-  font-size: 0.9375rem;
   line-height: 1.5;
   display: flex;
   align-items: center;
@@ -651,6 +648,14 @@ a.project-item:not(:hover) .lucide {
   margin-left: auto;
 }
 
+.post__arrow {
+  width: 16px;
+  height: 16px;
+  color: var(--secondary);
+  transform: translateY(1px);
+  margin-left: 0 !important;
+}
+
 /* Now playing */
 
 .now-playing {
@@ -707,8 +712,8 @@ a.project-item:not(:hover) .lucide {
 
 .title {
   color: var(--stroke) !important;
-  font-size: 16px;
   font-weight: 600;
+  margin-bottom: 0.15rem !important;
   margin: 0;
   overflow: hidden;
   transition: color 120ms ease-in-out;
@@ -720,8 +725,8 @@ a.project-item:not(:hover) .lucide {
 
 .artist {
   color: var(--stroke-secondary);
-  font-size: 13px;
-  font-weight: 500;
+  line-height: 1.2;
+  font-size: 0.9rem;
   margin: 0;
   overflow: hidden;
   transition: color 120ms ease-in-out;
@@ -1075,7 +1080,7 @@ body footer {
 }
 
 footer .links {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.6rem;
   padding: 0;
   max-height: 30px;
   overflow: visible;
@@ -1110,7 +1115,7 @@ footer .inline-icon {
   height: 26px;
   margin-left: auto;
   position: relative;
-  top: calc(-10px - 0.8rem);
+  top: -26px;
 }
 
 .mini-avatar .avatar {
@@ -2121,6 +2126,8 @@ hr.divider2 {
 }
 
 .post-title svg {
+  position: relative;
+  top: 2px;
   width: 20px;
   height: 20px;
   margin-right: 0.5rem;
@@ -2139,21 +2146,29 @@ hr.divider2 {
   text-decoration-color: var(--default);
 }
 
-.post-title .external-icon {
-  display: inline-block;
-  margin-left: 0.25em;
-  text-decoration: none;
+.post-item a:hover svg,
+.post__item a:hover svg {
+  color: var(--default);
 }
 
 .external-icon {
-  margin-left: 0.25rem;
+  display: inline-flex;
+  align-items: center;
   font-size: 0.875rem;
   color: var(--secondary);
+  text-decoration: none;
   transition: color 120ms ease-in-out;
 }
 
 .post-item a:hover .external-icon {
   color: var(--default);
+}
+
+.external-icon svg {
+  top: 0 !important;
+  width: 1.25em !important;
+  height: 1.25em !important;
+  margin: 0 0 0 0.2em !important;
 }
 
 .post-meta {

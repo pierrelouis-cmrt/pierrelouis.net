@@ -56,6 +56,14 @@ const SVG_ICONS = {
     </svg>`,
 };
 
+const EXTERNAL_LINK_SVG = `
+  <svg xmlns="http://www.w3.org/2000/svg"
+       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
+    <path d="M7 7h10v10"></path>
+    <path d="M7 17 17 7"></path>
+  </svg>`;
+
 /* -------------------------------------------------------------------------- */
 /*  Helper functions                                                          */
 /* -------------------------------------------------------------------------- */
@@ -96,7 +104,7 @@ function timelineItem(p) {
         <div class="post-title">
           ${SVG_ICONS[p.tag] || ""}
           <span class="link-text">${p.title}</span>
-          <span class="external-icon" aria-hidden="true">↗</span>
+          <span class="external-icon" aria-hidden="true">${EXTERNAL_LINK_SVG}</span>
         </div>
         ${description}
         ${preview}
@@ -113,7 +121,6 @@ function latestItem(p) {
         <div class="post-title">
           ${SVG_ICONS[p.tag] || ""}
           <span class="link-text">${p.title}</span>
-          <span class="external-icon" aria-hidden="true">↗</span>
         </div>
         <div class="post__separator"></div>
         <div class="post__date">${monthAbbr(p.month)} ${p.year}</div>
