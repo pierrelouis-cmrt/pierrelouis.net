@@ -7,3 +7,40 @@ RewriteEngine On
 # Map clean endpoints to your PHP proxy
 RewriteRule "^api/now-playing$" "/api/lastfm.php?endpoint=now-playing" [QSA,L]
 RewriteRule "^api/cover$"       "/api/lastfm.php?endpoint=cover"       [QSA,L]
+
+# --- Caching headers (override anything your host adds) ---
+<IfModule mod_headers.c>
+
+  # HTML should not be cached in the browser
+  <FilesMatch "\.(?:html)$">
+    Header always unset Cache-Control
+    Header always unset Expires
+    Header always unset Pragma
+    Header always set   Cache-Control "no-store"
+  </FilesMatch>
+
+  # Versioned/static assets: cache for 1 year and mark immutable
+  <FilesMatch "\.(?:css|js|mjs|ico|woff2?|ttf|eot|gif|png|jpe?g|webp|svg)$">
+    Header always unset Cache-Control
+    Header always unset Expires
+    Header always unset Pragma
+    Header always set   Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+</IfModule>
+
+# If your host is also using mod_expires, either turn it off here or restate your policy
+<IfModule mod_expires.c>
+  ExpiresActive Off  # disable inherited Expires rules in this directory
+  # (Optional) If you prefer to keep Expires, mirror the policy instead of turning it off:
+  # ExpiresActive On
+  # ExpiresByType text/html "access"
+  # ExpiresByType text/css "access plus 1 year"
+  # ExpiresByType application/javascript "access plus 1 year"
+  # ExpiresByType image/webp "access plus 1 year"
+  # ExpiresByType image/png "access plus 1 year"
+  # ExpiresByType image/jpeg "access plus 1 year"
+  # ExpiresByType image/svg+xml "access plus 1 year"
+  # ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
