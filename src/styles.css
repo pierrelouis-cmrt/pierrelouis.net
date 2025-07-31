@@ -106,13 +106,13 @@ body h4 {
 }
 
 body h4 .lucide {
-  color: hsl(from var(--default) h s l / 30%);
+  color: var(--secondary);
   margin-left: 0.25rem;
 }
 
 body p .lucide,
 body a .lucide {
-  color: hsl(from var(--body) h s l / 30%);
+  color: var(--secondary);
   margin-left: 0.3125rem;
   width: 1.25rem;
   min-width: 1.25rem;
@@ -217,7 +217,7 @@ p.links a:hover {
 }
 
 p.links a:hover .lucide {
-  color: hsl(from var(--body) h s l / 50%);
+  color: var(--body);
 }
 
 a.inline-icon {
@@ -228,7 +228,7 @@ a.inline-icon {
 }
 
 a.inline-icon:hover .lucide {
-  color: hsl(from var(--body) h s l / 50%);
+  color: var(--body);
   transition: color 120ms ease-in-out;
 }
 
@@ -921,6 +921,7 @@ a.project-item:not(:hover) .lucide {
 
 .cloud-image {
   position: absolute;
+  opacity: 0.75;
   animation: cloud 120s linear infinite;
   filter: blur(4px);
 }
@@ -1318,13 +1319,10 @@ a.email:hover {
   cursor: pointer;
 }
 
-.email:hover svg {
-  transform: scale(1.15);
-  transition: all 120ms ease-in-out;
-}
-
-.email:hover svg {
-  stroke: var(--stroke);
+.email svg {
+  width: 14px;
+  height: 14px;
+  margin-left: 0.25rem;
 }
 
 /*----------------------------  PAGES  --------------------------------------*/

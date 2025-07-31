@@ -61,9 +61,9 @@
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
 
-    <link rel="preload" href="/src/output-v070.css" as="style" />
+    <link rel="preload" href="/src/output-dev.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v070.css" />
+    <link rel="stylesheet" href="/src/output-dev.css" />
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
@@ -1082,20 +1082,23 @@
     <footer>
       <div class="links">
         <p>
-          <span class="tooltip-container">
-            <a class="email inline-icon" href="javascript:void(0);">
+          <span class="tooltip-container" data-email="contact@pierrelouis.net">
+            <a
+              class="email inline-icon"
+              href="mailto:contact@pierrelouis.net"
+              aria-label="Email contact@pierrelouis.net"
+            >
               <span class="email-text">Email</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
+                width="14"
+                height="14"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="lucide lucide-copy"
               >
                 <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
                 <path
@@ -1107,6 +1110,7 @@
               >Copy <i style="opacity: 0.75">contact@pierrelouis.net</i></span
             >
           </span>
+
           <a class="inline-icon" rel="noopener" href="/links"
             >Links<svg
               xmlns="http://www.w3.org/2000/svg"
@@ -1186,7 +1190,7 @@
         }
       });
     </script>
-    <script defer src="/src/footer-main.js"></script>
+    <script defer src="/src/footer.js"></script>
     <script defer src="/src/script.js"></script>
     <script defer src="/src/music.js"></script>
 

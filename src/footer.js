@@ -1,22 +1,31 @@
-// Copy email to clipboard
+// Copy email to clipboard + keep link crawlable
 document.addEventListener("DOMContentLoaded", () => {
   const tooltipContainer = document.querySelector(".tooltip-container");
 
   if (tooltipContainer) {
-    const emailToCopy = "contact@pierrelouis.net";
     const tooltip = tooltipContainer.querySelector(".tooltip");
     const emailLink = tooltipContainer.querySelector("a.email.inline-icon");
 
-    const copyIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" 
+    // Use the href as the single source of truth (crawlable)
+    const emailFromHref = (emailLink?.getAttribute("href") || "").replace(
+      /^mailto:/,
+      ""
+    );
+    const emailToCopy =
+      emailFromHref ||
+      tooltipContainer.dataset.email ||
+      "contact@pierrelouis.net";
+
+    const copyIconSVG = `<svg xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
-        stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy">
+        stroke-linecap="round" stroke-linejoin="round">
         <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
         <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
       </svg>`;
 
-    const copyCheckIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" 
+    const copyCheckIconSVG = `<svg xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
-        stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy-check">
+        stroke-linecap="round" stroke-linejoin="round">
         <path d="m12 15 2 2 4-4"/>
         <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
         <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
@@ -25,23 +34,29 @@ document.addEventListener("DOMContentLoaded", () => {
     function setIcon(iconSVG) {
       if (!emailLink) return;
       const existingIcon = emailLink.querySelector("svg");
-      if (existingIcon) {
-        emailLink.removeChild(existingIcon);
-      }
+      if (existingIcon) existingIcon.remove();
       const template = document.createElement("template");
       template.innerHTML = iconSVG.trim();
-      const newIcon = template.content.firstChild;
-      emailLink.appendChild(newIcon);
+      emailLink.appendChild(template.content.firstChild);
     }
 
-    const handleCopyEmail = () => {
+    // Keep the original tooltip HTML so we can restore it
+    const originalTooltipHTML = tooltip ? tooltip.innerHTML : "";
+    let revertTimer;
+
+    const handleCopyEmail = (e) => {
+      // Prevent navigation so click only copies (link remains crawlable)
+      e.preventDefault();
+
       navigator.clipboard
         .writeText(emailToCopy)
         .then(() => {
           if (tooltip) tooltip.textContent = "Copied";
           setIcon(copyCheckIconSVG);
-          setTimeout(() => {
-            if (tooltip) tooltip.textContent = "Copy Email";
+
+          clearTimeout(revertTimer);
+          revertTimer = setTimeout(() => {
+            if (tooltip) tooltip.innerHTML = originalTooltipHTML; // restore email text
             setIcon(copyIconSVG);
           }, 1000);
         })
@@ -51,9 +66,16 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     tooltipContainer.addEventListener("click", handleCopyEmail);
+
+    // Ensure that whenever the user hovers again, the email shows in the tooltip
+    tooltipContainer.addEventListener("mouseenter", () => {
+      if (tooltip) tooltip.innerHTML = originalTooltipHTML;
+      setIcon(copyIconSVG);
+    });
   }
 
-  fetch(window.location.href)
+  // Optional: HEAD is lighter than GET if supported by your host
+  fetch(window.location.href, { method: "HEAD" })
     .then((response) => {
       const lastModified = response.headers.get("Last-Modified");
       if (lastModified) {
