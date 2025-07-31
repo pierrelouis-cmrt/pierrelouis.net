@@ -64,7 +64,7 @@
     <link rel="preload" href="/src/output-v070.css" as="style" />
 
     <link rel="stylesheet" href="/src/output-v070.css" />
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -97,9 +97,10 @@
         <div class="nav-right">
           <div
             x-data="{ 
-          commandOpen: false, 
-          isTouchDevice: 'ontouchstart' in window
-        }"
+              commandOpen: false,
+              isTouchDevice: 'ontouchstart' in window,
+              isMac: /(Mac|iPhone|iPad|iPod)/i.test(navigator.platform) || (navigator.maxTouchPoints > 1 && /Mac/i.test(navigator.platform))
+            }"
             x-init="
           $watch('commandOpen', function(value){
             if(value === true){
@@ -143,10 +144,8 @@
               <span
                 class="ml-auto text-xs text-[var(--secondary)] border border-dashed border-[var(--stroke-lighter)] rounded-md px-1 hidden sm:inline"
               >
-                <script>
-                  document.write(isMac ? "⌘" : "Ctrl");
-                </script>
-                + K
+                <span x-text="isMac ? '⌘' : 'Ctrl'"></span>
+                &nbsp;+&nbsp;K
               </span>
             </button>
 
@@ -858,60 +857,97 @@
         <div class="post__block" id="latest-posts">
           <!-- AUTO-GEN:LATEST START -->
 
-    <div class="post__item">
-      <a class="inline-icon post__link" href="/posts/notes/coming-soon.html" rel="noopener noreferrer">
-        <div class="post-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2"
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/>
-      <path d="M15 3v4a2 2 0 0 0 2 2h4"/>
-    </svg>
-          <span class="link-text">Coming Soon</span>
-          <span class="external-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="post__separator"></div>
-        <div class="post__date">Jul 2025</div>
-      </a>
-    </div>
-    <div class="post__item">
-      <a class="inline-icon post__link" href="/posts/articles/coming-soon.html" rel="noopener noreferrer">
-        <div class="post-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2"
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
-      <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
-      <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
-    </svg>
-          <span class="link-text">Coming Soon</span>
-          <span class="external-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="post__separator"></div>
-        <div class="post__date">Jul 2025</div>
-      </a>
-    </div>
-    <div class="post__item">
-      <a class="inline-icon post__link" href="/posts/articles/coming-soon.html" rel="noopener noreferrer">
-        <div class="post-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2" 
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/>
-      <path d="M6.453 15h11.094"/>
-      <path d="M8.5 2h7"/>
-    </svg>
-          <span class="link-text">Coming Soon</span>
-          <span class="external-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="post__separator"></div>
-        <div class="post__date">Jul 2025</div>
-      </a>
-    </div>
-<!-- AUTO-GEN:LATEST END -->
+          <div class="post__item">
+            <a
+              class="inline-icon post__link"
+              href="/posts/notes/coming-soon.html"
+              rel="noopener noreferrer"
+            >
+              <div class="post-title">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"
+                  />
+                  <path d="M15 3v4a2 2 0 0 0 2 2h4" />
+                </svg>
+                <span class="link-text">Coming Soon</span>
+                <span class="external-icon" aria-hidden="true">↗</span>
+              </div>
+              <div class="post__separator"></div>
+              <div class="post__date">Jul 2025</div>
+            </a>
+          </div>
+          <div class="post__item">
+            <a
+              class="inline-icon post__link"
+              href="/posts/articles/coming-soon.html"
+              rel="noopener noreferrer"
+            >
+              <div class="post-title">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                  />
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  <path d="M10 9H8" />
+                  <path d="M16 13H8" />
+                  <path d="M16 17H8" />
+                </svg>
+                <span class="link-text">Coming Soon</span>
+                <span class="external-icon" aria-hidden="true">↗</span>
+              </div>
+              <div class="post__separator"></div>
+              <div class="post__date">Jul 2025</div>
+            </a>
+          </div>
+          <div class="post__item">
+            <a
+              class="inline-icon post__link"
+              href="/posts/articles/coming-soon.html"
+              rel="noopener noreferrer"
+            >
+              <div class="post-title">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"
+                  />
+                  <path d="M6.453 15h11.094" />
+                  <path d="M8.5 2h7" />
+                </svg>
+                <span class="link-text">Coming Soon</span>
+                <span class="external-icon" aria-hidden="true">↗</span>
+              </div>
+              <div class="post__separator"></div>
+              <div class="post__date">Jul 2025</div>
+            </a>
+          </div>
+          <!-- AUTO-GEN:LATEST END -->
         </div>
 
         <div class="project-button">
