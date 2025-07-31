@@ -1784,6 +1784,12 @@ hr.divider2 {
   margin-top: 1rem;
 }
 
+.badges .websitecarbon {
+  height: 150px;
+  width: auto;
+  border-radius: 12px;
+}
+
 /* -------- Projects Page -------- */
 
 /* Project collection */
