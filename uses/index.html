@@ -59,9 +59,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v082.css" as="style" />
+    <link rel="preload" href="/src/output-v088.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v082.css" />
+    <link rel="stylesheet" href="/src/output-v088.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -86,10 +86,10 @@
   </head>
 
   <body>
-    <nav class="sticky-nav">
-      <div class="menu-container">
-        <div class="nav-left">
-          <a class="home-button" href="/"
+    <nav class="site-navigation">
+      <div class="navigation-container">
+        <div class="navigation-left">
+          <a class="navigation-brand" href="/"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -108,9 +108,9 @@
             </svg>
             Back Home</a
           >
-          <div class="nav-links"></div>
+          <div class="navigation-links"></div>
         </div>
-        <div class="nav-right">
+        <div class="navigation-right">
           <div
             x-data="{ 
               commandOpen: false,
@@ -642,29 +642,29 @@
     </nav>
 
     <main>
-      <h2 class="section-title">Tech Arsenal</h2>
-      <p class="subtitle italic">
+      <h2 class="section-heading">Tech Arsenal</h2>
+      <p class="page-subtitle text-italic">
         A curated collection of tools, software, and hardware that power my
         creative workflow.
       </p>
-      <hr class="divider3" />
+      <hr class="divider-standard" />
 
       <div
-        class="arsenal-sections w-full flex flex-col overflow-clip"
+        class="tech-stack-sections w-full flex flex-col overflow-clip"
         id="arsenal-sections"
       >
         <div
-          class="arsenal-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
+          class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
           style="border-bottom: 1px solid var(--border-light)"
         >
           <span
-            class="arsenal-label text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
+            class="tech-stack-category text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
             >Languages
             <hr
-              class="arsenal-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
+              class="tech-stack-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
           /></span>
           <div
-            class="arsenal-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
+            class="tech-stack-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
           >
             <a
               class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
@@ -773,17 +773,17 @@
           </div>
         </div>
         <div
-          class="arsenal-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
+          class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
           style="border-bottom: 1px solid var(--border-light)"
         >
           <span
-            class="arsenal-label text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
+            class="tech-stack-category text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
             >Tools/Saas
             <hr
-              class="arsenal-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
+              class="tech-stack-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
           /></span>
           <div
-            class="arsenal-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
+            class="tech-stack-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
           >
             <a
               class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
@@ -1040,17 +1040,17 @@
           </div>
         </div>
         <div
-          class="arsenal-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
+          class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
           style="border-bottom: 1px solid var(--border-light)"
         >
           <span
-            class="arsenal-label text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
+            class="tech-stack-category text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
             >Apps
             <hr
-              class="arsenal-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
+              class="tech-stack-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
           /></span>
           <div
-            class="arsenal-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
+            class="tech-stack-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
           >
             <a
               class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
@@ -1328,16 +1328,16 @@
           </div>
         </div>
         <div
-          class="arsenal-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
+          class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
         >
           <span
-            class="arsenal-label text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
+            class="tech-stack-category text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
             >Hardware
             <hr
-              class="arsenal-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
+              class="tech-stack-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
           /></span>
           <div
-            class="arsenal-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
+            class="tech-stack-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
           >
             <a
               class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
@@ -1490,15 +1490,15 @@
         </div>
       </div>
 
-      <footer class="arsenal-footer">
-        <div class="footer-dots"><span></span><span></span><span></span></div>
+      <footer class="tech-stack-footer">
+        <div class="tech-stack-footer-dots"><span></span><span></span><span></span></div>
         <p class="last-updated"></p>
       </footer>
     </main>
 
     <footer>
-      <div class="footer-container">
-        <p class="footer-text-left">
+      <div class="footer-meta">
+        <p class="footer-meta-left">
           Designed with
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -1518,7 +1518,7 @@
           </svg>
           <span class="subtle">by</span> Pierre-Louis
         </p>
-        <p class="footer-text-right">© 2025</p>
+        <p class="footer-meta-right">© 2025</p>
       </div>
     </footer>
     <script>

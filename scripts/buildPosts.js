@@ -1,16 +1,9 @@
 // scripts/buildPosts.js
 // -----------------------------------------------------------------------------
 // Generate static HTML for the full timeline (posts/index.html) and for the
-// “latest 3 posts” block (index.html).  Idempotent: each run fully replaces
+// "latest 3 posts" block (index.html).  Idempotent: each run fully replaces
 // the previous generated content between the START/END markers.
 // Items dated after TODAY are ignored.
-// -----------------------------------------------------------------------------
-//
-// Prerequisites: Node ≥ 18 (for native ESM and fs/promises)
-//
-// Usage:  node scripts/buildPosts.js
-// (It is already wired into `npm run build` in package.json)
-//
 // -----------------------------------------------------------------------------
 
 import { readFile, writeFile } from "fs/promises";
@@ -47,7 +40,7 @@ const SVG_ICONS = {
       <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
     </svg>`,
   Experiments: `
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
          fill="none" stroke="currentColor" stroke-width="2" 
          stroke-linecap="round" stroke-linejoin="round">
       <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/>
@@ -87,11 +80,11 @@ const groupBy = (arr, key) =>
 /* -------------------------------------------------------------------------- */
 function timelineItem(p) {
   const description = p.description
-    ? `<div class="post-description">${p.description}</div>`
+    ? `<div class="timeline-item-description">${p.description}</div>`
     : "";
 
   const preview = p.image
-    ? `<div class="post-preview">
+    ? `<div class="timeline-item-preview">
          <figure>
            <img src="${p.image}" loading="lazy" alt="${p.title} preview">
          </figure>
@@ -99,12 +92,12 @@ function timelineItem(p) {
     : "";
 
   return `
-    <div class="post-item animate-on-scroll" data-tag="${p.tag}">
+    <div class="timeline-item animate-on-scroll" data-tag="${p.tag}">
       <a href="${p.link}" rel="noopener noreferrer">
-        <div class="post-title">
+        <div class="timeline-item-title">
           ${SVG_ICONS[p.tag] || ""}
           <span class="link-text">${p.title}</span>
-          <span class="external-icon" aria-hidden="true">${EXTERNAL_LINK_SVG}</span>
+          <span class="external-link-icon" aria-hidden="true">${EXTERNAL_LINK_SVG}</span>
         </div>
         ${description}
         ${preview}
@@ -112,18 +105,19 @@ function timelineItem(p) {
     </div>`;
 }
 
+/* Homepage "latest 3" uses homepage post card classes */
 function latestItem(p) {
   return `
-    <div class="post__item">
-      <a class="inline-icon post__link" href="${
+    <div class="post-card">
+      <a class="link-with-icon post-card-link" href="${
         p.link
       }" rel="noopener noreferrer">
-        <div class="post-title">
+        <div class="post-card-title">
           ${SVG_ICONS[p.tag] || ""}
           <span class="link-text">${p.title}</span>
         </div>
-        <div class="post__separator"></div>
-        <div class="post__date">${monthAbbr(p.month)} ${p.year}</div>
+        <div class="post-card-separator"></div>
+        <div class="post-card-date">${monthAbbr(p.month)} ${p.year}</div>
       </a>
     </div>`;
 }
@@ -142,11 +136,11 @@ function buildTimeline(items) {
         .map((month) => {
           const list = byMonth[month].sort((x, y) => y.day - x.day);
           return `
-            <div class="timeline-month">
-              <div class="month-header">
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
                 <h3>${month}<span class="full-year"> ${year}</span></h3>
               </div>
-              <div class="month-items">
+              <div class="content-timeline-month-items">
                 ${list.map(timelineItem).join("")}
               </div>
             </div>`;
@@ -154,9 +148,9 @@ function buildTimeline(items) {
         .join("");
 
       return `
-        <div class="timeline-header">
-          <div class="timeline-year"><h2>${year}</h2></div>
-          <div class="timeline-content">${monthsHtml}</div>
+        <div class="content-timeline-header">
+          <div class="content-timeline-year"><h2>${year}</h2></div>
+          <div class="content-timeline-content">${monthsHtml}</div>
         </div>`;
     })
     .join("");

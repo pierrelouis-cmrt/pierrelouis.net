@@ -59,9 +59,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v082.css" as="style" />
+    <link rel="preload" href="/src/output-v088.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v082.css" />
+    <link rel="stylesheet" href="/src/output-v088.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -86,10 +86,10 @@
   </head>
 
   <body>
-    <nav class="sticky-nav">
-      <div class="menu-container">
-        <div class="nav-left">
-          <a class="home-button" href="/"
+    <nav class="site-navigation">
+      <div class="navigation-container">
+        <div class="navigation-left">
+          <a class="navigation-brand" href="/"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -108,9 +108,9 @@
             </svg>
             Back Home</a
           >
-          <div class="nav-links"></div>
+          <div class="navigation-links"></div>
         </div>
-        <div class="nav-right">
+        <div class="navigation-right">
           <div
             x-data="{ 
               commandOpen: false,
@@ -642,11 +642,11 @@
     </nav>
 
     <main class="colophon">
-      <h2 class="section-title">Colophon</h2>
-      <h2 class="subtitle italic">
+      <h2 class="section-heading">Colophon</h2>
+      <h2 class="page-subtitle text-italic">
         A peek behind the making of this portfolio.
       </h2>
-      <hr class="divider3" />
+      <hr class="divider-standard" />
       <p class="animate-on-scroll">
         This site was entirely designed and coded by me, using plain old HTML,
         CSS, and JavaScript. I use a bit of Tailwind and AlpineJS here and there
@@ -696,7 +696,7 @@
         is produced every time someone visits it.
       </p>
 
-      <hr class="divider2" />
+      <hr class="divider-thin" />
       <p class="animate-on-scroll">
         Finally, here's a list of websites and portfolios that have inspired me
         along the way. It's unordered, and will grow over time. You can find
@@ -705,7 +705,7 @@
           >Dead Simple Sites</a
         >.
       </p>
-      <div class="colophon-credits">
+      <div class="credits-grid">
         <a
           href="https://www.harshsingh.me"
           target="_blank"
@@ -891,8 +891,8 @@
         >
       </div>
 
-      <hr class="divider2" />
-      <div class="badges animate-on-scroll">
+      <hr class="divider-thin" />
+      <div class="certification-badges animate-on-scroll">
         <a
           href="https://www.websitecarbon.com/website/pierrelouis-net/"
           target="_blank"
@@ -900,7 +900,7 @@
           <img
             src="../src/assets/websitecarbon.webp"
             alt="Website Carbon Analysis"
-            class="websitecarbon"
+            class="carbon-badge"
           />
         </a>
         <a
@@ -923,8 +923,8 @@
     </main>
 
     <footer>
-      <div class="footer-container">
-        <p class="footer-text-left">
+      <div class="footer-meta">
+        <p class="footer-meta-left">
           Designed with
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -944,7 +944,7 @@
           </svg>
           <span class="subtle">by</span> Pierre-Louis
         </p>
-        <p class="footer-text-right">© 2025</p>
+        <p class="footer-meta-right">© 2025</p>
       </div>
     </footer>
     <script defer src="/src/script.js"></script>

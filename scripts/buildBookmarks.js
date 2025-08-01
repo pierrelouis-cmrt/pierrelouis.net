@@ -32,18 +32,18 @@ const groupBy = (arr, key) =>
 /* -------------------------------------------------------------------------- */
 function bookmarkItem(b) {
   const meta = b.meta
-    ? `<div class="post-meta">
+    ? `<div class="timeline-item-meta">
          <img src="${b.meta.icon}" width="16" height="16" alt="">
          <span>${b.meta.text}</span>
        </div>`
     : "";
 
   const description = b.description
-    ? `<div class="post-description">${b.description}</div>`
+    ? `<div class="timeline-item-description">${b.description}</div>`
     : "";
 
   const preview = b.image
-    ? `<div class="post-preview">
+    ? `<div class="timeline-item-preview">
          <figure>
            <img src="${b.image}" loading="lazy" alt="${b.title} preview">
          </figure>
@@ -51,11 +51,11 @@ function bookmarkItem(b) {
     : "";
 
   return `
-    <div class="post-item animate-on-scroll" data-tag="${b.tag}">
+    <div class="timeline-item animate-on-scroll" data-tag="${b.tag}">
       <a href="${b.link}" target="_blank" rel="noopener noreferrer">
-        <div class="post-title">
+        <div class="timeline-item-title">
           <span class="link-text">${b.title}</span>
-          <span class="external-icon" aria-hidden="true">↗</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
         </div>
         ${meta}
         ${description}
@@ -79,13 +79,13 @@ function buildTimeline(items) {
       const monthsHtml = Object.keys(byMonth)
         .sort((a, b) => new Date(`${b} 1 2000`) - new Date(`${a} 1 2000`))
         .map((month) => {
-          const list = byMonth[month]; // no day field in original script
+          const list = byMonth[month]; // no "day" in bookmarks
           return `
-            <div class="timeline-month">
-              <div class="month-header">
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
                 <h3>${month}<span class="full-year"> ${year}</span></h3>
               </div>
-              <div class="month-items">
+              <div class="content-timeline-month-items">
                 ${list.map(bookmarkItem).join("")}
               </div>
             </div>`;
@@ -93,9 +93,9 @@ function buildTimeline(items) {
         .join("");
 
       return `
-        <div class="timeline-header">
-          <div class="timeline-year"><h2>${year}</h2></div>
-          <div class="timeline-content">${monthsHtml}</div>
+        <div class="content-timeline-header">
+          <div class="content-timeline-year"><h2>${year}</h2></div>
+          <div class="content-timeline-content">${monthsHtml}</div>
         </div>`;
     })
     .join("");

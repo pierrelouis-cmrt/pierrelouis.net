@@ -59,9 +59,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v082.css" as="style" />
+    <link rel="preload" href="/src/output-v088.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v082.css" />
+    <link rel="stylesheet" href="/src/output-v088.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -86,10 +86,10 @@
   </head>
 
   <body>
-    <nav class="sticky-nav">
-      <div class="menu-container">
-        <div class="nav-left">
-          <a class="home-button" href="/"
+    <nav class="site-navigation">
+      <div class="navigation-container">
+        <div class="navigation-left">
+          <a class="navigation-brand" href="/"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -108,9 +108,9 @@
             </svg>
             Back Home</a
           >
-          <div class="nav-links"></div>
+          <div class="navigation-links"></div>
         </div>
-        <div class="nav-right">
+        <div class="navigation-right">
           <div
             x-data="{ 
               commandOpen: false,
@@ -642,19 +642,19 @@
     </nav>
 
     <main>
-      <h2 class="section-title">Posts</h2>
-      <p class="subtitle italic">This is where I share my thoughts.</p>
-      <hr class="divider3" />
+      <h2 class="section-heading">Posts</h2>
+      <p class="page-subtitle text-italic">This is where I share my thoughts.</p>
+      <hr class="divider-standard" />
       <p>
         This is my personal blog. On here you'll find
         <strong>notes</strong> (aka fleeting thoughts) and
         <strong>articles</strong> (aka longer, more polished posts).
       </p>
 
-      <div class="posts-page" id="posts">
+      <div class="timeline-page" id="posts">
         <!-- Category filters -->
-        <div class="post-filters animate-on-scroll">
-          <a class="post-filter" data-tag="Notes"
+        <div class="timeline-filters animate-on-scroll">
+          <a class="timeline-filter" data-tag="Notes"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -670,7 +670,7 @@
               <path d="M15 3v4a2 2 0 0 0 2 2h4" /></svg
             >Notes</a
           >
-          <a class="post-filter" data-tag="Articles"
+          <a class="timeline-filter" data-tag="Articles"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -689,7 +689,7 @@
               <path d="M16 17H8" /></svg
             >Articles</a
           >
-          <a class="post-filter" data-tag="Experiments"
+          <a class="timeline-filter" data-tag="Experiments"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -706,7 +706,7 @@
               <path d="M8.5 2h7" /></svg
             >Experiments</a
           >
-          <a class="post-filter" id="clear-filter" style="display: none"
+          <a class="timeline-filter" id="clear-filter" style="display: none"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -722,21 +722,21 @@
           >
         </div>
 
-        <div class="posts-timeline animate-on-scroll" id="posts-timeline">
+        <div class="content-timeline animate-on-scroll" id="posts-timeline">
           <!-- AUTO-GEN:TIMELINE START -->
 
-        <div class="timeline-header">
-          <div class="timeline-year"><h2>2025</h2></div>
-          <div class="timeline-content">
-            <div class="timeline-month">
-              <div class="month-header">
+        <div class="content-timeline-header">
+          <div class="content-timeline-year"><h2>2025</h2></div>
+          <div class="content-timeline-content">
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
                 <h3>Jul<span class="full-year"> 2025</span></h3>
               </div>
-              <div class="month-items">
+              <div class="content-timeline-month-items">
                 
-    <div class="post-item animate-on-scroll" data-tag="Notes">
+    <div class="timeline-item animate-on-scroll" data-tag="Notes">
       <a href="/posts/notes/coming-soon.html" rel="noopener noreferrer">
-        <div class="post-title">
+        <div class="timeline-item-title">
           
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
          fill="none" stroke="currentColor" stroke-width="2"
@@ -745,7 +745,7 @@
       <path d="M15 3v4a2 2 0 0 0 2 2h4"/>
     </svg>
           <span class="link-text">Coming Soon</span>
-          <span class="external-icon" aria-hidden="true">
+          <span class="external-link-icon" aria-hidden="true">
   <svg xmlns="http://www.w3.org/2000/svg"
        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
        stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
@@ -753,13 +753,13 @@
     <path d="M7 17 17 7"></path>
   </svg></span>
         </div>
-        <div class="post-description">Coming Soon</div>
+        <div class="timeline-item-description">Coming Soon</div>
         
       </a>
     </div>
-    <div class="post-item animate-on-scroll" data-tag="Articles">
+    <div class="timeline-item animate-on-scroll" data-tag="Articles">
       <a href="/posts/articles/coming-soon.html" rel="noopener noreferrer">
-        <div class="post-title">
+        <div class="timeline-item-title">
           
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
          fill="none" stroke="currentColor" stroke-width="2"
@@ -769,7 +769,7 @@
       <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
     </svg>
           <span class="link-text">Coming Soon</span>
-          <span class="external-icon" aria-hidden="true">
+          <span class="external-link-icon" aria-hidden="true">
   <svg xmlns="http://www.w3.org/2000/svg"
        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
        stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
@@ -777,15 +777,15 @@
     <path d="M7 17 17 7"></path>
   </svg></span>
         </div>
-        <div class="post-description">Coming Soon</div>
+        <div class="timeline-item-description">Coming Soon</div>
         
       </a>
     </div>
-    <div class="post-item animate-on-scroll" data-tag="Experiments">
+    <div class="timeline-item animate-on-scroll" data-tag="Experiments">
       <a href="/posts/articles/coming-soon.html" rel="noopener noreferrer">
-        <div class="post-title">
+        <div class="timeline-item-title">
           
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
          fill="none" stroke="currentColor" stroke-width="2" 
          stroke-linecap="round" stroke-linejoin="round">
       <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/>
@@ -793,7 +793,7 @@
       <path d="M8.5 2h7"/>
     </svg>
           <span class="link-text">Coming Soon</span>
-          <span class="external-icon" aria-hidden="true">
+          <span class="external-link-icon" aria-hidden="true">
   <svg xmlns="http://www.w3.org/2000/svg"
        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
        stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
@@ -801,7 +801,7 @@
     <path d="M7 17 17 7"></path>
   </svg></span>
         </div>
-        <div class="post-description">Coming Soon</div>
+        <div class="timeline-item-description">Coming Soon</div>
         
       </a>
     </div>
@@ -814,8 +814,8 @@
     </main>
 
     <footer>
-      <div class="footer-container">
-        <p class="footer-text-left">
+      <div class="footer-meta">
+        <p class="footer-meta-left">
           Designed with
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -835,7 +835,7 @@
           </svg>
           <span class="subtle">by</span> Pierre-Louis
         </p>
-        <p class="footer-text-right">© 2025</p>
+        <p class="footer-meta-right">© 2025</p>
       </div>
     </footer>
     <script defer src="/src/script.js"></script>

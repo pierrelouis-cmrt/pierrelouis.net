@@ -1,7 +1,7 @@
 // Signature animation for the about page
 
 const signature = document.querySelector("#signature");
-const letterBank = document.querySelector(".letter-bank");
+const letterBank = document.querySelector(".signature-letter-templates");
 const name = "Pierre Louis";
 
 // ─────────────────────────────────────────────────────────
@@ -24,7 +24,7 @@ function generateSignature(text, animate = false) {
     if (char === " ") {
       signature.appendChild(
         Object.assign(document.createElement("div"), {
-          className: "word-space",
+          className: "signature-word-space",
         })
       );
       return;
@@ -38,11 +38,13 @@ function generateSignature(text, animate = false) {
   });
 }
 
-// Clone a template letter from the hidden “bank”
+// Clone a template letter from the hidden "bank"
 function createLetterElement(char) {
   const isUppercase = char === char.toUpperCase();
   const letterClass = char.toLowerCase();
-  const selector = `.${letterClass}.${isUppercase ? "up" : "lo"}`;
+  const selector = `.signature-letter-${letterClass}.${
+    isUppercase ? "signature-letter-uppercase" : "signature-letter-lowercase"
+  }`;
   const template = letterBank.querySelector(selector);
 
   if (!template) {
@@ -52,7 +54,10 @@ function createLetterElement(char) {
 
   const wrapper = document.createElement("div");
   wrapper.innerHTML = template.innerHTML;
-  wrapper.classList.add(letterClass, isUppercase ? "up" : "lo");
+  wrapper.classList.add(
+    `signature-letter-${letterClass}`,
+    isUppercase ? "signature-letter-uppercase" : "signature-letter-lowercase"
+  );
   return wrapper;
 }
 
@@ -66,7 +71,7 @@ function initPathAnimation(letterEl, animate, index) {
   path.style.strokeDasharray = len;
 
   if (animate) {
-    /* 1. Start hidden with NO transition, so there’s no visible flash */
+    /* 1. Start hidden with NO transition, so there's no visible flash */
     path.style.transition = "none";
     path.style.strokeDashoffset = len;
 
@@ -89,7 +94,7 @@ function initPathAnimation(letterEl, animate, index) {
 function replayAnimation() {
   const paths = signature.querySelectorAll("svg path");
 
-  // 1. Quick “fade out” by resetting dashoffset to the full length
+  // 1. Quick "fade out" by resetting dashoffset to the full length
   paths.forEach((path) => {
     const len = parseFloat(path.dataset.len) || path.getTotalLength();
     path.style.transition = "stroke-dashoffset 0.15s ease-out";

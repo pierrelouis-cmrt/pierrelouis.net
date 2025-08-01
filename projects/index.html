@@ -59,9 +59,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v082.css" as="style" />
+    <link rel="preload" href="/src/output-v088.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v082.css" />
+    <link rel="stylesheet" href="/src/output-v088.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -86,10 +86,10 @@
   </head>
 
   <body>
-    <nav class="sticky-nav">
-      <div class="menu-container">
-        <div class="nav-left">
-          <a class="home-button" href="/"
+    <nav class="site-navigation">
+      <div class="navigation-container">
+        <div class="navigation-left">
+          <a class="navigation-brand" href="/"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -108,9 +108,9 @@
             </svg>
             Back Home</a
           >
-          <div class="nav-links"></div>
+          <div class="navigation-links"></div>
         </div>
-        <div class="nav-right">
+        <div class="navigation-right">
           <div
             x-data="{ 
               commandOpen: false,
@@ -642,29 +642,29 @@
     </nav>
 
     <main>
-      <div class="subpage-header animate-on-scroll">
-        <h2 class="section-title">Projects</h2>
-        <h2 class="subtitle italic">
+      <div class="page-header animate-on-scroll">
+        <h2 class="section-heading">Projects</h2>
+        <h2 class="page-subtitle text-italic">
           A collection of websites and tools I've designed and developed.
         </h2>
-        <hr class="divider3" />
+        <hr class="divider-standard" />
       </div>
 
-      <div class="project-collection">
-        <div class="project-item-detailed animate-on-scroll">
-          <div class="project-item-content">
+      <div class="projects-showcase">
+        <div class="project-showcase-card animate-on-scroll">
+          <div class="project-showcase-content">
             <div class="project-preview">
-              <div class="project-thumbnails">
+              <div class="project-preview-gallery">
                 <img
                   src="screenshots/flashcards1.webp"
                   alt="Screenshot"
-                  class="project-thumb"
+                  class="project-preview-image"
                   onclick="openLightbox(this.src)"
                 />
                 <img
                   src="screenshots/flashcards2.webp"
                   alt="Screenshot"
-                  class="project-thumb"
+                  class="project-preview-image"
                   onclick="openLightbox(this.src)"
                 />
               </div>
@@ -676,19 +676,19 @@
               shuffling, LaTeX, and zero server uploads.
             </p>
 
-            <div class="project-meta">
-              <div class="project-tech">
+            <div class="project-showcase-meta">
+              <div class="project-tech-stack">
                 <span>2025</span>
                 <span>PDF.js</span>
                 <span>LaTeX</span>
                 <span>Forms UI/UX</span>
               </div>
 
-              <div class="project-actions">
+              <div class="project-action-buttons">
                 <a
                   href="https://github.com/pierrelouis-cmrt/RM-Flashcards"
                   target="_blank"
-                  class="project-action code"
+                  class="project-action-button code"
                 >
                   Source Code
                   <svg
@@ -710,7 +710,7 @@
                 <a
                   href="/flashcards/"
                   target="_blank"
-                  class="project-action visit"
+                  class="project-action-button visit"
                 >
                   Visit Site
                   <svg
@@ -734,38 +734,38 @@
             </div>
           </div>
         </div>
-        <div class="project-item-detailed animate-on-scroll">
-          <div class="project-item-content">
+        <div class="project-showcase-card animate-on-scroll">
+          <div class="project-showcase-content">
             <div class="project-preview">
-              <div class="project-thumbnails">
+              <div class="project-preview-gallery">
                 <img
                   src="screenshots/capecl1.webp"
                   alt="Screenshot"
-                  class="project-thumb"
+                  class="project-preview-image"
                   onclick="openLightbox(this.src)"
                 />
                 <img
                   src="screenshots/capecl2.webp"
                   alt="Screenshot"
-                  class="project-thumb"
+                  class="project-preview-image"
                   onclick="openLightbox(this.src)"
                 />
                 <img
                   src="screenshots/capecl3.webp"
                   alt="Screenshot"
-                  class="project-thumb"
+                  class="project-preview-image"
                   onclick="openLightbox(this.src)"
                 />
                 <img
                   src="screenshots/capecl4.webp"
                   alt="Screenshot"
-                  class="project-thumb"
+                  class="project-preview-image"
                   onclick="openLightbox(this.src)"
                 />
                 <img
                   src="screenshots/capecl5.webp"
                   alt="Screenshot"
-                  class="project-thumb"
+                  class="project-preview-image"
                   onclick="openLightbox(this.src)"
                 />
               </div>
@@ -777,18 +777,18 @@
               everything is one click away—organized, accessible, and free.
             </p>
 
-            <div class="project-meta">
-              <div class="project-tech">
+            <div class="project-showcase-meta">
+              <div class="project-tech-stack">
                 <span>2025</span>
                 <span>Tailwind</span>
                 <span>Brutalist UI</span>
               </div>
 
-              <div class="project-actions">
+              <div class="project-action-buttons">
                 <a
                   href="https://github.com/pierrelouis-cmrt/capecl"
                   target="_blank"
-                  class="project-action code"
+                  class="project-action-button code"
                 >
                   Source Code
                   <svg
@@ -807,7 +807,7 @@
                     <polyline points="8 6 2 12 8 18" />
                   </svg>
                 </a>
-                <a href="/capecl/" target="_blank" class="project-action visit">
+                <a href="/capecl/" target="_blank" class="project-action-button visit">
                   Visit Site
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -830,32 +830,32 @@
             </div>
           </div>
         </div>
-        <div class="project-item-detailed animate-on-scroll">
-          <div class="project-item-content">
+        <div class="project-showcase-card animate-on-scroll">
+          <div class="project-showcase-content">
             <div class="project-preview">
-              <div class="project-thumbnails">
+              <div class="project-preview-gallery">
                 <img
                   src="screenshots/odg1.webp"
                   alt="Screenshot"
-                  class="project-thumb"
+                  class="project-preview-image"
                   onclick="openLightbox(this.src)"
                 />
                 <img
                   src="screenshots/odg2.webp"
                   alt="Screenshot"
-                  class="project-thumb"
+                  class="project-preview-image"
                   onclick="openLightbox(this.src)"
                 />
                 <img
                   src="screenshots/odg3.webp"
                   alt="Screenshot"
-                  class="project-thumb"
+                  class="project-preview-image"
                   onclick="openLightbox(this.src)"
                 />
                 <img
                   src="screenshots/odg4.webp"
                   alt="Screenshot"
-                  class="project-thumb"
+                  class="project-preview-image"
                   onclick="openLightbox(this.src)"
                 />
               </div>
@@ -867,19 +867,19 @@
               and a custom calculator for visualizing energy concepts.
             </p>
 
-            <div class="project-meta">
-              <div class="project-tech">
+            <div class="project-showcase-meta">
+              <div class="project-tech-stack">
                 <span>2025</span>
                 <span>JS Graphs</span>
                 <span>MathJax</span>
                 <span>Magazine UI</span>
               </div>
 
-              <div class="project-actions">
+              <div class="project-action-buttons">
                 <a
                   href="https://github.com/pierrelouis-cmrt/ODG"
                   target="_blank"
-                  class="project-action code"
+                  class="project-action-button code"
                 >
                   Source Code
                   <svg
@@ -898,7 +898,7 @@
                     <polyline points="8 6 2 12 8 18" />
                   </svg>
                 </a>
-                <a href="/ODG/" target="_blank" class="project-action visit">
+                <a href="/ODG/" target="_blank" class="project-action-button visit">
                   Visit Site
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -921,20 +921,20 @@
             </div>
           </div>
         </div>
-        <div class="project-item-detailed animate-on-scroll">
-          <div class="project-item-content">
+        <div class="project-showcase-card animate-on-scroll">
+          <div class="project-showcase-content">
             <div class="project-preview">
-              <div class="project-thumbnails">
+              <div class="project-preview-gallery">
                 <img
                   src="screenshots/adatech1.webp"
                   alt="Screenshot"
-                  class="project-thumb"
+                  class="project-preview-image"
                   onclick="openLightbox(this.src)"
                 />
                 <img
                   src="screenshots/adatech2.webp"
                   alt="Screenshot"
-                  class="project-thumb"
+                  class="project-preview-image"
                   onclick="openLightbox(this.src)"
                 />
               </div>
@@ -948,18 +948,18 @@
               support feel welcoming, not intimidating.
             </p>
 
-            <div class="project-meta">
-              <div class="project-tech">
+            <div class="project-showcase-meta">
+              <div class="project-tech-stack">
                 <span>2024</span>
                 <span>Landing Page</span>
                 <span>JSON parsing</span>
               </div>
 
-              <div class="project-actions">
+              <div class="project-action-buttons">
                 <a
                   href="https://github.com/pierrelouis-cmrt/ADA-Tech"
                   target="_blank"
-                  class="project-action code"
+                  class="project-action-button code"
                 >
                   Source Code
                   <svg
@@ -981,7 +981,7 @@
                 <a
                   href="/ADA-Tech/"
                   target="_blank"
-                  class="project-action visit"
+                  class="project-action-button visit"
                 >
                   Visit Site
                   <svg
@@ -1008,15 +1008,15 @@
       </div>
 
       <!-- Simple Lightbox -->
-      <div id="lightbox" class="lightbox">
-        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-        <img id="lightbox-img" class="lightbox-content" />
+      <div id="lightbox" class="image-lightbox">
+        <span class="image-lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" class="image-lightbox-content" />
       </div>
     </main>
 
     <footer>
-      <div class="footer-container">
-        <p class="footer-text-left">
+      <div class="footer-meta">
+        <p class="footer-meta-left">
           Designed with
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -1036,7 +1036,7 @@
           </svg>
           <span class="subtle">by</span> Pierre-Louis
         </p>
-        <p class="footer-text-right">© 2025</p>
+        <p class="footer-meta-right">© 2025</p>
       </div>
     </footer>
     <script defer src="/src/script.js"></script>

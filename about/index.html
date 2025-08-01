@@ -59,9 +59,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v082.css" as="style" />
+    <link rel="preload" href="/src/output-v088.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v082.css" />
+    <link rel="stylesheet" href="/src/output-v088.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -86,10 +86,10 @@
   </head>
 
   <body>
-    <nav class="sticky-nav">
-      <div class="menu-container">
-        <div class="nav-left">
-          <a class="home-button" href="/"
+    <nav class="site-navigation">
+      <div class="navigation-container">
+        <div class="navigation-left">
+          <a class="navigation-brand" href="/"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -108,9 +108,9 @@
             </svg>
             Back Home</a
           >
-          <div class="nav-links"></div>
+          <div class="navigation-links"></div>
         </div>
-        <div class="nav-right">
+        <div class="navigation-right">
           <div
             x-data="{ 
               commandOpen: false,
@@ -641,12 +641,12 @@
       </div>
     </nav>
 
-    <main class="about">
-      <h2 class="section-title">Me, Myself, and I</h2>
-      <hr class="divider3" />
+    <main class="about-page">
+      <h2 class="section-heading">Me, Myself, and I</h2>
+      <hr class="divider-standard" />
 
-      <div class="content-wrapper">
-        <div class="header-img"></div>
+      <div class="page-content-wrapper">
+        <div class="about-profile-image"></div>
 
         <p>
           Hey! I'm <strong>Pierre-Louis</strong>, but honestly, most people just
@@ -698,7 +698,7 @@
           And that's pretty much everything I know about myself so far! Thanks a
           ton for stopping by.<br />
           If you want to chat or connect, definitely
-          <a href="/links" class="reach-out"
+          <a href="/links" class="contact-link-inline"
             >reach out
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -720,13 +720,13 @@
         </p>
       </div>
 
-      <div class="signature-container">
-        <div class="signature-main" id="signature"></div>
+      <div class="signature-section">
+        <div class="signature-canvas" id="signature"></div>
 
         <!-- Hidden letter bank for templates -->
-        <div class="letter-bank">
+        <div class="signature-letter-templates">
           <!-- Uppercase letters -->
-          <div class="p up">
+          <div class="signature-letter-p signature-letter-uppercase">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -739,7 +739,7 @@
               ></path>
             </svg>
           </div>
-          <div class="l up">
+          <div class="signature-letter-l signature-letter-uppercase">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="-25.27 -33.43 58.22 45.72"
@@ -757,7 +757,7 @@
           </div>
 
           <!-- Lowercase letters -->
-          <div class="i lo">
+          <div class="signature-letter-i signature-letter-lowercase">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -771,7 +771,7 @@
               ></path>
             </svg>
           </div>
-          <div class="e lo">
+          <div class="signature-letter-e signature-letter-lowercase">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -784,7 +784,7 @@
               ></path>
             </svg>
           </div>
-          <div class="r lo">
+          <div class="signature-letter-r signature-letter-lowercase">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -797,7 +797,7 @@
               ></path>
             </svg>
           </div>
-          <div class="o lo">
+          <div class="signature-letter-o signature-letter-lowercase">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -810,7 +810,7 @@
               ></path>
             </svg>
           </div>
-          <div class="u lo">
+          <div class="signature-letter-u signature-letter-lowercase">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -823,7 +823,7 @@
               ></path>
             </svg>
           </div>
-          <div class="s lo">
+          <div class="signature-letter-s signature-letter-lowercase">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -841,8 +841,8 @@
     </main>
 
     <footer>
-      <div class="footer-container">
-        <p class="footer-text-left">
+      <div class="footer-meta">
+        <p class="footer-meta-left">
           Designed with
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -862,7 +862,7 @@
           </svg>
           <span class="subtle">by</span> Pierre-Louis
         </p>
-        <p class="footer-text-right">© 2025</p>
+        <p class="footer-meta-right">© 2025</p>
       </div>
     </footer>
     <script defer src="/src/script.js"></script>

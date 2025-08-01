@@ -4,16 +4,16 @@
 //   posts/articles/md/  →  posts/articles/{slug}.html
 //   posts/notes/md/     →  posts/notes/{slug}.html
 //
-// Plug-ins & tweaks added:
-//   • ==highlight==                  → <mark>
-//   • task lists                     → real check-boxes (markdown-it-task-lists)
-//   • footnotes                      → markdown-it-footnote (arrowless backrefs)
-//   • abbreviations                  → markdown-it-abbr
-//   • definition list “= definition” → markdown-it-deflist   (with pre-tweak)
-//   • callout “> [!info] … ”         → custom container  :::info …
-//   • MathJax handled **client-side** via your skeleton’s <script> block
-//   • images: lazy + lightbox        → loading=lazy + onclick
-//   • “image” ending in .mp4/.webm   → <video>
+// Plug-ins & tweaks added (class names updated to article-*):
+//   • ==highlight==                     → <mark>
+//   • task lists                        → <ul class="article-task-list"> etc.
+//   • footnotes                         → article-footnotes*, custom backrefs
+//   • abbreviations                     → markdown-it-abbr
+//   • definition list “= definition”    → markdown-it-deflist (pre-tweak)
+//   • callout “> [!info] … ”            → <div class="article-callout"><div class="article-callout-inner">
+//   • MathJax handled client-side
+//   • images: lazy + lightbox           → loading=lazy + onclick
+//   • “image” ending in .mp4/.webm      → <video>
 // ---------------------------------------------------------------------------
 
 import { readFile, writeFile, readdir, mkdir } from "fs/promises";
@@ -85,20 +85,23 @@ const md = new MarkdownIt({ html: true, breaks: true, linkify: true })
   .use(container, "info", {
     render(tokens, idx) {
       return tokens[idx].nesting === 1
-        ? `<div class="callout" role="note"><div class="callout-inner"><div class="icon" aria-hidden="true">${INFO_ICON}</div><div class="content">\n`
+        ? `<div class="article-callout" role="note"><div class="article-callout-inner"><div class="icon" aria-hidden="true">${INFO_ICON}</div><div class="content">\n`
         : "</div></div></div>\n";
     },
   });
 
-/* -- custom footnote back-reference renderer ----------------------------- */
-md.renderer.rules.footnote_anchor = (tokens, idx, options, env, renderer) => {
-  let id = Number(tokens[idx].meta.id + 1).toString();
+/* -- custom footnote reference & back-reference renderers ---------------- */
+md.renderer.rules.footnote_ref = (tokens, idx) => {
+  const id = String(tokens[idx].meta.id + 1);
+  const sub = tokens[idx].meta.subId;
+  const ref = sub > 0 ? `${id}:${sub}` : id;
+  return `<sup class="article-footnote-ref"><a href="#fn${ref}">${id}</a></sup>`;
+};
 
-  if (tokens[idx].meta.subId > 0) {
-    id += `:${tokens[idx].meta.subId}`;
-  }
-
-  return ` <a href="#fnref${id}" class="footnote-backref">${FOOTNOTE_ICON}</a>`;
+md.renderer.rules.footnote_anchor = (tokens, idx) => {
+  let id = String(tokens[idx].meta.id + 1);
+  if (tokens[idx].meta.subId > 0) id += `:${tokens[idx].meta.subId}`;
+  return ` <a href="#fnref${id}" class="article-footnote-backref">${FOOTNOTE_ICON}</a>`;
 };
 
 /* -- custom renderer: images + mp4/webm ---------------------------------- */
@@ -152,13 +155,29 @@ async function buildDir(srcDir, outDir) {
     }
 
     const rawMd = await readFile(path.join(srcDir, file), "utf8");
-    const rendered = md.render(preprocess(rawMd));
+    let rendered = md.render(preprocess(rawMd));
+
+    /* Normalize plugin-generated classes to article-* ------------------- */
+    rendered = rendered
+      .replace(/class="footnotes"/g, 'class="article-footnotes"')
+      .replace(/class="footnotes-list"/g, 'class="article-footnotes-list"')
+      .replace(/class="footnote-item"/g, 'class="article-footnote-item"')
+      .replace(
+        /class="task-list-item-checkbox"/g,
+        'class="article-task-list-checkbox"'
+      )
+      .replace(/class="task-list-item"/g, 'class="article-task-list-item"')
+      .replace(
+        /class="contains-task-list"/g,
+        'class="article-contains-task-list"'
+      )
+      .replace(/class="task-list"/g, 'class="article-task-list"');
 
     const dateStr = `${monthName(meta.month)} ${meta.day}, ${meta.year}`;
 
     //  — Task-list ULs: no bullets ————————————————————————————————
     const styledTasks = rendered.replace(
-      /<ul class="(task-list|contains-task-list)"/g,
+      /<ul class="(article-task-list|article-contains-task-list)"/g,
       '<ul class="$1" style="list-style:none;margin:0;padding:0;"'
     );
 
@@ -168,7 +187,7 @@ async function buildDir(srcDir, outDir) {
       .replace(/{{TITLE}}/g, title)
       .replace(
         "{{POST_HEADER}}",
-        `<div class="post-meta"><h1>${title}</h1>\n<span class="post-date">${dateStr}</span></div>`
+        `<div class="article-meta-data"><h1>${title}</h1>\n<span class="article-publish-date">${dateStr}</span></div>`
       )
       .replace("{{CONTENT}}", styledTasks);
 

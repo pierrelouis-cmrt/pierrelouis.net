@@ -1,9 +1,9 @@
-/* bookmarksFilter.js — filtering + dynamic borders on /bookmarks/ */
+/* bookmarks.js — filtering + dynamic borders on /bookmarks/ */
 
 (() => {
-  const filters = document.querySelector(".post-filters");
+  const filters = document.querySelector(".timeline-filters");
   const clearBtn = document.getElementById("clear-filter");
-  const timeline = document.getElementById("posts-timeline");
+  const timeline = document.getElementById("content-timeline");
   if (!filters || !timeline) return; // not on this page
 
   /* ensure “no result” node */
@@ -23,7 +23,7 @@
 
   /* ---------------- EVENTS ---------------- */
   filters.addEventListener("click", (e) => {
-    const btn = e.target.closest(".post-filter");
+    const btn = e.target.closest(".timeline-filter");
     if (!btn) return;
 
     activeTag =
@@ -47,28 +47,30 @@
     );
 
     /* 2. show / hide items */
-    timeline.querySelectorAll(".post-item").forEach((it) => {
+    timeline.querySelectorAll(".timeline-item").forEach((it) => {
       it.style.display =
         !activeTag || it.dataset.tag === activeTag ? "" : "none";
     });
 
     /* 3. hide empty months */
-    timeline.querySelectorAll(".timeline-month").forEach((month) => {
+    timeline.querySelectorAll(".content-timeline-month").forEach((month) => {
       const visibleItem = month.querySelector(
-        '.post-item:not([style*="display: none"])'
+        '.timeline-item:not([style*="display: none"])'
       );
       month.style.display = visibleItem ? "" : "none";
     });
 
     /* 4. hide empty years */
     let anyVisible = false;
-    timeline.querySelectorAll(".timeline-header").forEach((yearBlock) => {
-      const visibleMonth = yearBlock.querySelector(
-        '.timeline-month:not([style*="display: none"])'
-      );
-      yearBlock.style.display = visibleMonth ? "" : "none";
-      if (visibleMonth) anyVisible = true;
-    });
+    timeline
+      .querySelectorAll(".content-timeline-header")
+      .forEach((yearBlock) => {
+        const visibleMonth = yearBlock.querySelector(
+          '.content-timeline-month:not([style*="display: none"])'
+        );
+        yearBlock.style.display = visibleMonth ? "" : "none";
+        if (visibleMonth) anyVisible = true;
+      });
 
     /* 5. adjust borders */
     adjustBorders();
@@ -81,17 +83,17 @@
   /* ---------------- BORDERS ---------------- */
   function adjustBorders() {
     /* reset all */
-    timeline.querySelectorAll(".post-item").forEach((it) => {
+    timeline.querySelectorAll(".timeline-item").forEach((it) => {
       it.style.borderBottom = "";
     });
-    timeline.querySelectorAll(".timeline-month").forEach((m) => {
+    timeline.querySelectorAll(".content-timeline-month").forEach((m) => {
       m.style.borderBottom = "";
     });
 
     /* last visible item per month */
-    timeline.querySelectorAll(".timeline-month").forEach((month) => {
+    timeline.querySelectorAll(".content-timeline-month").forEach((month) => {
       if (month.style.display === "none") return;
-      const vis = [...month.querySelectorAll(".post-item")].filter(
+      const vis = [...month.querySelectorAll(".timeline-item")].filter(
         (it) => it.style.display !== "none"
       );
       if (vis.length) {
@@ -100,10 +102,10 @@
     });
 
     /* last visible month per year */
-    timeline.querySelectorAll(".timeline-header").forEach((year) => {
+    timeline.querySelectorAll(".content-timeline-header").forEach((year) => {
       if (year.style.display === "none") return;
       const months = [
-        ...year.querySelectorAll(":scope .timeline-month"),
+        ...year.querySelectorAll(":scope .content-timeline-month"),
       ].filter((m) => m.style.display !== "none");
       if (months.length) {
         months[months.length - 1].style.borderBottom = "none";

@@ -61,9 +61,9 @@
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
 
-    <link rel="preload" href="/src/output-v082.css" as="style" />
+    <link rel="preload" href="/src/output-v088.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v082.css" />
+    <link rel="stylesheet" href="/src/output-v088.css" />
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
@@ -91,13 +91,13 @@
   </head>
 
   <body>
-    <nav class="sticky-nav">
-      <div class="menu-container">
-        <div class="nav-left">
-          <a class="home-button" href="/">Pierre-Louis</a>
-          <div class="nav-links"></div>
+    <nav class="site-navigation">
+      <div class="navigation-container">
+        <div class="navigation-left">
+          <a class="navigation-brand" href="/">Pierre-Louis</a>
+          <div class="navigation-links"></div>
         </div>
-        <div class="nav-right">
+        <div class="navigation-right">
           <div
             x-data="{ 
               commandOpen: false,
@@ -629,19 +629,22 @@
     </nav>
 
     <header class="animate-on-scroll">
-      <div class="homepage-header">
-        <div class="avatar-container">
+      <div class="hero-section">
+        <div class="hero-avatar-wrapper">
           <img
-            class="avatar"
+            class="hero-avatar"
             src="src/assets/avatar_small.webp"
             loading="eager"
             alt="Avatar"
             title="That's me!"
           />
         </div>
-        <h1 class="homepage">
+        <h1 class="hero-title">
           Chasing theorems by day,<br />
-          <span class="header-em italic">designing experiences</span> by night
+          <span class="hero-title-accent text-italic"
+            >designing experiences</span
+          >
+          by night
         </h1>
 
         <p>
@@ -649,8 +652,8 @@
           <a href="https://www.ec-lyon.fr/" target="_blank">Centrale Lyon</a>
           and designing websites by passion in my free time.
         </p>
-        <p class="links">
-          <a class="inline-icon" href="/about"
+        <p class="hero-links">
+          <a class="link-with-icon" href="/about"
             >More About Me<svg
               xmlns="http://www.w3.org/2000/svg"
               height="1em"
@@ -667,7 +670,7 @@
               <path d="M7 7h10v10" />
               <path d="M7 17 17 7" /></svg
           ></a>
-          <a class="inline-icon" href="/now"
+          <a class="link-with-icon" href="/now"
             >What I've Been Upto<svg
               xmlns="http://www.w3.org/2000/svg"
               height="1em"
@@ -689,15 +692,15 @@
     </header>
     <main>
       <section id="work" class="animate-on-scroll">
-        <h2 class="section-title italic">Featured Projects</h2>
-        <div class="project-block">
+        <h2 class="section-heading text-italic">Featured Projects</h2>
+        <div class="projects-grid">
           <a
             title="View project"
-            class="project-item"
+            class="project-card"
             href="/flashcards/"
             target="_blank"
           >
-            <div class="project-icon">
+            <div class="project-card-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -714,8 +717,8 @@
                 />
               </svg>
             </div>
-            <div class="project-item-box">
-              <h4 class="project-title">
+            <div class="project-card-content">
+              <h4 class="project-card-title">
                 Flashcards Web Tool<svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="1.2em"
@@ -733,7 +736,7 @@
                   <path d="m12 5 7 7-7 7" />
                 </svg>
               </h4>
-              <p class="project-description">
+              <p class="project-card-description">
                 My solution to flashcard frustration: Anki to reMarkable
                 optimized PDF converter with LaTeX support.
               </p>
@@ -741,11 +744,11 @@
           </a>
           <a
             title="View project"
-            class="project-item"
+            class="project-card"
             href="/capecl/"
             target="_blank"
           >
-            <div class="project-icon">
+            <div class="project-card-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -760,8 +763,8 @@
                 <path d="M10 12h4" />
               </svg>
             </div>
-            <div class="project-item-box">
-              <h4 class="project-title">
+            <div class="project-card-content">
+              <h4 class="project-card-title">
                 CapECL Archive and Resources<svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="1.2em"
@@ -779,7 +782,7 @@
                   <path d="m12 5 7 7-7 7" />
                 </svg>
               </h4>
-              <p class="project-description">
+              <p class="project-card-description">
                 One-click access to organized exam archives and useful
                 resources.
               </p>
@@ -787,11 +790,11 @@
           </a>
           <a
             title="View project"
-            class="project-item"
+            class="project-card"
             href="/ODG/"
             target="_blank"
           >
-            <div class="project-icon">
+            <div class="project-card-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -809,8 +812,8 @@
                 <rect width="8" height="4" x="10" y="6" rx="1" />
               </svg>
             </div>
-            <div class="project-item-box">
-              <h4 class="project-title">
+            <div class="project-card-content">
+              <h4 class="project-card-title">
                 Wind Energy Digital Magazine
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -829,14 +832,14 @@
                   <path d="m12 5 7 7-7 7" />
                 </svg>
               </h4>
-              <p class="project-description">
+              <p class="project-card-description">
                 Interactive magazine on French wind energy with custom
                 calculators to visualize concepts.
               </p>
             </div>
           </a>
-          <div class="project-button">
-            <a class="inline-icon project-link" href="/projects"
+          <div class="projects-view-all">
+            <a class="link-with-icon projects-view-all-link" href="/projects"
               >All my projects<svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="1em"
@@ -857,14 +860,14 @@
         </div>
       </section>
       <section id="blog" class="animate-on-scroll">
-        <h2 class="section-title italic">Latest Posts</h2>
+        <h2 class="section-heading text-italic">Latest Posts</h2>
 
-        <div class="post__block" id="latest-posts">
+        <div class="posts-grid" id="latest-posts">
           <!-- AUTO-GEN:LATEST START -->
 
-    <div class="post__item">
-      <a class="inline-icon post__link" href="/posts/notes/coming-soon.html" rel="noopener noreferrer">
-        <div class="post-title">
+    <div class="post-card">
+      <a class="link-with-icon post-card-link" href="/posts/notes/coming-soon.html" rel="noopener noreferrer">
+        <div class="post-card-title">
           
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
          fill="none" stroke="currentColor" stroke-width="2"
@@ -874,13 +877,13 @@
     </svg>
           <span class="link-text">Coming Soon</span>
         </div>
-        <div class="post__separator"></div>
-        <div class="post__date">Jul 2025</div>
+        <div class="post-card-separator"></div>
+        <div class="post-card-date">Jul 2025</div>
       </a>
     </div>
-    <div class="post__item">
-      <a class="inline-icon post__link" href="/posts/articles/coming-soon.html" rel="noopener noreferrer">
-        <div class="post-title">
+    <div class="post-card">
+      <a class="link-with-icon post-card-link" href="/posts/articles/coming-soon.html" rel="noopener noreferrer">
+        <div class="post-card-title">
           
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
          fill="none" stroke="currentColor" stroke-width="2"
@@ -891,15 +894,15 @@
     </svg>
           <span class="link-text">Coming Soon</span>
         </div>
-        <div class="post__separator"></div>
-        <div class="post__date">Jul 2025</div>
+        <div class="post-card-separator"></div>
+        <div class="post-card-date">Jul 2025</div>
       </a>
     </div>
-    <div class="post__item">
-      <a class="inline-icon post__link" href="/posts/articles/coming-soon.html" rel="noopener noreferrer">
-        <div class="post-title">
+    <div class="post-card">
+      <a class="link-with-icon post-card-link" href="/posts/articles/coming-soon.html" rel="noopener noreferrer">
+        <div class="post-card-title">
           
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
          fill="none" stroke="currentColor" stroke-width="2" 
          stroke-linecap="round" stroke-linejoin="round">
       <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/>
@@ -908,15 +911,15 @@
     </svg>
           <span class="link-text">Coming Soon</span>
         </div>
-        <div class="post__separator"></div>
-        <div class="post__date">Jul 2025</div>
+        <div class="post-card-separator"></div>
+        <div class="post-card-date">Jul 2025</div>
       </a>
     </div>
 <!-- AUTO-GEN:LATEST END -->
         </div>
 
-        <div class="project-button">
-          <a class="inline-icon project-link" href="/posts"
+        <div class="projects-view-all">
+          <a class="link-with-icon projects-view-all-link" href="/posts"
             >All posts<svg
               xmlns="http://www.w3.org/2000/svg"
               height="1em"
@@ -936,15 +939,17 @@
         </div>
       </section>
       <section id="connect" class="animate-on-scroll">
-        <h2 class="section-title italic">Connect</h2>
-        <div class="now-playing">
-          <div class="music-container">
-            <div class="music"><p>Music</p></div>
-            <div class="info">
-              <p class="title">Nothing right now</p>
-              <p class="artist">I'm not currently listening to any music</p>
+        <h2 class="section-heading text-italic">Connect</h2>
+        <div class="music-widget">
+          <div class="music-player">
+            <div class="music-player-label"><p>Music</p></div>
+            <div class="music-player-info">
+              <p class="music-track-title">Nothing right now</p>
+              <p class="music-track-artist">
+                I'm not currently listening to any music
+              </p>
             </div>
-            <div class="cover">
+            <div class="music-album-cover">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="50"
@@ -976,29 +981,29 @@
                 />
               </svg>
             </div>
-            <div class="status">
-              <div class="equalizer">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
+            <div class="music-player-status">
+              <div class="music-equalizer">
+                <span class="music-equalizer-bar"></span>
+                <span class="music-equalizer-bar"></span>
+                <span class="music-equalizer-bar"></span>
+                <span class="music-equalizer-bar"></span>
+                <span class="music-equalizer-bar"></span>
               </div>
             </div>
           </div>
         </div>
         <!--Component highly inspired by https://www.harshsingh.me/, he also made all the assets used here-->
-        <div class="where">
-          <div class="map-container">
-            <div class="map"><p>Map</p></div>
-            <div class="location">
+        <div class="location-widget">
+          <div class="location-display">
+            <div class="location-display-label"><p>Map</p></div>
+            <div class="location-map">
               <img
                 src="/src/assets/map/tinywow_cloud_small_82919920.webp"
                 width="390"
                 height="347"
                 alt="Cloud"
                 draggable="false"
-                class="cloud-image"
+                class="location-map-cloud"
               />
               <img
                 src="/src/assets/map/plane.webp"
@@ -1006,7 +1011,7 @@
                 height="56"
                 alt="Plane"
                 draggable="false"
-                class="plane-image"
+                class="location-map-plane"
               />
               <img
                 src="/src/assets/map/plane-shadow.webp"
@@ -1014,7 +1019,7 @@
                 height="24"
                 alt="Plane Shadow"
                 draggable="false"
-                class="plane-shadow-image"
+                class="location-map-plane-shadow"
               />
               <img
                 width="100%"
@@ -1022,18 +1027,18 @@
                 alt="Map with marker south of Saint-Etienne, France"
                 loading="eager"
                 draggable="false"
-                class="map-image"
+                class="location-map-image"
               />
               <a
                 href="https://en.wikipedia.org/wiki/Saint-%C3%89tienne"
                 target="_blank"
                 rel="noreferrer"
-                class="location-link"
+                class="location-map-link"
                 >Saint-Etienne, France</a
               >
               <div aria-hidden="true">
-                <div class="marker-dot"></div>
-                <div class="marker-ring"></div>
+                <div class="location-map-marker-dot"></div>
+                <div class="location-map-marker-ring"></div>
               </div>
             </div>
           </div>
@@ -1042,15 +1047,18 @@
     </main>
 
     <footer>
-      <div class="links">
+      <div class="hero-links">
         <p>
-          <span class="tooltip-container" data-email="contact@pierrelouis.net">
+          <span
+            class="email-tooltip-wrapper"
+            data-email="contact@pierrelouis.net"
+          >
             <a
-              class="email inline-icon"
+              class="email-link link-with-icon"
               href="mailto:contact@pierrelouis.net"
               aria-label="Email contact@pierrelouis.net"
             >
-              <span class="email-text">Email</span>
+              <span class="email-link-text">Email</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="14"
@@ -1068,12 +1076,12 @@
                 />
               </svg>
             </a>
-            <span class="tooltip"
+            <span class="email-tooltip"
               >Copy <i style="opacity: 0.75">contact@pierrelouis.net</i></span
             >
           </span>
 
-          <a class="inline-icon" rel="noopener" href="/links"
+          <a class="link-with-icon" rel="noopener" href="/links"
             >Links<svg
               xmlns="http://www.w3.org/2000/svg"
               height="1em"
@@ -1090,7 +1098,7 @@
               <path d="M7 7h10v10" />
               <path d="M7 17 17 7" /></svg
           ></a>
-          <a class="inline-icon" rel="noopener" href="/colophon"
+          <a class="link-with-icon" rel="noopener" href="/colophon"
             >Colophon<svg
               xmlns="http://www.w3.org/2000/svg"
               height="1em"
@@ -1108,12 +1116,12 @@
               <path d="M7 17 17 7" /></svg
           ></a>
         </p>
-        <div class="mini-avatar">
-          <div class="avatar" id="avatar"></div>
+        <div class="footer-avatar-wrapper">
+          <div class="hero-avatar" id="avatar"></div>
         </div>
       </div>
-      <div class="footer-container">
-        <p class="footer-text-left">
+      <div class="footer-meta">
+        <p class="footer-meta-left">
           Made with
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -1133,7 +1141,7 @@
           </svg>
           <span class="subtle">by</span> Pierre-Louis
         </p>
-        <p class="footer-text-right"></p>
+        <p class="footer-meta-right"></p>
       </div>
     </footer>
 
@@ -1141,7 +1149,7 @@
       fetch(window.location.href).then((response) => {
         const lastModified = response.headers.get("Last-Modified");
         if (lastModified) {
-          const footerText = document.querySelector(".footer-text-right");
+          const footerText = document.querySelector(".footer-meta-right");
           footerText.textContent = `Updated ${new Date(
             lastModified
           ).toLocaleDateString("en-US", {

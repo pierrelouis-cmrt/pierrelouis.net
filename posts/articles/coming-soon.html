@@ -59,9 +59,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v082.css" as="style" />
+    <link rel="preload" href="/src/output-v088.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v082.css" />
+    <link rel="stylesheet" href="/src/output-v088.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -112,10 +112,10 @@
   </head>
 
   <body>
-    <nav class="sticky-nav">
-      <div class="menu-container">
-        <div class="nav-left">
-          <a class="home-button" href="/posts/"
+    <nav class="site-navigation">
+      <div class="navigation-container">
+        <div class="navigation-left">
+          <a class="navigation-brand" href="/posts/"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -134,9 +134,9 @@
             </svg>
             Back to all posts</a
           >
-          <div class="nav-links"></div>
+          <div class="navigation-links"></div>
         </div>
-        <div class="nav-right">
+        <div class="navigation-right">
           <div
             x-data="{ 
               commandOpen: false,
@@ -668,14 +668,14 @@
     </nav>
 
     <main>
-      <article><div class="post-meta"><h1>Coming Soon</h1>
-<span class="post-date">July 22, 2025</span></div> <p>Coming Soon.</p>
+      <article><div class="article-meta-data"><h1>Coming Soon</h1>
+<span class="article-publish-date">July 22, 2025</span></div> <p>Coming Soon.</p>
 </article>
     </main>
 
     <footer>
-      <div class="footer-container">
-        <p class="footer-text-left">
+      <div class="footer-meta">
+        <p class="footer-meta-left">
           Designed with
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -695,14 +695,14 @@
           </svg>
           <span class="subtle">by</span> Pierre-Louis
         </p>
-        <p class="footer-text-right">© 2025</p>
+        <p class="footer-meta-right">© 2025</p>
       </div>
     </footer>
 
     <!-- Image lightbox -->
-    <div id="lightbox" class="lightbox">
-      <span class="lightbox-close" onclick="closeLightbox()">×</span>
-      <img id="lightbox-img" class="lightbox-content" loading="lazy" />
+    <div id="lightbox" class="image-lightbox">
+      <span class="image-lightbox-close" onclick="closeLightbox()">×</span>
+      <img id="lightbox-img" class="image-lightbox-content" loading="lazy" />
     </div>
 
     <!-- Prism.js for syntax highlighting -->

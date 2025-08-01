@@ -27,26 +27,26 @@ const paginationEl = document.querySelector(".swiper-pagination");
 
 function createSimplePagination() {
   paginationEl.innerHTML = `
-    <div class="dots-viewport">
-      <div class="dots-container"></div>
+    <div class="pagination-viewport">
+      <div class="pagination-container"></div>
     </div>
   `;
 
-  const dotsContainer = paginationEl.querySelector(".dots-container");
+  const dotsContainer = paginationEl.querySelector(".pagination-container");
 
   // Create exactly totalSlides dots
   for (let i = 0; i < totalSlides; i++) {
     const dot = document.createElement("div");
-    dot.className = "pagination-dot";
+    dot.className = "pagination-indicator";
     dot.addEventListener("click", () => swiper.slideToLoop(i));
     dotsContainer.appendChild(dot);
   }
 }
 
 function updateSimplePagination(activeIndex) {
-  const dotsContainer = paginationEl.querySelector(".dots-container");
-  const dots = dotsContainer.querySelectorAll(".pagination-dot");
-  const viewport = paginationEl.querySelector(".dots-viewport");
+  const dotsContainer = paginationEl.querySelector(".pagination-container");
+  const dots = dotsContainer.querySelectorAll(".pagination-indicator");
+  const viewport = paginationEl.querySelector(".pagination-viewport");
 
   // Calculate position to center active dot in viewport
   const dotSpacing = 24; // 8px + 16px gap
@@ -60,7 +60,7 @@ function updateSimplePagination(activeIndex) {
 
   // Update active states
   dots.forEach((dot, index) => {
-    dot.className = "pagination-dot";
+    dot.className = "pagination-indicator";
 
     if (index === activeIndex) {
       dot.classList.add("active");

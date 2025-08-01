@@ -59,8 +59,8 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v082.css" as="style" />
-    <link rel="stylesheet" href="/src/output-v082.css" />
+    <link rel="preload" href="/src/output-v088.css" as="style" />
+    <link rel="stylesheet" href="/src/output-v088.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -89,10 +89,10 @@
   </head>
 
   <body>
-    <nav class="sticky-nav">
-      <div class="menu-container">
-        <div class="nav-left">
-          <a class="home-button" href="/"
+    <nav class="site-navigation">
+      <div class="navigation-container">
+        <div class="navigation-left">
+          <a class="navigation-brand" href="/"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -111,9 +111,9 @@
             </svg>
             Back Home</a
           >
-          <div class="nav-links"></div>
+          <div class="navigation-links"></div>
         </div>
-        <div class="nav-right">
+        <div class="navigation-right">
           <div
             x-data="{ 
               commandOpen: false,
@@ -645,8 +645,8 @@
     </nav>
 
     <main>
-      <h2 class="section-title">What am I up to atm?</h2>
-      <hr class="divider3" />
+      <h2 class="section-heading">What am I up to atm?</h2>
+      <hr class="divider-standard" />
 
       <div class="swiper">
         <div class="swiper-wrapper">
@@ -704,49 +704,49 @@
       </div>
 
       <div class="animate-on-scroll">
-        <p class="p-now-page">
+        <p class="now-status-item">
           Currently studying engineering at Centrale Lyon
         </p>
-        <hr class="divider2" />
+        <hr class="divider-thin" />
 
-        <p class="p-now-page">
+        <p class="now-status-item">
           Living in Saint-Étienne (France), UNESCO Creative City of Design
         </p>
-        <hr class="divider2" />
+        <hr class="divider-thin" />
 
-        <p class="p-now-page">Designing websites in my free time</p>
-        <hr class="divider2" />
+        <p class="now-status-item">Designing websites in my free time</p>
+        <hr class="divider-thin" />
 
-        <p class="p-now-page">Listening to pop music on repeat</p>
+        <p class="now-status-item">Listening to pop music on repeat</p>
 
-        <hr class="divider2" />
+        <hr class="divider-thin" />
 
-        <p class="p-now-page">
+        <p class="now-status-item">
           Learning more about AI everyday, it's kinda becoming my whole
           personality lol
         </p>
-        <hr class="divider2" />
+        <hr class="divider-thin" />
 
-        <p class="p-now-page">Keeping up with tech news</p>
-        <hr class="divider2" />
+        <p class="now-status-item">Keeping up with tech news</p>
+        <hr class="divider-thin" />
 
-        <p class="p-now-page">
+        <p class="now-status-item">
           Gaming occasionally when my free time is free-timing
         </p>
-        <hr class="divider2" />
+        <hr class="divider-thin" />
 
-        <p class="p-now-page">
+        <p class="now-status-item">
           Logging every movie I watch on Letterboxd like it's serious business
         </p>
-        <hr class="divider2" />
+        <hr class="divider-thin" />
 
-        <p class="p-now-page">Slightly obsessed with my Last.fm stats</p>
+        <p class="now-status-item">Slightly obsessed with my Last.fm stats</p>
       </div>
     </main>
 
     <footer>
-      <div class="footer-container">
-        <p class="footer-text-left">
+      <div class="footer-meta">
+        <p class="footer-meta-left">
           Designed with
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -766,7 +766,7 @@
           </svg>
           <span class="subtle">by</span> Pierre-Louis
         </p>
-        <p class="footer-text-right">© 2025</p>
+        <p class="footer-meta-right">© 2025</p>
       </div>
     </footer>
 
