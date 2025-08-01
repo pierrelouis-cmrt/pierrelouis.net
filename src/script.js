@@ -273,6 +273,7 @@ let nPrefix = false;
 let nPrefixTimeout;
 document.addEventListener("keydown", (e) => {
   const key = e.key.toLowerCase();
+
   if (nPrefix) {
     const active = document.activeElement.tagName;
     if (
@@ -287,7 +288,8 @@ document.addEventListener("keydown", (e) => {
       }
       e.preventDefault();
       if (key === "t") {
-        if (window.Alpine) Alpine.store("theme").toggle();
+        // Reuse Alpine's click path so UI updates everywhere
+        document.querySelector("button.theme-toggle")?.click();
       } else {
         const target = window.SHORTCUT_MAP[key];
         if (target) window.location.href = target;
@@ -300,8 +302,6 @@ document.addEventListener("keydown", (e) => {
   if (!e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey && key === "n") {
     nPrefix = true;
     clearTimeout(nPrefixTimeout);
-    nPrefixTimeout = setTimeout(() => {
-      nPrefix = false;
-    }, 1000);
+    nPrefixTimeout = setTimeout(() => (nPrefix = false), 1000);
   }
 });
