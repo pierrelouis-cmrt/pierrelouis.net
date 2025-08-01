@@ -15,10 +15,10 @@ const REQUEST_TIMEOUT_MS = 8000; // hard timeout per request
 const PROXY_BASE = "/api"; // adjust if your API lives elsewhere
 
 /** ===== DOM ===== */
-const titleEl = document.querySelector(".now-playing .title");
-const artistEl = document.querySelector(".now-playing .artist");
-const coverEl = document.querySelector(".now-playing .cover");
-const statusEl = document.querySelector(".now-playing .status");
+const titleEl = document.querySelector(".music-widget .music-track-title");
+const artistEl = document.querySelector(".music-widget .music-track-artist");
+const coverEl = document.querySelector(".music-widget .music-album-cover");
+const statusEl = document.querySelector(".music-widget .music-player-status");
 const defaultCoverSvg = coverEl?.innerHTML ?? "";
 
 /** ===== State ===== */

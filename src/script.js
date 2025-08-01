@@ -232,8 +232,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Lightweight lightbox helpers for the projects page
 function openLightbox(src) {
-  const img = document.getElementById("lightbox-img");
-  const box = document.getElementById("lightbox");
+  const img = document.getElementById("image-lightbox-content");
+  const box = document.getElementById("image-lightbox");
   if (!img || !box) return;
   img.src = src;
   box.style.display = "flex";
@@ -241,14 +241,14 @@ function openLightbox(src) {
 }
 
 function closeLightbox() {
-  const box = document.getElementById("lightbox");
+  const box = document.getElementById("image-lightbox");
   if (!box) return;
   box.style.display = "none";
   document.body.style.overflow = "auto";
 }
 
 window.addEventListener("click", (e) => {
-  const box = document.getElementById("lightbox");
+  const box = document.getElementById("image-lightbox");
   if (box && e.target === box) {
     closeLightbox();
   }

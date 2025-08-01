@@ -1,12 +1,19 @@
 /* bookmarks.js — filtering + dynamic borders on /bookmarks/ */
 
 (() => {
-  const filters = document.querySelector(".timeline-filters");
-  const clearBtn = document.getElementById("clear-filter");
-  const timeline = document.getElementById("content-timeline");
-  if (!filters || !timeline) return; // not on this page
+  const filters =
+    document.querySelector(".timeline-filters") ||
+    document.querySelector(".post-filters");
 
-  /* ensure “no result” node */
+  const clearBtn = document.getElementById("clear-filter");
+
+  const timeline =
+    document.getElementById("content-timeline") ||
+    document.getElementById("posts-timeline") ||
+    document.querySelector(".content-timeline");
+
+  if (!filters || !timeline) return;
+
   let noResultMsg = document.getElementById("no-result");
   if (!noResultMsg) {
     noResultMsg = Object.assign(document.createElement("p"), {
@@ -21,9 +28,8 @@
 
   let activeTag = "";
 
-  /* ---------------- EVENTS ---------------- */
   filters.addEventListener("click", (e) => {
-    const btn = e.target.closest(".timeline-filter");
+    const btn = e.target.closest(".timeline-filter, .post-filter");
     if (!btn) return;
 
     activeTag =
@@ -39,59 +45,54 @@
     applyFilter();
   });
 
-  /* ---------------- CORE ---------------- */
   function applyFilter() {
-    /* 1. button highlight */
-    [...filters.children].forEach((btn) =>
-      btn.classList.toggle("active", btn.dataset.tag === activeTag)
-    );
+    filters
+      .querySelectorAll(".timeline-filter, .post-filter")
+      .forEach((btn) =>
+        btn.classList.toggle("active", btn.dataset.tag === activeTag)
+      );
 
-    /* 2. show / hide items */
     timeline.querySelectorAll(".timeline-item").forEach((it) => {
       it.style.display =
         !activeTag || it.dataset.tag === activeTag ? "" : "none";
     });
 
-    /* 3. hide empty months */
-    timeline.querySelectorAll(".content-timeline-month").forEach((month) => {
+    const monthSel = ".content-timeline-month, .timeline-month";
+    timeline.querySelectorAll(monthSel).forEach((month) => {
       const visibleItem = month.querySelector(
         '.timeline-item:not([style*="display: none"])'
       );
       month.style.display = visibleItem ? "" : "none";
     });
 
-    /* 4. hide empty years */
+    const yearSel = ".content-timeline-header, .timeline-header";
     let anyVisible = false;
-    timeline
-      .querySelectorAll(".content-timeline-header")
-      .forEach((yearBlock) => {
-        const visibleMonth = yearBlock.querySelector(
-          '.content-timeline-month:not([style*="display: none"])'
-        );
-        yearBlock.style.display = visibleMonth ? "" : "none";
-        if (visibleMonth) anyVisible = true;
-      });
+    timeline.querySelectorAll(yearSel).forEach((yearBlock) => {
+      const visibleMonth = yearBlock.querySelector(
+        `${monthSel}:not([style*="display: none"])`
+      );
+      yearBlock.style.display = visibleMonth ? "" : "none";
+      if (visibleMonth) anyVisible = true;
+    });
 
-    /* 5. adjust borders */
     adjustBorders();
 
-    /* 6. aux UI */
     noResultMsg.style.display = anyVisible ? "none" : "";
     if (clearBtn) clearBtn.style.display = activeTag ? "" : "none";
   }
 
-  /* ---------------- BORDERS ---------------- */
   function adjustBorders() {
-    /* reset all */
+    const monthSel = ".content-timeline-month, .timeline-month";
+    const yearSel = ".content-timeline-header, .timeline-header";
+
     timeline.querySelectorAll(".timeline-item").forEach((it) => {
       it.style.borderBottom = "";
     });
-    timeline.querySelectorAll(".content-timeline-month").forEach((m) => {
+    timeline.querySelectorAll(monthSel).forEach((m) => {
       m.style.borderBottom = "";
     });
 
-    /* last visible item per month */
-    timeline.querySelectorAll(".content-timeline-month").forEach((month) => {
+    timeline.querySelectorAll(monthSel).forEach((month) => {
       if (month.style.display === "none") return;
       const vis = [...month.querySelectorAll(".timeline-item")].filter(
         (it) => it.style.display !== "none"
@@ -101,18 +102,16 @@
       }
     });
 
-    /* last visible month per year */
-    timeline.querySelectorAll(".content-timeline-header").forEach((year) => {
+    timeline.querySelectorAll(yearSel).forEach((year) => {
       if (year.style.display === "none") return;
-      const months = [
-        ...year.querySelectorAll(":scope .content-timeline-month"),
-      ].filter((m) => m.style.display !== "none");
+      const months = [...year.querySelectorAll(`:scope ${monthSel}`)].filter(
+        (m) => m.style.display !== "none"
+      );
       if (months.length) {
         months[months.length - 1].style.borderBottom = "none";
       }
     });
   }
 
-  /* initial pass */
   applyFilter();
 })();

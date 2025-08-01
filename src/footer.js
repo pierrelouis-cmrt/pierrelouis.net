@@ -1,10 +1,12 @@
 // Copy email to clipboard + keep link crawlable
 document.addEventListener("DOMContentLoaded", () => {
-  const tooltipContainer = document.querySelector(".tooltip-container");
+  const tooltipContainer = document.querySelector(".email-tooltip-wrapper");
 
   if (tooltipContainer) {
-    const tooltip = tooltipContainer.querySelector(".tooltip");
-    const emailLink = tooltipContainer.querySelector("a.email.inline-icon");
+    const tooltip = tooltipContainer.querySelector(".email-tooltip");
+    const emailLink = tooltipContainer.querySelector(
+      "a.email-link.link-with-icon"
+    );
 
     // Use the href as the single source of truth (crawlable)
     const emailFromHref = (emailLink?.getAttribute("href") || "").replace(
@@ -79,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((response) => {
       const lastModified = response.headers.get("Last-Modified");
       if (lastModified) {
-        const footerText = document.querySelector(".footer-text-right");
+        const footerText = document.querySelector(".footer-meta-right");
         if (footerText) {
           footerText.textContent = `Updated ${new Date(
             lastModified
