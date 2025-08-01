@@ -1,8 +1,9 @@
 // scripts/buildMdPages.js
 // ---------------------------------------------------------------------------
 // Converts *.md inside:
-//   posts/articles/md/  →  posts/articles/{slug}.html
-//   posts/notes/md/     →  posts/notes/{slug}.html
+//   posts/articles/md/     →  posts/articles/{slug}.html
+//   posts/notes/md/        →  posts/notes/{slug}.html
+//   posts/experiments/md/  →  posts/experiments/{slug}.html
 //
 // Plug-ins & tweaks added (class names updated to article-*):
 //   • ==highlight==                     → <mark>
@@ -36,8 +37,11 @@ const root = path.join(__dirname, "..");
 const JSON_PATH = path.join(root, "posts", "posts.json");
 const ARTICLES_MD_DIR = path.join(root, "posts", "articles", "md");
 const NOTES_MD_DIR = path.join(root, "posts", "notes", "md");
+const EXPERIMENTS_MD_DIR = path.join(root, "posts", "experiments", "md");
+
 const ARTICLES_OUT_DIR = path.join(root, "posts", "articles");
 const NOTES_OUT_DIR = path.join(root, "posts", "notes");
+const EXPERIMENTS_OUT_DIR = path.join(root, "posts", "experiments");
 
 /* ---------- helpers ------------------------------------------------------ */
 const slugify = (t) =>
@@ -199,5 +203,6 @@ async function buildDir(srcDir, outDir) {
 
 await buildDir(ARTICLES_MD_DIR, ARTICLES_OUT_DIR);
 await buildDir(NOTES_MD_DIR, NOTES_OUT_DIR);
+await buildDir(EXPERIMENTS_MD_DIR, EXPERIMENTS_OUT_DIR);
 
 console.log("✔  buildMdPages complete");

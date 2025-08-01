@@ -178,8 +178,16 @@ function replaceBlock(html, tag, content) {
   /* 1. Load JSON ----------------------------------------------------------- */
   const raw = await readFile(JSON_PATH, "utf8");
   const items = JSON.parse(raw);
+
+  // Route links by tag → directory
+  const DIR_BY_TAG = {
+    Notes: "notes",
+    Articles: "articles",
+    Experiments: "experiments",
+  };
+
   for (const p of items) {
-    const dir = p.tag === "Notes" ? "notes" : "articles";
+    const dir = DIR_BY_TAG[p.tag] || "articles";
     p.link = `/posts/${dir}/${slugify(p.title)}.html`;
   }
 

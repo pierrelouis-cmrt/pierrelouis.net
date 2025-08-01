@@ -23,6 +23,9 @@ document.addEventListener("alpine:init", () => {
             this.applySystemTheme();
           }
         });
+
+      // Initial sync (safe even if iframes not loaded)
+      syncIframeTheme(this.mode);
     },
 
     toggle() {
@@ -39,18 +42,21 @@ document.addEventListener("alpine:init", () => {
       document.documentElement.classList.add("dark");
       localStorage.setItem("theme", "dark");
       this.mode = "dark";
+      syncIframeTheme("dark");
     },
 
     light() {
       document.documentElement.classList.remove("dark");
       localStorage.setItem("theme", "light");
       this.mode = "light";
+      syncIframeTheme("light");
     },
 
     system() {
       localStorage.removeItem("theme");
       this.mode = "system";
       this.applySystemTheme();
+      syncIframeTheme("system");
     },
 
     applySystemTheme() {
@@ -60,6 +66,53 @@ document.addEventListener("alpine:init", () => {
         document.documentElement.classList.remove("dark");
       }
     },
+  });
+});
+
+// Updated theme syncing function using classes for multiple iframes
+// This creatively syncs by adding/removing 'dark' and 'light' classes to each iframe's documentElement.
+// Assumes iframes have CSS with .dark for dark vars, and @media with :root:not(.light) for system dark.
+// Supports multiple iframes, forces themes correctly, and preserves standalone system support.
+// Added smooth transition on class change for a creative touch.
+function syncIframeTheme(mode) {
+  const iframes = document.querySelectorAll("iframe.article-embed");
+  iframes.forEach((iframe) => {
+    // Wait for load if not ready
+    if (!iframe.contentWindow) {
+      iframe.addEventListener("load", () => syncSingleIframe(iframe, mode));
+      return;
+    }
+    syncSingleIframe(iframe, mode);
+  });
+}
+
+function syncSingleIframe(iframe, mode) {
+  const html = iframe.contentWindow.document.documentElement;
+
+  // Remove both classes first
+  html.classList.remove("dark", "light");
+
+  // Apply based on mode
+  if (mode === "dark") {
+    html.classList.add("dark");
+  } else if (mode === "light") {
+    html.classList.add("light");
+  } // For 'system', no classes - let iframe's media query handle
+
+  // Creative addition: Smooth transition on theme change
+  const body = iframe.contentWindow.document.body;
+  body.style.transition = "background-color 0.3s ease, color 0.3s ease";
+  setTimeout(() => {
+    body.style.transition = "";
+  }, 300);
+}
+
+// Ensure sync on each iframe load (if theme set before load)
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("iframe.article-embed").forEach((iframe) => {
+    iframe.addEventListener("load", () => {
+      syncIframeTheme(Alpine.store("theme").mode);
+    });
   });
 });
 

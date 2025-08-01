@@ -15,6 +15,10 @@
   box-sizing: border-box;
 }
 
+[x-cloak] {
+  display: none;
+}
+
 :root {
   /* Colors */
   --bg-primary: rgba(250, 249, 249, 1);
@@ -2333,7 +2337,7 @@ article .article-meta-data h1 {
 }
 
 article .article-publish-date {
-  padding-bottom: 0.4rem;
+  padding-bottom: 0.5rem;
   white-space: nowrap;
 }
 
@@ -2714,6 +2718,17 @@ article img {
 
 article img:hover {
   opacity: 0.9;
+}
+
+/* HTML page embed */
+
+.avatar-embed {
+  max-width: 600px;
+  width: 100%;
+  height: 550px;
+  border: none;
+  border-radius: var(--radius-lg);
+  display: block;
 }
 
 /* Lightbox */
@@ -3114,6 +3129,9 @@ li.article-task-list-item::marker {
 @media (max-width: 600px) {
   .social-platform-handle {
     display: none;
+  }
+  .avatar-embed {
+    height: 750px;
   }
 }
 

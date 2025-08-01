@@ -1,27 +1,10 @@
 [
   {
     "year": 2025,
-    "month": "Jul",
-    "day": 22,
-    "title": "Coming Soon",
-    "description": "Coming Soon",
-    "tag": "Notes"
-  },
-  {
-    "year": 2025,
-    "month": "Jul",
-    "day": 22,
-    "title": "Coming Soon",
-    "description": "Coming Soon",
-    "image": "",
-    "tag": "Articles"
-  },
-  {
-    "year": 2025,
-    "month": "Jul",
-    "day": 22,
-    "title": "Coming Soon",
-    "description": "Coming Soon",
+    "month": "Aug",
+    "day": 1,
+    "title": "Animated Avatar",
+    "description": "Bringing life to a simple design element with CSS animations.",
     "image": "",
     "tag": "Experiments"
   }
