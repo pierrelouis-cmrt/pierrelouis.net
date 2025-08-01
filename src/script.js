@@ -268,40 +268,80 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-// Handle "n" prefix navigation shortcuts
-let nPrefix = false;
-let nPrefixTimeout;
-document.addEventListener("keydown", (e) => {
-  const key = e.key.toLowerCase();
+// Hold-N multi-chord shortcuts: while N is held, press keys to trigger actions.
+// Example: hold N, then press H/A/P/... to navigate; press T multiple times to toggle theme.
+(() => {
+  let nHeld = false;
+  let inactivityTimer = null;
+  const INACTIVITY_MS = 1500;
 
-  if (nPrefix) {
-    const active = document.activeElement.tagName;
-    if (
-      !e.ctrlKey &&
-      !e.metaKey &&
-      !e.altKey &&
-      (window.SHORTCUT_MAP[key] || key === "t")
-    ) {
-      if (["INPUT", "TEXTAREA"].includes(active)) {
-        nPrefix = false;
+  const isTypingField = () => {
+    const ae = document.activeElement;
+    return (
+      ae &&
+      (ae.tagName === "INPUT" ||
+        ae.tagName === "TEXTAREA" ||
+        ae.isContentEditable)
+    );
+  };
+
+  const reset = () => {
+    nHeld = false;
+    if (inactivityTimer) clearTimeout(inactivityTimer);
+    inactivityTimer = null;
+  };
+
+  const bumpInactivity = () => {
+    if (inactivityTimer) clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(reset, INACTIVITY_MS);
+  };
+
+  // Start/maintain the hold and perform chords
+  document.addEventListener(
+    "keydown",
+    (e) => {
+      const key = e.key.toLowerCase();
+
+      // Begin holding on bare "n"
+      if (!e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey && key === "n") {
+        if (isTypingField()) return;
+        nHeld = true;
+        bumpInactivity();
+        e.preventDefault(); // don't type "n" into the page
         return;
       }
-      e.preventDefault();
-      if (key === "t") {
-        // Reuse Alpine's click path so UI updates everywhere
-        document.querySelector("button.theme-toggle")?.click();
-      } else {
-        const target = window.SHORTCUT_MAP[key];
-        if (target) window.location.href = target;
-      }
-    }
-    nPrefix = false;
-    return;
-  }
 
-  if (!e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey && key === "n") {
-    nPrefix = true;
-    clearTimeout(nPrefixTimeout);
-    nPrefixTimeout = setTimeout(() => (nPrefix = false), 1000);
-  }
-});
+      // While holding N, fire actions on other keys
+      if (nHeld && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
+        if (isTypingField()) return reset();
+
+        // Ignore key auto-repeat to require distinct presses
+        if (e.repeat) return;
+
+        if (key === "t") {
+          e.preventDefault();
+          document.querySelector("button.theme-toggle")?.click(); // reuse Alpine path
+          bumpInactivity();
+          return;
+        }
+
+        const target = window.SHORTCUT_MAP?.[key];
+        if (target) {
+          e.preventDefault();
+          window.location.href = target;
+          // Navigation replaces the page, no need to bump timer
+        }
+      }
+    },
+    { capture: true }
+  );
+
+  // Stop holding when N is released (or on blur/hidden)
+  document.addEventListener("keyup", (e) => {
+    if (e.key.toLowerCase() === "n") reset();
+  });
+  window.addEventListener("blur", reset);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) reset();
+  });
+})();
