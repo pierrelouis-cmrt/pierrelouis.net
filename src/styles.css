@@ -1982,6 +1982,7 @@ hr.divider-thin {
 .image-lightbox {
   display: none;
   position: fixed;
+  inset: 0;
   z-index: 1000;
   top: 0;
   left: 0;
@@ -1990,6 +1991,10 @@ hr.divider-thin {
   background-color: rgba(0, 0, 0, 0.85);
   justify-content: center;
   align-items: center;
+}
+
+.image-lightbox.open {
+  display: flex;
 }
 
 .image-lightbox-content {
@@ -2722,13 +2727,16 @@ article img:hover {
 
 /* HTML page embed */
 
-.avatar-embed {
+.article-embed {
   max-width: 600px;
   width: 100%;
-  height: 550px;
+  height: 200px;
   border: none;
-  border-radius: var(--radius-lg);
   display: block;
+}
+
+.avatar-embed {
+  height: 575px !important;
 }
 
 /* Lightbox */
@@ -2967,7 +2975,8 @@ li.article-task-list-item::marker {
   .signature,
   .projects-view-all,
   .timeline-page,
-  .tech-stack-sections {
+  .tech-stack-sections,
+  .article-embed {
     padding: 0 var(--space-5) !important;
   }
 
@@ -3131,7 +3140,7 @@ li.article-task-list-item::marker {
     display: none;
   }
   .avatar-embed {
-    height: 750px;
+    height: 750px !important;
   }
 }
 

@@ -21,6 +21,7 @@ document.addEventListener("alpine:init", () => {
         .addEventListener("change", () => {
           if (this.mode === "system") {
             this.applySystemTheme();
+            syncIframeTheme("system");
           }
         });
 
@@ -97,7 +98,20 @@ function syncSingleIframe(iframe, mode) {
     html.classList.add("dark");
   } else if (mode === "light") {
     html.classList.add("light");
-  } // For 'system', no classes - let iframe's media query handle
+  } else if (mode === "system") {
+    // For 'system', dynamically adjust classes based on current system preference
+    // to workaround the unconditional :root:not(.light) in the embed CSS.
+    // If system prefers light, add 'light' to force light (prevents unconditional dark).
+    // If system prefers dark, add no classes (lets unconditional :not(.light) apply dark,
+    // and media query override if needed).
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    if (!prefersDark) {
+      html.classList.add("light");
+    }
+    // Else: no classes, which applies dark due to embed's CSS behavior
+  }
 
   // Creative addition: Smooth transition on theme change
   const body = iframe.contentWindow.document.body;
@@ -284,33 +298,49 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Lightweight lightbox helpers for the projects page
-function openLightbox(src) {
-  const img = document.getElementById("image-lightbox-content");
-  const box = document.getElementById("image-lightbox");
-  if (!img || !box) return;
-  img.src = src;
-  box.style.display = "flex";
-  document.body.style.overflow = "hidden";
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
 
-function closeLightbox() {
-  const box = document.getElementById("image-lightbox");
-  if (!box) return;
-  box.style.display = "none";
-  document.body.style.overflow = "auto";
-}
+  const open = (src) => {
+    if (!lightbox || !lightboxImg) return;
+    lightboxImg.src = src;
+    lightbox.classList.add("open");
+    lightbox.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  };
 
-window.addEventListener("click", (e) => {
-  const box = document.getElementById("image-lightbox");
-  if (box && e.target === box) {
-    closeLightbox();
-  }
-});
+  const close = () => {
+    if (!lightbox || !lightboxImg) return;
+    lightbox.classList.remove("open");
+    lightbox.setAttribute("aria-hidden", "true");
+    lightboxImg.removeAttribute("src");
+    document.body.style.overflow = "";
+  };
 
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
-    closeLightbox();
-  }
+  // 1) Make them globally callable for existing inline onclick=""
+  window.openLightbox = open;
+  window.closeLightbox = close;
+
+  // 2) Also bind listeners so it works even if CSP blocks inline handlers
+  document.querySelectorAll(".project-preview-image").forEach((img) => {
+    img.addEventListener("click", () => open(img.src));
+  });
+
+  // Close when clicking backdrop or the × button
+  lightbox?.addEventListener("click", (e) => {
+    if (
+      e.target.id === "lightbox" ||
+      e.target.classList.contains("image-lightbox-close")
+    ) {
+      close();
+    }
+  });
+
+  // Close on Escape
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") close();
+  });
 });
 
 // Global keyboard shortcut to toggle the command palette
