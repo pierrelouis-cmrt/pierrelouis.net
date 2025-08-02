@@ -2120,13 +2120,13 @@ hr.divider-thin {
 .content-timeline-month-header h3 {
   position: -webkit-sticky;
   position: sticky;
-  background-color: var(--bg-primary);
+  background-color: none;
   padding: var(--space-1) 0;
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
   color: var(--text-muted);
   font-weight: var(--font-medium);
-  margin: var(--space-4) 0; /* Default margin for desktop */
+  margin: var(--space-4) 0;
 }
 
 /* Year is always the top-most sticky element */
