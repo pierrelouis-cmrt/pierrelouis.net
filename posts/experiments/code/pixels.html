@@ -96,6 +96,12 @@
         z-index: 5;
       }
 
+      @media (pointer: coarse) {
+        .hint span {
+          display: none;
+        }
+      }
+
       .kbd {
         padding: 2px clamp(5px, 1.5vw, 7px);
         padding-right: clamp(3px, 1.5vw, 5px);
@@ -211,9 +217,6 @@
           font-size: 11px;
           min-height: 28px;
         }
-        .hint span {
-          display: none;
-        }
         .btn span {
           display: none;
         }
@@ -231,9 +234,6 @@
           -ms-overflow-style: none;
         }
         .controls::-webkit-scrollbar {
-          display: none;
-        }
-        .hint span {
           display: none;
         }
       }
@@ -277,8 +277,8 @@
       <div class="hint">
         Click to bloom from that point.
         <span
-          >Hover to interact. Press <span class="kbd">R</span> to randomize &
-          bloom at cursor.</span
+          >Hover to interact. <br />Press <span class="kbd">R</span> to
+          randomize & bloom at cursor.</span
         >
       </div>
 
@@ -365,10 +365,10 @@
       let userPalette = ["#ff6b6b", "#ffd166", "#5dd3ff"];
 
       const cfg = {
-        baseRadiusMin: 60,
+        baseRadiusMin: 40,
         radiusMultiplier: 1,
-        sizeBoostFactor: 0.2,
-        lBoostMax: 6,
+        sizeBoostFactor: 0.3,
+        lBoostMax: 9,
       };
 
       // ★ Detect touch environment
@@ -779,7 +779,7 @@
       function computeAutoGap(targetCount = 10000) {
         const area = width * height;
         const ideal = Math.sqrt(area / targetCount);
-        const min = 5,
+        const min = 10,
           max = 14;
         return Math.max(min, Math.min(max, Math.round(ideal)));
       }

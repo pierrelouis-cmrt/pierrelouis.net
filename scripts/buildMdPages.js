@@ -122,6 +122,25 @@ md.renderer.rules.image = (tokens, idx, opts, env, self) => {
   return defaultImg(tokens, idx, opts, env, self);
 };
 
+/* -- custom renderer: links target="_blank" ------------------------------ */
+const defaultLinkRenderer =
+  md.renderer.rules.link_open ||
+  function (tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+  };
+
+md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+  const href = tokens[idx].attrGet("href") || "";
+
+  // Exclude footnote backlinks (e.g., href="#fn1") and internal anchor links
+  if (!href.startsWith("#")) {
+    tokens[idx].attrSet("target", "_blank");
+    tokens[idx].attrSet("rel", "noopener noreferrer");
+  }
+
+  return defaultLinkRenderer(tokens, idx, options, env, self);
+};
+
 /* ---------- Pre-processing tweaks --------------------------------------- */
 function preprocess(markdown) {
   let txt = markdown;

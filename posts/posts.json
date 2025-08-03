@@ -7,5 +7,14 @@
     "description": "Bringing life to a simple design element with CSS animations.",
     "image": "",
     "tag": "Experiments"
+  },
+  {
+    "year": 2025,
+    "month": "Aug",
+    "day": 3,
+    "title": "Interactive Pixel Grid",
+    "description": "A fun experiment with a pixel grid that responds to user interaction.",
+    "image": "",
+    "tag": "Experiments"
   }
 ]
