@@ -2316,7 +2316,7 @@ article h5,
 article h6 {
   color: var(--text-primary);
   font-weight: var(--font-medium);
-  text-wrap: balance;
+  text-wrap: wrap;
   margin: var(--space-8) auto var(--space-4);
   transition: color 400ms ease-in-out;
 }
@@ -2947,6 +2947,39 @@ li.article-task-list-item::marker {
 }
 .article-task-list-checkbox {
   margin-right: 0.4em;
+}
+
+/* MathJax Styling */
+
+mjx-container {
+  max-width: 100%; /* never enlarge the page */
+  overflow-x: auto; /* let long equations scroll */
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch; /* smooth on iOS */
+  scrollbar-width: thin; /* Firefox */
+}
+
+/* keep the look & feel we already had for display math */
+mjx-container[display="block"] {
+  max-width: 600px;
+  margin: 1rem auto;
+  padding: 0;
+}
+@media (max-width: 640px) {
+  mjx-container[display="block"] {
+    /* mobile tweak */
+    max-width: 100%;
+    padding: 0 1.25rem;
+  }
+}
+
+/* tiny WebKit scrollbar cosmetics (optional) */
+mjx-container::-webkit-scrollbar {
+  height: 6px;
+}
+mjx-container::-webkit-scrollbar-thumb {
+  background: var(--border-secondary);
+  border-radius: 9999px;
 }
 
 /*----------------------------  MEDIA QUERIES  --------------------------------------*/

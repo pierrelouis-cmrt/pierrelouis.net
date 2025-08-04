@@ -1,6 +1,6 @@
 This little coding experiment has [Artem's Pixel Loader pen on CodePen](https://codepen.io/artzub/pen/XJJooON) as a starting point. I've sort of build on top of what he had already done.
 
-## What is this project about?
+## What's this all about?
 
 This project is a full-screen canvas made of tiny squares that I will call "pixels" here. Those react to the mouse. Clicking on the screen will start the generation of the pixel grid, extending from the point you clicked outwards. You could say that the grid "blooms" and then gently settles.
 
@@ -26,7 +26,7 @@ $$\text{gap} \approx \sqrt{\frac{\text{width} \times \text{height}}{10{,}000}}$$
 
 The result: on bigger screens, the gap increases, resulting in fewer rows and columns, whereas on smaller screens, the gap decreases, producing more rows and columns.
 
-Here is the piece of the JavaScript code that does exactly like what was explained above:
+Here is the piece of the JavaScript code that does exactly what was explained above:
 
 ```js
 function computeAutoGap(targetCount = 10000, min = 5, max = 14) {
@@ -47,10 +47,10 @@ The process is quickly detailed step by step below:
 - <u>step 1:</u> pick a _base hue_ (0-360° on the color wheel)
 - <u>step 2:</u> randomly choose between 5 types of "relationship":
   - **Analogous** (neighbors) → harmonious, soft
-    - **Complementary** (opposites) → striking, punchy
-    - **Split-complementary** (opposite ± a step) → balanced contrast
-    - **Triadic** (three evenly spaced) → lively, playful
-    - **Monochrome** (same hue, varied lightness) → minimal
+  - **Complementary** (opposites) → striking, punchy
+  - **Split-complementary** (opposite ± a step) → balanced contrast
+  - **Triadic** (three evenly spaced) → lively, playful
+  - **Monochrome** (same hue, varied lightness) → minimal
 - <u>step 3:</u> keep saturation & lightness in friendly ranges for dark backgrounds:
   - **Saturation:** ~70–90% (colors pop but don’t bleed)
   - **Lightness:** ~54–66% (bright enough on black, not neon)

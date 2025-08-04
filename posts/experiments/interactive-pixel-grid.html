@@ -59,9 +59,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v128.css" as="style" />
+    <link rel="preload" href="/src/output-dev.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v128.css" />
+    <link rel="stylesheet" href="/src/output-dev.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -85,25 +85,24 @@
     <script>
       window.MathJax = {
         tex: {
-          /* inline:  \( … \)  or  $ … $  */
           inlineMath: [
             ["\\(", "\\)"],
             ["$", "$"],
           ],
-
-          /* display:  \[ … \]  or  $$ … $$ */
           displayMath: [
             ["\\[", "\\]"],
             ["$$", "$$"],
           ],
         },
+        svg: { fontCache: "global" }, // better performance across pages
       };
     </script>
     <script
       id="MathJax-script"
       async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
     ></script>
+
     <script
       defer
       src="https://cloud.umami.is/script.js"
@@ -670,7 +669,7 @@
     <main>
       <article><div class="article-meta-data"><h1>Interactive Pixel Grid</h1>
 <span class="article-publish-date">August 3, 2025</span></div> <p>This little coding experiment has <a href="https://codepen.io/artzub/pen/XJJooON" target="_blank" rel="noopener noreferrer">Artem's Pixel Loader pen on CodePen</a> as a starting point. I've sort of build on top of what he had already done.</p>
-<h2>What is this project about?</h2>
+<h2>What's this all about?</h2>
 <p>This project is a full-screen canvas made of tiny squares that I will call &quot;pixels&quot; here. Those react to the mouse. Clicking on the screen will start the generation of the pixel grid, extending from the point you clicked outwards. You could say that the grid &quot;blooms&quot; and then gently settles.</p>
 <p>The hover effect isn't a simple static effect. Your cursor actually leaves behind a short <em>trail</em>. The area impacted by the cursor movement is dynamic, meaning it changes depending on the cursor direction and speed. Nearby pixels get slightly bigger and brighter. A tiny bit of inertia keeps the &quot;blob&quot; (created by your cursor) moving for a moment after you stop. I guess the best way to imagine it is thinking of water calming down.</p>
 <h2>Great, but where's the interesting stuff then?</h2>
@@ -684,7 +683,7 @@
 We now get a way to compute the gap specific to each screen:<br>
 \[\text{gap} \approx \sqrt{\frac{\text{width} \times \text{height}}{10{,}000}}\]</p>
 <p>The result: on bigger screens, the gap increases, resulting in fewer rows and columns, whereas on smaller screens, the gap decreases, producing more rows and columns.</p>
-<p>Here is the piece of the JavaScript code that does exactly like what was explained above:</p>
+<p>Here is the piece of the JavaScript code that does exactly what was explained above:</p>
 <pre><code class="language-js">function computeAutoGap(targetCount = 10000, min = 5, max = 14) {
   const area = window.innerWidth * window.innerHeight;
   const gap = Math.round(Math.sqrt(area / targetCount));
@@ -701,14 +700,11 @@ initPixels(); // rebuild grid with the new gap
 <li><u>step 1:</u> pick a <em>base hue</em> (0-360° on the color wheel)</li>
 <li><u>step 2:</u> randomly choose between 5 types of &quot;relationship&quot;:
 <ul>
-<li><strong>Analogous</strong> (neighbors) → harmonious, soft
-<ul>
+<li><strong>Analogous</strong> (neighbors) → harmonious, soft</li>
 <li><strong>Complementary</strong> (opposites) → striking, punchy</li>
 <li><strong>Split-complementary</strong> (opposite ± a step) → balanced contrast</li>
 <li><strong>Triadic</strong> (three evenly spaced) → lively, playful</li>
 <li><strong>Monochrome</strong> (same hue, varied lightness) → minimal</li>
-</ul>
-</li>
 </ul>
 </li>
 <li><u>step 3:</u> keep saturation &amp; lightness in friendly ranges for dark backgrounds:

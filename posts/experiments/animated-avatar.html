@@ -59,9 +59,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v128.css" as="style" />
+    <link rel="preload" href="/src/output-dev.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v128.css" />
+    <link rel="stylesheet" href="/src/output-dev.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -85,25 +85,24 @@
     <script>
       window.MathJax = {
         tex: {
-          /* inline:  \( … \)  or  $ … $  */
           inlineMath: [
             ["\\(", "\\)"],
             ["$", "$"],
           ],
-
-          /* display:  \[ … \]  or  $$ … $$ */
           displayMath: [
             ["\\[", "\\]"],
             ["$$", "$$"],
           ],
         },
+        svg: { fontCache: "global" }, // better performance across pages
       };
     </script>
     <script
       id="MathJax-script"
       async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
     ></script>
+
     <script
       defer
       src="https://cloud.umami.is/script.js"
