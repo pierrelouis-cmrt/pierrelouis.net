@@ -1,6 +1,16 @@
 # Enable mod_rewrite
 RewriteEngine On
 
+# Redirect `/index.html` to the canonical root URL
+RewriteCond %{THE_REQUEST} /index\.html [NC]
+RewriteRule ^(.*/)?index\.html$ /$1 [R=301,L]
+
+# Enforce HTTPS and non-www hostname
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
 # (Optional) If your site lives at the domain root, this can help some setups.
 # RewriteBase /
 
