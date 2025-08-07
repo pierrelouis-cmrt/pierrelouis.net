@@ -39,7 +39,6 @@
   --swiper-active: #ffffff;
   --swiper-inactive: rgba(255, 255, 255, 0.75);
   --bg-table-stripe: rgba(246, 246, 246, 1);
-  --text-subtle: hsl(0, 0%, 50%);
 
   /* Typography */
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
@@ -1644,21 +1643,18 @@ hr.divider-thin {
 /* -------- Links -------- */
 
 .social-platforms-grid {
-  max-width: 600px;
   margin: 0 auto;
-  font-size: large;
+  font-size: var(--text-xl);
 }
 
 .social-platform-card {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: var(--space-3) 0;
-  margin: auto;
 }
 
 .social-platform-info {
-  width: 150px;
+  width: 180px; /* Fixed width to ensure alignment */
   display: flex;
   align-items: center;
   font-weight: var(--font-semibold);
@@ -1667,55 +1663,87 @@ hr.divider-thin {
 }
 
 .social-platform-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 5px;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(var(--brand-color-rgb, 0, 0, 0), 0.15);
+  background-color: rgba(var(--brand-color-rgb), 0.1);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
-.social-platform-icon svg {
-  width: 18px;
-  height: 18px;
+/* Specific selector for brand SVG icons only */
+.social-platform-icon > svg {
+  width: 20px;
+  height: 20px;
   fill: var(--brand-color);
-  stroke: var(--brand-color);
-  opacity: 1;
-  z-index: 10;
+  stroke: none;
+  opacity: 0.9;
+}
+
+/* Hover effect for the icon containers */
+.social-platform-card:hover .social-platform-icon {
+  background-color: rgba(var(--brand-color-rgb), 0.25);
 }
 
 .social-platform-handle {
-  max-width: 200px;
   flex: 1;
-  text-align: center;
-  margin-left: 16px;
-  margin-right: 16px;
+  text-align: left; /* Changed from center to left */
+  padding-left: var(--space-3); /* Add consistent left padding */
 }
 
 .social-platform-handle p {
-  text-align: start;
-  color: #666;
+  color: var(--text-subtle);
   padding: 0;
   margin: 0;
 }
 
 .social-platform-action {
-  max-width: 130px;
-  text-align: right;
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
+  gap: 0;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 120ms ease-in-out;
 }
 
-.social-platform-action svg {
+/* Specific selector for arrow icons in action links */
+.social-platform-action > svg {
   width: 16px;
   height: 16px;
+  stroke: var(--text-muted);
+  fill: none;
+  transition: transform 120ms ease-in-out;
 }
 
-.social-platform-action:hover svg {
-  color: var(--text-primary);
+.social-platform-action:hover {
+  color: var(--text-body);
+  text-decoration: underline;
+  text-decoration-color: var(--text-body);
+}
+
+.social-platform-action:hover > svg {
   transform: translate(3px, -3px);
-  transition: all 120ms ease-in-out;
+  stroke: var(--text-body);
+}
+
+/* Special sizing adjustments for specific brand icons */
+.discord .social-platform-icon > svg {
+  width: 22px;
+  height: 22px;
+}
+
+.medium .social-platform-icon > svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Dark mode adjustments */
+.dark .social-platform-icon {
+  background-color: rgba(var(--brand-color-rgb), 0.15);
 }
 
 :root {
@@ -3018,7 +3046,8 @@ mjx-container::-webkit-scrollbar-thumb {
   .tech-stack-sections,
   .article-embed,
   .project-action-buttons,
-  .project-tech-stack {
+  .project-tech-stack,
+  .social-platforms-grid {
     padding: 0 var(--space-5) !important;
   }
 
@@ -3073,12 +3102,12 @@ mjx-container::-webkit-scrollbar-thumb {
     margin-right: 0 !important;
   }
 
-  .social-platforms-grid {
-    max-width: 90%;
-  }
-
   .timeline-filter:last-child {
     margin-left: 0;
+  }
+
+  .social-platform-info {
+    width: 160px;
   }
 
   article h1 {
@@ -3181,6 +3210,16 @@ mjx-container::-webkit-scrollbar-thumb {
   .social-platform-handle {
     display: none;
   }
+
+  .social-platform-card {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .social-platform-info {
+    width: auto;
+  }
+
   .avatar-embed {
     height: 750px !important;
   }
@@ -3359,6 +3398,10 @@ mjx-container::-webkit-scrollbar-thumb {
   }
   .music-player-status {
     display: none !important;
+  }
+
+  .social-platforms-grid {
+    font-size: var(--text-lg);
   }
 }
 
