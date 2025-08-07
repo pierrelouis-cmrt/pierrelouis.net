@@ -1,32 +1,36 @@
-This little coding experiment has [Artem's Pixel Loader pen on CodePen](https://codepen.io/artzub/pen/XJJooON) as a starting point. I've sort of build on top of what he had already done.
+This little coding experiment started with [Artem's Pixel Loader pen on CodePen](https://codepen.io/artzub/pen/XJJooON) as a base. I basically built on top of what he’d already done and took it in my own direction.
 
 ## What's this all about?
 
-This project is a full-screen canvas made of tiny squares that I will call "pixels" here. Those react to the mouse. Clicking on the screen will start the generation of the pixel grid, extending from the point you clicked outwards. You could say that the grid "blooms" and then gently settles.
+It’s a full-screen canvas made of tiny squares; I’ll just call them “pixels” here. They react to your mouse. Click anywhere on the screen and the pixel grid starts to grow outward from that point, like it’s blooming, before it gently settles down.
 
-The hover effect isn't a simple static effect. Your cursor actually leaves behind a short _trail_. The area impacted by the cursor movement is dynamic, meaning it changes depending on the cursor direction and speed. Nearby pixels get slightly bigger and brighter. A tiny bit of inertia keeps the "blob" (created by your cursor) moving for a moment after you stop. I guess the best way to imagine it is thinking of water calming down.
+The hover effect isn’t just a static glow. Your cursor leaves behind a little _trail_, and the area it affects depends on your cursor’s direction and speed. Pixels nearby get brighter and slightly bigger. There’s even a touch of inertia, so the “blob” your cursor makes keeps moving for a moment after you stop. Think ripples on water slowly fading away.
 
-## Great, but where's the interesting stuff then?
+## Making it smooth and fast
 
-My goal was to make the experience as smooth as possible, even on low-end machines like an old computer or cheap phone. To do that, the grid generation script always makes sure the number of total pixels created is always around 10k. This number felt high enough to make the grid dense to look fluid, and low enough, so the various effects felt fast.
+I wanted this to run nicely even on old laptops/cheap phones. The trick? The grid script always aims for around 10,000 pixels in total (or gets caped by a max gap I've set between two nearby pixels purely for looks). That’s dense enough to look fluid, but light enough for the effects to feel snappy.
 
-The hover effect is deliberately subtle for smoothness. Its radius is kept reasonable and the size/brightness effect it has on pixels stays subtle. It would have looked messy otherwise so performance limitations are a good thing here!
+The hover effect is deliberately subtle: small radius, gentle size and brightness changes. Go too strong and it turns into a messy, noisy soup... In this case, performance constraints are actually a good thing here!
 
-Lastly, color choices aren’t random chaos. As detailed below, colors are randomly generated but carefully curated, ensuring a visually pleasing grid against the dark background every time.
+As for colors, they’re not just random chaos of course. They’re generated randomly but carefully curated so they always look good, especially against the dark background.
 
-## And for the tech-savvy people reading this
+## For the tech-curious
 
-I'm going to quickly explain, code-wise, how 2 aspects of the generation work: auto grid size, and color curation.
+Here’s a quick peek at two key parts of the build: the auto grid sizing and the color curation.
 
-### 1. Why it stays ~10k pixels, no matter the screen
+### 1. Why it stays \~10k pixels on any screen
 
-Here is the main idea behind this: the $$\text{number of squares} \approx \text{screen area} \div (\text{gap})^2$$
-We now get a way to compute the gap specific to each screen:
-$$\text{gap} \approx \sqrt{\frac{\text{width} \times \text{height}}{10{,}000}}$$
+The main idea:
 
-The result: on bigger screens, the gap increases, resulting in fewer rows and columns, whereas on smaller screens, the gap decreases, producing more rows and columns.
+$\text{number of squares} \approx \frac{\text{screen area}}{(\text{gap})^2}$
 
-Here is the piece of the JavaScript code that does exactly what was explained above:
+We pick a “gap” size that makes this number roughly 10,000:
+
+$\text{gap} \approx \sqrt{\frac{\text{width} \times \text{height}}{10{,}000}}$
+
+Bigger screens → bigger gaps → fewer rows and columns. Smaller screens → smaller gaps → more rows and columns.
+
+And here’s the little function that does exactly that:
 
 ```js
 function computeAutoGap(targetCount = 10000, min = 5, max = 14) {
@@ -40,24 +44,28 @@ gap = computeAutoGap();
 initPixels(); // rebuild grid with the new gap
 ```
 
-### 2. The curation of colors, so it always looks nice
+### 2. How the colors always work
 
-The process is quickly detailed step by step below:
+Here’s the quick step by step process:
 
-- <u>step 1:</u> pick a _base hue_ (0-360° on the color wheel)
-- <u>step 2:</u> randomly choose between 5 types of "relationship":
-  - **Analogous** (neighbors) → harmonious, soft
-  - **Complementary** (opposites) → striking, punchy
-  - **Split-complementary** (opposite ± a step) → balanced contrast
-  - **Triadic** (three evenly spaced) → lively, playful
-  - **Monochrome** (same hue, varied lightness) → minimal
-- <u>step 3:</u> keep saturation & lightness in friendly ranges for dark backgrounds:
-  - **Saturation:** ~70–90% (colors pop but don’t bleed)
-  - **Lightness:** ~54–66% (bright enough on black, not neon)
-  - Add tiny random ± tweaks so it feels **natural**, not generated
-- <u>step 4:</u> convert to hex and use them in the grid, and that's it!
+1. Pick a random **base hue** (0–360° on the color wheel).
+2. Pick one of 5 “relationships” at random:
 
-Here is the code that does exactly that:
+   - **Analogous** (neighbors) → soft & harmonious
+   - **Complementary** (opposites) → bold & punchy
+   - **Split-complementary** (opposite ± a step) → balanced contrast
+   - **Triadic** (even thirds) → lively & playful
+   - **Monochrome** (same hue, different lightness) → clean & minimal
+
+3. Keep saturation & lightness in sweet spots for dark backgrounds:
+
+   - Saturation: 70–90% → colors pop but don’t scream
+   - Lightness: 54–66% → bright enough on black, not neon
+   - Add tiny random tweaks so it doesn’t feel “computer perfect.”
+
+4. Convert to hex and apply them to the grid. Done.
+
+And here’s the actual JavaScript:
 
 ```js
 function randomLovelyPalette() {
@@ -124,4 +132,4 @@ function hslToHex(h, s, l) {
 
 <iframe src="code/pixels.html" class="article-embed pixels-embed" loading="lazy"></iframe>
 
-You can view it in full page mode [here](code/pixels.html).
+Or open it in full-page mode [here](code/pixels.html).
