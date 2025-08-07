@@ -2475,6 +2475,7 @@ article pre {
 article pre code {
   background: none;
   padding: 0;
+  text-shadow: none !important;
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
 }
