@@ -13,6 +13,7 @@ const INTERVALS = {
 
 const REQUEST_TIMEOUT_MS = 8000; // hard timeout per request
 const PROXY_BASE = "/api"; // adjust if your API lives elsewhere
+const IMAGE_SIZE = "large"; // ~174px Last.fm image
 
 /** ===== DOM ===== */
 const titleEl = document.querySelector(".music-widget .music-track-title");
@@ -48,6 +49,13 @@ function lastNonEmptyImageUrl(images) {
     if (url) return url;
   }
   return "";
+}
+
+function imageUrlBySize(images, size) {
+  if (!Array.isArray(images)) return "";
+  const found = images.find((img) => img?.size === size);
+  const url = found?.["#text"]?.trim() ?? "";
+  return url || lastNonEmptyImageUrl(images);
 }
 
 function looksLikeLastfmPlaceholder(url) {
@@ -117,7 +125,7 @@ async function getTrackInfoCover(artist, track) {
   const url = `${PROXY_BASE}/cover?${params.toString()}`;
   const data = await fetchJsonWithRetry(url, { retries: 2 });
   const images = data?.track?.album?.image;
-  const urlCandidate = lastNonEmptyImageUrl(images);
+  const urlCandidate = imageUrlBySize(images, IMAGE_SIZE);
   return await preloadImage(urlCandidate);
 }
 
@@ -180,7 +188,7 @@ async function resolveCoverForTrack(track) {
   if (coverCache.has(key)) return coverCache.get(key);
 
   // Try image from recenttracks first
-  const recentUrl = lastNonEmptyImageUrl(track?.image);
+  const recentUrl = imageUrlBySize(track?.image, IMAGE_SIZE);
   const okRecent = await preloadImage(recentUrl);
   if (okRecent) {
     coverCache.set(key, okRecent);
