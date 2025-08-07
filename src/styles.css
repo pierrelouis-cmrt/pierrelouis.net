@@ -3015,7 +3015,9 @@ mjx-container::-webkit-scrollbar-thumb {
   .projects-view-all,
   .timeline-page,
   .tech-stack-sections,
-  .article-embed {
+  .article-embed,
+  .project-action-buttons,
+  .project-tech-stack {
     padding: 0 var(--space-5) !important;
   }
 
