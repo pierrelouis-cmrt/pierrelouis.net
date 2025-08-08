@@ -17,6 +17,7 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 # Map clean endpoints to your PHP proxy
 RewriteRule "^api/now-playing$" "/api/lastfm.php?endpoint=now-playing" [QSA,L]
 RewriteRule "^api/cover$"       "/api/lastfm.php?endpoint=cover"       [QSA,L]
+RewriteRule "^img$"             "/api/img.php"                          [QSA,L]
 
 # --- Caching headers (override anything your host adds) ---
 <IfModule mod_headers.c>
@@ -53,4 +54,3 @@ RewriteRule "^api/cover$"       "/api/lastfm.php?endpoint=cover"       [QSA,L]
   # ExpiresByType image/svg+xml "access plus 1 year"
   # ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
-

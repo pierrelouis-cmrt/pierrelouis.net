@@ -12,8 +12,10 @@ const INTERVALS = {
 };
 
 const REQUEST_TIMEOUT_MS = 8000; // hard timeout per request
-const PROXY_BASE = "/api"; // adjust if your API lives elsewhere
-const IMAGE_SIZE = "large"; // ~174px Last.fm image
+const PROXY_BASE = "/api"; // server JSON proxy base
+const IMAGE_SIZE = "large"; // ~174px Last.fm image from Last.fm
+const IMG_PROXY_PATH = "/img"; // PHP image proxy route (301 to cached file)
+const COVER_DISPLAY_WIDTH = 75; // CSS layout target in px
 
 /** ===== DOM ===== */
 const titleEl = document.querySelector(".music-widget .music-track-title");
@@ -97,7 +99,18 @@ async function fetchJsonWithRetry(
   }
 }
 
-/** Preload an image to verify it actually loads; resolves with URL or null */
+/** Build proxied image URL (width/DPR/format-aware) */
+function proxyUrl(src, w = COVER_DISPLAY_WIDTH, dpr = 1, fmt = "auto", q = 80) {
+  const u = new URL(IMG_PROXY_PATH, window.location.origin);
+  u.searchParams.set("src", src);
+  u.searchParams.set("w", String(w));
+  u.searchParams.set("dpr", String(Math.max(1, Math.min(3, Math.round(dpr)))));
+  u.searchParams.set("fmt", fmt);
+  u.searchParams.set("q", String(q));
+  return u.pathname + u.search;
+}
+
+/** Preload an image (usually proxied) to verify it loads; resolves with URL or null */
 function preloadImage(url) {
   return new Promise((resolve) => {
     if (!url || looksLikeLastfmPlaceholder(url)) return resolve(null);
@@ -126,7 +139,12 @@ async function getTrackInfoCover(artist, track) {
   const data = await fetchJsonWithRetry(url, { retries: 2 });
   const images = data?.track?.album?.image;
   const urlCandidate = imageUrlBySize(images, IMAGE_SIZE);
-  return await preloadImage(urlCandidate);
+  // Preload via our proxy (1x) so the cached file is generated
+  const proxied = urlCandidate
+    ? proxyUrl(urlCandidate, COVER_DISPLAY_WIDTH, 1, "auto", 80)
+    : "";
+  const ok = await preloadImage(proxied);
+  return ok ? urlCandidate : null;
 }
 
 /** ===== Rendering ===== */
@@ -156,19 +174,26 @@ function setCover(urlOrNull) {
     return;
   }
   const existingImg = coverEl.querySelector("img");
+  const src1x = proxyUrl(urlOrNull, COVER_DISPLAY_WIDTH, 1, "auto", 80);
+  const src2x = proxyUrl(urlOrNull, COVER_DISPLAY_WIDTH, 2, "auto", 80);
   if (existingImg) {
-    if (existingImg.src !== urlOrNull) {
-      existingImg.src = urlOrNull;
+    const desiredSrcset = `${src1x} 1x, ${src2x} 2x`;
+    if (existingImg.src !== src1x || existingImg.srcset !== desiredSrcset) {
+      existingImg.src = src1x;
+      existingImg.srcset = desiredSrcset;
       existingImg.alt = "Album art";
-      existingImg.width = 75;
-      existingImg.height = 75;
+      existingImg.width = COVER_DISPLAY_WIDTH;
+      existingImg.height = COVER_DISPLAY_WIDTH;
+      existingImg.decoding = "async";
     }
   } else {
     const img = document.createElement("img");
-    img.src = urlOrNull;
+    img.src = src1x;
+    img.srcset = `${src1x} 1x, ${src2x} 2x`;
     img.alt = "Album art";
-    img.width = 75;
-    img.height = 75;
+    img.width = COVER_DISPLAY_WIDTH;
+    img.height = COVER_DISPLAY_WIDTH;
+    img.decoding = "async";
     coverEl.replaceChildren(img);
   }
 }
@@ -187,12 +212,14 @@ async function resolveCoverForTrack(track) {
 
   if (coverCache.has(key)) return coverCache.get(key);
 
-  // Try image from recenttracks first
+  // Try image from recenttracks first (preload via proxy so it gets cached)
   const recentUrl = imageUrlBySize(track?.image, IMAGE_SIZE);
-  const okRecent = await preloadImage(recentUrl);
+  const okRecent = await preloadImage(
+    recentUrl ? proxyUrl(recentUrl, COVER_DISPLAY_WIDTH, 1, "auto", 80) : ""
+  );
   if (okRecent) {
-    coverCache.set(key, okRecent);
-    return okRecent;
+    coverCache.set(key, recentUrl);
+    return recentUrl;
   }
 
   // De-duplicate concurrent getInfo calls per track
