@@ -61,9 +61,10 @@
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
     <link rel="canonical" href="https://pierrelouis.net/" />
-    <link rel="preload" href="/src/output-v145.css" as="style" />
+    <link rel="preload" href="/src/assets/avatar_small.webp" as="image" type="image/webp" fetchpriority="high" />
+    <link rel="preload" href="/src/output-v146.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v145.css" />
+    <link rel="stylesheet" href="/src/output-v146.css" />
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
@@ -634,7 +635,11 @@
           <img
             class="hero-avatar"
             src="src/assets/avatar_small.webp"
+            width="88"
+            height="88"
             loading="eager"
+            decoding="async"
+            fetchpriority="high"
             alt="Avatar"
             title="That's me!"
           />
@@ -691,7 +696,7 @@
       </div>
     </header>
     <main>
-      <section id="work" class="animate-on-scroll">
+      <section id="work" class="animate-on-scroll cv-auto">
         <h2 class="section-heading text-italic">Featured Projects</h2>
         <div class="projects-grid">
           <a
@@ -859,7 +864,7 @@
           </div>
         </div>
       </section>
-      <section id="blog" class="animate-on-scroll">
+      <section id="blog" class="animate-on-scroll cv-auto">
         <h2 class="section-heading text-italic">Latest Posts</h2>
 
         <div class="posts-grid" id="latest-posts">
@@ -922,7 +927,7 @@
           ></a>
         </div>
       </section>
-      <section id="connect" class="animate-on-scroll">
+      <section id="connect" class="animate-on-scroll cv-auto">
         <h2 class="section-heading text-italic">Connect</h2>
         <div class="music-widget">
           <div class="music-player">
@@ -985,6 +990,8 @@
                 src="/src/assets/map/tinywow_cloud_small_82919920.webp"
                 width="390"
                 height="347"
+                loading="lazy"
+                decoding="async"
                 alt="Cloud"
                 draggable="false"
                 class="location-map-cloud"
@@ -993,6 +1000,8 @@
                 src="/src/assets/map/plane.webp"
                 width="24"
                 height="56"
+                loading="lazy"
+                decoding="async"
                 alt="Plane"
                 draggable="false"
                 class="location-map-plane"
@@ -1001,6 +1010,8 @@
                 src="/src/assets/map/plane-shadow.webp"
                 width="24"
                 height="24"
+                loading="lazy"
+                decoding="async"
                 alt="Plane Shadow"
                 draggable="false"
                 class="location-map-plane-shadow"
@@ -1138,6 +1149,5 @@
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"
       crossorigin="anonymous"
     ></script>
-    <script defer src="https://unpkg.com/alpinejs" defer></script>
   </body>
 </html>

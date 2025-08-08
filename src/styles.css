@@ -448,6 +448,12 @@ a.link-with-icon:not(:hover) .lucide {
 
 /* Avatar */
 
+/* Performance: skip rendering offscreen sections until needed */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px;
+}
+
 .hero-avatar-wrapper {
   position: relative;
   display: inline-block;
