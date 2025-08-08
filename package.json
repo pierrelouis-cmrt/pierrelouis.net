@@ -17,8 +17,9 @@
     "build:bookmarks": "node scripts/buildBookmarks.js",
     "build:md": "node scripts/buildMdPages.js",
     "build": "npm run build:css && npm run build:posts && npm run build:bookmarks && npm run build:md",
+    "build:content": "npm run build:posts && npm run build:bookmarks && npm run build:md",
 
-    "dev": "node scripts/buildCssVersioned.mjs --dev && nodemon --watch ./src/styles.css --exec \"npx tailwindcss -i ./src/styles.css -o ./src/output-dev.css\" && nodemon --watch ./index.html --exec \"npx tailwindcss -i ./src/styles.css -o ./src/output-dev.css\""
+    "dev": "node scripts/buildCssVersioned.mjs --dev && npx tailwindcss -i ./src/styles.css -o ./src/output-dev.css --watch"
   }
 
 }

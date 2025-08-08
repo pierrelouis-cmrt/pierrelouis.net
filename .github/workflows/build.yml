@@ -14,7 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # needed if you commit back to the same repo
+          fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -25,15 +25,58 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build Tailwind + posts + bookmarks
-        run: npm run build # <- runs both build:css, build:posts and build::bookmarks
+      - name: Detect changed areas
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            css:
+              - 'src/styles.css'
+              - 'tailwind.config.js'
+              - 'scripts/buildCssVersioned.mjs'
+              # Rebuild CSS if content files changed (classes may change)
+              - '**/*.html'
+            posts:
+              - 'posts/posts.json'
+              - 'scripts/buildPosts.js'
+            bookmarks:
+              - 'bookmarks/bookmarks.json'
+              - 'scripts/buildBookmarks.js'
+            md:
+              - 'posts/**/md/**/*.md'
+              - 'scripts/buildMdPages.js'
+              - 'scripts/page-skeleton.html'
 
-      # OPTIONAL ─── if you commit the built HTML/CSS back to the repo
+      - name: Build CSS (conditional)
+        if: steps.changes.outputs.css == 'true'
+        run: npm run build:css
+
+      - name: Build posts (conditional)
+        if: steps.changes.outputs.posts == 'true'
+        run: npm run build:posts
+
+      - name: Build bookmarks (conditional)
+        if: steps.changes.outputs.bookmarks == 'true'
+        run: npm run build:bookmarks
+
+      - name: Build Markdown pages (conditional)
+        if: steps.changes.outputs.md == 'true'
+        run: npm run build:md
+
       - name: Commit & push changes
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git diff --cached --quiet && echo "No changes to commit" || \
-          git commit -m "build site (css & posts)"
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          # Compose a concise commit message based on what changed
+          MSG="build:"
+          [ "${{ steps.changes.outputs.css }}" = "true" ] && MSG="$MSG css"
+          [ "${{ steps.changes.outputs.posts }}" = "true" ] && MSG="$MSG posts"
+          [ "${{ steps.changes.outputs.bookmarks }}" = "true" ] && MSG="$MSG bookmarks"
+          [ "${{ steps.changes.outputs.md }}" = "true" ] && MSG="$MSG md"
+          git commit -m "$MSG"
           git push
