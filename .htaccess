@@ -19,6 +19,10 @@ RewriteRule "^api/now-playing$" "/api/lastfm.php?endpoint=now-playing" [QSA,L]
 RewriteRule "^api/cover$"       "/api/lastfm.php?endpoint=cover"       [QSA,L]
 RewriteRule "^img$"             "/api/img.php"                          [QSA,L]
 
+# --- MIME types ---
+AddType image/avif avif
+AddType image/webp webp
+
 # --- Caching headers (override anything your host adds) ---
 <IfModule mod_headers.c>
 
@@ -31,7 +35,7 @@ RewriteRule "^img$"             "/api/img.php"                          [QSA,L]
   </FilesMatch>
 
   # Versioned/static assets: cache for 1 year and mark immutable
-  <FilesMatch "\.(?:css|js|mjs|ico|woff2?|ttf|eot|gif|png|jpe?g|webp|svg)$">
+  <FilesMatch "\.(?:css|js|mjs|ico|woff2?|ttf|eot|gif|png|jpe?g|webp|avif|svg)$">
     Header always unset Cache-Control
     Header always unset Expires
     Header always unset Pragma

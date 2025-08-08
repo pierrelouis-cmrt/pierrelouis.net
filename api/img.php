@@ -176,6 +176,7 @@ if (!$ok || $blob === false) {
 
 // Write atomically
 @file_put_contents($cacheFile, $blob, LOCK_EX);
+@chmod($cacheFile, 0644);
 if ($lock) { flock($lock, LOCK_UN); fclose($lock); @unlink($lockFile); }
 
 // Redirect to static file so future hits bypass PHP
@@ -183,4 +184,3 @@ header('Cache-Control: public, max-age=31536000, immutable');
 header('Location: ' . '/_cache/img/' . basename($cacheFile));
 http_response_code(301);
 exit;
-
