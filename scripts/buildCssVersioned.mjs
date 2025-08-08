@@ -58,10 +58,11 @@ execSync(
   { stdio: "inherit" }
 );
 
-// If production: compare temp output to previous version; skip if identical
+// If production: compare temp output to previous version; defer decisions
+let isSameAsCurrent = false;
+let tempPath = null;
 if (!devMode) {
-  const tempPath = path.join(root, outFile);
-  let isSameAsCurrent = false;
+  tempPath = path.join(root, outFile);
   if (currentVersionPath) {
     try {
       const [a, b] = await Promise.all([
@@ -70,16 +71,8 @@ if (!devMode) {
       ]);
       isSameAsCurrent = a === b;
     } catch {
-      // if read fails, treat as changed
       isSameAsCurrent = false;
     }
-  }
-
-  if (isSameAsCurrent) {
-    // Nothing changed: remove temp file and exit without bump/link updates
-    await rm(tempPath, { force: true });
-    console.log("✔  CSS unchanged; skipped version bump and relink");
-    process.exit(0);
   }
 }
 
@@ -98,6 +91,7 @@ async function* walk(dir) {
 // Matches: href="/src/output.css" | 'src/output-v012.css?foo' | "output-dev.css"
 const cssLinkPattern =
   /href=("|')[^"']*output(?:-v\d{3}|-dev)?\.css[^"']*("|')/gi;
+const devLinkPattern = /href=("|')[^"']*output-dev\.css[^"']*("|')/i;
 
 if (devMode) {
   // Development: directly link to output-dev.css
@@ -112,6 +106,37 @@ if (devMode) {
   console.log(`✔  CSS dev build complete: /${outFile}`);
 } else {
   // Production: we have a temp build at src/.output-temp.css
+  // If CSS content unchanged but pages point to output-dev.css, relink without bumping
+  let anyDevLinked = false;
+  for await (const file of walk(root)) {
+    const html = await readFile(file, "utf8");
+    if (devLinkPattern.test(html)) {
+      anyDevLinked = true;
+      break;
+    }
+  }
+
+  if (isSameAsCurrent && currentVersionPath) {
+    // Remove temp file
+    await rm(tempPath, { force: true });
+    if (anyDevLinked) {
+      const versionRel = `/${path.relative(root, currentVersionPath)}`.replaceAll("\\\\", "/");
+      for await (const file of walk(root)) {
+        const html = await readFile(file, "utf8");
+        const updated = html.replace(cssLinkPattern, `href=\"${versionRel}\"`);
+        if (updated !== html) {
+          await writeFile(file, updated);
+          console.log("✔  linked", path.relative(root, file));
+        }
+      }
+      try { await unlink(path.join(root, "src/output-dev.css")); } catch {}
+      console.log("✔  CSS unchanged; relinked from dev to current version");
+    } else {
+      console.log("✔  CSS unchanged; skipped version bump");
+    }
+    process.exit(0);
+  }
+
   // Determine next version, move temp to versioned name, clean stale, relink
   const VERSION_FILE = path.join(root, ".css-version");
   let version = 1;
