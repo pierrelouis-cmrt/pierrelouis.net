@@ -59,8 +59,8 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v147.css" as="style" />
-    <link rel="stylesheet" href="/src/output-v147.css" />
+    <link rel="preload" href="/src/output-v149.css" as="style" />
+    <link rel="stylesheet" href="/src/output-v149.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -651,58 +651,58 @@
       <div class="swiper">
         <div class="swiper-wrapper">
           <div class="swiper-slide">
-            <img src="pics/architecture1.webp" alt="Picture 1" />
+            <img src="pics/architecture1.webp" alt="Picture 1" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/architecture2.webp" alt="Picture 2" />
+            <img src="pics/architecture2.webp" alt="Picture 2" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/architecture3.webp" alt="Picture 3" />
+            <img src="pics/architecture3.webp" alt="Picture 3" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/architecture4.webp" alt="Picture 4" />
+            <img src="pics/architecture4.webp" alt="Picture 4" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/architecture5.webp" alt="Picture 5" />
+            <img src="pics/architecture5.webp" alt="Picture 5" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/architecture6.webp" alt="Picture 6" />
+            <img src="pics/architecture6.webp" alt="Picture 6" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/books1.webp" alt="Picture 7" />
+            <img src="pics/books1.webp" alt="Picture 7" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/books2.webp" alt="Picture 8" />
+            <img src="pics/books2.webp" alt="Picture 8" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/cat1.webp" alt="Picture 9" />
+            <img src="pics/cat1.webp" alt="Picture 9" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/cat2.webp" alt="Picture 10" />
+            <img src="pics/cat2.webp" alt="Picture 10" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/cat3.webp" alt="Picture 11" />
+            <img src="pics/cat3.webp" alt="Picture 11" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/cat4.webp" alt="Picture 12" />
+            <img src="pics/cat4.webp" alt="Picture 12" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/landscape1.webp" alt="Picture 13" />
+            <img src="pics/landscape1.webp" alt="Picture 13" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/landscape2.webp" alt="Picture 14" />
+            <img src="pics/landscape2.webp" alt="Picture 14" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/landscape3.webp" alt="Picture 15" />
+            <img src="pics/landscape3.webp" alt="Picture 15" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/sky1.webp" alt="Picture 16" />
+            <img src="pics/sky1.webp" alt="Picture 16" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/squirrel1.webp" alt="Picture 17" />
+            <img src="pics/squirrel1.webp" alt="Picture 17" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
           <div class="swiper-slide">
-            <img src="pics/squirrel2.webp" alt="Picture 18" />
+            <img src="pics/squirrel2.webp" alt="Picture 18" loading="lazy" decoding="async" onclick="openLightbox(this.src)" />
           </div>
         </div>
 
@@ -775,6 +775,12 @@
         <p class="footer-meta-right">© 2025</p>
       </div>
     </footer>
+
+    <!-- Simple Lightbox (shared with projects/posts) -->
+    <div id="lightbox" class="image-lightbox" aria-hidden="true">
+      <span class="image-lightbox-close" onclick="closeLightbox()">&times;</span>
+      <img id="lightbox-img" class="image-lightbox-content" loading="lazy" />
+    </div>
 
     <script defer src="/src/script.js"></script>
     <script defer src="carousel.js"></script>
