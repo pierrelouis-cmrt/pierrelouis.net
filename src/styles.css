@@ -2816,7 +2816,7 @@ article .article-embed {
   border: none;
   color: white;
   font-size: var(--text-5xl);
-  padding-bottom: var(--space-2);
+  padding-bottom: var(--space-1);
   cursor: pointer;
   width: var(--space-12);
   height: var(--space-12);
