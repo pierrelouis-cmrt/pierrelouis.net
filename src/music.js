@@ -14,7 +14,7 @@ const INTERVALS = {
 const REQUEST_TIMEOUT_MS = 8000; // hard timeout per request
 const PROXY_BASE = "/api"; // server JSON proxy base
 const IMAGE_SIZE = "large"; // ~174px Last.fm image from Last.fm
-const IMG_PROXY_PATH = "/img"; // PHP image proxy route (301 to cached file)
+const IMG_PROXY_PATH = "/img"; // PHP image proxy route (serves bytes directly)
 const COVER_DISPLAY_WIDTH = 75; // CSS layout target in px
 
 /** ===== DOM ===== */
@@ -100,7 +100,7 @@ async function fetchJsonWithRetry(
 }
 
 /** Build proxied image URL (width/DPR/format-aware) */
-function proxyUrl(src, w = COVER_DISPLAY_WIDTH, dpr = 1, fmt = "auto", q = 80) {
+function proxyUrl(src, w = COVER_DISPLAY_WIDTH, dpr = 1, fmt = "jpeg", q = 80) {
   const u = new URL(IMG_PROXY_PATH, window.location.origin);
   u.searchParams.set("src", src);
   u.searchParams.set("w", String(w));
@@ -141,7 +141,7 @@ async function getTrackInfoCover(artist, track) {
   const urlCandidate = imageUrlBySize(images, IMAGE_SIZE);
   // Preload via our proxy (1x) so the cached file is generated
   const proxied = urlCandidate
-    ? proxyUrl(urlCandidate, COVER_DISPLAY_WIDTH, 1, "auto", 80)
+    ? proxyUrl(urlCandidate, COVER_DISPLAY_WIDTH, 1, "jpeg", 80)
     : "";
   const ok = await preloadImage(proxied);
   return ok ? urlCandidate : null;
@@ -174,8 +174,8 @@ function setCover(urlOrNull) {
     return;
   }
   const existingImg = coverEl.querySelector("img");
-  const src1x = proxyUrl(urlOrNull, COVER_DISPLAY_WIDTH, 1, "auto", 80);
-  const src2x = proxyUrl(urlOrNull, COVER_DISPLAY_WIDTH, 2, "auto", 80);
+  const src1x = proxyUrl(urlOrNull, COVER_DISPLAY_WIDTH, 1, "jpeg", 80);
+  const src2x = proxyUrl(urlOrNull, COVER_DISPLAY_WIDTH, 2, "jpeg", 80);
   if (existingImg) {
     const desiredSrcset = `${src1x} 1x, ${src2x} 2x`;
     if (existingImg.src !== src1x || existingImg.srcset !== desiredSrcset) {
@@ -215,7 +215,7 @@ async function resolveCoverForTrack(track) {
   // Try image from recenttracks first (preload via proxy so it gets cached)
   const recentUrl = imageUrlBySize(track?.image, IMAGE_SIZE);
   const okRecent = await preloadImage(
-    recentUrl ? proxyUrl(recentUrl, COVER_DISPLAY_WIDTH, 1, "auto", 80) : ""
+    recentUrl ? proxyUrl(recentUrl, COVER_DISPLAY_WIDTH, 1, "jpeg", 80) : ""
   );
   if (okRecent) {
     coverCache.set(key, recentUrl);

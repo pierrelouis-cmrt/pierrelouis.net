@@ -2,8 +2,8 @@
 // public_html/api/img.php
 declare(strict_types=1);
 
-// Minimal image proxy + transformer with on-disk caching and redirect-to-static
-// Designed to keep PHP worker time minimal on Hostinger (25 workers).
+// Minimal image proxy + transformer with on-disk caching
+// Simpler pipeline: serve bytes directly (200), no redirects, default JPEG.
 
 // ---- Helpers ----
 function abort(int $code, string $msg = 'error'): void {
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') abort(405, 'method_not_allowed');
 $srcRaw = $_GET['src'] ?? '';
 if ($srcRaw === '') abort(400, 'src_required');
 
-$fmt = strtolower((string)($_GET['fmt'] ?? 'auto'));
+$fmt = strtolower((string)($_GET['fmt'] ?? 'jpeg'));
 $w   = normalize_int($_GET['w'] ?? null, 32, 4096, 640);
 $dpr = normalize_int($_GET['dpr'] ?? null, 1, 3, 1);
 $q   = normalize_int($_GET['q'] ?? null, 40, 95, 80);
@@ -53,17 +53,13 @@ $targetW = $w * $dpr;
 
 // Decide output format
 $supportsWebP = function_exists('imagewebp');
-$supportsAVIF = function_exists('imageavif'); // rarely available
+$supportsAVIF = false; // disable AVIF for reliability on shared hosts
 
 function choose_format(string $fmt, bool $supportsWebP, bool $supportsAVIF): array {
   $fmt = strtolower($fmt);
-  if ($fmt === 'auto') {
-    if ($supportsAVIF) return ['avif', 'image/avif'];
-    if ($supportsWebP) return ['webp', 'image/webp'];
-    return ['jpeg', 'image/jpeg'];
-  }
+  if ($fmt === 'auto') { return ['jpeg', 'image/jpeg']; }
   return match ($fmt) {
-    'avif' => $supportsAVIF ? ['avif', 'image/avif'] : ['jpeg', 'image/jpeg'],
+    // 'avif' intentionally disabled
     'webp' => $supportsWebP ? ['webp', 'image/webp'] : ['jpeg', 'image/jpeg'],
     'png'  => ['png', 'image/png'],
     'jpg', 'jpeg' => ['jpeg', 'image/jpeg'],
@@ -78,11 +74,19 @@ $cacheKey = sha1(json_encode([$srcRaw, $targetW, $outExt, $q]));
 $cacheDir = cache_dir();
 $cacheFile = "$cacheDir/$cacheKey.$outExt";
 
-// If cached file exists, respond with a 301 redirect to static file so Apache serves it.
+// If cached file exists, serve it directly with strong caching headers
 if (is_file($cacheFile)) {
+  $etag = 'W/"' . $cacheKey . '"';
+  header('ETag: ' . $etag);
   header('Cache-Control: public, max-age=31536000, immutable');
-  header('Location: ' . '/_cache/img/' . basename($cacheFile));
-  http_response_code(301);
+  header('Content-Type: ' . $mime);
+  header('Content-Length: ' . filesize($cacheFile));
+  header('Content-Disposition: inline; filename="cover.' . $outExt . '"');
+  if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && trim($_SERVER['HTTP_IF_NONE_MATCH']) === $etag) {
+    http_response_code(304);
+    exit;
+  }
+  readfile($cacheFile);
   exit;
 }
 
@@ -147,9 +151,6 @@ if ($lock) {
 $ok = false;
 ob_start();
 switch ($outExt) {
-  case 'avif':
-    if ($supportsAVIF) { $ok = imageavif($im, null, $q); }
-    break;
   case 'webp':
     if ($supportsWebP) { $ok = imagewebp($im, null, $q); }
     break;
@@ -179,8 +180,12 @@ if (!$ok || $blob === false) {
 @chmod($cacheFile, 0644);
 if ($lock) { flock($lock, LOCK_UN); fclose($lock); @unlink($lockFile); }
 
-// Redirect to static file so future hits bypass PHP
+// Serve bytes directly (no redirect)
+$etag = 'W/"' . $cacheKey . '"';
+header('ETag: ' . $etag);
 header('Cache-Control: public, max-age=31536000, immutable');
-header('Location: ' . '/_cache/img/' . basename($cacheFile));
-http_response_code(301);
+header('Content-Type: ' . $mime);
+header('Content-Length: ' . strlen($blob));
+header('Content-Disposition: inline; filename="cover.' . $outExt . '"');
+echo $blob;
 exit;
