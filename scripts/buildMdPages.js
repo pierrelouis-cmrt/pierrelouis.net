@@ -154,10 +154,10 @@ function preprocess(markdown) {
   /* 2· definition list with “= ” → “: ” -------------------------------- */
   txt = txt.replace(/^\s*=\s+/gm, ": ");
 
-  /* 3· strip trailing “(H1–H6)” in headings --------------------------- */
+  /* 3· strip trailing “(H1–H6)” in headings ---------------------------- */
   txt = txt.replace(/^(#{1,6}.*?)\s*\(H[1-6]\)\s*$/gm, "$1");
 
-  /* 4· ensure task list starts a **new** list by switching bullet char */
+  /* 4· ensure task list starts a **new** list by switching bullet char -- */
   txt = txt.replace(/^-(\s+\[(?:\s|x|X)])+/gm, (m) => m.replace(/^-/, "+"));
 
   return txt;
@@ -204,6 +204,7 @@ async function buildDir(srcDir, outDir) {
       '<ul class="$1" style="list-style:none;margin:0;padding:0;"'
     );
 
+    // No additional UL styling here — keep semantic HTML clean.
     const html = (
       await readFile(path.join(__dirname, "page-skeleton.html"), "utf8")
     )

@@ -2638,50 +2638,79 @@ article hr {
 }
 
 /* Lists with custom markers */
+/* Base lists */
+article :where(ul, ol) {
+  margin: var(--space-4) 0;
+  padding-left: var(--space-6);
+}
+
+/* Unordered lists (bullets) */
 article ul {
-  margin: var(--space-4) auto;
-  list-style: none;
-  padding-left: 0;
+  list-style: disc;
+}
+article ul ul {
+  list-style: circle;
+}
+article ul ul ul {
+  list-style: square;
 }
 
+/* Ordered lists (numbers) */
 article ol {
-  margin: var(--space-4) auto;
-  list-style: none;
-  counter-reset: list-counter;
-  padding-left: 0;
+  list-style: decimal;
+}
+article ol ol {
+  list-style: lower-alpha;
+}
+article ol ol ol {
+  list-style: lower-roman;
 }
 
-article ul li {
-  margin: var(--space-2) 0 var(--space-2) var(--space-6);
-  padding-left: var(--space-2);
+/* List items + markers */
+article li {
+  margin: var(--space-2) 0;
   color: var(--text-body);
-  position: relative;
 }
-
-article ol li {
-  margin: var(--space-2) 0 var(--space-2) var(--space-6);
-  padding-left: var(--space-2);
-  color: var(--text-body);
-  position: relative;
-  counter-increment: list-counter;
-}
-
-article ul li::before {
-  content: "•";
-  color: var(--text-subtle);
-  font-weight: bold;
-  position: absolute;
-  left: -1rem;
-}
-
-article ol li::before {
-  content: counter(list-counter) ".";
+article :where(ul, ol) > li::marker {
   color: var(--text-subtle);
   font-weight: var(--font-semibold);
-  position: absolute;
-  left: -1.5rem;
-  width: var(--space-4);
-  text-align: right;
+}
+
+/* Tighten nested lists a bit inside items */
+article li > :where(ul, ol) {
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+/* Task lists from markdown-it-task-lists */
+article .article-task-list,
+article .article-contains-task-list {
+  list-style: none;
+  margin: var(--space-4) 0;
+  padding-left: 0;
+}
+article .article-task-list > li,
+article .article-contains-task-list > li {
+  margin: var(--space-2) 0;
+}
+article .article-task-list > li::marker,
+article .article-contains-task-list > li::marker {
+  content: "";
+}
+article .article-task-list-checkbox {
+  margin-right: var(--space-2);
+  transform: translateY(1px);
+}
+
+/* Optional: definition lists (from markdown-it-deflist) */
+article dl {
+  margin: var(--space-4) 0;
+}
+article dt {
+  font-weight: var(--font-semibold);
+}
+article dd {
+  margin: 0 0 var(--space-2) var(--space-6);
 }
 
 /* Task lists with better alignment */
@@ -2773,7 +2802,7 @@ article .article-embed {
 }
 
 .avatar-embed {
-  height: 575px !important;
+  height: 600px !important;
 }
 
 .pixels-embed {
