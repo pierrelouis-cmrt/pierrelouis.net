@@ -525,7 +525,7 @@ h1.hero-title {
 }
 
 .hero-section {
-  margin: var(--space-24) auto var(--space-16);
+  margin: var(--space-24) auto var(--space-8);
   max-width: 600px;
 }
 
