@@ -5,14 +5,49 @@ const letterBank = document.querySelector(".signature-letter-templates");
 const name = "Pierre Louis";
 
 // ─────────────────────────────────────────────────────────
-//  Create signature on page load
+//  Trigger only when signature enters viewport
 // ─────────────────────────────────────────────────────────
-window.addEventListener("load", () => {
-  setTimeout(() => generateSignature(name, true), 1000);
-});
+let hasAnimated = false;
+
+function setupViewportTrigger() {
+  if (!signature) return;
+
+  // If IntersectionObserver is available, use it to animate on enter
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && !hasAnimated) {
+            hasAnimated = true;
+            generateSignature(name, true);
+            observer.unobserve(entry.target);
+            break;
+          }
+        }
+      },
+      {
+        root: null,
+        threshold: 0, // as soon as any pixel is visible
+      }
+    );
+    observer.observe(signature);
+  } else {
+    // Fallback: animate shortly after DOM is ready
+    window.addEventListener("load", () => {
+      if (!hasAnimated) {
+        hasAnimated = true;
+        generateSignature(name, true);
+      }
+    });
+  }
+}
+
+setupViewportTrigger();
 
 // Replay animation on hover
-signature.addEventListener("mouseenter", replayAnimation);
+if (signature) {
+  signature.addEventListener("mouseenter", replayAnimation);
+}
 
 // ─────────────────────────────────────────────────────────
 //  Signature builder
