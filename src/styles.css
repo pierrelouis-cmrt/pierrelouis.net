@@ -2641,7 +2641,6 @@ article hr {
 /* Base lists */
 article :where(ul, ol) {
   margin: var(--space-4) 0;
-  padding-left: var(--space-6);
 }
 
 /* Unordered lists (bullets) */
@@ -3084,6 +3083,12 @@ mjx-container::-webkit-scrollbar-thumb {
   .project-tech-stack,
   .social-platforms-grid {
     padding: 0 var(--space-5) !important;
+  }
+
+  article :where(ul, ol) p,
+  article li p {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   .credits-grid {
