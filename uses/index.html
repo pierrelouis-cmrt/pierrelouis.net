@@ -1528,7 +1528,7 @@
         const lastModified = response.headers.get("Last-Modified");
         if (lastModified) {
           const footerText = document.querySelector(".last-updated");
-          footerText.textContent = `This list evolves as my workflow does. Last updated: ${new Date(
+          footerText.innerHTML = `This list evolves as my workflow does.<br>Last updated: ${new Date(
             lastModified
           ).toLocaleDateString("en-US", {
             year: "numeric",
