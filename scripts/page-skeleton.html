@@ -59,9 +59,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v153.css" as="style" />
+    <link rel="preload" href="/src/output-v155.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v153.css" />
+    <link rel="stylesheet" href="/src/output-v155.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -201,19 +201,41 @@
           threshold: 80,
           isMobile: window.innerWidth < 640,
           dynamicBottomPadding: 0,
+          // tap detection
+          startTime: 0,
+          totalMove: 0,
+          moved: false,
+          tapMaxMove: 6,
+          tapMaxTime: 250,
           
           onTouchStart(event) {
             this.isDragging = true;
             this.startY = event.touches[0].clientY;
+            this.currentY = this.startY;
+            this.offsetY = 0;
+            this.startTime = (window.performance && performance.now) ? performance.now() : Date.now();
+            this.totalMove = 0;
+            this.moved = false;
           },
           onTouchMove(event) {
             if (!this.isDragging) return;
             this.currentY = event.touches[0].clientY;
-            this.offsetY = Math.max(0, this.currentY - this.startY);
+            const delta = Math.max(0, this.currentY - this.startY);
+            this.offsetY = delta;
+            this.totalMove = Math.max(this.totalMove, Math.abs(this.currentY - this.startY));
+            if (this.totalMove > this.tapMaxMove) this.moved = true;
           },
           onTouchEnd() {
             if (!this.isDragging) return;
             this.isDragging = false;
+            const duration = ((window.performance && performance.now) ? performance.now() : Date.now()) - this.startTime;
+            const travel = this.totalMove;
+            // Treat a quick, tiny movement as a tap on the handle area
+            if (duration <= this.tapMaxTime && travel <= this.tapMaxMove) {
+              commandOpen = false;
+              this.offsetY = 0;
+              return;
+            }
             if (this.offsetY > this.threshold) {
               commandOpen = false;
             } else {
@@ -278,7 +300,10 @@
           $watch('commandOpen', (value) => {
             if (value === true) {
               offsetY = 0;
-              document.body.classList.add('overflow-hidden');
+              // allow background scroll on mobile drawer; lock on desktop
+              if (!isMobile) {
+                document.body.classList.add('overflow-hidden');
+              }
               setTimeout(() => calculateSafariPadding(), 100);
             } else {
               document.body.classList.remove('overflow-hidden');
@@ -286,7 +311,7 @@
           });
         "
                 x-show="commandOpen"
-                class="fixed inset-0 z-[99] flex sm:items-center sm:justify-center w-screen h-screen"
+                class="fixed inset-0 z-[99] flex sm:items-center sm:justify-center w-screen h-screen pointer-events-none sm:pointer-events-auto"
                 @click="commandOpen = false"
                 x-cloak
               >
@@ -461,6 +486,44 @@
                 }
                 commandOpen = false;
               }
+            },
+            // Close-on-outside interaction (mobile only) without triggering background links
+            lastCloseTs: 0,
+            isInteractiveEl(el){
+              return !!(el && el.closest && el.closest('a,button,input,textarea,select,[role=button]'));
+            },
+            outsideShouldClose(target){
+              if (!this.isMobile) return false;
+              const drawer = this.$refs.drawerContainer;
+              if (!drawer) return false;
+              if (drawer.contains(target)) return false;
+              // do not close when tapping interactive background elements
+              if (this.isInteractiveEl(target)) return false;
+              return true;
+            },
+            outsideClickCapture(event){
+              if (!commandOpen) return;
+              if (!this.isMobile) return; // desktop handled by backdrop
+              if (this.outsideShouldClose(event.target)) {
+                event.preventDefault();
+                event.stopPropagation();
+                this.lastCloseTs = Date.now();
+                commandOpen = false;
+              }
+            },
+            outsideTouchEndCapture(event){
+              if (!commandOpen) return;
+              if (!this.isMobile) return;
+              const now = Date.now();
+              if (now - this.lastCloseTs < 200) return; // guard double fire
+              const touch = event.changedTouches ? event.changedTouches[0] : null;
+              const target = touch ? document.elementFromPoint(touch.clientX, touch.clientY) : event.target;
+              if (this.outsideShouldClose(target)) {
+                event.preventDefault();
+                event.stopPropagation();
+                this.lastCloseTs = now;
+                commandOpen = false;
+              }
             }
           }"
                   x-init="
@@ -469,6 +532,8 @@
             $watch('commandSearch', () => commandSearchItems());
             $watch('commandItemSelected', item => handleSelectedItem(item));
           "
+                  @click.capture.window="outsideClickCapture($event)"
+                  @touchend.capture.window="outsideTouchEndCapture($event)"
                   @keydown.down.prevent="commandItemActiveNext()"
                   @keydown.up.prevent="commandItemActivePrevious()"
                   @keydown.enter="commandItemSelected = commandItemActive; commandItemActive = null;"
@@ -482,8 +547,9 @@
                     x-show="commandOpen"
                     :style="`transform: translateY(${offsetY}px); ${getDynamicHeight()}`"
                     x-bind:class="{'transition-transform duration-150 ease-out will-change-transform': !isDragging}"
-                    class="bottom-0 left-1/2 -translate-x-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--border-secondary)] flex flex-col w-full sm:h-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--bg-primary)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:-translate-x-0 overflow-visible z-[9999]"
+                    class="bottom-0 left-1/2 -translate-x-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--border-secondary)] flex flex-col w-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--bg-primary)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:-translate-x-0 overflow-visible z-[9999] pointer-events-auto"
                     @click.stop
+                    x-ref="drawerContainer"
                   >
                     <!-- Mobile handle - Visual indicator only -->
                     <div
@@ -493,10 +559,16 @@
                       <div
                         x-show="commandOpen && isTouchDevice"
                         class="absolute -top-[90px] left-0 w-full h-[120px] z-10"
-                        style="background: transparent; pointer-events: auto"
-                        @touchstart.passive="onTouchStart($event)"
-                        @touchmove.passive="onTouchMove($event)"
-                        @touchend.passive="onTouchEnd()"
+                        style="
+                          background: transparent;
+                          pointer-events: auto;
+                          touch-action: none;
+                          overscroll-behavior: contain;
+                        "
+                        @click="commandOpen = false"
+                        @touchstart.prevent="onTouchStart($event)"
+                        @touchmove.prevent="onTouchMove($event)"
+                        @touchend="onTouchEnd()"
                       ></div>
                       <div
                         class="w-16 h-1 bg-[var(--border-secondary)] rounded-full"
@@ -544,7 +616,7 @@
                     <!-- Content list with SMART DYNAMIC PADDING -->
                     <div
                       x-ref="commandItemsList"
-                      :style="`padding-bottom: ${dynamicBottomPadding}px`"
+                      :style="isMobile ? `padding-bottom: ${dynamicBottomPadding}px` : ''"
                       class="grow overflow-y-auto overflow-x-hidden sm:pb-0 overscroll-contain"
                     >
                       <template
