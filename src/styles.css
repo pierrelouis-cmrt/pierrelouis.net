@@ -1549,16 +1549,21 @@ hr.divider-thin {
   clear: both;
 }
 
-/* Rest of your existing CSS remains the same */
+/* Scroll animation */
 .animate-on-scroll {
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .animate-on-scroll.visible {
-  opacity: 1;
-  transform: translateY(0);
+  animation: fade-in-up 0.8s ease forwards;
+}
+
+@keyframes fade-in-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .signature-section {
@@ -1889,6 +1894,28 @@ hr.divider-thin {
   border-radius: var(--radius-xl);
 }
 
+.colophon section > h3 {
+  font-weight: var(--font-semibold);
+  margin-top: 2.5rem;
+  margin-bottom: 0;
+}
+
+/* If any decorative underline exists from earlier rules,
+   keep its size but make it neutral/monochrome. */
+.colophon section > h3::after {
+  /* do NOT change width/height/margins here */
+  background: hsl(from var(--text-body) h s l / 30%) !important;
+}
+
+/* Same idea if a left accent bar was added to the sustainability h3 */
+.colophon #sustainability::before {
+  background: hsl(from var(--text-body) h s l / 30%) !important;
+}
+
+/* Optional: icons inside h3 stay neutral without affecting links elsewhere */
+.colophon section > h3 .lucide {
+  color: var(--text-subtle);
+}
 /* -------- Projects Page -------- */
 
 /* Project collection */

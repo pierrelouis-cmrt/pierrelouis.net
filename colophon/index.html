@@ -59,9 +59,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v156.css" as="style" />
+    <link rel="preload" href="/src/output-v157.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v156.css" />
+    <link rel="stylesheet" href="/src/output-v157.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -713,285 +713,358 @@
       </div>
     </nav>
 
-    <main class="colophon">
-      <h2 class="section-heading">Colophon</h2>
-      <h2 class="page-subtitle text-italic">
+    <main class="colophon" aria-labelledby="colophon-heading">
+      <h2 id="colophon-heading" class="section-heading">Colophon</h2>
+      <p class="page-subtitle text-italic">
         A peek behind the making of this portfolio.
-      </h2>
+      </p>
+
       <hr class="divider-standard" />
-      <p class="animate-on-scroll">
-        This site was entirely designed and coded by me, using plain old HTML,
-        CSS, and JavaScript. I use a bit of Tailwind and AlpineJS here and there
-        for some more advanced features, like the command palette. All the code
-        is open-source and available on
-        <a
-          href="https://github.com/pierrelouis-cmrt/pierrelouis.net"
-          target="_blank"
-          >Github</a
-        >
-        under the MIT license.
-      </p>
-      <p class="animate-on-scroll">
-        I design, prototype, and test everything directly in the code, inside VS
-        Code.
-      </p>
-      <p class="animate-on-scroll">
-        Typography is mostly just the default system UI fonts for now. There's a
-        bit of
-        <a
-          href="https://fonts.google.com/specimen/Libre+Baskerville"
-          target="_blank"
-          >Libre Baskerville</a
-        >
-        sprinkled in too. Icons are from
-        <a href="https://lucide.dev/" target="_blank">Lucide</a>, a free and
-        open-source icon set built by an amazing community.
-      </p>
-      <p class="animate-on-scroll">
-        Huge thanks to <a href="https://thu-le.com/" target="_blank">Thu Le</a>,
-        her work has been a major source of inspiration for this site.
-      </p>
-      <p class="animate-on-scroll">
-        I use <a href="https://umami.is/" target="_blank">Umami</a> for
-        analytics. It's open-source and privacy-focused. I simply want to know
-        how people use my site (how you discover it, what pages you visit,
-        etc.).That's it. No tracking, no ads, no cookies, no data collection.
-      </p>
-      <p class="animate-on-scroll">
-        And just so you know, this website is cleaner than 94% of all web pages
-        globally. Only
-        <a
-          href="https://www.websitecarbon.com/website/pierrelouis-net/"
-          target="_blank"
-          >0.03g of CO2</a
-        >
-        is produced every time someone visits it.
-      </p>
+
+      <!-- Build & Stack -->
+      <section class="animate-on-scroll" aria-labelledby="build-stack">
+        <h3 id="build-stack">Build & Stack</h3>
+        <p>
+          Designed and coded by me with semantic HTML, modern CSS, and vanilla
+          JavaScript. I sprinkle in Tailwind and AlpineJS for a few interactive
+          details (like the command palette). The entire codebase is open-source
+          on
+          <a
+            href="https://github.com/pierrelouis-cmrt/pierrelouis.net"
+            target="_blank"
+            >GitHub</a
+          >
+          under the MIT license.
+        </p>
+        <p>I design, prototype, and test directly in code using VS Code.</p>
+      </section>
+
+      <!-- Type & Icons -->
+      <section class="animate-on-scroll" aria-labelledby="type-icons">
+        <h3 id="type-icons">Type & Icons</h3>
+        <p>
+          The interface leans on the system UI font stack for performance and
+          clarity, with a touch of
+          <a
+            href="https://fonts.google.com/specimen/Libre+Baskerville"
+            target="_blank"
+            >Libre Baskerville</a
+          >
+          for accents. Icons are from
+          <a href="https://lucide.dev/" target="_blank">Lucide</a>, a free and
+          open-source set built by a great community.
+        </p>
+      </section>
+
+      <!-- Privacy-Friendly Analytics -->
+      <section class="animate-on-scroll" aria-labelledby="privacy-analytics">
+        <h3 id="privacy-analytics">Privacy-Friendly Analytics</h3>
+        <p>
+          I use <a href="https://umami.is/" target="_blank">Umami</a>, a
+          lightweight, open-source, cookieless analytics tool. I simply want to
+          understand how the site is used (how you discover it, which pages you
+          visit, etc.). That's it. No ads, no cross-site tracking, no cookies,
+          and no personally identifiable data — ever.
+        </p>
+      </section>
+
+      <!-- Sustainability (Ecology) -->
+      <section class="animate-on-scroll" aria-labelledby="sustainability">
+        <h3 id="sustainability">Sustainability</h3>
+        <p>
+          Performance and footprint matter. This site is cleaner than 96% of
+          tested web pages. Each visit produces about
+          <a
+            href="https://www.websitecarbon.com/website/pierrelouis-net/"
+            target="_blank"
+            >0.02g of CO₂</a
+          >. It runs on
+          <a
+            href="https://www.thegreenwebfoundation.org/green-web-check/?url=pierrelouis.net"
+            target="_blank"
+            >verified green hosting</a
+          >, and it's featured on
+          <a href="https://lowwwcarbon.com/" target="_blank">lowwwcarbon</a>
+          with an A+ rating.
+        </p>
+        <p>
+          What helps keep it lean: minimal JavaScript, compressed assets, system
+          fonts by default, carefully budgeted images, and a straightforward
+          architecture.
+        </p>
+
+        <!--<div class="certification-badges">
+          <a
+            href="https://www.websitecarbon.com/website/pierrelouis-net/"
+            target="_blank"
+          >
+            <img
+              src="../src/assets/websitecarbon.webp"
+              alt="Website Carbon Analysis"
+              class="carbon-badge"
+            />
+          </a>
+          <a
+            href="https://www.thegreenwebfoundation.org/green-web-check/?url=pierrelouis.net"
+            target="_blank"
+          >
+            <img
+              src="https://app.greenweb.org/api/v3/greencheckimage/pierrelouis.net?nocache=true"
+              alt="This website runs on green hosting — verified by thegreenwebfoundation.org"
+              width="200"
+              height="95"
+            />
+          </a>
+        </div>-->
+      </section>
 
       <hr class="divider-thin" />
-      <p class="animate-on-scroll">
-        Finally, here's a list of websites and portfolios that have inspired me
-        along the way. It's unordered, and will grow over time. You can find
-        more carefully selected sites like these on
-        <a href="https://deadsimplesites.com/" target="_blank"
-          >Dead Simple Sites</a
-        >.
-      </p>
-      <div class="credits-grid">
-        <a
-          href="https://www.harshsingh.me"
-          target="_blank"
-          class="animate-on-scroll"
-          >harshsingh.me</a
-        >
-        <a
-          href="https://kaijordan.com"
-          target="_blank"
-          class="animate-on-scroll"
-          >kaijordan.com</a
-        >
-        <a
-          href="https://www.emilykshen.com"
-          target="_blank"
-          class="animate-on-scroll"
-          >emilykshen.com</a
-        >
-        <a href="https://asrvd.me" target="_blank" class="animate-on-scroll"
-          >asrvd.me</a
-        >
-        <a href="https://jmswrnr.com" target="_blank" class="animate-on-scroll"
-          >jmswrnr.com</a
-        >
-        <a
-          href="https://sigurdarson.is"
-          target="_blank"
-          class="animate-on-scroll"
-          >sigurdarson.is</a
-        >
-        <a
-          href="https://lyleklyne.com"
-          target="_blank"
-          class="animate-on-scroll"
-          >lyleklyne.com</a
-        >
-        <a href="https://mateusf.com" target="_blank" class="animate-on-scroll"
-          >mateusf.com</a
-        >
-        <a href="https://nuro.dev" target="_blank" class="animate-on-scroll"
-          >nuro.dev</a
-        >
-        <a href="https://jahir.dev" target="_blank" class="animate-on-scroll"
-          >jahir.dev</a
-        >
-        <a
-          href="https://rishimohan.me"
-          target="_blank"
-          class="animate-on-scroll"
-          >rishimohan.me</a
-        >
-        <a href="https://kejk.tech" target="_blank" class="animate-on-scroll"
-          >kejk.tech</a
-        >
-        <a href="https://pandadev.net" target="_blank" class="animate-on-scroll"
-          >pandadev.net</a
-        >
-        <a
-          href="https://hellobrianl.in"
-          target="_blank"
-          class="animate-on-scroll"
-          >hellobrianl.in</a
-        >
-        <a href="https://kyswtn.com" target="_blank" class="animate-on-scroll"
-          >kyswtn.com</a
-        >
-        <a
-          href="https://paulstamatiou.com/gear"
-          target="_blank"
-          class="animate-on-scroll"
-          >paulstamatiou.com</a
-        >
-        <a
-          href="https://aaronrolston.com"
-          target="_blank"
-          class="animate-on-scroll"
-          >aaronrolston.com</a
-        >
-        <a
-          href="https://educalvolopez.com"
-          target="_blank"
-          class="animate-on-scroll"
-          >educalvolopez.com</a
-        >
-        <a href="https://thu-le.com" target="_blank" class="animate-on-scroll"
-          >thu-le.com</a
-        >
-        <a href="https://paco.me" target="_blank" class="animate-on-scroll"
-          >paco.me</a
-        >
-        <a href="https://slrncl.com" target="_blank" class="animate-on-scroll"
-          >slrncl.com</a
-        >
-        <a
-          href="https://henribredt.de"
-          target="_blank"
-          class="animate-on-scroll"
-          >henribredt.de</a
-        >
-        <a href="https://sesame.com" target="_blank" class="animate-on-scroll"
-          >sesame.com</a
-        >
-        <a href="https://sannedv.com" target="_blank" class="animate-on-scroll"
-          >sannedv.com</a
-        >
-        <a href="https://kyler.design" target="_blank" class="animate-on-scroll"
-          >kyler.design</a
-        >
-        <a
-          href="https://brianmaierjr.com"
-          target="_blank"
-          class="animate-on-scroll"
-          >brianmaierjr.com</a
-        >
-        <a
-          href="https://daleanthony.com"
-          target="_blank"
-          class="animate-on-scroll"
-          >daleanthony.com</a
-        >
-        <a href="https://prosper.org" target="_blank" class="animate-on-scroll"
-          >prosper.org</a
-        >
-        <a
-          href="https://tdquang.vercel.app"
-          target="_blank"
-          class="animate-on-scroll"
-          >tdquang.vercel.app</a
-        >
-        <a
-          href="https://stepanpavlov.com"
-          target="_blank"
-          class="animate-on-scroll"
-          >stepanpavlov.com</a
-        >
-        <a
-          href="https://youcefbelabed.webflow.io"
-          target="_blank"
-          class="animate-on-scroll"
-          >youcefbelabed</a
-        >
-        <a href="https://thomasri.co" target="_blank" class="animate-on-scroll"
-          >thomasri.co</a
-        >
-        <a href="https://timhoili.com" target="_blank" class="animate-on-scroll"
-          >timhoili.com</a
-        >
-        <a
-          href="https://dominikhofer.me"
-          target="_blank"
-          class="animate-on-scroll"
-          >dominikhofer.me</a
-        >
-        <a href="https://trangbui.me" target="_blank" class="animate-on-scroll"
-          >trangbui.me</a
-        >
-        <a
-          href="https://tomasmaillo.com"
-          target="_blank"
-          class="animate-on-scroll"
-          >tomasmaillo.com</a
-        >
-        <a href="https://milos.design" target="_blank" class="animate-on-scroll"
-          >milos.design</a
-        >
-        <a href="https://mosadiq.com" target="_blank" class="animate-on-scroll"
-          >mosadiq.com</a
-        >
-        <a href="https://perrera.com" target="_blank" class="animate-on-scroll"
-          >perrera.com</a
-        >
-        <a
-          href="https://dylanatsmith.com/"
-          target="_blank"
-          class="animate-on-scroll"
-          >dylanatsmith.com</a
-        >
-        <a
-          href="https://nazhamid.com/"
-          target="_blank"
-          class="animate-on-scroll"
-          >nazhamid.com</a
-        >
-      </div>
+
+      <!-- Credits -->
+      <section class="animate-on-scroll" aria-labelledby="credits">
+        <h3 id="credits">Credits & Thanks</h3>
+        <p>
+          Huge thanks to
+          <a href="https://thu-le.com/" target="_blank">Thu Le</a>. Her work has
+          been a major source of inspiration for this site.
+        </p>
+      </section>
 
       <hr class="divider-thin" />
-      <div class="certification-badges animate-on-scroll">
-        <a
-          href="https://www.websitecarbon.com/website/pierrelouis-net/"
-          target="_blank"
-        >
-          <img
-            src="../src/assets/websitecarbon.webp"
-            alt="Website Carbon Analysis"
-            class="carbon-badge"
-          />
-        </a>
-        <a
-          href="https://www.thegreenwebfoundation.org/green-web-check/?url=pierrelouis.net"
-          target="_blank"
-        >
-          <img
-            src="https://app.greenweb.org/api/v3/greencheckimage/pierrelouis.net?nocache=true"
-            alt="This website runs on green hosting - verified by thegreenwebfoundation.org"
-            width="200px"
-            height="95px"
-          />
-        </a>
-        <!--<div id="wcb" class="carbonbadge"></div>
-        <script
-          src="https://unpkg.com/website-carbon-badges@1.1.3/b.min.js"
-          defer
-        ></script>-->
-      </div>
+
+      <!-- Inspiration Gallery -->
+      <section class="animate-on-scroll" aria-labelledby="inspiration">
+        <h3 id="inspiration">Inspiration Gallery</h3>
+        <p>
+          Here's an evolving, unordered list of websites and portfolios that
+          inspired this one. You can find more hand-picked, minimal sites at
+          <a href="https://deadsimplesites.com/" target="_blank"
+            >Dead Simple Sites</a
+          >.
+        </p>
+
+        <div class="credits-grid">
+          <a
+            href="https://www.harshsingh.me"
+            target="_blank"
+            class="animate-on-scroll"
+            >harshsingh.me</a
+          >
+          <a
+            href="https://kaijordan.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >kaijordan.com</a
+          >
+          <a
+            href="https://www.emilykshen.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >emilykshen.com</a
+          >
+          <a href="https://asrvd.me" target="_blank" class="animate-on-scroll"
+            >asrvd.me</a
+          >
+          <a
+            href="https://jmswrnr.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >jmswrnr.com</a
+          >
+          <a
+            href="https://sigurdarson.is"
+            target="_blank"
+            class="animate-on-scroll"
+            >sigurdarson.is</a
+          >
+          <a
+            href="https://lyleklyne.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >lyleklyne.com</a
+          >
+          <a
+            href="https://mateusf.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >mateusf.com</a
+          >
+          <a href="https://nuro.dev" target="_blank" class="animate-on-scroll"
+            >nuro.dev</a
+          >
+          <a href="https://jahir.dev" target="_blank" class="animate-on-scroll"
+            >jahir.dev</a
+          >
+          <a
+            href="https://rishimohan.me"
+            target="_blank"
+            class="animate-on-scroll"
+            >rishimohan.me</a
+          >
+          <a href="https://kejk.tech" target="_blank" class="animate-on-scroll"
+            >kejk.tech</a
+          >
+          <a
+            href="https://pandadev.net"
+            target="_blank"
+            class="animate-on-scroll"
+            >pandadev.net</a
+          >
+          <a
+            href="https://hellobrianl.in"
+            target="_blank"
+            class="animate-on-scroll"
+            >hellobrianl.in</a
+          >
+          <a href="https://kyswtn.com" target="_blank" class="animate-on-scroll"
+            >kyswtn.com</a
+          >
+          <a
+            href="https://paulstamatiou.com/gear"
+            target="_blank"
+            class="animate-on-scroll"
+            >paulstamatiou.com</a
+          >
+          <a
+            href="https://aaronrolston.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >aaronrolston.com</a
+          >
+          <a
+            href="https://educalvolopez.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >educalvolopez.com</a
+          >
+          <a href="https://thu-le.com" target="_blank" class="animate-on-scroll"
+            >thu-le.com</a
+          >
+          <a href="https://paco.me" target="_blank" class="animate-on-scroll"
+            >paco.me</a
+          >
+          <a href="https://slrncl.com" target="_blank" class="animate-on-scroll"
+            >slrncl.com</a
+          >
+          <a
+            href="https://henribredt.de"
+            target="_blank"
+            class="animate-on-scroll"
+            >henribredt.de</a
+          >
+          <a href="https://sesame.com" target="_blank" class="animate-on-scroll"
+            >sesame.com</a
+          >
+          <a
+            href="https://sannedv.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >sannedv.com</a
+          >
+          <a
+            href="https://kyler.design"
+            target="_blank"
+            class="animate-on-scroll"
+            >kyler.design</a
+          >
+          <a
+            href="https://brianmaierjr.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >brianmaierjr.com</a
+          >
+          <a
+            href="https://daleanthony.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >daleanthony.com</a
+          >
+          <a
+            href="https://prosper.org"
+            target="_blank"
+            class="animate-on-scroll"
+            >prosper.org</a
+          >
+          <a
+            href="https://tdquang.vercel.app"
+            target="_blank"
+            class="animate-on-scroll"
+            >tdquang.vercel.app</a
+          >
+          <a
+            href="https://stepanpavlov.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >stepanpavlov.com</a
+          >
+          <a
+            href="https://youcefbelabed.webflow.io"
+            target="_blank"
+            class="animate-on-scroll"
+            >youcefbelabed.webflow.io</a
+          >
+          <a
+            href="https://thomasri.co"
+            target="_blank"
+            class="animate-on-scroll"
+            >thomasri.co</a
+          >
+          <a
+            href="https://timhoili.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >timhoili.com</a
+          >
+          <a
+            href="https://dominikhofer.me"
+            target="_blank"
+            class="animate-on-scroll"
+            >dominikhofer.me</a
+          >
+          <a
+            href="https://trangbui.me"
+            target="_blank"
+            class="animate-on-scroll"
+            >trangbui.me</a
+          >
+          <a
+            href="https://tomasmaillo.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >tomasmaillo.com</a
+          >
+          <a
+            href="https://milos.design"
+            target="_blank"
+            class="animate-on-scroll"
+            >milos.design</a
+          >
+          <a
+            href="https://mosadiq.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >mosadiq.com</a
+          >
+          <a
+            href="https://perrera.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >perrera.com</a
+          >
+          <a
+            href="https://dylanatsmith.com/"
+            target="_blank"
+            class="animate-on-scroll"
+            >dylanatsmith.com</a
+          >
+          <a
+            href="https://nazhamid.com/"
+            target="_blank"
+            class="animate-on-scroll"
+            >nazhamid.com</a
+          >
+        </div>
+      </section>
     </main>
 
     <footer>
