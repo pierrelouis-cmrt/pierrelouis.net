@@ -376,5 +376,18 @@
     "description": "Video journalist behind the show 'Huge If True', delivering optimistic and beautifully produced science & tech explainers.",
     "image": "",
     "tag": "People"
+  },
+  {
+    "year": 2025,
+    "month": "Aug",
+    "link": "https://www.youtube.com/watch?v=fHRS_NOs24w",
+    "title": "Ramanujan the Math Genius",
+    "meta": {
+      "text": "@fern on YouTube",
+      "icon": "https://icons.duckduckgo.com/ip3/youtube.com.ico"
+    },
+    "description": "An overview of Ramanujan's life and contributions to mathematics. He truly was a genius with incredible talent and intuition.",
+    "image": "",
+    "tag": "Videos"
   }
 ]
