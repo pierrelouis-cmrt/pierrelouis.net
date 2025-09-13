@@ -402,5 +402,18 @@
     "description": "OpenAI's o1 model was a huge deal: it introduced the notion of \"reasoning\", which is a fundamental step towards general intelligence. The model was the first to be able to solve bigger problems, step by step. This was truely a game changer.",
     "image": "",
     "tag": "Reading"
+  },
+  {
+    "year": 2025,
+    "month": "Sep",
+    "link": "https://x.com/kimmonismus",
+    "title": "Kim \"Chubby\" Isenberg",
+    "meta": {
+      "text": "@kimmonismus on X",
+      "icon": "/src/assets/profile.png"
+    },
+    "description": "One of the most insightful thinkers about AI and the future on X. His posts are always worth reading. His newsletter is also very good.",
+    "image": "",
+    "tag": "People"
   }
 ]
