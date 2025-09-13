@@ -389,5 +389,18 @@
     "description": "An overview of Ramanujan's life and contributions to mathematics. He truly was a genius with incredible talent and intuition.",
     "image": "",
     "tag": "Videos"
+  },
+  {
+    "year": 2025,
+    "month": "Sep",
+    "link": "https://x.com/kimmonismus/status/1966627812858855624",
+    "title": "One of the biggest breakthroughs in AI",
+    "meta": {
+      "text": "by @kimmonismus on X",
+      "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+    },
+    "description": "OpenAI's o1 model was a huge deal: it introduced the notion of \"reasoning\", which is a fundamental step towards general intelligence. The model was the first to be able to solve bigger problems, step by step. This was truely a game changer.",
+    "image": "",
+    "tag": "Reading"
   }
 ]
