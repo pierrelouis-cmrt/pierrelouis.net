@@ -170,6 +170,7 @@
           threshold: 80,
           isMobile: window.innerWidth < 640,
           viewportUpdateHandler: null,
+          bottomOvershoot: 160,
           // tap detection
           startTime: 0,
           totalMove: 0,
@@ -214,10 +215,12 @@
           
           getDrawerStyles() {
             if (this.isMobile) {
+              const overshoot = Math.max(this.bottomOvershoot || 0, 0);
+              const safeInset = 'env(safe-area-inset-bottom, 0px)';
               return {
                 transform: `translate(-50%, ${this.offsetY}px)`,
                 top: 'max(64px, 20dvh)',
-                bottom: 'env(safe-area-inset-bottom, 0px)'
+                bottom: `calc(-1 * (${safeInset} + ${overshoot}px))`
               };
             }
             return {
@@ -225,6 +228,15 @@
             };
           },
           
+          getListStyles() {
+            if (!this.isMobile) return {};
+            const overshoot = Math.max(this.bottomOvershoot || 0, 0);
+            return {
+              paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + ${overshoot}px)`,
+              WebkitOverflowScrolling: 'touch'
+            };
+          },
+
           refreshViewportState() {
             this.isMobile = window.innerWidth < 640;
           },
@@ -564,7 +576,7 @@
                     <!-- Scrollable content respects mobile safe areas -->
                     <div
                       x-ref="commandItemsList"
-                      :style="isMobile ? 'padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);' : ''"
+                      :style="getListStyles()"
                       class="grow min-h-0 overflow-y-auto overflow-x-hidden sm:pb-0 overscroll-contain"
                     >
                       <template
