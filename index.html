@@ -170,7 +170,13 @@
           threshold: 80,
           isMobile: window.innerWidth < 640,
           viewportUpdateHandler: null,
+          visualViewportResizeHandler: null,
+          visualViewportScrollHandler: null,
           bottomOvershoot: 160,
+          computedOvershoot: 160,
+          drawerTop: null,
+          commandListMaxHeight: null,
+          updateMetricsRaf: null,
           // tap detection
           startTime: 0,
           totalMove: 0,
@@ -215,11 +221,14 @@
           
           getDrawerStyles() {
             if (this.isMobile) {
-              const overshoot = Math.max(this.bottomOvershoot || 0, 0);
+              const overshoot = Math.max(this.computedOvershoot || 0, this.bottomOvershoot || 0, 0);
               const safeInset = 'env(safe-area-inset-bottom, 0px)';
+              const topValue = this.drawerTop != null
+                ? `${this.drawerTop}px`
+                : 'max(64px, 20dvh)';
               return {
                 transform: `translate(-50%, ${this.offsetY}px)`,
-                top: 'max(64px, 20dvh)',
+                top: topValue,
                 bottom: `calc(-1 * (${safeInset} + ${overshoot}px))`
               };
             }
@@ -230,15 +239,90 @@
           
           getListStyles() {
             if (!this.isMobile) return {};
-            const overshoot = Math.max(this.bottomOvershoot || 0, 0);
-            return {
+            const overshoot = Math.max(this.computedOvershoot || 0, this.bottomOvershoot || 0, 0);
+            const styles = {
               paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + ${overshoot}px)`,
-              WebkitOverflowScrolling: 'touch'
+              WebkitOverflowScrolling: 'touch',
+              touchAction: 'pan-y'
             };
+            if (this.commandListMaxHeight) {
+              styles.maxHeight = `${this.commandListMaxHeight}px`;
+            }
+            return styles;
+          },
+
+          calculateViewportMetrics() {
+            const layoutHeight = window.innerHeight || 0;
+            const visual = window.visualViewport;
+            if (!visual) {
+              return {
+                viewportHeight: layoutHeight,
+                chin: 0
+              };
+            }
+
+            const viewportHeight = visual.height || layoutHeight;
+            const visualBottom = (visual.offsetTop || 0) + viewportHeight;
+            const chin = Math.max(layoutHeight - visualBottom, 0);
+
+            return {
+              viewportHeight,
+              chin
+            };
+          },
+
+          queueMetricsUpdate() {
+            const raf = window.requestAnimationFrame || ((cb) => window.setTimeout(cb, 16));
+            const caf = window.cancelAnimationFrame || window.clearTimeout;
+            if (this.updateMetricsRaf) {
+              caf(this.updateMetricsRaf);
+            }
+            this.updateMetricsRaf = raf(() => {
+              this.updateMetricsRaf = null;
+              this.updateDrawerMetrics();
+            });
+          },
+
+          updateDrawerMetrics() {
+            if (!this.commandOpen) {
+              this.commandListMaxHeight = null;
+              this.drawerTop = null;
+              this.computedOvershoot = Math.max(this.bottomOvershoot || 0, 0);
+              return;
+            }
+
+            if (!this.isMobile) {
+              this.commandListMaxHeight = null;
+              this.drawerTop = null;
+              this.computedOvershoot = Math.max(this.bottomOvershoot || 0, 0);
+              return;
+            }
+
+            const { viewportHeight, chin } = this.calculateViewportMetrics();
+            const minOvershoot = this.bottomOvershoot || 0;
+            const overshoot = Math.max(minOvershoot, Math.round(chin + 120));
+            this.computedOvershoot = overshoot;
+            this.drawerTop = Math.round(Math.max(64, viewportHeight * 0.2));
+
+            const raf = window.requestAnimationFrame || ((cb) => window.setTimeout(cb, 16));
+            raf(() => {
+              if (!this.commandOpen || !this.isMobile) return;
+              const root = this.$root;
+              if (!root) return;
+              const list = root.querySelector('[data-command-list]');
+              if (!list) return;
+
+              const listRect = list.getBoundingClientRect();
+              const rawAvailable = viewportHeight - Math.max(listRect.top, 0) - chin;
+              const safeAvailable = Number.isFinite(rawAvailable) ? rawAvailable : viewportHeight;
+              const boundedAvailable = Math.max(safeAvailable, 0);
+              this.commandListMaxHeight = Math.max(200, Math.round(boundedAvailable));
+            });
           },
 
           refreshViewportState() {
             this.isMobile = window.innerWidth < 640;
+            this.queueMetricsUpdate();
           },
           
           setupViewportDetection() {
@@ -246,11 +330,21 @@
             if (!this.viewportUpdateHandler) {
               this.viewportUpdateHandler = updateFlags;
               window.addEventListener('resize', this.viewportUpdateHandler);
-              if (window.visualViewport) {
-                window.visualViewport.addEventListener('resize', this.viewportUpdateHandler);
+            }
+            if (window.visualViewport) {
+              if (!this.visualViewportResizeHandler) {
+                this.visualViewportResizeHandler = updateFlags;
+                window.visualViewport.addEventListener('resize', this.visualViewportResizeHandler);
+              }
+              if (!this.visualViewportScrollHandler) {
+                this.visualViewportScrollHandler = () => this.queueMetricsUpdate();
+                window.visualViewport.addEventListener('scroll', this.visualViewportScrollHandler);
               }
             }
-            this.$nextTick(updateFlags);
+            this.$nextTick(() => {
+              updateFlags();
+              this.queueMetricsUpdate();
+            });
           }
         }"
                 x-init="
@@ -260,13 +354,13 @@
             if (value === true) {
               component.offsetY = 0;
               component.refreshViewportState();
-              // allow background scroll on mobile drawer; lock on desktop
-              if (!component.isMobile) {
-                document.body.classList.add('overflow-hidden');
-              }
+              document.body.classList.add('overflow-hidden');
+              component.queueMetricsUpdate();
             } else {
               component.offsetY = 0;
               document.body.classList.remove('overflow-hidden');
+              component.commandListMaxHeight = null;
+              component.drawerTop = null;
             }
           });
         "
@@ -510,6 +604,7 @@
                     class="absolute bottom-0 left-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--border-secondary)] flex flex-col min-h-0 w-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--bg-primary)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:translate-x-0 overflow-visible z-[9999] pointer-events-auto"
                     @click.stop
                     x-ref="drawerContainer"
+                    data-command-drawer
                   >
                     <!-- Mobile handle - Visual indicator only -->
                     <div
@@ -578,6 +673,7 @@
                       x-ref="commandItemsList"
                       :style="getListStyles()"
                       class="grow min-h-0 overflow-y-auto overflow-x-hidden sm:pb-0 overscroll-contain"
+                      data-command-list
                     >
                       <template
                         x-for="(item, index) in commandItemsFiltered"
