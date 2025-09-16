@@ -169,7 +169,7 @@
           offsetY: 0,
           threshold: 80,
           isMobile: window.innerWidth < 640,
-          dynamicBottomPadding: 0,
+          viewportUpdateHandler: null,
           // tap detection
           startTime: 0,
           totalMove: 0,
@@ -212,69 +212,48 @@
             }
           },
           
-          getDynamicHeight() {
-            return this.isMobile ? 'height: 80vh; height: 80dvh;' : '';
-          },
-          
-          isSafari() {
-            return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-          },
-          
-          calculateSafariPadding() {
-            if (!this.isMobile || !this.isSafari()) {
-              this.dynamicBottomPadding = 0;
-              return;
+          getDrawerStyles() {
+            if (this.isMobile) {
+              return {
+                transform: `translate(-50%, ${this.offsetY}px)`,
+                top: 'max(64px, 20dvh)',
+                bottom: 'env(safe-area-inset-bottom, 0px)'
+              };
             }
-            
-            // Create test element to detect Safari bottom UI
-            let testDiv = document.createElement('div');
-            testDiv.style.cssText = 'position:fixed;bottom:0;height:100vh;width:1px;pointer-events:none;visibility:hidden;';
-            document.body.appendChild(testDiv);
-            
-            // Calculate the difference
-            let viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-            let computedHeight = testDiv.offsetHeight;
-            let safariUIOffset = Math.max(0, computedHeight - viewportHeight);
-            
-            // Clean up
-            document.body.removeChild(testDiv);
-            
-            // Set padding (add extra 20px buffer)
-            this.dynamicBottomPadding = Math.max(20, safariUIOffset + 20);
+            return {
+              transform: `translateY(${this.offsetY}px)`
+            };
           },
           
-          setupSafariDetection() {
-            if (!this.isMobile) return;
-            
-            // Listen for visual viewport changes (Safari UI show/hide)
-            if (window.visualViewport) {
-              window.visualViewport.addEventListener('resize', () => {
-                setTimeout(() => this.calculateSafariPadding(), 100);
-              });
+          refreshViewportState() {
+            this.isMobile = window.innerWidth < 640;
+          },
+          
+          setupViewportDetection() {
+            const updateFlags = () => this.refreshViewportState();
+            if (!this.viewportUpdateHandler) {
+              this.viewportUpdateHandler = updateFlags;
+              window.addEventListener('resize', this.viewportUpdateHandler);
+              if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', this.viewportUpdateHandler);
+              }
             }
-            
-            // Fallback for orientation/resize
-            window.addEventListener('resize', () => {
-              setTimeout(() => this.calculateSafariPadding(), 100);
-            });
-            
-            // Initial calculation
-            this.$nextTick(() => {
-              setTimeout(() => this.calculateSafariPadding(), 200);
-            });
+            this.$nextTick(updateFlags);
           }
         }"
                 x-init="
-          setupSafariDetection();
+          const component = $data;
+          component.setupViewportDetection();
           $watch('commandOpen', (value) => {
             if (value === true) {
-              offsetY = 0;
+              component.offsetY = 0;
+              component.refreshViewportState();
               // allow background scroll on mobile drawer; lock on desktop
-              if (!isMobile) {
+              if (!component.isMobile) {
                 document.body.classList.add('overflow-hidden');
               }
-              setTimeout(() => calculateSafariPadding(), 100);
             } else {
+              component.offsetY = 0;
               document.body.classList.remove('overflow-hidden');
             }
           });
@@ -514,9 +493,9 @@
                   <!-- Drawer container with smart dvh -->
                   <div
                     x-show="commandOpen"
-                    :style="`transform: translateY(${offsetY}px); ${getDynamicHeight()}`"
+                    :style="getDrawerStyles()"
                     x-bind:class="{'transition-transform duration-150 ease-out will-change-transform': !isDragging}"
-                    class="bottom-0 left-1/2 -translate-x-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--border-secondary)] flex flex-col w-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--bg-primary)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:-translate-x-0 overflow-visible z-[9999] pointer-events-auto"
+                    class="absolute bottom-0 left-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--border-secondary)] flex flex-col min-h-0 w-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--bg-primary)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:translate-x-0 overflow-visible z-[9999] pointer-events-auto"
                     @click.stop
                     x-ref="drawerContainer"
                   >
@@ -582,11 +561,11 @@
                       />
                     </div>
 
-                    <!-- Content list with SMART DYNAMIC PADDING -->
+                    <!-- Scrollable content respects mobile safe areas -->
                     <div
                       x-ref="commandItemsList"
-                      :style="isMobile ? `padding-bottom: ${dynamicBottomPadding}px` : ''"
-                      class="grow overflow-y-auto overflow-x-hidden sm:pb-0 overscroll-contain"
+                      :style="isMobile ? 'padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);' : ''"
+                      class="grow min-h-0 overflow-y-auto overflow-x-hidden sm:pb-0 overscroll-contain"
                     >
                       <template
                         x-for="(item, index) in commandItemsFiltered"
