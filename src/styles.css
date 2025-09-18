@@ -413,6 +413,18 @@ a.link-with-icon:not(:hover) .lucide {
   display: block;
 }
 
+@media (max-width: 639px) {
+  .site-navigation button[aria-label="Open command palette"] {
+    display: none;
+  }
+
+  .site-navigation .theme-toggle button {
+    margin-left: 0;
+    border-top-left-radius: var(--radius-lg);
+    border-bottom-left-radius: var(--radius-lg);
+  }
+}
+
 /* Back button */
 
 .back {
