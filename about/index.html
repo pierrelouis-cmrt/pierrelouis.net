@@ -59,9 +59,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v162.css" as="style" />
+    <link rel="preload" href="/src/output-v164.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v162.css" />
+    <link rel="stylesheet" href="/src/output-v164.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -168,214 +168,13 @@
 
             <template x-teleport="body">
               <div
-                x-data="{
-          isDragging: false,
-          startY: 0,
-          currentY: 0,
-          offsetY: 0,
-          threshold: 80,
-          isMobile: window.innerWidth < 640,
-          viewportUpdateHandler: null,
-          visualViewportResizeHandler: null,
-          visualViewportScrollHandler: null,
-          bottomOvershoot: 160,
-          computedOvershoot: 160,
-          drawerTop: null,
-          commandListMaxHeight: null,
-          updateMetricsRaf: null,
-          // tap detection
-          startTime: 0,
-          totalMove: 0,
-          moved: false,
-          tapMaxMove: 6,
-          tapMaxTime: 250,
-          
-          onTouchStart(event) {
-            this.isDragging = true;
-            this.startY = event.touches[0].clientY;
-            this.currentY = this.startY;
-            this.offsetY = 0;
-            this.startTime = (window.performance && performance.now) ? performance.now() : Date.now();
-            this.totalMove = 0;
-            this.moved = false;
-          },
-          onTouchMove(event) {
-            if (!this.isDragging) return;
-            this.currentY = event.touches[0].clientY;
-            const delta = Math.max(0, this.currentY - this.startY);
-            this.offsetY = delta;
-            this.totalMove = Math.max(this.totalMove, Math.abs(this.currentY - this.startY));
-            if (this.totalMove > this.tapMaxMove) this.moved = true;
-          },
-          onTouchEnd() {
-            if (!this.isDragging) return;
-            this.isDragging = false;
-            const duration = ((window.performance && performance.now) ? performance.now() : Date.now()) - this.startTime;
-            const travel = this.totalMove;
-            // Treat a quick, tiny movement as a tap on the handle area
-            if (duration <= this.tapMaxTime && travel <= this.tapMaxMove) {
-              commandOpen = false;
-              this.offsetY = 0;
-              return;
-            }
-            if (this.offsetY > this.threshold) {
-              commandOpen = false;
-            } else {
-              this.offsetY = 0;
-            }
-          },
-          
-          getDrawerStyles() {
-            if (this.isMobile) {
-              const overshoot = Math.max(this.computedOvershoot || 0, this.bottomOvershoot || 0, 0);
-              const safeInset = 'env(safe-area-inset-bottom, 0px)';
-              const topValue = this.drawerTop != null
-                ? `${this.drawerTop}px`
-                : 'max(64px, 20dvh)';
-              return {
-                transform: `translate(-50%, ${this.offsetY}px)`,
-                top: topValue,
-                bottom: `calc(-1 * (${safeInset} + ${overshoot}px))`
-              };
-            }
-            return {
-              transform: `translateY(${this.offsetY}px)`
-            };
-          },
-          
-          getListStyles() {
-            if (!this.isMobile) return {};
-            const overshoot = Math.max(this.computedOvershoot || 0, this.bottomOvershoot || 0, 0);
-            const styles = {
-              paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + ${overshoot}px)`,
-              WebkitOverflowScrolling: 'touch',
-              touchAction: 'pan-y'
-            };
-            if (this.commandListMaxHeight) {
-              styles.maxHeight = `${this.commandListMaxHeight}px`;
-            }
-            return styles;
-          },
-
-          calculateViewportMetrics() {
-            const layoutHeight = window.innerHeight || 0;
-            const visual = window.visualViewport;
-            if (!visual) {
-              return {
-                viewportHeight: layoutHeight,
-                chin: 0
-              };
-            }
-
-            const viewportHeight = visual.height || layoutHeight;
-            const visualBottom = (visual.offsetTop || 0) + viewportHeight;
-            const chin = Math.max(layoutHeight - visualBottom, 0);
-
-            return {
-              viewportHeight,
-              chin
-            };
-          },
-
-          queueMetricsUpdate() {
-            const raf = window.requestAnimationFrame || ((cb) => window.setTimeout(cb, 16));
-            const caf = window.cancelAnimationFrame || window.clearTimeout;
-            if (this.updateMetricsRaf) {
-              caf(this.updateMetricsRaf);
-            }
-            this.updateMetricsRaf = raf(() => {
-              this.updateMetricsRaf = null;
-              this.updateDrawerMetrics();
-            });
-          },
-
-          updateDrawerMetrics() {
-            if (!this.commandOpen) {
-              this.commandListMaxHeight = null;
-              this.drawerTop = null;
-              this.computedOvershoot = Math.max(this.bottomOvershoot || 0, 0);
-              return;
-            }
-
-            if (!this.isMobile) {
-              this.commandListMaxHeight = null;
-              this.drawerTop = null;
-              this.computedOvershoot = Math.max(this.bottomOvershoot || 0, 0);
-              return;
-            }
-
-            const { viewportHeight, chin } = this.calculateViewportMetrics();
-            const minOvershoot = this.bottomOvershoot || 0;
-            const overshoot = Math.max(minOvershoot, Math.round(chin + 120));
-            this.computedOvershoot = overshoot;
-            this.drawerTop = Math.round(Math.max(64, viewportHeight * 0.2));
-
-            const raf = window.requestAnimationFrame || ((cb) => window.setTimeout(cb, 16));
-            raf(() => {
-              if (!this.commandOpen || !this.isMobile) return;
-              const root = this.$root;
-              if (!root) return;
-              const list = root.querySelector('[data-command-list]');
-              if (!list) return;
-
-              const listRect = list.getBoundingClientRect();
-              const rawAvailable = viewportHeight - Math.max(listRect.top, 0) - chin;
-              const safeAvailable = Number.isFinite(rawAvailable) ? rawAvailable : viewportHeight;
-              const boundedAvailable = Math.max(safeAvailable, 0);
-              this.commandListMaxHeight = Math.max(200, Math.round(boundedAvailable));
-            });
-          },
-
-          refreshViewportState() {
-            this.isMobile = window.innerWidth < 640;
-            this.queueMetricsUpdate();
-          },
-          
-          setupViewportDetection() {
-            const updateFlags = () => this.refreshViewportState();
-            if (!this.viewportUpdateHandler) {
-              this.viewportUpdateHandler = updateFlags;
-              window.addEventListener('resize', this.viewportUpdateHandler);
-            }
-            if (window.visualViewport) {
-              if (!this.visualViewportResizeHandler) {
-                this.visualViewportResizeHandler = updateFlags;
-                window.visualViewport.addEventListener('resize', this.visualViewportResizeHandler);
-              }
-              if (!this.visualViewportScrollHandler) {
-                this.visualViewportScrollHandler = () => this.queueMetricsUpdate();
-                window.visualViewport.addEventListener('scroll', this.visualViewportScrollHandler);
-              }
-            }
-            this.$nextTick(() => {
-              updateFlags();
-              this.queueMetricsUpdate();
-            });
-          }
-        }"
-                x-init="
-          const component = $data;
-          component.setupViewportDetection();
-          $watch('commandOpen', (value) => {
-            if (value === true) {
-              component.offsetY = 0;
-              component.refreshViewportState();
-              document.body.classList.add('overflow-hidden');
-              component.queueMetricsUpdate();
-            } else {
-              component.offsetY = 0;
-              document.body.classList.remove('overflow-hidden');
-              component.commandListMaxHeight = null;
-              component.drawerTop = null;
-            }
-          });
-        "
+                x-data="{}"
+                x-init="$watch('commandOpen', value => document.body.classList.toggle('overflow-hidden', value))"
                 x-show="commandOpen"
-                class="fixed inset-0 z-[99] flex sm:items-center sm:justify-center w-screen h-screen pointer-events-none sm:pointer-events-auto"
+                class="fixed inset-0 z-[99] flex items-center justify-center w-screen h-screen pointer-events-auto"
                 @click="commandOpen = false"
                 x-cloak
               >
-                <!-- Optimized backdrop with fewer transition classes -->
                 <div
                   x-show="commandOpen"
                   x-transition:enter="ease-out duration-150"
@@ -387,7 +186,6 @@
                   class="absolute inset-0 w-full h-full bg-[rgba(0,0,0,0.4)] backdrop-blur-sm will-change-opacity"
                 ></div>
 
-                <!-- Command palette content with optimized data handling -->
                 <div
                   x-show="commandOpen"
                   x-transition:enter="ease-out duration-150 transform"
@@ -406,23 +204,19 @@
             commandSearch: '',
             isTouchDevice: 'ontouchstart' in window,
             itemsCache: {},
-            actionMap: window.COMMAND_ACTION_MAP,
-            
-            // Optimized empty search check
+
             commandSearchIsEmpty() {
               return !this.commandSearch || this.commandSearch.length === 0;
             },
-            
-            // Optimized active item check
+
             commandItemIsActive(item) {
               return this.commandItemActive && this.commandItemActive.value === item.value;
             },
-            
-            // Optimized navigation with debounce protection
+
             commandItemActiveNext() {
               if (this._navigating) return;
               this._navigating = true;
-              
+
               const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
               if (index < this.commandItemsFiltered.length - 1) {
                 this.commandItemActive = this.commandItemsFiltered[index + 1];
@@ -434,11 +228,11 @@
                 this._navigating = false;
               }
             },
-            
+
             commandItemActivePrevious() {
               if (this._navigating) return;
               this._navigating = true;
-              
+
               const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
               if (index > 0) {
                 this.commandItemActive = this.commandItemsFiltered[index - 1];
@@ -450,76 +244,67 @@
                 this._navigating = false;
               }
             },
-            
-            // Optimized scroll with lightweight calculations
+
             commandScrollToActiveItem() {
               if (!this.commandItemActive || !this.$refs.commandItemsList) return;
-              
+
               const activeElement = document.getElementById(this.commandItemActive.value + '-' + this.commandId);
               if (!activeElement) return;
-              
+
               const container = this.$refs.commandItemsList;
               const containerRect = container.getBoundingClientRect();
               const elementRect = activeElement.getBoundingClientRect();
-              
-              // Only scroll if element is outside visible area
+
               if (elementRect.bottom > containerRect.bottom) {
                 container.scrollTop += (elementRect.bottom - containerRect.bottom);
               } else if (elementRect.top < containerRect.top) {
                 container.scrollTop -= (containerRect.top - elementRect.top);
               }
             },
-            
-            // Optimized search with better caching and debouncing
+
             _searchTimeoutId: null,
             commandSearchItems() {
               if (this._searchTimeoutId) {
                 clearTimeout(this._searchTimeoutId);
               }
-              
+
               this._searchTimeoutId = setTimeout(() => {
                 const cacheKey = (this.commandSearch || '').toLowerCase();
-                
+
                 if (this.itemsCache[cacheKey]) {
                   this.commandItemsFiltered = this.itemsCache[cacheKey];
                 } else {
                   if (!this.commandSearchIsEmpty()) {
                     const searchTerm = cacheKey.replace(/\*/g, '');
-                    // Optimize search with early returns and index tracking
-                    this.commandItemsFiltered = this.commandItems.filter(item => 
+                    this.commandItemsFiltered = this.commandItems.filter(item =>
                       item.title.toLowerCase().includes(searchTerm));
                   } else {
                     this.commandItemsFiltered = this.commandItems.filter(item => item.default);
                   }
-                  
-                  // Cache results for future use
+
                   this.itemsCache[cacheKey] = this.commandItemsFiltered;
                 }
-                
+
                 this.commandItemActive = this.commandItemsFiltered[0] || null;
-              }, 100); // Small debounce for typing
+              }, 100);
             },
-            
-            // Optimized category display check
+
             commandShowCategory(item, index) {
               if (index === 0) return true;
               if (!this.commandItems[index - 1]) return false;
               return item.category !== this.commandItems[index - 1].category;
             },
-            
-            // Simple capitalize function
+
             commandCategoryCapitalize(string) {
               return string.charAt(0).toUpperCase() + string.slice(1);
             },
-            
-            // Reorganize items more efficiently
+
             commandItemsReorganize() {
-              // Preallocate array size for better memory performance
               const totalItems = Object.values(this.commandItemsData).reduce(
                 (acc, items) => acc + items.length, 0
               );
               this.commandItems = new Array(totalItems);
-              
+
               let index = 0;
               for (const category in this.commandItemsData) {
                 for (const item of this.commandItemsData[category]) {
@@ -527,18 +312,16 @@
                   this.commandItems[index++] = item;
                 }
               }
-              
-              // Pre-populate cache for empty search
+
               this.itemsCache[''] = this.commandItems.filter(item => item.default);
             },
-            
-            // Handle selected item efficiently
+
             handleSelectedItem(item) {
               if (!item) return;
-              
+
               if (item.value === 'theme') {
                 $store.theme.toggle();
-                this.commandItemSelected = null; // Reset selection to allow toggling again
+                this.commandItemSelected = null;
               } else {
                 const targetUrl = this.actionMap[item.value];
                 if (targetUrl) {
@@ -547,44 +330,7 @@
                 commandOpen = false;
               }
             },
-            // Close-on-outside interaction (mobile only) without triggering background links
-            lastCloseTs: 0,
-            isInteractiveEl(el){
-              return !!(el && el.closest && el.closest('a,button,input,textarea,select,[role=button]'));
-            },
-            outsideShouldClose(target){
-              if (!this.isMobile) return false;
-              const drawer = this.$refs.drawerContainer;
-              if (!drawer) return false;
-              if (drawer.contains(target)) return false;
-              // do not close when tapping interactive background elements
-              if (this.isInteractiveEl(target)) return false;
-              return true;
-            },
-            outsideClickCapture(event){
-              if (!commandOpen) return;
-              if (!this.isMobile) return; // desktop handled by backdrop
-              if (this.outsideShouldClose(event.target)) {
-                event.preventDefault();
-                event.stopPropagation();
-                this.lastCloseTs = Date.now();
-                commandOpen = false;
-              }
-            },
-            outsideTouchEndCapture(event){
-              if (!commandOpen) return;
-              if (!this.isMobile) return;
-              const now = Date.now();
-              if (now - this.lastCloseTs < 200) return; // guard double fire
-              const touch = event.changedTouches ? event.changedTouches[0] : null;
-              const target = touch ? document.elementFromPoint(touch.clientX, touch.clientY) : event.target;
-              if (this.outsideShouldClose(target)) {
-                event.preventDefault();
-                event.stopPropagation();
-                this.lastCloseTs = now;
-                commandOpen = false;
-              }
-            }
+            actionMap: window.COMMAND_ACTION_MAP
           }"
                   x-init="
             commandItemsReorganize();
@@ -592,58 +338,23 @@
             $watch('commandSearch', () => commandSearchItems());
             $watch('commandItemSelected', item => handleSelectedItem(item));
           "
-                  @click.capture.window="outsideClickCapture($event)"
-                  @touchend.capture.window="outsideTouchEndCapture($event)"
                   @keydown.down.prevent="commandItemActiveNext()"
                   @keydown.up.prevent="commandItemActivePrevious()"
                   @keydown.enter="commandItemSelected = commandItemActive; commandItemActive = null;"
                   @command-input-focus.window="$refs.commandInput.focus()"
-                  class="flex min-h-[370px] justify-center w-full max-w-xl items-end sm:items-start relative will-change-transform"
+                  class="relative z-10 w-full max-w-[95%] sm:max-w-xl px-4 sm:px-0"
                   x-cloak
                   @click.stop
                 >
-                  <!-- Drawer container with smart dvh -->
                   <div
-                    x-show="commandOpen"
-                    :style="getDrawerStyles()"
-                    x-bind:class="{'transition-transform duration-150 ease-out will-change-transform': !isDragging}"
-                    class="absolute bottom-0 left-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--border-secondary)] flex flex-col min-h-0 w-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--bg-primary)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:translate-x-0 overflow-visible z-[9999] pointer-events-auto"
-                    @click.stop
-                    x-ref="drawerContainer"
-                    data-command-drawer
+                    class="box-border border-2 border-[var(--border-secondary)] flex flex-col min-h-0 w-full overflow-hidden sm:overflow-visible p-2 bg-[var(--bg-primary)] rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm pointer-events-auto relative"
                   >
-                    <!-- Mobile handle - Visual indicator only -->
-                    <div
-                      class="block sm:hidden w-full h-[30px] flex items-center justify-center relative"
-                    >
-                      <!-- LARGE TOUCH AREA - Positioned relative to handle for large upward-extending hitbox -->
-                      <div
-                        x-show="commandOpen && isTouchDevice"
-                        class="absolute -top-[90px] left-0 w-full h-[120px] z-10"
-                        style="
-                          background: transparent;
-                          pointer-events: auto;
-                          touch-action: none;
-                          overscroll-behavior: contain;
-                        "
-                        @click="commandOpen = false"
-                        @touchstart.prevent="onTouchStart($event)"
-                        @touchmove.prevent="onTouchMove($event)"
-                        @touchend="onTouchEnd()"
-                      ></div>
-                      <div
-                        class="w-16 h-1 bg-[var(--border-secondary)] rounded-full"
-                      ></div>
-                    </div>
-
-                    <!-- Command pill -->
                     <div
                       class="absolute top-[-15px] left-5 px-4 py-1 border-2 rounded-full border-[var(--border-light)] bg-[var(--bg-primary)] hidden sm:block"
                     >
                       <p class="m-0 text-sm p-0">Command</p>
                     </div>
 
-                    <!-- Search input with optimized event handling -->
                     <div
                       class="flex items-center px-3 border-dotted border-b border-[var(--bg-hover)]"
                     >
@@ -674,10 +385,8 @@
                       />
                     </div>
 
-                    <!-- Scrollable content respects mobile safe areas -->
                     <div
                       x-ref="commandItemsList"
-                      :style="getListStyles()"
                       class="grow min-h-0 overflow-y-auto overflow-x-hidden sm:pb-0 overscroll-contain"
                       data-command-list
                     >
