@@ -1152,6 +1152,10 @@ body footer {
 }
 
 footer .hero-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
   margin-bottom: 0.6rem;
   padding: 0;
   max-height: 30px;
@@ -1160,8 +1164,17 @@ footer .hero-links {
 
 footer .hero-links p {
   display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   margin: 0;
   padding: 0;
+}
+
+footer .hero-links .theme-toggle {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 footer .hero-links a {
@@ -1220,6 +1233,47 @@ a.email-link:hover {
   width: 14px;
   height: 14px;
   margin-left: var(--space-1);
+}
+
+/* Theme Toggle */
+
+.theme-toggle {
+  position: relative;
+  z-index: 50;
+  width: auto;
+  height: auto;
+}
+
+.theme-toggle button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  color: var(--text-subtle);
+}
+
+.theme-toggle button:hover {
+  color: var(--text-primary);
+}
+
+/* Show/hide icons based on current theme */
+.theme-toggle [data-icon] {
+  display: none;
+}
+
+.theme-toggle[data-mode="system"] [data-icon="system"] {
+  display: block;
+}
+
+.theme-toggle[data-mode="light"] [data-icon="light"] {
+  display: block;
+}
+
+.theme-toggle[data-mode="dark"] [data-icon="dark"] {
+  display: block;
 }
 
 /*----------------------------  PAGES  --------------------------------------*/
