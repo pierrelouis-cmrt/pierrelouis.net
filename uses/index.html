@@ -85,7 +85,7 @@
     ></script>
   </head>
 
-  <body>
+  <body id="page-top">
     <nav class="site-navigation">
       <div class="navigation-container">
         <div class="navigation-left">
@@ -137,7 +137,7 @@
             <button
               aria-label="Open command palette"
               @click="commandOpen = true"
-              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium bg-[var(--bg-hover)] rounded-l-xl rounded-r-sm hover:bg-[var(--border-secondary)] active:bg-[var(--border-light)] disabled:opacity-50 disabled:pointer-events-none"
+              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium rounded-xl hover:bg-[var(--bg-hover)] disabled:opacity-50 disabled:pointer-events-none"
             >
               <svg
                 class="w-4 h-4 mr-0 sm:mr-2 text-[var(--text-body)] shrink-0"
@@ -175,7 +175,14 @@
           offsetY: 0,
           threshold: 80,
           isMobile: window.innerWidth < 640,
-          dynamicBottomPadding: 0,
+          viewportUpdateHandler: null,
+          visualViewportResizeHandler: null,
+          visualViewportScrollHandler: null,
+          bottomOvershoot: 160,
+          computedOvershoot: 160,
+          drawerTop: null,
+          commandListMaxHeight: null,
+          updateMetricsRaf: null,
           // tap detection
           startTime: 0,
           totalMove: 0,
@@ -218,70 +225,148 @@
             }
           },
           
-          getDynamicHeight() {
-            return this.isMobile ? 'height: 80vh; height: 80dvh;' : '';
+          getDrawerStyles() {
+            if (this.isMobile) {
+              const overshoot = Math.max(this.computedOvershoot || 0, this.bottomOvershoot || 0, 0);
+              const safeInset = 'env(safe-area-inset-bottom, 0px)';
+              const topValue = this.drawerTop != null
+                ? `${this.drawerTop}px`
+                : 'max(64px, 20dvh)';
+              return {
+                transform: `translate(-50%, ${this.offsetY}px)`,
+                top: topValue,
+                bottom: `calc(-1 * (${safeInset} + ${overshoot}px))`
+              };
+            }
+            return {
+              transform: `translateY(${this.offsetY}px)`
+            };
           },
           
-          isSafari() {
-            return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+          getListStyles() {
+            if (!this.isMobile) return {};
+            const overshoot = Math.max(this.computedOvershoot || 0, this.bottomOvershoot || 0, 0);
+            const styles = {
+              paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + ${overshoot}px)`,
+              WebkitOverflowScrolling: 'touch',
+              touchAction: 'pan-y'
+            };
+            if (this.commandListMaxHeight) {
+              styles.maxHeight = `${this.commandListMaxHeight}px`;
+            }
+            return styles;
           },
-          
-          calculateSafariPadding() {
-            if (!this.isMobile || !this.isSafari()) {
-              this.dynamicBottomPadding = 0;
+
+          calculateViewportMetrics() {
+            const layoutHeight = window.innerHeight || 0;
+            const visual = window.visualViewport;
+            if (!visual) {
+              return {
+                viewportHeight: layoutHeight,
+                chin: 0
+              };
+            }
+
+            const viewportHeight = visual.height || layoutHeight;
+            const visualBottom = (visual.offsetTop || 0) + viewportHeight;
+            const chin = Math.max(layoutHeight - visualBottom, 0);
+
+            return {
+              viewportHeight,
+              chin
+            };
+          },
+
+          queueMetricsUpdate() {
+            const raf = window.requestAnimationFrame || ((cb) => window.setTimeout(cb, 16));
+            const caf = window.cancelAnimationFrame || window.clearTimeout;
+            if (this.updateMetricsRaf) {
+              caf(this.updateMetricsRaf);
+            }
+            this.updateMetricsRaf = raf(() => {
+              this.updateMetricsRaf = null;
+              this.updateDrawerMetrics();
+            });
+          },
+
+          updateDrawerMetrics() {
+            if (!this.commandOpen) {
+              this.commandListMaxHeight = null;
+              this.drawerTop = null;
+              this.computedOvershoot = Math.max(this.bottomOvershoot || 0, 0);
               return;
             }
-            
-            // Create test element to detect Safari bottom UI
-            let testDiv = document.createElement('div');
-            testDiv.style.cssText = 'position:fixed;bottom:0;height:100vh;width:1px;pointer-events:none;visibility:hidden;';
-            document.body.appendChild(testDiv);
-            
-            // Calculate the difference
-            let viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-            let computedHeight = testDiv.offsetHeight;
-            let safariUIOffset = Math.max(0, computedHeight - viewportHeight);
-            
-            // Clean up
-            document.body.removeChild(testDiv);
-            
-            // Set padding (add extra 20px buffer)
-            this.dynamicBottomPadding = Math.max(20, safariUIOffset + 20);
+
+            if (!this.isMobile) {
+              this.commandListMaxHeight = null;
+              this.drawerTop = null;
+              this.computedOvershoot = Math.max(this.bottomOvershoot || 0, 0);
+              return;
+            }
+
+            const { viewportHeight, chin } = this.calculateViewportMetrics();
+            const minOvershoot = this.bottomOvershoot || 0;
+            const overshoot = Math.max(minOvershoot, Math.round(chin + 120));
+            this.computedOvershoot = overshoot;
+            this.drawerTop = Math.round(Math.max(64, viewportHeight * 0.2));
+
+            const raf = window.requestAnimationFrame || ((cb) => window.setTimeout(cb, 16));
+            raf(() => {
+              if (!this.commandOpen || !this.isMobile) return;
+              const root = this.$root;
+              if (!root) return;
+              const list = root.querySelector('[data-command-list]');
+              if (!list) return;
+
+              const listRect = list.getBoundingClientRect();
+              const rawAvailable = viewportHeight - Math.max(listRect.top, 0) - chin;
+              const safeAvailable = Number.isFinite(rawAvailable) ? rawAvailable : viewportHeight;
+              const boundedAvailable = Math.max(safeAvailable, 0);
+              this.commandListMaxHeight = Math.max(200, Math.round(boundedAvailable));
+            });
+          },
+
+          refreshViewportState() {
+            this.isMobile = window.innerWidth < 640;
+            this.queueMetricsUpdate();
           },
           
-          setupSafariDetection() {
-            if (!this.isMobile) return;
-            
-            // Listen for visual viewport changes (Safari UI show/hide)
-            if (window.visualViewport) {
-              window.visualViewport.addEventListener('resize', () => {
-                setTimeout(() => this.calculateSafariPadding(), 100);
-              });
+          setupViewportDetection() {
+            const updateFlags = () => this.refreshViewportState();
+            if (!this.viewportUpdateHandler) {
+              this.viewportUpdateHandler = updateFlags;
+              window.addEventListener('resize', this.viewportUpdateHandler);
             }
-            
-            // Fallback for orientation/resize
-            window.addEventListener('resize', () => {
-              setTimeout(() => this.calculateSafariPadding(), 100);
-            });
-            
-            // Initial calculation
+            if (window.visualViewport) {
+              if (!this.visualViewportResizeHandler) {
+                this.visualViewportResizeHandler = updateFlags;
+                window.visualViewport.addEventListener('resize', this.visualViewportResizeHandler);
+              }
+              if (!this.visualViewportScrollHandler) {
+                this.visualViewportScrollHandler = () => this.queueMetricsUpdate();
+                window.visualViewport.addEventListener('scroll', this.visualViewportScrollHandler);
+              }
+            }
             this.$nextTick(() => {
-              setTimeout(() => this.calculateSafariPadding(), 200);
+              updateFlags();
+              this.queueMetricsUpdate();
             });
           }
         }"
                 x-init="
-          setupSafariDetection();
+          const component = $data;
+          component.setupViewportDetection();
           $watch('commandOpen', (value) => {
             if (value === true) {
-              offsetY = 0;
-              // allow background scroll on mobile drawer; lock on desktop
-              if (!isMobile) {
-                document.body.classList.add('overflow-hidden');
-              }
-              setTimeout(() => calculateSafariPadding(), 100);
+              component.offsetY = 0;
+              component.refreshViewportState();
+              document.body.classList.add('overflow-hidden');
+              component.queueMetricsUpdate();
             } else {
+              component.offsetY = 0;
               document.body.classList.remove('overflow-hidden');
+              component.commandListMaxHeight = null;
+              component.drawerTop = null;
             }
           });
         "
@@ -520,11 +605,12 @@
                   <!-- Drawer container with smart dvh -->
                   <div
                     x-show="commandOpen"
-                    :style="`transform: translateY(${offsetY}px); ${getDynamicHeight()}`"
+                    :style="getDrawerStyles()"
                     x-bind:class="{'transition-transform duration-150 ease-out will-change-transform': !isDragging}"
-                    class="bottom-0 left-1/2 -translate-x-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--border-secondary)] flex flex-col w-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--bg-primary)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:-translate-x-0 overflow-visible z-[9999] pointer-events-auto"
+                    class="absolute bottom-0 left-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--border-secondary)] flex flex-col min-h-0 w-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--bg-primary)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:translate-x-0 overflow-visible z-[9999] pointer-events-auto"
                     @click.stop
                     x-ref="drawerContainer"
+                    data-command-drawer
                   >
                     <!-- Mobile handle - Visual indicator only -->
                     <div
@@ -588,11 +674,12 @@
                       />
                     </div>
 
-                    <!-- Content list with SMART DYNAMIC PADDING -->
+                    <!-- Scrollable content respects mobile safe areas -->
                     <div
                       x-ref="commandItemsList"
-                      :style="isMobile ? `padding-bottom: ${dynamicBottomPadding}px` : ''"
-                      class="grow overflow-y-auto overflow-x-hidden sm:pb-0 overscroll-contain"
+                      :style="getListStyles()"
+                      class="grow min-h-0 overflow-y-auto overflow-x-hidden sm:pb-0 overscroll-contain"
+                      data-command-list
                     >
                       <template
                         x-for="(item, index) in commandItemsFiltered"
@@ -638,76 +725,6 @@
                 </div>
               </div>
             </template>
-          </div>
-
-          <div class="theme-toggle">
-            <button
-              aria-label="Toggle theme"
-              class="theme-toggle"
-              x-data
-              x-init="$store.theme.init()"
-              @click="$store.theme.toggle()"
-              :data-mode="$store.theme.mode"
-            >
-              <!-- System Icon -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="var(--text-body)"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-monitor"
-                data-icon="system"
-              >
-                <rect width="20" height="14" x="2" y="3" rx="2" />
-                <line x1="8" x2="16" y1="21" y2="21" />
-                <line x1="12" x2="12" y1="17" y2="21" />
-              </svg>
-              <!-- Light/Sun Icon -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="var(--text-body)"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-sun"
-                data-icon="light"
-              >
-                <circle cx="12" cy="12" r="4" />
-                <path d="M12 2v2" />
-                <path d="M12 20v2" />
-                <path d="m4.93 4.93 1.41 1.41" />
-                <path d="m17.66 17.66 1.41 1.41" />
-                <path d="M2 12h2" />
-                <path d="M20 12h2" />
-                <path d="m6.34 17.66-1.41 1.41" />
-                <path d="m19.07 4.93-1.41 1.41" />
-              </svg>
-              <!-- Dark/Moon Icon -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="var(--text-body)"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-moon"
-                data-icon="dark"
-              >
-                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-              </svg>
-            </button>
           </div>
         </div>
       </div>
@@ -1001,7 +1018,7 @@
               <div
                 class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
               >
-                <span class="font-medium">Claude 4 sonnet reasonning</span>
+                <span class="font-medium">Claude 4.1 Opus Thinking</span>
               </div></a
             >
             <a
@@ -1571,6 +1588,100 @@
     </main>
 
     <footer>
+      <div class="hero-links">
+        <p>
+          <a
+            class="link-with-icon"
+            rel="noopener"
+            href="#page-top"
+            data-back-to-top
+            >Back to top<svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              width="1em"
+              style="margin-left: 0.2em"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-up-icon lucide-arrow-up"
+            >
+              <path d="m5 12 7-7 7 7" />
+              <path d="M12 19V5" /></svg
+          ></a>
+        </p>
+        <div class="theme-toggle">
+          <button
+            aria-label="Toggle theme"
+            class="theme-toggle"
+            x-data
+            x-init="$store.theme.init()"
+            @click="$store.theme.toggle()"
+            :data-mode="$store.theme.mode"
+          >
+            <!-- System Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-monitor"
+              data-icon="system"
+            >
+              <rect width="20" height="14" x="2" y="3" rx="2" />
+              <line x1="8" x2="16" y1="21" y2="21" />
+              <line x1="12" x2="12" y1="17" y2="21" />
+            </svg>
+            <!-- Light/Sun Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-sun"
+              data-icon="light"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" />
+              <path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" />
+              <path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+            <!-- Dark/Moon Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-moon"
+              data-icon="dark"
+            >
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
       <div class="footer-meta">
         <p class="footer-meta-left">
           Designed with
@@ -1595,6 +1706,7 @@
         <p class="footer-meta-right">© 2025</p>
       </div>
     </footer>
+
     <script>
       fetch(window.location.href).then((response) => {
         const lastModified = response.headers.get("Last-Modified");

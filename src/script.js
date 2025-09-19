@@ -428,3 +428,62 @@ document.addEventListener("keydown", (e) => {
     if (document.hidden) reset();
   });
 })();
+
+(() => {
+  const backToTop = document.querySelector("[data-back-to-top]");
+  if (!backToTop) return;
+
+  const prefersReducedMotion = window.matchMedia
+    ? window.matchMedia("(prefers-reduced-motion: reduce)")
+    : null;
+  const supportsSmoothScroll =
+    "scrollBehavior" in document.documentElement.style;
+
+  const animateFallback = () => {
+    const startY =
+      window.pageYOffset || document.documentElement.scrollTop || 0;
+    if (startY === 0 || !window.requestAnimationFrame) {
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    const duration = Math.min(600, Math.max(250, startY / 2));
+    const startTime =
+      (window.performance && performance.now) || Date.now();
+
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+    const step = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(1, elapsed / duration);
+      const eased = easeOutCubic(progress);
+      const nextY = Math.round(startY * (1 - eased));
+      window.scrollTo(0, nextY);
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      }
+    };
+
+    requestAnimationFrame(step);
+  };
+
+  backToTop.addEventListener(
+    "click",
+    (event) => {
+      event.preventDefault();
+
+      if (prefersReducedMotion && prefersReducedMotion.matches) {
+        window.scrollTo(0, 0);
+        return;
+      }
+
+      if (supportsSmoothScroll) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+
+      animateFallback();
+    },
+    { passive: false }
+  );
+})();

@@ -137,7 +137,7 @@
             <button
               aria-label="Open command palette"
               @click="commandOpen = true"
-              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium bg-[var(--bg-hover)] rounded-l-xl rounded-r-sm hover:bg-[var(--border-secondary)] active:bg-[var(--border-light)] disabled:opacity-50 disabled:pointer-events-none"
+              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium rounded-xl hover:bg-[var(--bg-hover)] disabled:opacity-50 disabled:pointer-events-none"
             >
               <svg
                 class="w-4 h-4 mr-0 sm:mr-2 text-[var(--text-body)] shrink-0"
@@ -175,7 +175,14 @@
           offsetY: 0,
           threshold: 80,
           isMobile: window.innerWidth < 640,
-          dynamicBottomPadding: 0,
+          viewportUpdateHandler: null,
+          visualViewportResizeHandler: null,
+          visualViewportScrollHandler: null,
+          bottomOvershoot: 160,
+          computedOvershoot: 160,
+          drawerTop: null,
+          commandListMaxHeight: null,
+          updateMetricsRaf: null,
           // tap detection
           startTime: 0,
           totalMove: 0,
@@ -218,70 +225,148 @@
             }
           },
           
-          getDynamicHeight() {
-            return this.isMobile ? 'height: 80vh; height: 80dvh;' : '';
+          getDrawerStyles() {
+            if (this.isMobile) {
+              const overshoot = Math.max(this.computedOvershoot || 0, this.bottomOvershoot || 0, 0);
+              const safeInset = 'env(safe-area-inset-bottom, 0px)';
+              const topValue = this.drawerTop != null
+                ? `${this.drawerTop}px`
+                : 'max(64px, 20dvh)';
+              return {
+                transform: `translate(-50%, ${this.offsetY}px)`,
+                top: topValue,
+                bottom: `calc(-1 * (${safeInset} + ${overshoot}px))`
+              };
+            }
+            return {
+              transform: `translateY(${this.offsetY}px)`
+            };
           },
           
-          isSafari() {
-            return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+          getListStyles() {
+            if (!this.isMobile) return {};
+            const overshoot = Math.max(this.computedOvershoot || 0, this.bottomOvershoot || 0, 0);
+            const styles = {
+              paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + ${overshoot}px)`,
+              WebkitOverflowScrolling: 'touch',
+              touchAction: 'pan-y'
+            };
+            if (this.commandListMaxHeight) {
+              styles.maxHeight = `${this.commandListMaxHeight}px`;
+            }
+            return styles;
           },
-          
-          calculateSafariPadding() {
-            if (!this.isMobile || !this.isSafari()) {
-              this.dynamicBottomPadding = 0;
+
+          calculateViewportMetrics() {
+            const layoutHeight = window.innerHeight || 0;
+            const visual = window.visualViewport;
+            if (!visual) {
+              return {
+                viewportHeight: layoutHeight,
+                chin: 0
+              };
+            }
+
+            const viewportHeight = visual.height || layoutHeight;
+            const visualBottom = (visual.offsetTop || 0) + viewportHeight;
+            const chin = Math.max(layoutHeight - visualBottom, 0);
+
+            return {
+              viewportHeight,
+              chin
+            };
+          },
+
+          queueMetricsUpdate() {
+            const raf = window.requestAnimationFrame || ((cb) => window.setTimeout(cb, 16));
+            const caf = window.cancelAnimationFrame || window.clearTimeout;
+            if (this.updateMetricsRaf) {
+              caf(this.updateMetricsRaf);
+            }
+            this.updateMetricsRaf = raf(() => {
+              this.updateMetricsRaf = null;
+              this.updateDrawerMetrics();
+            });
+          },
+
+          updateDrawerMetrics() {
+            if (!this.commandOpen) {
+              this.commandListMaxHeight = null;
+              this.drawerTop = null;
+              this.computedOvershoot = Math.max(this.bottomOvershoot || 0, 0);
               return;
             }
-            
-            // Create test element to detect Safari bottom UI
-            let testDiv = document.createElement('div');
-            testDiv.style.cssText = 'position:fixed;bottom:0;height:100vh;width:1px;pointer-events:none;visibility:hidden;';
-            document.body.appendChild(testDiv);
-            
-            // Calculate the difference
-            let viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-            let computedHeight = testDiv.offsetHeight;
-            let safariUIOffset = Math.max(0, computedHeight - viewportHeight);
-            
-            // Clean up
-            document.body.removeChild(testDiv);
-            
-            // Set padding (add extra 20px buffer)
-            this.dynamicBottomPadding = Math.max(20, safariUIOffset + 20);
+
+            if (!this.isMobile) {
+              this.commandListMaxHeight = null;
+              this.drawerTop = null;
+              this.computedOvershoot = Math.max(this.bottomOvershoot || 0, 0);
+              return;
+            }
+
+            const { viewportHeight, chin } = this.calculateViewportMetrics();
+            const minOvershoot = this.bottomOvershoot || 0;
+            const overshoot = Math.max(minOvershoot, Math.round(chin + 120));
+            this.computedOvershoot = overshoot;
+            this.drawerTop = Math.round(Math.max(64, viewportHeight * 0.2));
+
+            const raf = window.requestAnimationFrame || ((cb) => window.setTimeout(cb, 16));
+            raf(() => {
+              if (!this.commandOpen || !this.isMobile) return;
+              const root = this.$root;
+              if (!root) return;
+              const list = root.querySelector('[data-command-list]');
+              if (!list) return;
+
+              const listRect = list.getBoundingClientRect();
+              const rawAvailable = viewportHeight - Math.max(listRect.top, 0) - chin;
+              const safeAvailable = Number.isFinite(rawAvailable) ? rawAvailable : viewportHeight;
+              const boundedAvailable = Math.max(safeAvailable, 0);
+              this.commandListMaxHeight = Math.max(200, Math.round(boundedAvailable));
+            });
+          },
+
+          refreshViewportState() {
+            this.isMobile = window.innerWidth < 640;
+            this.queueMetricsUpdate();
           },
           
-          setupSafariDetection() {
-            if (!this.isMobile) return;
-            
-            // Listen for visual viewport changes (Safari UI show/hide)
-            if (window.visualViewport) {
-              window.visualViewport.addEventListener('resize', () => {
-                setTimeout(() => this.calculateSafariPadding(), 100);
-              });
+          setupViewportDetection() {
+            const updateFlags = () => this.refreshViewportState();
+            if (!this.viewportUpdateHandler) {
+              this.viewportUpdateHandler = updateFlags;
+              window.addEventListener('resize', this.viewportUpdateHandler);
             }
-            
-            // Fallback for orientation/resize
-            window.addEventListener('resize', () => {
-              setTimeout(() => this.calculateSafariPadding(), 100);
-            });
-            
-            // Initial calculation
+            if (window.visualViewport) {
+              if (!this.visualViewportResizeHandler) {
+                this.visualViewportResizeHandler = updateFlags;
+                window.visualViewport.addEventListener('resize', this.visualViewportResizeHandler);
+              }
+              if (!this.visualViewportScrollHandler) {
+                this.visualViewportScrollHandler = () => this.queueMetricsUpdate();
+                window.visualViewport.addEventListener('scroll', this.visualViewportScrollHandler);
+              }
+            }
             this.$nextTick(() => {
-              setTimeout(() => this.calculateSafariPadding(), 200);
+              updateFlags();
+              this.queueMetricsUpdate();
             });
           }
         }"
                 x-init="
-          setupSafariDetection();
+          const component = $data;
+          component.setupViewportDetection();
           $watch('commandOpen', (value) => {
             if (value === true) {
-              offsetY = 0;
-              // allow background scroll on mobile drawer; lock on desktop
-              if (!isMobile) {
-                document.body.classList.add('overflow-hidden');
-              }
-              setTimeout(() => calculateSafariPadding(), 100);
+              component.offsetY = 0;
+              component.refreshViewportState();
+              document.body.classList.add('overflow-hidden');
+              component.queueMetricsUpdate();
             } else {
+              component.offsetY = 0;
               document.body.classList.remove('overflow-hidden');
+              component.commandListMaxHeight = null;
+              component.drawerTop = null;
             }
           });
         "
@@ -520,11 +605,12 @@
                   <!-- Drawer container with smart dvh -->
                   <div
                     x-show="commandOpen"
-                    :style="`transform: translateY(${offsetY}px); ${getDynamicHeight()}`"
+                    :style="getDrawerStyles()"
                     x-bind:class="{'transition-transform duration-150 ease-out will-change-transform': !isDragging}"
-                    class="bottom-0 left-1/2 -translate-x-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--border-secondary)] flex flex-col w-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--bg-primary)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:-translate-x-0 overflow-visible z-[9999] pointer-events-auto"
+                    class="absolute bottom-0 left-1/2 box-border border-2 border-b-0 sm:border-2 border-[var(--border-secondary)] flex flex-col min-h-0 w-full max-w-[95%] sm:max-w-full overflow-hidden p-2 bg-[var(--bg-primary)] rounded-t-[25px] sm:rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm transform sm:relative sm:bottom-auto sm:left-auto sm:translate-x-0 overflow-visible z-[9999] pointer-events-auto"
                     @click.stop
                     x-ref="drawerContainer"
+                    data-command-drawer
                   >
                     <!-- Mobile handle - Visual indicator only -->
                     <div
@@ -588,11 +674,12 @@
                       />
                     </div>
 
-                    <!-- Content list with SMART DYNAMIC PADDING -->
+                    <!-- Scrollable content respects mobile safe areas -->
                     <div
                       x-ref="commandItemsList"
-                      :style="isMobile ? `padding-bottom: ${dynamicBottomPadding}px` : ''"
-                      class="grow overflow-y-auto overflow-x-hidden sm:pb-0 overscroll-contain"
+                      :style="getListStyles()"
+                      class="grow min-h-0 overflow-y-auto overflow-x-hidden sm:pb-0 overscroll-contain"
+                      data-command-list
                     >
                       <template
                         x-for="(item, index) in commandItemsFiltered"
@@ -639,76 +726,6 @@
               </div>
             </template>
           </div>
-
-          <div class="theme-toggle">
-            <button
-              aria-label="Toggle theme"
-              class="theme-toggle"
-              x-data
-              x-init="$store.theme.init()"
-              @click="$store.theme.toggle()"
-              :data-mode="$store.theme.mode"
-            >
-              <!-- System Icon -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="var(--text-body)"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-monitor"
-                data-icon="system"
-              >
-                <rect width="20" height="14" x="2" y="3" rx="2" />
-                <line x1="8" x2="16" y1="21" y2="21" />
-                <line x1="12" x2="12" y1="17" y2="21" />
-              </svg>
-              <!-- Light/Sun Icon -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="var(--text-body)"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-sun"
-                data-icon="light"
-              >
-                <circle cx="12" cy="12" r="4" />
-                <path d="M12 2v2" />
-                <path d="M12 20v2" />
-                <path d="m4.93 4.93 1.41 1.41" />
-                <path d="m17.66 17.66 1.41 1.41" />
-                <path d="M2 12h2" />
-                <path d="M20 12h2" />
-                <path d="m6.34 17.66-1.41 1.41" />
-                <path d="m19.07 4.93-1.41 1.41" />
-              </svg>
-              <!-- Dark/Moon Icon -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="var(--text-body)"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-moon"
-                data-icon="dark"
-              >
-                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-              </svg>
-            </button>
-          </div>
         </div>
       </div>
     </nav>
@@ -754,584 +771,1272 @@
         <div class="content-timeline" id="posts-timeline">
           <!-- AUTO-GEN:BOOKMARKS START -->
 
-        <div class="content-timeline-header">
-          <div class="content-timeline-year"><h2>2025</h2></div>
-          <div class="content-timeline-content">
-            <div class="content-timeline-month">
-              <div class="content-timeline-month-header">
-                <h3>Sep<span class="full-year"> 2025</span></h3>
+          <div class="content-timeline-header">
+            <div class="content-timeline-year"><h2>2025</h2></div>
+            <div class="content-timeline-content">
+              <div class="content-timeline-month">
+                <div class="content-timeline-month-header">
+                  <h3>Sep<span class="full-year"> 2025</span></h3>
+                </div>
+                <div class="content-timeline-month-items">
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Reading"
+                  >
+                    <a
+                      href="https://x.com/kimmonismus/status/1966627812858855624"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text"
+                          >One of the biggest breakthroughs in AI</span
+                        >
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/x.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by @kimmonismus on X</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        OpenAI's o1 model was a huge deal: it introduced the
+                        notion of "reasoning", which is a fundamental step
+                        towards general intelligence. The model was the first to
+                        be able to solve bigger problems, step by step. This was
+                        truely a game changer.
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="People"
+                  >
+                    <a
+                      href="https://x.com/kimmonismus"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Kim "Chubby" Isenberg</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="/src/assets/profile.png"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>@kimmonismus on X</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        One of the most insightful thinkers about AI and the
+                        future on X. His posts are always worth reading. His
+                        newsletter is also very good.
+                      </div>
+                    </a>
+                  </div>
+                </div>
               </div>
-              <div class="content-timeline-month-items">
-                
-    <div class="timeline-item animate-on-scroll" data-tag="Reading">
-      <a href="https://x.com/kimmonismus/status/1966627812858855624" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">One of the biggest breakthroughs in AI</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
-         <span>by @kimmonismus on X</span>
-       </div>
-        <div class="timeline-item-description">OpenAI's o1 model was a huge deal: it introduced the notion of "reasoning", which is a fundamental step towards general intelligence. The model was the first to be able to solve bigger problems, step by step. This was truely a game changer.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="People">
-      <a href="https://x.com/kimmonismus" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Kim "Chubby" Isenberg</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="/src/assets/profile.png" width="16" height="16" alt="">
-         <span>@kimmonismus on X</span>
-       </div>
-        <div class="timeline-item-description">One of the most insightful thinkers about AI and the future on X. His posts are always worth reading. His newsletter is also very good.</div>
-        
-      </a>
-    </div>
+              <div class="content-timeline-month">
+                <div class="content-timeline-month-header">
+                  <h3>Aug<span class="full-year"> 2025</span></h3>
+                </div>
+                <div class="content-timeline-month-items">
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Videos"
+                  >
+                    <a
+                      href="https://www.youtube.com/watch?v=fHRS_NOs24w"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Ramanujan the Math Genius</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/youtube.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by Fern</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        An overview of Ramanujan's life and contributions to
+                        mathematics. He truly was a genius with incredible
+                        talent and intuition.
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="content-timeline-month">
+                <div class="content-timeline-month-header">
+                  <h3>Jul<span class="full-year"> 2025</span></h3>
+                </div>
+                <div class="content-timeline-month-items">
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Videos"
+                  >
+                    <a
+                      href="https://www.youtube.com/watch?v=m_4zaXSLW5U"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text"
+                          >The incredible design of the ISS</span
+                        >
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/youtube.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by Fern</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        A super interesting video about the ISS by Fern.
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Videos"
+                  >
+                    <a
+                      href="https://www.youtube.com/watch?v=v5YlreKsUGY"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text"
+                          >What is the future of art?</span
+                        >
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/youtube.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by Answer in Progress</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        A look at different opinions about AI art and the
+                        broader definition of art.
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Reading"
+                  >
+                    <a
+                      href="https://x.com/joshm/status/1945860833306673409"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">The “Mac vs PC” era of AI</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/thebrowser.company.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by Josh Miller</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        An interesting take on the two paths of AI development:
+                        the agents and the personal apps.
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Inspiration"
+                  >
+                    <a
+                      href="https://x.com/lostdoesart/status/1917334803176907086"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Folders 📁</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/x.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>Made by @lostdoesart on X</span>
+                      </div>
+
+                      <div class="timeline-item-preview">
+                        <figure>
+                          <img
+                            src="https://pbs.twimg.com/media/Gpu9zrxWIAAoifH?format=jpg&name=small"
+                            loading="lazy"
+                            alt="Folders 📁 preview"
+                          />
+                        </figure>
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Inspiration"
+                  >
+                    <a
+                      href="https://x.com/yashwanth941v/status/1917929934737281108"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Notification</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/x.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by @yashwanth941v on X</span>
+                      </div>
+
+                      <div class="timeline-item-preview">
+                        <figure>
+                          <img
+                            src="https://pbs.twimg.com/media/Gp3bGyoawAA5vPO?format=jpg&name=large"
+                            loading="lazy"
+                            alt="Notification preview"
+                          />
+                        </figure>
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Inspiration"
+                  >
+                    <a
+                      href="https://x.com/yashwanth941v/status/1916811810746851376"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Minimal Folder Design</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/x.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by @yashwanth941v on X</span>
+                      </div>
+
+                      <div class="timeline-item-preview">
+                        <figure>
+                          <img
+                            src="https://pbs.twimg.com/media/GpniKi5asAAQ_No?format=jpg&name=small"
+                            loading="lazy"
+                            alt="Minimal Folder Design preview"
+                          />
+                        </figure>
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Tools/Ressources"
+                  >
+                    <a
+                      href="https://fmhy.xyz/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">freemediaheckyeah</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/fmhy.xyz.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>fmhy.xyz</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        The largest collection of free stuff on the internet!
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Tools/Ressources"
+                  >
+                    <a
+                      href="https://www.realtimecolors.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Color and font visualizer</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/realtimecolors.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>realtimecolors.com</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        Realtime Colors is a tool that lets you visualize the
+                        colors and fonts used on a dummy website in real-time.
+                        It is very useful for designers wanting to know if
+                        colors work and check for accessibility. It allows you
+                        to setup a light and dark mode, and then export the css.
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Videos"
+                  >
+                    <a
+                      href="https://www.youtube.com/watch?v=2b1a3c4d8e0"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text"
+                          >When Your Body Attacks Itself</span
+                        >
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/youtube.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by Kurzgesagt</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        Autoimmunity. What happens when your immune system,
+                        designed to protect you, turns against you? And why does
+                        this happen?
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="People"
+                  >
+                    <a
+                      href="https://www.youtube.com/@CleoAbram"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Cleo Abram</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="/src/assets/profile.png"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>@CleoAbram on YouTube</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        Video journalist behind the show 'Huge If True',
+                        delivering optimistic and beautifully produced science &
+                        tech explainers.
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="content-timeline-month">
+                <div class="content-timeline-month-header">
+                  <h3>Jun<span class="full-year"> 2025</span></h3>
+                </div>
+                <div class="content-timeline-month-items">
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Videos"
+                  >
+                    <a
+                      href="https://www.youtube.com/watch?v=IrGYUq1mklk"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Liquid Glass </span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/youtube.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by Apple Developer</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        A video addressing the alleged accessibility issues of
+                        the upcoming iOS 26 update. It clearly defines the
+                        philosophy of this new design language. We've reached a
+                        point where this design process is closer to a physical
+                        approach than a software one.
+                      </div>
+                      <div class="timeline-item-preview">
+                        <figure>
+                          <img
+                            src="https://media.licdn.com/dms/image/v2/D5612AQFjDO-bM9vmWg/article-cover_image-shrink_720_1280/B56ZdoVPjvGoAI-/0/1749802094973?e=2147483647&v=beta&t=9xro6iRnWNnoppSKN3SAAs9fnY7z62sbS5AUqporZ-8"
+                            loading="lazy"
+                            alt="Liquid Glass  preview"
+                          />
+                        </figure>
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Inspiration"
+                  >
+                    <a
+                      href="https://x.com/dhruvdeora2/status/1916120373990723973"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Landing Page</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/x.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by @dhruvdeora2 on X</span>
+                      </div>
+
+                      <div class="timeline-item-preview">
+                        <figure>
+                          <img
+                            src="https://pbs.twimg.com/media/GpdtFZ_XYAIVVRJ?format=jpg&name=large"
+                            loading="lazy"
+                            alt="Landing Page preview"
+                          />
+                        </figure>
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Tools/Ressources"
+                  >
+                    <a
+                      href="https://penpot.app/penpothub/libraries-templates"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text"
+                          >Open-source figma alternative</span
+                        >
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/penpot.app.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>penpot.app</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        Penpot is a free and open-source design and prototyping
+                        platform. It is a great alternative to Figma!
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="content-timeline-month">
+                <div class="content-timeline-month-header">
+                  <h3>May<span class="full-year"> 2025</span></h3>
+                </div>
+                <div class="content-timeline-month-items">
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Videos"
+                  >
+                    <a
+                      href="https://x.com/mrexits/status/1917247659561066558"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">The Objects of Our Life</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/x.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>from Steve Jobs</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        Steve's talk at the 1983 International Design Conference
+                        in Aspen. He explains what a computer is, how software
+                        works, and what the next decades of advancements could
+                        look like, all with incredible foresight.
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Reading"
+                  >
+                    <a
+                      href="https://x.com/kimmonismus/status/1920594810286571640"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Automated Cleaning</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/x.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by @kimmonismus on X</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        A very important breakthrough: cleaning robots. Hygiene
+                        is what leads to healthier and longer living societies.
+                      </div>
+                      <div class="timeline-item-preview">
+                        <figure>
+                          <img
+                            src="https://www.startupticker.ch/assets/images/articles/Loki_Robotics_robot.png"
+                            loading="lazy"
+                            alt="Automated Cleaning preview"
+                          />
+                        </figure>
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Reading"
+                  >
+                    <a
+                      href="https://www.aboutamazon.com/news/operations/amazon-vulcan-robot-pick-stow-touch"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text"
+                          >Vulcan robots: the next genreration warehouse</span
+                        >
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/amazon.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by Amazon Robotics</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        In addition to the real time vision systems, those
+                        robots can feel the environment arount them using
+                        sensors and tactile feedback. This is a huge step and
+                        allow the robots to grab stuff more efficiently without
+                        damaging them.
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Videos"
+                  >
+                    <a
+                      href="https://www.reddit.com/r/interestingasfuck/comments/1lk73vi/the_bbc_uses_robocameras_disguised_as_dung_heaps/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text"
+                          >A new way to film widelife</span
+                        >
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/reddit.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>from the BBC</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        The BBC used robots looking like dung heaps to film
+                        close up shots of wild animals without scaring them
+                        away. This is a funny outcome of the recent advancements
+                        in robotics!
+                      </div>
+                      <div class="timeline-item-preview">
+                        <figure>
+                          <img
+                            src="https://images.techeblog.com/wp-content/uploads/2025/05/09150947/bbc-dung-cam-elephants-2.jpg"
+                            loading="lazy"
+                            alt="A new way to film widelife preview"
+                          />
+                        </figure>
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Inspiration"
+                  >
+                    <a
+                      href="https://x.com/samstooff/status/1910665385051119979"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text"
+                          >Nice graphic design with the help of GPT Image
+                          Gen</span
+                        >
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/x.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by @samstooff on X</span>
+                      </div>
+
+                      <div class="timeline-item-preview">
+                        <figure>
+                          <img
+                            src="https://pbs.twimg.com/media/Gn4J9r8WkAA6cWQ?format=jpg&name=4096x4096"
+                            loading="lazy"
+                            alt="Nice graphic design with the help of GPT Image Gen preview"
+                          />
+                        </figure>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="content-timeline-month">
+                <div class="content-timeline-month-header">
+                  <h3>Apr<span class="full-year"> 2025</span></h3>
+                </div>
+                <div class="content-timeline-month-items">
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Videos"
+                  >
+                    <a
+                      href="https://www.youtube.com/watch?v=7QR9otLcnf0"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text"
+                          >Bill Gates' 1993 prediction for the future of
+                          computers</span
+                        >
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/youtube.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by the BBC</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        Bill Gates and Paul Allen launched computing giant
+                        Microsoft 50 years ago. In 1993, he talked to the BBC
+                        about the online innovations that would define the 21st
+                        Century. He was truly a visionary.
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Reading"
+                  >
+                    <a
+                      href="https://x.com/kimmonismus/status/1913559452730658871"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Beyond Human Training</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/x.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by @kimmonismus on X</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        Google DeepMind's new “Streams” AI learns directly from
+                        the real world, discarding human data all by itself.
+                        This means the AI can come up with ideas that people
+                        might never have imagined or fully understood.
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Reading"
+                  >
+                    <a
+                      href="https://blog.google/products/google-cloud/ironwood-tpu-age-of-inference/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Google's advantage</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/google.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by Amin Vahdat</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        Google decided to lean heavily towards TPU instead of
+                        GPU for their AI infrastructure. This is a bold move
+                        that will allow them to have a more efficient and
+                        powerful system in the long run. You could comapare that
+                        with Apple's M1 chip, which was a game changer for the
+                        company. Google won't have to rely on Nvidia at all for
+                        example.
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Videos"
+                  >
+                    <a
+                      href="https://www.youtube.com/watch?v=DfznnKUwywQ"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text"
+                          >The design of mechanical characters</span
+                        >
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/youtube.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>Paper from Disney</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        In 2013, Disney published a paper on the design of
+                        mechanical characters. It's basically an interactive
+                        design system that lets anyone (even without engineering
+                        experience) turn a digital, articulated character into a
+                        3-D-printable mechanical toy/figure. It works for a wide
+                        range of characters and movements, from simple 2D to
+                        complex 3D animations.
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Inspiration"
+                  >
+                    <a
+                      href="https://x.com/neybell_/status/1908878149611565176"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Graphic - tokyo</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/x.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by @neybell_ on X</span>
+                      </div>
+
+                      <div class="timeline-item-preview">
+                        <figure>
+                          <img
+                            src="https://pbs.twimg.com/media/Gn2yTmhbkAASUAM?format=jpg&name=900x900"
+                            loading="lazy"
+                            alt="Graphic - tokyo preview"
+                          />
+                        </figure>
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Inspiration"
+                  >
+                    <a
+                      href="https://x.com/damonxart/status/1908832026297577477"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Poster - graphic design</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/x.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by @damonxart on X</span>
+                      </div>
+
+                      <div class="timeline-item-preview">
+                        <figure>
+                          <img
+                            src="https://pbs.twimg.com/media/Gn2ImxXa4AAv3xV?format=jpg&name=900x900"
+                            loading="lazy"
+                            alt="Poster - graphic design preview"
+                          />
+                        </figure>
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Inspiration"
+                  >
+                    <a
+                      href="https://x.com/damonxart/status/1908832026297577477"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Poster - graphic design</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/x.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by @damonxart on X</span>
+                      </div>
+
+                      <div class="timeline-item-preview">
+                        <figure>
+                          <img
+                            src="https://pbs.twimg.com/media/Gn2IjZobAAA3fCI?format=jpg&name=900x900"
+                            loading="lazy"
+                            alt="Poster - graphic design preview"
+                          />
+                        </figure>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="content-timeline-month">
+                <div class="content-timeline-month-header">
+                  <h3>Mar<span class="full-year"> 2025</span></h3>
+                </div>
+                <div class="content-timeline-month-items">
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Reading"
+                  >
+                    <a
+                      href="https://medium.com/@disco_lu/saying-bye-to-4px-spacing-and-hello-to-fibonacci-58477e3ecca3"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Fibonacci in design</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/medium.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by Luis Ouriach</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        Saying bye to 4px spacing and hello to Fibonacci. Very
+                        useful article about spacing in web design.
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Tools/Ressources"
+                  >
+                    <a
+                      href="https://lucide.dev/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Open-source Icons</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/lucide.dev.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>lucide.dev</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        Free, open-source and consistent. I use those icons in
+                        most of my projects.
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="content-timeline-month">
+                <div class="content-timeline-month-header">
+                  <h3>Feb<span class="full-year"> 2025</span></h3>
+                </div>
+                <div class="content-timeline-month-items">
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Tools/Ressources"
+                  >
+                    <a
+                      href="https://fontjoy.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">Font pairing made easy</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/fontjoy.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>fontjoy.com</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        Fontjoy is a tool that helps you find 3 complementary
+                        fonts that work well together. It uses a neural network
+                        and is very fun to play with.
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="content-timeline-month">
+                <div class="content-timeline-month-header">
+                  <h3>Jan<span class="full-year"> 2025</span></h3>
+                </div>
+                <div class="content-timeline-month-items">
+                  <div
+                    class="timeline-item animate-on-scroll"
+                    data-tag="Reading"
+                  >
+                    <a
+                      href="https://freedium.cfd/https://medium.muz.li/ui-design-trends-in-2025-34987ed805c9"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div class="timeline-item-title">
+                        <span class="link-text">UI Design Trends In 2025</span>
+                        <span class="external-link-icon" aria-hidden="true"
+                          >↗</span
+                        >
+                      </div>
+                      <div class="timeline-item-meta">
+                        <img
+                          src="https://icons.duckduckgo.com/ip3/medium.com.ico"
+                          width="16"
+                          height="16"
+                          alt=""
+                        />
+                        <span>by Souptik Debnath</span>
+                      </div>
+                      <div class="timeline-item-description">
+                        Interesting article.
+                      </div>
+                      <div class="timeline-item-preview">
+                        <figure>
+                          <img
+                            src="https://miro.medium.com/v2/resize:fit:700/1*sOkarKseqH84zxnaXlFdOQ.png"
+                            loading="lazy"
+                            alt="UI Design Trends In 2025 preview"
+                          />
+                        </figure>
+                      </div>
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="content-timeline-month">
-              <div class="content-timeline-month-header">
-                <h3>Aug<span class="full-year"> 2025</span></h3>
-              </div>
-              <div class="content-timeline-month-items">
-                
-    <div class="timeline-item animate-on-scroll" data-tag="Videos">
-      <a href="https://www.youtube.com/watch?v=fHRS_NOs24w" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Ramanujan the Math Genius</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
-         <span>by Fern</span>
-       </div>
-        <div class="timeline-item-description">An overview of Ramanujan's life and contributions to mathematics. He truly was a genius with incredible talent and intuition.</div>
-        
-      </a>
-    </div>
-              </div>
-            </div>
-            <div class="content-timeline-month">
-              <div class="content-timeline-month-header">
-                <h3>Jul<span class="full-year"> 2025</span></h3>
-              </div>
-              <div class="content-timeline-month-items">
-                
-    <div class="timeline-item animate-on-scroll" data-tag="Videos">
-      <a href="https://www.youtube.com/watch?v=m_4zaXSLW5U" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">The incredible design of the ISS</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
-         <span>by Fern</span>
-       </div>
-        <div class="timeline-item-description">A super interesting video about the ISS by Fern.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Videos">
-      <a href="https://www.youtube.com/watch?v=v5YlreKsUGY" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">What is the future of art?</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
-         <span>by Answer in Progress</span>
-       </div>
-        <div class="timeline-item-description">A look at different opinions about AI art and the broader definition of art.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Reading">
-      <a href="https://x.com/joshm/status/1945860833306673409" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">The “Mac vs PC” era of AI</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/thebrowser.company.ico" width="16" height="16" alt="">
-         <span>by Josh Miller</span>
-       </div>
-        <div class="timeline-item-description">An interesting take on the two paths of AI development: the agents and the personal apps.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
-      <a href="https://x.com/lostdoesart/status/1917334803176907086" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Folders 📁</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
-         <span>Made by @lostdoesart on X</span>
-       </div>
-        
-        <div class="timeline-item-preview">
-         <figure>
-           <img src="https://pbs.twimg.com/media/Gpu9zrxWIAAoifH?format=jpg&name=small" loading="lazy" alt="Folders 📁 preview">
-         </figure>
-       </div>
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
-      <a href="https://x.com/yashwanth941v/status/1917929934737281108" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Notification</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
-         <span>by @yashwanth941v on X</span>
-       </div>
-        
-        <div class="timeline-item-preview">
-         <figure>
-           <img src="https://pbs.twimg.com/media/Gp3bGyoawAA5vPO?format=jpg&name=large" loading="lazy" alt="Notification preview">
-         </figure>
-       </div>
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
-      <a href="https://x.com/yashwanth941v/status/1916811810746851376" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Minimal Folder Design</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
-         <span>by @yashwanth941v on X</span>
-       </div>
-        
-        <div class="timeline-item-preview">
-         <figure>
-           <img src="https://pbs.twimg.com/media/GpniKi5asAAQ_No?format=jpg&name=small" loading="lazy" alt="Minimal Folder Design preview">
-         </figure>
-       </div>
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Tools/Ressources">
-      <a href="https://fmhy.xyz/" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">freemediaheckyeah</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/fmhy.xyz.ico" width="16" height="16" alt="">
-         <span>fmhy.xyz</span>
-       </div>
-        <div class="timeline-item-description">The largest collection of free stuff on the internet!</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Tools/Ressources">
-      <a href="https://www.realtimecolors.com/" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Color and font visualizer</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/realtimecolors.com.ico" width="16" height="16" alt="">
-         <span>realtimecolors.com</span>
-       </div>
-        <div class="timeline-item-description">Realtime Colors is a tool that lets you visualize the colors and fonts used on a dummy website in real-time. It is very useful for designers wanting to know if colors work and check for accessibility. It allows you to setup a light and dark mode, and then export the css.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Videos">
-      <a href="https://www.youtube.com/watch?v=2b1a3c4d8e0" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">When Your Body Attacks Itself</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
-         <span>by Kurzgesagt</span>
-       </div>
-        <div class="timeline-item-description">Autoimmunity. What happens when your immune system, designed to protect you, turns against you? And why does this happen?</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="People">
-      <a href="https://www.youtube.com/@CleoAbram" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Cleo Abram</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="/src/assets/profile.png" width="16" height="16" alt="">
-         <span>@CleoAbram on YouTube</span>
-       </div>
-        <div class="timeline-item-description">Video journalist behind the show 'Huge If True', delivering optimistic and beautifully produced science & tech explainers.</div>
-        
-      </a>
-    </div>
-              </div>
-            </div>
-            <div class="content-timeline-month">
-              <div class="content-timeline-month-header">
-                <h3>Jun<span class="full-year"> 2025</span></h3>
-              </div>
-              <div class="content-timeline-month-items">
-                
-    <div class="timeline-item animate-on-scroll" data-tag="Videos">
-      <a href="https://www.youtube.com/watch?v=IrGYUq1mklk" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Liquid Glass </span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
-         <span>by Apple Developer</span>
-       </div>
-        <div class="timeline-item-description">A video addressing the alleged accessibility issues of the upcoming iOS 26 update. It clearly defines the philosophy of this new design language. We've reached a point where this design process is closer to a physical approach than a software one.</div>
-        <div class="timeline-item-preview">
-         <figure>
-           <img src="https://media.licdn.com/dms/image/v2/D5612AQFjDO-bM9vmWg/article-cover_image-shrink_720_1280/B56ZdoVPjvGoAI-/0/1749802094973?e=2147483647&v=beta&t=9xro6iRnWNnoppSKN3SAAs9fnY7z62sbS5AUqporZ-8" loading="lazy" alt="Liquid Glass  preview">
-         </figure>
-       </div>
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
-      <a href="https://x.com/dhruvdeora2/status/1916120373990723973" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Landing Page</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
-         <span>by @dhruvdeora2 on X</span>
-       </div>
-        
-        <div class="timeline-item-preview">
-         <figure>
-           <img src="https://pbs.twimg.com/media/GpdtFZ_XYAIVVRJ?format=jpg&name=large" loading="lazy" alt="Landing Page preview">
-         </figure>
-       </div>
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Tools/Ressources">
-      <a href="https://penpot.app/penpothub/libraries-templates" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Open-source figma alternative</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/penpot.app.ico" width="16" height="16" alt="">
-         <span>penpot.app</span>
-       </div>
-        <div class="timeline-item-description">Penpot is a free and open-source design and prototyping platform. It is a great alternative to Figma!</div>
-        
-      </a>
-    </div>
-              </div>
-            </div>
-            <div class="content-timeline-month">
-              <div class="content-timeline-month-header">
-                <h3>May<span class="full-year"> 2025</span></h3>
-              </div>
-              <div class="content-timeline-month-items">
-                
-    <div class="timeline-item animate-on-scroll" data-tag="Videos">
-      <a href="https://x.com/mrexits/status/1917247659561066558" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">The Objects of Our Life</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
-         <span>from Steve Jobs</span>
-       </div>
-        <div class="timeline-item-description">Steve's talk at the 1983 International Design Conference in Aspen. He explains what a computer is, how software works, and what the next decades of advancements could look like, all with incredible foresight.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Reading">
-      <a href="https://x.com/kimmonismus/status/1920594810286571640" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Automated Cleaning</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
-         <span>by @kimmonismus on X</span>
-       </div>
-        <div class="timeline-item-description">A very important breakthrough: cleaning robots. Hygiene is what leads to healthier and longer living societies.</div>
-        <div class="timeline-item-preview">
-         <figure>
-           <img src="https://www.startupticker.ch/assets/images/articles/Loki_Robotics_robot.png" loading="lazy" alt="Automated Cleaning preview">
-         </figure>
-       </div>
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Reading">
-      <a href="https://www.aboutamazon.com/news/operations/amazon-vulcan-robot-pick-stow-touch" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Vulcan robots: the next genreration warehouse</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/amazon.com.ico" width="16" height="16" alt="">
-         <span>by Amazon Robotics</span>
-       </div>
-        <div class="timeline-item-description">In addition to the real time vision systems, those robots can feel the environment arount them using sensors and tactile feedback. This is a huge step and allow the robots to grab stuff more efficiently without damaging them.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Videos">
-      <a href="https://www.reddit.com/r/interestingasfuck/comments/1lk73vi/the_bbc_uses_robocameras_disguised_as_dung_heaps/" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">A new way to film widelife</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/reddit.com.ico" width="16" height="16" alt="">
-         <span>from the BBC</span>
-       </div>
-        <div class="timeline-item-description">The BBC used robots looking like dung heaps to film close up shots of wild animals without scaring them away. This is a funny outcome of the recent advancements in robotics!</div>
-        <div class="timeline-item-preview">
-         <figure>
-           <img src="https://images.techeblog.com/wp-content/uploads/2025/05/09150947/bbc-dung-cam-elephants-2.jpg" loading="lazy" alt="A new way to film widelife preview">
-         </figure>
-       </div>
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
-      <a href="https://x.com/samstooff/status/1910665385051119979" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Nice graphic design with the help of GPT Image Gen</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
-         <span>by @samstooff on X</span>
-       </div>
-        
-        <div class="timeline-item-preview">
-         <figure>
-           <img src="https://pbs.twimg.com/media/Gn4J9r8WkAA6cWQ?format=jpg&name=4096x4096" loading="lazy" alt="Nice graphic design with the help of GPT Image Gen preview">
-         </figure>
-       </div>
-      </a>
-    </div>
-              </div>
-            </div>
-            <div class="content-timeline-month">
-              <div class="content-timeline-month-header">
-                <h3>Apr<span class="full-year"> 2025</span></h3>
-              </div>
-              <div class="content-timeline-month-items">
-                
-    <div class="timeline-item animate-on-scroll" data-tag="Videos">
-      <a href="https://www.youtube.com/watch?v=7QR9otLcnf0" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Bill Gates' 1993 prediction for the future of computers</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
-         <span>by the BBC</span>
-       </div>
-        <div class="timeline-item-description">Bill Gates and Paul Allen launched computing giant Microsoft 50 years ago. In 1993, he talked to the BBC about the online innovations that would define the 21st Century. He was truly a visionary.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Reading">
-      <a href="https://x.com/kimmonismus/status/1913559452730658871" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Beyond Human Training</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
-         <span>by @kimmonismus on X</span>
-       </div>
-        <div class="timeline-item-description">Google DeepMind's new “Streams” AI learns directly from the real world, discarding human data all by itself. This means the AI can come up with ideas that people might never have imagined or fully understood.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Reading">
-      <a href="https://blog.google/products/google-cloud/ironwood-tpu-age-of-inference/" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Google's advantage</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/google.com.ico" width="16" height="16" alt="">
-         <span>by Amin Vahdat</span>
-       </div>
-        <div class="timeline-item-description">Google decided to lean heavily towards TPU instead of GPU for their AI infrastructure. This is a bold move that will allow them to have a more efficient and powerful system in the long run. You could comapare that with Apple's M1 chip, which was a game changer for the company. Google won't have to rely on Nvidia at all for example.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Videos">
-      <a href="https://www.youtube.com/watch?v=DfznnKUwywQ" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">The design of mechanical characters</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
-         <span>Paper from Disney</span>
-       </div>
-        <div class="timeline-item-description">In 2013, Disney published a paper on the design of mechanical characters. It's basically an interactive design system that lets anyone (even without engineering experience) turn a digital, articulated character into a 3-D-printable mechanical toy/figure. It works for a wide range of characters and movements, from simple 2D to complex 3D animations.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
-      <a href="https://x.com/neybell_/status/1908878149611565176" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Graphic - tokyo</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
-         <span>by @neybell_ on X</span>
-       </div>
-        
-        <div class="timeline-item-preview">
-         <figure>
-           <img src="https://pbs.twimg.com/media/Gn2yTmhbkAASUAM?format=jpg&name=900x900" loading="lazy" alt="Graphic - tokyo preview">
-         </figure>
-       </div>
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
-      <a href="https://x.com/damonxart/status/1908832026297577477" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Poster - graphic design</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
-         <span>by @damonxart on X</span>
-       </div>
-        
-        <div class="timeline-item-preview">
-         <figure>
-           <img src="https://pbs.twimg.com/media/Gn2ImxXa4AAv3xV?format=jpg&name=900x900" loading="lazy" alt="Poster - graphic design preview">
-         </figure>
-       </div>
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
-      <a href="https://x.com/damonxart/status/1908832026297577477" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Poster - graphic design</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
-         <span>by @damonxart on X</span>
-       </div>
-        
-        <div class="timeline-item-preview">
-         <figure>
-           <img src="https://pbs.twimg.com/media/Gn2IjZobAAA3fCI?format=jpg&name=900x900" loading="lazy" alt="Poster - graphic design preview">
-         </figure>
-       </div>
-      </a>
-    </div>
-              </div>
-            </div>
-            <div class="content-timeline-month">
-              <div class="content-timeline-month-header">
-                <h3>Mar<span class="full-year"> 2025</span></h3>
-              </div>
-              <div class="content-timeline-month-items">
-                
-    <div class="timeline-item animate-on-scroll" data-tag="Reading">
-      <a href="https://medium.com/@disco_lu/saying-bye-to-4px-spacing-and-hello-to-fibonacci-58477e3ecca3" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Fibonacci in design</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/medium.com.ico" width="16" height="16" alt="">
-         <span>by Luis Ouriach</span>
-       </div>
-        <div class="timeline-item-description">Saying bye to 4px spacing and hello to Fibonacci. Very useful article about spacing in web design.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Tools/Ressources">
-      <a href="https://lucide.dev/" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Open-source Icons</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/lucide.dev.ico" width="16" height="16" alt="">
-         <span>lucide.dev</span>
-       </div>
-        <div class="timeline-item-description">Free, open-source and consistent. I use those icons in most of my projects.</div>
-        
-      </a>
-    </div>
-              </div>
-            </div>
-            <div class="content-timeline-month">
-              <div class="content-timeline-month-header">
-                <h3>Feb<span class="full-year"> 2025</span></h3>
-              </div>
-              <div class="content-timeline-month-items">
-                
-    <div class="timeline-item animate-on-scroll" data-tag="Tools/Ressources">
-      <a href="https://fontjoy.com/" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">Font pairing made easy</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/fontjoy.com.ico" width="16" height="16" alt="">
-         <span>fontjoy.com</span>
-       </div>
-        <div class="timeline-item-description">Fontjoy is a tool that helps you find 3 complementary fonts that work well together. It uses a neural network and is very fun to play with.</div>
-        
-      </a>
-    </div>
-              </div>
-            </div>
-            <div class="content-timeline-month">
-              <div class="content-timeline-month-header">
-                <h3>Jan<span class="full-year"> 2025</span></h3>
-              </div>
-              <div class="content-timeline-month-items">
-                
-    <div class="timeline-item animate-on-scroll" data-tag="Reading">
-      <a href="https://freedium.cfd/https://medium.muz.li/ui-design-trends-in-2025-34987ed805c9" target="_blank" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          <span class="link-text">UI Design Trends In 2025</span>
-          <span class="external-link-icon" aria-hidden="true">↗</span>
-        </div>
-        <div class="timeline-item-meta">
-         <img src="https://icons.duckduckgo.com/ip3/medium.com.ico" width="16" height="16" alt="">
-         <span>by Souptik Debnath</span>
-       </div>
-        <div class="timeline-item-description">Interesting article.</div>
-        <div class="timeline-item-preview">
-         <figure>
-           <img src="https://miro.medium.com/v2/resize:fit:700/1*sOkarKseqH84zxnaXlFdOQ.png" loading="lazy" alt="UI Design Trends In 2025 preview">
-         </figure>
-       </div>
-      </a>
-    </div>
-              </div>
-            </div></div>
-        </div>
-<!-- AUTO-GEN:BOOKMARKS END -->
+          </div>
+          <!-- AUTO-GEN:BOOKMARKS END -->
         </div>
       </div>
     </main>
 
     <footer>
+      <div class="hero-links">
+        <p>
+          <a
+            class="link-with-icon"
+            rel="noopener"
+            href="#page-top"
+            data-back-to-top
+            >Back to top<svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              width="1em"
+              style="margin-left: 0.2em"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-up-icon lucide-arrow-up"
+            >
+              <path d="m5 12 7-7 7 7" />
+              <path d="M12 19V5" /></svg
+          ></a>
+        </p>
+        <div class="theme-toggle">
+          <button
+            aria-label="Toggle theme"
+            class="theme-toggle"
+            x-data
+            x-init="$store.theme.init()"
+            @click="$store.theme.toggle()"
+            :data-mode="$store.theme.mode"
+          >
+            <!-- System Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-monitor"
+              data-icon="system"
+            >
+              <rect width="20" height="14" x="2" y="3" rx="2" />
+              <line x1="8" x2="16" y1="21" y2="21" />
+              <line x1="12" x2="12" y1="17" y2="21" />
+            </svg>
+            <!-- Light/Sun Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-sun"
+              data-icon="light"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" />
+              <path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" />
+              <path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+            <!-- Dark/Moon Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-moon"
+              data-icon="dark"
+            >
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
       <div class="footer-meta">
         <p class="footer-meta-left">
           Designed with
