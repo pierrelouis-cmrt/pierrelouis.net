@@ -1,5 +1,101 @@
 // Theme
 
+const COLOR_META_SELECTOR = 'meta[data-theme-control="color"]';
+const STATUS_META_SELECTOR = 'meta[data-theme-control="status"]';
+const FALLBACK_THEME_COLORS = {
+  light: "#faf9f9",
+  dark: "#0f0f0f",
+};
+
+function toHexComponent(value) {
+  const int = Math.round(Number(value));
+  const clamped = Math.max(0, Math.min(255, int));
+  return clamped.toString(16).padStart(2, "0");
+}
+
+function parseCssColorValue(color) {
+  if (!color) return null;
+  const value = color.trim();
+  if (!value) return null;
+
+  if (value.startsWith("#")) {
+    let hex = value.slice(1);
+    if (hex.length === 3) {
+      hex = hex
+        .split("")
+        .map((char) => char + char)
+        .join("");
+    }
+    if (hex.length !== 6) return null;
+    const r = parseInt(hex.slice(0, 2), 16);
+    const g = parseInt(hex.slice(2, 4), 16);
+    const b = parseInt(hex.slice(4, 6), 16);
+    return { hex: `#${hex.toLowerCase()}`, r, g, b };
+  }
+
+  const match = value.match(
+    /^rgba?\(\s*([0-9.]+)\s*,\s*([0-9.]+)\s*,\s*([0-9.]+)/i
+  );
+  if (match) {
+    const r = parseFloat(match[1]);
+    const g = parseFloat(match[2]);
+    const b = parseFloat(match[3]);
+    return {
+      hex: `#${toHexComponent(r)}${toHexComponent(g)}${toHexComponent(b)}`,
+      r: Math.round(r),
+      g: Math.round(g),
+      b: Math.round(b),
+    };
+  }
+
+  return null;
+}
+
+function isDarkFromRgb(rgb) {
+  if (!rgb) return false;
+  const luminance =
+    (0.2126 * rgb.r + 0.7152 * rgb.g + 0.0722 * rgb.b) / 255;
+  return luminance < 0.5;
+}
+
+function refreshDynamicThemeColor() {
+  const raf = window.requestAnimationFrame || ((cb) => setTimeout(cb, 0));
+  raf(() => {
+    const root = document.documentElement;
+    const computedStyle = getComputedStyle(root);
+    const rawColor = computedStyle.getPropertyValue("--bg-primary");
+    const parsed = parseCssColorValue(rawColor);
+    const colors = {
+      ...FALLBACK_THEME_COLORS,
+      ...(window.__PL_THEME_COLORS || {}),
+    };
+    const fallbackMode = root.classList.contains("dark") ? "dark" : "light";
+    const colorValue =
+      parsed?.hex ||
+      window.__PL_ACTIVE_THEME_COLOR ||
+      colors[fallbackMode] ||
+      colors.light;
+
+    document.querySelectorAll(COLOR_META_SELECTOR).forEach((meta) => {
+      meta.setAttribute("content", colorValue);
+      if (meta.getAttribute("name") === "theme-color" && meta.parentNode) {
+        meta.parentNode.appendChild(meta);
+      }
+    });
+
+    const statusMeta = document.querySelector(STATUS_META_SELECTOR);
+    const isDark = parsed ? isDarkFromRgb(parsed) : fallbackMode === "dark";
+    if (statusMeta) {
+      statusMeta.setAttribute("content", isDark ? "black" : "default");
+    }
+
+    window.__PL_ACTIVE_THEME_COLOR = colorValue;
+    window.__PL_CURRENT_THEME_APPEARANCE = isDark ? "dark" : "light";
+  });
+}
+
+refreshDynamicThemeColor();
+
 document.addEventListener("alpine:init", () => {
   Alpine.store("theme", {
     mode: "system",
@@ -27,6 +123,7 @@ document.addEventListener("alpine:init", () => {
 
       // Initial sync (safe even if iframes not loaded)
       syncIframeTheme(this.mode);
+      refreshDynamicThemeColor();
     },
 
     toggle() {
@@ -44,6 +141,7 @@ document.addEventListener("alpine:init", () => {
       localStorage.setItem("theme", "dark");
       this.mode = "dark";
       syncIframeTheme("dark");
+      refreshDynamicThemeColor();
     },
 
     light() {
@@ -51,6 +149,7 @@ document.addEventListener("alpine:init", () => {
       localStorage.setItem("theme", "light");
       this.mode = "light";
       syncIframeTheme("light");
+      refreshDynamicThemeColor();
     },
 
     system() {
@@ -66,6 +165,7 @@ document.addEventListener("alpine:init", () => {
       } else {
         document.documentElement.classList.remove("dark");
       }
+      refreshDynamicThemeColor();
     },
   });
 });

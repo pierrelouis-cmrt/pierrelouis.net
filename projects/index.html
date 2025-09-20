@@ -3,16 +3,23 @@
   <head>
     <script>
       (() => {
+        const themeColors = {
+          light: "#faf9f9",
+          dark: "#0f0f0f",
+        };
+        window.__PL_THEME_COLORS = themeColors;
+
         const theme = localStorage.theme || "system";
-        if (
-          theme === "dark" ||
-          (theme === "system" &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches)
-        ) {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
+        const prefersDark = window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .matches;
+        const useDark =
+          theme === "dark" || (theme === "system" && prefersDark);
+
+        document.documentElement.classList.toggle("dark", useDark);
+        window.__PL_INITIAL_THEME = useDark ? "dark" : "light";
+        window.__PL_ACTIVE_THEME_COLOR =
+          themeColors[useDark ? "dark" : "light"];
       })();
     </script>
     <script>
@@ -58,7 +65,59 @@
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="theme-color"
+      content="#faf9f9"
+      media="(prefers-color-scheme: light)"
+      data-theme-control="color"
+    />
+    <meta
+      name="theme-color"
+      content="#0f0f0f"
+      media="(prefers-color-scheme: dark)"
+      data-theme-control="color"
+    />
+    <meta name="theme-color" content="#faf9f9" data-theme-control="color" />
+    <meta
+      name="msapplication-navbutton-color"
+      content="#faf9f9"
+      data-theme-control="color"
+    />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="default"
+      data-theme-control="status"
+    />
+    <script>
+      (() => {
+        const themeColors = window.__PL_THEME_COLORS || {
+          light: "#faf9f9",
+          dark: "#0f0f0f",
+        };
+        const mode =
+          window.__PL_INITIAL_THEME ||
+          (document.documentElement.classList.contains("dark")
+            ? "dark"
+            : "light");
+        const color = themeColors[mode] || themeColors.light;
+
+        document
+          .querySelectorAll('meta[data-theme-control="color"]')
+          .forEach((meta) => {
+            meta.setAttribute("content", color);
+          });
+
+        const statusMeta = document.querySelector(
+          'meta[data-theme-control="status"]'
+        );
+        if (statusMeta) {
+          statusMeta.setAttribute("content", mode === "dark" ? "black" : "default");
+        }
+
+        window.__PL_ACTIVE_THEME_COLOR = color;
+        window.__PL_CURRENT_THEME_APPEARANCE = mode;
+      })();
+    </script>
     <link rel="preload" href="/src/output-v168.css" as="style" />
 
     <link rel="stylesheet" href="/src/output-v168.css" />
