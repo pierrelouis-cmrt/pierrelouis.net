@@ -300,26 +300,22 @@ a.link-with-icon:not(:hover) .lucide {
   -webkit-backdrop-filter: blur(16px);
   z-index: 98;
   transition: background-color 400ms ease-in-out;
-  --nav-safe-area: 0px;
-}
-
-.site-navigation::before {
-  content: "";
-  display: block;
-  height: var(--nav-safe-area);
-  pointer-events: none;
+  padding-top: 0;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  contain: paint;
 }
 
 @supports (padding-top: env(safe-area-inset-top)) {
   .site-navigation {
-    --nav-safe-area: env(safe-area-inset-top);
+    padding-top: env(safe-area-inset-top);
   }
 }
 
 @supports not (padding-top: env(safe-area-inset-top)) and
   (padding-top: constant(safe-area-inset-top)) {
   .site-navigation {
-    --nav-safe-area: constant(safe-area-inset-top);
+    padding-top: constant(safe-area-inset-top);
   }
 }
 
