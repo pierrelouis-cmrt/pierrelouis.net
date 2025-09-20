@@ -87,6 +87,9 @@
   --space-16: 4rem;
   --space-24: 6rem;
 
+  /* Safe areas */
+  --safe-area-top: 0px;
+
   /* Border radius */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
@@ -94,6 +97,19 @@
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
   --radius-full: 9999px;
+}
+
+@supports (padding-top: env(safe-area-inset-top)) {
+  :root {
+    --safe-area-top: env(safe-area-inset-top);
+  }
+}
+
+@supports not (padding-top: env(safe-area-inset-top)) and
+  (padding-top: constant(safe-area-inset-top)) {
+  :root {
+    --safe-area-top: constant(safe-area-inset-top);
+  }
 }
 
 .dark {
@@ -293,25 +309,21 @@ a.link-with-icon:not(:hover) .lucide {
 .site-navigation {
   position: sticky;
   top: 0;
+  z-index: 98;
+  padding-top: var(--safe-area-top);
+  isolation: isolate;
+}
+
+.site-navigation::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background-color: var(--bg-navbar);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  z-index: 98;
   transition: background-color 400ms ease-in-out;
-  will-change: transform;
-}
-
-@supports (padding-top: env(safe-area-inset-top)) {
-  .site-navigation {
-    padding-top: env(safe-area-inset-top);
-  }
-}
-
-@supports not (padding-top: env(safe-area-inset-top)) and
-  (padding-top: constant(safe-area-inset-top)) {
-  .site-navigation {
-    padding-top: constant(safe-area-inset-top);
-  }
+  pointer-events: none;
+  z-index: -1;
 }
 
 .navigation-container {
