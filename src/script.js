@@ -1,5 +1,45 @@
 // Theme
 
+function withPreservedScroll(callback) {
+  const scrollX = window.scrollX;
+  const scrollY = window.scrollY;
+  const activeElement = document.activeElement;
+
+  callback();
+
+  const maxAttempts = 10;
+  let attempts = 0;
+  let focusRestored = false;
+
+  const restore = () => {
+    attempts += 1;
+
+    if (window.scrollX !== scrollX || window.scrollY !== scrollY) {
+      window.scrollTo(scrollX, scrollY);
+
+      if (
+        !focusRestored &&
+        activeElement &&
+        typeof activeElement.focus === "function" &&
+        activeElement !== document.body
+      ) {
+        try {
+          activeElement.focus({ preventScroll: true });
+        } catch (error) {
+          activeElement.focus();
+        }
+        focusRestored = true;
+      }
+    }
+
+    if (attempts < maxAttempts) {
+      setTimeout(restore, 50);
+    }
+  };
+
+  setTimeout(restore, 0);
+}
+
 document.addEventListener("alpine:init", () => {
   Alpine.store("theme", {
     mode: "system",
@@ -20,8 +60,10 @@ document.addEventListener("alpine:init", () => {
         .matchMedia("(prefers-color-scheme: dark)")
         .addEventListener("change", () => {
           if (this.mode === "system") {
-            this.applySystemTheme();
-            syncIframeTheme("system");
+            withPreservedScroll(() => {
+              this.applySystemTheme();
+              syncIframeTheme("system");
+            });
           }
         });
 
@@ -40,24 +82,30 @@ document.addEventListener("alpine:init", () => {
     },
 
     dark() {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-      this.mode = "dark";
-      syncIframeTheme("dark");
+      withPreservedScroll(() => {
+        document.documentElement.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+        this.mode = "dark";
+        syncIframeTheme("dark");
+      });
     },
 
     light() {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-      this.mode = "light";
-      syncIframeTheme("light");
+      withPreservedScroll(() => {
+        document.documentElement.classList.remove("dark");
+        localStorage.setItem("theme", "light");
+        this.mode = "light";
+        syncIframeTheme("light");
+      });
     },
 
     system() {
-      localStorage.removeItem("theme");
-      this.mode = "system";
-      this.applySystemTheme();
-      syncIframeTheme("system");
+      withPreservedScroll(() => {
+        localStorage.removeItem("theme");
+        this.mode = "system";
+        this.applySystemTheme();
+        syncIframeTheme("system");
+      });
     },
 
     applySystemTheme() {
