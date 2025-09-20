@@ -1,71 +1,118 @@
 // Theme
 
+const themeRoot = document.documentElement;
+const themeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+const themeStorageKey = "theme";
+
+const keepViewport = (fn) => {
+  const scrollEl = document.scrollingElement || document.documentElement;
+  const { scrollX, scrollY } = window;
+  const savedScrollLeft = scrollEl ? scrollEl.scrollLeft : scrollX;
+  const savedScrollTop = scrollEl ? scrollEl.scrollTop : scrollY;
+
+  fn();
+
+  const restore = () => {
+    if (window.scrollX !== scrollX || window.scrollY !== scrollY) {
+      window.scrollTo(scrollX, scrollY);
+    }
+
+    if (scrollEl) {
+      if (scrollEl.scrollLeft !== savedScrollLeft) {
+        scrollEl.scrollLeft = savedScrollLeft;
+      }
+      if (scrollEl.scrollTop !== savedScrollTop) {
+        scrollEl.scrollTop = savedScrollTop;
+      }
+    }
+  };
+
+  const now = () => (typeof performance !== "undefined" ? performance.now() : Date.now());
+  const start = now();
+  const duration = 450;
+
+  const tick = () => {
+    restore();
+    if (now() - start < duration) {
+      requestAnimationFrame(tick);
+    }
+  };
+
+  requestAnimationFrame(tick);
+};
+
+const applyThemeToRoot = (mode) => {
+  const shouldBeDark =
+    mode === "dark" || (mode === "system" && themeQuery.matches);
+  themeRoot.classList.toggle("dark", shouldBeDark);
+};
+
+const persistTheme = (mode) => {
+  if (mode === "system") {
+    localStorage.removeItem(themeStorageKey);
+  } else {
+    localStorage.setItem(themeStorageKey, mode);
+  }
+};
+
+const loadStoredTheme = () => {
+  const saved = localStorage.getItem(themeStorageKey);
+  return saved === "dark" || saved === "light" ? saved : "system";
+};
+
 document.addEventListener("alpine:init", () => {
+  const apply = (store, mode, immediate = false) => {
+    const run = () => {
+      applyThemeToRoot(mode);
+      persistTheme(mode);
+      store.mode = mode;
+      syncIframeTheme(mode);
+    };
+
+    if (immediate) {
+      run();
+    } else {
+      keepViewport(run);
+    }
+  };
+
   Alpine.store("theme", {
     mode: "system",
 
     init() {
-      // Check for saved theme preference
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "dark") {
-        this.dark();
-      } else if (savedTheme === "light") {
-        this.light();
-      } else {
-        this.system();
-      }
+      apply(this, loadStoredTheme(), true);
 
-      // Watch for system theme changes
-      window
-        .matchMedia("(prefers-color-scheme: dark)")
-        .addEventListener("change", () => {
-          if (this.mode === "system") {
-            this.applySystemTheme();
-            syncIframeTheme("system");
-          }
-        });
+      themeQuery.addEventListener("change", () => {
+        if (this.mode === "system") {
+          apply(this, "system");
+        }
+      });
+    },
 
-      // Initial sync (safe even if iframes not loaded)
-      syncIframeTheme(this.mode);
+    set(mode) {
+      apply(this, mode);
     },
 
     toggle() {
-      if (this.mode === "system") {
-        this.light();
-      } else if (this.mode === "light") {
-        this.dark();
-      } else {
-        this.system();
-      }
+      this.set(
+        this.mode === "system"
+          ? "light"
+          : this.mode === "light"
+          ? "dark"
+          : "system"
+      );
     },
 
     dark() {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-      this.mode = "dark";
-      syncIframeTheme("dark");
+      this.set("dark");
     },
 
     light() {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-      this.mode = "light";
-      syncIframeTheme("light");
+      this.set("light");
     },
 
     system() {
-      localStorage.removeItem("theme");
-      this.mode = "system";
-      this.applySystemTheme();
-      syncIframeTheme("system");
-    },
-
-    applySystemTheme() {
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
+      this.set("system");
     },
   });
 });
@@ -104,9 +151,7 @@ function syncSingleIframe(iframe, mode) {
     // If system prefers light, add 'light' to force light (prevents unconditional dark).
     // If system prefers dark, add no classes (lets unconditional :not(.light) apply dark,
     // and media query override if needed).
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
+    const prefersDark = themeQuery.matches;
     if (!prefersDark) {
       html.classList.add("light");
     }
