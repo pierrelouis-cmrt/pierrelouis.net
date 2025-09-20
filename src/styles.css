@@ -424,6 +424,15 @@ a.link-with-icon:not(:hover) .lucide {
   contain-intrinsic-size: 1000px;
 }
 
+@supports (-webkit-touch-callout: none) {
+  @media (hover: none) and (pointer: coarse) {
+    .cv-auto {
+      content-visibility: visible;
+      contain-intrinsic-size: auto;
+    }
+  }
+}
+
 .hero-avatar-wrapper {
   position: relative;
   display: inline-block;
