@@ -5,35 +5,40 @@ const themeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 const themeStorageKey = "theme";
 
 const keepViewport = (fn) => {
-  const active = document.activeElement;
-  const restoreFocus =
-    active &&
-    active !== document.body &&
-    active !== themeRoot &&
-    typeof active.blur === "function" &&
-    typeof active.focus === "function";
-
+  const scrollEl = document.scrollingElement || document.documentElement;
   const { scrollX, scrollY } = window;
-
-  if (restoreFocus) {
-    active.blur();
-  }
+  const savedScrollLeft = scrollEl ? scrollEl.scrollLeft : scrollX;
+  const savedScrollTop = scrollEl ? scrollEl.scrollTop : scrollY;
 
   fn();
 
-  requestAnimationFrame(() => {
+  const restore = () => {
     if (window.scrollX !== scrollX || window.scrollY !== scrollY) {
       window.scrollTo(scrollX, scrollY);
     }
 
-    if (restoreFocus && document.contains(active)) {
-      try {
-        active.focus({ preventScroll: true });
-      } catch (error) {
-        active.focus();
+    if (scrollEl) {
+      if (scrollEl.scrollLeft !== savedScrollLeft) {
+        scrollEl.scrollLeft = savedScrollLeft;
+      }
+      if (scrollEl.scrollTop !== savedScrollTop) {
+        scrollEl.scrollTop = savedScrollTop;
       }
     }
-  });
+  };
+
+  const now = () => (typeof performance !== "undefined" ? performance.now() : Date.now());
+  const start = now();
+  const duration = 450;
+
+  const tick = () => {
+    restore();
+    if (now() - start < duration) {
+      requestAnimationFrame(tick);
+    }
+  };
+
+  requestAnimationFrame(tick);
 };
 
 const applyThemeToRoot = (mode) => {
