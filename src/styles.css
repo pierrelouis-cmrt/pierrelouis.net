@@ -293,11 +293,30 @@ a.link-with-icon:not(:hover) .lucide {
 .site-navigation {
   position: sticky;
   top: 0;
+  left: 0;
+  right: 0;
   background-color: var(--bg-navbar);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   z-index: 98;
   transition: background-color 400ms ease-in-out;
+  padding-top: 0;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  contain: paint;
+}
+
+@supports (padding-top: env(safe-area-inset-top)) {
+  .site-navigation {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+@supports not (padding-top: env(safe-area-inset-top)) and
+  (padding-top: constant(safe-area-inset-top)) {
+  .site-navigation {
+    padding-top: constant(safe-area-inset-top);
+  }
 }
 
 .navigation-container {
