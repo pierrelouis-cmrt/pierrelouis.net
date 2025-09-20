@@ -1,119 +1,113 @@
 // Theme
 
-function withPreservedScroll(callback) {
-  const scrollX = window.scrollX;
-  const scrollY = window.scrollY;
-  const activeElement = document.activeElement;
+const themeRoot = document.documentElement;
+const themeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+const themeStorageKey = "theme";
 
-  callback();
+const keepViewport = (fn) => {
+  const active = document.activeElement;
+  const restoreFocus =
+    active &&
+    active !== document.body &&
+    active !== themeRoot &&
+    typeof active.blur === "function" &&
+    typeof active.focus === "function";
 
-  const maxAttempts = 10;
-  let attempts = 0;
-  let focusRestored = false;
+  const { scrollX, scrollY } = window;
 
-  const restore = () => {
-    attempts += 1;
+  if (restoreFocus) {
+    active.blur();
+  }
 
+  fn();
+
+  requestAnimationFrame(() => {
     if (window.scrollX !== scrollX || window.scrollY !== scrollY) {
       window.scrollTo(scrollX, scrollY);
-
-      if (
-        !focusRestored &&
-        activeElement &&
-        typeof activeElement.focus === "function" &&
-        activeElement !== document.body
-      ) {
-        try {
-          activeElement.focus({ preventScroll: true });
-        } catch (error) {
-          activeElement.focus();
-        }
-        focusRestored = true;
-      }
     }
 
-    if (attempts < maxAttempts) {
-      setTimeout(restore, 50);
+    if (restoreFocus && document.contains(active)) {
+      try {
+        active.focus({ preventScroll: true });
+      } catch (error) {
+        active.focus();
+      }
+    }
+  });
+};
+
+const applyThemeToRoot = (mode) => {
+  const shouldBeDark =
+    mode === "dark" || (mode === "system" && themeQuery.matches);
+  themeRoot.classList.toggle("dark", shouldBeDark);
+};
+
+const persistTheme = (mode) => {
+  if (mode === "system") {
+    localStorage.removeItem(themeStorageKey);
+  } else {
+    localStorage.setItem(themeStorageKey, mode);
+  }
+};
+
+const loadStoredTheme = () => {
+  const saved = localStorage.getItem(themeStorageKey);
+  return saved === "dark" || saved === "light" ? saved : "system";
+};
+
+document.addEventListener("alpine:init", () => {
+  const apply = (store, mode, immediate = false) => {
+    const run = () => {
+      applyThemeToRoot(mode);
+      persistTheme(mode);
+      store.mode = mode;
+      syncIframeTheme(mode);
+    };
+
+    if (immediate) {
+      run();
+    } else {
+      keepViewport(run);
     }
   };
 
-  setTimeout(restore, 0);
-}
-
-document.addEventListener("alpine:init", () => {
   Alpine.store("theme", {
     mode: "system",
 
     init() {
-      // Check for saved theme preference
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "dark") {
-        this.dark();
-      } else if (savedTheme === "light") {
-        this.light();
-      } else {
-        this.system();
-      }
+      apply(this, loadStoredTheme(), true);
 
-      // Watch for system theme changes
-      window
-        .matchMedia("(prefers-color-scheme: dark)")
-        .addEventListener("change", () => {
-          if (this.mode === "system") {
-            withPreservedScroll(() => {
-              this.applySystemTheme();
-              syncIframeTheme("system");
-            });
-          }
-        });
+      themeQuery.addEventListener("change", () => {
+        if (this.mode === "system") {
+          apply(this, "system");
+        }
+      });
+    },
 
-      // Initial sync (safe even if iframes not loaded)
-      syncIframeTheme(this.mode);
+    set(mode) {
+      apply(this, mode);
     },
 
     toggle() {
-      if (this.mode === "system") {
-        this.light();
-      } else if (this.mode === "light") {
-        this.dark();
-      } else {
-        this.system();
-      }
+      this.set(
+        this.mode === "system"
+          ? "light"
+          : this.mode === "light"
+          ? "dark"
+          : "system"
+      );
     },
 
     dark() {
-      withPreservedScroll(() => {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-        this.mode = "dark";
-        syncIframeTheme("dark");
-      });
+      this.set("dark");
     },
 
     light() {
-      withPreservedScroll(() => {
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-        this.mode = "light";
-        syncIframeTheme("light");
-      });
+      this.set("light");
     },
 
     system() {
-      withPreservedScroll(() => {
-        localStorage.removeItem("theme");
-        this.mode = "system";
-        this.applySystemTheme();
-        syncIframeTheme("system");
-      });
-    },
-
-    applySystemTheme() {
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
+      this.set("system");
     },
   });
 });
@@ -152,9 +146,7 @@ function syncSingleIframe(iframe, mode) {
     // If system prefers light, add 'light' to force light (prevents unconditional dark).
     // If system prefers dark, add no classes (lets unconditional :not(.light) apply dark,
     // and media query override if needed).
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
+    const prefersDark = themeQuery.matches;
     if (!prefersDark) {
       html.classList.add("light");
     }
