@@ -314,6 +314,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let isAnimatingClose = false;
   let allowImmediateClose = false;
   let closeFallback;
+  let contentTransitionEndHandler;
   let scrollCloseRaf;
   let isClosingFromSwipe = false;
   let lastScrollTop = scroller.scrollTop;
@@ -323,6 +324,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (closeFallback) {
       clearTimeout(closeFallback);
       closeFallback = null;
+    }
+    if (contentTransitionEndHandler) {
+      content.removeEventListener("transitionend", contentTransitionEndHandler);
+      contentTransitionEndHandler = null;
     }
     drawer.removeAttribute("data-closing");
     isAnimatingClose = false;
@@ -363,17 +368,16 @@ document.addEventListener("DOMContentLoaded", function () {
     drawer.dataset.closing = "true";
 
     const finish = () => {
-      content.removeEventListener("transitionend", onTransitionEnd);
       clearClosingAnimation();
       hideDrawerInstantly();
     };
 
-    const onTransitionEnd = (event) => {
+    contentTransitionEndHandler = (event) => {
       if (event.target !== content) return;
       finish();
     };
 
-    content.addEventListener("transitionend", onTransitionEnd);
+    content.addEventListener("transitionend", contentTransitionEndHandler);
 
     closeFallback = window.setTimeout(() => {
       finish();
@@ -570,6 +574,7 @@ document.addEventListener("DOMContentLoaded", function () {
         scrollCloseRaf = null;
       }
       document.documentElement.dataset.dragging = false;
+      document.body.classList.remove("overflow-hidden");
     }
     if (event.newState === "open" && !scrollSnapChangeSupport) {
       clearClosingAnimation();
@@ -682,11 +687,11 @@ document.addEventListener("DOMContentLoaded", function () {
     'button[aria-label="Open command palette"]'
   );
   if (commandButton) {
-    commandButton.removeEventListener("click", commandButton._clickHandler);
+    commandButton.removeEventListener("click", commandButton._clickHandler, true);
     commandButton._clickHandler = function (e) {
       if (window.innerWidth < 768) {
         e.preventDefault();
-        e.stopPropagation();
+        e.stopImmediatePropagation();
         // Close Alpine palette if open
         if (
           window.Alpine &&
@@ -695,6 +700,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ) {
           window.Alpine.$data.commandOpen = false;
         }
+        document.body.classList.remove("overflow-hidden");
         // Open drawer
         const drawer = document.getElementById("command-drawer");
         if (drawer) {
@@ -702,7 +708,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
     };
-    commandButton.addEventListener("click", commandButton._clickHandler);
+    commandButton.addEventListener("click", commandButton._clickHandler, true);
   }
 });
 
