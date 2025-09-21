@@ -658,22 +658,25 @@ a.link-with-icon:not(:hover) .lucide {
     --duration: 0.5s;
     --ease: cubic-bezier(0.32, 0.72, 0, 1);
     --drag-bar: 44px;
-    --mobile-drawer-hidden-height: 100vh;
     --mobile-drawer-safe-area: 0px;
     --mobile-drawer-hidden-distance: calc(
-      var(--mobile-drawer-hidden-height) + var(--mobile-drawer-safe-area)
+      100% + var(--mobile-drawer-safe-area)
     );
-  }
-
-  @supports (height: 100dvh) {
-    :root {
-      --mobile-drawer-hidden-height: 100dvh;
-    }
   }
 
   @supports (padding-bottom: env(safe-area-inset-bottom)) {
     :root {
-      --mobile-drawer-safe-area: env(safe-area-inset-bottom);
+      --mobile-drawer-safe-area: max(env(safe-area-inset-bottom), 0px);
+    }
+  }
+
+  @supports not (padding-bottom: env(safe-area-inset-bottom))
+    and (padding-bottom: constant(safe-area-inset-bottom)) {
+    :root {
+      --mobile-drawer-safe-area: max(
+        constant(safe-area-inset-bottom),
+        0px
+      );
     }
   }
 
