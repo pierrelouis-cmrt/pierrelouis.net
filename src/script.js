@@ -304,6 +304,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const drawer = document.querySelector(".drawer");
   if (!drawer) return;
 
+  const root = document.documentElement;
   const scroller = drawer.querySelector(".drawer__scroller");
   const slide = drawer.querySelector(".drawer__slide");
   const searchInput = document.querySelector("#drawer-search");
@@ -337,12 +338,14 @@ document.addEventListener("DOMContentLoaded", function () {
     allowImmediateClose = true;
     drawer.hidePopover();
     allowImmediateClose = false;
+    root.classList.remove("drawer-open");
   };
 
   const openDrawer = () => {
     clearClosingAnimation();
     isAnimatingClose = false;
     drawer.removeAttribute("data-closing");
+    root.classList.add("drawer-open");
     drawer.showPopover();
     requestAnimationFrame(() => {
       const targetTop = slide?.offsetHeight || scroller.scrollHeight || 0;
@@ -549,6 +552,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (event.newState === "open") {
+      root.classList.add("drawer-open");
       clearClosingAnimation();
       requestAnimationFrame(() => {
         const targetTop = slide?.offsetHeight || scroller.scrollHeight || 0;
@@ -575,6 +579,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       document.documentElement.dataset.dragging = false;
       document.body.classList.remove("overflow-hidden");
+      root.classList.remove("drawer-open");
     }
     if (event.newState === "open" && !scrollSnapChangeSupport) {
       clearClosingAnimation();
@@ -587,6 +592,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (event.newState === "open") {
       isClosingFromSwipe = false;
       lastScrollTop = scroller.scrollTop;
+      root.classList.add("drawer-open");
     }
   });
 
