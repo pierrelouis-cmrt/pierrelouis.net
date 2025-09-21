@@ -310,6 +310,108 @@ document.addEventListener("DOMContentLoaded", function () {
   const itemsContainer = document.querySelector(".command-items-container");
   const content = drawer.querySelector(".drawer__content");
   const closeTargets = drawer.querySelectorAll("[data-command-drawer-close]");
+  const root = document.documentElement;
+
+  const DEFAULT_SLIDE_SIZE = 600;
+  let measuredEnvSafeArea = 0;
+  let metricsRaf = null;
+
+  const parsePxValue = (value) => {
+    const parsed = parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  };
+
+  const measureEnvSafeArea = () => {
+    if (!document.body) return;
+    const probe = document.createElement("div");
+    probe.style.cssText =
+      "position:fixed;inset:auto 0 0 0;height:0;padding-bottom:env(safe-area-inset-bottom);visibility:hidden;pointer-events:none;";
+    document.body.appendChild(probe);
+    measuredEnvSafeArea =
+      Math.round(parsePxValue(window.getComputedStyle(probe).paddingBottom)) || 0;
+    document.body.removeChild(probe);
+  };
+
+  const updateDrawerMetrics = () => {
+    const viewport = window.visualViewport;
+    const layoutHeight = window.innerHeight || 0;
+    let viewportHeight = layoutHeight;
+
+    if (viewport) {
+      viewportHeight = Math.max(
+        viewportHeight,
+        Math.round(viewport.height + viewport.offsetTop)
+      );
+    }
+
+    let slideSize = DEFAULT_SLIDE_SIZE;
+    if (slide) {
+      const slideStyle = window.getComputedStyle(slide);
+      slideSize = Math.max(
+        DEFAULT_SLIDE_SIZE,
+        parsePxValue(slideStyle.getPropertyValue("--size")),
+        parsePxValue(slideStyle.height)
+      );
+    }
+
+    let contentHeight = 0;
+    if (content) {
+      const rect = content.getBoundingClientRect();
+      contentHeight = Math.round(rect.height);
+    }
+
+    const hiddenBase = Math.max(viewportHeight, slideSize, contentHeight);
+    if (hiddenBase > 0) {
+      root.style.setProperty(
+        "--mobile-drawer-hidden-base",
+        `${hiddenBase}px`
+      );
+    }
+
+    let safeAreaFromViewport = 0;
+    if (viewport) {
+      const visualBottom = viewport.height + viewport.offsetTop;
+      safeAreaFromViewport = Math.max(
+        Math.round(layoutHeight - visualBottom),
+        0
+      );
+    }
+
+    const safeAreaValue = Math.max(
+      measuredEnvSafeArea,
+      safeAreaFromViewport
+    );
+
+    root.style.setProperty(
+      "--mobile-drawer-safe-area-value",
+      `${safeAreaValue}px`
+    );
+  };
+
+  const queueDrawerMetricsUpdate = () => {
+    if (metricsRaf) return;
+    metricsRaf = requestAnimationFrame(() => {
+      metricsRaf = null;
+      updateDrawerMetrics();
+    });
+  };
+
+  measureEnvSafeArea();
+  queueDrawerMetricsUpdate();
+
+  const handleViewportMetrics = () => {
+    queueDrawerMetricsUpdate();
+  };
+
+  const handleOrientationChange = () => {
+    measureEnvSafeArea();
+    queueDrawerMetricsUpdate();
+  };
+
+  window.addEventListener("resize", handleViewportMetrics);
+  window.visualViewport?.addEventListener("resize", handleViewportMetrics);
+  window.visualViewport?.addEventListener("scroll", handleViewportMetrics);
+  window.addEventListener("orientationchange", handleOrientationChange);
 
   let isAnimatingClose = false;
   let allowImmediateClose = false;
@@ -343,11 +445,13 @@ document.addEventListener("DOMContentLoaded", function () {
     clearClosingAnimation();
     isAnimatingClose = false;
     drawer.removeAttribute("data-closing");
+    root.dataset.drawerChin = "visible";
     drawer.showPopover();
     requestAnimationFrame(() => {
       const targetTop = slide?.offsetHeight || scroller.scrollHeight || 0;
       scroller.scrollTo({ top: targetTop, behavior: "instant" });
       lastScrollTop = targetTop;
+      queueDrawerMetricsUpdate();
     });
   };
 
@@ -392,7 +496,7 @@ document.addEventListener("DOMContentLoaded", function () {
       scrollCloseRaf = null;
     }
     drawer.dataset.snapped = true;
-    document.documentElement.dataset.dragging = false;
+    root.dataset.dragging = false;
     closeDrawer({ immediate: true });
   };
 
@@ -454,6 +558,8 @@ document.addEventListener("DOMContentLoaded", function () {
         closeDrawer();
       });
     });
+
+    queueDrawerMetricsUpdate();
   }
 
   // Search functionality
@@ -503,7 +609,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let frame = 0;
   const syncDrawer = () => {
     syncer = requestAnimationFrame(() => {
-      document.documentElement.style.setProperty(
+      root.style.setProperty(
         "--closed",
         1 - scroller.scrollTop / slide.offsetHeight
       );
@@ -564,7 +670,7 @@ document.addEventListener("DOMContentLoaded", function () {
       drawer.dataset.snapped = false;
       scroller.removeEventListener("scroll", scrollDriver);
       if (syncer) cancelAnimationFrame(syncer);
-      document.documentElement.style.removeProperty("--closed");
+      root.style.removeProperty("--closed");
       if (searchInput) searchInput.value = "";
       renderItems();
       isClosingFromSwipe = false;
@@ -573,8 +679,10 @@ document.addEventListener("DOMContentLoaded", function () {
         cancelAnimationFrame(scrollCloseRaf);
         scrollCloseRaf = null;
       }
-      document.documentElement.dataset.dragging = false;
+      root.dataset.dragging = false;
       document.body.classList.remove("overflow-hidden");
+      delete root.dataset.drawerChin;
+      queueDrawerMetricsUpdate();
     }
     if (event.newState === "open" && !scrollSnapChangeSupport) {
       clearClosingAnimation();
@@ -587,6 +695,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (event.newState === "open") {
       isClosingFromSwipe = false;
       lastScrollTop = scroller.scrollTop;
+      root.dataset.drawerChin = "visible";
+      queueDrawerMetricsUpdate();
     }
   });
 
@@ -602,7 +712,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const handleScroll = () => {
         if (scroller.scrollTop === top) {
-          document.documentElement.dataset.dragging = false;
+          root.dataset.dragging = false;
           scroller.removeEventListener("scroll", handleScroll);
           lastScrollTop = scroller.scrollTop;
           if (top === 0) finishSwipeClose();
@@ -637,7 +747,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const activate = ({ y }) => {
       startY = y;
       scrollStart = scroller.scrollTop;
-      document.documentElement.dataset.dragging = true;
+      root.dataset.dragging = true;
       document.addEventListener("mousemove", handle);
       document.addEventListener("mouseup", teardown);
     };
@@ -676,10 +786,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Handle VisualViewport changes for iOS
   window.visualViewport?.addEventListener("resize", () => {
-    document.documentElement.style.setProperty(
-      "--sw-keyboard-height",
-      window.visualViewport.offsetTop
-    );
+    root.style.setProperty("--sw-keyboard-height", window.visualViewport.offsetTop);
   });
 
   // Update command button to handle both desktop and mobile properly
