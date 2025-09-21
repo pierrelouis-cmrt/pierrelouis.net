@@ -311,6 +311,39 @@ document.addEventListener("DOMContentLoaded", function () {
   const content = drawer.querySelector(".drawer__content");
   const closeTargets = drawer.querySelectorAll("[data-command-drawer-close]");
 
+  const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+  const userAgent = navigator.userAgent || "";
+  const platform = navigator.platform || "";
+  const isIOSDevice =
+    /iPad|iPhone|iPod/.test(userAgent) ||
+    (platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const isIOSSafari =
+    isIOSDevice &&
+    /WebKit/i.test(userAgent) &&
+    !/(CriOS|FxiOS|OPiOS|EdgiOS)/i.test(userAgent);
+  const iosTransparentThemeColor = "rgba(0, 0, 0, 0)";
+  const defaultThemeColor = themeColorMeta?.getAttribute("content") || "";
+  const setThemeColor = (color) => {
+    if (!themeColorMeta || !color) return;
+    themeColorMeta.setAttribute("content", color);
+  };
+  const syncSafariChin = (isOpen = false) => {
+    if (!isIOSSafari) return;
+    if (isOpen) {
+      const drawerColor =
+        (content && getComputedStyle(content).backgroundColor) ||
+        defaultThemeColor ||
+        iosTransparentThemeColor;
+      setThemeColor(drawerColor);
+      document.body.classList.add("drawer-chin-fill");
+    } else {
+      setThemeColor(iosTransparentThemeColor);
+      document.body.classList.remove("drawer-chin-fill");
+    }
+  };
+
+  syncSafariChin(false);
+
   let isAnimatingClose = false;
   let allowImmediateClose = false;
   let closeFallback;
@@ -344,6 +377,7 @@ document.addEventListener("DOMContentLoaded", function () {
     isAnimatingClose = false;
     drawer.removeAttribute("data-closing");
     drawer.showPopover();
+    syncSafariChin(true);
     requestAnimationFrame(() => {
       const targetTop = slide?.offsetHeight || scroller.scrollHeight || 0;
       scroller.scrollTo({ top: targetTop, behavior: "instant" });
@@ -359,6 +393,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (immediate || !content) {
       clearClosingAnimation();
       hideDrawerInstantly();
+      syncSafariChin(false);
       return;
     }
 
@@ -370,6 +405,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const finish = () => {
       clearClosingAnimation();
       hideDrawerInstantly();
+      syncSafariChin(false);
     };
 
     contentTransitionEndHandler = (event) => {
@@ -575,6 +611,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       document.documentElement.dataset.dragging = false;
       document.body.classList.remove("overflow-hidden");
+      syncSafariChin(false);
     }
     if (event.newState === "open" && !scrollSnapChangeSupport) {
       clearClosingAnimation();
@@ -587,6 +624,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (event.newState === "open") {
       isClosingFromSwipe = false;
       lastScrollTop = scroller.scrollTop;
+      syncSafariChin(true);
     }
   });
 
