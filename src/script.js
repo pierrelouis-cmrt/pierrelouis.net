@@ -311,6 +311,47 @@ document.addEventListener("DOMContentLoaded", function () {
   const content = drawer.querySelector(".drawer__content");
   const closeTargets = drawer.querySelectorAll("[data-command-drawer-close]");
 
+  let metricsRaf;
+
+  const updateDrawerMetrics = () => {
+    if (!drawer.matches(":popover-open")) return;
+    if (!slide) return;
+
+    const height = slide.getBoundingClientRect().height;
+
+    if (!height) return;
+
+    drawer.style.setProperty("--drawer-content-height", `${height}px`);
+  };
+
+  const scheduleDrawerMetrics = () => {
+    if (!drawer.matches(":popover-open")) return;
+
+    if (metricsRaf) {
+      cancelAnimationFrame(metricsRaf);
+    }
+
+    metricsRaf = requestAnimationFrame(updateDrawerMetrics);
+  };
+
+  const handleViewportResize = () => {
+    scheduleDrawerMetrics();
+  };
+
+  window.addEventListener("resize", handleViewportResize);
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", handleViewportResize);
+  }
+
+  drawer.addEventListener("toggle", () => {
+    scheduleDrawerMetrics();
+  });
+
+  if (drawer.matches(":popover-open")) {
+    scheduleDrawerMetrics();
+  }
+
   let isAnimatingClose = false;
   let allowImmediateClose = false;
   let closeFallback;
@@ -348,6 +389,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const targetTop = slide?.offsetHeight || scroller.scrollHeight || 0;
       scroller.scrollTo({ top: targetTop, behavior: "instant" });
       lastScrollTop = targetTop;
+      scheduleDrawerMetrics();
     });
   };
 
@@ -454,6 +496,8 @@ document.addEventListener("DOMContentLoaded", function () {
         closeDrawer();
       });
     });
+
+    scheduleDrawerMetrics();
   }
 
   // Search functionality
