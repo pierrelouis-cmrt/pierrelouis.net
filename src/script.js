@@ -311,6 +311,36 @@ document.addEventListener("DOMContentLoaded", function () {
   const content = drawer.querySelector(".drawer__content");
   const closeTargets = drawer.querySelectorAll("[data-command-drawer-close]");
 
+  const rootStyle = document.documentElement.style;
+
+  const updateDrawerViewportHeight = () => {
+    const viewport = window.visualViewport;
+    let height = window.innerHeight || 0;
+
+    if (viewport) {
+      const viewportHeight = viewport.height + viewport.offsetTop;
+      height = Math.max(height, viewportHeight);
+      rootStyle.setProperty("--sw-keyboard-height", `${viewport.offsetTop}px`);
+    }
+
+    if (slide) {
+      height = Math.max(height, slide.offsetHeight);
+    }
+
+    if (height) {
+      rootStyle.setProperty(
+        "--mobile-drawer-viewport-height",
+        `${Math.round(height)}px`
+      );
+    }
+  };
+
+  updateDrawerViewportHeight();
+  window.addEventListener("resize", updateDrawerViewportHeight);
+  window.addEventListener("orientationchange", updateDrawerViewportHeight);
+  window.visualViewport?.addEventListener("resize", updateDrawerViewportHeight);
+  window.visualViewport?.addEventListener("scroll", updateDrawerViewportHeight);
+
   let isAnimatingClose = false;
   let allowImmediateClose = false;
   let closeFallback;
@@ -345,6 +375,7 @@ document.addEventListener("DOMContentLoaded", function () {
     drawer.removeAttribute("data-closing");
     drawer.showPopover();
     requestAnimationFrame(() => {
+      updateDrawerViewportHeight();
       const targetTop = slide?.offsetHeight || scroller.scrollHeight || 0;
       scroller.scrollTo({ top: targetTop, behavior: "instant" });
       lastScrollTop = targetTop;
@@ -673,14 +704,6 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   scroller.addEventListener("scroll", handleScrollClose, { passive: true });
-
-  // Handle VisualViewport changes for iOS
-  window.visualViewport?.addEventListener("resize", () => {
-    document.documentElement.style.setProperty(
-      "--sw-keyboard-height",
-      window.visualViewport.offsetTop
-    );
-  });
 
   // Update command button to handle both desktop and mobile properly
   const commandButton = document.querySelector(
