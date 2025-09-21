@@ -592,22 +592,42 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Drag mechanics (exact CodePen implementation)
   const attachDrag = (element) => {
+    const supportsPointer = "PointerEvent" in window;
+    const downEvent = supportsPointer ? "pointerdown" : "mousedown";
+    const moveEvent = supportsPointer ? "pointermove" : "mousemove";
+    const upEvent = supportsPointer ? "pointerup" : "mouseup";
+
     let startY = 0;
     let drag = 0;
     let scrollStart;
+    let activePointer = null;
+
+    const getY = (event) => {
+      if (event.clientY != null) return event.clientY;
+      if (event.touches?.[0]) return event.touches[0].clientY;
+      if (event.changedTouches?.[0]) return event.changedTouches[0].clientY;
+      return 0;
+    };
 
     const reset = () => {
+      const start = scrollStart;
       startY = drag = 0;
-      const top = scroller.scrollTop < scrollStart * 0.5 ? 0 : scrollStart;
+      activePointer = null;
+      scrollStart = undefined;
+
+      if (typeof start !== "number") return;
+
+      const top = scroller.scrollTop < start * 0.5 ? 0 : start;
 
       const handleScroll = () => {
-        if (scroller.scrollTop === top) {
+        if (Math.abs(scroller.scrollTop - top) <= 1) {
           document.documentElement.dataset.dragging = false;
           scroller.removeEventListener("scroll", handleScroll);
           lastScrollTop = scroller.scrollTop;
           if (top === 0) finishSwipeClose();
         }
       };
+
       scroller.addEventListener("scroll", handleScroll);
 
       scroller.scrollTo({
@@ -618,7 +638,9 @@ document.addEventListener("DOMContentLoaded", function () {
       handleScroll();
     };
 
-    const handle = ({ y }) => {
+    const handleMove = (event) => {
+      if (supportsPointer && event.pointerId !== activePointer) return;
+      const y = getY(event);
       drag += Math.abs(y - startY);
       scroller.scrollTo({
         top: scrollStart - (y - startY),
@@ -627,26 +649,45 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     const teardown = (event) => {
+      if (supportsPointer && event.pointerId !== activePointer) return;
+
+      document.removeEventListener(moveEvent, handleMove);
+      document.removeEventListener(upEvent, teardown);
+      if (supportsPointer) {
+        document.removeEventListener("pointercancel", teardown);
+      }
+
       if (event.target.tagName !== "BUTTON") {
         reset();
       }
-      document.removeEventListener("mousemove", handle);
-      document.removeEventListener("mouseup", teardown);
     };
 
-    const activate = ({ y }) => {
-      startY = y;
+    const activate = (event) => {
+      if (supportsPointer) {
+        if (!event.isPrimary) return;
+        if (event.pointerType === "mouse" && event.button !== 0) return;
+      } else if (event.button !== undefined && event.button !== 0) {
+        return;
+      }
+
+      activePointer = supportsPointer ? event.pointerId : "mouse";
+      startY = getY(event);
       scrollStart = scroller.scrollTop;
+      drag = 0;
       document.documentElement.dataset.dragging = true;
-      document.addEventListener("mousemove", handle);
-      document.addEventListener("mouseup", teardown);
+
+      document.addEventListener(moveEvent, handleMove, { passive: false });
+      document.addEventListener(upEvent, teardown, { passive: false });
+      if (supportsPointer) {
+        document.addEventListener("pointercancel", teardown, { passive: false });
+      }
     };
 
     element.addEventListener("click", (event) => {
       if (drag > 5) event.preventDefault();
       reset();
     });
-    element.addEventListener("mousedown", activate);
+    element.addEventListener(downEvent, activate, { passive: false });
   };
 
   attachDrag(drawer);
@@ -673,6 +714,20 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   scroller.addEventListener("scroll", handleScrollClose, { passive: true });
+
+  const outsideEvent = "PointerEvent" in window ? "pointerdown" : "mousedown";
+  const handleOutsideInteraction = (event) => {
+    if (event.defaultPrevented) return;
+    if (!drawer.matches(":popover-open")) return;
+    if (event.button && event.button !== 0) return;
+
+    const path = event.composedPath?.() ?? [];
+    if (path.includes(drawer)) return;
+
+    closeDrawer();
+  };
+
+  document.addEventListener(outsideEvent, handleOutsideInteraction, true);
 
   // Handle VisualViewport changes for iOS
   window.visualViewport?.addEventListener("resize", () => {
