@@ -304,6 +304,81 @@ document.addEventListener("DOMContentLoaded", function () {
   const drawer = document.querySelector(".drawer");
   if (!drawer) return;
 
+  const root = document.documentElement;
+  let metricsRaf = null;
+  let cachedSafeAreaInsetBottom = null;
+
+  const parseLengthValue = (value) => {
+    if (!value) return 0;
+    const parsed = parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+  };
+
+  const measureSafeAreaInsetBottom = () => {
+    if (!document.body) return 0;
+    const probe = document.createElement("div");
+    probe.style.position = "fixed";
+    probe.style.visibility = "hidden";
+    probe.style.pointerEvents = "none";
+    probe.style.bottom = "0";
+    probe.style.left = "0";
+    probe.style.width = "0";
+    probe.style.height = "env(safe-area-inset-bottom, 0px)";
+    document.body.appendChild(probe);
+    let measured = parseLengthValue(window.getComputedStyle(probe).height);
+    if (!measured) {
+      probe.style.height = "constant(safe-area-inset-bottom)";
+      measured = parseLengthValue(window.getComputedStyle(probe).height);
+    }
+    document.body.removeChild(probe);
+    return measured;
+  };
+
+  const getSafeAreaInsetBottom = () => {
+    if (cachedSafeAreaInsetBottom !== null) {
+      return cachedSafeAreaInsetBottom;
+    }
+    cachedSafeAreaInsetBottom = measureSafeAreaInsetBottom();
+    return cachedSafeAreaInsetBottom;
+  };
+
+  const updateDrawerMetrics = () => {
+    if (window.innerWidth >= 768) {
+      root.style.removeProperty("--mobile-drawer-hidden-distance");
+      cachedSafeAreaInsetBottom = null;
+      return;
+    }
+    const viewport = window.visualViewport;
+    const viewportHeight = viewport
+      ? viewport.height + viewport.offsetTop
+      : window.innerHeight || document.documentElement.clientHeight;
+    const safeAreaInsetBottom = getSafeAreaInsetBottom();
+    const totalDistance = Math.ceil((viewportHeight || 0) + safeAreaInsetBottom + 1);
+    root.style.setProperty(
+      "--mobile-drawer-hidden-distance",
+      `${totalDistance}px`
+    );
+  };
+
+  const scheduleDrawerMetricsUpdate = () => {
+    if (metricsRaf) cancelAnimationFrame(metricsRaf);
+    metricsRaf = requestAnimationFrame(() => {
+      metricsRaf = null;
+      updateDrawerMetrics();
+    });
+  };
+
+  updateDrawerMetrics();
+  window.addEventListener("resize", scheduleDrawerMetricsUpdate, {
+    passive: true,
+  });
+  window.visualViewport?.addEventListener("resize", scheduleDrawerMetricsUpdate);
+  window.visualViewport?.addEventListener("scroll", scheduleDrawerMetricsUpdate);
+  window.addEventListener("orientationchange", () => {
+    cachedSafeAreaInsetBottom = null;
+    scheduleDrawerMetricsUpdate();
+  });
+
   const scroller = drawer.querySelector(".drawer__scroller");
   const slide = drawer.querySelector(".drawer__slide");
   const searchInput = document.querySelector("#drawer-search");
@@ -343,6 +418,7 @@ document.addEventListener("DOMContentLoaded", function () {
     clearClosingAnimation();
     isAnimatingClose = false;
     drawer.removeAttribute("data-closing");
+    updateDrawerMetrics();
     drawer.showPopover();
     requestAnimationFrame(() => {
       const targetTop = slide?.offsetHeight || scroller.scrollHeight || 0;
