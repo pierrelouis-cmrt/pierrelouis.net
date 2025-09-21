@@ -314,6 +314,10 @@ document.addEventListener("DOMContentLoaded", function () {
   let isAnimatingClose = false;
   let allowImmediateClose = false;
   let closeFallback;
+  let scrollCloseRaf;
+  let isClosingFromSwipe = false;
+  let lastScrollTop = scroller.scrollTop;
+  const SCROLL_CLOSE_THRESHOLD = 8;
 
   const clearClosingAnimation = () => {
     if (closeFallback) {
@@ -338,6 +342,7 @@ document.addEventListener("DOMContentLoaded", function () {
     requestAnimationFrame(() => {
       const targetTop = slide?.offsetHeight || scroller.scrollHeight || 0;
       scroller.scrollTo({ top: targetTop, behavior: "instant" });
+      lastScrollTop = targetTop;
     });
   };
 
@@ -373,6 +378,18 @@ document.addEventListener("DOMContentLoaded", function () {
     closeFallback = window.setTimeout(() => {
       finish();
     }, 600);
+  };
+
+  const finishSwipeClose = () => {
+    if (isClosingFromSwipe || isAnimatingClose) return;
+    isClosingFromSwipe = true;
+    if (scrollCloseRaf) {
+      cancelAnimationFrame(scrollCloseRaf);
+      scrollCloseRaf = null;
+    }
+    drawer.dataset.snapped = true;
+    document.documentElement.dataset.dragging = false;
+    closeDrawer({ immediate: true });
   };
 
   closeTargets.forEach((button) => {
@@ -546,6 +563,13 @@ document.addEventListener("DOMContentLoaded", function () {
       document.documentElement.style.removeProperty("--closed");
       if (searchInput) searchInput.value = "";
       renderItems();
+      isClosingFromSwipe = false;
+      lastScrollTop = scroller.scrollTop;
+      if (scrollCloseRaf) {
+        cancelAnimationFrame(scrollCloseRaf);
+        scrollCloseRaf = null;
+      }
+      document.documentElement.dataset.dragging = false;
     }
     if (event.newState === "open" && !scrollSnapChangeSupport) {
       clearClosingAnimation();
@@ -554,6 +578,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     if (event.newState === "open" && !scrollAnimationSupport) {
       scroller.addEventListener("scroll", scrollDriver, { once: true });
+    }
+    if (event.newState === "open") {
+      isClosingFromSwipe = false;
+      lastScrollTop = scroller.scrollTop;
     }
   });
 
@@ -571,6 +599,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (scroller.scrollTop === top) {
           document.documentElement.dataset.dragging = false;
           scroller.removeEventListener("scroll", handleScroll);
+          lastScrollTop = scroller.scrollTop;
+          if (top === 0) finishSwipeClose();
         }
       };
       scroller.addEventListener("scroll", handleScroll);
@@ -615,6 +645,29 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   attachDrag(drawer);
+
+  const handleScrollClose = () => {
+    if (scrollCloseRaf) cancelAnimationFrame(scrollCloseRaf);
+    scrollCloseRaf = requestAnimationFrame(() => {
+      if (!drawer.matches(":popover-open")) {
+        scrollCloseRaf = null;
+        return;
+      }
+      const currentTop = scroller.scrollTop;
+      const isPullingDown = currentTop <= lastScrollTop;
+      lastScrollTop = currentTop;
+      if (
+        isPullingDown &&
+        currentTop <= SCROLL_CLOSE_THRESHOLD &&
+        !isClosingFromSwipe
+      ) {
+        finishSwipeClose();
+      }
+      scrollCloseRaf = null;
+    });
+  };
+
+  scroller.addEventListener("scroll", handleScrollClose, { passive: true });
 
   // Handle VisualViewport changes for iOS
   window.visualViewport?.addEventListener("resize", () => {

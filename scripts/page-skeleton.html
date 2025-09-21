@@ -59,9 +59,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v169.css" as="style" />
+    <link rel="preload" href="/src/output-v175.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v169.css" />
+    <link rel="stylesheet" href="/src/output-v175.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -191,17 +191,18 @@
               </span>
             </button>
 
+            <!-- Desktop Command Palette (Alpine.js) -->
             <template x-teleport="body">
               <div
                 x-data="{}"
                 x-init="$watch('commandOpen', value => document.body.classList.toggle('overflow-hidden', value))"
-                x-show="commandOpen"
+                x-show="commandOpen && window.innerWidth >= 768"
                 class="fixed inset-0 z-[99] flex items-center justify-center w-screen h-screen pointer-events-auto"
                 @click="commandOpen = false"
                 x-cloak
               >
                 <div
-                  x-show="commandOpen"
+                  x-show="commandOpen && window.innerWidth >= 768"
                   x-transition:enter="ease-out duration-150"
                   x-transition:enter-start="opacity-0"
                   x-transition:enter-end="opacity-100"
@@ -212,7 +213,7 @@
                 ></div>
 
                 <div
-                  x-show="commandOpen"
+                  x-show="commandOpen && window.innerWidth >= 768"
                   x-transition:enter="ease-out duration-150 transform"
                   x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                   x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
@@ -220,159 +221,159 @@
                   x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                   x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                   x-data="{
-            commandItemsData: window.COMMAND_ITEMS_DATA,
-            commandItems: [],
-            commandItemsFiltered: [],
-            commandItemActive: null,
-            commandItemSelected: null,
-            commandId: $id('command'),
-            commandSearch: '',
-            isTouchDevice: 'ontouchstart' in window,
-            itemsCache: {},
+        commandItemsData: window.COMMAND_ITEMS_DATA,
+        commandItems: [],
+        commandItemsFiltered: [],
+        commandItemActive: null,
+        commandItemSelected: null,
+        commandId: $id('command'),
+        commandSearch: '',
+        isTouchDevice: 'ontouchstart' in window,
+        itemsCache: {},
 
-            commandSearchIsEmpty() {
-              return !this.commandSearch || this.commandSearch.length === 0;
-            },
+        commandSearchIsEmpty() {
+          return !this.commandSearch || this.commandSearch.length === 0;
+        },
 
-            commandItemIsActive(item) {
-              return this.commandItemActive && this.commandItemActive.value === item.value;
-            },
+        commandItemIsActive(item) {
+          return this.commandItemActive && this.commandItemActive.value === item.value;
+        },
 
-            commandItemActiveNext() {
-              if (this._navigating) return;
-              this._navigating = true;
+        commandItemActiveNext() {
+          if (this._navigating) return;
+          this._navigating = true;
 
-              const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
-              if (index < this.commandItemsFiltered.length - 1) {
-                this.commandItemActive = this.commandItemsFiltered[index + 1];
-                this.$nextTick(() => {
-                  this.commandScrollToActiveItem();
-                  setTimeout(() => { this._navigating = false; }, 50);
-                });
+          const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
+          if (index < this.commandItemsFiltered.length - 1) {
+            this.commandItemActive = this.commandItemsFiltered[index + 1];
+            this.$nextTick(() => {
+              this.commandScrollToActiveItem();
+              setTimeout(() => { this._navigating = false; }, 50);
+            });
+          } else {
+            this._navigating = false;
+          }
+        },
+
+        commandItemActivePrevious() {
+          if (this._navigating) return;
+          this._navigating = true;
+
+          const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
+          if (index > 0) {
+            this.commandItemActive = this.commandItemsFiltered[index - 1];
+            this.$nextTick(() => {
+              this.commandScrollToActiveItem();
+              setTimeout(() => { this._navigating = false; }, 50);
+            });
+          } else {
+            this._navigating = false;
+          }
+        },
+
+        commandScrollToActiveItem() {
+          if (!this.commandItemActive || !this.$refs.commandItemsList) return;
+
+          const activeElement = document.getElementById(this.commandItemActive.value + '-' + this.commandId);
+          if (!activeElement) return;
+
+          const container = this.$refs.commandItemsList;
+          const containerRect = container.getBoundingClientRect();
+          const elementRect = activeElement.getBoundingClientRect();
+
+          if (elementRect.bottom > containerRect.bottom) {
+            container.scrollTop += (elementRect.bottom - containerRect.bottom);
+          } else if (elementRect.top < containerRect.top) {
+            container.scrollTop -= (containerRect.top - elementRect.top);
+          }
+        },
+
+        _searchTimeoutId: null,
+        commandSearchItems() {
+          if (this._searchTimeoutId) {
+            clearTimeout(this._searchTimeoutId);
+          }
+
+          this._searchTimeoutId = setTimeout(() => {
+            const cacheKey = (this.commandSearch || '').toLowerCase();
+
+            if (this.itemsCache[cacheKey]) {
+              this.commandItemsFiltered = this.itemsCache[cacheKey];
+            } else {
+              if (!this.commandSearchIsEmpty()) {
+                const searchTerm = cacheKey.replace(/\*/g, '');
+                this.commandItemsFiltered = this.commandItems.filter(item =>
+                  item.title.toLowerCase().includes(searchTerm));
               } else {
-                this._navigating = false;
-              }
-            },
-
-            commandItemActivePrevious() {
-              if (this._navigating) return;
-              this._navigating = true;
-
-              const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
-              if (index > 0) {
-                this.commandItemActive = this.commandItemsFiltered[index - 1];
-                this.$nextTick(() => {
-                  this.commandScrollToActiveItem();
-                  setTimeout(() => { this._navigating = false; }, 50);
-                });
-              } else {
-                this._navigating = false;
-              }
-            },
-
-            commandScrollToActiveItem() {
-              if (!this.commandItemActive || !this.$refs.commandItemsList) return;
-
-              const activeElement = document.getElementById(this.commandItemActive.value + '-' + this.commandId);
-              if (!activeElement) return;
-
-              const container = this.$refs.commandItemsList;
-              const containerRect = container.getBoundingClientRect();
-              const elementRect = activeElement.getBoundingClientRect();
-
-              if (elementRect.bottom > containerRect.bottom) {
-                container.scrollTop += (elementRect.bottom - containerRect.bottom);
-              } else if (elementRect.top < containerRect.top) {
-                container.scrollTop -= (containerRect.top - elementRect.top);
-              }
-            },
-
-            _searchTimeoutId: null,
-            commandSearchItems() {
-              if (this._searchTimeoutId) {
-                clearTimeout(this._searchTimeoutId);
+                this.commandItemsFiltered = this.commandItems.filter(item => item.default);
               }
 
-              this._searchTimeoutId = setTimeout(() => {
-                const cacheKey = (this.commandSearch || '').toLowerCase();
+              this.itemsCache[cacheKey] = this.commandItemsFiltered;
+            }
 
-                if (this.itemsCache[cacheKey]) {
-                  this.commandItemsFiltered = this.itemsCache[cacheKey];
-                } else {
-                  if (!this.commandSearchIsEmpty()) {
-                    const searchTerm = cacheKey.replace(/\*/g, '');
-                    this.commandItemsFiltered = this.commandItems.filter(item =>
-                      item.title.toLowerCase().includes(searchTerm));
-                  } else {
-                    this.commandItemsFiltered = this.commandItems.filter(item => item.default);
-                  }
+            this.commandItemActive = this.commandItemsFiltered[0] || null;
+          }, 100);
+        },
 
-                  this.itemsCache[cacheKey] = this.commandItemsFiltered;
-                }
+        commandShowCategory(item, index) {
+          if (index === 0) return true;
+          if (!this.commandItemsFiltered[index - 1]) return false;
+          return item.category !== this.commandItemsFiltered[index - 1].category;
+        },
 
-                this.commandItemActive = this.commandItemsFiltered[0] || null;
-              }, 100);
-            },
+        commandCategoryCapitalize(string) {
+          return string.charAt(0).toUpperCase() + string.slice(1);
+        },
 
-            commandShowCategory(item, index) {
-              if (index === 0) return true;
-              if (!this.commandItems[index - 1]) return false;
-              return item.category !== this.commandItems[index - 1].category;
-            },
+        commandItemsReorganize() {
+          const totalItems = Object.values(this.commandItemsData).reduce(
+            (acc, items) => acc + items.length, 0
+          );
+          this.commandItems = new Array(totalItems);
 
-            commandCategoryCapitalize(string) {
-              return string.charAt(0).toUpperCase() + string.slice(1);
-            },
+          let index = 0;
+          for (const category in this.commandItemsData) {
+            for (const item of this.commandItemsData[category]) {
+              item.category = category;
+              this.commandItems[index++] = item;
+            }
+          }
 
-            commandItemsReorganize() {
-              const totalItems = Object.values(this.commandItemsData).reduce(
-                (acc, items) => acc + items.length, 0
-              );
-              this.commandItems = new Array(totalItems);
+          this.itemsCache[''] = this.commandItems.filter(item => item.default);
+        },
 
-              let index = 0;
-              for (const category in this.commandItemsData) {
-                for (const item of this.commandItemsData[category]) {
-                  item.category = category;
-                  this.commandItems[index++] = item;
-                }
-              }
+        handleSelectedItem(item) {
+          if (!item) return;
 
-              this.itemsCache[''] = this.commandItems.filter(item => item.default);
-            },
-
-            handleSelectedItem(item) {
-              if (!item) return;
-
-              if (item.value === 'theme') {
-                $store.theme.toggle();
-                this.commandItemSelected = null;
-              } else {
-                const targetUrl = this.actionMap[item.value];
-                if (targetUrl) {
-                  window.location.href = targetUrl;
-                }
-                commandOpen = false;
-              }
-            },
-            actionMap: window.COMMAND_ACTION_MAP
-          }"
+          if (item.value === 'theme') {
+            $store.theme.toggle();
+            this.commandItemSelected = null;
+          } else {
+            const targetUrl = this.actionMap[item.value];
+            if (targetUrl) {
+              window.location.href = targetUrl;
+            }
+            commandOpen = false;
+          }
+        },
+        actionMap: window.COMMAND_ACTION_MAP
+      }"
                   x-init="
-            commandItemsReorganize();
-            commandSearchItems();
-            $watch('commandSearch', () => commandSearchItems());
-            $watch('commandItemSelected', item => handleSelectedItem(item));
-          "
+        commandItemsReorganize();
+        commandSearchItems();
+        $watch('commandSearch', () => commandSearchItems());
+        $watch('commandItemSelected', item => handleSelectedItem(item));
+      "
                   @keydown.down.prevent="commandItemActiveNext()"
                   @keydown.up.prevent="commandItemActivePrevious()"
                   @keydown.enter="commandItemSelected = commandItemActive; commandItemActive = null;"
                   @command-input-focus.window="$refs.commandInput.focus()"
-                  class="relative z-10 w-full max-w-[95%] sm:max-w-xl px-4 sm:px-0"
+                  class="relative z-10 w-full max-w-[95%] sm:max-w-xl px-0"
                   x-cloak
                   @click.stop
                 >
                   <div
-                    class="box-border border-2 border-[var(--border-secondary)] flex flex-col min-h-0 w-full overflow-hidden sm:overflow-visible p-2 bg-[var(--bg-primary)] rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm pointer-events-auto relative"
+                    class="box-border border-2 border-[var(--border-secondary)] flex flex-col min-h-0 w-full p-2 bg-[var(--bg-primary)] rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm pointer-events-auto relative"
                   >
                     <div
                       class="absolute top-[-15px] left-5 px-4 py-1 border-2 rounded-full border-[var(--border-light)] bg-[var(--bg-primary)] hidden sm:block"
@@ -402,7 +403,7 @@
                         type="text"
                         x-ref="commandInput"
                         x-model="commandSearch"
-                        class="flex w-full px-2 py-3 text-base sm:text-sm bg-transparent border-0 rounded-md outline-none focus:outline-none focus:ring-0 focus:border-0 placeholder:text-[var(--border-secondary)] h-11 disabled:cursor-not-allowed disabled:opacity-50"
+                        class="flex w-full px-2 py-3 text-sm bg-transparent border-0 rounded-md outline-none focus:outline-none focus:ring-0 focus:border-0 placeholder:text-[var(--border-secondary)] h-11 disabled:cursor-not-allowed disabled:opacity-50"
                         placeholder="Type a command or search..."
                         autocomplete="off"
                         autocorrect="off"
@@ -412,7 +413,7 @@
 
                     <div
                       x-ref="commandItemsList"
-                      class="grow min-h-0 overflow-y-auto overflow-x-hidden sm:pb-0 overscroll-contain"
+                      class="grow min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain"
                       data-command-list
                     >
                       <template
@@ -437,7 +438,7 @@
                                 @click="commandItemSelected=item"
                                 @mouseenter="commandItemActive=item"
                                 x-bind:class="commandItemIsActive(item) ? 'bg-[var(--bg-hover)] text-[var(--text-body)]' : 'text-[var(--text-muted)]'"
-                                class="relative flex cursor-pointer select-none items-center rounded-[10px] px-2 py-2.5 md:py-1 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                                class="relative flex cursor-pointer select-none items-center rounded-[10px] px-2 py-1 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
                               >
                                 <span x-html="item.icon"></span>
                                 <span
@@ -445,7 +446,7 @@
                                 ></span>
                                 <template x-if="item.right && !isTouchDevice">
                                   <span
-                                    class="ml-auto text-xs px-l-2 px-1 py-1 tracking-widest text-[var(--text-body)] border border-[var(--bg-hover)] rounded-md"
+                                    class="ml-auto text-xs px-1 py-1 tracking-widest text-[var(--text-body)] border border-[var(--bg-hover)] rounded-md"
                                     x-text="item.right"
                                   ></span>
                                 </template>
@@ -459,8 +460,71 @@
                 </div>
               </div>
             </template>
+
+            <!-- Mobile Command Drawer (Exact CodePen Structure) -->
+            <aside class="drawer" popover="auto" id="command-drawer">
+              <div class="drawer__scroller">
+                <div class="drawer__slide">
+                  <div class="drawer__anchors">
+                    <div class="drawer__anchor"></div>
+                    <div class="drawer__anchor"></div>
+                  </div>
+                  <!-- Acts like a backdrop button so you don't body click -->
+                  <button
+                    type="button"
+                    class="drawer__curtain"
+                    tabindex="-1"
+                    data-command-drawer-close
+                    aria-label="Close command drawer"
+                  ></button>
+                  <div class="drawer__content">
+                    <button
+                      class="drawer__drag"
+                      type="button"
+                      aria-label="Close command drawer"
+                      data-command-drawer-close
+                    >
+                      <span></span>
+                    </button>
+                    <div class="content">
+                      <!-- Search Bar -->
+                      <div class="command-search-wrapper">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <circle cx="11" cy="11" r="8"></circle>
+                          <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+                        </svg>
+                        <input
+                          type="text"
+                          id="drawer-search"
+                          placeholder="Type a command or search..."
+                          autocomplete="off"
+                          autocorrect="off"
+                          spellcheck="false"
+                        />
+                      </div>
+
+                      <!-- Command Items -->
+                      <div class="command-items-container">
+                        <!-- Will be populated by JavaScript -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </aside>
           </div>
         </div>
+
       </div>
     </nav>
 

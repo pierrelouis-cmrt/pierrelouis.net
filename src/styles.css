@@ -501,7 +501,7 @@ a.link-with-icon:not(:hover) .lucide {
     transition-property: translate;
     transition-duration: var(--duration);
     transition-timing-function: var(--ease);
-    translate: 0 100%;
+    translate: 0 100vh;
   }
 
   .command-drawer:popover-open .command-drawer__content {
@@ -510,7 +510,7 @@ a.link-with-icon:not(:hover) .lucide {
 
   @starting-style {
     .command-drawer:popover-open .command-drawer__content {
-      translate: 0 100%;
+      translate: 0 100vh;
     }
   }
 
@@ -811,7 +811,7 @@ a.link-with-icon:not(:hover) .lucide {
     transition-property: translate;
     transition-duration: var(--duration);
     transition-timing-function: var(--ease);
-    translate: 0 100%;
+    translate: 0 100vh;
   }
 
   .drawer:popover-open .drawer__content {
@@ -819,7 +819,7 @@ a.link-with-icon:not(:hover) .lucide {
   }
 
   .drawer[data-closing="true"] .drawer__content {
-    translate: 0 100%;
+    translate: 0 100vh;
     pointer-events: none;
   }
 
@@ -834,7 +834,7 @@ a.link-with-icon:not(:hover) .lucide {
 
   @starting-style {
     .drawer:popover-open .drawer__content {
-      translate: 0 100%;
+      translate: 0 100vh;
     }
   }
 
