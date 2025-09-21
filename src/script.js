@@ -27,7 +27,8 @@ const keepViewport = (fn) => {
     }
   };
 
-  const now = () => (typeof performance !== "undefined" ? performance.now() : Date.now());
+  const now = () =>
+    typeof performance !== "undefined" ? performance.now() : Date.now();
   const start = now();
   const duration = 450;
 
@@ -118,14 +119,9 @@ document.addEventListener("alpine:init", () => {
 });
 
 // Updated theme syncing function using classes for multiple iframes
-// This creatively syncs by adding/removing 'dark' and 'light' classes to each iframe's documentElement.
-// Assumes iframes have CSS with .dark for dark vars, and @media with :root:not(.light) for system dark.
-// Supports multiple iframes, forces themes correctly, and preserves standalone system support.
-// Added smooth transition on class change for a creative touch.
 function syncIframeTheme(mode) {
   const iframes = document.querySelectorAll("iframe.article-embed");
   iframes.forEach((iframe) => {
-    // Wait for load if not ready
     if (!iframe.contentWindow) {
       iframe.addEventListener("load", () => syncSingleIframe(iframe, mode));
       return;
@@ -137,28 +133,19 @@ function syncIframeTheme(mode) {
 function syncSingleIframe(iframe, mode) {
   const html = iframe.contentWindow.document.documentElement;
 
-  // Remove both classes first
   html.classList.remove("dark", "light");
 
-  // Apply based on mode
   if (mode === "dark") {
     html.classList.add("dark");
   } else if (mode === "light") {
     html.classList.add("light");
   } else if (mode === "system") {
-    // For 'system', dynamically adjust classes based on current system preference
-    // to workaround the unconditional :root:not(.light) in the embed CSS.
-    // If system prefers light, add 'light' to force light (prevents unconditional dark).
-    // If system prefers dark, add no classes (lets unconditional :not(.light) apply dark,
-    // and media query override if needed).
     const prefersDark = themeQuery.matches;
     if (!prefersDark) {
       html.classList.add("light");
     }
-    // Else: no classes, which applies dark due to embed's CSS behavior
   }
 
-  // Creative addition: Smooth transition on theme change
   const body = iframe.contentWindow.document.body;
   body.style.transition = "background-color 0.3s ease, color 0.3s ease";
   setTimeout(() => {
@@ -176,7 +163,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Content interaction
-
 document.addEventListener("DOMContentLoaded", function () {
   // Set up scroll animations
   const observerOptions = {
@@ -313,6 +299,360 @@ window.SHORTCUT_MAP = {
   e: "mailto:contact@pierrelouis.net?subject=Hi,%20I'm%20....%20and...%20",
 };
 
+// Mobile Command Drawer Implementation (Exact CodePen mechanics)
+document.addEventListener("DOMContentLoaded", function () {
+  const drawer = document.querySelector(".drawer");
+  if (!drawer) return;
+
+  const scroller = drawer.querySelector(".drawer__scroller");
+  const slide = drawer.querySelector(".drawer__slide");
+  const searchInput = document.querySelector("#drawer-search");
+  const itemsContainer = document.querySelector(".command-items-container");
+  const content = drawer.querySelector(".drawer__content");
+  const closeTargets = drawer.querySelectorAll("[data-command-drawer-close]");
+
+  let isAnimatingClose = false;
+  let allowImmediateClose = false;
+  let closeFallback;
+
+  const clearClosingAnimation = () => {
+    if (closeFallback) {
+      clearTimeout(closeFallback);
+      closeFallback = null;
+    }
+    drawer.removeAttribute("data-closing");
+    isAnimatingClose = false;
+  };
+
+  const hideDrawerInstantly = () => {
+    allowImmediateClose = true;
+    drawer.hidePopover();
+    allowImmediateClose = false;
+  };
+
+  const openDrawer = () => {
+    clearClosingAnimation();
+    isAnimatingClose = false;
+    drawer.removeAttribute("data-closing");
+    drawer.showPopover();
+    requestAnimationFrame(() => {
+      const targetTop = slide?.offsetHeight || scroller.scrollHeight || 0;
+      scroller.scrollTo({ top: targetTop, behavior: "instant" });
+    });
+  };
+
+  drawer.openCommandDrawer = openDrawer;
+
+  const closeDrawer = ({ immediate = false } = {}) => {
+    if (!drawer.matches(":popover-open")) return;
+
+    if (immediate || !content) {
+      clearClosingAnimation();
+      hideDrawerInstantly();
+      return;
+    }
+
+    if (isAnimatingClose) return;
+
+    isAnimatingClose = true;
+    drawer.dataset.closing = "true";
+
+    const finish = () => {
+      content.removeEventListener("transitionend", onTransitionEnd);
+      clearClosingAnimation();
+      hideDrawerInstantly();
+    };
+
+    const onTransitionEnd = (event) => {
+      if (event.target !== content) return;
+      finish();
+    };
+
+    content.addEventListener("transitionend", onTransitionEnd);
+
+    closeFallback = window.setTimeout(() => {
+      finish();
+    }, 600);
+  };
+
+  closeTargets.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      closeDrawer();
+    });
+  });
+
+  const formatCommandCategory = (value) =>
+    value
+      .split(/[\s_-]+/)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ");
+
+  // Populate command items
+  function renderItems(searchTerm = "") {
+    const items = window.COMMAND_ITEMS_DATA;
+    let html = "";
+
+    for (const category in items) {
+      const categoryItems = items[category].filter((item) => {
+        if (!searchTerm) return item.default;
+        return item.title.toLowerCase().includes(searchTerm.toLowerCase());
+      });
+
+      if (categoryItems.length > 0) {
+        html += `<div class="command-item-category">${formatCommandCategory(
+          category
+        )}</div>`;
+        categoryItems.forEach((item) => {
+          html += `
+            <div class="command-item" data-value="${item.value}">
+              ${item.icon}
+              <span>${
+                item.value === "theme" ? "Toggle Theme" : item.title
+              }</span>
+            </div>
+          `;
+        });
+      }
+    }
+
+    itemsContainer.innerHTML = html;
+
+    // Add click handlers
+    itemsContainer.querySelectorAll(".command-item").forEach((item) => {
+      item.addEventListener("click", function () {
+        const value = this.dataset.value;
+        if (value === "theme") {
+          if (window.Alpine && window.Alpine.store("theme")) {
+            window.Alpine.store("theme").toggle();
+          }
+        } else {
+          const url = window.COMMAND_ACTION_MAP[value];
+          if (url) window.location.href = url;
+        }
+        closeDrawer();
+      });
+    });
+  }
+
+  // Search functionality
+  let searchTimeout;
+  if (searchInput) {
+    searchInput.addEventListener("input", function () {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        renderItems(this.value);
+      }, 100);
+    });
+  }
+
+  // Initial render
+  renderItems();
+
+  // Scroll snap change support (exact CodePen implementation)
+  const scrollSnapChangeSupport = "onscrollsnapchange" in window;
+  const scrollAnimationSupport = CSS.supports("animation-timeline: scroll()");
+
+  if (scrollSnapChangeSupport) {
+    scroller.addEventListener("scrollsnapchange", () => {
+      if (scroller.scrollTop === 0) {
+        drawer.dataset.snapped = true;
+        closeDrawer({ immediate: true });
+      }
+    });
+  }
+
+  const anchor = drawer.querySelector(".drawer__anchor");
+  const options = {
+    root: drawer,
+    rootMargin: "0px 0px -1px 0px",
+    threshold: 1.0,
+  };
+
+  let observer;
+  let syncer;
+  let syncs = new Array(10);
+  let index = 0;
+
+  function addNumber(num) {
+    syncs[index] = num;
+    index = (index + 1) % syncs.length;
+  }
+
+  let frame = 0;
+  const syncDrawer = () => {
+    syncer = requestAnimationFrame(() => {
+      document.documentElement.style.setProperty(
+        "--closed",
+        1 - scroller.scrollTop / slide.offsetHeight
+      );
+
+      if (new Set(syncs).size === 1 && syncs[0] === slide.offsetHeight) {
+        frame++;
+      }
+      if (frame >= 10) {
+        frame = 0;
+        syncs = new Array(10);
+        scroller.addEventListener("scroll", scrollDriver, { once: true });
+      } else {
+        addNumber(scroller.scrollTop);
+        syncDrawer();
+      }
+    });
+  };
+
+  const scrollDriver = () => {
+    syncDrawer();
+  };
+
+  const callback = (entries) => {
+    const { isIntersecting, intersectionRatio } = entries[0];
+    const isVisible = intersectionRatio === 1;
+
+    if (
+      !isVisible &&
+      !isIntersecting &&
+      scroller.scrollTop - (window.visualViewport?.offsetTop || 0) <
+        slide.offsetHeight * 0.5
+    ) {
+      drawer.dataset.snapped = true;
+      closeDrawer({ immediate: true });
+      observer.disconnect();
+    }
+  };
+
+  drawer.addEventListener("beforetoggle", (event) => {
+    if (event.newState === "closed" && !allowImmediateClose) {
+      event.preventDefault();
+      closeDrawer();
+    }
+
+    if (event.newState === "open") {
+      clearClosingAnimation();
+      requestAnimationFrame(() => {
+        const targetTop = slide?.offsetHeight || scroller.scrollHeight || 0;
+        scroller.scrollTo({ top: targetTop, behavior: "instant" });
+      });
+    }
+  });
+
+  // Reset the drawer once closed
+  drawer.addEventListener("toggle", (event) => {
+    if (event.newState === "closed") {
+      clearClosingAnimation();
+      drawer.dataset.snapped = false;
+      scroller.removeEventListener("scroll", scrollDriver);
+      if (syncer) cancelAnimationFrame(syncer);
+      document.documentElement.style.removeProperty("--closed");
+      if (searchInput) searchInput.value = "";
+      renderItems();
+    }
+    if (event.newState === "open" && !scrollSnapChangeSupport) {
+      clearClosingAnimation();
+      if (!observer) observer = new IntersectionObserver(callback, options);
+      observer.observe(anchor);
+    }
+    if (event.newState === "open" && !scrollAnimationSupport) {
+      scroller.addEventListener("scroll", scrollDriver, { once: true });
+    }
+  });
+
+  // Drag mechanics (exact CodePen implementation)
+  const attachDrag = (element) => {
+    let startY = 0;
+    let drag = 0;
+    let scrollStart;
+
+    const reset = () => {
+      startY = drag = 0;
+      const top = scroller.scrollTop < scrollStart * 0.5 ? 0 : scrollStart;
+
+      const handleScroll = () => {
+        if (scroller.scrollTop === top) {
+          document.documentElement.dataset.dragging = false;
+          scroller.removeEventListener("scroll", handleScroll);
+        }
+      };
+      scroller.addEventListener("scroll", handleScroll);
+
+      scroller.scrollTo({
+        top,
+        behavior: "smooth",
+      });
+
+      handleScroll();
+    };
+
+    const handle = ({ y }) => {
+      drag += Math.abs(y - startY);
+      scroller.scrollTo({
+        top: scrollStart - (y - startY),
+        behavior: "instant",
+      });
+    };
+
+    const teardown = (event) => {
+      if (event.target.tagName !== "BUTTON") {
+        reset();
+      }
+      document.removeEventListener("mousemove", handle);
+      document.removeEventListener("mouseup", teardown);
+    };
+
+    const activate = ({ y }) => {
+      startY = y;
+      scrollStart = scroller.scrollTop;
+      document.documentElement.dataset.dragging = true;
+      document.addEventListener("mousemove", handle);
+      document.addEventListener("mouseup", teardown);
+    };
+
+    element.addEventListener("click", (event) => {
+      if (drag > 5) event.preventDefault();
+      reset();
+    });
+    element.addEventListener("mousedown", activate);
+  };
+
+  attachDrag(drawer);
+
+  // Handle VisualViewport changes for iOS
+  window.visualViewport?.addEventListener("resize", () => {
+    document.documentElement.style.setProperty(
+      "--sw-keyboard-height",
+      window.visualViewport.offsetTop
+    );
+  });
+
+  // Update command button to handle both desktop and mobile properly
+  const commandButton = document.querySelector(
+    'button[aria-label="Open command palette"]'
+  );
+  if (commandButton) {
+    commandButton.removeEventListener("click", commandButton._clickHandler);
+    commandButton._clickHandler = function (e) {
+      if (window.innerWidth < 768) {
+        e.preventDefault();
+        e.stopPropagation();
+        // Close Alpine palette if open
+        if (
+          window.Alpine &&
+          window.Alpine.$data &&
+          window.Alpine.$data.commandOpen
+        ) {
+          window.Alpine.$data.commandOpen = false;
+        }
+        // Open drawer
+        const drawer = document.getElementById("command-drawer");
+        if (drawer) {
+          openDrawer();
+        }
+      }
+    };
+    commandButton.addEventListener("click", commandButton._clickHandler);
+  }
+});
+
 // Prefetch internal pages on hover for snappier navigation
 document.addEventListener("DOMContentLoaded", () => {
   const cache = new Set();
@@ -363,16 +703,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.style.overflow = "";
   };
 
-  // 1) Make them globally callable for existing inline onclick=""
   window.openLightbox = open;
   window.closeLightbox = close;
 
-  // 2) Also bind listeners so it works even if CSP blocks inline handlers
   document.querySelectorAll(".project-preview-image").forEach((img) => {
     img.addEventListener("click", () => open(img.src));
   });
 
-  // Close when clicking backdrop or the × button
   lightbox?.addEventListener("click", (e) => {
     if (
       e.target.id === "lightbox" ||
@@ -382,7 +719,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Close on Escape
   window.addEventListener("keydown", (e) => {
     if (e.key === "Escape") close();
   });
@@ -392,12 +728,20 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
     e.preventDefault();
-    window.dispatchEvent(new CustomEvent("open-command-palette"));
+    if (window.innerWidth < 768) {
+      const drawer = document.getElementById("command-drawer");
+      if (drawer?.openCommandDrawer) {
+        drawer.openCommandDrawer();
+      } else if (drawer) {
+        drawer.showPopover();
+      }
+    } else {
+      window.dispatchEvent(new CustomEvent("open-command-palette"));
+    }
   }
 });
 
-// Hold-N multi-chord shortcuts: while N is held, press keys to trigger actions.
-// Example: hold N, then press H/A/P/... to navigate; press T multiple times to toggle theme.
+// Hold-N multi-chord shortcuts
 (() => {
   let nHeld = false;
   let inactivityTimer = null;
@@ -424,31 +768,27 @@ document.addEventListener("keydown", (e) => {
     inactivityTimer = setTimeout(reset, INACTIVITY_MS);
   };
 
-  // Start/maintain the hold and perform chords
   document.addEventListener(
     "keydown",
     (e) => {
       const key = e.key.toLowerCase();
 
-      // Begin holding on bare "n"
       if (!e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey && key === "n") {
         if (isTypingField()) return;
         nHeld = true;
         bumpInactivity();
-        e.preventDefault(); // don't type "n" into the page
+        e.preventDefault();
         return;
       }
 
-      // While holding N, fire actions on other keys
       if (nHeld && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
         if (isTypingField()) return reset();
 
-        // Ignore key auto-repeat to require distinct presses
         if (e.repeat) return;
 
         if (key === "t") {
           e.preventDefault();
-          document.querySelector("button.theme-toggle")?.click(); // reuse Alpine path
+          document.querySelector("button.theme-toggle")?.click();
           bumpInactivity();
           return;
         }
@@ -457,14 +797,12 @@ document.addEventListener("keydown", (e) => {
         if (target) {
           e.preventDefault();
           window.location.href = target;
-          // Navigation replaces the page, no need to bump timer
         }
       }
     },
     { capture: true }
   );
 
-  // Stop holding when N is released (or on blur/hidden)
   document.addEventListener("keyup", (e) => {
     if (e.key.toLowerCase() === "n") reset();
   });
@@ -493,8 +831,7 @@ document.addEventListener("keydown", (e) => {
     }
 
     const duration = Math.min(600, Math.max(250, startY / 2));
-    const startTime =
-      (window.performance && performance.now) || Date.now();
+    const startTime = (window.performance && performance.now) || Date.now();
 
     const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 

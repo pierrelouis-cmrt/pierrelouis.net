@@ -383,6 +383,629 @@ a.link-with-icon:not(:hover) .lucide {
   color: var(--text-subtle);
 }
 
+/* Command Drawer Styles - Mobile Only */
+@media (max-width: 767px) {
+  /* Base drawer setup */
+  .command-drawer {
+    --duration: 0.5s;
+    --ease: cubic-bezier(0.32, 0.72, 0, 1);
+    --drag-bar: 44px;
+
+    inset: 0 0 0 0;
+    margin: 0;
+    width: unset;
+    height: unset;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    transition: inset var(--duration) var(--ease);
+  }
+
+  .command-drawer::backdrop {
+    background: hsl(0 0% 0% / 0.5);
+    transition-property: display, opacity, overlay;
+    transition-behavior: allow-discrete;
+    transition-duration: var(--duration);
+    transition-timing-function: var(--ease);
+  }
+
+  .command-drawer:popover-open::backdrop {
+    opacity: 1;
+  }
+
+  @starting-style {
+    .command-drawer:popover-open::backdrop {
+      opacity: 0;
+    }
+  }
+
+  /* Scroller setup */
+  .command-drawer__scroller {
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    overflow-y: auto;
+    overscroll-behavior: none;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .command-drawer__scroller::after {
+    content: "";
+    width: 100%;
+    height: 100svh;
+    order: -999999;
+    flex: 1 0 100svh;
+  }
+
+  /* Slide container */
+  .command-drawer__slide {
+    --size: 600px;
+    width: 100%;
+    max-height: 85%;
+    height: var(--size);
+    flex: 1 0 var(--size);
+    position: relative;
+  }
+
+  /* Anchor points for scroll snap */
+  .command-drawer__anchors {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 10;
+  }
+
+  .command-drawer__anchor {
+    height: 50px;
+    width: 100%;
+    scroll-snap-align: end;
+  }
+
+  .command-drawer__anchor:first-of-type {
+    translate: 0 -100%;
+  }
+
+  /* Invisible curtain for backdrop clicks */
+  .command-drawer__curtain {
+    position: absolute;
+    left: 50%;
+    opacity: 0;
+    height: 100svh;
+    width: 100%;
+    bottom: 0;
+    border: 0;
+    translate: -50% 0;
+    background: transparent;
+  }
+
+  /* Content container */
+  .command-drawer__content {
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    position: absolute;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-secondary);
+    border-bottom: 0;
+    border-radius: 20px 20px 0 0;
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--drag-bar);
+    transition-property: translate;
+    transition-duration: var(--duration);
+    transition-timing-function: var(--ease);
+    translate: 0 100%;
+  }
+
+  .command-drawer:popover-open .command-drawer__content {
+    translate: 0 0;
+  }
+
+  @starting-style {
+    .command-drawer:popover-open .command-drawer__content {
+      translate: 0 100%;
+    }
+  }
+
+  /* Drag handle */
+  .command-drawer__drag {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: var(--drag-bar);
+    background: transparent;
+    border: 0;
+    outline: none;
+    cursor: grab;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .command-drawer__drag:active {
+    cursor: grabbing;
+  }
+
+  .command-drawer__drag span:first-of-type {
+    width: 36px;
+    height: 4px;
+    border-radius: 10px;
+    background: var(--text-subtle);
+    opacity: 0.3;
+    margin-bottom: 4px;
+  }
+
+  .command-drawer__drag span:last-of-type {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
+
+  /* Search container */
+  .command-search-container {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px dashed var(--border-light);
+    background: var(--bg-primary);
+  }
+
+  .command-search-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--border-secondary);
+    flex-shrink: 0;
+    margin-right: 8px;
+  }
+
+  .command-drawer-search {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    outline: none;
+    font-size: var(--text-base);
+    color: var(--text-primary);
+    padding: 4px;
+  }
+
+  .command-drawer-search::placeholder {
+    color: var(--border-secondary);
+  }
+
+  /* Items container */
+  .command-drawer-items {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px;
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+  }
+
+  /* Command items */
+  .command-drawer-category {
+    padding: 8px 12px 4px;
+    font-size: var(--text-xs);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+    text-transform: capitalize;
+  }
+
+  .command-drawer-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    transition: all 120ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .command-drawer-item:active {
+    transform: scale(0.98);
+  }
+
+  .command-drawer-item.active {
+    background: var(--bg-hover);
+    color: var(--text-body);
+  }
+
+  .command-drawer-item svg {
+    width: 18px;
+    height: 18px;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  /* Hide desktop command palette on mobile */
+  body:has(.command-drawer:popover-open) {
+    overflow: hidden;
+  }
+
+  /* Dragging state */
+  [data-dragging="true"] .command-drawer__scroller {
+    scroll-snap-type: none;
+  }
+}
+
+/* Dark mode support */
+.dark .command-drawer__content {
+  background: var(--bg-primary);
+  border-color: var(--border-secondary);
+}
+
+.dark .command-drawer__drag {
+  border-bottom-color: var(--border-light);
+}
+
+.dark .command-search-container {
+  border-bottom-color: var(--border-light);
+}
+
+/* Mobile Drawer - Exact CodePen Implementation */
+@media (max-width: 767px) {
+  :root {
+    --duration: 0.5s;
+    --ease: cubic-bezier(0.32, 0.72, 0, 1);
+    --drag-bar: 44px;
+  }
+
+  /* Animation Properties */
+  @property --opened {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0;
+  }
+
+  @property --closed {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 1;
+  }
+
+  /* Timeline scope */
+  :root {
+    timeline-scope: --drawer;
+  }
+
+  .drawer__slide {
+    view-timeline: --drawer;
+  }
+
+  /* Main body animation when drawer opens */
+  body:has(.drawer:popover-open) {
+    overflow: hidden;
+  }
+
+  /* Drawer base */
+  .drawer {
+    inset: 0 0 0 0;
+    margin: 0;
+    width: unset;
+    height: unset;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    transition: inset var(--duration) var(--ease);
+  }
+
+  .drawer:not([data-snapped="true"]) {
+    transition-property: display, overlay;
+    transition-behavior: allow-discrete;
+    transition-duration: var(--duration);
+  }
+
+  /* Backdrop */
+  .drawer::backdrop {
+    background: hsl(0 0% 0% / 0.5);
+    transition-property: display, --opened, --closed, overlay;
+    transition-behavior: allow-discrete;
+    transition-duration: var(--duration);
+    transition-timing-function: var(--ease);
+    opacity: calc(var(--opened) - (var(--opened) * var(--closed)));
+  }
+
+  .drawer:popover-open::backdrop {
+    --opened: 1;
+  }
+
+  @starting-style {
+    .drawer:popover-open::backdrop {
+      --opened: 0;
+    }
+  }
+
+  /* Scroller */
+  .drawer__scroller {
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    overflow-y: auto;
+    overscroll-behavior: none;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .drawer__scroller::after {
+    content: "";
+    width: 100%;
+    height: 100svh;
+    order: -999999;
+    flex: 1 0 100svh;
+  }
+
+  [data-dragging="true"] .drawer__scroller {
+    scroll-snap-type: none;
+  }
+
+  /* Slide */
+  .drawer__slide {
+    --size: 600px;
+    width: 100%;
+    max-height: 85%;
+    height: var(--size);
+    flex: 1 0 var(--size);
+    position: relative;
+  }
+
+  /* Anchors for scroll snap */
+  .drawer__anchors {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 10;
+  }
+
+  .drawer__anchor {
+    height: 50px;
+    width: 100%;
+    scroll-snap-align: end;
+  }
+
+  .drawer__anchor:first-of-type {
+    translate: 0 -100%;
+  }
+
+  /* Curtain (invisible backdrop button) */
+  .drawer__curtain {
+    position: absolute;
+    left: 50%;
+    opacity: 0;
+    height: 100svh;
+    width: 100%;
+    bottom: 0;
+    border: 0;
+    translate: -50% 0;
+    background: transparent;
+  }
+
+  /* Content container */
+  .drawer__content {
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    position: absolute;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-secondary);
+    border-bottom: 0;
+    border-radius: 25px 25px 0 0;
+    color: var(--text-primary);
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--drag-bar);
+    transition-property: translate;
+    transition-duration: var(--duration);
+    transition-timing-function: var(--ease);
+    translate: 0 100%;
+  }
+
+  .drawer:popover-open .drawer__content {
+    translate: 0 0;
+  }
+
+  .drawer[data-closing="true"] .drawer__content {
+    translate: 0 100%;
+    pointer-events: none;
+  }
+
+  .drawer[data-closing="true"] .drawer__curtain,
+  .drawer[data-closing="true"] .drawer__drag {
+    pointer-events: none;
+  }
+
+  .drawer[data-closing="true"]::backdrop {
+    --opened: 0;
+  }
+
+  @starting-style {
+    .drawer:popover-open .drawer__content {
+      translate: 0 100%;
+    }
+  }
+
+  /* Drag handle */
+  .drawer__drag {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: var(--drag-bar);
+    background: transparent;
+    border: 0;
+    font-size: 0.875rem;
+    outline-color: transparent;
+    border-bottom: 1px solid var(--border-light);
+    cursor: grab;
+    -webkit-tap-highlight-color: transparent;
+    appearance: none;
+  }
+
+  .drawer__drag:active {
+    cursor: grabbing;
+  }
+
+  .drawer__drag:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .drawer__drag span:first-of-type {
+    width: 36px;
+    height: 4px;
+    border-radius: 10px;
+    background: var(--text-subtle);
+    opacity: 0.3;
+    margin-bottom: 4px;
+  }
+
+  /* Content area */
+  .drawer .content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Command palette specific styles */
+  .command-search-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    margin: -1rem -1rem 1rem;
+    border-bottom: 1px dashed var(--border-light);
+    background: var(--bg-primary);
+  }
+
+  .command-search-wrapper svg {
+    width: 16px;
+    height: 16px;
+    color: var(--border-secondary);
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .command-search-wrapper input {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    outline: none;
+    font-size: var(--text-base);
+    color: var(--text-primary);
+  }
+
+  .command-search-wrapper input::placeholder {
+    color: var(--border-secondary);
+  }
+
+  .command-items-container {
+    flex: 1;
+    overflow-x: hidden;
+  }
+
+  .command-item-category {
+    padding: 0.5rem 0 0.25rem;
+    font-size: var(--text-xs);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+    text-transform: capitalize;
+  }
+
+  .command-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0.75rem;
+    padding-left: 1.75rem;
+    margin: 0;
+    border-radius: 12px;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    transition: all 120ms ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .command-item:active {
+    transform: scale(0.98);
+  }
+
+  .command-item.active {
+    background: var(--bg-hover);
+    color: var(--text-body);
+  }
+
+  .command-item svg {
+    width: 18px;
+    height: 18px;
+    margin-right: 0;
+    flex-shrink: 0;
+  }
+
+  /* Scroll animations */
+  @supports (animation-timeline: scroll()) {
+    :root:has(.drawer:popover-open) {
+      --closed: 1;
+      animation: open both linear reverse;
+      animation-timeline: --drawer;
+      animation-range: entry;
+    }
+
+    @keyframes open {
+      0% {
+        --closed: 0;
+      }
+    }
+  }
+
+  /* Override desktop palette on mobile */
+  .drawer:popover-open ~ * [x-show="commandOpen"] {
+    display: none !important;
+  }
+}
+
+/* Fix Alpine palette responsive padding */
+@media (max-width: 640px) {
+  [x-show="commandOpen"] .px-4 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  [x-show="commandOpen"] .sm\:px-0 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  [x-show="commandOpen"] .py-2\.5 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  [x-show="commandOpen"] .md\:py-1 {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
 /* Back button */
 
 .back {
@@ -3085,7 +3708,7 @@ mjx-container::-webkit-scrollbar-thumb {
 
 @media screen and (max-width: 640px) {
   .site-navigation button[aria-label="Open command palette"] {
-    display: none;
+    display: block;
   }
 
   .content-timeline-year {
