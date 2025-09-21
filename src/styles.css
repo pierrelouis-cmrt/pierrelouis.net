@@ -687,6 +687,21 @@ a.link-with-icon:not(:hover) .lucide {
     overflow: hidden;
   }
 
+  @supports (padding: env(safe-area-inset-bottom)) {
+    body.drawer-chin-fill::after {
+      content: "";
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: env(safe-area-inset-bottom);
+      background: var(--bg-primary);
+      pointer-events: none;
+      z-index: 999;
+      transition: background-color var(--duration) var(--ease);
+    }
+  }
+
   /* Drawer base */
   .drawer {
     inset: 0 0 0 0;
