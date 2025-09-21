@@ -498,6 +498,7 @@ a.link-with-icon:not(:hover) .lucide {
     display: flex;
     flex-direction: column;
     padding-top: var(--drag-bar);
+    padding-bottom: var(--mobile-drawer-safe-area);
     transition-property: translate;
     transition-duration: var(--duration);
     transition-timing-function: var(--ease);
@@ -659,6 +660,7 @@ a.link-with-icon:not(:hover) .lucide {
     --ease: cubic-bezier(0.32, 0.72, 0, 1);
     --drag-bar: 44px;
     --mobile-drawer-safe-area: 0px;
+    --mobile-drawer-safe-area-open: 0px;
     --mobile-drawer-hidden-distance: calc(
       100% + var(--mobile-drawer-safe-area)
     );
@@ -666,18 +668,22 @@ a.link-with-icon:not(:hover) .lucide {
 
   @supports (padding-bottom: env(safe-area-inset-bottom)) {
     :root {
-      --mobile-drawer-safe-area: max(env(safe-area-inset-bottom), 0px);
+      --mobile-drawer-safe-area-open: max(env(safe-area-inset-bottom), 0px);
     }
   }
 
   @supports not (padding-bottom: env(safe-area-inset-bottom))
     and (padding-bottom: constant(safe-area-inset-bottom)) {
     :root {
-      --mobile-drawer-safe-area: max(
+      --mobile-drawer-safe-area-open: max(
         constant(safe-area-inset-bottom),
         0px
       );
     }
+  }
+
+  :root:has(.drawer:is(:popover-open, [data-closing="true"])) {
+    --mobile-drawer-safe-area: var(--mobile-drawer-safe-area-open);
   }
 
   /* Animation Properties */
@@ -828,6 +834,7 @@ a.link-with-icon:not(:hover) .lucide {
     display: flex;
     flex-direction: column;
     padding-top: var(--drag-bar);
+    padding-bottom: var(--mobile-drawer-safe-area);
     transition-property: translate;
     transition-duration: var(--duration);
     transition-timing-function: var(--ease);
@@ -902,6 +909,7 @@ a.link-with-icon:not(:hover) .lucide {
     overflow-y: auto;
     overflow-x: hidden;
     padding: 1rem;
+    padding-bottom: calc(1rem + var(--mobile-drawer-safe-area));
     display: flex;
     flex-direction: column;
   }
