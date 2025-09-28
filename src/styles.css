@@ -306,19 +306,6 @@ a.link-with-icon:not(:hover) .lucide {
   contain: paint;
 }
 
-@supports (padding-top: env(safe-area-inset-top)) {
-  .site-navigation {
-    padding-top: env(safe-area-inset-top);
-  }
-}
-
-@supports not (padding-top: env(safe-area-inset-top)) and
-  (padding-top: constant(safe-area-inset-top)) {
-  .site-navigation {
-    padding-top: constant(safe-area-inset-top);
-  }
-}
-
 .navigation-container {
   display: flex;
   margin-inline: auto;
@@ -669,16 +656,6 @@ a.link-with-icon:not(:hover) .lucide {
   @supports (padding-bottom: env(safe-area-inset-bottom)) {
     :root {
       --mobile-drawer-safe-area-open: max(env(safe-area-inset-bottom), 0px);
-    }
-  }
-
-  @supports not (padding-bottom: env(safe-area-inset-bottom))
-    and (padding-bottom: constant(safe-area-inset-bottom)) {
-    :root {
-      --mobile-drawer-safe-area-open: max(
-        constant(safe-area-inset-bottom),
-        0px
-      );
     }
   }
 
