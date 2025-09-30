@@ -299,7 +299,7 @@ window.SHORTCUT_MAP = {
   e: "mailto:contact@pierrelouis.net?subject=Hi,%20I'm%20....%20and...%20",
 };
 
-// Mobile Command Drawer Implementation (Exact CodePen mechanics)
+// Mobile Command Drawer - Smart scroll direction monitoring
 document.addEventListener("DOMContentLoaded", function () {
   const drawer = document.querySelector(".drawer");
   if (!drawer) return;
@@ -311,105 +311,377 @@ document.addEventListener("DOMContentLoaded", function () {
   const content = drawer.querySelector(".drawer__content");
   const closeTargets = drawer.querySelectorAll("[data-command-drawer-close]");
 
-  let isAnimatingClose = false;
-  let allowImmediateClose = false;
-  let closeFallback;
-  let contentTransitionEndHandler;
-  let scrollCloseRaf;
-  let isClosingFromSwipe = false;
-  let lastScrollTop = scroller.scrollTop;
-  const SCROLL_CLOSE_THRESHOLD = 8;
+  // State machine
+  const STATE = {
+    CLOSED: "closed",
+    OPENING: "opening",
+    OPEN: "open",
+    CLOSING: "closing",
+  };
 
-  const clearClosingAnimation = () => {
-    if (closeFallback) {
-      clearTimeout(closeFallback);
-      closeFallback = null;
+  let state = {
+    current: STATE.CLOSED,
+    lastScrollTop: 0,
+    scrollDirection: null, // 'up' or 'down'
+    openedAt: 0,
+    monitorRaf: null,
+    hasReachedBottom: false,
+  };
+
+  // Calculate what "bottom" means (fully open position)
+  const getMaxScrollTop = () => {
+    return slide?.offsetHeight || scroller.scrollHeight || 0;
+  };
+
+  // FORCE CLOSE
+  const forceCloseNow = (reason = "unknown") => {
+    console.log(`[DRAWER] 🔴 FORCE CLOSE: ${reason}`);
+
+    // Stop monitoring
+    if (state.monitorRaf) {
+      cancelAnimationFrame(state.monitorRaf);
+      state.monitorRaf = null;
     }
-    if (contentTransitionEndHandler) {
-      content.removeEventListener("transitionend", contentTransitionEndHandler);
-      contentTransitionEndHandler = null;
-    }
+
+    // Update state
+    state.current = STATE.CLOSING;
+
+    // Clean attributes
     drawer.removeAttribute("data-closing");
-    isAnimatingClose = false;
+    drawer.removeAttribute("data-snapped");
+    document.documentElement.removeAttribute("data-dragging");
+
+    // Force hide popover
+    try {
+      if (drawer.matches(":popover-open")) {
+        drawer.hidePopover();
+      }
+    } catch (e) {
+      console.warn("[DRAWER] hidePopover error:", e);
+    }
+
+    // Reset UI
+    if (searchInput) searchInput.value = "";
+    renderItems();
+    document.body.classList.remove("overflow-hidden");
+
+    // Reset state
+    state.current = STATE.CLOSED;
+    state.lastScrollTop = 0;
+    state.scrollDirection = null;
+    state.hasReachedBottom = false;
+
+    console.log("[DRAWER] ✅ Closed");
   };
 
-  const hideDrawerInstantly = () => {
-    allowImmediateClose = true;
-    drawer.hidePopover();
-    allowImmediateClose = false;
+  // Smart scroll monitor that understands context
+  const startSmartMonitor = () => {
+    if (state.monitorRaf) {
+      cancelAnimationFrame(state.monitorRaf);
+    }
+
+    let stableAtZeroCount = 0;
+    let stableAtBottomCount = 0;
+
+    const monitor = () => {
+      if (state.current === STATE.CLOSED || state.current === STATE.CLOSING) {
+        state.monitorRaf = null;
+        return;
+      }
+
+      const currentScrollTop = scroller.scrollTop;
+      const maxScrollTop = getMaxScrollTop();
+      const scrollDelta = currentScrollTop - state.lastScrollTop;
+
+      // Determine scroll direction
+      if (Math.abs(scrollDelta) > 1) {
+        state.scrollDirection = scrollDelta > 0 ? "down" : "up";
+      }
+
+      // Check if we've reached the bottom (fully open)
+      if (currentScrollTop >= maxScrollTop - 10) {
+        stableAtBottomCount++;
+        if (stableAtBottomCount >= 3 && state.current === STATE.OPENING) {
+          console.log("[DRAWER] ✅ Reached bottom - now OPEN");
+          state.current = STATE.OPEN;
+          state.hasReachedBottom = true;
+        }
+      } else {
+        stableAtBottomCount = 0;
+      }
+
+      // CRITICAL: Only check for close if we're OPEN and have reached bottom before
+      if (state.current === STATE.OPEN && state.hasReachedBottom) {
+        const timeSinceOpen = Date.now() - state.openedAt;
+
+        // Must be open for at least 300ms before we can close
+        if (timeSinceOpen > 300) {
+          // If at or near the top
+          if (currentScrollTop <= 10) {
+            stableAtZeroCount++;
+
+            // If we scrolled UP (decreasing scrollTop) to get here, user is closing
+            if (state.scrollDirection === "up" && stableAtZeroCount >= 2) {
+              console.log("[DRAWER] 📍 Scrolled up to 0 - closing");
+              forceCloseNow("scrolled to top");
+              return;
+            }
+
+            // If been at 0 for a while (60 frames = ~1 second), definitely close
+            if (stableAtZeroCount >= 60) {
+              console.log("[DRAWER] 📍 Stuck at 0 for 1s - closing");
+              forceCloseNow("stuck at 0");
+              return;
+            }
+          } else {
+            stableAtZeroCount = 0;
+          }
+        }
+      }
+
+      state.lastScrollTop = currentScrollTop;
+      state.monitorRaf = requestAnimationFrame(monitor);
+    };
+
+    state.monitorRaf = requestAnimationFrame(monitor);
   };
 
+  // Touch tracking for swipe detection
+  let touchStartY = 0;
+  let touchStartScrollTop = 0;
+  let isSwiping = false;
+
+  scroller.addEventListener(
+    "touchstart",
+    (e) => {
+      if (state.current !== STATE.OPEN) return;
+
+      touchStartY = e.touches[0].clientY;
+      touchStartScrollTop = scroller.scrollTop;
+      isSwiping = false;
+    },
+    { passive: true }
+  );
+
+  scroller.addEventListener(
+    "touchmove",
+    (e) => {
+      if (state.current !== STATE.OPEN) return;
+      if (touchStartY === 0) return;
+
+      const currentY = e.touches[0].clientY;
+      const deltaY = currentY - touchStartY;
+      const currentScrollTop = scroller.scrollTop;
+
+      // User is swiping down (finger moving down) while near top
+      if (deltaY > 20 && currentScrollTop < 100) {
+        isSwiping = true;
+      }
+    },
+    { passive: true }
+  );
+
+  scroller.addEventListener(
+    "touchend",
+    (e) => {
+      if (state.current !== STATE.OPEN) return;
+
+      const currentScrollTop = scroller.scrollTop;
+
+      // If we were swiping and ended near the top, close
+      if (isSwiping && currentScrollTop <= 30) {
+        console.log("[DRAWER] 📍 Swipe down completed at top");
+        forceCloseNow("swipe down");
+      }
+
+      // If ended at 0, definitely close
+      if (currentScrollTop <= 5) {
+        console.log("[DRAWER] 📍 Touch ended at 0");
+        setTimeout(() => {
+          if (state.current === STATE.OPEN && scroller.scrollTop <= 10) {
+            forceCloseNow("touch ended at 0");
+          }
+        }, 100);
+      }
+
+      touchStartY = 0;
+      touchStartScrollTop = 0;
+      isSwiping = false;
+    },
+    { passive: true }
+  );
+
+  // Additional scroll event listener
+  let scrollEndTimeout;
+  scroller.addEventListener(
+    "scroll",
+    () => {
+      if (state.current !== STATE.OPEN) return;
+
+      // Clear previous timeout
+      clearTimeout(scrollEndTimeout);
+
+      // Set new timeout to detect when scrolling stops
+      scrollEndTimeout = setTimeout(() => {
+        const currentScrollTop = scroller.scrollTop;
+
+        // If scroll ended at position 0 and we're open
+        if (currentScrollTop <= 5 && state.current === STATE.OPEN) {
+          const timeSinceOpen = Date.now() - state.openedAt;
+
+          // Must be open for at least 300ms
+          if (timeSinceOpen > 300) {
+            console.log("[DRAWER] 📍 Scroll ended at 0");
+            forceCloseNow("scroll ended at 0");
+          }
+        }
+      }, 150); // Wait 150ms after scroll stops
+    },
+    { passive: true }
+  );
+
+  // IntersectionObserver on top anchor - but only when OPEN
+  const topAnchor = drawer.querySelector(".drawer__anchor:first-child");
+  if (topAnchor) {
+    const anchorObserver = new IntersectionObserver(
+      (entries) => {
+        if (state.current !== STATE.OPEN) return;
+
+        const entry = entries[0];
+        const timeSinceOpen = Date.now() - state.openedAt;
+
+        // Only trigger if been open for a bit
+        if (
+          timeSinceOpen > 400 &&
+          entry.isIntersecting &&
+          entry.intersectionRatio > 0.8
+        ) {
+          console.log("[DRAWER] 📍 Top anchor visible");
+          forceCloseNow("top anchor visible");
+        }
+      },
+      {
+        root: drawer,
+        threshold: [0, 0.5, 0.8, 1.0],
+      }
+    );
+
+    anchorObserver.observe(topAnchor);
+  }
+
+  // Open drawer
   const openDrawer = () => {
-    clearClosingAnimation();
-    isAnimatingClose = false;
+    console.log("[DRAWER] 🟢 Opening drawer");
+
+    // Stop any monitoring
+    if (state.monitorRaf) {
+      cancelAnimationFrame(state.monitorRaf);
+      state.monitorRaf = null;
+    }
+
+    // Reset state for new opening
+    state.current = STATE.OPENING;
+    state.openedAt = Date.now();
+    state.lastScrollTop = 0;
+    state.scrollDirection = null;
+    state.hasReachedBottom = false;
+
     drawer.removeAttribute("data-closing");
     drawer.showPopover();
+
     requestAnimationFrame(() => {
-      const targetTop = slide?.offsetHeight || scroller.scrollHeight || 0;
+      // Scroll to bottom (fully open position)
+      const targetTop = getMaxScrollTop();
       scroller.scrollTo({ top: targetTop, behavior: "instant" });
-      lastScrollTop = targetTop;
+      state.lastScrollTop = targetTop;
+
+      // Start monitoring after a grace period
+      setTimeout(() => {
+        if (state.current === STATE.OPENING || state.current === STATE.OPEN) {
+          console.log("[DRAWER] 👁️ Starting monitor");
+          startSmartMonitor();
+        }
+      }, 200); // Grace period before monitoring starts
     });
   };
 
   drawer.openCommandDrawer = openDrawer;
 
-  const closeDrawer = ({ immediate = false } = {}) => {
-    if (!drawer.matches(":popover-open")) return;
-
-    if (immediate || !content) {
-      clearClosingAnimation();
-      hideDrawerInstantly();
-      return;
-    }
-
-    if (isAnimatingClose) return;
-
-    isAnimatingClose = true;
-    drawer.dataset.closing = "true";
-
-    const finish = () => {
-      clearClosingAnimation();
-      hideDrawerInstantly();
-    };
-
-    contentTransitionEndHandler = (event) => {
-      if (event.target !== content) return;
-      finish();
-    };
-
-    content.addEventListener("transitionend", contentTransitionEndHandler);
-
-    closeFallback = window.setTimeout(() => {
-      finish();
-    }, 600);
-  };
-
-  const finishSwipeClose = () => {
-    if (isClosingFromSwipe || isAnimatingClose) return;
-    isClosingFromSwipe = true;
-    if (scrollCloseRaf) {
-      cancelAnimationFrame(scrollCloseRaf);
-      scrollCloseRaf = null;
-    }
-    drawer.dataset.snapped = true;
-    document.documentElement.dataset.dragging = false;
-    closeDrawer({ immediate: true });
-  };
-
+  // Close button handlers
   closeTargets.forEach((button) => {
     button.addEventListener("click", (event) => {
       event.preventDefault();
-      closeDrawer();
+      forceCloseNow("close button");
     });
   });
 
+  // Popover toggle event
+  drawer.addEventListener("toggle", (event) => {
+    if (event.newState === "closed") {
+      console.log("[DRAWER] Popover closed event");
+
+      if (state.monitorRaf) {
+        cancelAnimationFrame(state.monitorRaf);
+        state.monitorRaf = null;
+      }
+
+      state.current = STATE.CLOSED;
+      state.lastScrollTop = 0;
+      state.scrollDirection = null;
+      state.hasReachedBottom = false;
+
+      drawer.removeAttribute("data-closing");
+      document.body.classList.remove("overflow-hidden");
+
+      if (searchInput) searchInput.value = "";
+      renderItems();
+    }
+
+    if (event.newState === "open") {
+      console.log("[DRAWER] Popover opened event");
+      // State is already set in openDrawer()
+    }
+  });
+
+  // Safety check: If drawer is in weird state, fix it
+  setInterval(() => {
+    const isPopoverOpen = drawer.matches(":popover-open");
+
+    // If popover is closed but state thinks it's open
+    if (
+      !isPopoverOpen &&
+      (state.current === STATE.OPEN || state.current === STATE.OPENING)
+    ) {
+      console.log("[DRAWER] 🧟 State mismatch - fixing");
+      state.current = STATE.CLOSED;
+      if (state.monitorRaf) {
+        cancelAnimationFrame(state.monitorRaf);
+        state.monitorRaf = null;
+      }
+    }
+
+    // If popover is open, we're in OPEN state, and scrollTop has been 0 for a while
+    if (
+      isPopoverOpen &&
+      state.current === STATE.OPEN &&
+      state.hasReachedBottom
+    ) {
+      const timeSinceOpen = Date.now() - state.openedAt;
+
+      if (timeSinceOpen > 1000 && scroller.scrollTop <= 5) {
+        console.log("[DRAWER] 🧟 Zombie drawer detected (open but at 0)");
+        forceCloseNow("zombie check");
+      }
+    }
+  }, 500); // Check every 500ms
+
+  // Render command items
   const formatCommandCategory = (value) =>
     value
       .split(/[\s_-]+/)
       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
       .join(" ");
 
-  // Populate command items
   function renderItems(searchTerm = "") {
     const items = window.COMMAND_ITEMS_DATA;
     let html = "";
@@ -439,7 +711,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     itemsContainer.innerHTML = html;
 
-    // Add click handlers
     itemsContainer.querySelectorAll(".command-item").forEach((item) => {
       item.addEventListener("click", function () {
         const value = this.dataset.value;
@@ -451,7 +722,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const url = window.COMMAND_ACTION_MAP[value];
           if (url) window.location.href = url;
         }
-        closeDrawer();
+        forceCloseNow("item clicked");
       });
     });
   }
@@ -470,246 +741,46 @@ document.addEventListener("DOMContentLoaded", function () {
   // Initial render
   renderItems();
 
-  // Scroll snap change support (exact CodePen implementation)
-  const scrollSnapChangeSupport = "onscrollsnapchange" in window;
-  const scrollAnimationSupport = CSS.supports("animation-timeline: scroll()");
-
-  if (scrollSnapChangeSupport) {
-    scroller.addEventListener("scrollsnapchange", () => {
-      if (scroller.scrollTop === 0) {
-        drawer.dataset.snapped = true;
-        closeDrawer({ immediate: true });
-      }
-    });
-  }
-
-  const anchor = drawer.querySelector(".drawer__anchor");
-  const options = {
-    root: drawer,
-    rootMargin: "0px 0px -1px 0px",
-    threshold: 1.0,
-  };
-
-  let observer;
-  let syncer;
-  let syncs = new Array(10);
-  let index = 0;
-
-  function addNumber(num) {
-    syncs[index] = num;
-    index = (index + 1) % syncs.length;
-  }
-
-  let frame = 0;
-  const syncDrawer = () => {
-    syncer = requestAnimationFrame(() => {
-      document.documentElement.style.setProperty(
-        "--closed",
-        1 - scroller.scrollTop / slide.offsetHeight
-      );
-
-      if (new Set(syncs).size === 1 && syncs[0] === slide.offsetHeight) {
-        frame++;
-      }
-      if (frame >= 10) {
-        frame = 0;
-        syncs = new Array(10);
-        scroller.addEventListener("scroll", scrollDriver, { once: true });
-      } else {
-        addNumber(scroller.scrollTop);
-        syncDrawer();
-      }
-    });
-  };
-
-  const scrollDriver = () => {
-    syncDrawer();
-  };
-
-  const callback = (entries) => {
-    const { isIntersecting, intersectionRatio } = entries[0];
-    const isVisible = intersectionRatio === 1;
-
-    if (
-      !isVisible &&
-      !isIntersecting &&
-      scroller.scrollTop - (window.visualViewport?.offsetTop || 0) <
-        slide.offsetHeight * 0.5
-    ) {
-      drawer.dataset.snapped = true;
-      closeDrawer({ immediate: true });
-      observer.disconnect();
-    }
-  };
-
-  drawer.addEventListener("beforetoggle", (event) => {
-    if (event.newState === "closed" && !allowImmediateClose) {
-      event.preventDefault();
-      closeDrawer();
-    }
-
-    if (event.newState === "open") {
-      clearClosingAnimation();
-      requestAnimationFrame(() => {
-        const targetTop = slide?.offsetHeight || scroller.scrollHeight || 0;
-        scroller.scrollTo({ top: targetTop, behavior: "instant" });
-      });
-    }
-  });
-
-  // Reset the drawer once closed
-  drawer.addEventListener("toggle", (event) => {
-    if (event.newState === "closed") {
-      clearClosingAnimation();
-      drawer.dataset.snapped = false;
-      scroller.removeEventListener("scroll", scrollDriver);
-      if (syncer) cancelAnimationFrame(syncer);
-      document.documentElement.style.removeProperty("--closed");
-      if (searchInput) searchInput.value = "";
-      renderItems();
-      isClosingFromSwipe = false;
-      lastScrollTop = scroller.scrollTop;
-      if (scrollCloseRaf) {
-        cancelAnimationFrame(scrollCloseRaf);
-        scrollCloseRaf = null;
-      }
-      document.documentElement.dataset.dragging = false;
-      document.body.classList.remove("overflow-hidden");
-    }
-    if (event.newState === "open" && !scrollSnapChangeSupport) {
-      clearClosingAnimation();
-      if (!observer) observer = new IntersectionObserver(callback, options);
-      observer.observe(anchor);
-    }
-    if (event.newState === "open" && !scrollAnimationSupport) {
-      scroller.addEventListener("scroll", scrollDriver, { once: true });
-    }
-    if (event.newState === "open") {
-      isClosingFromSwipe = false;
-      lastScrollTop = scroller.scrollTop;
-    }
-  });
-
-  // Drag mechanics (exact CodePen implementation)
-  const attachDrag = (element) => {
-    let startY = 0;
-    let drag = 0;
-    let scrollStart;
-
-    const reset = () => {
-      startY = drag = 0;
-      const top = scroller.scrollTop < scrollStart * 0.5 ? 0 : scrollStart;
-
-      const handleScroll = () => {
-        if (scroller.scrollTop === top) {
-          document.documentElement.dataset.dragging = false;
-          scroller.removeEventListener("scroll", handleScroll);
-          lastScrollTop = scroller.scrollTop;
-          if (top === 0) finishSwipeClose();
-        }
-      };
-      scroller.addEventListener("scroll", handleScroll);
-
-      scroller.scrollTo({
-        top,
-        behavior: "smooth",
-      });
-
-      handleScroll();
-    };
-
-    const handle = ({ y }) => {
-      drag += Math.abs(y - startY);
-      scroller.scrollTo({
-        top: scrollStart - (y - startY),
-        behavior: "instant",
-      });
-    };
-
-    const teardown = (event) => {
-      if (event.target.tagName !== "BUTTON") {
-        reset();
-      }
-      document.removeEventListener("mousemove", handle);
-      document.removeEventListener("mouseup", teardown);
-    };
-
-    const activate = ({ y }) => {
-      startY = y;
-      scrollStart = scroller.scrollTop;
-      document.documentElement.dataset.dragging = true;
-      document.addEventListener("mousemove", handle);
-      document.addEventListener("mouseup", teardown);
-    };
-
-    element.addEventListener("click", (event) => {
-      if (drag > 5) event.preventDefault();
-      reset();
-    });
-    element.addEventListener("mousedown", activate);
-  };
-
-  attachDrag(drawer);
-
-  const handleScrollClose = () => {
-    if (scrollCloseRaf) cancelAnimationFrame(scrollCloseRaf);
-    scrollCloseRaf = requestAnimationFrame(() => {
-      if (!drawer.matches(":popover-open")) {
-        scrollCloseRaf = null;
-        return;
-      }
-      const currentTop = scroller.scrollTop;
-      const isPullingDown = currentTop <= lastScrollTop;
-      lastScrollTop = currentTop;
-      if (
-        isPullingDown &&
-        currentTop <= SCROLL_CLOSE_THRESHOLD &&
-        !isClosingFromSwipe
-      ) {
-        finishSwipeClose();
-      }
-      scrollCloseRaf = null;
-    });
-  };
-
-  scroller.addEventListener("scroll", handleScrollClose, { passive: true });
-
-  // Handle VisualViewport changes for iOS
-  window.visualViewport?.addEventListener("resize", () => {
-    document.documentElement.style.setProperty(
-      "--sw-keyboard-height",
-      window.visualViewport.offsetTop
-    );
-  });
-
-  // Update command button to handle both desktop and mobile properly
+  // Handle command button
   const commandButton = document.querySelector(
     'button[aria-label="Open command palette"]'
   );
   if (commandButton) {
-    commandButton.removeEventListener("click", commandButton._clickHandler, true);
+    commandButton.removeEventListener(
+      "click",
+      commandButton._clickHandler,
+      true
+    );
     commandButton._clickHandler = function (e) {
       if (window.innerWidth < 768) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        // Close Alpine palette if open
-        if (
-          window.Alpine &&
-          window.Alpine.$data &&
-          window.Alpine.$data.commandOpen
-        ) {
+        if (window.Alpine?.$data?.commandOpen) {
           window.Alpine.$data.commandOpen = false;
         }
         document.body.classList.remove("overflow-hidden");
-        // Open drawer
-        const drawer = document.getElementById("command-drawer");
-        if (drawer) {
-          openDrawer();
-        }
+        openDrawer();
       }
     };
     commandButton.addEventListener("click", commandButton._clickHandler, true);
   }
+
+  // Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && state.current === STATE.OPEN) {
+      e.preventDefault();
+      forceCloseNow("escape key");
+    }
+  });
+
+  // Visibility change
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && state.current === STATE.OPEN) {
+      forceCloseNow("page hidden");
+    }
+  });
+
+  console.log("[DRAWER] ✅ Initialized with smart state machine");
 });
 
 // Prefetch internal pages on hover for snappier navigation

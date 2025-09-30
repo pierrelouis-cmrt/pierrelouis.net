@@ -430,7 +430,7 @@
               </div>
             </template>
 
-            <!-- Mobile Command Drawer (Exact CodePen Structure) -->
+            <!-- Mobile Command Drawer (Rebuilt Robust Version) -->
             <aside class="drawer" popover="auto" id="command-drawer">
               <div class="drawer__scroller">
                 <div class="drawer__slide">
@@ -438,7 +438,6 @@
                     <div class="drawer__anchor"></div>
                     <div class="drawer__anchor"></div>
                   </div>
-                  <!-- Acts like a backdrop button so you don't body click -->
                   <button
                     type="button"
                     class="drawer__curtain"
@@ -456,7 +455,6 @@
                       <span></span>
                     </button>
                     <div class="content">
-                      <!-- Search Bar -->
                       <div class="command-search-wrapper">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -481,11 +479,7 @@
                           spellcheck="false"
                         />
                       </div>
-
-                      <!-- Command Items -->
-                      <div class="command-items-container">
-                        <!-- Will be populated by JavaScript -->
-                      </div>
+                      <div class="command-items-container"></div>
                     </div>
                   </div>
                 </div>
@@ -796,41 +790,63 @@
         <div class="posts-grid" id="latest-posts">
           <!-- AUTO-GEN:LATEST START -->
 
-    <div class="post-card">
-      <a class="link-with-icon post-card-link" href="/posts/experiments/interactive-pixel-grid.html" rel="noopener noreferrer">
-        <div class="post-card-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2" 
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/>
-      <path d="M6.453 15h11.094"/>
-      <path d="M8.5 2h7"/>
-    </svg>
-          <span class="link-text">Interactive Pixel Grid</span>
-        </div>
-        <div class="post-card-separator"></div>
-        <div class="post-card-date">Aug 2025</div>
-      </a>
-    </div>
-    <div class="post-card">
-      <a class="link-with-icon post-card-link" href="/posts/experiments/animated-avatar.html" rel="noopener noreferrer">
-        <div class="post-card-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2" 
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/>
-      <path d="M6.453 15h11.094"/>
-      <path d="M8.5 2h7"/>
-    </svg>
-          <span class="link-text">Animated Avatar</span>
-        </div>
-        <div class="post-card-separator"></div>
-        <div class="post-card-date">Aug 2025</div>
-      </a>
-    </div>
-<!-- AUTO-GEN:LATEST END -->
+          <div class="post-card">
+            <a
+              class="link-with-icon post-card-link"
+              href="/posts/experiments/interactive-pixel-grid.html"
+              rel="noopener noreferrer"
+            >
+              <div class="post-card-title">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"
+                  />
+                  <path d="M6.453 15h11.094" />
+                  <path d="M8.5 2h7" />
+                </svg>
+                <span class="link-text">Interactive Pixel Grid</span>
+              </div>
+              <div class="post-card-separator"></div>
+              <div class="post-card-date">Aug 2025</div>
+            </a>
+          </div>
+          <div class="post-card">
+            <a
+              class="link-with-icon post-card-link"
+              href="/posts/experiments/animated-avatar.html"
+              rel="noopener noreferrer"
+            >
+              <div class="post-card-title">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"
+                  />
+                  <path d="M6.453 15h11.094" />
+                  <path d="M8.5 2h7" />
+                </svg>
+                <span class="link-text">Animated Avatar</span>
+              </div>
+              <div class="post-card-separator"></div>
+              <div class="post-card-date">Aug 2025</div>
+            </a>
+          </div>
+          <!-- AUTO-GEN:LATEST END -->
         </div>
 
         <div class="projects-view-all">
