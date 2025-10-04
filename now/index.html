@@ -508,9 +508,17 @@
         self.velocity = 0;
         self.isDragging = false;
 
-        document.body.style.overflow = 'hidden';
-        document.body.style.position = 'fixed';
-        document.body.style.width = '100%';
+        const overlayController = window.__overlayChromeController;
+        const canUseController =
+          overlayController && typeof overlayController.open === 'function';
+
+        if (canUseController) {
+          overlayController.open('drawer');
+        } else {
+          document.body.style.overflow = 'hidden';
+          document.body.style.position = 'fixed';
+          document.body.style.width = '100%';
+        }
 
         requestAnimationFrame(() => {
           self.openFrame = requestAnimationFrame(() => {
@@ -550,24 +558,43 @@
         // IMPORTANT: Reset commandOpen to fix Android button state
         commandOpen = false;
 
-        // Reset theme color slightly before drawer fully closes
-        self.themeTimer = setTimeout(() => {
-          self.resetThemeColor();
-          self.themeTimer = null;
-        }, Math.min(200, self.closeDuration));
+        const overlayController = window.__overlayChromeController;
+        const canUseController =
+          overlayController &&
+          typeof overlayController.close === 'function' &&
+          overlayController.hasActiveOverlays &&
+          overlayController.hasActiveOverlays();
+
+        if (canUseController) {
+          overlayController.close('drawer');
+        } else {
+          // Reset theme color slightly before drawer fully closes
+          self.themeTimer = setTimeout(() => {
+            self.resetThemeColor();
+            self.themeTimer = null;
+          }, Math.min(200, self.closeDuration));
+        }
 
         self.settleTimer = setTimeout(() => {
           self.drawerOpen = false;
           self.isAnimating = false;
-          document.body.style.overflow = '';
-          document.body.style.position = '';
-          document.body.style.width = '';
+          if (!canUseController) {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+          }
           self.searchQuery = '';
           self.settleTimer = null;
         }, self.closeDuration);
       },
 
       updateThemeColor() {
+        const overlayController = window.__overlayChromeController;
+        if (overlayController) {
+          overlayController.updateThemeColor();
+          return;
+        }
+
         let metaTheme = document.querySelector('meta[name=\'theme-color\']');
         if (!metaTheme) {
           metaTheme = document.createElement('meta');
@@ -580,6 +607,12 @@
       },
 
       resetThemeColor() {
+        const overlayController = window.__overlayChromeController;
+        if (overlayController) {
+          overlayController.resetThemeColor();
+          return;
+        }
+
         const metaTheme = document.querySelector('meta[name=\'theme-color\']');
         if (metaTheme) {
           metaTheme.content = '#ffffff';

@@ -441,6 +441,194 @@ document.addEventListener("keydown", (e) => {
 })();
 
 (() => {
+  const html = document.documentElement;
+  const body = document.body;
+  const RESET_DELAY = 200;
+  const DEFAULT_PALETTE = { dark: "#0f0f0f", light: "#faf9f9" };
+  const PALETTES = {
+    overlay: DEFAULT_PALETTE,
+    drawer: DEFAULT_PALETTE,
+    lightbox: { dark: "#14161d", light: "#e4e3e1" },
+  };
+
+  const state = {
+    stack: [],
+    resetTimer: null,
+    observer: null,
+    mediaQuery: null,
+    mediaHandler: null,
+    bodySnapshot: null,
+  };
+
+  const ensureMeta = (() => {
+    let meta;
+    return () => {
+      if (meta && meta.isConnected) return meta;
+      meta =
+        document.querySelector("meta[name='theme-color']") ||
+        Object.assign(document.createElement("meta"), { name: "theme-color" });
+      if (!meta.isConnected) document.head.appendChild(meta);
+      return meta;
+    };
+  })();
+
+  const pickPalette = (source) => PALETTES[source] || DEFAULT_PALETTE;
+
+  const resolveColor = (palette) =>
+    (palette || pickPalette(state.stack[state.stack.length - 1] || "overlay"))[
+      html.classList.contains("dark") ? "dark" : "light"
+    ];
+
+  const applyThemeColor = () => ensureMeta().setAttribute("content", resolveColor());
+
+  const scheduleThemeColor = () => {
+    applyThemeColor();
+    requestAnimationFrame(applyThemeColor);
+    setTimeout(applyThemeColor, 60);
+  };
+
+  const clearResetTimer = () => {
+    if (state.resetTimer) {
+      clearTimeout(state.resetTimer);
+      state.resetTimer = null;
+    }
+  };
+
+  const scheduleReset = () => {
+    state.resetTimer = setTimeout(() => {
+      ensureMeta().setAttribute("content", "#ffffff");
+      state.resetTimer = null;
+    }, RESET_DELAY);
+  };
+
+  const startWatchers = () => {
+    if (!state.observer) state.observer = new MutationObserver(scheduleThemeColor);
+    state.observer.observe(html, { attributes: true, attributeFilter: ["class"] });
+
+    if (!state.mediaQuery && window.matchMedia) {
+      try {
+        state.mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      } catch (error) {
+        state.mediaQuery = null;
+      }
+    }
+
+    if (state.mediaQuery && !state.mediaHandler) {
+      const mq = state.mediaQuery;
+      const handler = (state.mediaHandler = scheduleThemeColor);
+      if (typeof mq.addEventListener === "function") {
+        mq.addEventListener("change", handler);
+      } else if (typeof mq.addListener === "function") {
+        mq.addListener(handler);
+      }
+    }
+  };
+
+  const stopWatchers = () => {
+    state.observer?.disconnect();
+    if (state.mediaQuery && state.mediaHandler) {
+      const mq = state.mediaQuery;
+      if (typeof mq.removeEventListener === "function") {
+        mq.removeEventListener("change", state.mediaHandler);
+      } else if (typeof mq.removeListener === "function") {
+        mq.removeListener(state.mediaHandler);
+      }
+      state.mediaHandler = null;
+    }
+  };
+
+  const lockBody = () => {
+    if (!body || state.bodySnapshot) return;
+    state.bodySnapshot = {
+      overflow: body.style.overflow,
+      position: body.style.position,
+      width: body.style.width,
+      left: body.style.left,
+      top: body.style.top,
+      scrollX: window.scrollX,
+      scrollY: window.scrollY,
+    };
+    body.style.overflow = "hidden";
+    body.style.position = "fixed";
+    body.style.width = "100%";
+    body.style.left = "0";
+    body.style.top = `-${state.bodySnapshot.scrollY}px`;
+  };
+
+  const unlockBody = () => {
+    if (!body || !state.bodySnapshot) return;
+    const snapshot = state.bodySnapshot;
+    body.style.overflow = snapshot.overflow || "";
+    body.style.position = snapshot.position || "";
+    body.style.width = snapshot.width || "";
+    body.style.left = snapshot.left || "";
+    body.style.top = snapshot.top || "";
+    state.bodySnapshot = null;
+
+    requestAnimationFrame(() => {
+      window.scrollTo(snapshot.scrollX, snapshot.scrollY);
+    });
+  };
+
+  const removeFromStack = (source) => {
+    if (!state.stack.length) return;
+    if (!source) {
+      state.stack.pop();
+      return;
+    }
+    const index = state.stack.lastIndexOf(source);
+    if (index === -1) {
+      state.stack.pop();
+      return;
+    }
+    state.stack.splice(index, 1);
+  };
+
+  const controller = {
+    open(source = "overlay") {
+      clearResetTimer();
+      if (!state.stack.length) {
+        lockBody();
+        startWatchers();
+      }
+      state.stack.push(source);
+      scheduleThemeColor();
+    },
+
+    close(source = "overlay") {
+      if (!state.stack.length) return;
+      clearResetTimer();
+      removeFromStack(source);
+      if (state.stack.length) {
+        scheduleThemeColor();
+        return;
+      }
+      stopWatchers();
+      scheduleReset();
+      unlockBody();
+    },
+
+    updateThemeColor: scheduleThemeColor,
+
+    resetThemeColor() {
+      clearResetTimer();
+      ensureMeta().setAttribute("content", "#ffffff");
+    },
+
+    getColorFor(source, isDark) {
+      const palette = pickPalette(source);
+      return palette[isDark ? "dark" : "light"];
+    },
+
+    hasActiveOverlays() {
+      return state.stack.length > 0;
+    },
+  };
+
+  window.__overlayChromeController = controller;
+})();
+
+(() => {
   class LightboxGallery {
     constructor(overlay) {
       this.overlay = overlay;
@@ -467,8 +655,12 @@ document.addEventListener("keydown", (e) => {
       this.activeIndex = 0;
       this.lastFocused = null;
       this.boundHandlers = false;
-      this.metaThemeOriginal = null;
-      this.themeColorApplied = false;
+      this.themeObserver = null;
+      this.prefersDarkMedia = null;
+      this.mediaListenerAttached = false;
+      this.boundMediaChange = null;
+      this.themeTimer = null;
+      this.themeResetDelay = 200;
 
       if (this.shell && !this.shell.hasAttribute("tabindex")) {
         this.shell.setAttribute("tabindex", "-1");
@@ -582,7 +774,17 @@ document.addEventListener("keydown", (e) => {
       this.overlay.classList.add("is-active");
       this.overlay.setAttribute("aria-hidden", "false");
       document.body.classList.add("lightbox-open");
-      this.applyThemeColor();
+      const overlayController = window.__overlayChromeController;
+      const canUseController =
+        overlayController && typeof overlayController.open === "function";
+
+      if (canUseController) {
+        overlayController.open("lightbox");
+      } else {
+        this.clearThemeTimer();
+        this.updateThemeColor();
+        this.startThemeWatchers();
+      }
 
       this.buildThumbnails();
       this.showIndex(this.activeIndex, { focusThumbnail: false });
@@ -759,7 +961,19 @@ document.addEventListener("keydown", (e) => {
       this.overlay.classList.remove("is-active");
       this.overlay.setAttribute("aria-hidden", "true");
       document.body.classList.remove("lightbox-open");
-      this.resetThemeColor();
+      const overlayControllerClose = window.__overlayChromeController;
+      const canUseControllerClose =
+        overlayControllerClose &&
+        typeof overlayControllerClose.close === "function" &&
+        overlayControllerClose.hasActiveOverlays &&
+        overlayControllerClose.hasActiveOverlays();
+
+      if (canUseControllerClose) {
+        overlayControllerClose.close("lightbox");
+      } else {
+        this.stopThemeWatchers();
+        this.scheduleThemeReset();
+      }
       this._navLock = false;
 
       this.detachGlobalHandlers();
@@ -852,24 +1066,86 @@ document.addEventListener("keydown", (e) => {
       return meta;
     }
 
-    applyThemeColor() {
+    updateThemeColor() {
       const meta = this.ensureMetaThemeTag();
-      if (!this.themeColorApplied) {
-        this.metaThemeOriginal = meta.content || "";
+      const isDark = document.documentElement.classList.contains("dark");
+      const controller = window.__overlayChromeController;
+      if (controller && typeof controller.getColorFor === "function") {
+        meta.content = controller.getColorFor("lightbox", isDark);
+        return;
       }
-      meta.content = "#0f0f0f";
-      this.themeColorApplied = true;
+      meta.content = isDark ? "#14161d" : "#e4e3e1";
     }
 
     resetThemeColor() {
-      if (!this.themeColorApplied) return;
       const meta = document.querySelector("meta[name='theme-color']");
       if (meta) {
-        const fallback = this.metaThemeOriginal ?? "#ffffff";
-        meta.content = fallback || "#ffffff";
+        meta.content = "#ffffff";
       }
-      this.themeColorApplied = false;
-      this.metaThemeOriginal = null;
+    }
+
+    startThemeWatchers() {
+      if (!this.themeObserver) {
+        this.themeObserver = new MutationObserver(() => this.updateThemeColor());
+        this.themeObserver.observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ["class"],
+        });
+      }
+
+      if (!this.boundMediaChange) {
+        this.boundMediaChange = () => this.updateThemeColor();
+      }
+      if (!this.prefersDarkMedia && window.matchMedia) {
+        try {
+          this.prefersDarkMedia = window.matchMedia("(prefers-color-scheme: dark)");
+        } catch (error) {
+          this.prefersDarkMedia = null;
+        }
+      }
+
+      if (this.prefersDarkMedia && !this.mediaListenerAttached) {
+        const media = this.prefersDarkMedia;
+        if (typeof media.addEventListener === "function") {
+          media.addEventListener("change", this.boundMediaChange);
+          this.mediaListenerAttached = true;
+        } else if (typeof media.addListener === "function") {
+          media.addListener(this.boundMediaChange);
+          this.mediaListenerAttached = true;
+        }
+      }
+    }
+
+    stopThemeWatchers() {
+      if (this.themeObserver) {
+        this.themeObserver.disconnect();
+        this.themeObserver = null;
+      }
+
+      if (this.prefersDarkMedia && this.mediaListenerAttached) {
+        const media = this.prefersDarkMedia;
+        if (typeof media.removeEventListener === "function") {
+          media.removeEventListener("change", this.boundMediaChange);
+        } else if (typeof media.removeListener === "function") {
+          media.removeListener(this.boundMediaChange);
+        }
+        this.mediaListenerAttached = false;
+      }
+    }
+
+    clearThemeTimer() {
+      if (this.themeTimer) {
+        clearTimeout(this.themeTimer);
+        this.themeTimer = null;
+      }
+    }
+
+    scheduleThemeReset() {
+      this.clearThemeTimer();
+      this.themeTimer = setTimeout(() => {
+        this.resetThemeColor();
+        this.themeTimer = null;
+      }, this.themeResetDelay);
     }
   }
 
