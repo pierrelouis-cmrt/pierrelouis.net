@@ -439,3 +439,410 @@ document.addEventListener("keydown", (e) => {
     { passive: false }
   );
 })();
+
+(() => {
+  class LightboxGallery {
+    constructor(overlay) {
+      this.overlay = overlay;
+      this.shell = overlay.querySelector(".image-lightbox__shell");
+      this.imageEl = overlay.querySelector("[data-lightbox-active-image]");
+      this.captionEl = overlay.querySelector("[data-lightbox-caption]");
+      this.thumbnailsEl = overlay.querySelector("[data-lightbox-thumbnails]");
+      this.closeButtons = overlay.querySelectorAll("[data-lightbox-close]");
+      this.prevButton = overlay.querySelector("[data-lightbox-prev]");
+      this.nextButton = overlay.querySelector("[data-lightbox-next]");
+
+      this.groups = new Map();
+      this.thumbnailButtons = [];
+      this.preloaded = new Set();
+      this._navLock = false;
+
+      const fallbackSlug = window.location.pathname
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+      this.defaultGroupId = fallbackSlug ? `page-${fallbackSlug}` : "page-root";
+      this.activeGroupId = null;
+      this.activeItems = [];
+      this.activeIndex = 0;
+      this.lastFocused = null;
+      this.boundHandlers = false;
+
+      if (this.shell && !this.shell.hasAttribute("tabindex")) {
+        this.shell.setAttribute("tabindex", "-1");
+      }
+    }
+
+    init() {
+      if (!this.overlay || !this.imageEl) return;
+      this.collectItems();
+      if (this.groups.size === 0) return;
+      this.bindControls();
+    }
+
+    collectItems() {
+      const triggers = Array.from(
+        document.querySelectorAll("[data-lightbox-item]")
+      );
+
+      triggers.forEach((trigger) => {
+        if (!trigger || trigger.dataset.lightboxReady === "true") return;
+
+        const groupId = this.resolveGroupId(trigger);
+        if (!this.groups.has(groupId)) {
+          this.groups.set(groupId, []);
+        }
+
+        const groupItems = this.groups.get(groupId);
+        const item = {
+          element: trigger,
+          groupId,
+          getSource: () =>
+            trigger.dataset.lightboxSrc || trigger.currentSrc || trigger.src,
+          getThumb: () =>
+            trigger.dataset.lightboxThumb || trigger.currentSrc || trigger.src,
+          getCaption: () =>
+            trigger.dataset.lightboxCaption || trigger.getAttribute("alt") || "",
+        };
+
+        item.index = groupItems.length;
+        groupItems.push(item);
+
+        trigger.dataset.lightboxReady = "true";
+        trigger.dataset.lightboxGroupResolved = groupId;
+        trigger.dataset.lightboxIndex = String(item.index);
+
+        if (!trigger.hasAttribute("tabindex")) {
+          trigger.tabIndex = 0;
+        }
+
+        const openFromTrigger = (event) => {
+          event.preventDefault();
+          this.open(groupId, item.index);
+        };
+
+        trigger.addEventListener("click", openFromTrigger);
+        trigger.addEventListener("keydown", (event) => {
+          if (event.defaultPrevented) return;
+          const key = event.key;
+          if (
+            key === "Enter" ||
+            key === " " ||
+            key === "Space" ||
+            key === "Spacebar"
+          ) {
+            openFromTrigger(event);
+          }
+        });
+      });
+    }
+
+    resolveGroupId(trigger) {
+      const direct = (trigger.dataset.lightboxGroup || "").trim();
+      if (direct) return direct;
+      const ancestor = trigger.closest("[data-lightbox-group]");
+      if (ancestor && ancestor.dataset.lightboxGroup) {
+        return ancestor.dataset.lightboxGroup;
+      }
+      return this.defaultGroupId;
+    }
+
+    bindControls() {
+      this.closeButtons.forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.preventDefault();
+          this.close();
+        });
+      });
+
+      this.prevButton?.addEventListener("click", (event) => {
+        event.preventDefault();
+        this.showPrevious();
+      });
+
+      this.nextButton?.addEventListener("click", (event) => {
+        event.preventDefault();
+        this.showNext();
+      });
+    }
+
+    open(groupId, index = 0) {
+      this.collectItems();
+      const group = this.groups.get(groupId);
+      if (!group || group.length === 0) return;
+
+      this.activeGroupId = groupId;
+      this.activeItems = group;
+      this.activeIndex = this.normalizeIndex(index);
+      this.lastFocused = document.activeElement;
+      this._navLock = false;
+
+      this.overlay.classList.add("is-active");
+      this.overlay.setAttribute("aria-hidden", "false");
+      document.body.classList.add("lightbox-open");
+
+      this.buildThumbnails();
+      this.showIndex(this.activeIndex, { focusThumbnail: false });
+      this.attachGlobalHandlers();
+      this.focusPrimaryControl();
+    }
+
+    showIndex(index, { focusThumbnail = true } = {}) {
+      if (!this.activeItems || this.activeItems.length === 0) {
+        this._navLock = false;
+        return;
+      }
+
+      this.activeIndex = this.normalizeIndex(index);
+      this.renderActiveItem();
+      this.updateControls();
+      this.updateThumbnails({ focusCurrent: focusThumbnail });
+      this.preloadAdjacent();
+      this._navLock = false;
+    }
+
+    showNext() {
+      if (this._navLock) return;
+      this._navLock = true;
+      this.showIndex(this.activeIndex + 1);
+    }
+
+    showPrevious() {
+      if (this._navLock) return;
+      this._navLock = true;
+      this.showIndex(this.activeIndex - 1);
+    }
+
+    normalizeIndex(index) {
+      if (!this.activeItems || this.activeItems.length === 0) return 0;
+      const count = this.activeItems.length;
+      const normalized = ((index % count) + count) % count;
+      return normalized;
+    }
+
+    renderActiveItem() {
+      const item = this.activeItems[this.activeIndex];
+      if (!item) return;
+
+      const src = item.getSource();
+      if (src && this.imageEl.src !== src) {
+        this.imageEl.src = src;
+      }
+
+      const caption = item.getCaption().trim();
+      this.imageEl.alt = caption;
+
+      if (this.captionEl) {
+        if (caption) {
+          this.captionEl.textContent = caption;
+          this.captionEl.hidden = false;
+        } else {
+          this.captionEl.textContent = "";
+          this.captionEl.hidden = true;
+        }
+      }
+    }
+
+    updateControls() {
+      const hasMultiple = this.activeItems.length > 1;
+
+      if (this.prevButton) {
+        this.prevButton.disabled = !hasMultiple;
+        this.prevButton.hidden = !hasMultiple;
+      }
+
+      if (this.nextButton) {
+        this.nextButton.disabled = !hasMultiple;
+        this.nextButton.hidden = !hasMultiple;
+      }
+
+      if (this.thumbnailsEl) {
+        if (!hasMultiple) {
+          this.thumbnailsEl.hidden = true;
+        } else {
+          this.thumbnailsEl.hidden = false;
+        }
+      }
+    }
+
+    buildThumbnails() {
+      if (!this.thumbnailsEl) return;
+
+      this.thumbnailsEl.innerHTML = "";
+      this.thumbnailButtons = [];
+
+      if (!this.activeItems || this.activeItems.length <= 1) {
+        this.thumbnailsEl.hidden = true;
+        return;
+      }
+
+      this.thumbnailsEl.hidden = false;
+
+      this.activeItems.forEach((item, idx) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "image-lightbox__thumbnail";
+        button.setAttribute("data-index", String(idx));
+        button.setAttribute("role", "listitem");
+
+        const thumbImg = document.createElement("img");
+        thumbImg.loading = "lazy";
+        thumbImg.decoding = "async";
+        const thumbSrc = item.getThumb();
+        if (thumbSrc) {
+          thumbImg.src = thumbSrc;
+        }
+        const caption = item.getCaption().trim();
+        thumbImg.alt = caption
+          ? `${caption} thumbnail`
+          : `Image ${idx + 1}`;
+
+        button.appendChild(thumbImg);
+        button.addEventListener("click", (event) => {
+          event.preventDefault();
+          this.showIndex(idx, { focusThumbnail: false });
+        });
+
+        this.thumbnailsEl.appendChild(button);
+        this.thumbnailButtons.push(button);
+      });
+    }
+
+    updateThumbnails({ focusCurrent = false } = {}) {
+      if (!this.thumbnailButtons.length) return;
+
+      this.thumbnailButtons.forEach((button, idx) => {
+        if (idx === this.activeIndex) {
+          button.classList.add("is-active");
+          if (focusCurrent) {
+            button.focus({ preventScroll: true });
+          }
+          requestAnimationFrame(() => {
+            button.scrollIntoView({
+              behavior: "smooth",
+              block: "nearest",
+              inline: "center",
+            });
+          });
+        } else {
+          button.classList.remove("is-active");
+        }
+      });
+    }
+
+    preloadAdjacent() {
+      if (!this.activeItems || this.activeItems.length <= 1) return;
+
+      const count = this.activeItems.length;
+      const neighborIndexes = [
+        (this.activeIndex + 1) % count,
+        (this.activeIndex - 1 + count) % count,
+      ];
+
+      neighborIndexes.forEach((idx) => {
+        const item = this.activeItems[idx];
+        if (!item) return;
+        const src = item.getSource();
+        if (!src || this.preloaded.has(src)) return;
+        this.preloaded.add(src);
+        const img = new Image();
+        img.src = src;
+      });
+    }
+
+    close() {
+      if (!this.overlay.classList.contains("is-active")) return;
+
+      this.overlay.classList.remove("is-active");
+      this.overlay.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("lightbox-open");
+      this._navLock = false;
+
+      this.detachGlobalHandlers();
+
+      if (this.thumbnailsEl) {
+        this.thumbnailsEl.hidden = true;
+      }
+
+      this.activeGroupId = null;
+      this.activeItems = [];
+      this.activeIndex = 0;
+
+      const toFocus = this.lastFocused;
+      this.lastFocused = null;
+      if (toFocus && typeof toFocus.focus === "function") {
+        setTimeout(() => toFocus.focus(), 0);
+      }
+    }
+
+    attachGlobalHandlers() {
+      if (this.boundHandlers) return;
+      this.keydownHandler = (event) => this.onKeydown(event);
+      this.focusHandler = (event) => this.handleFocusIn(event);
+      document.addEventListener("keydown", this.keydownHandler);
+      document.addEventListener("focusin", this.focusHandler);
+      this.boundHandlers = true;
+    }
+
+    detachGlobalHandlers() {
+      if (!this.boundHandlers) return;
+      if (this.keydownHandler) {
+        document.removeEventListener("keydown", this.keydownHandler);
+      }
+      if (this.focusHandler) {
+        document.removeEventListener("focusin", this.focusHandler);
+      }
+      this.boundHandlers = false;
+    }
+
+    onKeydown(event) {
+      if (!this.overlay.classList.contains("is-active")) return;
+
+      switch (event.key) {
+        case "Escape":
+          event.preventDefault();
+          this.close();
+          break;
+        case "ArrowRight":
+          event.preventDefault();
+          this.showNext();
+          break;
+        case "ArrowLeft":
+          event.preventDefault();
+          this.showPrevious();
+          break;
+        case "Home":
+          event.preventDefault();
+          this.showIndex(0);
+          break;
+        case "End":
+          event.preventDefault();
+          this.showIndex(this.activeItems.length - 1);
+          break;
+        default:
+          break;
+      }
+    }
+
+    handleFocusIn(event) {
+      if (!this.overlay.classList.contains("is-active")) return;
+      if (!this.shell) return;
+      if (this.shell.contains(event.target)) return;
+      this.focusPrimaryControl();
+    }
+
+    focusPrimaryControl() {
+      const target = this.closeButtons?.[0] || this.shell;
+      if (target && typeof target.focus === "function") {
+        target.focus({ preventScroll: true });
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const overlay = document.getElementById("lightbox");
+    if (!overlay) return;
+    const gallery = new LightboxGallery(overlay);
+    gallery.init();
+  });
+})();

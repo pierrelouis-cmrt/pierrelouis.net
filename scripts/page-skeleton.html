@@ -62,9 +62,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v194.css" as="style" />
+    <link rel="preload" href="/src/output-v207.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v194.css" />
+    <link rel="stylesheet" href="/src/output-v207.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -874,7 +874,9 @@
     </nav>
 
     <main>
-      <article>{{POST_HEADER}} {{CONTENT}}</article>
+      <article data-lightbox-group="{{LIGHTBOX_GROUP}}">
+        {{POST_HEADER}} {{CONTENT}}
+      </article>
     </main>
 
     <footer>
@@ -997,10 +999,93 @@
       </div>
     </footer>
 
-    <!-- Image lightbox -->
-    <div id="lightbox" class="image-lightbox">
-      <span class="image-lightbox-close" onclick="closeLightbox()">×</span>
-      <img id="lightbox-img" class="image-lightbox-content" loading="lazy" />
+    <div
+      id="lightbox"
+      class="image-lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+    >
+      <div class="image-lightbox__backdrop" data-lightbox-close></div>
+      <div class="image-lightbox__shell" role="document">
+        <button
+          type="button"
+          class="image-lightbox__close"
+          aria-label="Close gallery"
+          data-lightbox-close
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="18" x2="6" y1="6" y2="18" />
+            <line x1="6" x2="18" y1="6" y2="18" />
+          </svg>
+        </button>
+        <div class="image-lightbox__stage">
+          <button
+            type="button"
+            class="image-lightbox__nav image-lightbox__nav--prev"
+            aria-label="Previous image"
+            data-lightbox-prev
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <figure class="image-lightbox__figure">
+            <img
+              class="image-lightbox__image"
+              alt=""
+              decoding="async"
+              data-lightbox-active-image
+            />
+            <figcaption
+              class="image-lightbox__caption"
+              data-lightbox-caption
+            ></figcaption>
+          </figure>
+          <button
+            type="button"
+            class="image-lightbox__nav image-lightbox__nav--next"
+            aria-label="Next image"
+            data-lightbox-next
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="image-lightbox__thumbnail-bar"
+          role="list"
+          data-lightbox-thumbnails
+        ></div>
+      </div>
     </div>
 
     <!-- Prism.js for syntax highlighting -->

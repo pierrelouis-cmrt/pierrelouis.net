@@ -118,7 +118,18 @@ md.renderer.rules.image = (tokens, idx, opts, env, self) => {
     return `<video controls>\n<source src="${src}" type="video/${type}">\nYour browser does not support the video tag.\n</video>`;
   }
   token.attrSet("loading", "lazy");
-  token.attrSet("onclick", "openLightbox(this.src)");
+  token.attrSet("decoding", "async");
+
+  if (!token.attrGet("data-lightbox-item")) {
+    token.attrSet("data-lightbox-item", "");
+  }
+
+  if (!token.attrGet("data-lightbox-group") && env) {
+    const group = env.lightboxGroup || (env.slug ? `post-${env.slug}` : null);
+    if (group) {
+      token.attrSet("data-lightbox-group", group);
+    }
+  }
   return defaultImg(tokens, idx, opts, env, self);
 };
 
@@ -177,8 +188,12 @@ async function buildDir(srcDir, outDir) {
       continue;
     }
 
+    const slug = slugify(title);
     const rawMd = await readFile(path.join(srcDir, file), "utf8");
-    let rendered = md.render(preprocess(rawMd));
+    let rendered = md.render(preprocess(rawMd), {
+      slug,
+      lightboxGroup: `post-${slug}`,
+    });
 
     /* Normalize plugin-generated classes to article-* ------------------- */
     rendered = rendered
@@ -213,9 +228,10 @@ async function buildDir(srcDir, outDir) {
         "{{POST_HEADER}}",
         `<div class="article-meta-data"><h1>${title}</h1>\n<span class="article-publish-date">${dateStr}</span></div>`
       )
-      .replace("{{CONTENT}}", styledTasks);
+      .replace("{{CONTENT}}", styledTasks)
+      .replace(/{{LIGHTBOX_GROUP}}/g, `post-${slug}`);
 
-    const out = path.join(outDir, `${slugify(title)}.html`);
+    const out = path.join(outDir, `${slug}.html`);
     await writeFile(out, html);
     console.log("✔  built", path.relative(root, out));
   }

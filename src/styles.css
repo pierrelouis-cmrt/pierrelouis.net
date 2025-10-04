@@ -129,6 +129,11 @@ body {
   overflow-x: hidden;
 }
 
+body.lightbox-open {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
 main {
   min-height: 70vh;
   max-width: 600px;
@@ -1917,39 +1922,305 @@ hr.divider-thin {
   opacity: 0.9;
 }
 
-/* Lightbox */
+img[data-lightbox-item] {
+  cursor: zoom-in;
+}
+
+/* Lightbox overlay */
 .image-lightbox {
-  display: none;
   position: fixed;
   inset: 0;
-  z-index: 1000;
-  top: 0;
-  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(var(--space-4), 6vw, var(--space-8));
+  background: rgba(3, 4, 8, 0.6);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 160ms ease, visibility 160ms ease;
+  z-index: 1200;
+}
+
+.image-lightbox.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.image-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  cursor: zoom-out;
+}
+
+.image-lightbox__shell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-items: center;
+  justify-items: center;
+  width: min(82vw, 960px);
+  height: min(82vh, 680px);
+  padding: clamp(var(--space-3), 4vw, var(--space-5));
+  gap: clamp(var(--space-3), 3vw, var(--space-4));
+}
+
+.image-lightbox__close {
+  position: fixed;
+  top: clamp(var(--space-2), 2vw, var(--space-3));
+  right: clamp(var(--space-2), 2vw, var(--space-3));
+  width: clamp(44px, 5vw, 56px);
+  height: clamp(44px, 5vw, 56px);
+  padding: var(--space-2);
+  border: none;
+  background: none;
+  color: rgba(255, 255, 255, 0.85);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 150ms ease, color 150ms ease;
+  z-index: 1300;
+}
+
+.image-lightbox__close:hover,
+.image-lightbox__close:focus-visible {
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.image-lightbox__close:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.image-lightbox__close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.image-lightbox__stage {
+  position: relative;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.85);
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(var(--space-3), 3vw, var(--space-5));
+}
+
+.image-lightbox__figure {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-lightbox__image {
+  max-width: min(100%, 76vw);
+  max-height: min(100%, 72vh);
+  object-fit: contain;
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+
+.image-lightbox__caption {
+  display: none !important;
+}
+
+.image-lightbox__nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 clamp(44px, 5vw, 56px);
+  height: clamp(44px, 5vw, 56px);
+  padding: var(--space-2);
+  border: none;
+  background: none;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: transform 150ms ease, color 150ms ease;
+}
+
+.image-lightbox__nav:hover,
+.image-lightbox__nav:focus-visible {
+  color: #fff;
+}
+
+.image-lightbox__nav:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.45);
+  outline-offset: 2px;
+}
+
+.image-lightbox__nav svg {
+  width: clamp(20px, 3vw, 26px);
+  height: clamp(20px, 3vw, 26px);
+}
+
+.image-lightbox__nav--prev:hover {
+  transform: translateX(-3px);
+}
+
+.image-lightbox__nav--next:hover {
+  transform: translateX(3px);
+}
+
+.image-lightbox__nav[disabled] {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.image-lightbox__thumbnail-bar {
+  width: 100%;
+  display: flex;
   justify-content: center;
   align-items: center;
+  gap: var(--space-2);
+  overflow-x: auto;
+  padding: var(--space-1) var(--space-2);
+  scroll-padding-left: var(--space-2);
 }
 
-.image-lightbox.open {
-  display: flex;
+.image-lightbox__thumbnail-bar::-webkit-scrollbar {
+  height: 6px;
 }
 
-.image-lightbox-content {
-  max-width: 90%;
-  max-height: 90%;
-  object-fit: contain;
+.image-lightbox__thumbnail-bar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-full);
 }
 
-.image-lightbox-close {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  color: #fff;
-  font-size: 30px;
-  font-weight: bold;
+.image-lightbox__thumbnail {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 40px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0;
+  background: none;
   cursor: pointer;
+  transition: transform 120ms ease, border-color 120ms ease, opacity 120ms ease;
+  opacity: 0.6;
+  overflow: hidden;
+}
+
+.image-lightbox__thumbnail img {
+  display: block;
+  max-height: 48px;
+  max-width: 72px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: inherit;
+}
+
+.image-lightbox__thumbnail:hover {
+  transform: translateY(-2px);
+  opacity: 0.85;
+}
+
+.image-lightbox__thumbnail:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+.image-lightbox__thumbnail.is-active {
+  border-color: rgba(255, 255, 255, 0.8);
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .image-lightbox__shell {
+    width: min(90vw, 720px);
+    height: min(82vh, 620px);
+  }
+}
+
+@media (max-width: 620px) {
+  .image-lightbox {
+    padding: var(--space-3);
+  }
+
+  .image-lightbox__shell {
+    width: min(94vw, 640px);
+    height: calc(100vh - 2 * var(--space-3));
+    max-height: 96vh;
+    padding: var(--space-3);
+    gap: var(--space-3);
+  }
+
+  .image-lightbox__stage {
+    display: grid;
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-rows: minmax(0, 1fr) auto;
+    column-gap: var(--space-2);
+    row-gap: var(--space-2);
+    align-items: center;
+    justify-items: center;
+  }
+
+  .image-lightbox__figure {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    width: 100%;
+    align-self: stretch;
+    justify-self: center;
+  }
+
+  .image-lightbox__image {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .image-lightbox__nav {
+    width: clamp(44px, 14vw, 56px);
+    height: clamp(44px, 14vw, 56px);
+    padding: 0;
+  }
+
+  .image-lightbox__nav--prev {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: center;
+    justify-self: center;
+  }
+
+  .image-lightbox__nav--next {
+    grid-column: 3;
+    grid-row: 2;
+    align-self: center;
+    justify-self: center;
+  }
+
+  .image-lightbox__thumbnail-bar {
+    width: 100%;
+    justify-content: center;
+    padding: var(--space-1) 0;
+    gap: var(--space-2);
+    overflow-x: auto;
+    scroll-padding-left: var(--space-2);
+  }
+
+  .image-lightbox__nav svg {
+    width: clamp(18px, 6vw, 22px);
+    height: clamp(18px, 6vw, 22px);
+  }
 }
 
 /* -------- Arsenal (Uses) Page -------- */
@@ -2711,57 +2982,6 @@ article .article-embed {
 
 .pixels-embed {
   height: 600px !important;
-}
-
-/* Lightbox */
-.image-lightbox {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.9);
-  z-index: 9999;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(4px);
-}
-
-.image-lightbox.active {
-  display: flex;
-}
-
-.image-lightbox img {
-  max-width: 90vw;
-  max-height: 90vh;
-  object-fit: contain;
-  border: none;
-  margin: 0;
-  cursor: default;
-}
-
-.image-lightbox-close {
-  position: absolute;
-  top: var(--space-8);
-  right: var(--space-8);
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
-  font-size: var(--text-5xl);
-  padding-bottom: var(--space-1);
-  cursor: pointer;
-  width: var(--space-12);
-  height: var(--space-12);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 120ms ease-in-out;
-}
-
-.image-lightbox-close:hover {
-  background: rgba(255, 255, 255, 0.2);
 }
 
 article video {
