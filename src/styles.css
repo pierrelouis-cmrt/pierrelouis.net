@@ -413,11 +413,9 @@ a.link-with-icon:not(:hover) .lucide {
 /* Back button */
 
 .back {
-  width: 16px;
-  height: 16px;
-  margin-right: var(--space-2);
+  height: calc(1lh - 6px);
+  margin-right: var(--space-1);
   color: inherit;
-  transform: translateY(1px);
   margin-left: 0 !important;
 }
 
