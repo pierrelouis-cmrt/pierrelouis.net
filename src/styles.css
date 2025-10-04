@@ -1412,7 +1412,7 @@ hr.divider-thin {
 }
 
 .about-page p {
-  text-align: justify;
+  text-align: left;
 }
 
 .contact-link-inline {
