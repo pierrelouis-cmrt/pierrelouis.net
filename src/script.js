@@ -467,6 +467,8 @@ document.addEventListener("keydown", (e) => {
       this.activeIndex = 0;
       this.lastFocused = null;
       this.boundHandlers = false;
+      this.metaThemeOriginal = null;
+      this.themeColorApplied = false;
 
       if (this.shell && !this.shell.hasAttribute("tabindex")) {
         this.shell.setAttribute("tabindex", "-1");
@@ -580,6 +582,7 @@ document.addEventListener("keydown", (e) => {
       this.overlay.classList.add("is-active");
       this.overlay.setAttribute("aria-hidden", "false");
       document.body.classList.add("lightbox-open");
+      this.applyThemeColor();
 
       this.buildThumbnails();
       this.showIndex(this.activeIndex, { focusThumbnail: false });
@@ -756,6 +759,7 @@ document.addEventListener("keydown", (e) => {
       this.overlay.classList.remove("is-active");
       this.overlay.setAttribute("aria-hidden", "true");
       document.body.classList.remove("lightbox-open");
+      this.resetThemeColor();
       this._navLock = false;
 
       this.detachGlobalHandlers();
@@ -836,6 +840,36 @@ document.addEventListener("keydown", (e) => {
       if (target && typeof target.focus === "function") {
         target.focus({ preventScroll: true });
       }
+    }
+
+    ensureMetaThemeTag() {
+      let meta = document.querySelector("meta[name='theme-color']");
+      if (!meta) {
+        meta = document.createElement("meta");
+        meta.name = "theme-color";
+        document.head.appendChild(meta);
+      }
+      return meta;
+    }
+
+    applyThemeColor() {
+      const meta = this.ensureMetaThemeTag();
+      if (!this.themeColorApplied) {
+        this.metaThemeOriginal = meta.content || "";
+      }
+      meta.content = "#0f0f0f";
+      this.themeColorApplied = true;
+    }
+
+    resetThemeColor() {
+      if (!this.themeColorApplied) return;
+      const meta = document.querySelector("meta[name='theme-color']");
+      if (meta) {
+        const fallback = this.metaThemeOriginal ?? "#ffffff";
+        meta.content = fallback || "#ffffff";
+      }
+      this.themeColorApplied = false;
+      this.metaThemeOriginal = null;
     }
   }
 
