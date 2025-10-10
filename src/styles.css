@@ -1884,13 +1884,15 @@ hr.divider-thin {
 
 .project-action-button svg {
   transition: transform 0.2s ease;
+  color: currentColor !important;
 }
 
 .project-action-button:hover svg {
   transform: translateX(2px);
 }
 
-.project-action-button.visit {
+.project-action-button.visit,
+.project-action-button.visit svg {
   color: var(--text-subtle);
 }
 
