@@ -1142,6 +1142,13 @@
       </div>
     </main>
 
+    <footer class="tech-stack-footer">
+      <div class="tech-stack-footer-dots">
+        <span></span><span></span><span></span>
+      </div>
+      <p class="last-updated"></p>
+    </footer>
+
     <footer>
       <div class="hero-links">
         <p>
@@ -1350,6 +1357,21 @@
         ></div>
       </div>
     </div>
+
+    <script>
+      fetch(window.location.href).then((response) => {
+        const lastModified = response.headers.get("Last-Modified");
+        if (lastModified) {
+          const footerText = document.querySelector(".last-updated");
+          footerText.innerHTML = `<br>Last updated: ${new Date(
+            lastModified
+          ).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+          })}`;
+        }
+      });
+    </script>
 
     <script defer src="/src/script.js"></script>
     <script defer src="carousel.js"></script>
