@@ -184,7 +184,7 @@ body strong {
 
 body em {
   font-family: var(--font-serif);
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   letter-spacing: normal;
   line-height: normal;
 }
