@@ -457,6 +457,7 @@
       openDuration: 420,
       closeDuration: 260,
       animationCurve: 'cubic-bezier(0.16, 1, 0.3, 1)',
+      drawerHeight: null,
       openFrame: null,
       settleTimer: null,
       themeTimer: null,
@@ -498,6 +499,7 @@
           self.themeTimer = null;
         }
 
+        self.drawerHeight = null;
         self.drawerOpen = true;
         self.isAnimating = true;
         self.translateY = 100;
@@ -524,6 +526,14 @@
               self.isAnimating = false;
               self.settleTimer = null;
             }, self.openDuration);
+            self.$nextTick(() => {
+              if (self.drawerHeight === null) {
+                const drawer = self.$refs.drawerContainer;
+                if (drawer) {
+                  self.drawerHeight = drawer.getBoundingClientRect().height;
+                }
+              }
+            });
           });
         });
 
@@ -580,6 +590,7 @@
             document.body.style.width = '';
           }
           self.searchQuery = '';
+          self.drawerHeight = null;
           self.settleTimer = null;
         }, self.closeDuration);
       },
@@ -689,6 +700,19 @@
 
         const duration = this.isAnimating ? this.openDuration : this.closeDuration;
         return `transform ${duration}ms ${this.animationCurve}`;
+      },
+
+      drawerStyles() {
+        const styles = {
+          transform: `translateY(${Math.max(0, this.translateY)}%)`,
+          transition: this.transitionStyle(),
+        };
+
+        if (this.drawerHeight !== null) {
+          styles.height = `${this.drawerHeight}px`;
+        }
+
+        return styles;
       }
     }"
                 x-init="
@@ -736,9 +760,10 @@
                   @mousemove="onDrag"
                   @mouseup="endDrag"
                   @mouseleave="endDrag"
-                  :style="`transform: translateY(${Math.max(0, translateY)}%); transition: ${transitionStyle()}`"
+                  :style="drawerStyles()"
                   :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'ring-1 ring-white/10' : ''"
                   class="absolute bottom-0 left-0 right-0 bg-[var(--bg-primary)] rounded-t-[28px] shadow-2xl max-h-[75vh] flex flex-col"
+                  x-ref="drawerContainer"
                   style="
                     will-change: transform;
                     padding-bottom: env(safe-area-inset-bottom);
@@ -866,7 +891,7 @@
                     <!-- Empty State -->
                     <div
                       x-show="allItems.length === 0"
-                      class="text-center py-16"
+                      class="text-center pt-6 pb-12"
                     >
                       <p class="text-[var(--text-subtle)] text-sm">
                         No results found
