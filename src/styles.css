@@ -2234,8 +2234,8 @@ img[data-lightbox-item] {
   max-width: 600px;
 }
 
-/* Footer */
-.tech-stack-footer {
+/* Last Updated block */
+.last-updated-block {
   max-width: 600px;
   margin: var(--space-16) auto var(--space-8);
   text-align: center;
@@ -2243,13 +2243,13 @@ img[data-lightbox-item] {
   transition: border-color 400ms ease-in-out;
 }
 
-.tech-stack-footer-dots {
+.last-updated-block__dots {
   display: flex;
   justify-content: center;
   gap: var(--space-2);
 }
 
-.tech-stack-footer-dots span {
+.last-updated-block__dots span {
   width: 3px;
   height: 3px;
   background: var(--text-subtle);

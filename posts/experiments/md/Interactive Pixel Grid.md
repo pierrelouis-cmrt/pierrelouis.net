@@ -28,7 +28,8 @@ We pick a “gap” size that makes this number roughly 10,000:
 
 $\text{gap} \approx \sqrt{\frac{\text{width} \times \text{height}}{10{,}000}}$
 
-Bigger screens → bigger gaps → fewer rows and columns. Smaller screens → smaller gaps → more rows and columns.
+Bigger screens → bigger gaps → fewer rows and columns.
+Smaller screens → smaller gaps → more rows and columns.
 
 And here’s the little function that does exactly that:
 
