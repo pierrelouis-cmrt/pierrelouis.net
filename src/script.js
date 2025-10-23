@@ -270,6 +270,9 @@ window.COMMAND_ITEMS_DATA = {
       default: true,
     },
   ],
+  articles: [],
+  notes: [],
+  experiments: [],
 };
 
 window.COMMAND_ACTION_MAP = {
@@ -298,6 +301,134 @@ window.SHORTCUT_MAP = {
   l: "/links",
   e: "mailto:contact@pierrelouis.net?subject=Hi,%20I'm%20....%20and...%20",
 };
+
+const COMMAND_POST_CATEGORY_MAP = {
+  Articles: { key: "articles", dir: "articles" },
+  Notes: { key: "notes", dir: "notes" },
+  Experiments: { key: "experiments", dir: "experiments" },
+};
+
+const COMMAND_POST_ICONS = {
+  Articles:
+    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-notebook-pen w-4 h-4 mr-1 sm:mr-2"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"/><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><path d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/></svg>',
+  Notes:
+    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sticky-note w-4 h-4 mr-1 sm:mr-2"><path d="M15 2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9Z"/><path d="M15 2v6a2 2 0 0 0 2 2h6"/><path d="M9 10h6"/><path d="M9 14h6"/></svg>',
+  Experiments:
+    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flask-conical w-4 h-4 mr-1 sm:mr-2"><path d="M10 2v6a2 2 0 0 1-.3 1.05L4.3 18.9A2 2 0 0 0 6.03 22h11.94a2 2 0 0 0 1.73-3.1l-5.4-9.85A2 2 0 0 1 14 8V2"/><path d="M14 16h-4"/><path d="M14 12h-4"/></svg>',
+};
+
+(() => {
+  const postsEndpoint = "/posts/posts.json";
+  const now = () => new Date();
+
+  const monthIndex = (month) => {
+    if (!month) return NaN;
+    return new Date(`${month} 1 2000`).getMonth();
+  };
+
+  const slugify = (text) =>
+    text
+      .toLowerCase()
+      .replace(/[^a-z0-9 _-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-");
+
+  const ensureBuckets = () => {
+    Object.values(COMMAND_POST_CATEGORY_MAP).forEach(({ key }) => {
+      if (!Array.isArray(window.COMMAND_ITEMS_DATA[key])) {
+        window.COMMAND_ITEMS_DATA[key] = [];
+      }
+    });
+  };
+
+  const integratePosts = (posts) => {
+    ensureBuckets();
+
+    const today = now();
+    const added = [];
+
+    const sorted = [...posts].sort(
+      (a, b) =>
+        (b.year || 0) - (a.year || 0) ||
+        monthIndex(b.month) - monthIndex(a.month) ||
+        (b.day || 0) - (a.day || 0)
+    );
+
+    sorted.forEach((post) => {
+      if (!post || !post.title || !post.tag) return;
+
+      const categoryMeta = COMMAND_POST_CATEGORY_MAP[post.tag];
+      if (!categoryMeta) return;
+
+      const { key, dir } = categoryMeta;
+      const slug = slugify(post.title);
+      const value = `post-${key}-${slug}`;
+
+      if (window.COMMAND_ACTION_MAP[value]) return;
+
+      const postDate = new Date(
+        `${post.month || "Jan"} ${post.day || 1} ${post.year || today.getFullYear()}`
+      );
+      if (Number.isNaN(postDate) || postDate > today) return;
+
+      const iconMarkup = COMMAND_POST_ICONS[post.tag] || COMMAND_POST_ICONS.Articles;
+      const url = `/posts/${dir}/${slug}.html`;
+      const right =
+        post.month && post.year ? `${post.month} ${post.year}` : undefined;
+
+      const item = {
+        title: post.title,
+        value,
+        icon: iconMarkup,
+        default: false,
+      };
+
+      if (right) {
+        item.right = right;
+      }
+
+      window.COMMAND_ITEMS_DATA[key].push(item);
+      window.COMMAND_ACTION_MAP[value] = url;
+      added.push(item);
+    });
+
+    if (added.length > 0) {
+      window.dispatchEvent(
+        new CustomEvent("command-palette-data-updated", {
+          detail: { source: "posts", count: added.length },
+        })
+      );
+    }
+  };
+
+  let postsPromise = null;
+
+  window.loadCommandPalettePosts = () => {
+    if (postsPromise) {
+      return postsPromise;
+    }
+
+    postsPromise = fetch(postsEndpoint, { credentials: "same-origin" })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to load posts.json: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((posts) => {
+        if (Array.isArray(posts)) {
+          integratePosts(posts);
+        }
+      })
+      .catch((error) => {
+        console.error("[CommandPalette] Unable to load posts JSON", error);
+      });
+
+    return postsPromise;
+  };
+
+  window.loadCommandPalettePosts();
+})();
 
 // Global keyboard shortcut to toggle the command palette
 document.addEventListener("keydown", (e) => {
