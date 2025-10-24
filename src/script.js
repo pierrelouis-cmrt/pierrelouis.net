@@ -212,8 +212,15 @@ window.COMMAND_ITEMS_DATA = {
     {
       title: "Now (What am I upto at the moment?)",
       value: "now",
-      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hourglass w-4 h-4 mr-1 sm:mr-2"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>',
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock3-icon lucide-clock-3 w-4 h-4 mr-1 sm:mr-2"><path d="M12 6v6h4"/><circle cx="12" cy="12" r="10"/></svg>',
       right: "N + N",
+      default: true,
+    },
+    {
+      title: "Someday (Someday I will...)",
+      value: "someday",
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hourglass-icon lucide-hourglass w-4 h-4 mr-1 sm:mr-2"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>',
+      right: "N + S",
       default: true,
     },
     {
@@ -228,6 +235,13 @@ window.COMMAND_ITEMS_DATA = {
       value: "uses",
       icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-drafting-compass w-4 h-4 mr-1 sm:mr-2"><path d="m12.99 6.74 1.93 3.44"/><path d="M19.136 12a10 10 0 0 1-14.271 0"/><path d="m21 21-2.16-3.84"/><path d="m3 21 8.02-14.26"/><circle cx="12" cy="5" r="2"/></svg>',
       right: "N + U",
+      default: true,
+    },
+    {
+      title: "Photos (Some of my best shots)",
+      value: "photos",
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-camera-icon lucide-camera w-4 h-4 mr-1 sm:mr-2"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/></svg>',
+      right: "N + P",
       default: true,
     },
     {
@@ -367,11 +381,14 @@ const COMMAND_POST_ICONS = {
       if (window.COMMAND_ACTION_MAP[value]) return;
 
       const postDate = new Date(
-        `${post.month || "Jan"} ${post.day || 1} ${post.year || today.getFullYear()}`
+        `${post.month || "Jan"} ${post.day || 1} ${
+          post.year || today.getFullYear()
+        }`
       );
       if (Number.isNaN(postDate) || postDate > today) return;
 
-      const iconMarkup = COMMAND_POST_ICONS[post.tag] || COMMAND_POST_ICONS.Articles;
+      const iconMarkup =
+        COMMAND_POST_ICONS[post.tag] || COMMAND_POST_ICONS.Articles;
       const url = `/posts/${dir}/${slug}.html`;
       const right =
         post.month && post.year ? `${post.month} ${post.year}` : undefined;
@@ -610,7 +627,8 @@ document.addEventListener("keydown", (e) => {
       html.classList.contains("dark") ? "dark" : "light"
     ];
 
-  const applyThemeColor = () => ensureMeta().setAttribute("content", resolveColor());
+  const applyThemeColor = () =>
+    ensureMeta().setAttribute("content", resolveColor());
 
   const scheduleThemeColor = () => {
     applyThemeColor();
@@ -633,8 +651,12 @@ document.addEventListener("keydown", (e) => {
   };
 
   const startWatchers = () => {
-    if (!state.observer) state.observer = new MutationObserver(scheduleThemeColor);
-    state.observer.observe(html, { attributes: true, attributeFilter: ["class"] });
+    if (!state.observer)
+      state.observer = new MutationObserver(scheduleThemeColor);
+    state.observer.observe(html, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
 
     if (!state.mediaQuery && window.matchMedia) {
       try {
@@ -827,7 +849,9 @@ document.addEventListener("keydown", (e) => {
           getThumb: () =>
             trigger.dataset.lightboxThumb || trigger.currentSrc || trigger.src,
           getCaption: () =>
-            trigger.dataset.lightboxCaption || trigger.getAttribute("alt") || "",
+            trigger.dataset.lightboxCaption ||
+            trigger.getAttribute("alt") ||
+            "",
         };
 
         item.index = groupItems.length;
@@ -1029,9 +1053,7 @@ document.addEventListener("keydown", (e) => {
           thumbImg.src = thumbSrc;
         }
         const caption = item.getCaption().trim();
-        thumbImg.alt = caption
-          ? `${caption} thumbnail`
-          : `Image ${idx + 1}`;
+        thumbImg.alt = caption ? `${caption} thumbnail` : `Image ${idx + 1}`;
 
         button.appendChild(thumbImg);
         button.addEventListener("click", (event) => {
@@ -1217,7 +1239,9 @@ document.addEventListener("keydown", (e) => {
 
     startThemeWatchers() {
       if (!this.themeObserver) {
-        this.themeObserver = new MutationObserver(() => this.updateThemeColor());
+        this.themeObserver = new MutationObserver(() =>
+          this.updateThemeColor()
+        );
         this.themeObserver.observe(document.documentElement, {
           attributes: true,
           attributeFilter: ["class"],
@@ -1229,7 +1253,9 @@ document.addEventListener("keydown", (e) => {
       }
       if (!this.prefersDarkMedia && window.matchMedia) {
         try {
-          this.prefersDarkMedia = window.matchMedia("(prefers-color-scheme: dark)");
+          this.prefersDarkMedia = window.matchMedia(
+            "(prefers-color-scheme: dark)"
+          );
         } catch (error) {
           this.prefersDarkMedia = null;
         }
