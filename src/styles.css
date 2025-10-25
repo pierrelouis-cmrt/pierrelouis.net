@@ -660,14 +660,16 @@ a.project-card:not(:hover) .lucide {
   transition: all 120ms ease-in-out, transition-delay 120ms;
 }
 
-.projects-view-all-link {
+.projects-view-all-link,
+.photos-view-all-link {
   border-radius: var(--radius-full);
   border: 2px solid var(--border-light);
   padding: 4px var(--space-3);
   transition: all 120ms ease-in-out;
 }
 
-.projects-view-all-link:hover {
+.projects-view-all-link:hover,
+.photos-view-all-link:hover {
   border: 2px solid var(--border-light-hover);
 }
 
@@ -1577,7 +1579,7 @@ hr.divider-thin {
   margin-left: calc(50% - 50vw) !important;
   height: clamp(250px, 40vw, 400px);
   cursor: grab;
-  margin-bottom: var(--space-16);
+  margin-bottom: var(--space-4);
 }
 .swiper:active {
   cursor: grabbing;
@@ -1663,6 +1665,16 @@ hr.divider-thin {
 .pagination-indicator.edge.active {
   transform: scale(0.9);
   opacity: 1;
+}
+
+.photos-view-all {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto var(--space-12) auto;
+}
+
+.photos-view-all-link {
+  margin: 0 auto !important;
 }
 
 /* About */
