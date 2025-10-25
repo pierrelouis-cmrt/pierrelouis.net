@@ -3748,7 +3748,7 @@ mjx-container::-webkit-scrollbar-thumb {
   }
 }
 
-@media (max-width: 370px) {
+@media (max-width: 371px) {
   .more-panel .more-links {
     grid-template-columns: 1fr;
   }
