@@ -3788,6 +3788,14 @@ mjx-container::-webkit-scrollbar-thumb {
     padding: 0 !important;
   }
 
+  .photos-gallery-grid {
+    gap: var(--space-3);
+  }
+
+  .photos-gallery-column {
+    gap: var(--space-3);
+  }
+
   .photos-back-button {
     margin-left: var(--space-5) !important;
     margin-right: var(--space-5) !important;
