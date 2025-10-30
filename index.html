@@ -207,7 +207,7 @@
                 x-data="{}"
                 x-init="$watch('commandOpen', value => document.body.classList.toggle('overflow-hidden', value))"
                 x-show="commandOpen && window.innerWidth >= 768"
-                class="fixed inset-0 z-[99] flex items-center justify-center w-screen h-screen pointer-events-auto"
+                class="fixed inset-0 z-[99] flex items-start justify-center pt-[5vh] w-screen h-screen pointer-events-auto"
                 @click="commandOpen = false"
                 x-cloak
               >
