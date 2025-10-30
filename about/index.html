@@ -62,9 +62,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-v228.css" as="style" />
+    <link rel="preload" href="/src/output-v229.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v228.css" />
+    <link rel="stylesheet" href="/src/output-v229.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -117,12 +117,12 @@
           <div
             x-data="{ 
       commandOpen: false,
-      isTouchDevice: 'ontouchstart' in window,
+      isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
       isMac: /(Mac|iPhone|iPad|iPod)/i.test(navigator.platform) || (navigator.maxTouchPoints > 1 && /Mac/i.test(navigator.platform))
     }"
             x-init="
       $watch('commandOpen', function(value){
-        if(value === true){
+        if(value === true && !isTouchDevice){
           $nextTick(() => { window.dispatchEvent(new CustomEvent('command-input-focus')); });
         }
       })
@@ -173,14 +173,19 @@
             <template x-teleport="body">
               <div
                 x-data="{}"
-                x-init="$watch('commandOpen', value => document.body.classList.toggle('overflow-hidden', value))"
-                x-show="commandOpen && window.innerWidth >= 768"
+                x-init="$watch('commandOpen', value => {
+        const touch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+        if (!touch) {
+          document.body.classList.toggle('overflow-hidden', value);
+        }
+      })"
+                x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
                 class="fixed inset-0 z-[99] flex items-start justify-center pt-[15vh] w-screen h-screen pointer-events-auto"
                 @click="commandOpen = false"
                 x-cloak
               >
                 <div
-                  x-show="commandOpen && window.innerWidth >= 768"
+                  x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
                   x-transition:enter="ease-out duration-150"
                   x-transition:enter-start="opacity-0"
                   x-transition:enter-end="opacity-100"
@@ -191,7 +196,7 @@
                 ></div>
 
                 <div
-                  x-show="commandOpen && window.innerWidth >= 768"
+                  x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
                   x-transition:enter="ease-out duration-150 transform"
                   x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                   x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
@@ -206,7 +211,7 @@
         commandItemSelected: null,
         commandId: $id('command'),
         commandSearch: '',
-        isTouchDevice: 'ontouchstart' in window,
+        isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
         itemsCache: {},
 
         commandSearchIsEmpty() {
@@ -461,6 +466,7 @@
               <div
                 x-data="{
       drawerOpen: false,
+      isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
       dragStartY: 0,
       currentY: 0,
       translateY: 100,
@@ -724,8 +730,11 @@
 
       drawerStyles() {
         const styles = {
-          transform: `translateY(${Math.max(0, this.translateY)}%)`,
+          transform: `translate3d(-50%, ${Math.max(0, this.translateY)}%, 0)`,
           transition: this.transitionStyle(),
+          left: '50%',
+          maxWidth: '640px',
+          width: '100%',
         };
 
         if (this.drawerHeight !== null) {
@@ -741,7 +750,7 @@
       window.loadCommandPalettePosts && window.loadCommandPalettePosts().catch(() => {});
 
       $watch('commandOpen', value => {
-        if (value && window.innerWidth < 768) {
+        if (value && (window.innerWidth < 768 || isTouchDevice)) {
           commandOpen = false;
           openDrawer();
         }
@@ -756,7 +765,7 @@
     "
                 x-show="drawerOpen"
                 @click="closeDrawer()"
-                class="md:hidden fixed inset-0 z-[100] touch-none"
+                class="fixed inset-0 z-[100] touch-none"
                 x-cloak
               >
                 <!-- Backdrop with better dark mode contrast -->
@@ -786,7 +795,7 @@
                   @mouseleave="endDrag"
                   :style="drawerStyles()"
                   :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'ring-1 ring-white/10' : ''"
-                  class="absolute bottom-0 left-0 right-0 bg-[var(--bg-primary)] rounded-t-[28px] shadow-2xl max-h-[75vh] flex flex-col"
+                  class="absolute bottom-0 w-full bg-[var(--bg-primary)] rounded-t-[28px] shadow-2xl max-h-[75vh] flex flex-col"
                   x-ref="drawerContainer"
                   style="
                     will-change: transform;
