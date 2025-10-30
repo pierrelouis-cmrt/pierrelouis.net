@@ -1,5 +1,5 @@
 // Photos Page JavaScript
-// Handles photo gallery filtering, display, and lightbox integration
+// Handles photo gallery filtering and display
 
 (function () {
   'use strict';
@@ -100,6 +100,7 @@
   function init() {
     updateCounts();
     attachEventListeners();
+    document.body.classList.remove('gallery-open');
   }
 
   // Update photo counts
@@ -169,6 +170,7 @@
     currentView = 'home';
     homeView.style.display = 'block';
     galleryView.style.display = 'none';
+    document.body.classList.remove('gallery-open');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -182,8 +184,8 @@
                          filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
     galleryTitle.textContent = displayValue;
 
-    // Get filtered photos
-    const photos = getFilteredPhotos(filterType, filterValue);
+    // Get filtered photos in a random order for each view
+    const photos = shufflePhotos(getFilteredPhotos(filterType, filterValue));
 
     // Render gallery
     renderGallery(photos);
@@ -191,6 +193,7 @@
     // Show gallery view
     homeView.style.display = 'none';
     galleryView.style.display = 'block';
+    document.body.classList.add('gallery-open');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -229,6 +232,18 @@
     return photos;
   }
 
+  // Shuffle photos to vary the gallery order on each open
+  function shufflePhotos(photos) {
+    const shuffled = photos.slice();
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = shuffled[i];
+      shuffled[i] = shuffled[j];
+      shuffled[j] = temp;
+    }
+    return shuffled;
+  }
+
   // Render gallery in 2-column masonry layout
   function renderGallery(photos) {
     galleryGrid.innerHTML = '';
@@ -251,9 +266,6 @@
 
     galleryGrid.appendChild(column1);
     galleryGrid.appendChild(column2);
-
-    // Initialize lightbox for the current selection
-    initializeLightboxForGallery(photos);
   }
 
   // Create photo item element
@@ -265,32 +277,8 @@
     img.src = photo.src;
     img.alt = `${photo.category} photo from ${photo.trip}`;
     img.loading = 'lazy';
-    img.dataset.lightboxIndex = index;
-    img.dataset.lightboxGroup = 'current-gallery';
-
     item.appendChild(img);
     return item;
-  }
-
-  // Initialize lightbox for current gallery
-  function initializeLightboxForGallery(photos) {
-    // Wait for the existing lightbox to be available
-    if (window.PhotoLightbox) {
-      // Prepare photo data for lightbox
-      const lightboxPhotos = photos.map(photo => ({
-        src: photo.src,
-        alt: `${photo.category} photo from ${photo.trip}`
-      }));
-
-      // Initialize lightbox with the current gallery photos
-      const lightboxInstance = new window.PhotoLightbox({
-        selector: '[data-lightbox-group="current-gallery"]',
-        photos: lightboxPhotos
-      });
-    } else {
-      // Fallback: use the existing lightbox initialization
-      setTimeout(() => initializeLightboxForGallery(photos), 100);
-    }
   }
 
   // Initialize when DOM is ready

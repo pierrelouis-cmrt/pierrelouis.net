@@ -2804,9 +2804,18 @@ img[data-lightbox-item] {
 
 /* -------- Photos Page -------- */
 
+.gallery-open .site-navigation,
+.gallery-open footer {
+  display: none;
+}
+
 .photos-view {
   max-width: 600px;
   margin: 0 auto;
+}
+
+#photos-gallery-view {
+  padding: var(--space-16) 0 !important;
 }
 
 .photos-intro {
@@ -2854,12 +2863,12 @@ img[data-lightbox-item] {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  max-width: 240px;
 }
 
 .photo-trip-card:hover {
   border-color: var(--border-secondary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background-color: var(--bg-hover);
 }
 
 .dark .photo-trip-card:hover {
@@ -2886,18 +2895,20 @@ img[data-lightbox-item] {
 
 .photo-trip-info {
   padding: var(--space-3) var(--space-4);
-  text-align: left;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .photo-trip-info h4 {
   font-size: var(--text-base);
   font-weight: var(--font-medium);
   color: var(--text-primary);
-  margin: 0 0 var(--space-1);
 }
 
 .photo-trip-count {
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   color: var(--text-subtle);
 }
 
@@ -2912,7 +2923,7 @@ img[data-lightbox-item] {
 
 .photos-divider::before,
 .photos-divider::after {
-  content: '';
+  content: "";
   flex: 1;
   height: 1px;
   background: var(--border-light);
@@ -2942,7 +2953,7 @@ img[data-lightbox-item] {
   padding: var(--space-4);
   background: none;
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   cursor: pointer;
   transition: all 150ms ease-in-out;
   text-align: left;
@@ -2955,6 +2966,8 @@ img[data-lightbox-item] {
 }
 
 .photo-category-button svg {
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
   color: var(--text-subtle);
   transition: color 150ms ease-in-out;
@@ -2972,7 +2985,7 @@ img[data-lightbox-item] {
 }
 
 .photo-category-count {
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   color: var(--text-subtle);
 }
 
@@ -2985,7 +2998,7 @@ img[data-lightbox-item] {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-1) var(--space-2);
   background: none;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-full);
@@ -3034,12 +3047,7 @@ img[data-lightbox-item] {
   position: relative;
   overflow: hidden;
   border-radius: var(--radius-lg);
-  cursor: pointer;
   transition: transform 200ms ease-in-out;
-}
-
-.photos-gallery-item:hover {
-  transform: translateY(-2px);
 }
 
 .photos-gallery-item img {
@@ -3048,70 +3056,6 @@ img[data-lightbox-item] {
   display: block;
   border-radius: var(--radius-lg);
   transition: transform 300ms ease-in-out;
-}
-
-.photos-gallery-item:hover img {
-  transform: scale(1.02);
-}
-
-/* Responsive Adjustments */
-@media screen and (max-width: 640px) {
-  .photos-trip-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-3);
-  }
-
-  .photo-trip-card {
-    border-radius: var(--radius-lg);
-  }
-
-  .photo-trip-info {
-    padding: var(--space-2) var(--space-3);
-  }
-
-  .photo-trip-info h4 {
-    font-size: var(--text-sm);
-  }
-
-  .photo-trip-count,
-  .photo-category-count {
-    font-size: var(--text-xs);
-  }
-
-  .photos-filter-title {
-    font-size: var(--text-lg);
-  }
-
-  .photos-gallery-grid {
-    gap: var(--space-3);
-  }
-
-  .photos-gallery-column {
-    gap: var(--space-3);
-  }
-
-  .photos-gallery-item {
-    border-radius: var(--radius-md);
-  }
-
-  .photos-gallery-item img {
-    border-radius: var(--radius-md);
-  }
-
-  .photos-gallery-title {
-    font-size: var(--text-3xl);
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .photos-trip-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .photo-trip-card {
-    max-width: 280px;
-    margin: 0 auto;
-  }
 }
 
 /* -------- Article Styles -------- */
@@ -3811,7 +3755,11 @@ mjx-container::-webkit-scrollbar-thumb {
   .article-embed,
   .project-action-buttons,
   .project-tech-stack,
-  .social-platforms-grid {
+  .social-platforms-grid,
+  .photos-trip-grid,
+  .photos-divider,
+  .photos-category-list,
+  .photos-gallery-grid {
     padding: 0 var(--space-5) !important;
   }
 
@@ -3828,6 +3776,15 @@ mjx-container::-webkit-scrollbar-thumb {
   article li p {
     padding-left: 0 !important;
     padding-right: 0 !important;
+  }
+
+  .photo-trip-info h4 {
+    padding: 0 !important;
+  }
+
+  .photos-back-button {
+    margin-left: var(--space-5) !important;
+    margin-right: var(--space-5) !important;
   }
 
   .credits-grid {
@@ -4285,5 +4242,12 @@ mjx-container::-webkit-scrollbar-thumb {
 @media (min-width: 640px) {
   .full-year {
     display: none;
+  }
+}
+
+@media (max-width: 375px) {
+  .photo-trip-card {
+    max-width: 100% !important;
+    max-height: 160px !important;
   }
 }
