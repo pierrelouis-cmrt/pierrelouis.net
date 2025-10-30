@@ -110,9 +110,9 @@
       type="image/webp"
       fetchpriority="high"
     />
-    <link rel="preload" href="/src/output-v227.css" as="style" />
+    <link rel="preload" href="/src/output-v228.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-v227.css" />
+    <link rel="stylesheet" href="/src/output-v228.css" />
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
@@ -207,7 +207,7 @@
                 x-data="{}"
                 x-init="$watch('commandOpen', value => document.body.classList.toggle('overflow-hidden', value))"
                 x-show="commandOpen && window.innerWidth >= 768"
-                class="fixed inset-0 z-[99] flex items-center justify-center w-screen h-screen pointer-events-auto"
+                class="fixed inset-0 z-[99] flex items-start justify-center pt-[15vh] w-screen h-screen pointer-events-auto"
                 @click="commandOpen = false"
                 x-cloak
               >
@@ -400,7 +400,7 @@
                   @click.stop
                 >
                   <div
-                    class="box-border border-2 border-[var(--border-secondary)] flex flex-col min-h-0 max-h-[90vh] w-full p-2 bg-[var(--bg-primary)] rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm pointer-events-auto relative"
+                    class="box-border border-2 border-[var(--border-secondary)] flex flex-col min-h-0 max-h-[80vh] w-full p-2 bg-[var(--bg-primary)] rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm pointer-events-auto relative"
                   >
                     <div
                       class="absolute top-[-15px] left-5 px-4 py-1 border-2 rounded-full border-[var(--border-light)] bg-[var(--bg-primary)] hidden sm:block"
