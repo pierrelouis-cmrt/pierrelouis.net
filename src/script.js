@@ -451,60 +451,6 @@ const COMMAND_POST_ICONS = {
   window.loadCommandPalettePosts();
 })();
 
-// iOS Safari viewport height fix for command palette
-// This fixes the issue where 100vh doesn't account for Safari's dynamic UI
-(() => {
-  const isIOS = () => {
-    return (
-      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
-    );
-  };
-
-  const isSafari = () => {
-    return (
-      /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ||
-      /iPad|iPhone|iPod/.test(navigator.userAgent)
-    );
-  };
-
-  const updateViewportHeight = () => {
-    // Only apply on iOS/Safari for desktop palette (>= 768px)
-    if ((isIOS() || isSafari()) && window.innerWidth >= 768) {
-      const vh = window.innerHeight;
-      document.documentElement.style.setProperty("--viewport-height", `${vh}px`);
-    } else {
-      // Reset to default for non-iOS or mobile
-      document.documentElement.style.setProperty("--viewport-height", "100vh");
-    }
-  };
-
-  // Update on load
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", updateViewportHeight);
-  } else {
-    updateViewportHeight();
-  }
-
-  // Update on resize and orientation change
-  let resizeTimeout;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(updateViewportHeight, 100);
-  });
-
-  window.addEventListener("orientationchange", () => {
-    // Wait for orientation change to complete
-    setTimeout(updateViewportHeight, 300);
-  });
-
-  // Update when command palette opens (for address bar hiding)
-  window.addEventListener("open-command-palette", () => {
-    // Small delay to ensure address bar has hidden
-    setTimeout(updateViewportHeight, 50);
-  });
-})();
-
 // Global keyboard shortcut to toggle the command palette
 document.addEventListener("keydown", (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {

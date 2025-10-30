@@ -448,57 +448,41 @@ a.link-with-icon:not(:hover) .lucide {
   margin: 0;
 }
 
-/* Desktop Command Palette Scrolling Fix - iOS Compatible */
-/* CSS custom property for dynamic viewport height (set by JS on iOS) */
-:root {
-  --viewport-height: 100vh;
-  --palette-max-height: 80vh;
-}
-
-/* Base scrolling for command palette list */
+/* Desktop Command Palette Scrolling Fix */
+/* Ensure proper scrolling on all devices including iPad landscape */
 [data-command-list] {
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
   overscroll-behavior: contain;
-  position: relative;
+  scroll-behavior: smooth;
 }
 
-/* iOS/Safari specific fixes for proper height calculation and scrolling */
+/* Additional iOS/Safari specific fixes for command palette */
 @supports (-webkit-touch-callout: none) {
-  /* Fix for iOS Safari: Use dynamic viewport height */
-  :root {
-    --palette-max-height: calc(var(--viewport-height, 100vh) * 0.8);
-  }
-
-  /* Critical: Force flex child to respect parent height on iOS */
+  /* Target iOS devices specifically */
   [data-command-list] {
-    /* This is the key: flex child needs explicit height for overflow to work on iOS */
-    height: 0;
-    flex-grow: 1;
-    flex-shrink: 1;
+    /* Force GPU acceleration for smoother scrolling */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    will-change: scroll-position;
 
-    /* Enable momentum scrolling */
+    /* Ensure momentum scrolling works */
     -webkit-overflow-scrolling: touch;
-
-    /* Smooth scrolling with GPU acceleration */
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
+    overflow-scrolling: touch;
   }
 
-  /* Custom scrollbar for better visibility on iOS */
+  /* Ensure parent container has proper constraints */
   [data-command-list]::-webkit-scrollbar {
     -webkit-appearance: none;
-    width: 6px;
+  }
+
+  [data-command-list]::-webkit-scrollbar:vertical {
+    width: 8px;
   }
 
   [data-command-list]::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.3);
-  }
-
-  /* Ensure parent palette container uses dynamic height */
-  .max-h-\[80vh\] {
-    max-height: var(--palette-max-height) !important;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.2);
   }
 }
 
