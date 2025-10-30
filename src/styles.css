@@ -2802,6 +2802,262 @@ img[data-lightbox-item] {
   transition: all 120ms ease-in-out;
 }
 
+/* -------- Photos Page -------- */
+
+.gallery-open .site-navigation,
+.gallery-open footer {
+  display: none;
+}
+
+.photos-view {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+#photos-gallery-view {
+  padding: var(--space-16) 0 !important;
+}
+
+.photos-intro {
+  margin: var(--space-6) 0 var(--space-12);
+}
+
+.photos-intro p {
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text-body);
+}
+
+.photos-filter-section {
+  margin: var(--space-8) 0;
+}
+
+.photos-filter-group {
+  margin-bottom: var(--space-12);
+}
+
+.photos-filter-title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+  text-align: left;
+  font-family: var(--font-serif);
+}
+
+/* Trip Grid */
+.photos-trip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.photo-trip-card {
+  background: none;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  padding: 0;
+  cursor: pointer;
+  transition: all 180ms ease-in-out;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-width: 240px;
+}
+
+.photo-trip-card:hover {
+  border-color: var(--border-secondary);
+  background-color: var(--bg-hover);
+}
+
+.dark .photo-trip-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.photo-trip-preview {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: var(--bg-hover);
+}
+
+.photo-trip-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 280ms ease-in-out;
+}
+
+.photo-trip-card:hover .photo-trip-preview img {
+  transform: scale(1.05);
+}
+
+.photo-trip-info {
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.photo-trip-info h4 {
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+}
+
+.photo-trip-count {
+  font-size: var(--text-xs);
+  color: var(--text-subtle);
+}
+
+/* Divider */
+.photos-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: var(--space-12) 0;
+  position: relative;
+}
+
+.photos-divider::before,
+.photos-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border-light);
+}
+
+.photos-divider span {
+  padding: 0 var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-muted);
+  font-style: italic;
+  font-family: var(--font-serif);
+}
+
+/* Category List */
+.photos-category-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.photo-category-button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: none;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: all 150ms ease-in-out;
+  text-align: left;
+  width: 100%;
+}
+
+.photo-category-button:hover {
+  border-color: var(--border-secondary);
+  background-color: var(--bg-hover);
+}
+
+.photo-category-button svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--text-subtle);
+  transition: color 150ms ease-in-out;
+}
+
+.photo-category-button:hover svg {
+  color: var(--text-body);
+}
+
+.photo-category-button span:nth-child(2) {
+  flex: 1;
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+}
+
+.photo-category-count {
+  font-size: var(--text-xs);
+  color: var(--text-subtle);
+}
+
+/* Gallery View */
+.photos-gallery-header {
+  margin-bottom: var(--space-8);
+}
+
+.photos-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  background: none;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-body);
+  transition: all 150ms ease-in-out;
+  margin-bottom: var(--space-6);
+}
+
+.photos-back-button:hover {
+  border-color: var(--border-secondary);
+  background-color: var(--bg-hover);
+}
+
+.photos-back-button svg {
+  width: 16px;
+  height: 16px;
+  color: var(--text-subtle);
+}
+
+.photos-gallery-title {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  margin: 0;
+  font-family: var(--font-serif);
+}
+
+/* Gallery Grid - 2 Column Masonry Layout */
+.photos-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+  max-width: 100%;
+}
+
+.photos-gallery-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.photos-gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  transition: transform 200ms ease-in-out;
+}
+
+.photos-gallery-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-lg);
+  transition: transform 300ms ease-in-out;
+}
+
 /* -------- Article Styles -------- */
 
 article {
@@ -3499,7 +3755,11 @@ mjx-container::-webkit-scrollbar-thumb {
   .article-embed,
   .project-action-buttons,
   .project-tech-stack,
-  .social-platforms-grid {
+  .social-platforms-grid,
+  .photos-trip-grid,
+  .photos-divider,
+  .photos-category-list,
+  .photos-gallery-grid {
     padding: 0 var(--space-5) !important;
   }
 
@@ -3516,6 +3776,15 @@ mjx-container::-webkit-scrollbar-thumb {
   article li p {
     padding-left: 0 !important;
     padding-right: 0 !important;
+  }
+
+  .photo-trip-info h4 {
+    padding: 0 !important;
+  }
+
+  .photos-back-button {
+    margin-left: var(--space-5) !important;
+    margin-right: var(--space-5) !important;
   }
 
   .credits-grid {
@@ -3973,5 +4242,12 @@ mjx-container::-webkit-scrollbar-thumb {
 @media (min-width: 640px) {
   .full-year {
     display: none;
+  }
+}
+
+@media (max-width: 375px) {
+  .photo-trip-card {
+    max-width: 100% !important;
+    max-height: 160px !important;
   }
 }
