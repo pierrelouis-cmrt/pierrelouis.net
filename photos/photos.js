@@ -85,24 +85,12 @@
   let currentView = 'home';
   let currentFilter = { type: null, value: null };
 
-  // Shuffle array function
-  function shuffleArray(array) {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  }
-
   // DOM Elements
   const homeView = document.getElementById('photos-home-view');
   const galleryView = document.getElementById('photos-gallery-view');
   const galleryGrid = document.getElementById('photos-gallery-grid');
   const galleryTitle = document.getElementById('gallery-title');
   const backButton = document.getElementById('back-to-home');
-  const siteNav = document.querySelector('.site-navigation');
-  const siteFooter = document.querySelector('footer');
 
   // Category/Trip buttons
   const tripCards = document.querySelectorAll('.photo-trip-card');
@@ -181,11 +169,6 @@
     currentView = 'home';
     homeView.style.display = 'block';
     galleryView.style.display = 'none';
-
-    // Show nav and footer
-    if (siteNav) siteNav.style.display = 'block';
-    if (siteFooter) siteFooter.style.display = 'block';
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -199,15 +182,11 @@
                          filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
     galleryTitle.textContent = displayValue;
 
-    // Get filtered photos and shuffle them
-    const photos = shuffleArray(getFilteredPhotos(filterType, filterValue));
+    // Get filtered photos
+    const photos = getFilteredPhotos(filterType, filterValue);
 
     // Render gallery
-    renderGallery(photos, filterValue);
-
-    // Hide nav and footer
-    if (siteNav) siteNav.style.display = 'none';
-    if (siteFooter) siteFooter.style.display = 'none';
+    renderGallery(photos);
 
     // Show gallery view
     homeView.style.display = 'none';
@@ -251,13 +230,8 @@
   }
 
   // Render gallery in 2-column masonry layout
-  function renderGallery(photos, groupId) {
+  function renderGallery(photos) {
     galleryGrid.innerHTML = '';
-
-    // Create container with lightbox group
-    const container = document.createElement('div');
-    container.className = 'photos-gallery-container';
-    container.setAttribute('data-lightbox-group', `photos-${groupId}`);
 
     // Create two columns
     const column1 = document.createElement('div');
@@ -275,42 +249,48 @@
       }
     });
 
-    container.appendChild(column1);
-    container.appendChild(column2);
-    galleryGrid.appendChild(container);
+    galleryGrid.appendChild(column1);
+    galleryGrid.appendChild(column2);
+
+    // Initialize lightbox for the current selection
+    initializeLightboxForGallery(photos);
   }
 
-  // Create photo item element with lazy loading
+  // Create photo item element
   function createPhotoItem(photo, index) {
     const item = document.createElement('div');
     item.className = 'photos-gallery-item';
 
     const img = document.createElement('img');
-    img.setAttribute('data-src', photo.src);
-    img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"%3E%3C/svg%3E'; // Placeholder
+    img.src = photo.src;
     img.alt = `${photo.category} photo from ${photo.trip}`;
-    img.setAttribute('data-lightbox-item', '');
-    img.className = 'lazy-load';
-
-    // Intersection Observer for lazy loading
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const lazyImg = entry.target;
-          lazyImg.src = lazyImg.getAttribute('data-src');
-          lazyImg.classList.remove('lazy-load');
-          lazyImg.classList.add('loaded');
-          observer.unobserve(lazyImg);
-        }
-      });
-    }, {
-      rootMargin: '50px'
-    });
-
-    observer.observe(img);
+    img.loading = 'lazy';
+    img.dataset.lightboxIndex = index;
+    img.dataset.lightboxGroup = 'current-gallery';
 
     item.appendChild(img);
     return item;
+  }
+
+  // Initialize lightbox for current gallery
+  function initializeLightboxForGallery(photos) {
+    // Wait for the existing lightbox to be available
+    if (window.PhotoLightbox) {
+      // Prepare photo data for lightbox
+      const lightboxPhotos = photos.map(photo => ({
+        src: photo.src,
+        alt: `${photo.category} photo from ${photo.trip}`
+      }));
+
+      // Initialize lightbox with the current gallery photos
+      const lightboxInstance = new window.PhotoLightbox({
+        selector: '[data-lightbox-group="current-gallery"]',
+        photos: lightboxPhotos
+      });
+    } else {
+      // Fallback: use the existing lightbox initialization
+      setTimeout(() => initializeLightboxForGallery(photos), 100);
+    }
   }
 
   // Initialize when DOM is ready

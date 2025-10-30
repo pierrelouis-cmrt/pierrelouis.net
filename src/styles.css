@@ -2846,8 +2846,8 @@ img[data-lightbox-item] {
 
 .photo-trip-card {
   background: none;
-  border: 2px solid var(--border-light);
-  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
   padding: 0;
   cursor: pointer;
   transition: all 180ms ease-in-out;
@@ -2857,8 +2857,13 @@ img[data-lightbox-item] {
 }
 
 .photo-trip-card:hover {
-  border-color: var(--text-body);
+  border-color: var(--border-secondary);
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.dark .photo-trip-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .photo-trip-preview {
@@ -2909,7 +2914,7 @@ img[data-lightbox-item] {
 .photos-divider::after {
   content: '';
   flex: 1;
-  height: 2px;
+  height: 1px;
   background: var(--border-light);
 }
 
@@ -2936,7 +2941,7 @@ img[data-lightbox-item] {
   gap: var(--space-3);
   padding: var(--space-4);
   background: none;
-  border: 2px solid var(--border-light);
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
   cursor: pointer;
   transition: all 150ms ease-in-out;
@@ -2945,7 +2950,7 @@ img[data-lightbox-item] {
 }
 
 .photo-category-button:hover {
-  border-color: var(--text-body);
+  border-color: var(--border-secondary);
   background-color: var(--bg-hover);
 }
 
@@ -2972,27 +2977,18 @@ img[data-lightbox-item] {
 }
 
 /* Gallery View */
-#photos-gallery-view {
-  max-width: 100vw;
-  margin: 0;
-  padding: var(--space-6) var(--space-4);
-}
-
 .photos-gallery-header {
   margin-bottom: var(--space-8);
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .photos-back-button {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-2) var(--space-4);
   background: none;
-  border: 2px solid var(--border-light);
-  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-full);
   cursor: pointer;
   font-size: var(--text-sm);
   font-weight: var(--font-medium);
@@ -3002,7 +2998,7 @@ img[data-lightbox-item] {
 }
 
 .photos-back-button:hover {
-  border-color: var(--text-body);
+  border-color: var(--border-secondary);
   background-color: var(--bg-hover);
 }
 
@@ -3021,130 +3017,100 @@ img[data-lightbox-item] {
 }
 
 /* Gallery Grid - 2 Column Masonry Layout */
-.photos-gallery-container {
+.photos-gallery-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0;
-  max-width: 1200px;
-  margin: 0 auto;
+  gap: var(--space-4);
+  max-width: 100%;
 }
 
 .photos-gallery-column {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: var(--space-4);
 }
 
 .photos-gallery-item {
   position: relative;
   overflow: hidden;
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  transition: opacity 200ms ease-in-out;
+  transition: transform 200ms ease-in-out;
 }
 
 .photos-gallery-item:hover {
-  opacity: 0.9;
+  transform: translateY(-2px);
 }
 
 .photos-gallery-item img {
   width: 100%;
   height: auto;
   display: block;
-  transition: opacity 300ms ease-in-out;
+  border-radius: var(--radius-lg);
+  transition: transform 300ms ease-in-out;
 }
 
-.photos-gallery-item img.lazy-load {
-  opacity: 0;
-}
-
-.photos-gallery-item img.loaded {
-  opacity: 1;
+.photos-gallery-item:hover img {
+  transform: scale(1.02);
 }
 
 /* Responsive Adjustments */
 @media screen and (max-width: 640px) {
-  #photos-gallery-view {
-    padding: var(--space-4) var(--space-3);
-  }
-
-  .photos-view {
-    padding: 0 var(--space-3);
-  }
-
   .photos-trip-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
 
   .photo-trip-card {
-    border-radius: var(--radius-md);
-  }
-
-  .photo-trip-preview {
-    aspect-ratio: 3 / 2;
+    border-radius: var(--radius-lg);
   }
 
   .photo-trip-info {
-    padding: var(--space-2);
+    padding: var(--space-2) var(--space-3);
   }
 
   .photo-trip-info h4 {
     font-size: var(--text-sm);
-    margin-bottom: 2px;
   }
 
-  .photo-trip-count {
-    font-size: 11px;
-  }
-
-  .photo-category-button {
-    padding: var(--space-3);
-    gap: var(--space-2);
-  }
-
-  .photo-category-button span:nth-child(2) {
-    font-size: var(--text-sm);
-  }
-
+  .photo-trip-count,
   .photo-category-count {
-    font-size: 11px;
+    font-size: var(--text-xs);
   }
 
   .photos-filter-title {
     font-size: var(--text-lg);
   }
 
-  .photos-divider {
-    margin: var(--space-8) 0;
+  .photos-gallery-grid {
+    gap: var(--space-3);
+  }
+
+  .photos-gallery-column {
+    gap: var(--space-3);
+  }
+
+  .photos-gallery-item {
+    border-radius: var(--radius-md);
+  }
+
+  .photos-gallery-item img {
+    border-radius: var(--radius-md);
   }
 
   .photos-gallery-title {
-    font-size: var(--text-2xl);
-  }
-
-  .photos-back-button {
-    font-size: 13px;
-    padding: 6px var(--space-2);
-  }
-
-  .photos-back-button svg {
-    width: 14px;
-    height: 14px;
-  }
-
-  .photos-gallery-header {
-    margin-bottom: var(--space-6);
+    font-size: var(--text-3xl);
   }
 }
 
 @media screen and (max-width: 480px) {
   .photos-trip-grid {
     grid-template-columns: 1fr;
-    gap: var(--space-2);
   }
 
   .photo-trip-card {
-    max-width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
   }
 }
 
