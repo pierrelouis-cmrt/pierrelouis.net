@@ -3037,6 +3037,12 @@ img[data-lightbox-item] {
   max-width: 100%;
 }
 
+@media (max-width: 349px) {
+  .photos-gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .photos-gallery-column {
   display: flex;
   flex-direction: column;
