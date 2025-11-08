@@ -4,6 +4,11 @@ const P_MAX = 15;
 const STEP = 3;
 const SIZE = 256;
 
+function normalizeBasePath(path) {
+  const value = typeof path === 'string' && path.length > 0 ? path : '/faces/';
+  return value.endsWith('/') ? value : `${value}/`;
+}
+
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
@@ -29,7 +34,7 @@ function updateDebug(debugEl, x, y, filename) {
 }
 
 function initializeFaceTracker(container) {
-  const basePath = container.dataset.basePath || '/faces/';
+  const basePath = normalizeBasePath(container.dataset.basePath);
   const showDebug = String(container.dataset.debug || 'false') === 'true';
 
   const img = document.createElement('img');
@@ -38,6 +43,9 @@ function initializeFaceTracker(container) {
   container.appendChild(img);
 
   let debugEl = null;
+  let lastPx = null;
+  let lastPy = null;
+
   if (showDebug) {
     debugEl = document.createElement('div');
     debugEl.className = 'face-debug';
@@ -60,8 +68,15 @@ function initializeFaceTracker(container) {
 
     const filename = gridToFilename(px, py);
     const imagePath = `${basePath}${filename}`;
-    img.src = imagePath;
     updateDebug(debugEl, clientX - rect.left, clientY - rect.top, filename);
+
+    if (px === lastPx && py === lastPy) {
+      return;
+    }
+
+    lastPx = px;
+    lastPy = py;
+    img.src = imagePath;
   }
 
   function handleMouseMove(e) {

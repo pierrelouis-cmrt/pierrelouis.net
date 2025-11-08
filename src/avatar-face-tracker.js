@@ -40,12 +40,13 @@ function getDistance(x1, y1, x2, y2) {
 }
 
 function isMobileDevice() {
-  return (
-    ('ontouchstart' in window) ||
-    (navigator.maxTouchPoints > 0) ||
-    (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ||
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-  );
+  const uaMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const supportsMatchMedia = typeof window.matchMedia === 'function';
+  const hasCoarsePointer = supportsMatchMedia && window.matchMedia('(pointer: coarse)').matches;
+  const lacksHover = supportsMatchMedia && window.matchMedia('(hover: none)').matches;
+
+  // Treat as mobile if it explicitly reports a coarse, non-hover pointer (touch-first) or matches mobile UA
+  return uaMobile || (hasCoarsePointer && lacksHover);
 }
 
 function initializeAvatarFaceTracker() {
@@ -61,7 +62,7 @@ function initializeAvatarFaceTracker() {
     return;
   }
 
-  const basePath = '/src/face_looker/faces/';
+  const basePath = '/faces/';
   const originalSrc = mainAvatar.src;
 
   // Create overlay layer for crossfade transitions

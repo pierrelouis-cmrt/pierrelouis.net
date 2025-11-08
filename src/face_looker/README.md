@@ -12,7 +12,7 @@ Create an interactive face that follows the cursor using plain HTML, CSS, and Ja
 1) Put your gaze images in a `faces/` folder next to `index.html` using this naming pattern:
 
 ```
-gaze_px{X}_py{Y}_{SIZE}.webp
+gaze_px{SANITIZED_X}_py{SANITIZED_Y}_{SIZE}.webp
 ```
 
 Defaults expected by the script:
@@ -23,9 +23,12 @@ Defaults expected by the script:
 
 Examples:
 
-- `gaze_px0_py0_256.webp` (center)
-- `gaze_px15_py0_256.webp` (right)
-- `gaze_px0_pym15_256.webp` (up)
+- `gaze_px0p0_py0p0_256.webp` (center)
+- `gaze_px15p0_py0p0_256.webp` (right)
+- `gaze_px0p0_pym15p0_256.webp` (up)
+
+**Sanitized values:** numbers are always formatted with one decimal place, `-` becomes `m`, and `.` becomes `p`.  
+Examples: `-12` → `m12p0`, `3` → `3p0`, `0` → `0p0`.
 
 2) Open `index.html` in a browser (or serve the folder with any static server).
 
@@ -36,6 +39,7 @@ That's it. Move your cursor over the face.
 In `index.html`, adjust attributes on the `.face-tracker` element:
 
 - `data-base-path` (default `/faces/`) — where images are served from
+  - Any value you pass will automatically be normalized to include a trailing `/`.
 - `data-debug` (`true` | `false`) — show overlay with mouse coords and filename
 
 Multiple faces are supported — add more `.face-tracker` elements with different `data-base-path` values.
