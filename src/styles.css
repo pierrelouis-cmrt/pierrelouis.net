@@ -468,6 +468,8 @@ a.link-with-icon:not(:hover) .lucide {
 .hero-avatar-wrapper {
   position: relative;
   display: inline-block;
+  width: 88px;
+  height: 88px;
 }
 
 .hero-avatar {
@@ -479,18 +481,12 @@ a.link-with-icon:not(:hover) .lucide {
     0px 3.5px 9.9px -24px rgba(0, 0, 0, 0.223),
     0px 7.3px 20.4px -24px rgba(0, 0, 0, 0.276),
     0px 20px 56px -24px rgba(0, 0, 0, 0.4);
-  position: relative;
   opacity: 0.85;
+  object-fit: cover;
 }
 
-.hero-avatar:hover {
-  transform: translate(0, -4px);
-  transition: transform 200ms ease-in-out;
-}
-
-.hero-avatar:not(:hover) {
-  transform: translate(0, 0);
-  transition: transform 200ms ease-in-out, transition-delay 200ms;
+.hero-avatar-layer {
+  pointer-events: none;
 }
 
 /* Copy email tooltip */
