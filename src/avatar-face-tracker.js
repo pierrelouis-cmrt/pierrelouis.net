@@ -14,6 +14,44 @@ const PROXIMITY_THRESHOLD = 180;
 // Transition timing - only for enter/exit animations
 const TRANSITION_DURATION = 250; // ms
 
+const FALLBACK_EXTENSION = 'webp';
+const ACTIVE_EXTENSION = supportsAvif() ? 'avif' : FALLBACK_EXTENSION;
+const SLOW_CONNECTION_TYPES = new Set(['slow-2g', '2g', '3g']);
+
+const preloadedImages = new Set();
+const startedPreloads = new Set();
+
+const GRID_VALUES = buildGridValues();
+const FACE_FILE_STEMS = buildFaceFileStems(GRID_VALUES);
+const PRELOAD_BATCH_SIZE = 6;
+const ALLOW_AGGRESSIVE_PRELOAD = canAggressivelyPreload();
+
+function supportsAvif() {
+  const canvas = document.createElement('canvas');
+  if (!canvas.getContext) {
+    return false;
+  }
+  try {
+    return canvas.toDataURL('image/avif').indexOf('image/avif') !== -1;
+  } catch (error) {
+    return false;
+  }
+}
+
+function canAggressivelyPreload() {
+  const connection =
+    navigator.connection ||
+    navigator.mozConnection ||
+    navigator.webkitConnection ||
+    navigator.msConnection;
+
+  if (!connection || !connection.effectiveType) {
+    return true;
+  }
+
+  return !SLOW_CONNECTION_TYPES.has(connection.effectiveType);
+}
+
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
@@ -29,8 +67,57 @@ function sanitize(val) {
   return str.replace('-', 'm').replace('.', 'p');
 }
 
-function gridToFilename(px, py) {
-  return `gaze_px${sanitize(px)}_py${sanitize(py)}_${SIZE}.webp`;
+function gridToFileStem(px, py) {
+  return `gaze_px${sanitize(px)}_py${sanitize(py)}_${SIZE}`;
+}
+
+function buildGridValues() {
+  const values = [];
+  for (let v = P_MIN; v <= P_MAX; v += STEP) {
+    values.push(Number(v.toFixed(1)));
+  }
+  return values;
+}
+
+function buildFaceFileStems(values) {
+  const stems = [];
+  for (let i = 0; i < values.length; i += 1) {
+    for (let j = 0; j < values.length; j += 1) {
+      stems.push(gridToFileStem(values[i], values[j]));
+    }
+  }
+  return stems;
+}
+
+function buildImageSrc(basePath, fileStem, extension = ACTIVE_EXTENSION) {
+  return `${basePath}${fileStem}.${extension}`;
+}
+
+function getImageSources(basePath, px, py) {
+  const fileStem = gridToFileStem(px, py);
+  const primarySrc = buildImageSrc(basePath, fileStem, ACTIVE_EXTENSION);
+  const fallbackSrc =
+    ACTIVE_EXTENSION === FALLBACK_EXTENSION
+      ? primarySrc
+      : buildImageSrc(basePath, fileStem, FALLBACK_EXTENSION);
+
+  return {
+    primarySrc,
+    fallbackSrc,
+  };
+}
+
+function applySource(img, primarySrc, fallbackSrc) {
+  if (primarySrc === fallbackSrc) {
+    img.src = primarySrc;
+    return;
+  }
+
+  img.onerror = () => {
+    img.onerror = null;
+    img.src = fallbackSrc;
+  };
+  img.src = primarySrc;
 }
 
 function getDistance(x1, y1, x2, y2) {
@@ -49,6 +136,87 @@ function isMobileDevice() {
   return uaMobile || (hasCoarsePointer && lacksHover);
 }
 
+function scheduleIdleWork(callback) {
+  if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'function') {
+    return window.requestIdleCallback(callback);
+  }
+  return setTimeout(() => {
+    callback({ didTimeout: false, timeRemaining: () => 0 });
+  }, 25);
+}
+
+function startPreloadingAllFaces(basePath) {
+  if (!ALLOW_AGGRESSIVE_PRELOAD) {
+    return;
+  }
+
+  const normalizedPath = basePath.endsWith('/') ? basePath : `${basePath}/`;
+  if (startedPreloads.has(normalizedPath)) {
+    return;
+  }
+
+  startedPreloads.add(normalizedPath);
+
+  const sources = FACE_FILE_STEMS.map((stem) => ({
+    primary: buildImageSrc(normalizedPath, stem),
+    fallback:
+      ACTIVE_EXTENSION === FALLBACK_EXTENSION
+        ? null
+        : buildImageSrc(normalizedPath, stem, FALLBACK_EXTENSION),
+  }));
+  let index = 0;
+
+  function loadChunk(deadline) {
+    let processed = 0;
+
+    while (index < sources.length) {
+      if (
+        deadline &&
+        typeof deadline.timeRemaining === 'function' &&
+        deadline.timeRemaining() <= 2 &&
+        processed > 0
+      ) {
+        break;
+      }
+
+      const { primary, fallback } = sources[index];
+      index += 1;
+
+      if (preloadedImages.has(primary)) {
+        continue;
+      }
+
+      preloadedImages.add(primary);
+
+      const img = new Image();
+      img.decoding = 'async';
+      img.loading = 'eager';
+
+      if (fallback) {
+        const handleError = () => {
+          img.removeEventListener('error', handleError);
+          img.src = fallback;
+        };
+        img.addEventListener('error', handleError);
+      }
+
+      img.src = primary;
+
+      processed += 1;
+
+      if (!deadline && processed >= PRELOAD_BATCH_SIZE) {
+        break;
+      }
+    }
+
+    if (index < sources.length) {
+      scheduleIdleWork(loadChunk);
+    }
+  }
+
+  scheduleIdleWork(loadChunk);
+}
+
 function initializeAvatarFaceTracker() {
   // Exit early on mobile devices
   if (isMobileDevice()) {
@@ -64,6 +232,7 @@ function initializeAvatarFaceTracker() {
 
   const basePath = '/faces/';
   const originalSrc = mainAvatar.src;
+  const originalSources = { primarySrc: originalSrc, fallbackSrc: originalSrc };
 
   // Create overlay layer for crossfade transitions
   const overlayAvatar = document.createElement('img');
@@ -94,7 +263,7 @@ function initializeAvatarFaceTracker() {
   let transitionTimeout = null;
 
   // Crossfade from one image to another (only used for enter/exit)
-  function crossfade(fromSrc, toSrc, callback) {
+  function crossfade(fromSrc, targetSources, callback) {
     if (isTransitioning) return;
 
     isTransitioning = true;
@@ -105,17 +274,26 @@ function initializeAvatarFaceTracker() {
       transitionTimeout = null;
     }
 
+    const { primarySrc, fallbackSrc } = targetSources;
+
     // Preload target image
     const preload = new Image();
-    preload.src = toSrc;
+    let resolvedSrc = primarySrc;
 
-    const performCrossfade = () => {
+    const handleCleanup = () => {
+      isTransitioning = false;
+      transitionTimeout = null;
+      preload.onload = null;
+      preload.onerror = null;
+    };
+
+    const performCrossfade = (srcToUse) => {
       // Set up initial state
       mainAvatar.src = fromSrc;
       mainAvatar.style.opacity = '0.85';
       mainAvatar.style.transition = 'none';
 
-      overlayAvatar.src = toSrc;
+      applySource(overlayAvatar, srcToUse, fallbackSrc);
       overlayAvatar.style.opacity = '0';
       overlayAvatar.style.transition = 'none';
 
@@ -135,35 +313,42 @@ function initializeAvatarFaceTracker() {
       // After transition completes
       transitionTimeout = setTimeout(() => {
         // Swap: make overlay the new main
-        mainAvatar.src = toSrc;
+        applySource(mainAvatar, srcToUse, fallbackSrc);
         mainAvatar.style.opacity = '0.85';
         mainAvatar.style.transition = 'none';
 
         overlayAvatar.style.opacity = '0';
         overlayAvatar.style.transition = 'none';
 
-        isTransitioning = false;
-        transitionTimeout = null;
+        handleCleanup();
 
         if (callback) callback();
       }, TRANSITION_DURATION);
     };
 
-    if (preload.complete) {
-      performCrossfade();
-    } else {
-      preload.onload = performCrossfade;
-      preload.onerror = () => {
-        isTransitioning = false;
-      };
-    }
+    const handleLoad = () => {
+      performCrossfade(resolvedSrc);
+    };
+
+    const handleError = () => {
+      if (fallbackSrc && resolvedSrc !== fallbackSrc) {
+        resolvedSrc = fallbackSrc;
+        preload.src = fallbackSrc;
+        return;
+      }
+      handleCleanup();
+    };
+
+    preload.onload = handleLoad;
+    preload.onerror = handleError;
+    preload.src = primarySrc;
   }
 
   // Instantly update image during tracking
-  function instantUpdate(imagePath) {
+  function instantUpdate(targetSources) {
     if (isTransitioning) return;
     mainAvatar.style.transition = 'none';
-    mainAvatar.src = imagePath;
+    applySource(mainAvatar, targetSources.primarySrc, targetSources.fallbackSrc);
     mainAvatar.style.opacity = '0.85';
   }
 
@@ -184,7 +369,7 @@ function initializeAvatarFaceTracker() {
         const currentSrc = mainAvatar.src;
 
         // Crossfade back to original
-        crossfade(currentSrc, originalSrc, () => {
+        crossfade(currentSrc, originalSources, () => {
           lastPx = null;
           lastPy = null;
         });
@@ -196,6 +381,7 @@ function initializeAvatarFaceTracker() {
     // ENTER - first time entering radius
     if (!isTracking && !isTransitioning) {
       isTracking = true;
+      startPreloadingAllFaces(basePath);
 
       // Calculate initial gaze position
       const nx = (clientX - centerX) / (rect.width / 2);
@@ -206,10 +392,9 @@ function initializeAvatarFaceTracker() {
       const py = quantizeToGrid(clampedY);
 
       // Crossfade from original to first gaze
-      const filename = gridToFilename(px, py);
-      const imagePath = `${basePath}${filename}`;
+      const targetSources = getImageSources(basePath, px, py);
 
-      crossfade(originalSrc, imagePath, () => {
+      crossfade(originalSrc, targetSources, () => {
         lastPx = px;
         lastPy = py;
       });
@@ -229,10 +414,9 @@ function initializeAvatarFaceTracker() {
 
       // Update if gaze direction changed - INSTANT
       if (px !== lastPx || py !== lastPy) {
-        const filename = gridToFilename(px, py);
-        const imagePath = `${basePath}${filename}`;
+        const targetSources = getImageSources(basePath, px, py);
 
-        instantUpdate(imagePath);
+        instantUpdate(targetSources);
 
         lastPx = px;
         lastPy = py;

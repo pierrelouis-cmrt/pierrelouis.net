@@ -13,6 +13,8 @@
   height: 100%;
   object-fit: contain;
   transition: opacity 0.1s ease-out;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 .face-loading {

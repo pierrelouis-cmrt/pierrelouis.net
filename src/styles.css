@@ -483,6 +483,8 @@ a.link-with-icon:not(:hover) .lucide {
     0px 20px 56px -24px rgba(0, 0, 0, 0.4);
   opacity: 0.85;
   object-fit: cover;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 .hero-avatar-layer {

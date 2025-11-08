@@ -3,10 +3,24 @@ const P_MIN = -15;
 const P_MAX = 15;
 const STEP = 3;
 const SIZE = 256;
+const FALLBACK_EXTENSION = 'webp';
+const ACTIVE_EXTENSION = supportsAvif() ? 'avif' : FALLBACK_EXTENSION;
 
 function normalizeBasePath(path) {
   const value = typeof path === 'string' && path.length > 0 ? path : '/faces/';
   return value.endsWith('/') ? value : `${value}/`;
+}
+
+function supportsAvif() {
+  const canvas = document.createElement('canvas');
+  if (!canvas.getContext) {
+    return false;
+  }
+  try {
+    return canvas.toDataURL('image/avif').includes('image/avif');
+  } catch (error) {
+    return false;
+  }
 }
 
 function clamp(value, min, max) {
@@ -24,8 +38,37 @@ function sanitize(val) {
   return str.replace('-', 'm').replace('.', 'p');
 }
 
-function gridToFilename(px, py) {
-  return `gaze_px${sanitize(px)}_py${sanitize(py)}_${SIZE}.webp`;
+function gridToFileStem(px, py) {
+  return `gaze_px${sanitize(px)}_py${sanitize(py)}_${SIZE}`;
+}
+
+function buildImageSources(basePath, px, py) {
+  const fileStem = gridToFileStem(px, py);
+  const primary = `${basePath}${fileStem}.${ACTIVE_EXTENSION}`;
+  const fallback =
+    ACTIVE_EXTENSION === FALLBACK_EXTENSION
+      ? primary
+      : `${basePath}${fileStem}.${FALLBACK_EXTENSION}`;
+
+  return {
+    primary,
+    fallback,
+    filename: `${fileStem}.${ACTIVE_EXTENSION}`,
+  };
+}
+
+function applyImageSource(target, sources) {
+  if (sources.primary === sources.fallback) {
+    target.src = sources.primary;
+    return;
+  }
+
+  target.onerror = () => {
+    target.onerror = null;
+    target.src = sources.fallback;
+  };
+
+  target.src = sources.primary;
 }
 
 function updateDebug(debugEl, x, y, filename) {
@@ -66,9 +109,8 @@ function initializeFaceTracker(container) {
     const px = quantizeToGrid(clampedX);
     const py = quantizeToGrid(clampedY);
 
-    const filename = gridToFilename(px, py);
-    const imagePath = `${basePath}${filename}`;
-    updateDebug(debugEl, clientX - rect.left, clientY - rect.top, filename);
+    const sources = buildImageSources(basePath, px, py);
+    updateDebug(debugEl, clientX - rect.left, clientY - rect.top, sources.filename);
 
     if (px === lastPx && py === lastPy) {
       return;
@@ -76,7 +118,7 @@ function initializeFaceTracker(container) {
 
     lastPx = px;
     lastPy = py;
-    img.src = imagePath;
+    applyImageSource(img, sources);
   }
 
   function handleMouseMove(e) {
