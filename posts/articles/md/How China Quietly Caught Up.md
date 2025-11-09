@@ -1,4 +1,4 @@
-It’s wild that, in 2025, people still say that only low-quality products come out of China’s factories. Some people even believe that China is behind the US!
+It’s wild that, in 2025, people still say that only low-quality products come out of China’s factories. Some people even believe that China lags behind the US!
 
 China is one of the biggest sources of talent there is. And big tech companies don’t only choose China for the supposedly lower costs, but for the huge concentration of skill and machinery. It’s one of the few places with the manufacturing ecosystem to produce state-of-the-art products needing highly specialized precision tooling. China stopped being the low-labor-cost country a long time ago!
 
