@@ -1317,3 +1317,54 @@ document.addEventListener("keydown", (e) => {
     gallery.init();
   });
 })();
+
+// Footnote navigation enhancement
+(() => {
+  document.addEventListener("DOMContentLoaded", () => {
+    // Add IDs to footnote references in the text
+    const footnoteRefs = document.querySelectorAll(".article-footnote-ref");
+    footnoteRefs.forEach((ref) => {
+      const link = ref.querySelector("a[href^='#fn']");
+      if (!link) return;
+
+      // Extract the footnote number from the href (e.g., "#fn1" -> "1")
+      const match = link.getAttribute("href")?.match(/#fn(\d+)/);
+      if (!match) return;
+
+      const footnoteNum = match[1];
+      const refId = `fnref${footnoteNum}`;
+
+      // Add the ID to the sup element
+      ref.id = refId;
+    });
+
+    // Handle back arrow clicks with smooth scrolling
+    const backRefs = document.querySelectorAll(".article-footnote-backref");
+    backRefs.forEach((backRef) => {
+      backRef.addEventListener("click", (e) => {
+        e.preventDefault();
+        const href = backRef.getAttribute("href");
+        if (!href) return;
+
+        const targetId = href.replace("#", "");
+        const target = document.getElementById(targetId);
+
+        if (target) {
+          // Smooth scroll with offset for header
+          const offsetTop = target.getBoundingClientRect().top + window.pageYOffset - 100;
+          window.scrollTo({
+            top: offsetTop,
+            behavior: "smooth"
+          });
+
+          // Optional: Add a brief highlight effect
+          target.style.transition = "background-color 0.3s ease";
+          target.style.backgroundColor = "var(--bg-hover)";
+          setTimeout(() => {
+            target.style.backgroundColor = "";
+          }, 800);
+        }
+      });
+    });
+  });
+})();
