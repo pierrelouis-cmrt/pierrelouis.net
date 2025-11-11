@@ -415,5 +415,18 @@
     "description": "One of the most insightful thinkers about AI and the future on X. His posts are always worth reading. His newsletter is also very good.",
     "image": "",
     "tag": "People"
+  },
+  {
+    "year": 2025,
+    "month": "Nov",
+    "link": "https://www.youtube.com/watch?v=Mo1A45ShcMo",
+    "title": "You're More Stressed Than Ever - Let's Change That",
+    "meta": {
+      "text": "by Kurzgesagt",
+      "icon": "https://icons.duckduckgo.com/ip3/youtube.com.ico"
+    },
+    "description": "What exactly is stress, how did it evolve, and is it even possible to use it in a healthy way? This is a great video to learn more about stress, I highly recommend it.",
+    "image": "",
+    "tag": "Videos"
   }
 ]
