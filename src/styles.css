@@ -1829,6 +1829,11 @@ hr.divider-thin {
 
 /* Someday Page */
 
+/* Add spacing between intro paragraph and first section */
+main > p.animate-on-scroll {
+  margin-bottom: var(--space-12);
+}
+
 .someday-goals {
   max-width: 640px;
   margin: 0 auto;
@@ -1854,7 +1859,7 @@ hr.divider-thin {
 }
 
 .someday-goals h3:first-of-type {
-  margin-top: var(--space-8);
+  margin-top: var(--space-12);
 }
 
 .goal-subtitle__number {
@@ -1946,6 +1951,33 @@ hr.divider-thin {
 
 .bucket-item--done .bucket-item__icon {
   color: var(--text-subtle);
+}
+
+/* Mobile improvements for someday page */
+@media (max-width: 640px) {
+  .someday-goals h3 {
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: flex-start;
+  }
+
+  .goal-subtitle__number {
+    padding-right: 0;
+    font-size: 0.95rem;
+  }
+
+  .goal-subtitle__label {
+    line-height: 1.5;
+  }
+
+  .someday-goals p {
+    padding-left: var(--space-4);
+    line-height: 1.65;
+  }
+
+  .someday-goals p:last-of-type {
+    padding-left: 0;
+  }
 }
 
 /* -------- Links -------- */
