@@ -1858,7 +1858,7 @@ main > p.animate-on-scroll {
   line-height: 1.5;
 }
 
-.someday-goals h3:first-of-type {
+.someday-goals > .goal-section:first-of-type h3 {
   margin-top: var(--space-12);
 }
 
@@ -1888,7 +1888,7 @@ main > p.animate-on-scroll {
   padding-left: calc(1.05rem + var(--space-5));
 }
 
-.someday-goals p:last-of-type {
+.bucket-list__intro {
   padding-left: 0;
   margin-top: var(--space-12);
   margin-bottom: var(--space-4);
@@ -1975,7 +1975,7 @@ main > p.animate-on-scroll {
     line-height: 1.65;
   }
 
-  .someday-goals p:last-of-type {
+  .bucket-list__intro {
     padding-left: 0;
   }
 }
