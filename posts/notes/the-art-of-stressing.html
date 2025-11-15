@@ -63,6 +63,7 @@
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
     <link rel="preload" href="/src/output-v257.css" as="style" />
+
     <link rel="stylesheet" href="/src/output-v257.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -81,9 +82,30 @@
     </noscript>
 
     <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ["\\(", "\\)"],
+            ["$", "$"],
+          ],
+          displayMath: [
+            ["\\[", "\\]"],
+            ["$$", "$$"],
+          ],
+        },
+        svg: { fontCache: "global" }, // better performance across pages
+      };
+    </script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
+    ></script>
+
     <script
       defer
       src="https://cloud.umami.is/script.js"
@@ -95,7 +117,7 @@
     <nav class="site-navigation">
       <div class="navigation-container">
         <div class="navigation-left">
-          <a class="navigation-brand" href="/"
+          <a class="navigation-brand" href="/posts/"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -112,11 +134,10 @@
               <path d="M16 12H8" />
               <path d="m12 8-4 4 4 4" />
             </svg>
-            Back Home</a
+            Back to all posts</a
           >
           <div class="navigation-links"></div>
         </div>
-
         <div class="navigation-right">
           <div
             x-data="{ 
@@ -470,7 +491,7 @@
               <div
                 x-data="{
       drawerOpen: false,
-      isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+      dataRevision: 0,
       dragStartY: 0,
       currentY: 0,
       translateY: 100,
@@ -488,7 +509,6 @@
       openFrame: null,
       settleTimer: null,
       themeTimer: null,
-      dataRevision: 0,
 
       get allItems() {
         void this.dataRevision;
@@ -944,179 +964,18 @@
     </nav>
 
     <main>
-      <h2 class="section-heading">What am I up to atm?</h2>
-      <hr class="divider-standard" />
+      <article data-lightbox-group="post-the-art-of-stressing">
+        <div class="article-meta-data"><h1>The art of stressing</h1>
+<span class="article-publish-date">November 15, 2025</span></div> <p>What even is stress?</p>
+<p>Stress is a core response of the body to a demanding or dangerous situation. It gets your heart rate up, sends more blood to your muscles, makes it easier to focus and can even make you feel less pain and tiredness in the moment. That’s incredibly useful when something actually threatens you.</p>
+<p>This was perfect when our lives were more primitive and real physical danger was a daily thing.</p>
+<p>But today, in an age where a lot of our stress comes from screens, messages, deadlines and social pressure, the way our body reacts isn’t really appropriated anymore. Your brain still treats an angry email a bit like a wild animal.</p>
+<p>A certain amount of stress can actually help. It can boost your motivation, help you focus and push you to work in a more productive manner. That short-term “good stress” is what gets you to study, work, react quickly and take action when it matters.</p>
+<p>But if your stress level stays too high for too long, that’s when it turns into chronic stress. This is where it gets bad. Your body stays tense, your sleep and recovery suffer, and tiredness starts to pile up. It becomes very easy to get stuck in a stress loop: you’re stressed, so you rest badly, so you have less energy, so everything feels more stressful.</p>
+<p>The goal of managing stress is finding the balance that works for you. Stress is kinda overpowered, and it’s our job to nerf it just enough so it helps more than it hurts. Your physical and mental health should always be your number one priority in life.</p>
 
-      <div class="swiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img
-              src="../photos/pics/Other/architecture1.webp"
-              alt="Architecture photo from Other trip"
-              loading="lazy"
-              decoding="async"
-              width="1000"
-              height="1333"
-            />
-          </div>
-          <div class="swiper-slide">
-            <img
-              src="../photos/pics/Paris/architecture2.webp"
-              alt="Architecture photo from Paris trip"
-              loading="lazy"
-              decoding="async"
-              width="1000"
-              height="1333"
-            />
-          </div>
-          <div class="swiper-slide">
-            <img
-              src="../photos/pics/Paris/architecture3.webp"
-              alt="Architecture detail from Paris trip"
-              loading="lazy"
-              decoding="async"
-              width="1000"
-              height="1333"
-            />
-          </div>
-          <div class="swiper-slide">
-            <img
-              src="../photos/pics/Other/architecture4.webp"
-              alt="Architecture photo from Other trip"
-              loading="lazy"
-              decoding="async"
-              width="1000"
-              height="1333"
-            />
-          </div>
-          <div class="swiper-slide">
-            <img
-              src="../photos/pics/Other/animal1.webp"
-              alt="Animal portrait from Other trip"
-              loading="lazy"
-              decoding="async"
-              width="1000"
-              height="1333"
-            />
-          </div>
-          <div class="swiper-slide">
-            <img
-              src="../photos/pics/Other/animal2.webp"
-              alt="Animal portrait from Other trip (close up)"
-              loading="lazy"
-              decoding="async"
-              width="1000"
-              height="1333"
-            />
-          </div>
-          <div class="swiper-slide">
-            <img
-              src="../photos/pics/Norway/landscape1.webp"
-              alt="Landscape photo from Norway trip"
-              loading="lazy"
-              decoding="async"
-              width="1333"
-              height="1000"
-            />
-          </div>
-          <div class="swiper-slide">
-            <img
-              src="../photos/pics/Other/landscape2.webp"
-              alt="Landscape photo from Other trip"
-              loading="lazy"
-              decoding="async"
-              width="1333"
-              height="1000"
-            />
-          </div>
-          <div class="swiper-slide">
-            <img
-              src="../photos/pics/Sweden/animal4.webp"
-              alt="Animal portrait from Sweden trip"
-              loading="lazy"
-              decoding="async"
-              width="1000"
-              height="1333"
-            />
-          </div>
-        </div>
-
-        <div class="swiper-pagination"></div>
-      </div>
-      <div class="photos-view-all">
-        <a class="link-with-icon photos-view-all-link" href="/photos"
-          >See all my photos<svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="1em"
-            width="1em"
-            style="margin-left: 0.2em"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-arrow-up-right"
-          >
-            <path d="M7 7h10v10"></path>
-            <path d="M7 17 17 7"></path></svg
-        ></a>
-      </div>
-
-      <div class="animate-on-scroll">
-        <p class="now-status-item">
-          Currently studying engineering at Centrale Lyon
-        </p>
-        <hr class="divider-thin" />
-
-        <p>Trying to reach 100k minutes of listening time on Apple Music</p>
-        <hr class="divider-thin" />
-
-        <p>Trying to motivate myself to read and write more.</p>
-        <hr class="divider-thin" />
-
-        <p class="now-status-item">
-          Living in Saint-Étienne (France), UNESCO Creative City of Design
-        </p>
-        <hr class="divider-thin" />
-
-        <p class="now-status-item">Designing websites in my free time</p>
-        <hr class="divider-thin" />
-
-        <p class="now-status-item">Listening to pop music on repeat</p>
-        <hr class="divider-thin" />
-
-        <p class="now-status-item">
-          Learning more about AI everyday, it's kinda becoming my whole
-          personality lol
-        </p>
-        <hr class="divider-thin" />
-
-        <p class="now-status-item">Keeping up with tech news... FOMO is real</p>
-        <hr class="divider-thin" />
-
-        <p class="now-status-item">
-          Gaming occasionally when my free time is free-timing
-        </p>
-        <hr class="divider-thin" />
-
-        <p class="now-status-item">
-          Logging every movie I watch on Letterboxd like it's serious business
-        </p>
-        <hr class="divider-thin" />
-
-        <p class="now-status-item">
-          Being slightly obsessed with my Last.fm stats
-        </p>
-      </div>
+      </article>
     </main>
-
-    <footer class="last-updated-block">
-      <div class="last-updated-block__dots">
-        <span></span><span></span><span></span>
-      </div>
-      <p class="last-updated"></p>
-    </footer>
 
     <footer>
       <div class="hero-links">
@@ -1238,24 +1097,100 @@
       </div>
     </footer>
 
-    <script>
-      fetch(window.location.href).then((response) => {
-        const lastModified = response.headers.get("Last-Modified");
-        if (lastModified) {
-          const footerText = document.querySelector(".last-updated");
-          footerText.innerHTML = `<br>Last updated: ${new Date(
-            lastModified
-          ).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-          })}`;
-        }
-      });
-    </script>
+    <div
+      id="lightbox"
+      class="image-lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+    >
+      <div class="image-lightbox__backdrop" data-lightbox-close></div>
+      <div class="image-lightbox__shell" role="document">
+        <button
+          type="button"
+          class="image-lightbox__close"
+          aria-label="Close gallery"
+          data-lightbox-close
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="18" x2="6" y1="6" y2="18" />
+            <line x1="6" x2="18" y1="6" y2="18" />
+          </svg>
+        </button>
+        <div class="image-lightbox__stage">
+          <button
+            type="button"
+            class="image-lightbox__nav image-lightbox__nav--prev"
+            aria-label="Previous image"
+            data-lightbox-prev
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <figure class="image-lightbox__figure">
+            <img
+              class="image-lightbox__image"
+              alt=""
+              decoding="async"
+              data-lightbox-active-image
+            />
+            <figcaption
+              class="image-lightbox__caption"
+              data-lightbox-caption
+            ></figcaption>
+          </figure>
+          <button
+            type="button"
+            class="image-lightbox__nav image-lightbox__nav--next"
+            aria-label="Next image"
+            data-lightbox-next
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="image-lightbox__thumbnail-bar"
+          role="list"
+          data-lightbox-thumbnails
+        ></div>
+      </div>
+    </div>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
 
     <script defer src="/src/script.js"></script>
-    <script defer src="carousel.js"></script>
-
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"
@@ -1265,6 +1200,5 @@
       defer
       src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"
     ></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   </body>
 </html>

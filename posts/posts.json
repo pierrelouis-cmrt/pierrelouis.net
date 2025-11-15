@@ -25,5 +25,23 @@
     "description": "Why everyone chooses China as their manufacturing hub? Is China really on the verge of surpassing the US in AI?",
     "image": "",
     "tag": "Articles"
+  },
+  {
+    "year": 2025,
+    "month": "Dec",
+    "day": 1,
+    "title": "Was maths invented or discovered?",
+    "description": "An exploration of the philosophy of mathematics and its origins.",
+    "image": "",
+    "tag": "Articles"
+  },
+  {
+    "year": 2025,
+    "month": "Nov",
+    "day": 15,
+    "title": "The art of stressing",
+    "description": "Understanding stress: where it comes from and how to find balance in a hectic world.",
+    "image": "",
+    "tag": "Notes"
   }
 ]

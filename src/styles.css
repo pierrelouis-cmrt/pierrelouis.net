@@ -3310,11 +3310,6 @@ article p {
   hyphens: auto;
 }
 
-/* Indent only the opening paragraph */
-article > p:first-of-type {
-  text-indent: 1.5em;
-}
-
 /* Keep rhythm tight between consecutive paragraphs */
 article p + p {
   margin-top: var(--space-4);
