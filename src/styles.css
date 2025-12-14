@@ -1449,8 +1449,7 @@ a.project-card:not(:hover) .lucide {
 }
 
 .more-page-path {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
+  font-size: var(--text-body);
   letter-spacing: normal;
 }
 
