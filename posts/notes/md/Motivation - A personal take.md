@@ -2,7 +2,7 @@ I’m thinking a lot about motivation. I believe it’s something you can work o
 
 But the concept of motivation itself is kinda hard to grasp and even comprehend. So is there a proper way to summon motivation as a whole? Or should I focus on finding near objectives and goals to give a place/state to move my life to?
 
-When I look at where my motivation actually comes from, I realise how different it can be from person to person. For some people, a source of motivation can be fear, fame and failure itself.
+When I look at where my motivation actually comes from, I realise how different it can be from person to person. For some people, a source of motivation can be fear or even failure itself.
 
 For me, it’s the opposite: fear grips my mind and I feel like I’m almost paralyzed. It’s a very weird feeling.
 
