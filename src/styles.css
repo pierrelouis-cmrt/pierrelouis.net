@@ -952,7 +952,7 @@ a.project-card:not(:hover) .lucide {
   position: relative;
   margin-inline: 0;
   display: flex;
-  align-items: left;
+  align-items: flex-start;
   box-sizing: border-box;
   width: 100%;
   gap: 15px;
@@ -1166,9 +1166,6 @@ a.project-card:not(:hover) .lucide {
 
 .connect-widgets-grid {
   margin-top: var(--space-8);
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-auto-rows: auto;
   gap: var(--space-6);
   width: 100%;
   max-width: 720px;
@@ -1389,8 +1386,7 @@ a.project-card:not(:hover) .lucide {
 
 @media (min-width: 600px) {
   .connect-widgets-grid {
-    grid-template-columns: minmax(320px, 2fr) minmax(220px, 1fr);
-    grid-template-areas: "stack more";
+    grid-template-columns: 1fr;
     align-items: stretch;
   }
 
@@ -1422,6 +1418,102 @@ a.project-card:not(:hover) .lucide {
   .more-panel {
     height: 100%;
     width: 100%;
+  }
+}
+
+/* More Section */
+.more-pages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.more-pages .post-card {
+  padding: var(--space-2) 0;
+}
+
+.more-pages .post-card-title {
+  margin-bottom: 0;
+}
+
+.more-pages .post-card-title svg {
+  width: 18px;
+  height: 18px;
+  margin-right: var(--space-2);
+  color: var(--text-subtle);
+  transition: color 120ms ease-in-out;
+}
+
+.more-pages .post-card-link:hover .post-card-title svg {
+  color: var(--text-body);
+}
+
+.more-page-path {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: normal;
+}
+
+.more-page-meta {
+  color: var(--text-subtle);
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  text-align: right;
+  max-width: 18ch;
+}
+
+/* Connect + More row (homepage) */
+.home-connect-more {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+.home-connect-more-inner {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.home-connect-more #connect .section-heading,
+.home-connect-more #more .section-heading {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+@media (min-width: 900px) {
+  .home-connect-more-inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: var(--space-12);
+  }
+
+  .home-connect-more #connect,
+  .home-connect-more #more {
+    flex: 0 0 auto;
+    width: fit-content;
+  }
+
+  .home-connect-more #connect .connect-widgets-grid,
+  .home-connect-more #connect .connect-widgets-stack {
+    width: fit-content;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .home-connect-more #connect .connect-widgets-stack .music-widget,
+  .home-connect-more #connect .connect-widgets-stack .location-widget {
+    width: 350px;
+    max-width: 350px;
+  }
+
+  .home-connect-more #more .posts-grid.more-pages {
+    width: 350px;
+    max-width: 350px;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 
@@ -1753,8 +1845,8 @@ hr.divider-thin {
   display: flex;
   min-height: 80px;
   max-width: fit-content;
-  justify-content: left;
-  align-items: left;
+  justify-content: flex-start;
+  align-items: flex-start;
   cursor: pointer;
   transition: all 0.6s ease;
   padding: 20px;
@@ -4042,7 +4134,7 @@ mjx-container::-webkit-scrollbar-thumb {
 
   .project-card,
   .post-card {
-    padding: 0.3rem var(--space-5);
+    padding: 0.3rem var(--space-5) !important;
   }
 
   .project-card-title,
