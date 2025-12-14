@@ -1481,18 +1481,22 @@ a.project-card:not(:hover) .lucide {
   margin-right: 0;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 768px) {
   .home-connect-more-inner {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: var(--space-12);
+    gap: var(--space-8);
   }
 
-  .home-connect-more #connect,
+  .home-connect-more #connect {
+    flex: 0 0 350px;
+    width: 350px;
+  }
+
   .home-connect-more #more {
-    flex: 0 0 auto;
-    width: fit-content;
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   .home-connect-more #connect .connect-widgets-grid,
@@ -1510,8 +1514,8 @@ a.project-card:not(:hover) .lucide {
   }
 
   .home-connect-more #more .posts-grid.more-pages {
-    width: 350px;
-    max-width: 350px;
+    width: 100%;
+    max-width: none;
     margin-left: 0;
     margin-right: 0;
   }
