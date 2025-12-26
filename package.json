@@ -16,7 +16,8 @@
     "build:posts": "node scripts/buildPosts.js",
     "build:bookmarks": "node scripts/buildBookmarks.js",
     "build:md": "node scripts/buildMdPages.js",
-    "build": "npm run build:css && npm run build:posts && npm run build:bookmarks && npm run build:md",
+    "build:push": "node scripts/pushBuildBranch.mjs",
+    "build": "npm run build:css && npm run build:posts && npm run build:bookmarks && npm run build:md && npm run build:push",
     "build:content": "npm run build:posts && npm run build:bookmarks && npm run build:md",
     "dev": "node scripts/buildCssVersioned.mjs --dev && node scripts/buildPosts.js && node scripts/buildMdPages.js && npx tailwindcss -i ./src/styles.css -o ./src/output-dev.css --watch"
   }
