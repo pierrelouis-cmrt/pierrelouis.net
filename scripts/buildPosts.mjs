@@ -1,4 +1,4 @@
-// scripts/buildPosts.js
+// scripts/buildPosts.mjs
 // -----------------------------------------------------------------------------
 // Generate static HTML for the full timeline (posts/index.html) and for the
 // "latest 3 posts" block (index.html).  Idempotent: each run fully replaces
@@ -9,7 +9,7 @@
 import { readFile, writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
-import { loadPosts } from "./postsData.js";
+import { loadPosts } from "./postsData.mjs";
 
 /* -------------------------------------------------------------------------- */
 /*  Paths                                                                     */

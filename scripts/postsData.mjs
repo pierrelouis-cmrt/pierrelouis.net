@@ -1,4 +1,4 @@
-// scripts/postsData.js
+// scripts/postsData.mjs
 // ---------------------------------------------------------------------------
 // Reads markdown from the Obsidian vault (if available) or /posts/md and
 // exposes normalized post metadata + content.
