@@ -1,0 +1,1953 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+  <head>
+    <script>
+      (() => {
+        const theme = localStorage.theme || "system";
+        if (
+          theme === "dark" ||
+          (theme === "system" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      })();
+    </script>
+    <script>
+      const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta name="google" content="notranslate" />
+    <title>Pierre-Louis &ndash; Web Dev</title>
+    <style>
+      [x-cloak] {
+        display: none;
+      }
+    </style>
+    <meta name="author" content="Pierre-Louis" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      name="description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      property="og:description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+    <meta property="og:url" content="https://pierrelouis.net" />
+    <meta property="og:image" content="assets/social-media-preview.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      name="twitter:description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+    <meta name="twitter:image" content="assets/social-media-preview.png" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="preload" href="/src/output-134f40cbde.css" as="style" />
+
+    <link rel="stylesheet" href="/src/output-134f40cbde.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      />
+    </noscript>
+
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="51538055-0cc5-4a88-8f4f-8d3b77f708b4"
+    ></script>
+  </head>
+
+  <body id="page-top">
+    <nav class="site-navigation">
+      <div class="navigation-container">
+        <div class="navigation-left">
+          <a class="navigation-brand" href="/"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-circle-arrow-left back"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M16 12H8" />
+              <path d="m12 8-4 4 4 4" />
+            </svg>
+            Back Home</a
+          >
+          <div class="navigation-links"></div>
+        </div>
+        <div class="navigation-right">
+          <div
+            x-data="{ 
+      commandOpen: false,
+      isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+      isMac: /(Mac|iPhone|iPad|iPod)/i.test(navigator.platform) || (navigator.maxTouchPoints > 1 && /Mac/i.test(navigator.platform))
+    }"
+            x-init="
+      $watch('commandOpen', function(value){
+        if(value === true && !isTouchDevice){
+          $nextTick(() => { window.dispatchEvent(new CustomEvent('command-input-focus')); });
+        }
+      })
+    "
+            @keydown.escape.window="commandOpen = false"
+            @open-command-palette.window="commandOpen = true"
+            @keydown.window="
+      if (($event.ctrlKey || $event.metaKey) && !$event.shiftKey && $event.key.toLowerCase() === 'k') {
+        $event.preventDefault();
+        commandOpen = true;
+      }
+    "
+            class="relative z-50 w-auto h-auto"
+          >
+            <button
+              aria-label="Open command palette"
+              @click="commandOpen = true"
+              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium rounded-xl hover:bg-[var(--bg-hover)] disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <svg
+                class="w-4 h-4 mr-0 sm:mr-2 text-[var(--text-body)] shrink-0"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <span
+                class="flex-1 mr-5 text-left text-[var(--text-body)] hidden sm:inline"
+                >Search...</span
+              >
+              <span
+                class="ml-auto text-xs text-[var(--text-subtle)] border border-dashed border-[var(--border-light)] rounded-md px-1 hidden sm:inline"
+              >
+                <span x-text="isMac ? '⌘' : 'Ctrl'"></span>
+                &nbsp;+&nbsp;K
+              </span>
+            </button>
+
+            <!-- Desktop Command Palette (Alpine.js) -->
+            <template x-teleport="body">
+              <div
+                x-data="{}"
+                x-init="$watch('commandOpen', value => {
+        const touch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+        if (!touch) {
+          document.body.classList.toggle('overflow-hidden', value);
+        }
+      })"
+                x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
+                class="fixed inset-0 z-[99] flex items-start justify-center pt-[15vh] w-screen h-screen pointer-events-auto"
+                @click="commandOpen = false"
+                x-cloak
+              >
+                <div
+                  x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
+                  x-transition:enter="ease-out duration-150"
+                  x-transition:enter-start="opacity-0"
+                  x-transition:enter-end="opacity-100"
+                  x-transition:leave="ease-in duration-100"
+                  x-transition:leave-start="opacity-100"
+                  x-transition:leave-end="opacity-0"
+                  class="absolute inset-0 w-full h-full bg-[rgba(0,0,0,0.4)] backdrop-blur-sm will-change-opacity"
+                ></div>
+
+                <div
+                  x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
+                  x-transition:enter="ease-out duration-150 transform"
+                  x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                  x-transition:leave="ease-in duration-100 transform"
+                  x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                  x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  x-data="{
+        commandItemsData: window.COMMAND_ITEMS_DATA,
+        commandItems: [],
+        commandItemsFiltered: [],
+        commandItemActive: null,
+        commandItemSelected: null,
+        commandId: $id('command'),
+        commandSearch: '',
+        isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+        itemsCache: {},
+
+        commandSearchIsEmpty() {
+          return !this.commandSearch || this.commandSearch.length === 0;
+        },
+
+        commandItemIsActive(item) {
+          return this.commandItemActive && this.commandItemActive.value === item.value;
+        },
+
+        commandItemActiveNext() {
+          if (this._navigating) return;
+          this._navigating = true;
+
+          const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
+          if (index < this.commandItemsFiltered.length - 1) {
+            this.commandItemActive = this.commandItemsFiltered[index + 1];
+            this.$nextTick(() => {
+              this.commandScrollToActiveItem();
+              setTimeout(() => { this._navigating = false; }, 50);
+            });
+          } else {
+            this._navigating = false;
+          }
+        },
+
+        commandItemActivePrevious() {
+          if (this._navigating) return;
+          this._navigating = true;
+
+          const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
+          if (index > 0) {
+            this.commandItemActive = this.commandItemsFiltered[index - 1];
+            this.$nextTick(() => {
+              this.commandScrollToActiveItem();
+              setTimeout(() => { this._navigating = false; }, 50);
+            });
+          } else {
+            this._navigating = false;
+          }
+        },
+
+        commandScrollToActiveItem() {
+          if (!this.commandItemActive || !this.$refs.commandItemsList) return;
+
+          const activeElement = document.getElementById(this.commandItemActive.value + '-' + this.commandId);
+          if (!activeElement) return;
+
+          const container = this.$refs.commandItemsList;
+          const containerRect = container.getBoundingClientRect();
+          const elementRect = activeElement.getBoundingClientRect();
+
+          if (elementRect.bottom > containerRect.bottom) {
+            container.scrollTop += (elementRect.bottom - containerRect.bottom);
+          } else if (elementRect.top < containerRect.top) {
+            container.scrollTop -= (containerRect.top - elementRect.top);
+          }
+        },
+
+        _searchTimeoutId: null,
+        commandSearchItems() {
+          if (this._searchTimeoutId) {
+            clearTimeout(this._searchTimeoutId);
+          }
+
+          this._searchTimeoutId = setTimeout(() => {
+            const cacheKey = (this.commandSearch || '').toLowerCase();
+
+            if (this.itemsCache[cacheKey]) {
+              this.commandItemsFiltered = this.itemsCache[cacheKey];
+            } else {
+              if (!this.commandSearchIsEmpty()) {
+                const searchTerm = cacheKey.replace(/\*/g, '');
+                this.commandItemsFiltered = this.commandItems.filter(item =>
+                  item.title.toLowerCase().includes(searchTerm));
+              } else {
+                this.commandItemsFiltered = this.commandItems.filter(item => item.default);
+              }
+
+              this.itemsCache[cacheKey] = this.commandItemsFiltered;
+            }
+
+            this.commandItemActive = this.commandItemsFiltered[0] || null;
+          }, 100);
+        },
+
+        commandShowCategory(item, index) {
+          if (index === 0) return true;
+          if (!this.commandItemsFiltered[index - 1]) return false;
+          return item.category !== this.commandItemsFiltered[index - 1].category;
+        },
+
+        commandCategoryCapitalize(string) {
+          return string.charAt(0).toUpperCase() + string.slice(1);
+        },
+
+        commandItemsReorganize() {
+          const totalItems = Object.keys(this.commandItemsData).reduce(
+            (acc, category) => {
+              const items = this.commandItemsData[category];
+              return acc + (Array.isArray(items) ? items.length : 0);
+            },
+            0
+          );
+          this.commandItems = new Array(totalItems);
+
+          let index = 0;
+          for (const category in this.commandItemsData) {
+            const categoryItems = this.commandItemsData[category];
+            if (!Array.isArray(categoryItems)) continue;
+            for (const item of categoryItems) {
+              item.category = category;
+              this.commandItems[index++] = item;
+            }
+          }
+
+          if (index < this.commandItems.length) {
+            this.commandItems.length = index;
+          }
+
+          this.itemsCache = {};
+          this.itemsCache[''] = this.commandItems.filter(item => item.default);
+        },
+
+        handleSelectedItem(item) {
+          if (!item) return;
+
+          if (item.value === 'theme') {
+            $store.theme.toggle();
+            this.commandItemSelected = null;
+          } else {
+            const targetUrl = this.actionMap[item.value];
+            if (targetUrl) {
+              window.location.href = targetUrl;
+            }
+            commandOpen = false;
+          }
+        },
+        actionMap: window.COMMAND_ACTION_MAP
+      }"
+                  x-init="
+        const dataUpdateHandler = () => {
+          commandItemsReorganize();
+          commandSearchItems();
+        };
+        window.addEventListener('command-palette-data-updated', dataUpdateHandler);
+        commandItemsReorganize();
+        commandSearchItems();
+        $watch('commandSearch', () => commandSearchItems());
+        $watch('commandItemSelected', item => handleSelectedItem(item));
+        window.loadCommandPalettePosts && window.loadCommandPalettePosts().catch(() => {});
+      "
+                  @keydown.down.prevent="commandItemActiveNext()"
+                  @keydown.up.prevent="commandItemActivePrevious()"
+                  @keydown.enter="commandItemSelected = commandItemActive; commandItemActive = null;"
+                  @command-input-focus.window="$refs.commandInput.focus()"
+                  class="relative z-10 w-full max-w-[95%] sm:max-w-xl px-0"
+                  x-cloak
+                  @click.stop
+                >
+                  <div
+                    class="box-border border-2 border-[var(--border-secondary)] flex flex-col min-h-0 max-h-[80vh] w-full p-2 bg-[var(--bg-primary)] rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm pointer-events-auto relative"
+                  >
+                    <div
+                      class="absolute top-[-15px] left-5 px-4 py-1 border-2 rounded-full border-[var(--border-light)] bg-[var(--bg-primary)] hidden sm:block"
+                    >
+                      <p class="m-0 text-sm p-0">Command</p>
+                    </div>
+
+                    <div
+                      class="flex items-center px-3 border-dotted border-b border-[var(--bg-hover)]"
+                    >
+                      <svg
+                        class="w-4 h-4 mr-0 text-[var(--border-secondary)] shrink-0"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+                      </svg>
+                      <input
+                        type="text"
+                        x-ref="commandInput"
+                        x-model="commandSearch"
+                        class="flex w-full px-2 py-3 text-sm bg-transparent border-0 rounded-md outline-none focus:outline-none focus:ring-0 focus:border-0 placeholder:text-[var(--border-secondary)] h-11 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="Type a command or search..."
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                      />
+                    </div>
+
+                    <div
+                      x-ref="commandItemsList"
+                      class="grow min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain"
+                      data-command-list
+                    >
+                      <template
+                        x-for="(item, index) in commandItemsFiltered"
+                        :key="item.value"
+                      >
+                        <div class="pb-1 space-y-1">
+                          <template x-if="commandShowCategory(item, index)">
+                            <div class="px-1 overflow-hidden">
+                              <div
+                                class="px-2 py-1 my-1 text-xs font-medium text-[var(--text-primary)]"
+                                x-text="commandCategoryCapitalize(item.category)"
+                              ></div>
+                            </div>
+                          </template>
+                          <template
+                            x-if="(item.default && commandSearchIsEmpty()) || !commandSearchIsEmpty()"
+                          >
+                            <div class="px-1">
+                              <div
+                                :id="item.value + '-' + commandId"
+                                @click="commandItemSelected=item"
+                                @mouseenter="commandItemActive=item"
+                                x-bind:class="commandItemIsActive(item) ? 'bg-[var(--bg-hover)] text-[var(--text-body)]' : 'text-[var(--text-muted)]'"
+                                class="relative flex cursor-pointer select-none items-center rounded-[10px] px-2 py-1 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                              >
+                                <span x-html="item.icon"></span>
+                                <span
+                                  x-text="item.value === 'theme' ? ('Toggle Theme (current: ' + $store.theme.mode + ')') : item.title"
+                                ></span>
+                                <template x-if="item.right && !isTouchDevice">
+                                  <span
+                                    class="ml-auto text-xs px-1 py-1 tracking-widest text-[var(--text-body)] border border-[var(--bg-hover)] rounded-md"
+                                    x-text="item.right"
+                                  ></span>
+                                </template>
+                              </div>
+                            </div>
+                          </template>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!-- Mobile Bottom Drawer (Alpine.js) - Enhanced version -->
+            <template x-teleport="body">
+              <div
+                x-data="{
+      drawerOpen: false,
+      isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+      dragStartY: 0,
+      currentY: 0,
+      translateY: 100,
+      isDragging: false,
+      velocity: 0,
+      lastY: 0,
+      lastTime: 0,
+      snapThreshold: 20,
+      searchQuery: '',
+      isAnimating: false,
+      openDuration: 420,
+      closeDuration: 260,
+      animationCurve: 'cubic-bezier(0.16, 1, 0.3, 1)',
+      drawerHeight: null,
+      openFrame: null,
+      settleTimer: null,
+      themeTimer: null,
+      dataRevision: 0,
+
+      get allItems() {
+        void this.dataRevision;
+        const items = [];
+        const categories = Object.keys(window.COMMAND_ITEMS_DATA || {});
+
+        for (const category of categories) {
+          const bucket = window.COMMAND_ITEMS_DATA && window.COMMAND_ITEMS_DATA[category];
+          const categoryItems = Array.isArray(bucket) ? bucket : [];
+          const filtered = !this.searchQuery
+            ? categoryItems.filter(item => item.default)
+            : categoryItems.filter(item =>
+                item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+              );
+
+          if (filtered.length > 0) {
+            items.push({ type: 'header', category });
+            items.push(...filtered.map(item => ({ ...item, type: 'item' })));
+          }
+        }
+
+        return items;
+      },
+
+      openDrawer() {
+        const self = this;
+
+        if (self.settleTimer) {
+          clearTimeout(self.settleTimer);
+          self.settleTimer = null;
+        }
+        if (self.openFrame) {
+          cancelAnimationFrame(self.openFrame);
+          self.openFrame = null;
+        }
+        if (self.themeTimer) {
+          clearTimeout(self.themeTimer);
+          self.themeTimer = null;
+        }
+
+        self.drawerHeight = null;
+        self.drawerOpen = true;
+        self.isAnimating = true;
+        self.translateY = 100;
+        self.velocity = 0;
+        self.isDragging = false;
+
+        const overlayController = window.__overlayChromeController;
+        const canUseController =
+          overlayController && typeof overlayController.open === 'function';
+
+        if (canUseController) {
+          overlayController.open('drawer');
+        } else {
+          document.body.style.overflow = 'hidden';
+          document.body.style.position = 'fixed';
+          document.body.style.width = '100%';
+        }
+
+        requestAnimationFrame(() => {
+          self.openFrame = requestAnimationFrame(() => {
+            self.translateY = 0;
+            self.openFrame = null;
+            self.settleTimer = setTimeout(() => {
+              self.isAnimating = false;
+              self.settleTimer = null;
+            }, self.openDuration);
+            self.$nextTick(() => {
+              if (self.drawerHeight === null) {
+                const drawer = self.$refs.drawerContainer;
+                if (drawer) {
+                  self.drawerHeight = drawer.getBoundingClientRect().height;
+                }
+              }
+            });
+          });
+        });
+
+        // Update meta theme-color for Safari bottom bar
+        self.updateThemeColor();
+      },
+
+      closeDrawer() {
+        const self = this;
+
+        if (self.openFrame) {
+          cancelAnimationFrame(self.openFrame);
+          self.openFrame = null;
+        }
+        if (self.settleTimer) {
+          clearTimeout(self.settleTimer);
+          self.settleTimer = null;
+        }
+        if (self.themeTimer) {
+          clearTimeout(self.themeTimer);
+          self.themeTimer = null;
+        }
+
+        self.isAnimating = true;
+        self.isDragging = false;
+        self.translateY = 100;
+
+        // IMPORTANT: Reset commandOpen to fix Android button state
+        commandOpen = false;
+
+        const overlayController = window.__overlayChromeController;
+        const canUseController =
+          overlayController &&
+          typeof overlayController.close === 'function' &&
+          overlayController.hasActiveOverlays &&
+          overlayController.hasActiveOverlays();
+
+        if (canUseController) {
+          overlayController.close('drawer');
+        } else {
+          // Reset theme color slightly before drawer fully closes
+          self.themeTimer = setTimeout(() => {
+            self.resetThemeColor();
+            self.themeTimer = null;
+          }, Math.min(200, self.closeDuration));
+        }
+
+        self.settleTimer = setTimeout(() => {
+          self.drawerOpen = false;
+          self.isAnimating = false;
+          if (!canUseController) {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+          }
+          self.searchQuery = '';
+          self.drawerHeight = null;
+          self.settleTimer = null;
+        }, self.closeDuration);
+      },
+
+      updateThemeColor() {
+        const overlayController = window.__overlayChromeController;
+        if (overlayController) {
+          overlayController.updateThemeColor();
+          return;
+        }
+
+        let metaTheme = document.querySelector('meta[name=\'theme-color\']');
+        if (!metaTheme) {
+          metaTheme = document.createElement('meta');
+          metaTheme.name = 'theme-color';
+          document.head.appendChild(metaTheme);
+        }
+
+        const isDark = document.documentElement.classList.contains('dark');
+        metaTheme.content = isDark ? '#0f0f0f' : '#faf9f9';
+      },
+
+      resetThemeColor() {
+        const overlayController = window.__overlayChromeController;
+        if (overlayController) {
+          overlayController.resetThemeColor();
+          return;
+        }
+
+        const metaTheme = document.querySelector('meta[name=\'theme-color\']');
+        if (metaTheme) {
+          metaTheme.content = '#ffffff';
+        }
+      },
+
+      startDrag(e) {
+        if (e.target.closest('[data-no-drag]')) return;
+        if (this.isAnimating) return;
+
+        this.isDragging = true;
+        this.dragStartY = e.touches ? e.touches[0].clientY : e.clientY;
+        this.lastY = this.dragStartY;
+        this.lastTime = Date.now();
+        this.velocity = 0;
+      },
+
+      onDrag(e) {
+        if (!this.isDragging || this.isAnimating) return;
+
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const deltaY = clientY - this.dragStartY;
+
+        // Calculate velocity
+        const now = Date.now();
+        const deltaTime = now - this.lastTime;
+        if (deltaTime > 0) {
+          this.velocity = (clientY - this.lastY) / deltaTime;
+        }
+        this.lastY = clientY;
+        this.lastTime = now;
+
+        // Apply resistance when dragging up
+        if (deltaY < 0) {
+          this.translateY = deltaY * 0.15;
+        } else {
+          this.translateY = Math.min(100, (deltaY / window.innerHeight) * 100);
+        }
+      },
+
+      endDrag() {
+        if (!this.isDragging) return;
+        this.isDragging = false;
+
+        const shouldClose = this.translateY > this.snapThreshold || this.velocity > 0.3;
+
+        if (shouldClose) {
+          this.closeDrawer();
+        } else {
+          this.translateY = 0;
+        }
+      },
+
+      handleItemClick(item) {
+        if (item.value === 'theme') {
+          $store.theme.toggle();
+          this.updateThemeColor();
+        } else if (item.value === 'email') {
+          window.location.href = window.COMMAND_ACTION_MAP[item.value];
+          this.closeDrawer();
+        } else {
+          const targetUrl = window.COMMAND_ACTION_MAP[item.value];
+          if (targetUrl) {
+            window.location.href = targetUrl;
+          }
+          this.closeDrawer();
+        }
+      },
+
+      formatCategoryName(category) {
+        return category.charAt(0).toUpperCase() + category.slice(1);
+      },
+
+      transitionStyle() {
+        if (this.isDragging) {
+          return 'none';
+        }
+
+        const duration = this.isAnimating ? this.openDuration : this.closeDuration;
+        return `transform ${duration}ms ${this.animationCurve}`;
+      },
+
+      drawerStyles() {
+        const styles = {
+          transform: `translate3d(-50%, ${Math.max(0, this.translateY)}%, 0)`,
+          transition: this.transitionStyle(),
+          left: '50%',
+          maxWidth: '640px',
+          width: '100%',
+        };
+
+        if (this.drawerHeight !== null) {
+          styles.height = `${this.drawerHeight}px`;
+        }
+
+        return styles;
+      }
+    }"
+                x-init="
+      const dataUpdateHandlerMobile = () => { dataRevision += 1; };
+      window.addEventListener('command-palette-data-updated', dataUpdateHandlerMobile);
+      window.loadCommandPalettePosts && window.loadCommandPalettePosts().catch(() => {});
+
+      $watch('commandOpen', value => {
+        if (value && (window.innerWidth < 768 || isTouchDevice)) {
+          commandOpen = false;
+          openDrawer();
+        }
+      });
+
+      // Watch for theme changes to update Safari chrome
+      $watch('$store.theme.mode', () => {
+        if (drawerOpen) {
+          updateThemeColor();
+        }
+      });
+    "
+                x-show="drawerOpen"
+                @click="closeDrawer()"
+                class="fixed inset-0 z-[100] touch-none"
+                x-cloak
+              >
+                <!-- Backdrop with better dark mode contrast -->
+                <div
+                  x-show="drawerOpen"
+                  x-transition:enter="ease-out duration-400"
+                  x-transition:enter-start="opacity-0"
+                  x-transition:enter-end="opacity-100"
+                  x-transition:leave="ease-in duration-200"
+                  x-transition:leave-start="opacity-100"
+                  x-transition:leave-end="opacity-0"
+                  :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'bg-black/60' : 'bg-black/30'"
+                  class="absolute inset-0 backdrop-blur-sm transition-colors duration-300"
+                  :style="`opacity: ${drawerOpen ? Math.max(0, 1 - (translateY / 100)) : 0}`"
+                ></div>
+
+                <!-- Bottom Sheet with smooth entrance animation -->
+                <div
+                  x-show="drawerOpen"
+                  @click.stop
+                  @touchstart="startDrag"
+                  @touchmove="onDrag"
+                  @touchend="endDrag"
+                  @mousedown="startDrag"
+                  @mousemove="onDrag"
+                  @mouseup="endDrag"
+                  @mouseleave="endDrag"
+                  :style="drawerStyles()"
+                  :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'ring-1 ring-white/10' : ''"
+                  class="absolute bottom-0 w-full bg-[var(--bg-primary)] rounded-t-[28px] shadow-2xl max-h-[75vh] flex flex-col"
+                  x-ref="drawerContainer"
+                  style="
+                    will-change: transform;
+                    padding-bottom: env(safe-area-inset-bottom);
+                  "
+                >
+                  <!-- Larger Invisible Drag Handle Area -->
+                  <div
+                    class="relative pt-3 pb-6 -mb-3 cursor-grab active:cursor-grabbing"
+                  >
+                    <!-- Visual Handle with better visibility in dark mode -->
+                    <div
+                      :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'opacity-40' : 'opacity-30'"
+                      class="mx-auto w-11 h-1 bg-[var(--border-secondary)] rounded-full transition-opacity duration-300"
+                    ></div>
+                  </div>
+
+                  <!-- Search Bar -->
+                  <div class="px-4 pb-3" data-no-drag>
+                    <div
+                      class="flex items-center border border-[var(--border-light)] rounded-xl px-3.5 py-2.5"
+                    >
+                      <svg
+                        class="w-4 h-4 text-[var(--text-subtle)] mr-2.5 opacity-60"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                      </svg>
+                      <input
+                        type="search"
+                        x-model="searchQuery"
+                        placeholder="Type a command or search..."
+                        class="flex-1 bg-transparent outline-none text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] text-base"
+                        style="font-size: 16px"
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                        data-no-drag
+                      />
+                      <button
+                        x-show="searchQuery"
+                        @click="searchQuery = ''"
+                        class="ml-2 p-1 -mr-1"
+                        data-no-drag
+                      >
+                        <svg
+                          class="w-4 h-4 text-[var(--text-subtle)]"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M18 6 6 18"></path>
+                          <path d="m6 6 12 12"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Scrollable Content with stagger animation -->
+                  <div
+                    class="flex-1 overflow-y-auto overscroll-contain px-2 pb-4"
+                    data-no-drag
+                  >
+                    <template x-for="(item, index) in allItems" :key="index">
+                      <div>
+                        <!-- Section Header -->
+                        <template x-if="item.type === 'header'">
+                          <div class="px-3 pt-3 pb-1.5">
+                            <div
+                              class="text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider opacity-60"
+                              x-text="formatCategoryName(item.category)"
+                            ></div>
+                          </div>
+                        </template>
+
+                        <!-- Item -->
+                        <template x-if="item.type === 'item'">
+                          <button
+                            @click="handleItemClick(item)"
+                            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-transform duration-150 active:scale-[0.98]"
+                            data-no-drag
+                          >
+                            <!-- Icon -->
+                            <span
+                              x-html="item.icon"
+                              class="[&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-[var(--text-subtle)]"
+                            ></span>
+
+                            <!-- Text -->
+                            <span
+                              class="flex-1 text-left text-[var(--text-body)] text-[15px]"
+                              x-text="item.value === 'theme' ? ('Toggle Theme (' + $store.theme.mode + ')') : item.title"
+                            ></span>
+
+                            <!-- Chevron -->
+                            <template x-if="item.value !== 'theme'">
+                              <svg
+                                class="w-4 h-4 text-[var(--border-secondary)] opacity-60"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path d="m9 18 6-6-6-6"></path>
+                              </svg>
+                            </template>
+                          </button>
+                        </template>
+                      </div>
+                    </template>
+
+                    <!-- Empty State -->
+                    <div
+                      x-show="allItems.length === 0"
+                      class="text-center pt-6 pb-12"
+                    >
+                      <p class="text-[var(--text-subtle)] text-sm">
+                        No results found
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <h2 class="section-heading">Tech Arsenal</h2>
+      <p class="page-subtitle text-italic">
+        A curated collection of tools, software, and hardware that power my
+        creative workflow.
+      </p>
+      <hr class="divider-standard" />
+
+      <div
+        class="tech-stack-sections w-full flex flex-col overflow-clip"
+        id="arsenal-sections"
+      >
+        <div
+          class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
+          style="border-bottom: 1px solid var(--border-light)"
+        >
+          <span
+            class="tech-stack-category text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
+            >Languages
+            <hr
+              class="tech-stack-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
+          /></span>
+          <div
+            class="tech-stack-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
+          >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://en.wikipedia.org/wiki/CSS"
+              ><img
+                alt="Favicon"
+                name="CSS"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Official_CSS_Logo.svg/120px-Official_CSS_Logo.svg.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">CSS</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://sass-lang.com/"
+              ><img
+                alt="Favicon"
+                name="SCSS"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://sass-lang.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">SCSS</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://en.wikipedia.org/wiki/JavaScript"
+              ><img
+                alt="Favicon"
+                name="JavaScript"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Javascript-736400_960_720.png/250px-Javascript-736400_960_720.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Javascript</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.python.org/"
+              ><img
+                alt="Favicon"
+                name="Python"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.python.org/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Python</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)"
+              ><img
+                alt="Favicon"
+                name="Bash"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJFDJLaUHfkk5JOqF2RTfK4m3RgHi3kM7Txw&s"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Bash</span>
+              </div></a
+            >
+          </div>
+        </div>
+        <div
+          class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
+          style="border-bottom: 1px solid var(--border-light)"
+        >
+          <span
+            class="tech-stack-category text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
+            >Tools/Saas
+            <hr
+              class="tech-stack-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
+          /></span>
+          <div
+            class="tech-stack-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
+          >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://prettier.io/"
+              ><img
+                alt="Favicon"
+                name="Prettier"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://prettier.io/icon.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Prettier</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.docker.com/"
+              ><img
+                alt="Favicon"
+                name="Docker"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.docker.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Docker</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://tailwindcss.com/"
+              ><img
+                alt="Favicon"
+                name="Tailwind CSS"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://tailwindcss.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Tailwind</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://alpinejs.dev/"
+              ><img
+                alt="Favicon"
+                name="AlpineJS"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://alpinejs.dev/favicon.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Alpine JS</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://github.com/"
+              ><img
+                alt="Favicon"
+                name="GitHub"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbqj9Ii13d6hx5a9kyLnC5A8A96LDSaSZv_w&s"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">GitHub</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://openai.com/index/introducing-gpt-5/"
+              ><img
+                alt="Favicon"
+                name="OpenAI"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://openai.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">ChatGPT 5 Thinking</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://openai.com/codex/"
+              ><img
+                alt="Favicon"
+                name="OpenAI"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://openai.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">OpenAI Codex</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.anthropic.com/"
+              ><img
+                alt="Favicon"
+                name="Anthropic"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.anthropic.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Claude 4.5 Opus Thinking</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://gemini.google.com/"
+              ><img
+                alt="Favicon"
+                name="Gemini"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.gstatic.com/lamda/images/gemini_aurora_icon_4g_53fff55fa07630c47cc6c.svg"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Gemini 3 pro / 3 flash</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://huggingface.co/"
+              ><img
+                alt="Favicon"
+                name="Hugging Face"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://huggingface.co/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Hugging Face</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://t3.chat/"
+              ><img
+                alt="Favicon"
+                name="T3 Chat"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://t3.chat/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">T3 Chat</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.hostinger.com/"
+              ><img
+                alt="Favicon"
+                name="Hostinger"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.hostinger.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Hostinger</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.last.fm/"
+              ><img
+                alt="Favicon"
+                name="Last.fm"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.last.fm/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Last FM</span>
+              </div></a
+            >
+          </div>
+        </div>
+        <div
+          class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
+          style="border-bottom: 1px solid var(--border-light)"
+        >
+          <span
+            class="tech-stack-category text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
+            >Apps
+            <hr
+              class="tech-stack-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
+          /></span>
+          <div
+            class="tech-stack-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
+          >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://code.visualstudio.com/"
+              ><img
+                alt="Favicon"
+                name="Visual Studio Code"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://code.visualstudio.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Visual Studio Code</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.apple.com/fr/apple-music/"
+              ><img
+                alt="Favicon"
+                name="Apple Music"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apple_Music_icon.svg/120px-Apple_Music_icon.svg.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Apple Music</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://obsidian.md/"
+              ><img
+                alt="Favicon"
+                name="Obsidian"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://obsidian.md/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Obsidian</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://zen-browser.app/"
+              ><img
+                alt="Favicon"
+                name="Zen Browser"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://zen-browser.app/favicon.svg"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Zen Browser</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://bitwarden.com/"
+              ><img
+                alt="Favicon"
+                name="Bitwarden"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://bitwarden.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Bitwarden</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.icloud.com/"
+              ><img
+                alt="Favicon"
+                name="iCloud"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://help.apple.com/assets/677EB6990E35CFE25809758B/677EB69E5AFECC5ECD0B4978/en_AU/dc4bdf1973030717f16d02d3e44e3793.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">iCloud</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.raycast.com/"
+              ><img
+                alt="Favicon"
+                name="Raycast"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.raycast.com/favicon-production.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Raycast</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.overleaf.com/"
+              ><img
+                alt="Favicon"
+                name="Overleaf"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.overleaf.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Overleaf</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://dropoverapp.com/"
+              ><img
+                alt="Favicon"
+                name="Dropover"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://dropoverapp.com/assets/images/favicon-32x32.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Dropover</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.figma.com/"
+              ><img
+                alt="Favicon"
+                name="Figma"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://static.figma.com/app/icon/1/favicon.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Figma</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://raindrop.io/"
+              ><img
+                alt="Favicon"
+                name="Raindrop.io"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://raindrop.io/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Raindrop.io</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://apps.apple.com/us/app/focuspomo-pomodoro-timer/id1528322796"
+              ><img
+                alt="Favicon"
+                name="FocusPomo"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/2e/77/bd/2e77bd3b-1ec1-bc66-70c1-da73a8de8c80/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.jpg"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">FocusPomo</span>
+              </div></a
+            >
+          </div>
+        </div>
+        <div
+          class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
+        >
+          <span
+            class="tech-stack-category text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
+            >Hardware
+            <hr
+              class="tech-stack-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
+          /></span>
+          <div
+            class="tech-stack-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
+          >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.apple.com/fr/macbook-air/"
+              ><img
+                alt="Favicon"
+                name="iPhone 15 Pro (Daily Driver)"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.apple.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">iPhone 15 Pro (Daily Driver)</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.apple.com/fr/macbook-air/"
+              ><img
+                alt="Favicon"
+                name="AirPods Pro 2 (Daily Carry)"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.apple.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">AirPods Pro 2 (Daily Carry)</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.anker.com/"
+              ><img
+                alt="Favicon"
+                name="Anker 622 MagGo 5000mAh"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.anker.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Anker 622 MagGo 5000mAh</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.apple.com/fr/macbook-air/"
+              ><img
+                alt="Favicon"
+                name="MacBook Air M4"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.apple.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">MacBook Air M4</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.apple.com/fr/ipad-air/"
+              ><img
+                alt="Favicon"
+                name="iPad Air M3 11 inch"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.apple.com/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">iPad Air M3 11 inch</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.samsung.com/fr/smartphones/galaxy-s24/"
+              ><img
+                alt="Favicon"
+                name="Samsung Galaxy S24"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.samsung.com/etc.clientlibs/samsung/clientlibs/consumer/global/clientlib-common/resources/images/Favicon.png"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Samsung Galaxy S24</span>
+              </div></a
+            >
+            <a
+              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
+              href="https://www.shure.com/en-US"
+              ><img
+                alt="Favicon"
+                name="Shure MV7+"
+                loading="lazy"
+                width="64"
+                height="64"
+                decoding="async"
+                data-nimg="1"
+                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
+                style="color: transparent"
+                src="https://www.shure.com/en-US/favicon.ico"
+              />
+              <div
+                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
+              >
+                <span class="font-medium">Shure MV7+</span>
+              </div></a
+            >
+          </div>
+        </div>
+      </div>
+
+      <footer class="last-updated-block">
+        <div class="last-updated-block__dots">
+          <span></span><span></span><span></span>
+        </div>
+        <p class="last-updated"></p>
+      </footer>
+    </main>
+
+    <footer>
+      <div class="hero-links">
+        <p>
+          <a
+            class="link-with-icon"
+            rel="noopener"
+            href="#page-top"
+            data-back-to-top
+            >Back to top<svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              width="1em"
+              style="margin-left: 0.2em"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-up-icon lucide-arrow-up"
+            >
+              <path d="m5 12 7-7 7 7" />
+              <path d="M12 19V5" /></svg
+          ></a>
+        </p>
+        <div class="theme-toggle">
+          <button
+            aria-label="Toggle theme"
+            class="theme-toggle"
+            x-data
+            x-init="$store.theme.init()"
+            @click="$store.theme.toggle()"
+            :data-mode="$store.theme.mode"
+          >
+            <!-- System Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-monitor"
+              data-icon="system"
+            >
+              <rect width="20" height="14" x="2" y="3" rx="2" />
+              <line x1="8" x2="16" y1="21" y2="21" />
+              <line x1="12" x2="12" y1="17" y2="21" />
+            </svg>
+            <!-- Light/Sun Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-sun"
+              data-icon="light"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" />
+              <path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" />
+              <path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+            <!-- Dark/Moon Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-moon"
+              data-icon="dark"
+            >
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <p class="footer-meta-left">
+          Designed with
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#FE6F5E"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-heart w-3 h-3 mr-2 animate-bounce"
+          >
+            <path
+              d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+            />
+          </svg>
+          <span class="subtle">by</span> Pierre-Louis
+        </p>
+        <p class="footer-meta-right">© 2025</p>
+      </div>
+    </footer>
+
+    <script>
+      fetch(window.location.href).then((response) => {
+        const lastModified = response.headers.get("Last-Modified");
+        if (lastModified) {
+          const footerText = document.querySelector(".last-updated");
+          footerText.innerHTML = `This list evolves as my workflow does.<br>Last updated: ${new Date(
+            lastModified
+          ).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+          })}`;
+        }
+      });
+    </script>
+    <script>
+      // Select all <a> inside the div with id="arsenal-sections"
+      const links = document.querySelectorAll("#arsenal-sections a");
+      links.forEach((link) => {
+        link.setAttribute("target", "_blank");
+        // optional: add rel="noopener" for security/performance
+        link.setAttribute("rel", "noopener");
+      });
+    </script>
+    <script defer src="/src/script.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"
+    ></script>
+  </body>
+</html>

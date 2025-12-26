@@ -18,6 +18,6 @@
     "build:md": "node scripts/buildMdPages.js",
     "build": "npm run build:css && npm run build:posts && npm run build:bookmarks && npm run build:md",
     "build:content": "npm run build:posts && npm run build:bookmarks && npm run build:md",
-    "dev": "node scripts/buildCssVersioned.mjs --dev && npx tailwindcss -i ./src/styles.css -o ./src/output-dev.css --watch"
+    "dev": "node scripts/buildCssVersioned.mjs --dev && node scripts/buildPosts.js && node scripts/buildMdPages.js && npx tailwindcss -i ./src/styles.css -o ./src/output-dev.css --watch"
   }
 }

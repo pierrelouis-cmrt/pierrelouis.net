@@ -1,9 +1,7 @@
 // scripts/buildMdPages.js
 // ---------------------------------------------------------------------------
 // Converts *.md inside:
-//   posts/articles/md/     →  posts/articles/{slug}.html
-//   posts/notes/md/        →  posts/notes/{slug}.html
-//   posts/experiments/md/  →  posts/experiments/{slug}.html
+//   posts/md/  →  posts/{slug}.html
 //
 // Plug-ins & tweaks added (class names updated to article-*):
 //   • ==highlight==                     → <mark>
@@ -17,9 +15,10 @@
 //   • “image” ending in .mp4/.webm      → <video>
 // ---------------------------------------------------------------------------
 
-import { readFile, writeFile, readdir, mkdir } from "fs/promises";
+import { readFile, writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
+import { loadPosts, monthName } from "./postsData.js";
 
 import MarkdownIt from "markdown-it";
 import mark from "markdown-it-mark";
@@ -34,44 +33,13 @@ import mathjax from "markdown-it-mathjax"; // → leaves TeX for runtime MathJax
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 
-const JSON_PATH = path.join(root, "posts", "posts.json");
-const ARTICLES_MD_DIR = path.join(root, "posts", "articles", "md");
-const NOTES_MD_DIR = path.join(root, "posts", "notes", "md");
-const EXPERIMENTS_MD_DIR = path.join(root, "posts", "experiments", "md");
+const outArgIndex = process.argv.indexOf("--out");
+const outRoot =
+  outArgIndex !== -1 && process.argv[outArgIndex + 1]
+    ? path.resolve(root, process.argv[outArgIndex + 1])
+    : root;
 
-const ARTICLES_OUT_DIR = path.join(root, "posts", "articles");
-const NOTES_OUT_DIR = path.join(root, "posts", "notes");
-const EXPERIMENTS_OUT_DIR = path.join(root, "posts", "experiments");
-
-/* ---------- helpers ------------------------------------------------------ */
-const slugify = (t) =>
-  t
-    .toLowerCase()
-    .replace(/[^a-z0-9 _-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
-
-const monthName = (abbr) =>
-  ({
-    Jan: "January",
-    Feb: "February",
-    Mar: "March",
-    Apr: "April",
-    May: "May",
-    Jun: "June",
-    Jul: "July",
-    Aug: "August",
-    Sep: "September",
-    Oct: "October",
-    Nov: "November",
-    Dec: "December",
-  }[abbr] || abbr);
-
-/* ---------- Load JSON metadata ------------------------------------------ */
-const postsMeta = {};
-for (const p of JSON.parse(await readFile(JSON_PATH, "utf8"))) {
-  postsMeta[p.title] = p;
-}
+const POSTS_OUT_DIR = path.join(outRoot, "posts");
 
 /* ---------- SVG icon for the ‘info’ call-out ---------------------------- */
 const INFO_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`;
@@ -175,24 +143,14 @@ function preprocess(markdown) {
 }
 
 /* ---------- builder ----------------------------------------------------- */
-async function buildDir(srcDir, outDir) {
-  await mkdir(outDir, { recursive: true });
+async function buildPages(posts) {
+  await mkdir(POSTS_OUT_DIR, { recursive: true });
 
-  for (const file of await readdir(srcDir)) {
-    if (!file.endsWith(".md")) continue;
-
-    const title = file.replace(/\.md$/i, "");
-    const meta = postsMeta[title];
-    if (!meta) {
-      console.warn("⚠  No JSON metadata for", title);
-      continue;
-    }
-
-    const slug = slugify(title);
-    const rawMd = await readFile(path.join(srcDir, file), "utf8");
+  for (const post of posts) {
+    const rawMd = post.body;
     let rendered = md.render(preprocess(rawMd), {
-      slug,
-      lightboxGroup: `post-${slug}`,
+      slug: post.slug,
+      lightboxGroup: `post-${post.slug}`,
     });
 
     /* Normalize plugin-generated classes to article-* ------------------- */
@@ -211,7 +169,7 @@ async function buildDir(srcDir, outDir) {
       )
       .replace(/class="task-list"/g, 'class="article-task-list"');
 
-    const dateStr = `${monthName(meta.month)} ${meta.day}, ${meta.year}`;
+    const dateStr = `${monthName(post.month)} ${post.day}, ${post.year}`;
 
     //  — Task-list ULs: no bullets ————————————————————————————————
     const styledTasks = rendered.replace(
@@ -223,22 +181,21 @@ async function buildDir(srcDir, outDir) {
     const html = (
       await readFile(path.join(__dirname, "page-skeleton.html"), "utf8")
     )
-      .replace(/{{TITLE}}/g, title)
+      .replace(/{{TITLE}}/g, post.title)
       .replace(
         "{{POST_HEADER}}",
-        `<div class="article-meta-data"><h1>${title}</h1>\n<span class="article-publish-date">${dateStr}</span></div>`
+        `<div class="article-meta-data"><h1>${post.title}</h1>\n<span class="article-publish-date">${dateStr}</span></div>`
       )
       .replace("{{CONTENT}}", styledTasks)
-      .replace(/{{LIGHTBOX_GROUP}}/g, `post-${slug}`);
+      .replace(/{{LIGHTBOX_GROUP}}/g, `post-${post.slug}`);
 
-    const out = path.join(outDir, `${slug}.html`);
+    const out = path.join(POSTS_OUT_DIR, `${post.slug}.html`);
     await writeFile(out, html);
     console.log("✔  built", path.relative(root, out));
   }
 }
 
-await buildDir(ARTICLES_MD_DIR, ARTICLES_OUT_DIR);
-await buildDir(NOTES_MD_DIR, NOTES_OUT_DIR);
-await buildDir(EXPERIMENTS_MD_DIR, EXPERIMENTS_OUT_DIR);
+const posts = await loadPosts(root);
+await buildPages(posts);
 
 console.log("✔  buildMdPages complete");

@@ -321,9 +321,9 @@ window.SHORTCUT_MAP = {
 };
 
 const COMMAND_POST_CATEGORY_MAP = {
-  Articles: { key: "articles", dir: "articles" },
-  Notes: { key: "notes", dir: "notes" },
-  Experiments: { key: "experiments", dir: "experiments" },
+  Articles: { key: "articles" },
+  Notes: { key: "notes" },
+  Experiments: { key: "experiments" },
 };
 
 const COMMAND_POST_ICONS = {
@@ -378,7 +378,7 @@ const COMMAND_POST_ICONS = {
       const categoryMeta = COMMAND_POST_CATEGORY_MAP[post.tag];
       if (!categoryMeta) return;
 
-      const { key, dir } = categoryMeta;
+      const { key } = categoryMeta;
       const slug = slugify(post.title);
       const value = `post-${key}-${slug}`;
 
@@ -393,7 +393,7 @@ const COMMAND_POST_ICONS = {
 
       const iconMarkup =
         COMMAND_POST_ICONS[post.tag] || COMMAND_POST_ICONS.Articles;
-      const url = `/posts/${dir}/${slug}.html`;
+      const url = `/posts/${slug}.html`;
       const right =
         post.month && post.year ? `${post.month} ${post.year}` : undefined;
 

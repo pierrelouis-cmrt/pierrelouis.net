@@ -1,0 +1,7 @@
+{
+    "liveServer.settings.port": 5501,
+    "files.associations": { ".htaccess": "apacheconf" },
+    "[apacheconf]": {
+    "editor.formatOnSave": false
+  }
+}

@@ -1,0 +1,1808 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+  <head>
+    <script>
+      (() => {
+        const theme = localStorage.theme || "system";
+        if (
+          theme === "dark" ||
+          (theme === "system" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      })();
+    </script>
+    <script>
+      const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+    </script>
+    <script>
+      document.addEventListener("alpine:init", () => {
+        Alpine.store("theme", {
+          mode: localStorage.theme || "system",
+
+          init() {
+            this.apply();
+          },
+
+          toggle() {
+            const modes = ["system", "light", "dark"];
+            const currentIndex = modes.indexOf(this.mode);
+            this.mode = modes[(currentIndex + 1) % modes.length];
+            localStorage.theme = this.mode;
+            this.apply();
+
+            // ADD THIS to immediately update Safari's chrome when theme changes
+            const metaTheme = document.querySelector(
+              'meta[name="theme-color"]'
+            );
+            if (metaTheme) {
+              const isDark =
+                document.documentElement.classList.contains("dark");
+              metaTheme.content = isDark ? "#0f0f0f" : "#faf9f9";
+            }
+          },
+
+          apply() {
+            const theme = this.mode;
+            if (
+              theme === "dark" ||
+              (theme === "system" &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches)
+            ) {
+              document.documentElement.classList.add("dark");
+            } else {
+              document.documentElement.classList.remove("dark");
+            }
+          },
+        });
+      });
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta name="google" content="notranslate" />
+    <title>Pierre-Louis &ndash; Web Dev</title>
+    <style>
+      [x-cloak] {
+        display: none;
+      }
+    </style>
+    <meta name="author" content="Pierre-Louis" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      name="description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/faces/gaze_px0p0_py0p0_256.avif"
+      type="image/avif"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/faces/gaze_px0p0_py0p0_256.webp"
+      type="image/webp"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/faces/gaze_px6p0_py0p0_256.avif"
+      type="image/avif"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/faces/gaze_px6p0_py0p0_256.webp"
+      type="image/webp"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/faces/gaze_pxm6p0_py0p0_256.avif"
+      type="image/avif"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/faces/gaze_pxm6p0_py0p0_256.webp"
+      type="image/webp"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/faces/gaze_px0p0_py6p0_256.avif"
+      type="image/avif"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/faces/gaze_px0p0_py6p0_256.webp"
+      type="image/webp"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/faces/gaze_px0p0_pym6p0_256.avif"
+      type="image/avif"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/faces/gaze_px0p0_pym6p0_256.webp"
+      type="image/webp"
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      property="og:description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+    <meta property="og:url" content="https://pierrelouis.net" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      name="twitter:description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="canonical" href="https://pierrelouis.net/" />
+    <link
+      rel="preload"
+      href="/src/assets/avatar.webp"
+      as="image"
+      type="image/webp"
+      fetchpriority="high"
+    />
+    <link rel="preload" href="/src/output-134f40cbde.css" as="style" />
+
+    <link rel="stylesheet" href="/src/output-134f40cbde.css" />
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      />
+    </noscript>
+
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="51538055-0cc5-4a88-8f4f-8d3b77f708b4"
+    ></script>
+  </head>
+  <body>
+    <nav class="site-navigation">
+      <div class="navigation-container">
+        <div class="navigation-left">
+          <a class="navigation-brand" href="/">Pierre-Louis</a>
+          <div class="navigation-links"></div>
+        </div>
+        <div class="navigation-right">
+          <div
+            x-data="{ 
+      commandOpen: false,
+      isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+      isMac: /(Mac|iPhone|iPad|iPod)/i.test(navigator.platform) || (navigator.maxTouchPoints > 1 && /Mac/i.test(navigator.platform))
+    }"
+            x-init="
+      $watch('commandOpen', function(value){
+        if(value === true && !isTouchDevice){
+          $nextTick(() => { window.dispatchEvent(new CustomEvent('command-input-focus')); });
+        }
+      })
+    "
+            @keydown.escape.window="commandOpen = false"
+            @open-command-palette.window="commandOpen = true"
+            @keydown.window="
+      if (($event.ctrlKey || $event.metaKey) && !$event.shiftKey && $event.key.toLowerCase() === 'k') {
+        $event.preventDefault();
+        commandOpen = true;
+      }
+    "
+            class="relative z-50 w-auto h-auto"
+          >
+            <button
+              aria-label="Open command palette"
+              @click="commandOpen = true"
+              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium rounded-xl hover:bg-[var(--bg-hover)] disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <svg
+                class="w-4 h-4 mr-0 sm:mr-2 text-[var(--text-body)] shrink-0"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <span
+                class="flex-1 mr-5 text-left text-[var(--text-body)] hidden sm:inline"
+                >Search...</span
+              >
+              <span
+                class="ml-auto text-xs text-[var(--text-subtle)] border border-dashed border-[var(--border-light)] rounded-md px-1 hidden sm:inline"
+              >
+                <span x-text="isMac ? '⌘' : 'Ctrl'"></span>
+                &nbsp;+&nbsp;K
+              </span>
+            </button>
+
+            <!-- Desktop Command Palette (Alpine.js) -->
+            <template x-teleport="body">
+              <div
+                x-data="{}"
+                x-init="$watch('commandOpen', value => {
+        const touch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+        if (!touch) {
+          document.body.classList.toggle('overflow-hidden', value);
+        }
+      })"
+                x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
+                class="fixed inset-0 z-[99] flex items-start justify-center pt-[15vh] w-screen h-screen pointer-events-auto"
+                @click="commandOpen = false"
+                x-cloak
+              >
+                <div
+                  x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
+                  x-transition:enter="ease-out duration-150"
+                  x-transition:enter-start="opacity-0"
+                  x-transition:enter-end="opacity-100"
+                  x-transition:leave="ease-in duration-100"
+                  x-transition:leave-start="opacity-100"
+                  x-transition:leave-end="opacity-0"
+                  class="absolute inset-0 w-full h-full bg-[rgba(0,0,0,0.4)] backdrop-blur-sm will-change-opacity"
+                ></div>
+
+                <div
+                  x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
+                  x-transition:enter="ease-out duration-150 transform"
+                  x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                  x-transition:leave="ease-in duration-100 transform"
+                  x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                  x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  x-data="{
+        commandItemsData: window.COMMAND_ITEMS_DATA,
+        commandItems: [],
+        commandItemsFiltered: [],
+        commandItemActive: null,
+        commandItemSelected: null,
+        commandId: $id('command'),
+        commandSearch: '',
+        isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+        itemsCache: {},
+
+        commandSearchIsEmpty() {
+          return !this.commandSearch || this.commandSearch.length === 0;
+        },
+
+        commandItemIsActive(item) {
+          return this.commandItemActive && this.commandItemActive.value === item.value;
+        },
+
+        commandItemActiveNext() {
+          if (this._navigating) return;
+          this._navigating = true;
+
+          const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
+          if (index < this.commandItemsFiltered.length - 1) {
+            this.commandItemActive = this.commandItemsFiltered[index + 1];
+            this.$nextTick(() => {
+              this.commandScrollToActiveItem();
+              setTimeout(() => { this._navigating = false; }, 50);
+            });
+          } else {
+            this._navigating = false;
+          }
+        },
+
+        commandItemActivePrevious() {
+          if (this._navigating) return;
+          this._navigating = true;
+
+          const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
+          if (index > 0) {
+            this.commandItemActive = this.commandItemsFiltered[index - 1];
+            this.$nextTick(() => {
+              this.commandScrollToActiveItem();
+              setTimeout(() => { this._navigating = false; }, 50);
+            });
+          } else {
+            this._navigating = false;
+          }
+        },
+
+        commandScrollToActiveItem() {
+          if (!this.commandItemActive || !this.$refs.commandItemsList) return;
+
+          const activeElement = document.getElementById(this.commandItemActive.value + '-' + this.commandId);
+          if (!activeElement) return;
+
+          const container = this.$refs.commandItemsList;
+          const containerRect = container.getBoundingClientRect();
+          const elementRect = activeElement.getBoundingClientRect();
+
+          if (elementRect.bottom > containerRect.bottom) {
+            container.scrollTop += (elementRect.bottom - containerRect.bottom);
+          } else if (elementRect.top < containerRect.top) {
+            container.scrollTop -= (containerRect.top - elementRect.top);
+          }
+        },
+
+        _searchTimeoutId: null,
+        commandSearchItems() {
+          if (this._searchTimeoutId) {
+            clearTimeout(this._searchTimeoutId);
+          }
+
+          this._searchTimeoutId = setTimeout(() => {
+            const cacheKey = (this.commandSearch || '').toLowerCase();
+
+            if (this.itemsCache[cacheKey]) {
+              this.commandItemsFiltered = this.itemsCache[cacheKey];
+            } else {
+              if (!this.commandSearchIsEmpty()) {
+                const searchTerm = cacheKey.replace(/\*/g, '');
+                this.commandItemsFiltered = this.commandItems.filter(item =>
+                  item.title.toLowerCase().includes(searchTerm));
+              } else {
+                this.commandItemsFiltered = this.commandItems.filter(item => item.default);
+              }
+
+              this.itemsCache[cacheKey] = this.commandItemsFiltered;
+            }
+
+            this.commandItemActive = this.commandItemsFiltered[0] || null;
+          }, 100);
+        },
+
+        commandShowCategory(item, index) {
+          if (index === 0) return true;
+          if (!this.commandItemsFiltered[index - 1]) return false;
+          return item.category !== this.commandItemsFiltered[index - 1].category;
+        },
+
+        commandCategoryCapitalize(string) {
+          return string.charAt(0).toUpperCase() + string.slice(1);
+        },
+
+        commandItemsReorganize() {
+          const totalItems = Object.keys(this.commandItemsData).reduce(
+            (acc, category) => {
+              const items = this.commandItemsData[category];
+              return acc + (Array.isArray(items) ? items.length : 0);
+            },
+            0
+          );
+          this.commandItems = new Array(totalItems);
+
+          let index = 0;
+          for (const category in this.commandItemsData) {
+            const categoryItems = this.commandItemsData[category];
+            if (!Array.isArray(categoryItems)) continue;
+            for (const item of categoryItems) {
+              item.category = category;
+              this.commandItems[index++] = item;
+            }
+          }
+
+          if (index < this.commandItems.length) {
+            this.commandItems.length = index;
+          }
+
+          this.itemsCache = {};
+          this.itemsCache[''] = this.commandItems.filter(item => item.default);
+        },
+
+        handleSelectedItem(item) {
+          if (!item) return;
+
+          if (item.value === 'theme') {
+            $store.theme.toggle();
+            this.commandItemSelected = null;
+          } else {
+            const targetUrl = this.actionMap[item.value];
+            if (targetUrl) {
+              window.location.href = targetUrl;
+            }
+            commandOpen = false;
+          }
+        },
+        actionMap: window.COMMAND_ACTION_MAP
+      }"
+                  x-init="
+        const dataUpdateHandler = () => {
+          commandItemsReorganize();
+          commandSearchItems();
+        };
+        window.addEventListener('command-palette-data-updated', dataUpdateHandler);
+        commandItemsReorganize();
+        commandSearchItems();
+        $watch('commandSearch', () => commandSearchItems());
+        $watch('commandItemSelected', item => handleSelectedItem(item));
+        window.loadCommandPalettePosts && window.loadCommandPalettePosts().catch(() => {});
+      "
+                  @keydown.down.prevent="commandItemActiveNext()"
+                  @keydown.up.prevent="commandItemActivePrevious()"
+                  @keydown.enter="commandItemSelected = commandItemActive; commandItemActive = null;"
+                  @command-input-focus.window="$refs.commandInput.focus()"
+                  class="relative z-10 w-full max-w-[95%] sm:max-w-xl px-0"
+                  x-cloak
+                  @click.stop
+                >
+                  <div
+                    class="box-border border-2 border-[var(--border-secondary)] flex flex-col min-h-0 max-h-[80vh] w-full p-2 bg-[var(--bg-primary)] rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm pointer-events-auto relative"
+                  >
+                    <div
+                      class="absolute top-[-15px] left-5 px-4 py-1 border-2 rounded-full border-[var(--border-light)] bg-[var(--bg-primary)] hidden sm:block"
+                    >
+                      <p class="m-0 text-sm p-0">Command</p>
+                    </div>
+
+                    <div
+                      class="flex items-center px-3 border-dotted border-b border-[var(--bg-hover)]"
+                    >
+                      <svg
+                        class="w-4 h-4 mr-0 text-[var(--border-secondary)] shrink-0"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+                      </svg>
+                      <input
+                        type="text"
+                        x-ref="commandInput"
+                        x-model="commandSearch"
+                        class="flex w-full px-2 py-3 text-sm bg-transparent border-0 rounded-md outline-none focus:outline-none focus:ring-0 focus:border-0 placeholder:text-[var(--border-secondary)] h-11 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="Type a command or search..."
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                      />
+                    </div>
+
+                    <div
+                      x-ref="commandItemsList"
+                      class="grow min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain"
+                      data-command-list
+                    >
+                      <template
+                        x-for="(item, index) in commandItemsFiltered"
+                        :key="item.value"
+                      >
+                        <div class="pb-1 space-y-1">
+                          <template x-if="commandShowCategory(item, index)">
+                            <div class="px-1 overflow-hidden">
+                              <div
+                                class="px-2 py-1 my-1 text-xs font-medium text-[var(--text-primary)]"
+                                x-text="commandCategoryCapitalize(item.category)"
+                              ></div>
+                            </div>
+                          </template>
+                          <template
+                            x-if="(item.default && commandSearchIsEmpty()) || !commandSearchIsEmpty()"
+                          >
+                            <div class="px-1">
+                              <div
+                                :id="item.value + '-' + commandId"
+                                @click="commandItemSelected=item"
+                                @mouseenter="commandItemActive=item"
+                                x-bind:class="commandItemIsActive(item) ? 'bg-[var(--bg-hover)] text-[var(--text-body)]' : 'text-[var(--text-muted)]'"
+                                class="relative flex cursor-pointer select-none items-center rounded-[10px] px-2 py-1 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                              >
+                                <span x-html="item.icon"></span>
+                                <span
+                                  x-text="item.value === 'theme' ? ('Toggle Theme (current: ' + $store.theme.mode + ')') : item.title"
+                                ></span>
+                                <template x-if="item.right && !isTouchDevice">
+                                  <span
+                                    class="ml-auto text-xs px-1 py-1 tracking-widest text-[var(--text-body)] border border-[var(--bg-hover)] rounded-md"
+                                    x-text="item.right"
+                                  ></span>
+                                </template>
+                              </div>
+                            </div>
+                          </template>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!-- Mobile Bottom Drawer (Alpine.js) - Enhanced version -->
+            <template x-teleport="body">
+              <div
+                x-data="{
+      drawerOpen: false,
+      isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+      dragStartY: 0,
+      currentY: 0,
+      translateY: 100,
+      isDragging: false,
+      velocity: 0,
+      lastY: 0,
+      lastTime: 0,
+      snapThreshold: 20,
+      searchQuery: '',
+      isAnimating: false,
+      openDuration: 420,
+      closeDuration: 260,
+      animationCurve: 'cubic-bezier(0.16, 1, 0.3, 1)',
+      drawerHeight: null,
+      openFrame: null,
+      settleTimer: null,
+      themeTimer: null,
+      dataRevision: 0,
+
+      get allItems() {
+        void this.dataRevision;
+        const items = [];
+        const categories = Object.keys(window.COMMAND_ITEMS_DATA || {});
+
+        for (const category of categories) {
+          const bucket = window.COMMAND_ITEMS_DATA && window.COMMAND_ITEMS_DATA[category];
+          const categoryItems = Array.isArray(bucket) ? bucket : [];
+          const filtered = !this.searchQuery
+            ? categoryItems.filter(item => item.default)
+            : categoryItems.filter(item =>
+                item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+              );
+
+          if (filtered.length > 0) {
+            items.push({ type: 'header', category });
+            items.push(...filtered.map(item => ({ ...item, type: 'item' })));
+          }
+        }
+
+        return items;
+      },
+
+      openDrawer() {
+        const self = this;
+
+        if (self.settleTimer) {
+          clearTimeout(self.settleTimer);
+          self.settleTimer = null;
+        }
+        if (self.openFrame) {
+          cancelAnimationFrame(self.openFrame);
+          self.openFrame = null;
+        }
+        if (self.themeTimer) {
+          clearTimeout(self.themeTimer);
+          self.themeTimer = null;
+        }
+
+        self.drawerHeight = null;
+        self.drawerOpen = true;
+        self.isAnimating = true;
+        self.translateY = 100;
+        self.velocity = 0;
+        self.isDragging = false;
+
+        const overlayController = window.__overlayChromeController;
+        const canUseController =
+          overlayController && typeof overlayController.open === 'function';
+
+        if (canUseController) {
+          overlayController.open('drawer');
+        } else {
+          document.body.style.overflow = 'hidden';
+          document.body.style.position = 'fixed';
+          document.body.style.width = '100%';
+        }
+
+        requestAnimationFrame(() => {
+          self.openFrame = requestAnimationFrame(() => {
+            self.translateY = 0;
+            self.openFrame = null;
+            self.settleTimer = setTimeout(() => {
+              self.isAnimating = false;
+              self.settleTimer = null;
+            }, self.openDuration);
+            self.$nextTick(() => {
+              if (self.drawerHeight === null) {
+                const drawer = self.$refs.drawerContainer;
+                if (drawer) {
+                  self.drawerHeight = drawer.getBoundingClientRect().height;
+                }
+              }
+            });
+          });
+        });
+
+        // Update meta theme-color for Safari bottom bar
+        self.updateThemeColor();
+      },
+
+      closeDrawer() {
+        const self = this;
+
+        if (self.openFrame) {
+          cancelAnimationFrame(self.openFrame);
+          self.openFrame = null;
+        }
+        if (self.settleTimer) {
+          clearTimeout(self.settleTimer);
+          self.settleTimer = null;
+        }
+        if (self.themeTimer) {
+          clearTimeout(self.themeTimer);
+          self.themeTimer = null;
+        }
+
+        self.isAnimating = true;
+        self.isDragging = false;
+        self.translateY = 100;
+
+        // IMPORTANT: Reset commandOpen to fix Android button state
+        commandOpen = false;
+
+        const overlayController = window.__overlayChromeController;
+        const canUseController =
+          overlayController &&
+          typeof overlayController.close === 'function' &&
+          overlayController.hasActiveOverlays &&
+          overlayController.hasActiveOverlays();
+
+        if (canUseController) {
+          overlayController.close('drawer');
+        } else {
+          // Reset theme color slightly before drawer fully closes
+          self.themeTimer = setTimeout(() => {
+            self.resetThemeColor();
+            self.themeTimer = null;
+          }, Math.min(200, self.closeDuration));
+        }
+
+        self.settleTimer = setTimeout(() => {
+          self.drawerOpen = false;
+          self.isAnimating = false;
+          if (!canUseController) {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+          }
+          self.searchQuery = '';
+          self.settleTimer = null;
+          self.drawerHeight = null;
+        }, self.closeDuration);
+      },
+
+      updateThemeColor() {
+        const overlayController = window.__overlayChromeController;
+        if (overlayController) {
+          overlayController.updateThemeColor();
+          return;
+        }
+
+        let metaTheme = document.querySelector('meta[name=\'theme-color\']');
+        if (!metaTheme) {
+          metaTheme = document.createElement('meta');
+          metaTheme.name = 'theme-color';
+          document.head.appendChild(metaTheme);
+        }
+
+        const isDark = document.documentElement.classList.contains('dark');
+        metaTheme.content = isDark ? '#0f0f0f' : '#faf9f9';
+      },
+
+      resetThemeColor() {
+        const overlayController = window.__overlayChromeController;
+        if (overlayController) {
+          overlayController.resetThemeColor();
+          return;
+        }
+
+        const metaTheme = document.querySelector('meta[name=\'theme-color\']');
+        if (metaTheme) {
+          metaTheme.content = '#ffffff';
+        }
+      },
+
+      startDrag(e) {
+        if (e.target.closest('[data-no-drag]')) return;
+        if (this.isAnimating) return;
+
+        this.isDragging = true;
+        this.dragStartY = e.touches ? e.touches[0].clientY : e.clientY;
+        this.lastY = this.dragStartY;
+        this.lastTime = Date.now();
+        this.velocity = 0;
+      },
+
+      onDrag(e) {
+        if (!this.isDragging || this.isAnimating) return;
+
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const deltaY = clientY - this.dragStartY;
+
+        // Calculate velocity
+        const now = Date.now();
+        const deltaTime = now - this.lastTime;
+        if (deltaTime > 0) {
+          this.velocity = (clientY - this.lastY) / deltaTime;
+        }
+        this.lastY = clientY;
+        this.lastTime = now;
+
+        // Apply resistance when dragging up
+        if (deltaY < 0) {
+          this.translateY = deltaY * 0.15;
+        } else {
+          this.translateY = Math.min(100, (deltaY / window.innerHeight) * 100);
+        }
+      },
+
+      endDrag() {
+        if (!this.isDragging) return;
+        this.isDragging = false;
+
+        const shouldClose = this.translateY > this.snapThreshold || this.velocity > 0.3;
+
+        if (shouldClose) {
+          this.closeDrawer();
+        } else {
+          this.translateY = 0;
+        }
+      },
+
+      handleItemClick(item) {
+        if (item.value === 'theme') {
+          $store.theme.toggle();
+          this.updateThemeColor();
+        } else if (item.value === 'email') {
+          window.location.href = window.COMMAND_ACTION_MAP[item.value];
+          this.closeDrawer();
+        } else {
+          const targetUrl = window.COMMAND_ACTION_MAP[item.value];
+          if (targetUrl) {
+            window.location.href = targetUrl;
+          }
+          this.closeDrawer();
+        }
+      },
+
+      formatCategoryName(category) {
+        return category.charAt(0).toUpperCase() + category.slice(1);
+      },
+
+      transitionStyle() {
+        if (this.isDragging) {
+          return 'none';
+        }
+
+        const duration = this.isAnimating ? this.openDuration : this.closeDuration;
+        return `transform ${duration}ms ${this.animationCurve}`;
+      },
+
+      drawerStyles() {
+        const styles = {
+          transform: `translate3d(-50%, ${Math.max(0, this.translateY)}%, 0)`,
+          transition: this.transitionStyle(),
+          left: '50%',
+          maxWidth: '640px',
+          width: '100%',
+        };
+
+        if (this.drawerHeight !== null) {
+          styles.height = `${this.drawerHeight}px`;
+        }
+
+        return styles;
+      }
+    }"
+                x-init="
+      const dataUpdateHandlerMobile = () => { dataRevision += 1; };
+      window.addEventListener('command-palette-data-updated', dataUpdateHandlerMobile);
+      window.loadCommandPalettePosts && window.loadCommandPalettePosts().catch(() => {});
+
+      $watch('commandOpen', value => {
+        if (value && (window.innerWidth < 768 || isTouchDevice)) {
+          commandOpen = false;
+          openDrawer();
+        }
+      });
+
+      // Watch for theme changes to update Safari chrome
+      $watch('$store.theme.mode', () => {
+        if (drawerOpen) {
+          updateThemeColor();
+        }
+      });
+    "
+                x-show="drawerOpen"
+                @click="closeDrawer()"
+                class="fixed inset-0 z-[100] touch-none"
+                x-cloak
+              >
+                <!-- Backdrop with better dark mode contrast -->
+                <div
+                  x-show="drawerOpen"
+                  x-transition:enter="ease-out duration-400"
+                  x-transition:enter-start="opacity-0"
+                  x-transition:enter-end="opacity-100"
+                  x-transition:leave="ease-in duration-200"
+                  x-transition:leave-start="opacity-100"
+                  x-transition:leave-end="opacity-0"
+                  :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'bg-black/60' : 'bg-black/30'"
+                  class="absolute inset-0 backdrop-blur-sm transition-colors duration-300"
+                  :style="`opacity: ${drawerOpen ? Math.max(0, 1 - (translateY / 100)) : 0}`"
+                ></div>
+
+                <!-- Bottom Sheet with smooth entrance animation -->
+                <div
+                  x-show="drawerOpen"
+                  @click.stop
+                  @touchstart="startDrag"
+                  @touchmove="onDrag"
+                  @touchend="endDrag"
+                  @mousedown="startDrag"
+                  @mousemove="onDrag"
+                  @mouseup="endDrag"
+                  @mouseleave="endDrag"
+                  :style="drawerStyles()"
+                  :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'ring-1 ring-white/10' : ''"
+                  class="absolute bottom-0 w-full bg-[var(--bg-primary)] rounded-t-[28px] shadow-2xl max-h-[75vh] flex flex-col"
+                  x-ref="drawerContainer"
+                  style="
+                    will-change: transform;
+                    padding-bottom: env(safe-area-inset-bottom);
+                  "
+                >
+                  <!-- Larger Invisible Drag Handle Area -->
+                  <div
+                    class="relative pt-3 pb-6 -mb-3 cursor-grab active:cursor-grabbing"
+                  >
+                    <!-- Visual Handle with better visibility in dark mode -->
+                    <div
+                      :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'opacity-40' : 'opacity-30'"
+                      class="mx-auto w-11 h-1 bg-[var(--border-secondary)] rounded-full transition-opacity duration-300"
+                    ></div>
+                  </div>
+
+                  <!-- Search Bar -->
+                  <div class="px-4 pb-3" data-no-drag>
+                    <div
+                      class="flex items-center border border-[var(--border-light)] rounded-xl px-3.5 py-2.5"
+                    >
+                      <svg
+                        class="w-4 h-4 text-[var(--text-subtle)] mr-2.5 opacity-60"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                      </svg>
+                      <input
+                        type="search"
+                        x-model="searchQuery"
+                        placeholder="Type a command or search..."
+                        class="flex-1 bg-transparent outline-none text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] text-base"
+                        style="font-size: 16px"
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                        data-no-drag
+                      />
+                      <button
+                        x-show="searchQuery"
+                        @click="searchQuery = ''"
+                        class="ml-2 p-1 -mr-1"
+                        data-no-drag
+                      >
+                        <svg
+                          class="w-4 h-4 text-[var(--text-subtle)]"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M18 6 6 18"></path>
+                          <path d="m6 6 12 12"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Scrollable Content with stagger animation -->
+                  <div
+                    class="flex-1 overflow-y-auto overscroll-contain px-2 pb-4"
+                    data-no-drag
+                  >
+                    <template x-for="(item, index) in allItems" :key="index">
+                      <div>
+                        <!-- Section Header -->
+                        <template x-if="item.type === 'header'">
+                          <div class="px-3 pt-3 pb-1.5">
+                            <div
+                              class="text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider opacity-60"
+                              x-text="formatCategoryName(item.category)"
+                            ></div>
+                          </div>
+                        </template>
+
+                        <!-- Item -->
+                        <template x-if="item.type === 'item'">
+                          <button
+                            @click="handleItemClick(item)"
+                            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-transform duration-150 active:scale-[0.98]"
+                            data-no-drag
+                          >
+                            <!-- Icon -->
+                            <span
+                              x-html="item.icon"
+                              class="[&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-[var(--text-subtle)]"
+                            ></span>
+
+                            <!-- Text -->
+                            <span
+                              class="flex-1 text-left text-[var(--text-body)] text-[15px]"
+                              x-text="item.value === 'theme' ? ('Toggle Theme (' + $store.theme.mode + ')') : item.title"
+                            ></span>
+
+                            <!-- Chevron -->
+                            <template x-if="item.value !== 'theme'">
+                              <svg
+                                class="w-4 h-4 text-[var(--border-secondary)] opacity-60"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path d="m9 18 6-6-6-6"></path>
+                              </svg>
+                            </template>
+                          </button>
+                        </template>
+                      </div>
+                    </template>
+
+                    <!-- Empty State -->
+                    <div
+                      x-show="allItems.length === 0"
+                      class="text-center pt-6 pb-12"
+                    >
+                      <p class="text-[var(--text-subtle)] text-sm">
+                        No results found
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <header class="animate-on-scroll">
+      <div class="hero-section">
+        <div class="hero-avatar-wrapper">
+          <img
+            class="hero-avatar"
+            src="src/assets/avatar.webp"
+            width="88"
+            height="88"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+            alt="Avatar"
+            title="That's me!"
+          />
+        </div>
+        <h1 class="hero-title" id="hero-title"></h1>
+        <script>
+          (() => {
+            const a = "hero-title-accent text-italic";
+            const titles = [
+              `Thoughtful <span class="${a}">interfaces</span>,<br> solid engineering`,
+              `Web development<br> with an <span class="${a}">engineer's eye</span>`,
+              `Useful websites<br> that feel <span class="${a}">effortless</span>`,
+              `Clean, fast sites<br> for <span class="${a}">ideas</span> that matter`,
+              `Interfaces that get<br> <span class="${a}">out of the way</span>`,
+              `I study engineering;<br> I build the <span class="${a}">web</span>.`,
+            ];
+
+            document.getElementById("hero-title").innerHTML =
+              titles[(Math.random() * titles.length) | 0];
+          })();
+        </script>
+
+        <p>
+          I'm currently studying engineering at
+          <a href="https://www.ec-lyon.fr/" target="_blank">Centrale Lyon</a>
+          and designing websites by passion in my free time.
+        </p>
+        <p class="hero-links">
+          <a class="link-with-icon" href="/about"
+            >More About Me<svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              width="1em"
+              style="margin-left: 0.2em"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-up-right"
+            >
+              <path d="M7 7h10v10" />
+              <path d="M7 17 17 7" /></svg
+          ></a>
+          <a class="link-with-icon" href="/now"
+            >What I've Been Upto<svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              width="1em"
+              style="margin-left: 0.2em"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-up-right"
+            >
+              <path d="M7 7h10v10" />
+              <path d="M7 17 17 7" /></svg
+          ></a>
+        </p>
+      </div>
+    </header>
+    <main>
+      <section id="work" class="animate-on-scroll cv-auto">
+        <h2 class="section-heading text-italic">Featured Projects</h2>
+        <div class="projects-grid">
+          <a
+            title="View project"
+            class="project-card"
+            href="https://capecl.fr/cartes"
+            target="_blank"
+          >
+            <div class="project-card-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect width="18" height="18" x="3" y="3" rx="2" />
+                <path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2" />
+                <path
+                  d="M3 11h3c.8 0 1.6.3 2.1.9l1.1.9c1.6 1.6 4.1 1.6 5.7 0l1.1-.9c.5-.5 1.3-.9 2.1-.9H21"
+                />
+              </svg>
+            </div>
+            <div class="project-card-content">
+              <h4 class="project-card-title">
+                Physics Flashcards Viewer
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="1.2em"
+                  width="1.2em"
+                  style="margin-left: 0.2em"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-arrow-right"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </h4>
+              <p class="project-card-description">
+                An easy and effective way to study physics concepts.
+              </p>
+            </div>
+          </a>
+          <a
+            title="View project"
+            class="project-card"
+            href="/audiovisual/"
+            target="_blank"
+          >
+            <div class="project-card-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M2 13a2 2 0 0 0 2-2V7a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0V4a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0v-4a2 2 0 0 1 2-2"
+                />
+              </svg>
+            </div>
+            <div class="project-card-content">
+              <h4 class="project-card-title">
+                Where Silence Shapes Sound<svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="1.2em"
+                  width="1.2em"
+                  style="margin-left: 0.2em"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-arrow-right"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </h4>
+              <p class="project-card-description">
+                An interactive and artistic music-visualizer.
+              </p>
+            </div>
+          </a>
+          <!--<a
+            title="View project"
+            class="project-card"
+            href="https://capecl.fr"
+            target="_blank"
+          >
+            <div class="project-card-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect width="20" height="5" x="2" y="3" rx="1" />
+                <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8" />
+                <path d="M10 12h4" />
+              </svg>
+            </div>
+            <div class="project-card-content">
+              <h4 class="project-card-title">
+                CapECL website for students
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="1.2em"
+                  width="1.2em"
+                  style="margin-left: 0.2em"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-arrow-right"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </h4>
+              <p class="project-card-description">
+                One-click access to organized exam archives, curated books and useful
+                resources/tools.
+              </p>
+            </div>
+          </a>-->
+          <a
+            title="View project"
+            class="project-card"
+            href="/ODG/"
+            target="_blank"
+          >
+            <div class="project-card-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M15 18h-5" />
+                <path d="M18 14h-8" />
+                <path
+                  d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2"
+                />
+                <rect width="8" height="4" x="10" y="6" rx="1" />
+              </svg>
+            </div>
+            <div class="project-card-content">
+              <h4 class="project-card-title">
+                Digital Magazine
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="1.2em"
+                  width="1.2em"
+                  style="margin-left: 0.2em"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-arrow-right"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </h4>
+              <p class="project-card-description">
+                How many wind turbines would it take to power France?
+              </p>
+            </div>
+          </a>
+          <div class="projects-view-all">
+            <a class="link-with-icon projects-view-all-link" href="/projects"
+              >All my projects<svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="1em"
+                width="1em"
+                style="margin-left: 0.2em"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-arrow-up-right"
+              >
+                <path d="M7 7h10v10" />
+                <path d="M7 17 17 7" /></svg
+            ></a>
+          </div>
+        </div>
+      </section>
+      <section id="blog" class="animate-on-scroll cv-auto">
+        <h2 class="section-heading text-italic">Latest Posts</h2>
+
+        <div class="posts-grid" id="latest-posts">
+          <!-- AUTO-GEN:LATEST START -->
+
+    <div class="post-card">
+      <a class="link-with-icon post-card-link" href="/posts/notes/motivation---a-personal-take.html" rel="noopener noreferrer">
+        <div class="post-card-title">
+          
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/>
+      <path d="M15 3v4a2 2 0 0 0 2 2h4"/>
+    </svg>
+          <span class="link-text">Motivation - A personal take</span>
+        </div>
+        <div class="post-card-separator"></div>
+        <div class="post-card-date">Dec 2025</div>
+      </a>
+    </div>
+    <div class="post-card">
+      <a class="link-with-icon post-card-link" href="/posts/articles/was-maths-invented-or-discovered.html" rel="noopener noreferrer">
+        <div class="post-card-title">
+          
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+      <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+      <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
+    </svg>
+          <span class="link-text">Was maths invented or discovered?</span>
+        </div>
+        <div class="post-card-separator"></div>
+        <div class="post-card-date">Dec 2025</div>
+      </a>
+    </div>
+    <div class="post-card">
+      <a class="link-with-icon post-card-link" href="/posts/notes/the-art-of-stressing.html" rel="noopener noreferrer">
+        <div class="post-card-title">
+          
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/>
+      <path d="M15 3v4a2 2 0 0 0 2 2h4"/>
+    </svg>
+          <span class="link-text">The art of stressing</span>
+        </div>
+        <div class="post-card-separator"></div>
+        <div class="post-card-date">Nov 2025</div>
+      </a>
+    </div>
+<!-- AUTO-GEN:LATEST END -->
+        </div>
+
+        <div class="projects-view-all">
+          <a class="link-with-icon projects-view-all-link" href="/posts"
+            >All posts<svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              width="1em"
+              style="margin-left: 0.2em"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-up-right"
+            >
+              <path d="M7 7h10v10" />
+              <path d="M7 17 17 7" /></svg
+          ></a>
+        </div>
+      </section>
+      <div class="home-connect-more">
+        <div class="home-connect-more-inner">
+          <section id="connect" class="animate-on-scroll cv-auto">
+            <h2 class="section-heading text-italic">Connect</h2>
+            <div class="connect-widgets-grid">
+              <div class="connect-widgets-stack">
+                <div class="music-widget">
+                  <div class="music-player">
+                    <div class="music-player-label"><p>Music</p></div>
+                    <div class="music-player-info">
+                      <p class="music-track-title">Nothing right now</p>
+                      <p class="music-track-artist">
+                        I'm not currently listening to any music
+                      </p>
+                    </div>
+                    <div class="music-album-cover">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="50"
+                        height="50"
+                        viewBox="0 0 50 50"
+                        fill="none"
+                      >
+                        <path
+                          d="M25 40.625C25 42.0063 24.4513 43.3311 23.4745 44.3078C22.4978 45.2846 21.173 45.8333 19.7917 45.8333C18.4103 45.8333 17.0856 45.2846 16.1088 44.3078C15.1321 43.3311 14.5833 42.0063 14.5833 40.625C14.5833 39.2437 15.1321 37.9189 16.1088 36.9422C17.0856 35.9654 18.4103 35.4167 19.7917 35.4167C21.173 35.4167 22.4978 35.9654 23.4745 36.9422C24.4513 37.9189 25 39.2437 25 40.625ZM45.8333 36.4583C45.8333 37.8397 45.2846 39.1644 44.3078 40.1412C43.3311 41.1179 42.0063 41.6667 40.625 41.6667C39.2437 41.6667 37.9189 41.1179 36.9421 40.1412C35.9654 39.1644 35.4167 37.8397 35.4167 36.4583C35.4167 35.077 35.9654 33.7522 36.9421 32.7755C37.9189 31.7987 39.2437 31.25 40.625 31.25C42.0063 31.25 43.3311 31.7987 44.3078 32.7755C45.2846 33.7522 45.8333 35.077 45.8333 36.4583Z"
+                          stroke="var(--border-primary)"
+                          stroke-width="3.125"
+                        />
+                        <path
+                          d="M45.8333 16.6667L25 25"
+                          stroke="var(--border-primary)"
+                          stroke-width="3.125"
+                          stroke-linecap="round"
+                        />
+                        <path
+                          d="M26.5625 39.5833V18.4312H23.4375V39.5833H26.5625ZM47.3958 35.7354V16.6896H44.2708V35.7375L47.3958 35.7354ZM30.7187 12.1875L34.8854 10.4437L33.6792 7.56041L29.5125 9.30416L30.7187 12.1875ZM47.3958 16.6896C47.3958 13.9125 47.4 11.6458 47.1458 9.9375C46.8896 8.19375 46.3125 6.63958 44.8417 5.65833L43.1083 8.26041C43.4937 8.51666 43.8479 8.99583 44.0562 10.3937C44.2667 11.8229 44.2708 13.8062 44.2708 16.6896H47.3958ZM34.8854 10.4437C37.5437 9.33125 39.3771 8.56875 40.7771 8.21041C42.1458 7.8625 42.725 8.00416 43.1104 8.26041L44.8417 5.65833C43.3687 4.67916 41.7104 4.74791 40.0062 5.18333C38.3292 5.61041 36.2437 6.4875 33.6792 7.56041L34.8854 10.4437ZM26.5625 18.4312C26.5625 17.0521 26.5646 16.1458 26.6396 15.4458C26.7125 14.7854 26.8375 14.4583 26.9979 14.2167L24.3979 12.4875C23.8604 13.2937 23.6354 14.1646 23.5333 15.1083C23.4354 16.0167 23.4375 17.1208 23.4375 18.4312H26.5625ZM29.5125 9.30416C28.3042 9.81041 27.2833 10.2354 26.4833 10.6771C25.65 11.1354 24.9354 11.6792 24.3979 12.4875L26.9979 14.2167C27.1583 13.9771 27.4125 13.7333 27.9937 13.4125C28.6104 13.0729 29.4479 12.7187 30.7187 12.1875L29.5125 9.30416Z"
+                          fill="var(--border-primary)"
+                        />
+                        <path
+                          d="M14.5833 22.9167V4.16666C14.5833 8.48125 18.2437 10.4167 20.8333 10.4167M14.5833 21.875C14.5833 23.2563 14.0346 24.5811 13.0578 25.5578C12.0811 26.5346 10.7563 27.0833 9.375 27.0833C7.99366 27.0833 6.6689 26.5346 5.69215 25.5578C4.7154 24.5811 4.16666 23.2563 4.16666 21.875C4.16666 20.4937 4.7154 19.1689 5.69215 18.1921C6.6689 17.2154 7.99366 16.6667 9.375 16.6667C10.7563 16.6667 12.0811 17.2154 13.0578 18.1921C14.0346 19.1689 14.5833 20.4937 14.5833 21.875Z"
+                          stroke="var(--border-secondary)"
+                          stroke-width="3.125"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div class="music-player-status">
+                      <div class="music-equalizer">
+                        <span class="music-equalizer-bar"></span>
+                        <span class="music-equalizer-bar"></span>
+                        <span class="music-equalizer-bar"></span>
+                        <span class="music-equalizer-bar"></span>
+                        <span class="music-equalizer-bar"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--Component highly inspired by https://www.harshsingh.me/, he also made all the assets used here-->
+                <div class="location-widget">
+                  <div class="location-display">
+                    <div class="location-display-label"><p>Map</p></div>
+                    <div class="location-map">
+                      <img
+                        src="/src/assets/map/tinywow_cloud_small_82919920.webp"
+                        width="390"
+                        height="347"
+                        loading="lazy"
+                        decoding="async"
+                        alt="Cloud"
+                        draggable="false"
+                        class="location-map-cloud"
+                      />
+                      <img
+                        src="/src/assets/map/plane.webp"
+                        width="24"
+                        height="56"
+                        loading="lazy"
+                        decoding="async"
+                        alt="Plane"
+                        draggable="false"
+                        class="location-map-plane"
+                      />
+                      <img
+                        src="/src/assets/map/plane-shadow.webp"
+                        width="24"
+                        height="24"
+                        loading="lazy"
+                        decoding="async"
+                        alt="Plane Shadow"
+                        draggable="false"
+                        class="location-map-plane-shadow"
+                      />
+                      <img
+                        width="100%"
+                        height="auto"
+                        alt="Map with marker south of Saint-Etienne, France"
+                        loading="eager"
+                        draggable="false"
+                        class="location-map-image"
+                      />
+                      <a
+                        href="https://en.wikipedia.org/wiki/Saint-%C3%89tienne"
+                        target="_blank"
+                        rel="noreferrer"
+                        class="location-map-link"
+                        >Saint-Etienne, France</a
+                      >
+                      <div aria-hidden="true">
+                        <div class="location-map-marker-dot"></div>
+                        <div class="location-map-marker-ring"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section id="more" class="animate-on-scroll cv-auto">
+            <h2 class="section-heading text-italic">More</h2>
+            <div class="posts-grid more-pages">
+              <div class="post-card">
+                <a class="link-with-icon post-card-link" href="/someday">
+                  <div class="post-card-title">
+                    <!--<svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-hourglass"
+                >
+                  <path d="M5 22h14" />
+                  <path d="M5 2h14" />
+                  <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22" />
+                  <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2" />
+                </svg>-->
+                    <span class="link-text more-page-path">/someday</span>
+                  </div>
+                  <div class="post-card-separator"></div>
+                  <div class="post-card-date more-page-meta">future</div>
+                </a>
+              </div>
+              <div class="post-card">
+                <a class="link-with-icon post-card-link" href="/uses">
+                  <div class="post-card-title">
+                    <!--<svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-tangent"
+                >
+                  <path d="m12.99 6.74 1.93 3.44" />
+                  <path d="M19.136 12a10 10 0 0 1-14.271 0" />
+                  <path d="m21 21-2.16-3.84" />
+                  <path d="m3 21 8.02-14.26" />
+                  <circle cx="12" cy="5" r="2" />
+                </svg>-->
+                    <span class="link-text more-page-path">/uses</span>
+                  </div>
+                  <div class="post-card-separator"></div>
+                  <div class="post-card-date more-page-meta">setup</div>
+                </a>
+              </div>
+              <div class="post-card">
+                <a class="link-with-icon post-card-link" href="/bookmarks">
+                  <div class="post-card-title">
+                    <!--<svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-bookmark"
+                >
+                  <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+                </svg>-->
+                    <span class="link-text more-page-path">/bookmarks</span>
+                  </div>
+                  <div class="post-card-separator"></div>
+                  <div class="post-card-date more-page-meta">links</div>
+                </a>
+              </div>
+              <div class="post-card">
+                <a class="link-with-icon post-card-link" href="/photos">
+                  <div class="post-card-title">
+                    <!--<svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-camera"
+                >
+                  <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
+                  <circle cx="12" cy="13" r="3" />
+                </svg>-->
+                    <span class="link-text more-page-path">/photos</span>
+                  </div>
+                  <div class="post-card-separator"></div>
+                  <div class="post-card-date more-page-meta">gallery</div>
+                </a>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="hero-links">
+        <p>
+          <span
+            class="email-tooltip-wrapper"
+            data-email="contact@pierrelouis.net"
+          >
+            <a
+              class="email-link link-with-icon"
+              href="mailto:contact@pierrelouis.net"
+              aria-label="Email contact@pierrelouis.net"
+            >
+              <span class="email-link-text">Email</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                <path
+                  d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+                />
+              </svg>
+            </a>
+            <span class="email-tooltip"
+              >Copy <i style="opacity: 0.75">contact@pierrelouis.net</i></span
+            >
+          </span>
+
+          <a class="link-with-icon" rel="noopener" href="/links"
+            >Links<svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              width="1em"
+              style="margin-left: 0.2em"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-up-right"
+            >
+              <path d="M7 7h10v10" />
+              <path d="M7 17 17 7" /></svg
+          ></a>
+          <a class="link-with-icon" rel="noopener" href="/colophon"
+            >Colophon<svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              width="1em"
+              style="margin-left: 0.2em"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-up-right"
+            >
+              <path d="M7 7h10v10" />
+              <path d="M7 17 17 7" /></svg
+          ></a>
+        </p>
+        <div class="theme-toggle">
+          <button
+            aria-label="Toggle theme"
+            class="theme-toggle"
+            x-data
+            x-init="$store.theme.init()"
+            @click="$store.theme.toggle()"
+            :data-mode="$store.theme.mode"
+          >
+            <!-- System Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-monitor"
+              data-icon="system"
+            >
+              <rect width="20" height="14" x="2" y="3" rx="2" />
+              <line x1="8" x2="16" y1="21" y2="21" />
+              <line x1="12" x2="12" y1="17" y2="21" />
+            </svg>
+            <!-- Light/Sun Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-sun"
+              data-icon="light"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" />
+              <path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" />
+              <path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+            <!-- Dark/Moon Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-moon"
+              data-icon="dark"
+            >
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <p class="footer-meta-left">
+          Made with
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#FE6F5E"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-heart w-3 h-3 mr-2 animate-bounce"
+          >
+            <path
+              d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+            />
+          </svg>
+          <span class="subtle">by</span> Pierre-Louis
+        </p>
+        <p class="footer-meta-right"></p>
+      </div>
+    </footer>
+
+    <script defer src="/src/footer.js"></script>
+    <script defer src="/src/script.js"></script>
+    <script defer src="/src/music.js"></script>
+    <script defer src="/src/avatar-face-tracker.js"></script>
+
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

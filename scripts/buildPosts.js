@@ -6,9 +6,10 @@
 // Items dated after TODAY are ignored.
 // -----------------------------------------------------------------------------
 
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
+import { loadPosts } from "./postsData.js";
 
 /* -------------------------------------------------------------------------- */
 /*  Paths                                                                     */
@@ -16,9 +17,17 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 
-const JSON_PATH = path.join(root, "posts", "posts.json");
 const POSTS_HTML = path.join(root, "posts", "index.html");
 const HOME_HTML = path.join(root, "index.html");
+
+const outArgIndex = process.argv.indexOf("--out");
+const outRoot =
+  outArgIndex !== -1 && process.argv[outArgIndex + 1]
+    ? path.resolve(root, process.argv[outArgIndex + 1])
+    : root;
+
+const POSTS_HTML_OUT = path.join(outRoot, "posts", "index.html");
+const HOME_HTML_OUT = path.join(outRoot, "index.html");
 
 /* -------------------------------------------------------------------------- */
 /*  SVG icons (same markup you used on the client)                            */
@@ -61,13 +70,6 @@ const EXTERNAL_LINK_SVG = `
 /*  Helper functions                                                          */
 /* -------------------------------------------------------------------------- */
 const monthAbbr = (m) => m.slice(0, 3);
-const monthIndex = (m) => new Date(`${m} 1 2000`).getMonth();
-const slugify = (t) =>
-  t
-    .toLowerCase()
-    .replace(/[^a-z0-9 _-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
 
 const groupBy = (arr, key) =>
   arr.reduce((map, obj) => {
@@ -175,46 +177,47 @@ function replaceBlock(html, tag, content) {
 /*  Main build process                                                        */
 /* -------------------------------------------------------------------------- */
 (async () => {
-  /* 1. Load JSON ----------------------------------------------------------- */
-  const raw = await readFile(JSON_PATH, "utf8");
-  const items = JSON.parse(raw);
+  /* 1. Load markdown metadata --------------------------------------------- */
+  const items = await loadPosts(root);
 
-  // Route links by tag → directory
-  const DIR_BY_TAG = {
-    Notes: "notes",
-    Articles: "articles",
-    Experiments: "experiments",
-  };
+  const sorted = [...items].sort((a, b) => b.date - a.date);
+  const withLinks = sorted.map((post) => ({
+    ...post,
+    link: `/posts/${post.slug}.html`,
+  }));
 
-  for (const p of items) {
-    const dir = DIR_BY_TAG[p.tag] || "articles";
-    p.link = `/posts/${dir}/${slugify(p.title)}.html`;
-  }
+  const postsJson = withLinks.map(
+    ({ year, month, day, title, description, image, tag, tags }) => ({
+      year,
+      month,
+      day,
+      title,
+      description,
+      image: image || "",
+      tag,
+      tags: tags || [],
+    })
+  );
+
+  await mkdir(path.join(outRoot, "posts"), { recursive: true });
+  await writeFile(
+    path.join(outRoot, "posts", "posts.json"),
+    JSON.stringify(postsJson, null, 2)
+  );
+  console.log("✔  posts.json generated from markdown");
 
   /* 2. Filter out future-dated posts -------------------------------------- */
   const today = new Date();
-  const isPastOrToday = (p) => {
-    const date = new Date(`${p.month} ${p.day} ${p.year}`);
-    return !Number.isNaN(date) && date <= today;
-  };
+  const filtered = withLinks.filter((post) => post.date <= today);
 
-  const filtered = items.filter(isPastOrToday);
-
-  /* 3. Sort newest first (year, month, day) ------------------------------- */
-  filtered.sort(
-    (a, b) =>
-      b.year - a.year ||
-      monthIndex(b.month) - monthIndex(a.month) ||
-      b.day - a.day
-  );
-
-  /* 4. Render pages -------------------------------------------------------- */
+  /* 3. Render pages -------------------------------------------------------- */
 
   // /posts/index.html
   {
     const htmlIn = await readFile(POSTS_HTML, "utf8");
     const htmlOut = replaceBlock(htmlIn, "TIMELINE", buildTimeline(filtered));
-    await writeFile(POSTS_HTML, htmlOut);
+    await mkdir(path.dirname(POSTS_HTML_OUT), { recursive: true });
+    await writeFile(POSTS_HTML_OUT, htmlOut);
     console.log("✔  timeline updated in posts/index.html");
   }
 
@@ -223,7 +226,8 @@ function replaceBlock(html, tag, content) {
     const latest3 = filtered.slice(0, 3).map(latestItem).join("");
     const htmlIn = await readFile(HOME_HTML, "utf8");
     const htmlOut = replaceBlock(htmlIn, "LATEST", latest3);
-    await writeFile(HOME_HTML, htmlOut);
+    await mkdir(path.dirname(HOME_HTML_OUT), { recursive: true });
+    await writeFile(HOME_HTML_OUT, htmlOut);
     console.log("✔  latest 3 posts injected into index.html");
   }
 })();
