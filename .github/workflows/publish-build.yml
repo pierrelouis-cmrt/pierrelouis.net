@@ -27,7 +27,7 @@ jobs:
         run: npm ci
 
       - name: Build site
-        run: npm run build
+        run: SKIP_BUILD_PUSH=1 npm run build
 
       - name: Prepare publish folder
         run: |
@@ -58,6 +58,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git branch -D build || true
           git checkout --orphan build
           git rm -rf .
           rsync -a --delete build-output/ ./

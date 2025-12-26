@@ -28,6 +28,15 @@ const remote = getArg("--remote") || process.env.BUILD_REMOTE || "origin";
 const runId = Date.now().toString();
 const worktreeDir = path.join(root, "_cache", `build-worktree-${runId}`);
 
+const skipPush =
+  process.env.SKIP_BUILD_PUSH === "1" ||
+  process.env.SKIP_BUILD_PUSH === "true";
+
+if (skipPush) {
+  console.log("ℹ  build push disabled via SKIP_BUILD_PUSH");
+  process.exit(0);
+}
+
 const run = (cmd, opts = {}) =>
   execSync(cmd, { cwd: root, stdio: "inherit", ...opts });
 const capture = (cmd, opts = {}) =>
