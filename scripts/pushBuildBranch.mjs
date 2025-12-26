@@ -61,6 +61,44 @@ const copyFileSmart = async (src, dest) => {
   await copyFile(src, dest);
 };
 
+const getGitConfig = (repoDir, key) => {
+  try {
+    return execSync(`git -C "${repoDir}" config ${key}`, {
+      encoding: "utf8",
+      stdio: "pipe",
+    }).trim();
+  } catch {
+    return "";
+  }
+};
+
+const setGitConfig = (repoDir, key, value) => {
+  if (!value) return;
+  execSync(`git -C "${repoDir}" config ${key} "${value.replace(/"/g, '\\"')}"`, {
+    stdio: "ignore",
+  });
+};
+
+const ensureIdentity = (repoDir) => {
+  const existingName = getGitConfig(repoDir, "user.name");
+  const existingEmail = getGitConfig(repoDir, "user.email");
+  if (existingName && existingEmail) return;
+
+  const name =
+    process.env.BUILD_GIT_NAME ||
+    process.env.GIT_AUTHOR_NAME ||
+    process.env.GITHUB_ACTOR ||
+    "github-actions[bot]";
+  const email =
+    process.env.BUILD_GIT_EMAIL ||
+    process.env.GIT_AUTHOR_EMAIL ||
+    process.env.GITHUB_EMAIL ||
+    "41898282+github-actions[bot]@users.noreply.github.com";
+
+  setGitConfig(repoDir, "user.name", name);
+  setGitConfig(repoDir, "user.email", email);
+};
+
 await mkdir(path.join(root, "_cache"), { recursive: true });
 
 try {
@@ -128,6 +166,7 @@ try {
   }).trim();
 
   if (status) {
+    ensureIdentity(worktreeDir);
     const shortSha = capture("git rev-parse --short HEAD");
     const timestamp = new Date().toISOString().replace("T", " ").replace("Z", "");
     const msg = `build: sync from ${shortSha} (${timestamp})`.replace(/"/g, '\\"');
