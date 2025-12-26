@@ -28,6 +28,15 @@ const remote = getArg("--remote") || process.env.BUILD_REMOTE || "origin";
 const runId = Date.now().toString();
 const worktreeDir = path.join(root, "_cache", `build-worktree-${runId}`);
 
+const skipPush =
+  process.env.SKIP_BUILD_PUSH === "1" ||
+  process.env.SKIP_BUILD_PUSH === "true";
+
+if (skipPush) {
+  console.log("ℹ  build push disabled via SKIP_BUILD_PUSH");
+  process.exit(0);
+}
+
 const run = (cmd, opts = {}) =>
   execSync(cmd, { cwd: root, stdio: "inherit", ...opts });
 const capture = (cmd, opts = {}) =>
@@ -38,6 +47,19 @@ const ok = (cmd) => {
     return true;
   } catch {
     return false;
+  }
+};
+const tryRun = (cmd) => {
+  try {
+    execSync(cmd, { cwd: root, stdio: "pipe" });
+    return { ok: true, stdout: "", stderr: "" };
+  } catch (err) {
+    return {
+      ok: false,
+      stdout: err.stdout ? err.stdout.toString() : "",
+      stderr: err.stderr ? err.stderr.toString() : "",
+      error: err,
+    };
   }
 };
 
@@ -61,9 +83,60 @@ const copyFileSmart = async (src, dest) => {
   await copyFile(src, dest);
 };
 
+const getGitConfig = (repoDir, key) => {
+  try {
+    return execSync(`git -C "${repoDir}" config ${key}`, {
+      encoding: "utf8",
+      stdio: "pipe",
+    }).trim();
+  } catch {
+    return "";
+  }
+};
+
+const setGitConfig = (repoDir, key, value) => {
+  if (!value) return;
+  execSync(`git -C "${repoDir}" config ${key} "${value.replace(/"/g, '\\"')}"`, {
+    stdio: "ignore",
+  });
+};
+
+const ensureIdentity = (repoDir) => {
+  const existingName = getGitConfig(repoDir, "user.name");
+  const existingEmail = getGitConfig(repoDir, "user.email");
+  if (existingName && existingEmail) return;
+
+  const name =
+    process.env.BUILD_GIT_NAME ||
+    process.env.GIT_AUTHOR_NAME ||
+    process.env.GITHUB_ACTOR ||
+    "github-actions[bot]";
+  const email =
+    process.env.BUILD_GIT_EMAIL ||
+    process.env.GIT_AUTHOR_EMAIL ||
+    process.env.GITHUB_EMAIL ||
+    "41898282+github-actions[bot]@users.noreply.github.com";
+
+  setGitConfig(repoDir, "user.name", name);
+  setGitConfig(repoDir, "user.email", email);
+};
+
 await mkdir(path.join(root, "_cache"), { recursive: true });
 
 try {
+  const currentBranch = (() => {
+    try {
+      return capture("git rev-parse --abbrev-ref HEAD");
+    } catch {
+      return "";
+    }
+  })();
+  const githubRef = process.env.GITHUB_REF || "";
+  if (currentBranch === branch || githubRef === `refs/heads/${branch}`) {
+    console.log(`ℹ  already on '${branch}' branch; skipping build push`);
+    process.exit(0);
+  }
+
   try {
     execSync(`git fetch --quiet ${remote} ${branch}`, {
       cwd: root,
@@ -82,10 +155,22 @@ try {
 
   if (hasLocalBranch) {
     run(`git worktree add "${worktreeDir}" "${branch}"`);
-  } else if (hasRemoteBranch) {
-    run(`git worktree add -b "${branch}" "${worktreeDir}" "${remote}/${branch}"`);
   } else {
-    run(`git worktree add -b "${branch}" "${worktreeDir}" HEAD`);
+    const baseRef = hasRemoteBranch ? `${remote}/${branch}` : "HEAD";
+    const attempt = tryRun(
+      `git worktree add -b "${branch}" "${worktreeDir}" "${baseRef}"`
+    );
+    if (!attempt.ok) {
+      const msg = `${attempt.stderr}\n${attempt.stdout}`;
+      if (msg.includes("already exists")) {
+        run(`git worktree add "${worktreeDir}" "${branch}"`);
+      } else if (msg.includes("already checked out")) {
+        console.log(`ℹ  '${branch}' is already checked out; skipping build push`);
+        process.exit(0);
+      } else {
+        throw attempt.error;
+      }
+    }
   }
 
   const sourceList = capture("git ls-files -co --exclude-standard");
@@ -128,6 +213,7 @@ try {
   }).trim();
 
   if (status) {
+    ensureIdentity(worktreeDir);
     const shortSha = capture("git rev-parse --short HEAD");
     const timestamp = new Date().toISOString().replace("T", " ").replace("Z", "");
     const msg = `build: sync from ${shortSha} (${timestamp})`.replace(/"/g, '\\"');
