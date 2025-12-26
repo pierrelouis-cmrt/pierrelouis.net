@@ -51,6 +51,7 @@ const safeUnlink = async (filePath) => {
 
 const copyFileSmart = async (src, dest) => {
   const st = await lstat(src);
+  if (st.isDirectory()) return;
   if (st.isSymbolicLink()) {
     const link = await readlink(src);
     await safeUnlink(dest);
@@ -88,7 +89,18 @@ try {
   }
 
   const sourceList = capture("git ls-files -co --exclude-standard");
-  const sourceFiles = sourceList ? sourceList.split("\n") : [];
+  const sourceEntries = sourceList ? sourceList.split("\n") : [];
+  const sourceFiles = [];
+  for (const file of sourceEntries) {
+    const src = path.join(root, file);
+    try {
+      const st = await lstat(src);
+      if (st.isDirectory()) continue;
+      sourceFiles.push(file);
+    } catch {
+      /* skip missing files */
+    }
+  }
   const sourceSet = new Set(sourceFiles);
 
   const worktreeList = execSync(`git -C "${worktreeDir}" ls-files`, {
