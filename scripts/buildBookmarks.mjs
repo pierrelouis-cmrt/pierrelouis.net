@@ -1,4 +1,4 @@
-// scripts/buildBookmarks.js
+// scripts/buildBookmarks.mjs
 // -----------------------------------------------------------------------------
 // Generate static HTML for /bookmarks/index.html from /bookmarks/bookmarks.json,
 // skipping any bookmark dated in a FUTURE month (or year) relative to today.

@@ -52,10 +52,15 @@ if (devMode) {
 
 /* ---------- Build Tailwind CSS ------------------------------------------- */
 console.log(`◆ Building Tailwind → ${outFile}`);
+const tailwindEnv = {
+  ...process.env,
+  BROWSERSLIST_IGNORE_OLD_DATA:
+    process.env.BROWSERSLIST_IGNORE_OLD_DATA || "1",
+};
 execSync(
   `npx tailwindcss -i ./src/styles.css -o ./${outFile}` +
     (devMode ? "" : " --minify"),
-  { stdio: "inherit" }
+  { stdio: "inherit", env: tailwindEnv }
 );
 
 // If production: compare temp output to previous version; defer decisions

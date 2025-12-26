@@ -222,7 +222,9 @@ try {
     console.log("✔ build branch already up to date");
   }
 
-  run(`git -C "${worktreeDir}" push -u "${remote}" "${branch}"`);
+  run(
+    `git -C "${worktreeDir}" push --force-with-lease -u "${remote}" "${branch}"`
+  );
 } finally {
   try {
     run(`git worktree remove --force "${worktreeDir}"`);

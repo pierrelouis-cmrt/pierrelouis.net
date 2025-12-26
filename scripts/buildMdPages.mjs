@@ -1,4 +1,4 @@
-// scripts/buildMdPages.js
+// scripts/buildMdPages.mjs
 // ---------------------------------------------------------------------------
 // Converts *.md inside:
 //   posts/md/  →  posts/{slug}.html
@@ -18,7 +18,7 @@
 import { readFile, writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
-import { loadPosts, monthName } from "./postsData.js";
+import { loadPosts, monthName } from "./postsData.mjs";
 
 import MarkdownIt from "markdown-it";
 import mark from "markdown-it-mark";
