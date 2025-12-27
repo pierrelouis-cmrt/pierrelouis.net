@@ -1,8 +1,8 @@
 // scripts/buildCssVersioned.mjs
 // -----------------------------------------------------------------------------
 // One script, two modes:
-//   • Production  (default) → output‑vNNN.css  + minified  + full cache‑bust.
-//     ‑‑ Also removes all stale css: any output‑v*.css and output‑dev.css.
+//   • Production  (default) → output‑<hash>.css + minified + full cache‑bust.
+//     ‑‑ Also removes all stale css: any output‑*.css and output‑dev.css.
 //   • Development ( --dev ) → output‑dev.css no versioning, keeps dev fast.
 //
 // Both modes re‑link every HTML file – single‑ or double‑quoted, absolute or
@@ -17,6 +17,7 @@ import { execSync } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
 import { glob } from "glob";
+import { createHash } from "crypto";
 
 /* ---------- Flags --------------------------------------------------------- */
 const devMode = process.argv.includes("--dev");
@@ -25,26 +26,34 @@ const devMode = process.argv.includes("--dev");
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 
-/* ---------- Pick output file & version ----------------------------------- */
+/* ---------- Pick output file & hash -------------------------------------- */
 let outFile;
-let currentVersion = 0;
-let currentVersionPath = null;
+let currentHash = "";
+let currentHashPath = null;
 if (devMode) {
   outFile = "src/output-dev.css";
 } else {
   // In production mode we will build to a temp file first, compare with
-  // the latest versioned CSS (if any), and only bump the version + relink
-  // when the content actually changed. This avoids noisy commits.
-  const VERSION_FILE = path.join(root, ".css-version");
-  try {
-    currentVersion = parseInt(await readFile(VERSION_FILE, "utf8"), 10) || 0;
-  } catch {
-    /* no version yet */
+  // the latest hashed CSS (if any), and only relink when the content
+  // actually changed. This avoids noisy commits.
+  const existingHashes = (await glob("src/output-*.css", {
+    cwd: root,
+    absolute: true,
+  })).filter((file) => path.basename(file) !== "output-dev.css");
+  if (existingHashes.length > 0) {
+    existingHashes.sort(
+      (a, b) => statSync(b).mtimeMs - statSync(a).mtimeMs
+    );
+    currentHashPath = existingHashes[0];
+    const match = /output-([a-z0-9]+)\.css$/i.exec(
+      path.basename(currentHashPath)
+    );
+    if (match) {
+      currentHash = match[1];
+    } else {
+      currentHashPath = null;
+    }
   }
-
-  const currentTag = String(currentVersion).padStart(3, "0");
-  currentVersionPath =
-    currentVersion > 0 ? path.join(root, `src/output-v${currentTag}.css`) : null;
 
   // Always build to a temporary path first
   outFile = "src/.output-temp.css";
@@ -63,18 +72,22 @@ execSync(
   { stdio: "inherit", env: tailwindEnv }
 );
 
-// If production: compare temp output to previous version; defer decisions
+// If production: compare temp output to previous hash; defer decisions
 let isSameAsCurrent = false;
 let tempPath = null;
+let tempBuffer = null;
+let nextHash = "";
 if (!devMode) {
   tempPath = path.join(root, outFile);
-  if (currentVersionPath) {
+  tempBuffer = await readFile(tempPath);
+  nextHash = createHash("sha256")
+    .update(tempBuffer)
+    .digest("hex")
+    .slice(0, 10);
+  if (currentHashPath && currentHash === nextHash) {
     try {
-      const [a, b] = await Promise.all([
-        readFile(tempPath, "utf8"),
-        readFile(currentVersionPath, "utf8"),
-      ]);
-      isSameAsCurrent = a === b;
+      await readFile(currentHashPath, "utf8");
+      isSameAsCurrent = true;
     } catch {
       isSameAsCurrent = false;
     }
@@ -93,9 +106,9 @@ async function* walk(dir) {
 }
 
 /* ---------- Update every HTML file --------------------------------------- */
-// Matches: href="/src/output.css" | 'src/output-v012.css?foo' | "output-dev.css"
+// Matches: href="/src/output.css" | 'src/output-1a2b3c4d5e.css?foo' | "output-dev.css"
 const cssLinkPattern =
-  /href=("|')[^"']*output(?:-v\d{3}|-dev)?\.css[^"']*("|')/gi;
+  /href=("|')[^"']*output(?:-[a-z0-9]+)?\.css[^"']*("|')/gi;
 const devLinkPattern = /href=("|')[^"']*output-dev\.css[^"']*("|')/i;
 
 if (devMode) {
@@ -121,11 +134,11 @@ if (devMode) {
     }
   }
 
-  if (isSameAsCurrent && currentVersionPath) {
+  if (isSameAsCurrent && currentHashPath) {
     // Remove temp file
     await rm(tempPath, { force: true });
     if (anyDevLinked) {
-      const versionRel = `/${path.relative(root, currentVersionPath)}`.replaceAll("\\\\", "/");
+      const versionRel = `/${path.relative(root, currentHashPath)}`.replaceAll("\\\\", "/");
       for await (const file of walk(root)) {
         const html = await readFile(file, "utf8");
         const updated = html.replace(cssLinkPattern, `href=\"${versionRel}\"`);
@@ -135,27 +148,18 @@ if (devMode) {
         }
       }
       try { await unlink(path.join(root, "src/output-dev.css")); } catch {}
-      console.log("✔  CSS unchanged; relinked from dev to current version");
+      console.log("✔  CSS unchanged; relinked from dev to current hash");
     } else {
-      console.log("✔  CSS unchanged; skipped version bump");
+      console.log("✔  CSS unchanged; skipped hash update");
     }
     process.exit(0);
   }
 
-  // Determine next version, move temp to versioned name, clean stale, relink
-  const VERSION_FILE = path.join(root, ".css-version");
-  let version = 1;
-  try {
-    version = parseInt(await readFile(VERSION_FILE, "utf8"), 10) + 1;
-  } catch {
-    /* first run – keep 1 */
-  }
-  await writeFile(VERSION_FILE, String(version), "utf8");
-  const tag = String(version).padStart(3, "0");
-  const finalOut = `src/output-v${tag}.css`;
+  // Determine next hash, move temp to hashed name, clean stale, relink
+  const finalOut = `src/output-${nextHash}.css`;
 
-  // Remove stale versioned + dev files BEFORE we move the new one in place
-  for (const file of await glob("src/output-v*.css", {
+  // Remove stale hashed + dev files BEFORE we move the new one in place
+  for (const file of await glob("src/output-*.css", {
     cwd: root,
     absolute: true,
   })) {
@@ -168,10 +172,10 @@ if (devMode) {
 
   // Move temp into final location
   const fsPath = path.join(root, finalOut);
-  await writeFile(fsPath, await readFile(path.join(root, outFile)));
+  await writeFile(fsPath, tempBuffer);
   await rm(path.join(root, outFile), { force: true });
 
-  // Relink HTML to the new versioned file
+  // Relink HTML to the new hashed file
   for await (const file of walk(root)) {
     const html = await readFile(file, "utf8");
     const updated = html.replace(cssLinkPattern, `href="/${finalOut}"`);
