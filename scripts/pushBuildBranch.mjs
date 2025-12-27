@@ -25,6 +25,81 @@ const getArg = (name) => {
 const branch = getArg("--branch") || process.env.BUILD_BRANCH || "build";
 const remote = getArg("--remote") || process.env.BUILD_REMOTE || "origin";
 
+// Only include host-ready files in the build branch. Adjust lists as needed.
+const DEPLOY_EXTENSIONS = new Set([
+  ".html",
+  ".htm",
+  ".css",
+  ".js",
+  ".mjs",
+  ".json",
+  ".svg",
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".gif",
+  ".webp",
+  ".avif",
+  ".ico",
+  ".xml",
+  ".txt",
+  ".webmanifest",
+  ".csv",
+  ".pdf",
+  ".mp4",
+  ".webm",
+  ".woff",
+  ".woff2",
+  ".ttf",
+  ".otf",
+  ".eot",
+  ".php",
+]);
+
+const DEPLOY_EXACT_EXCLUDES = new Set([
+  "src/styles.css",
+  "src/output-dev.css",
+  "src/.output-temp.css",
+  "bookmarks/bookmarks.json",
+]);
+
+const DEPLOY_BASE_EXCLUDES = new Set([
+  "AGENTS.md",
+  "README.md",
+  "LICENSE",
+  ".gitignore",
+  "package.json",
+  "package-lock.json",
+  "tailwind.config.js",
+]);
+
+const DEPLOY_PREFIX_EXCLUDES = [
+  ".git/",
+  ".github/",
+  ".vscode/",
+  "node_modules/",
+  "scripts/",
+  "_cache/",
+  ".build-worktree/",
+];
+
+const DEPLOY_NO_EXT_ALLOW = new Set([".htaccess"]);
+
+const isDeployable = (file) => {
+  const normalized = file.replaceAll("\\", "/");
+  if (DEPLOY_PREFIX_EXCLUDES.some((prefix) => normalized.startsWith(prefix))) {
+    return false;
+  }
+  if (DEPLOY_EXACT_EXCLUDES.has(normalized)) return false;
+
+  const base = path.posix.basename(normalized);
+  if (DEPLOY_BASE_EXCLUDES.has(base)) return false;
+
+  const ext = path.posix.extname(base).toLowerCase();
+  if (ext) return DEPLOY_EXTENSIONS.has(ext);
+  return DEPLOY_NO_EXT_ALLOW.has(base);
+};
+
 const runId = Date.now().toString();
 const worktreeDir = path.join(root, "_cache", `build-worktree-${runId}`);
 
@@ -177,6 +252,7 @@ try {
   const sourceEntries = sourceList ? sourceList.split("\n") : [];
   const sourceFiles = [];
   for (const file of sourceEntries) {
+    if (!isDeployable(file)) continue;
     const src = path.join(root, file);
     try {
       const st = await lstat(src);
