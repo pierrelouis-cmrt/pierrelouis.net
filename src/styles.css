@@ -1781,7 +1781,7 @@ hr.divider-thin {
   width: 150px;
   height: 300px;
   border-radius: var(--radius-lg);
-  background-image: url("/about/me-still.png");
+  background-image: url("/about/me.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -1792,10 +1792,6 @@ hr.divider-thin {
   float: left;
   margin-right: 20px;
   margin-bottom: 5px;
-}
-
-.about-profile-image:hover {
-  background-image: url("/about/me.gif");
 }
 
 /* Content styling */
@@ -4488,6 +4484,10 @@ mjx-container::-webkit-scrollbar-thumb {
     width: auto;
     height: 200px;
     float: none;
+    background-image: url("/about/me-mobile.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
   }
 
   .category-number {
