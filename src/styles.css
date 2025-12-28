@@ -705,16 +705,14 @@ a.project-card:not(:hover) .lucide {
 }
 
 .post-card-title {
+  color: var(--text-body) !important;
   display: flex;
   align-items: center;
   margin-bottom: var(--space-2);
-  text-decoration: underline;
-  -webkit-text-decoration: underline;
 }
 
 .post-card-title svg {
   position: relative;
-  top: 1px;
   width: 18px;
   height: 18px;
   margin-right: var(--space-2);
@@ -734,6 +732,28 @@ a.project-card:not(:hover) .lucide {
 
 .post-card-date {
   margin-left: auto;
+}
+
+#latest-posts .post-card-title {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+#latest-posts .post-card-title svg {
+  flex-shrink: 0;
+}
+
+#latest-posts .post-card-title .link-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#latest-posts .post-card-date {
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 /* Now playing */
