@@ -1457,6 +1457,13 @@ a.project-card:not(:hover) .lucide {
   padding: var(--space-2) 0;
 }
 
+.more-pages .post-card-link {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+
 .more-pages .post-card-title {
   margin-bottom: 0;
 }
@@ -1478,13 +1485,11 @@ a.project-card:not(:hover) .lucide {
   letter-spacing: normal;
 }
 
-.more-page-meta {
+.more-page-description {
   color: var(--text-subtle);
   font-size: var(--text-sm);
   letter-spacing: 0.02em;
   text-transform: lowercase;
-  text-align: right;
-  max-width: 18ch;
 }
 
 /* Connect + More row (homepage) */
