@@ -11,9 +11,10 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    env:
-      BUILD_OUTPUT: ${{ runner.temp }}/build-output
     steps:
+      - name: Set build output dir
+        run: echo "BUILD_OUTPUT=${RUNNER_TEMP}/build-output" >> "$GITHUB_ENV"
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
