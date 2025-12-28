@@ -1469,15 +1469,17 @@ a.project-card:not(:hover) .lucide {
 }
 
 .more-pages .post-card-title svg {
-  width: 18px;
-  height: 18px;
+  width: 1em;
+  height: 1em;
   margin-right: var(--space-2);
+  margin-left: 0 !important;
+  margin-top: 0px;
   color: var(--text-subtle);
   transition: color 120ms ease-in-out;
 }
 
 .more-pages .post-card-link:hover .post-card-title svg {
-  color: var(--text-body);
+  color: #fff;
 }
 
 .more-page-path {
