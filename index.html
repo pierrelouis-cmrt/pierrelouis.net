@@ -1039,20 +1039,22 @@
 
     <header class="animate-on-scroll">
       <div class="hero-section">
-        <div class="hero-avatar-wrapper">
-          <img
-            class="hero-avatar"
-            src="src/assets/avatar.webp"
-            width="88"
-            height="88"
-            loading="eager"
-            decoding="async"
-            fetchpriority="high"
-            alt="Avatar"
-            title="That's me!"
-          />
+        <div class="hero-intro">
+          <div class="hero-avatar-wrapper">
+            <img
+              class="hero-avatar"
+              src="src/assets/avatar.webp"
+              width="88"
+              height="88"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+              alt="Avatar"
+              title="That's me!"
+            />
+          </div>
+          <h1 class="hero-title" id="hero-title"></h1>
         </div>
-        <h1 class="hero-title" id="hero-title"></h1>
         <script>
           (() => {
             const a = "hero-title-accent text-italic";
@@ -1332,91 +1334,56 @@
         <div class="posts-grid" id="latest-posts">
           <!-- AUTO-GEN:LATEST START -->
 
-          <div class="post-card">
-            <a
-              class="link-with-icon post-card-link"
-              href="/posts/how-marketing-renames-our-world.html"
-              rel="noopener noreferrer"
-            >
-              <div class="post-card-title">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path
-                    d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"
-                  />
-                  <path d="M15 3v4a2 2 0 0 0 2 2h4" />
-                </svg>
-                <span class="link-text">How Marketing Renames Our World</span>
-              </div>
-              <div class="post-card-separator"></div>
-              <div class="post-card-date">Dec 2025</div>
-            </a>
-          </div>
-          <div class="post-card">
-            <a
-              class="link-with-icon post-card-link"
-              href="/posts/motivation---a-personal-take.html"
-              rel="noopener noreferrer"
-            >
-              <div class="post-card-title">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path
-                    d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"
-                  />
-                  <path d="M15 3v4a2 2 0 0 0 2 2h4" />
-                </svg>
-                <span class="link-text">Motivation - A personal take</span>
-              </div>
-              <div class="post-card-separator"></div>
-              <div class="post-card-date">Dec 2025</div>
-            </a>
-          </div>
-          <div class="post-card">
-            <a
-              class="link-with-icon post-card-link"
-              href="/posts/was-maths-invented-or-discovered.html"
-              rel="noopener noreferrer"
-            >
-              <div class="post-card-title">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path
-                    d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
-                  />
-                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-                  <path d="M10 9H8" />
-                  <path d="M16 13H8" />
-                  <path d="M16 17H8" />
-                </svg>
-                <span class="link-text">Was maths invented or discovered?</span>
-              </div>
-              <div class="post-card-separator"></div>
-              <div class="post-card-date">Dec 2025</div>
-            </a>
-          </div>
-          <!-- AUTO-GEN:LATEST END -->
+    <div class="post-card">
+      <a class="link-with-icon post-card-link" href="/posts/how-marketing-renames-our-world.html" rel="noopener noreferrer">
+        <div class="post-card-title">
+          
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/>
+      <path d="M15 3v4a2 2 0 0 0 2 2h4"/>
+    </svg>
+          <span class="link-text">How Marketing Renames Our World</span>
+        </div>
+        <div class="post-card-separator"></div>
+        <div class="post-card-date">Dec 2025</div>
+      </a>
+    </div>
+    <div class="post-card">
+      <a class="link-with-icon post-card-link" href="/posts/motivation---a-personal-take.html" rel="noopener noreferrer">
+        <div class="post-card-title">
+          
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/>
+      <path d="M15 3v4a2 2 0 0 0 2 2h4"/>
+    </svg>
+          <span class="link-text">Motivation - A personal take</span>
+        </div>
+        <div class="post-card-separator"></div>
+        <div class="post-card-date">Dec 2025</div>
+      </a>
+    </div>
+    <div class="post-card">
+      <a class="link-with-icon post-card-link" href="/posts/was-maths-invented-or-discovered.html" rel="noopener noreferrer">
+        <div class="post-card-title">
+          
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+      <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+      <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
+    </svg>
+          <span class="link-text">Was maths invented or discovered?</span>
+        </div>
+        <div class="post-card-separator"></div>
+        <div class="post-card-date">Dec 2025</div>
+      </a>
+    </div>
+<!-- AUTO-GEN:LATEST END -->
         </div>
 
         <div class="projects-view-all">

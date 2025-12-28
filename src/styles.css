@@ -472,13 +472,13 @@ a.link-with-icon:not(:hover) .lucide {
 .hero-avatar-wrapper {
   position: relative;
   display: inline-block;
-  width: 88px;
-  height: 88px;
+  width: 77px;
+  height: 77px;
 }
 
 .hero-avatar {
-  width: 88px;
-  height: 88px;
+  width: 77px;
+  height: 77px;
   border-radius: 33% 67% 40% 60% / 66% 39% 61% 34%;
   box-shadow: 0px 0.7px 1.9px -24px rgba(0, 0, 0, 0.124),
     0px 1.7px 4.9px -24px rgba(0, 0, 0, 0.177),
@@ -488,7 +488,6 @@ a.link-with-icon:not(:hover) .lucide {
   opacity: 0.85;
   object-fit: cover;
   image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
 }
 
 .hero-avatar-layer {
@@ -526,20 +525,26 @@ a.link-with-icon:not(:hover) .lucide {
 /* Header */
 
 h1.hero-title {
-  font-size: var(--text-3xl);
+  font-size: var(--text-2xl);
   font-weight: var(--font-normal);
   line-height: 1.2;
   letter-spacing: var(--tracking-tight);
   text-wrap: pretty;
   max-width: 28ch;
-  margin-top: var(--space-6);
-  margin-bottom: var(--space-4);
-  margin-left: 0;
+  margin: 0;
+  margin-top: var(--space-4);
 }
 
 .hero-section {
   margin: var(--space-24) auto var(--space-8);
   max-width: 600px;
+}
+
+.hero-intro {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--space-4);
+  align-items: center;
 }
 
 h1.main-title {
@@ -4376,6 +4381,11 @@ mjx-container::-webkit-scrollbar-thumb {
 }
 
 @media (max-width: 480px) {
+  .hero-intro {
+    grid-template-columns: 1fr;
+    row-gap: var(--space-3);
+  }
+
   .music-widget,
   .location-widget,
   .more-widget {
