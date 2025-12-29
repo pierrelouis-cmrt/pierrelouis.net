@@ -213,7 +213,7 @@ window.COMMAND_ITEMS_DATA = {
       title: "Now (What am I upto at the moment?)",
       value: "now",
       icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock3-icon lucide-clock-3 w-4 h-4 mr-1 sm:mr-2"><path d="M12 6v6h4"/><circle cx="12" cy="12" r="10"/></svg>',
-      right: "N + N",
+      right: "N + K",
       default: true,
     },
     {
@@ -309,7 +309,7 @@ window.SHORTCUT_MAP = {
   h: "/",
   a: "/about",
   p: "/projects",
-  n: "/now",
+  k: "/now",
   s: "/someday",
   w: "/posts",
   b: "/bookmarks",
@@ -1351,10 +1351,11 @@ document.addEventListener("keydown", (e) => {
 
         if (target) {
           // Smooth scroll with offset for header
-          const offsetTop = target.getBoundingClientRect().top + window.pageYOffset - 100;
+          const offsetTop =
+            target.getBoundingClientRect().top + window.pageYOffset - 100;
           window.scrollTo({
             top: offsetTop,
-            behavior: "smooth"
+            behavior: "smooth",
           });
 
           // Optional: Add a brief highlight effect

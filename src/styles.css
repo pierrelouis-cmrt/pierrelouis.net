@@ -1813,7 +1813,7 @@ hr.divider-thin {
   width: 150px;
   height: 300px;
   border-radius: var(--radius-lg);
-  background-image: url("/about/me.png");
+  background-image: url("/about/me.webp");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -4521,7 +4521,7 @@ mjx-container::-webkit-scrollbar-thumb {
     width: auto;
     height: 200px;
     float: none;
-    background-image: url("/about/me-mobile.png");
+    background-image: url("/about/me-mobile.webp");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
