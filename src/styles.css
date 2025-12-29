@@ -1479,7 +1479,7 @@ a.project-card:not(:hover) .lucide {
 }
 
 .more-pages .post-card-link:hover .post-card-title svg {
-  color: #fff;
+  color: var(--text-body);
 }
 
 .more-page-path {
