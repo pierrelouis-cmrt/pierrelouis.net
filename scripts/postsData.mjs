@@ -171,7 +171,7 @@ function resolvePostTag(tags) {
   return tags.map((tag) => TYPE_TAG_MAP[tag]).find(Boolean) || null;
 }
 
-async function resolveSourceDir(root) {
+export async function resolveSourceDir(root) {
   const repoDir = path.join(root, "posts", "md");
   const preferred = process.env.POSTS_SOURCE_DIR || DEFAULT_VAULT_PATH;
 
@@ -191,8 +191,8 @@ async function resolveSourceDir(root) {
   return repoDir;
 }
 
-export async function loadPosts(root) {
-  const mdDir = await resolveSourceDir(root);
+export async function loadPosts(root, options = {}) {
+  const mdDir = options.sourceDir || (await resolveSourceDir(root));
   const entries = await readdir(mdDir);
 
   const posts = [];

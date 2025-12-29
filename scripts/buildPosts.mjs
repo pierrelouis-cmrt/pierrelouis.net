@@ -6,10 +6,18 @@
 // Items dated after TODAY are ignored.
 // -----------------------------------------------------------------------------
 
-import { readFile, writeFile, mkdir } from "fs/promises";
+import {
+  readFile,
+  writeFile,
+  mkdir,
+  readdir,
+  copyFile,
+  unlink,
+} from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
-import { loadPosts } from "./postsData.mjs";
+import { buildPostPages } from "./buildMdPages.mjs";
+import { loadPosts, resolveSourceDir } from "./postsData.mjs";
 
 /* -------------------------------------------------------------------------- */
 /*  Paths                                                                     */
@@ -17,6 +25,7 @@ import { loadPosts } from "./postsData.mjs";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 
+const POSTS_MD_DIR = path.join(root, "posts", "md");
 const POSTS_HTML = path.join(root, "posts", "index.html");
 const HOME_HTML = path.join(root, "index.html");
 
@@ -76,6 +85,89 @@ const groupBy = (arr, key) =>
     (map[obj[key]] ||= []).push(obj);
     return map;
   }, {});
+
+async function syncMarkdown(sourceDir, destDir) {
+  const resolvedSource = path.resolve(sourceDir);
+  const resolvedDest = path.resolve(destDir);
+
+  if (resolvedSource === resolvedDest) {
+    console.log("INFO: posts source already in posts/md, skipping copy");
+    return { copied: 0, total: 0, extras: [] };
+  }
+
+  await mkdir(destDir, { recursive: true });
+
+  const entries = await readdir(sourceDir, { withFileTypes: true });
+  const mdFiles = entries.filter(
+    (entry) => entry.isFile() && entry.name.toLowerCase().endsWith(".md")
+  );
+
+  const sourceNames = new Set(mdFiles.map((entry) => entry.name));
+  let copied = 0;
+
+  if (!mdFiles.length) {
+    console.warn(`WARN: no markdown files found in "${sourceDir}"`);
+  }
+
+  for (const entry of mdFiles) {
+    const src = path.join(sourceDir, entry.name);
+    const dest = path.join(destDir, entry.name);
+    await copyFile(src, dest);
+    copied += 1;
+  }
+
+  const destEntries = await readdir(destDir, { withFileTypes: true });
+  const destMd = destEntries
+    .filter((entry) => entry.isFile() && entry.name.toLowerCase().endsWith(".md"))
+    .map((entry) => entry.name);
+
+  const extras = destMd.filter((name) => !sourceNames.has(name));
+
+  console.log(`✔  synced ${copied}/${mdFiles.length} markdown files to posts/md`);
+
+  if (extras.length) {
+    for (const name of extras) {
+      await unlink(path.join(destDir, name));
+    }
+    console.log(
+      `✔  removed ${extras.length} stale markdown files from posts/md`
+    );
+  }
+
+  return { copied, total: mdFiles.length, extras };
+}
+
+async function cleanupStaleHtml(posts, outputRoot) {
+  const postsDir = path.join(outputRoot, "posts");
+  let entries = [];
+
+  try {
+    entries = await readdir(postsDir, { withFileTypes: true });
+  } catch (error) {
+    if (error?.code === "ENOENT") return [];
+    throw error;
+  }
+
+  const keep = new Set(posts.map((post) => `${post.slug}.html`));
+  keep.add("index.html");
+
+  const removed = [];
+
+  for (const entry of entries) {
+    if (!entry.isFile()) continue;
+    if (!entry.name.toLowerCase().endsWith(".html")) continue;
+    if (keep.has(entry.name)) continue;
+
+    await unlink(path.join(postsDir, entry.name));
+    removed.push(entry.name);
+  }
+
+  if (removed.length) {
+    console.log(`✔  removed ${removed.length} stale post HTML files`);
+  }
+
+  return removed;
+}
 
 /* -------------------------------------------------------------------------- */
 /*  Markup factory functions (two layouts)                                    */
@@ -177,14 +269,21 @@ function replaceBlock(html, tag, content) {
 /*  Main build process                                                        */
 /* -------------------------------------------------------------------------- */
 (async () => {
-  /* 1. Load markdown metadata --------------------------------------------- */
-  const items = await loadPosts(root);
+  /* 1. Sync markdown from source ------------------------------------------ */
+  const sourceDir = await resolveSourceDir(root);
+  await syncMarkdown(sourceDir, POSTS_MD_DIR);
+
+  /* 2. Load markdown metadata --------------------------------------------- */
+  const items = await loadPosts(root, { sourceDir });
 
   const sorted = [...items].sort((a, b) => b.date - a.date);
   const withLinks = sorted.map((post) => ({
     ...post,
     link: `/posts/${post.slug}.html`,
   }));
+
+  await buildPostPages(withLinks, { root, outRoot });
+  await cleanupStaleHtml(withLinks, outRoot);
 
   const postsJson = withLinks.map(
     ({ year, month, day, title, description, image, tag, tags }) => ({
@@ -206,11 +305,11 @@ function replaceBlock(html, tag, content) {
   );
   console.log("✔  posts.json generated from markdown");
 
-  /* 2. Filter out future-dated posts -------------------------------------- */
+  /* 3. Filter out future-dated posts -------------------------------------- */
   const today = new Date();
   const filtered = withLinks.filter((post) => post.date <= today);
 
-  /* 3. Render pages -------------------------------------------------------- */
+  /* 4. Render pages -------------------------------------------------------- */
 
   // /posts/index.html
   {

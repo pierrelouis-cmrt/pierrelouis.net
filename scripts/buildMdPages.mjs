@@ -17,7 +17,7 @@
 
 import { readFile, writeFile, mkdir } from "fs/promises";
 import path from "path";
-import { fileURLToPath } from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 import { loadPosts, monthName } from "./postsData.mjs";
 
 import MarkdownIt from "markdown-it";
@@ -38,8 +38,6 @@ const outRoot =
   outArgIndex !== -1 && process.argv[outArgIndex + 1]
     ? path.resolve(root, process.argv[outArgIndex + 1])
     : root;
-
-const POSTS_OUT_DIR = path.join(outRoot, "posts");
 
 /* ---------- SVG icon for the ‘info’ call-out ---------------------------- */
 const INFO_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`;
@@ -143,8 +141,12 @@ function preprocess(markdown) {
 }
 
 /* ---------- builder ----------------------------------------------------- */
-async function buildPages(posts) {
-  await mkdir(POSTS_OUT_DIR, { recursive: true });
+export async function buildPostPages(
+  posts,
+  { root: rootDir = root, outRoot: outRootDir = root } = {}
+) {
+  const postsOutDir = path.join(outRootDir, "posts");
+  await mkdir(postsOutDir, { recursive: true });
 
   for (const post of posts) {
     const rawMd = post.body;
@@ -189,13 +191,28 @@ async function buildPages(posts) {
       .replace("{{CONTENT}}", styledTasks)
       .replace(/{{LIGHTBOX_GROUP}}/g, `post-${post.slug}`);
 
-    const out = path.join(POSTS_OUT_DIR, `${post.slug}.html`);
+    const out = path.join(postsOutDir, `${post.slug}.html`);
     await writeFile(out, html);
-    console.log("✔  built", path.relative(root, out));
+    console.log("✔  built", path.relative(rootDir, out));
   }
 }
 
-const posts = await loadPosts(root);
-await buildPages(posts);
+export async function buildMdPages({
+  root: rootDir = root,
+  outRoot: outRootDir = root,
+  sourceDir,
+} = {}) {
+  const posts = await loadPosts(
+    rootDir,
+    sourceDir ? { sourceDir } : undefined
+  );
+  await buildPostPages(posts, { root: rootDir, outRoot: outRootDir });
+  console.log("✔  buildMdPages complete");
+}
 
-console.log("✔  buildMdPages complete");
+const isDirectRun =
+  import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href;
+
+if (isDirectRun) {
+  await buildMdPages({ root, outRoot });
+}

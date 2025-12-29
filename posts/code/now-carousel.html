@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Carousel</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <style>
+      :root {
+        --swiper-active: #ffffff;
+        --swiper-inactive: rgba(255, 255, 255, 0.75);
+        --page-bg: rgba(250, 249, 249, 1);
+      }
+
+      .dark {
+        --page-bg: rgba(15, 15, 15, 1);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root:not(.light) {
+          --page-bg: rgba(15, 15, 15, 1);
+        }
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--page-bg);
+      }
+
+      .swiper {
+        width: 100vw;
+        margin-left: calc(50% - 50vw) !important;
+        height: clamp(250px, 40vw, 400px);
+        cursor: grab;
+      }
+
+      @media (max-height: 400px) {
+        .swiper {
+          height: 100vh; /* fallback */
+          height: 100dvh; /* better on mobile */
+        }
+      }
+
+      .swiper:active {
+        cursor: grabbing;
+      }
+
+      .swiper-slide {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.4s ease;
+        transform: scale(1);
+      }
+
+      .swiper-slide-active {
+        transform: scale(1);
+      }
+
+      .swiper-slide img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .swiper-pagination {
+        bottom: 30px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: fit-content !important;
+        background-color: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        border-radius: 20px;
+        position: relative;
+        height: 24px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .pagination-viewport {
+        --viewport-width: 120px;
+        width: var(--viewport-width) !important;
+        height: 16px;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .pagination-container {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition: transform 0.3s ease;
+        position: absolute;
+      }
+
+      .pagination-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: var(--swiper-inactive);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+      }
+
+      .pagination-indicator.active {
+        background-color: var(--swiper-active);
+        transform: scale(1.3);
+        box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+      }
+
+      .pagination-indicator.edge {
+        transform: scale(0.7);
+        opacity: 0.6;
+      }
+
+      .pagination-indicator.edge.active {
+        transform: scale(0.9);
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <img
+            src="/photos/pics/Other/architecture1.webp"
+            alt="Architecture photo from Other trip"
+            loading="lazy"
+            decoding="async"
+            width="1000"
+            height="1333"
+          />
+        </div>
+        <div class="swiper-slide">
+          <img
+            src="/photos/pics/Paris/architecture2.webp"
+            alt="Architecture photo from Paris trip"
+            loading="lazy"
+            decoding="async"
+            width="1000"
+            height="1333"
+          />
+        </div>
+        <div class="swiper-slide">
+          <img
+            src="/photos/pics/Paris/architecture3.webp"
+            alt="Architecture detail from Paris trip"
+            loading="lazy"
+            decoding="async"
+            width="1000"
+            height="1333"
+          />
+        </div>
+        <div class="swiper-slide">
+          <img
+            src="/photos/pics/Other/architecture4.webp"
+            alt="Architecture photo from Other trip"
+            loading="lazy"
+            decoding="async"
+            width="1000"
+            height="1333"
+          />
+        </div>
+        <div class="swiper-slide">
+          <img
+            src="/photos/pics/Other/animal1.webp"
+            alt="Animal portrait from Other trip"
+            loading="lazy"
+            decoding="async"
+            width="1000"
+            height="1333"
+          />
+        </div>
+        <div class="swiper-slide">
+          <img
+            src="/photos/pics/Other/animal2.webp"
+            alt="Animal portrait from Other trip (close up)"
+            loading="lazy"
+            decoding="async"
+            width="1000"
+            height="1333"
+          />
+        </div>
+        <div class="swiper-slide">
+          <img
+            src="/photos/pics/Norway/landscape1.webp"
+            alt="Landscape photo from Norway trip"
+            loading="lazy"
+            decoding="async"
+            width="1333"
+            height="1000"
+          />
+        </div>
+        <div class="swiper-slide">
+          <img
+            src="/photos/pics/Other/landscape2.webp"
+            alt="Landscape photo from Other trip"
+            loading="lazy"
+            decoding="async"
+            width="1333"
+            height="1000"
+          />
+        </div>
+        <div class="swiper-slide">
+          <img
+            src="/photos/pics/Sweden/animal4.webp"
+            alt="Animal portrait from Sweden trip"
+            loading="lazy"
+            decoding="async"
+            width="1000"
+            height="1333"
+          />
+        </div>
+      </div>
+
+      <div class="swiper-pagination"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+      const swiper = new Swiper(".swiper", {
+        touchEventsTarget: "container",
+        grabCursor: true,
+        slideToClickedSlide: true,
+        centeredSlides: true,
+        loop: true,
+        mousewheel: {
+          forceToAxis: true,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: false,
+          renderBullet: function () {
+            return "";
+          },
+        },
+        breakpoints: {
+          320: { slidesPerView: 1.5, spaceBetween: 15 },
+          768: { slidesPerView: 2.5, spaceBetween: 20 },
+          1200: { slidesPerView: 3.5, spaceBetween: 25 },
+        },
+      });
+
+      const totalSlides = swiper.slides.length;
+      const paginationEl = document.querySelector(".swiper-pagination");
+
+      function createSimplePagination() {
+        paginationEl.innerHTML = `
+    <div class="pagination-viewport">
+      <div class="pagination-container"></div>
+    </div>
+  `;
+
+        const dotsContainer = paginationEl.querySelector(
+          ".pagination-container"
+        );
+
+        for (let i = 0; i < totalSlides; i += 1) {
+          const dot = document.createElement("div");
+          dot.className = "pagination-indicator";
+          dot.addEventListener("click", () => swiper.slideToLoop(i));
+          dotsContainer.appendChild(dot);
+        }
+      }
+
+      function updateSimplePagination(activeIndex) {
+        const dotsContainer = paginationEl.querySelector(
+          ".pagination-container"
+        );
+        const dots = dotsContainer.querySelectorAll(".pagination-indicator");
+        const viewport = paginationEl.querySelector(".pagination-viewport");
+
+        const dotSpacing = 24;
+        const viewportWidth = parseInt(
+          getComputedStyle(viewport).getPropertyValue("--viewport-width"),
+          10
+        );
+        const viewportCenter = viewportWidth / 2;
+        const offset = viewportCenter - activeIndex * dotSpacing - 4;
+
+        dotsContainer.style.transform = `translateX(${offset}px)`;
+
+        dots.forEach((dot, index) => {
+          dot.className = "pagination-indicator";
+
+          if (index === activeIndex) {
+            dot.classList.add("active");
+          }
+
+          const dotPosition = offset + index * dotSpacing;
+          const fadeZone = 25;
+          if (
+            dotPosition < fadeZone ||
+            dotPosition > viewportWidth - fadeZone
+          ) {
+            dot.classList.add("edge");
+          }
+        });
+      }
+
+      createSimplePagination();
+      updateSimplePagination(0);
+
+      swiper.on("slideChange", function () {
+        updateSimplePagination(swiper.realIndex);
+      });
+    </script>
+  </body>
+</html>

@@ -2,6 +2,18 @@
   {
     "year": 2025,
     "month": "Dec",
+    "day": 29,
+    "title": "Building a Carousel",
+    "description": "Tips & tricks behind my custom carousel",
+    "image": "",
+    "tag": "Experiments",
+    "tags": [
+      "experiment"
+    ]
+  },
+  {
+    "year": 2025,
+    "month": "Dec",
     "day": 26,
     "title": "How Marketing Renames Our World",
     "description": "Some words we regularly use have really fun origins, far from a simple etymology perspective",
