@@ -67,7 +67,7 @@ md.renderer.rules.footnote_ref = (tokens, idx) => {
   const id = String(tokens[idx].meta.id + 1);
   const sub = tokens[idx].meta.subId;
   const ref = sub > 0 ? `${id}:${sub}` : id;
-  return `<sup class="article-footnote-ref"><a href="#fn${ref}">${id}</a></sup>`;
+  return `<sup id="fnref${ref}" class="article-footnote-ref"><a href="#fn${ref}">${id}</a></sup>`;
 };
 
 md.renderer.rules.footnote_anchor = (tokens, idx) => {

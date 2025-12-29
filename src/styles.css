@@ -1482,6 +1482,11 @@ a.project-card:not(:hover) .lucide {
   color: var(--text-body);
 }
 
+.post-card-link:hover > .more-page-description {
+  color: var(--text-primary);
+  transition: color 120ms ease-in-out;
+}
+
 .more-page-path {
   font-size: var(--text-body);
   letter-spacing: normal;
@@ -3618,7 +3623,7 @@ article .article-math-inline {
 /* Blockquotes */
 article blockquote {
   margin: var(--space-8) auto;
-  padding-left: var(--space-6);
+  padding-left: var(--space-4);
   border-left: 3px solid hsl(from var(--text-primary) h s l / 15%);
   color: var(--text-body);
   position: relative;

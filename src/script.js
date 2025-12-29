@@ -1327,44 +1327,51 @@ document.addEventListener("keydown", (e) => {
       const link = ref.querySelector("a[href^='#fn']");
       if (!link) return;
 
-      // Extract the footnote number from the href (e.g., "#fn1" -> "1")
-      const match = link.getAttribute("href")?.match(/#fn(\d+)/);
+      // Extract the footnote id from the href (e.g., "#fn1" -> "1")
+      const match = link.getAttribute("href")?.match(/^#fn(.+)$/);
       if (!match) return;
 
-      const footnoteNum = match[1];
-      const refId = `fnref${footnoteNum}`;
+      const footnoteId = match[1];
+      const refId = `fnref${footnoteId}`;
 
       // Add the ID to the sup element
-      ref.id = refId;
+      if (!ref.id) {
+        ref.id = refId;
+      }
     });
 
     // Handle back arrow clicks with smooth scrolling
     const backRefs = document.querySelectorAll(".article-footnote-backref");
     backRefs.forEach((backRef) => {
       backRef.addEventListener("click", (e) => {
-        e.preventDefault();
         const href = backRef.getAttribute("href");
         if (!href) return;
 
         const targetId = href.replace("#", "");
         const target = document.getElementById(targetId);
 
-        if (target) {
-          // Smooth scroll with offset for header
-          const offsetTop =
-            target.getBoundingClientRect().top + window.pageYOffset - 100;
+        if (!target) return;
+        e.preventDefault();
+
+        // Smooth scroll with offset for header
+        const offsetTop =
+          target.getBoundingClientRect().top + window.pageYOffset - 100;
+
+        try {
           window.scrollTo({
             top: offsetTop,
             behavior: "smooth",
           });
-
-          // Optional: Add a brief highlight effect
-          target.style.transition = "background-color 0.3s ease";
-          target.style.backgroundColor = "var(--bg-hover)";
-          setTimeout(() => {
-            target.style.backgroundColor = "";
-          }, 800);
+        } catch (error) {
+          window.scrollTo(0, offsetTop);
         }
+
+        // Optional: Add a brief highlight effect
+        target.style.transition = "background-color 0.3s ease";
+        target.style.backgroundColor = "var(--bg-hover)";
+        setTimeout(() => {
+          target.style.backgroundColor = "";
+        }, 800);
       });
     });
   });
