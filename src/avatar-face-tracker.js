@@ -230,7 +230,7 @@ function initializeAvatarFaceTracker() {
     return;
   }
 
-  const basePath = '/faces/';
+  const basePath = '/src/assets/faces/';
   const originalSrc = mainAvatar.src;
   const originalSources = { primarySrc: originalSrc, fallbackSrc: originalSrc };
 
