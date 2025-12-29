@@ -41,6 +41,7 @@ const extractHtmlClasses = (content) => {
 };
 
 module.exports = {
+  darkMode: "class",
   content: {
     files: [
       "./index.html",
