@@ -42,7 +42,7 @@ Old school? Yes, definitely. But it still works, and is still very useful.
 
 ## Demo of the carousel
 
-<iframe src="code/now-carousel.html" class="article-embed" loading="lazy"></iframe>
+<iframe src="code/now-carousel.html" class="article-embed carousel-embed" loading="lazy"></iframe>
 
 [Open fullscreen](code/now-carousel.html)
 

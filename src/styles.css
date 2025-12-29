@@ -3919,6 +3919,13 @@ article .article-embed {
   height: 600px !important;
 }
 
+.carousel-embed {
+  height: clamp(250px, 40vw, 400px) !important;
+  width: 100vw !important;
+  max-width: none !important;
+  margin-left: calc(50% - 50vw);
+}
+
 article video {
   max-width: 100%;
   height: auto;
@@ -4175,6 +4182,11 @@ mjx-container::-webkit-scrollbar-thumb {
   .photos-category-list,
   .photos-gallery-grid {
     padding: 0 var(--space-5) !important;
+  }
+
+  .article-embed.carousel-embed {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   .music-widget,
