@@ -4260,12 +4260,7 @@ mjx-container::-webkit-scrollbar-thumb {
   }
 
   article blockquote p {
-    padding: 0 0;
-  }
-
-  article .article-footnotes li {
-    padding: 0;
-    margin: 0;
+    padding: 0 0 !important;
   }
 
   .image-lightbox-close {
