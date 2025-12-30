@@ -86,6 +86,14 @@
       .column {
         position: relative;
         padding: var(--space-6) 0;
+        height: 400px !important;
+        margin: 0 auto;
+      }
+
+      @media (max-width: 768px) {
+        .column {
+          max-width: 70vw;
+        }
       }
 
       .column::before,
@@ -100,9 +108,11 @@
 
       .column::before {
         left: 0;
+        transform: translateX(0.5px);
       }
       .column::after {
         right: 0;
+        transform: translateX(-0.5px);
       }
 
       /* Examples */
@@ -226,7 +236,10 @@
         <div class="example">
           <div class="label">
             <span class="status pass">✓</span>
-            <code>width: 100vw; margin-left: calc(50% - 50vw)</code>
+            <code
+              >width: 100vw; <br />
+              margin-left: calc(50% - 50vw)</code
+            >
           </div>
           <div class="strip correct">re-centers on viewport → full bleed</div>
         </div>
