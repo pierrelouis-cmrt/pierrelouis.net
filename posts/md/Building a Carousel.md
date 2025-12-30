@@ -35,9 +35,7 @@ if (dotPosition < fadeZone || dotPosition > viewportWidth - fadeZone) {
 My carousel lived inside a centered 600px column, but I wanted it to bleed: go full-width and touch both edges of the screen. Setting a width of 100vw (100% of the viewport's width) gives it the right size, but it still starts where the column starts, so it overflows on the right side instead of expanding evenly.
 
 The carousel breaks out of its container using the negative margin hack:
-<iframe src="code/bleed-trick.html" class="article-embed" loading="lazy"></iframe>
-
-
+<iframe src="code/bleed-trick.html" class="article-embed bleed-embed" loading="lazy"></iframe>
 Old school? Yes, definitely. But it still works, and is still very useful.
 
 ## Demo of the carousel

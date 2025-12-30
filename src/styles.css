@@ -4184,7 +4184,8 @@ mjx-container::-webkit-scrollbar-thumb {
     padding: 0 var(--space-5) !important;
   }
 
-  .article-embed.carousel-embed {
+  .article-embed.carousel-embed,
+  .article-embed.bleed-embed {
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
