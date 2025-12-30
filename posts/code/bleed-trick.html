@@ -102,17 +102,20 @@
         position: absolute;
         top: 0;
         bottom: 0;
-        border-left: 1.5px dashed var(--border-light);
+        width: 1.5px;
         pointer-events: none;
+        background: repeating-linear-gradient(
+          to bottom,
+          var(--border-light) 0 6px,
+          transparent 6px 12px
+        );
       }
 
       .column::before {
         left: 0;
-        transform: translateX(0.5px);
       }
       .column::after {
         right: 0;
-        transform: translateX(-0.5px);
       }
 
       /* Examples */

@@ -62,9 +62,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-59d3f8d0a6.css" as="style" />
+    <link rel="preload" href="/src/output-f9122e54f0.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-59d3f8d0a6.css" />
+    <link rel="stylesheet" href="/src/output-f9122e54f0.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -970,7 +970,7 @@
     <main>
       <article data-lightbox-group="post-building-a-carousel">
         <div class="article-meta-data"><h1>Building a Carousel</h1>
-<span class="article-publish-date">December 29, 2025</span></div> <p>Swiper (the js library) does most of the heavy lifting for carousels. Loop it, center it, add some breakpoints, and bam, it's done!. But the default pagination always felt static to me. A row of dots that just... sits there.</p>
+<span class="article-publish-date">December 29, 2025</span></div> <p>Swiper (the js library) does most of the heavy lifting for carousels. Loop it, center it, add some breakpoints, and bam, it's done! But the default pagination always felt static to me. A row of dots that just... sits there.</p>
 <p>So I built one that moves.</p>
 <h2>The Sliding Window</h2>
 <p>Instead of showing all dots at once, there's a 120px viewport that only reveals a handful. When you've got many images in a carousel, showing all dots can be pretty overwhelming. While swiping, the entire dot container translates to keep the active one centered:</p>
@@ -988,7 +988,7 @@ dotsContainer.style.transform = `translateX(${offset}px)`;
 <p>My carousel lived inside a centered 600px column, but I wanted it to bleed: go full-width and touch both edges of the screen. Setting a width of 100vw (100% of the viewport's width) gives it the right size, but it still starts where the column starts, so it overflows on the right side instead of expanding evenly.</p>
 <p>The carousel breaks out of its container using the negative margin hack:</p>
 <iframe src="code/bleed-trick.html" class="article-embed bleed-embed" loading="lazy"></iframe>
-Old school? Yes, definitely. But it still works, and is still very useful.
+<p>Old school? Yes, definitely. But it still works, and is still very useful.</p>
 <h2>Demo of the carousel</h2>
 <iframe src="code/now-carousel.html" class="article-embed carousel-embed" loading="lazy"></iframe>
 <p><a href="code/now-carousel.html" target="_blank" rel="noopener noreferrer">Open fullscreen</a></p>

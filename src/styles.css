@@ -3924,6 +3924,11 @@ article .article-embed {
   width: 100vw !important;
   max-width: none !important;
   margin-left: calc(50% - 50vw);
+  border-radius: 0 !important;
+}
+
+.bleed-embed {
+  border-radius: 0 !important;
 }
 
 article video {

@@ -5,7 +5,7 @@ tags:
   - experiment
 date: 2025-12-29
 ---
-Swiper (the js library) does most of the heavy lifting for carousels. Loop it, center it, add some breakpoints, and bam, it's done!. But the default pagination always felt static to me. A row of dots that just... sits there.
+Swiper (the js library) does most of the heavy lifting for carousels. Loop it, center it, add some breakpoints, and bam, it's done! But the default pagination always felt static to me. A row of dots that just... sits there.
 
 So I built one that moves.
 
@@ -36,6 +36,7 @@ My carousel lived inside a centered 600px column, but I wanted it to bleed: go f
 
 The carousel breaks out of its container using the negative margin hack:
 <iframe src="code/bleed-trick.html" class="article-embed bleed-embed" loading="lazy"></iframe>
+
 Old school? Yes, definitely. But it still works, and is still very useful.
 
 ## Demo of the carousel
