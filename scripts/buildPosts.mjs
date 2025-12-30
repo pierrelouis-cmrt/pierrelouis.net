@@ -201,6 +201,9 @@ function timelineItem(p) {
 
 /* Homepage "latest 3" uses homepage post card classes */
 function latestItem(p) {
+  const month = monthAbbr(p.month);
+  const yearShort = String(p.year).slice(-2);
+
   return `
     <div class="post-card">
       <a class="link-with-icon post-card-link" href="${
@@ -211,7 +214,7 @@ function latestItem(p) {
           <span class="link-text">${p.title}</span>
         </div>
         <div class="post-card-separator"></div>
-        <div class="post-card-date">${monthAbbr(p.month)} ${p.year}</div>
+        <div class="post-card-date"><span class="post-date-month">${month}</span><span class="post-date-year-full"> ${p.year}</span><span class="post-date-year-short"> ${yearShort}</span></div>
       </a>
     </div>`;
 }

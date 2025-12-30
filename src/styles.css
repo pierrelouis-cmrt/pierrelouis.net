@@ -756,6 +756,10 @@ a.project-card:not(:hover) .lucide {
   white-space: nowrap;
 }
 
+#latest-posts .post-date-year-short {
+  display: none;
+}
+
 /* Now playing */
 
 .music-widget {
@@ -4471,6 +4475,14 @@ mjx-container::-webkit-scrollbar-thumb {
 }
 
 @media (max-width: 480px) {
+  #latest-posts .post-date-year-full {
+    display: none;
+  }
+
+  #latest-posts .post-date-year-short {
+    display: inline;
+  }
+
   .hero-intro {
     grid-template-columns: 1fr;
     row-gap: var(--space-3);
