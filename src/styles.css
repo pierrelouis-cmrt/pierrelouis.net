@@ -254,8 +254,6 @@ a {
   -webkit-text-decoration-color: hsl(from var(--text-body) h s l / 30%);
   text-decoration-thickness: 0.0625rem;
   -webkit-text-decoration-thickness: 0.0625rem;
-  text-underline-offset: var(--space-1);
-  -webkit-text-underline-offset: var(--space-1);
   transition: all 120ms ease-in-out;
 }
 
@@ -4189,7 +4187,8 @@ mjx-container::-webkit-scrollbar-thumb {
   .photos-trip-grid,
   .photos-divider,
   .photos-category-list,
-  .photos-gallery-grid {
+  .photos-gallery-grid,
+  .now-entry-gallery {
     padding: 0 var(--space-5) !important;
   }
 
@@ -4475,14 +4474,6 @@ mjx-container::-webkit-scrollbar-thumb {
 }
 
 @media (max-width: 480px) {
-  #latest-posts .post-date-year-full {
-    display: none;
-  }
-
-  #latest-posts .post-date-year-short {
-    display: inline;
-  }
-
   .hero-intro {
     grid-template-columns: 1fr;
     row-gap: var(--space-3);
