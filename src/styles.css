@@ -3054,7 +3054,7 @@ img[data-lightbox-item] {
 }
 
 .photos-view {
-  max-width: 600px;
+  max-width: 680px;
   margin: 0 auto;
 }
 
@@ -3063,17 +3063,20 @@ img[data-lightbox-item] {
 }
 
 .photos-intro {
-  margin: var(--space-6) 0 var(--space-12);
+  margin: var(--space-4) 0 var(--space-8);
+  text-align: center;
 }
 
 .photos-intro p {
-  font-size: var(--text-base);
-  line-height: var(--leading-normal);
-  color: var(--text-body);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--text-muted);
+  max-width: 48ch;
+  margin: 0 auto;
 }
 
 .photos-filter-section {
-  margin: var(--space-8) 0;
+  margin: var(--space-4) 0;
 }
 
 .photos-filter-group {
@@ -3081,79 +3084,138 @@ img[data-lightbox-item] {
 }
 
 .photos-filter-title {
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
   font-weight: var(--font-medium);
   color: var(--text-primary);
-  margin-bottom: var(--space-4);
-  text-align: left;
+  margin-bottom: var(--space-6);
+  text-align: center;
   font-family: var(--font-serif);
+  letter-spacing: -0.01em;
 }
 
-/* Trip Grid */
+/* Trip Grid - Scattered Overlapping Layout */
 .photos-trip-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: var(--space-4);
-  margin-top: var(--space-6);
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-16) auto var(--space-12);
+  padding: var(--space-8) var(--space-4);
+  min-height: 420px;
 }
 
 .photo-trip-card {
-  background: none;
+  position: relative;
+  background: var(--bg-primary);
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   padding: 0;
   cursor: pointer;
-  transition: all 180ms ease-in-out;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  max-width: 240px;
+  width: clamp(140px, 28vw, 180px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
+  transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 350ms cubic-bezier(0.34, 1.56, 0.64, 1), border-color 250ms ease;
+  transform-origin: center center;
+  will-change: transform;
 }
 
+/* Scattered rotation angles for each card */
+.photo-trip-card:nth-child(1) {
+  transform: rotate(-3deg) translateY(-8px);
+  z-index: 1;
+}
+
+.photo-trip-card:nth-child(2) {
+  transform: rotate(2deg) translateY(4px);
+  z-index: 2;
+  margin-left: -20px;
+}
+
+.photo-trip-card:nth-child(3) {
+  transform: rotate(-1.5deg) translateY(-4px);
+  z-index: 3;
+  margin-left: -20px;
+}
+
+.photo-trip-card:nth-child(4) {
+  transform: rotate(2.5deg) translateY(6px);
+  z-index: 4;
+  margin-left: -20px;
+}
+
+.photo-trip-card:nth-child(5) {
+  transform: rotate(-2deg) translateY(-2px);
+  z-index: 5;
+  margin-left: -20px;
+}
+
+/* Hover effects - lift and straighten with smooth physics */
 .photo-trip-card:hover {
+  transform: rotate(0deg) translateY(-12px) scale(1.05) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12), 0 6px 12px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
   border-color: var(--border-secondary);
-  background-color: var(--bg-hover);
+  z-index: 100 !important;
+}
+
+.dark .photo-trip-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .dark .photo-trip-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4), 0 8px 16px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .photo-trip-preview {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
-  background-color: var(--bg-hover);
+  background: linear-gradient(
+    135deg,
+    var(--bg-hover) 0%,
+    var(--bg-primary) 100%
+  );
 }
 
 .photo-trip-preview img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 280ms ease-in-out;
+  transition: transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: brightness(0.98) contrast(1.02);
 }
 
 .photo-trip-card:hover .photo-trip-preview img {
-  transform: scale(1.05);
+  transform: scale(1.08);
+  filter: brightness(1) contrast(1.05);
 }
 
 .photo-trip-info {
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) var(--space-3);
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: var(--space-1);
+  background: var(--bg-primary);
 }
 
 .photo-trip-info h4 {
-  font-size: var(--text-base);
-  font-weight: var(--font-medium);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
   color: var(--text-primary);
+  letter-spacing: -0.01em;
+  font-family: var(--font-serif);
 }
 
 .photo-trip-count {
   font-size: var(--text-xs);
-  color: var(--text-subtle);
+  color: var(--text-muted);
+  font-weight: var(--font-normal);
 }
 
 /* Divider */
@@ -3182,24 +3244,27 @@ img[data-lightbox-item] {
   font-family: var(--font-serif);
 }
 
-/* Category List */
+/* Category List - Minimal Design */
 .photos-category-list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-2);
   margin-top: var(--space-6);
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .photo-category-button {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-4);
+  padding: var(--space-3) var(--space-4);
   background: none;
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-full);
   cursor: pointer;
-  transition: all 150ms ease-in-out;
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
   text-align: left;
   width: 100%;
 }
@@ -3210,27 +3275,29 @@ img[data-lightbox-item] {
 }
 
 .photo-category-button svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
-  color: var(--text-subtle);
-  transition: color 150ms ease-in-out;
+  color: var(--text-muted);
+  transition: all 200ms ease;
 }
 
 .photo-category-button:hover svg {
   color: var(--text-body);
+  transform: scale(1.1);
 }
 
 .photo-category-button span:nth-child(2) {
   flex: 1;
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
   font-weight: var(--font-medium);
   color: var(--text-primary);
 }
 
 .photo-category-count {
   font-size: var(--text-xs);
-  color: var(--text-subtle);
+  color: var(--text-muted);
+  font-weight: var(--font-normal);
 }
 
 /* Gallery View */
@@ -4606,9 +4673,53 @@ mjx-container::-webkit-scrollbar-thumb {
   }
 }
 
+/* Mobile: Stack cards more vertically with subtle rotation */
+@media (max-width: 640px) {
+  .photos-trip-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+    min-height: auto;
+    padding: var(--space-6) var(--space-5);
+    margin: var(--space-8) auto;
+  }
+
+  .photo-trip-card {
+    width: min(220px, 70vw);
+    margin-left: 0 !important;
+  }
+
+  .photo-trip-card:nth-child(1) {
+    transform: rotate(-2deg) translateX(-8px);
+  }
+
+  .photo-trip-card:nth-child(2) {
+    transform: rotate(1.5deg) translateX(8px);
+  }
+
+  .photo-trip-card:nth-child(3) {
+    transform: rotate(-1deg) translateX(-6px);
+  }
+
+  .photo-trip-card:nth-child(4) {
+    transform: rotate(2deg) translateX(6px);
+  }
+
+  .photo-trip-card:nth-child(5) {
+    transform: rotate(-1.5deg) translateX(-4px);
+  }
+
+  .photo-trip-card:hover {
+    transform: rotate(0deg) translateY(-8px) scale(1.02) !important;
+  }
+
+  .photo-trip-preview {
+    aspect-ratio: 4 / 5;
+  }
+}
+
 @media (max-width: 375px) {
   .photo-trip-card {
-    max-width: 100% !important;
-    max-height: 160px !important;
+    width: min(200px, 75vw);
   }
 }
