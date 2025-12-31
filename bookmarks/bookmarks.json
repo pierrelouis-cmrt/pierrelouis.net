@@ -428,5 +428,18 @@
     "description": "What exactly is stress, how did it evolve, and is it even possible to use it in a healthy way? This is a great video to learn more about stress, I highly recommend it.",
     "image": "",
     "tag": "Videos"
+  },
+  {
+    "year": 2025,
+    "month": "Dec",
+    "link": "https://www.anthropic.com/research/project-vend-2",
+    "title": "Anthropic's Project Vend",
+    "meta": {
+      "text": "by Anthropic",
+      "icon": "https://icons.duckduckgo.com/ip3/anthropic.com.ico"
+    },
+    "description": "Project Vend consisted in letting Claude Sonnet run a small shop by itself. The goal was to better understand how AI agents can interact with the real world and what were the biggest limitations.",
+    "image": "https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2Ffc74d2b498b54dba86feaaca166f7a64c221ae60-3840x2160.png&w=3840&q=75",
+    "tag": "Reading"
   }
 ]
