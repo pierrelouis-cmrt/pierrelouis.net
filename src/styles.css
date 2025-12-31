@@ -3054,7 +3054,7 @@ img[data-lightbox-item] {
 }
 
 .photos-view {
-  max-width: 680px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
@@ -3062,17 +3062,10 @@ img[data-lightbox-item] {
   padding: var(--space-16) 0 !important;
 }
 
-.photos-intro {
-  margin: var(--space-4) 0 var(--space-8);
-  text-align: center;
-}
-
 .photos-intro p {
   font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
   color: var(--text-muted);
-  max-width: 48ch;
-  margin: 0 auto;
 }
 
 .photos-filter-section {
@@ -3085,11 +3078,11 @@ img[data-lightbox-item] {
 
 .photos-filter-title {
   font-size: var(--text-lg);
-  font-weight: var(--font-medium);
+  font-weight: var(--font-semibold);
   color: var(--text-primary);
   margin-bottom: var(--space-6);
   text-align: center;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   letter-spacing: -0.01em;
 }
 
@@ -3101,7 +3094,7 @@ img[data-lightbox-item] {
   justify-content: center;
   align-items: center;
   gap: var(--space-2);
-  margin: var(--space-16) auto var(--space-12);
+  margin: 0 auto var(--space-12);
   padding: var(--space-8) var(--space-4);
   min-height: 420px;
 }
@@ -3174,7 +3167,7 @@ img[data-lightbox-item] {
 
 .photo-trip-preview {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   background: linear-gradient(
     135deg,
@@ -3199,7 +3192,9 @@ img[data-lightbox-item] {
 .photo-trip-info {
   padding: var(--space-3) var(--space-3);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   gap: var(--space-1);
   background: var(--bg-primary);
 }
