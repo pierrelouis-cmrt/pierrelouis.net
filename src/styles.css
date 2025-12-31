@@ -2067,7 +2067,7 @@ hr.divider-thin {
 
 .social-platforms-grid {
   margin: 0 auto;
-  font-size: var(--text-xl);
+  font-size: var(--text-base);
 }
 
 .social-platform-card {
@@ -2086,8 +2086,8 @@ hr.divider-thin {
 }
 
 .social-platform-icon {
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -2099,8 +2099,8 @@ hr.divider-thin {
 
 /* Specific selector for brand SVG icons only */
 .social-platform-icon > svg {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   fill: var(--brand-color);
   stroke: none;
   opacity: 0.9;
@@ -2119,6 +2119,7 @@ hr.divider-thin {
 
 .social-platform-handle p {
   color: var(--text-subtle);
+  font-size: var(--text-base);
   padding: 0;
   margin: 0;
 }
@@ -2128,6 +2129,7 @@ hr.divider-thin {
   display: inline-flex;
   align-items: center;
   gap: 0;
+  font-size: var(--text-base);
   color: var(--text-muted);
   text-decoration: none;
   transition: color 120ms ease-in-out;
@@ -2135,8 +2137,8 @@ hr.divider-thin {
 
 /* Specific selector for arrow icons in action links */
 .social-platform-action > svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   stroke: var(--text-muted);
   fill: none;
   transition: transform 120ms ease-in-out;
@@ -2149,19 +2151,19 @@ hr.divider-thin {
 }
 
 .social-platform-action:hover > svg {
-  transform: translate(3px, -3px);
+  transform: translate(2px, -2px);
   stroke: var(--text-body);
 }
 
 /* Special sizing adjustments for specific brand icons */
 .discord .social-platform-icon > svg {
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
 }
 
 .medium .social-platform-icon > svg {
-  width: 24px;
-  height: 24px;
+  width: 19px;
+  height: 19px;
 }
 
 /* Dark mode adjustments */
