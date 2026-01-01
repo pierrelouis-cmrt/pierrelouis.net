@@ -965,16 +965,16 @@ document.addEventListener("keydown", (e) => {
       this._navLock = false;
     }
 
-    showNext() {
+    showNext(options = {}) {
       if (this._navLock) return;
       this._navLock = true;
-      this.showIndex(this.activeIndex + 1);
+      this.showIndex(this.activeIndex + 1, options);
     }
 
-    showPrevious() {
+    showPrevious(options = {}) {
       if (this._navLock) return;
       this._navLock = true;
-      this.showIndex(this.activeIndex - 1);
+      this.showIndex(this.activeIndex - 1, options);
     }
 
     normalizeIndex(index) {
@@ -1180,19 +1180,21 @@ document.addEventListener("keydown", (e) => {
           break;
         case "ArrowRight":
           event.preventDefault();
-          this.showNext();
+          this.showNext({ focusThumbnail: false });
           break;
         case "ArrowLeft":
           event.preventDefault();
-          this.showPrevious();
+          this.showPrevious({ focusThumbnail: false });
           break;
         case "Home":
           event.preventDefault();
-          this.showIndex(0);
+          this.showIndex(0, { focusThumbnail: false });
           break;
         case "End":
           event.preventDefault();
-          this.showIndex(this.activeItems.length - 1);
+          this.showIndex(this.activeItems.length - 1, {
+            focusThumbnail: false,
+          });
           break;
         default:
           break;
