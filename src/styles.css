@@ -3068,6 +3068,14 @@ img[data-lightbox-item] {
   transition: all 120ms ease-in-out;
 }
 
+.timeline-item-preview video {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
 /* -------- Photos Page -------- */
 
 .gallery-open .site-navigation,

@@ -74,7 +74,7 @@
       "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
     },
     "description": "A very important breakthrough: cleaning robots. Hygiene is what leads to healthier and longer living societies.",
-    "image": "https://www.startupticker.ch/assets/images/articles/Loki_Robotics_robot.png",
+    "image": "assets/cleaning_robot.mp4",
     "tag": "Reading"
   },
   {
@@ -480,5 +480,70 @@
     "description": "In the clip shared in this X post, FSD uses a drivethru and understands the complex scenario and socia interactions perfectly. It knows when to stop, when to go. This is truly impressive. Tesla achieved this with camera vision only and a well trained neural network. No lidar required.",
     "image": "",
     "tag": "Watching"
+  },
+  {
+    "year": 2026,
+    "month": "Feb",
+    "link": "https://www.tesla.com/fsd/safety",
+    "title": "AI's impact on vehicle safety",
+    "meta": {
+      "text": "from Tesla",
+      "icon": "https://icons.duckduckgo.com/ip3/tesla.com.ico"
+    },
+    "description": "AI's impact can be huge is some domains, very specifically in vehicle safety. Tesla's data shows that vehicles with FSD engaged are involved in significantly fewer accidents than those without (7 times less!). The more we wait before adopting that tech, the more lives we put at risk.",
+    "image": "./assets/tesla_collision.webp",
+    "tag": "Reading"
+  },
+  {
+    "year": 2026,
+    "month": "Mar",
+    "link": "https://www.science.org/stoken/author-tokens/ST-2065/full",
+    "title": "Can robots feel?",
+    "meta": {
+      "text": "Science Robotics",
+      "icon": "https://www.science.org/products/aaas/releasedAssets/images/favicon/favicon-32x32-da7530e24672f255e6c1269e845c61a0.png"
+    },
+    "description": "Creating an artificial electronic skin to cover the entire surface of a robot can be challenging. This article explores how robots could feel by only exploiting a few internal sensors on each limb/joint. Those sensors would measure the force/torque applied to them, and compute the exact contact points causing those forces. It even works when the robot gets touched in multiple places at the same time!",
+    "image": "",
+    "tag": "Reading"
+  },
+  {
+    "year": 2026,
+    "month": "Mar",
+    "link": "https://www.macrumors.com/2025/11/06/new-apple-tv-intro-made-with-practical-effects/",
+    "title": "Apple's handcrafted AppleTV intro",
+    "meta": {
+      "text": "Link to an article on MacRumors",
+      "icon": "https://icons.duckduckgo.com/ip3/apple.com.ico"
+    },
+    "description": "In a time of AI generated content flooding the internet, Apple decided to create its new AppleTV intro sequence using only real camera footage. Everything was made by hand, using pure craftsmanship. Watch this video to see their creative process.",
+    "image": "assets/appletv_intro.mp4",
+    "tag": "Reading"
+  },
+  {
+    "year": 2026,
+    "month": "Mar",
+    "link": "https://www.figure.ai/news/production-at-bmw",
+    "title": "Robots integrated in BMW's production line",
+    "meta": {
+      "text": "by Figure AI",
+      "icon": "https://icons.duckduckgo.com/ip3/figure.ai.ico"
+    },
+    "description": "BMW is using Figure AI's robots in their production line to assist human workers. They contributed to the production of over 30,000 cars. This as a sign robots are becoming more and more useful in real world applications.",
+    "image": "",
+    "tag": "Reading"
+  },
+  {
+    "year": 2026,
+    "month": "Mar",
+    "link": "https://x.com/kepano/status/1905660164893802669",
+    "title": "Art vs Technology",
+    "meta": {
+      "text": "by Kepano on X",
+      "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+    },
+    "description": "\"@technology always finds the next reproducible thing\n\nart always finds the next irreproducible thing\" - Kepano. This is very well said and true. I believe that any good products will always need to have both elements combined together: art and technology.",
+    "image": "",
+    "tag": "Reading"
   }
 ]

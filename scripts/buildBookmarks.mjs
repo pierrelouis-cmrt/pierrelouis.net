@@ -26,6 +26,20 @@ const groupBy = (arr, key) =>
     (map[obj[key]] ||= []).push(obj);
     return map;
   }, {});
+const videoExtensions = new Set([
+  ".mp4",
+  ".webm",
+  ".ogg",
+  ".ogv",
+  ".mov",
+  ".m4v",
+]);
+const isVideoPath = (src) => {
+  if (!src) return false;
+  const clean = src.split(/[?#]/)[0];
+  const ext = path.extname(clean).toLowerCase();
+  return videoExtensions.has(ext);
+};
 
 /* -------------------------------------------------------------------------- */
 /*  Create markup for one bookmark item                                       */
@@ -42,10 +56,16 @@ function bookmarkItem(b) {
     ? `<div class="timeline-item-description">${b.description}</div>`
     : "";
 
-  const preview = b.image
+  const previewSrc = (b.image || "").trim();
+  const previewMedia = previewSrc
+    ? isVideoPath(previewSrc)
+      ? `<video src="${previewSrc}" preload="metadata" playsinline controls aria-label="${b.title} preview"></video>`
+      : `<img src="${previewSrc}" loading="lazy" alt="${b.title} preview">`
+    : "";
+  const preview = previewMedia
     ? `<div class="timeline-item-preview">
          <figure>
-           <img src="${b.image}" loading="lazy" alt="${b.title} preview">
+           ${previewMedia}
          </figure>
        </div>`
     : "";
