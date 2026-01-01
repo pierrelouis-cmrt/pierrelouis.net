@@ -13,6 +13,7 @@ import {
   readdir,
   copyFile,
   unlink,
+  access,
 } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -135,6 +136,91 @@ async function syncMarkdown(sourceDir, destDir) {
   }
 
   return { copied, total: mdFiles.length, extras };
+}
+
+function resolveAssetsSourceDir(sourceDir, rootDir) {
+  const resolvedSource = path.resolve(sourceDir);
+  const repoMd = path.join(rootDir, "posts", "md");
+
+  if (resolvedSource === repoMd) {
+    return path.join(rootDir, "posts", "assets");
+  }
+
+  if (
+    path.basename(resolvedSource) === "md" &&
+    path.basename(path.dirname(resolvedSource)) === "posts"
+  ) {
+    return path.join(path.dirname(resolvedSource), "assets");
+  }
+
+  return path.join(resolvedSource, "assets");
+}
+
+async function collectFiles(dir) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const files = [];
+
+  for (const entry of entries) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await collectFiles(full)));
+      continue;
+    }
+    if (entry.isFile()) files.push(full);
+  }
+
+  return files;
+}
+
+async function syncAssets(sourceDir, destDir) {
+  const resolvedSource = path.resolve(sourceDir);
+  const resolvedDest = path.resolve(destDir);
+
+  if (resolvedSource === resolvedDest) {
+    console.log("INFO: posts assets already in posts/assets, skipping copy");
+    return { copied: 0, total: 0, extras: [] };
+  }
+
+  try {
+    await access(sourceDir);
+  } catch {
+    console.warn(`WARN: assets source not found at "${sourceDir}"`);
+    return { copied: 0, total: 0, extras: [] };
+  }
+
+  await mkdir(destDir, { recursive: true });
+
+  const sourceFiles = await collectFiles(sourceDir);
+  const sourceRel = new Set(
+    sourceFiles.map((file) => path.relative(sourceDir, file))
+  );
+
+  let copied = 0;
+  for (const file of sourceFiles) {
+    const rel = path.relative(sourceDir, file);
+    const dest = path.join(destDir, rel);
+    await mkdir(path.dirname(dest), { recursive: true });
+    await copyFile(file, dest);
+    copied += 1;
+  }
+
+  const destFiles = await collectFiles(destDir);
+  const extras = destFiles
+    .map((file) => path.relative(destDir, file))
+    .filter((rel) => !sourceRel.has(rel));
+
+  if (extras.length) {
+    for (const rel of extras) {
+      await unlink(path.join(destDir, rel));
+    }
+    console.log(
+      `✔  removed ${extras.length} stale files from posts/assets`
+    );
+  }
+
+  console.log(`✔  synced ${copied}/${sourceFiles.length} assets files`);
+
+  return { copied, total: sourceFiles.length, extras };
 }
 
 async function cleanupStaleHtml(posts, outputRoot) {
@@ -275,6 +361,8 @@ function replaceBlock(html, tag, content) {
   /* 1. Sync markdown from source ------------------------------------------ */
   const sourceDir = await resolveSourceDir(root);
   await syncMarkdown(sourceDir, POSTS_MD_DIR);
+  const assetsSourceDir = resolveAssetsSourceDir(sourceDir, root);
+  await syncAssets(assetsSourceDir, path.join(outRoot, "posts", "assets"));
 
   /* 2. Load markdown metadata --------------------------------------------- */
   const items = await loadPosts(root, { sourceDir });

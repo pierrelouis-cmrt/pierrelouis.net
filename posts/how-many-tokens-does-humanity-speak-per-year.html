@@ -968,13 +968,40 @@
     </nav>
 
     <main>
-      <article data-lightbox-group="post-animated-avatar">
-        <div class="article-meta-data"><h1>Animated Avatar</h1>
-<span class="article-publish-date">August 1, 2025</span></div> <p>I've always wanted to bring life to the most simple design element possible. Using only code.</p>
-<p>When I stumbled upon Nicolas' small avatar in the footer of his <a href="https://web.archive.org/web/20250516084155/https://slrncl.com/" target="_blank" rel="noopener noreferrer">portfolio</a>, I knew it was exactly what I'd been looking for. It was simple, sleek and was already slightly animated. The subtle head and eye movements already made it alive.</p>
-<p>I then played around for a bit, and created a dozen more animations with keyframes in CSS. It's incredible to see how much emotion you can give to a simple design element: 1 circle, 2 dots and a gradient.</p>
-<p>Here it is, in all its glory:</p>
-<iframe src="code/avatar.html" class="article-embed avatar-embed" loading="lazy"></iframe>
+      <article data-lightbox-group="post-how-many-tokens-does-humanity-speak-per-year">
+        <div class="article-meta-data"><h1>How Many Tokens Does Humanity Speak Per Year?</h1>
+<span class="article-publish-date">January 10, 2026</span></div> <p>The goal here is only to get an order of magnitude, nothing precise, just coherent enough to get a rough idea of what we're dealing with.</p>
+<p>We’ll estimate in 3 steps:</p>
+<h3>1) Words per person per day</h3>
+<p>A decent global-average is <strong>\(\sim 15000\) words/day/person</strong>.</p>
+<h3>2) People</h3>
+<p>The world population is <strong>\(\sim 8\times 10^9\)</strong>.</p>
+<h3>3) Total words per year</h3>
+<p>\[
+W_{\text{yr}} \approx (8 \times 10^9) \times (1.5 \times 10^4) \times 365
+\]<br>
+\[
+W_{\text{yr}} \approx 4.38 \times 10^{16} \text{ words/year}
+\]</p>
+<h4>4) Converting Words \(\to\) Tokens</h4>
+<p>In the LLM world, the standard rule of thumb is that <strong>\(1000\) tokens \(\approx 750\) words</strong>.<br>
+Therefore, to get tokens from words, we divide by \(0.75\).<br>
+\[
+T_{\text{yr}} \approx \frac{W_{\text{yr}}}{0.75} \approx 5.86 \times 10^{16} \text{ tokens/year)}
+\]</p>
+<h3>Final estimate</h3>
+<p>\[
+T_{\text{yr}} \approx 6\times 10^{16}\ \text{tokens/year}
+\]<br>
+That’s <strong>\(\sim 60\) quadrillion tokens/year</strong>.</p>
+<h3>How does this compare to AI?</h3>
+<p>Let's look at the numbers from the biggest AI labs as of late 2025.</p>
+<p>Let's start with OpenAI. At Dev Day in October 2025, they said they were processing more than 6B tokens/min. That's 3.1 quadrillion tokens per year. 5% of human speech.</p>
+<p>Google indicated they were above 1.3 quadrillion tokens/month in the Google CEO earnings remarks from October 2025. That's 15.6 quadrillion tokens per year, or in other words 26% of the total human speech.</p>
+<p><img src="assets/chart_tokens.webp" alt="Tokens Processed/Spoken per Year" loading="lazy" decoding="async" data-lightbox-item="" data-lightbox-group="post-how-many-tokens-does-humanity-speak-per-year"></p>
+<hr>
+<p>Just two companies alone are now processing a volume of information equivalent to <strong>one-third of all words spoken by all of humanity</strong>.</p>
+<p>AI is getting real close to speaking more than us, that's pretty impressive already. And numbers as big as the ones here are already super hard to visualise and comprehend. We often think of &quot;human scale&quot; as an unreachable ceiling, let's see how that changes in the following years!</p>
 
       </article>
     </main>

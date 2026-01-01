@@ -2602,6 +2602,10 @@ img[data-lightbox-item] {
   transition: transform 150ms ease, color 150ms ease;
 }
 
+.image-lightbox.lightbox--single .image-lightbox__nav {
+  display: none;
+}
+
 .image-lightbox__nav:hover,
 .image-lightbox__nav:focus-visible {
   color: #fff;
@@ -4116,12 +4120,40 @@ mjx-container {
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch; /* smooth on iOS */
   scrollbar-width: thin; /* Firefox */
+  font-size: 0.95em;
+}
+
+/* keep inline math truly inline + baseline-aligned */
+mjx-container:not([display="true"]):not([display="block"]) {
+  --math-inline-shift: -0.08em;
+  display: inline-flex;
+  align-items: center;
+  height: 1lh;
+  line-height: 1;
+  max-width: none;
+  overflow: visible;
+  padding-inline: 0.04em;
+  vertical-align: var(--math-inline-shift);
+}
+
+@supports not (height: 1lh) {
+  mjx-container:not([display="true"]):not([display="block"]) {
+    height: 1em;
+  }
+}
+
+mjx-container:not([display="true"]):not([display="block"]) > svg {
+  display: block;
+  height: auto;
+  width: auto;
+  max-height: 1em;
 }
 
 /* keep the look & feel we already had for display math */
+mjx-container[display="true"],
 mjx-container[display="block"] {
   max-width: 600px;
-  margin: 1rem auto;
+  margin: 0 auto;
   padding: 0;
 }
 @media (max-width: 640px) {
