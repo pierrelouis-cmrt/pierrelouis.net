@@ -2408,7 +2408,7 @@ hr.divider-thin {
   font-size: var(--text-sm);
   text-decoration: none;
   color: var(--border-secondary);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-lg);
   padding: 0.3rem 0.6rem;
   transition: all 0.2s ease;
 }
@@ -2418,7 +2418,20 @@ hr.divider-thin {
   color: currentColor !important;
 }
 
-.project-action-button:hover svg {
+.project-action-button.code svg polyline {
+  transition: transform 0.2s ease;
+  transform-origin: center;
+}
+
+.project-action-button.code:hover svg polyline:first-of-type {
+  transform: translateX(1.5px);
+}
+
+.project-action-button.code:hover svg polyline:last-of-type {
+  transform: translateX(-1.5px);
+}
+
+.project-action-button.visit:hover svg {
   transform: translateX(2px);
 }
 
@@ -2696,18 +2709,16 @@ img[data-lightbox-item] {
     height: calc(100vh - 2 * var(--space-3));
     max-height: 96vh;
     padding: var(--space-3);
-    gap: var(--space-3);
+    padding-bottom: calc(var(--space-3) + var(--space-2));
+    gap: var(--space-2);
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-rows: minmax(0, 1fr) auto;
+    align-items: center;
+    justify-items: stretch;
   }
 
   .image-lightbox__stage {
-    display: grid;
-    width: 100%;
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    grid-template-rows: minmax(0, 1fr) auto;
-    column-gap: var(--space-2);
-    row-gap: var(--space-2);
-    align-items: center;
-    justify-items: center;
+    display: contents;
   }
 
   .image-lightbox__figure {
@@ -2729,29 +2740,36 @@ img[data-lightbox-item] {
     width: clamp(44px, 14vw, 56px);
     height: clamp(44px, 14vw, 56px);
     padding: 0;
+    align-self: center;
+    justify-self: end;
   }
 
   .image-lightbox__nav--prev {
     grid-column: 2;
     grid-row: 2;
     align-self: center;
-    justify-self: center;
+    justify-self: end;
   }
 
   .image-lightbox__nav--next {
     grid-column: 3;
     grid-row: 2;
     align-self: center;
-    justify-self: center;
+    justify-self: end;
   }
 
   .image-lightbox__thumbnail-bar {
+    grid-column: 1;
+    grid-row: 2;
     width: 100%;
-    justify-content: center;
+    min-width: 0;
+    justify-content: flex-start;
     padding: var(--space-1) 0;
     gap: var(--space-2);
     overflow-x: auto;
     scroll-padding-left: var(--space-2);
+    scroll-padding-right: var(--space-2);
+    -webkit-overflow-scrolling: touch;
   }
 
   .image-lightbox__nav svg {
