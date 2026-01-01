@@ -1010,6 +1010,8 @@ document.addEventListener("keydown", (e) => {
     updateControls() {
       const hasMultiple = this.activeItems.length > 1;
 
+      this.overlay.classList.toggle("lightbox--single", !hasMultiple);
+
       if (this.prevButton) {
         this.prevButton.disabled = !hasMultiple;
         this.prevButton.hidden = !hasMultiple;
@@ -1116,6 +1118,7 @@ document.addEventListener("keydown", (e) => {
       if (!this.overlay.classList.contains("is-active")) return;
 
       this.overlay.classList.remove("is-active");
+      this.overlay.classList.remove("lightbox--single");
       this.overlay.setAttribute("aria-hidden", "true");
       document.body.classList.remove("lightbox-open");
       const overlayControllerClose = window.__overlayChromeController;
