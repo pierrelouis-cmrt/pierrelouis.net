@@ -28,7 +28,7 @@ $$
 In the LLM world, the standard rule of thumb is that **$1000$ tokens $\approx 750$ words**.
 Therefore, to get tokens from words, we divide by $0.75$.
 $$
-T_{\text{yr}} \approx \frac{W_{\text{yr}}}{0.75} \approx 5.86 \times 10^{16} \text{ tokens/year)}
+T_{\text{yr}} \approx \frac{W_{\text{yr}}}{0.75} \approx 5.86 \times 10^{16} \text{ tokens/year}
 $$
 ### Final estimate
 $$

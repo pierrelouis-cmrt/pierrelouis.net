@@ -4149,6 +4149,58 @@ mjx-container:not([display="true"]):not([display="block"]) > svg {
   max-height: 1em;
 }
 
+@supports selector(:has(*)) {
+  /* let inline fractions expand to readable multi-line height */
+  mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac),
+  mjx-container:not([display="true"]):not([display="block"]):has(
+      [data-mml-node="mfrac"]
+    ) {
+    height: auto;
+    min-height: 2lh;
+  }
+
+  mjx-container:not([display="true"]):not([display="block"]):has(
+      mjx-mfrac mjx-mfrac
+    ),
+  mjx-container:not([display="true"]):not([display="block"]):has(
+      [data-mml-node="mfrac"] [data-mml-node="mfrac"]
+    ) {
+    height: auto;
+    min-height: 3lh;
+  }
+
+  mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac) > svg,
+  mjx-container:not([display="true"]):not([display="block"]):has(
+      [data-mml-node="mfrac"]
+    )
+    > svg {
+    max-height: none;
+    height: auto;
+  }
+}
+
+@supports not (height: 1lh) {
+  @supports selector(:has(*)) {
+    mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac),
+    mjx-container:not([display="true"]):not([display="block"]):has(
+        [data-mml-node="mfrac"]
+      ) {
+      height: auto;
+      min-height: 2em;
+    }
+
+    mjx-container:not([display="true"]):not([display="block"]):has(
+        mjx-mfrac mjx-mfrac
+      ),
+    mjx-container:not([display="true"]):not([display="block"]):has(
+        [data-mml-node="mfrac"] [data-mml-node="mfrac"]
+      ) {
+      height: auto;
+      min-height: 3em;
+    }
+  }
+}
+
 /* keep the look & feel we already had for display math */
 mjx-container[display="true"],
 mjx-container[display="block"] {
