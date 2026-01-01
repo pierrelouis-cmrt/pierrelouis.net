@@ -441,5 +441,44 @@
     "description": "Project Vend consisted in letting Claude Sonnet run a small shop by itself. The goal was to better understand how AI agents can interact with the real world and what were the biggest limitations.",
     "image": "https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2Ffc74d2b498b54dba86feaaca166f7a64c221ae60-3840x2160.png&w=3840&q=75",
     "tag": "Reading"
+  },
+  {
+    "year": 2026,
+    "month": "Jan",
+    "link": "https://arxiv.org/pdf/2507.07935",
+    "title": "AI in the job industry",
+    "meta": {
+      "text": "by Microsoft Research",
+      "icon": "https://icons.duckduckgo.com/ip3/microsoft.com.ico"
+    },
+    "description": "This paper shows that AI has high applicability across a wide range of jobs. Each career field is given a score from 0 to 1, 1 being the most easily automatable with current AI systems.",
+    "image": "",
+    "tag": "Reading"
+  },
+  {
+    "year": 2026,
+    "month": "Jan",
+    "link": "https://www.youtube.com/watch?v=N10uWV3aMWA",
+    "title": "This is more than an Ad",
+    "meta": {
+      "text": "by Polestar",
+      "icon": "https://icons.duckduckgo.com/ip3/polestar.com.ico"
+    },
+    "description": "This is truely one of the best car ad I've ever seen. The motion graphic work is incredible, sound design is on point. Watch it, you'll be surprised.",
+    "image": "",
+    "tag": "Watching"
+  },
+  {
+    "year": 2026,
+    "month": "Feb",
+    "link": "https://x.com/DirtyTesLa/status/1975644389406855212",
+    "title": "Tesla full self-driving (FSD) is magic",
+    "meta": {
+      "text": "@DirtyTesLa on X",
+      "icon": "https://icons.duckduckgo.com/ip3/x.com.ico"
+    },
+    "description": "In the clip shared in this X post, FSD uses a drivethru and understands the complex scenario and socia interactions perfectly. It knows when to stop, when to go. This is truly impressive. Tesla achieved this with camera vision only and a well trained neural network. No lidar required.",
+    "image": "",
+    "tag": "Watching"
   }
 ]
