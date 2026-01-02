@@ -275,7 +275,7 @@
       <canvas></canvas>
 
       <div class="hint">
-        Click to bloom from that point.
+        Tap to bloom. Drag to illuminate.
         <span
           >Hover to interact. <br />Press <span class="kbd">R</span> to
           randomize & bloom at cursor.</span
@@ -343,19 +343,19 @@
       let origin = { x: 0, y: 0 };
       let mouse = { x: -9999, y: -9999, inside: false };
 
-      // Smoothed mouse velocity (desktop only)
+      // Smoothed mouse velocity
       let v = { vx: 0, vy: 0, px: -9999, py: -9999 };
       const speedRef = 1200;
       const speedAlpha = 0.25;
 
-      // Cursor trail (desktop only)
+      // Cursor trail
       const TRAIL_LEN = 14;
       const trailX = new Float32Array(TRAIL_LEN);
       const trailY = new Float32Array(TRAIL_LEN);
       const trailW = new Float32Array(TRAIL_LEN);
       let activity = 0;
 
-      // Inertia when cursor stops / leaves (desktop only)
+      // Inertia when cursor stops / leaves
       let ghost = { x: 0, y: 0 };
       const inertiaFactor = 0.95;
 
@@ -376,6 +376,41 @@
         window.matchMedia &&
         (matchMedia("(hover: none)").matches ||
           matchMedia("(pointer: coarse)").matches);
+
+      // ═══════════════════════════════════════════════════════════════════
+      // ★ TOUCH SYSTEM - Soft illumination trail
+      // ═══════════════════════════════════════════════════════════════════
+      let touch = {
+        active: false,
+        x: 0,
+        y: 0,
+        px: 0,
+        py: 0,
+        vx: 0,
+        vy: 0,
+        downX: 0,
+        downY: 0,
+        moved: false,
+      };
+
+      // Longer touch trail for smooth, flowing effect
+      const TOUCH_TRAIL_LEN = 24;
+      const touchTrailX = new Float32Array(TOUCH_TRAIL_LEN);
+      const touchTrailY = new Float32Array(TOUCH_TRAIL_LEN);
+      const touchTrailW = new Float32Array(TOUCH_TRAIL_LEN);
+      let touchActivity = 0;
+
+      // Pulse wave on release
+      let pulseWave = {
+        active: false,
+        x: 0,
+        y: 0,
+        radius: 0,
+        maxRadius: 0,
+        strength: 0,
+      };
+
+      // ═══════════════════════════════════════════════════════════════════
 
       // --- Utils ---
       const rand = (min, max) => Math.random() * (max - min) + min;
@@ -579,6 +614,24 @@
           }
         }
 
+        // Pulse wave effect - gentle outward ripple
+        updatePulse(pulse) {
+          if (!pulse.active) return;
+          const dx = this.x - pulse.x;
+          const dy = this.y - pulse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          // Wave band - pixels light up as wave passes through them
+          const waveWidth = 60;
+          const distFromWave = Math.abs(dist - pulse.radius);
+
+          if (distFromWave < waveWidth) {
+            const intensity = (1 - distFromWave / waveWidth) * pulse.strength;
+            this.lBoost = Math.max(this.lBoost, intensity * 12);
+            this.sizeBoost = Math.max(this.sizeBoost, intensity * gap * 0.3);
+          }
+        }
+
         draw(ctx) {
           const sizeNow = Math.max(0, this.size + this.sizeBoost);
           const offset = this.sizeMax * 0.5 - sizeNow * 0.5;
@@ -668,6 +721,9 @@
         const dt = Math.min(0.05, diff / 1000);
         lastTime = now - (diff % interval);
 
+        // ─────────────────────────────────────────────────────────────────
+        // DESKTOP MOUSE HANDLING
+        // ─────────────────────────────────────────────────────────────────
         if (!isTouchEnv) {
           if (v.px !== -9999) {
             const ivx = (mouse.x - v.px) / dt;
@@ -709,14 +765,69 @@
             const t = 1 - i / (TRAIL_LEN - 1 || 1);
             trailW[i] = base * Math.pow(t, gamma);
           }
-        } else {
-          activity = 0;
+        }
+
+        // ─────────────────────────────────────────────────────────────────
+        // TOUCH HANDLING - Soft illumination
+        // ─────────────────────────────────────────────────────────────────
+        if (isTouchEnv) {
+          if (touch.active) {
+            // Smooth velocity
+            const dx = touch.x - touch.px;
+            const dy = touch.y - touch.py;
+            touch.vx = touch.vx * 0.7 + dx * 0.3;
+            touch.vy = touch.vy * 0.7 + dy * 0.3;
+            touch.px = touch.x;
+            touch.py = touch.y;
+
+            // Update trail - follows finger smoothly
+            for (let i = TOUCH_TRAIL_LEN - 1; i > 0; i--) {
+              touchTrailX[i] = touchTrailX[i - 1];
+              touchTrailY[i] = touchTrailY[i - 1];
+            }
+            touchTrailX[0] = touch.x;
+            touchTrailY[0] = touch.y;
+
+            // Activity based on speed
+            const speed = Math.hypot(touch.vx, touch.vy);
+            const ns = clamp01(speed / 30);
+            touchActivity +=
+              (ns > touchActivity ? 0.3 : 0.12) * (ns - touchActivity);
+
+            // Weight distribution - brighter at finger, fading along trail
+            const base = 0.5 + 0.45 * touchActivity;
+            for (let i = 0; i < TOUCH_TRAIL_LEN; i++) {
+              const t = 1 - i / (TOUCH_TRAIL_LEN - 1 || 1);
+              // Smooth cubic falloff for elegant trail
+              touchTrailW[i] = base * t * t * t;
+            }
+          } else {
+            // Gentle fade when not touching
+            touchActivity *= 0.92;
+            for (let i = 0; i < TOUCH_TRAIL_LEN; i++) {
+              touchTrailW[i] *= 0.88;
+            }
+          }
+
+          // Update pulse wave
+          if (pulseWave.active) {
+            pulseWave.radius += 8;
+            pulseWave.strength *= 0.97;
+            if (
+              pulseWave.radius > pulseWave.maxRadius ||
+              pulseWave.strength < 0.01
+            ) {
+              pulseWave.active = false;
+            }
+          }
         }
 
         ctx.fillStyle = "#191B1F";
         ctx.fillRect(0, 0, width, height);
 
         let params = null;
+
+        // Desktop hover params
         if (!isTouchEnv) {
           const Rraw = Math.max(cfg.baseRadiusMin, gap * cfg.radiusMultiplier);
           const Rcap = 0.16 * Math.min(width, height);
@@ -738,22 +849,58 @@
           };
         }
 
+        // Touch params - smaller, softer radius
+        if (isTouchEnv && (touch.active || touchActivity > 0.01)) {
+          const Rraw = Math.max(
+            cfg.baseRadiusMin * 1.2,
+            gap * cfg.radiusMultiplier * 1.4
+          );
+          const Rcap = 0.16 * Math.min(width, height);
+          const R = Math.min(Rraw, Rcap);
+          const R2 = R * R;
+
+          params = {
+            R2,
+            invR2: 1 / R2,
+            sizeBoostMax: Math.min(gap * cfg.sizeBoostFactor * 1.2, gap * 0.7),
+            lBoostMax: Math.min(cfg.lBoostMax * 1.3, 18),
+            trailX: touchTrailX,
+            trailY: touchTrailY,
+            trailW: touchTrailW,
+            trailN: TOUCH_TRAIL_LEN,
+          };
+        }
+
         let allHidden = true;
 
         for (let i = 0; i < pixels.length; i++) {
           const p = pixels[i];
 
-          if (!isTouchEnv) {
-            if (mouse.inside || activity > 0.01) p.updateHover(params);
-            else {
-              p.sizeBoost *= 0.85;
-              p.lBoost *= 0.85;
-              if (p.sizeBoost < 0.01) p.sizeBoost = 0;
-              if (p.lBoost < 0.01) p.lBoost = 0;
+          // Apply hover/touch effect
+          if (params) {
+            if (!isTouchEnv) {
+              if (mouse.inside || activity > 0.01) p.updateHover(params);
+              else {
+                p.sizeBoost *= 0.85;
+                p.lBoost *= 0.85;
+                if (p.sizeBoost < 0.01) p.sizeBoost = 0;
+                if (p.lBoost < 0.01) p.lBoost = 0;
+              }
+            } else {
+              if (touch.active || touchActivity > 0.01) {
+                p.updateHover(params);
+              } else {
+                p.sizeBoost *= 0.88;
+                p.lBoost *= 0.88;
+                if (p.sizeBoost < 0.01) p.sizeBoost = 0;
+                if (p.lBoost < 0.01) p.lBoost = 0;
+              }
             }
-          } else {
-            if (p.sizeBoost) p.sizeBoost = 0;
-            if (p.lBoost) p.lBoost = 0;
+          }
+
+          // Apply pulse wave effect
+          if (isTouchEnv && pulseWave.active) {
+            p.updatePulse(pulseWave);
           }
 
           if (animationDirection > 0) p.show();
@@ -808,6 +955,11 @@
           trailY[i] = cy;
           trailW[i] = 0;
         }
+        for (let i = 0; i < TOUCH_TRAIL_LEN; i++) {
+          touchTrailX[i] = cx;
+          touchTrailY[i] = cy;
+          touchTrailW[i] = 0;
+        }
 
         if (gapAuto) gap = computeAutoGap();
 
@@ -835,7 +987,7 @@
       // --- Desktop mouse events ---
       if (!isTouchEnv) {
         container.addEventListener("click", (e) => {
-          if (eventFromControls(e)) return; // don't let controls trigger container
+          if (eventFromControls(e)) return;
           const rect = container.getBoundingClientRect();
           bloomAt(e.clientX - rect.left, e.clientY - rect.top);
         });
@@ -849,13 +1001,88 @@
           mouse.inside = false;
         });
       } else {
-        // --- Mobile: tap to generate a new grid; ignore taps on controls ---
-        container.addEventListener("pointerdown", (e) => {
-          if (eventFromControls(e)) return;
-          e.preventDefault();
-          const rect = container.getBoundingClientRect();
-          bloomAt(e.clientX - rect.left, e.clientY - rect.top);
-        });
+        // ─────────────────────────────────────────────────────────────────
+        // TOUCH EVENTS - Elegant illumination
+        // ─────────────────────────────────────────────────────────────────
+
+        container.addEventListener(
+          "pointerdown",
+          (e) => {
+            if (eventFromControls(e)) return;
+            e.preventDefault();
+
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            touch.active = true;
+            touch.x = x;
+            touch.y = y;
+            touch.px = x;
+            touch.py = y;
+            touch.vx = 0;
+            touch.vy = 0;
+            touch.downX = x;
+            touch.downY = y;
+            touch.moved = false;
+
+            // Initialize trail at touch point
+            for (let i = 0; i < TOUCH_TRAIL_LEN; i++) {
+              touchTrailX[i] = x;
+              touchTrailY[i] = y;
+              touchTrailW[i] = 0;
+            }
+
+            // Bloom from touch point
+            bloomAt(x, y);
+          },
+          { passive: false }
+        );
+
+        container.addEventListener(
+          "pointermove",
+          (e) => {
+            if (!touch.active) return;
+            if (eventFromControls(e)) return;
+            e.preventDefault();
+
+            const rect = container.getBoundingClientRect();
+            touch.x = e.clientX - rect.left;
+            touch.y = e.clientY - rect.top;
+            if (!touch.moved) {
+              const dx = touch.x - touch.downX;
+              const dy = touch.y - touch.downY;
+              touch.moved = dx * dx + dy * dy > 36;
+            }
+          },
+          { passive: false }
+        );
+
+        function handleTouchEnd(e) {
+          if (!touch.active) return;
+          const speed = Math.hypot(touch.vx, touch.vy);
+
+          // Trigger a soft pulse wave on release
+          pulseWave.active = true;
+          pulseWave.x = touch.x;
+          pulseWave.y = touch.y;
+          pulseWave.radius = 0;
+          pulseWave.maxRadius = Math.max(width, height) * 0.6;
+          // Stronger pulse if released with velocity
+          pulseWave.strength = 0.4 + Math.min(0.6, speed * 0.03);
+
+          touch.active = false;
+          for (let i = 0; i < TOUCH_TRAIL_LEN; i++) {
+            touchTrailW[i] = 0;
+          }
+          if (touch.moved) animationDirection = -1;
+        }
+
+        container.addEventListener("pointerup", handleTouchEnd);
+        container.addEventListener("pointercancel", handleTouchEnd);
+        container.addEventListener("pointerleave", handleTouchEnd);
+
+        container.addEventListener("contextmenu", (e) => e.preventDefault());
       }
 
       function paintChipBackgrounds() {
@@ -871,25 +1098,20 @@
       colorB.addEventListener("input", syncUserPalette);
       colorC.addEventListener("input", syncUserPalette);
 
-      // -------- FIX: randomize ONCE and bloom with NEW colors at button's click point --------
       let randomLock = false;
       function getEventXYRelativeToContainer(e) {
         const rect = container.getBoundingClientRect();
-        // Pointer/Mouse
         if (typeof e.clientX === "number" && typeof e.clientY === "number") {
           return { x: e.clientX - rect.left, y: e.clientY - rect.top };
         }
-        // Touch
         const t =
           e.touches && e.touches[0]
             ? e.touches[0]
             : e.changedTouches && e.changedTouches[0];
         if (t) return { x: t.clientX - rect.left, y: t.clientY - rect.top };
-        // Keyboard fallback → center
         return { x: rect.width * 0.5, y: rect.height * 0.5 };
       }
       function handleRandom(e) {
-        // Debounce duplicates (touchstart → click, pointerdown → click, etc.)
         if (randomLock) {
           e.preventDefault();
           e.stopPropagation();
@@ -902,12 +1124,11 @@
         e.stopPropagation();
 
         const { x, y } = getEventXYRelativeToContainer(e);
-        // 1) make a NEW palette
         randomLovelyPalette();
-        // 2) bloom immediately with the NEW palette at the button's click point
         bloomAt(x, y);
+
+        touch.active = false;
       }
-      // Capture early and block bubbling to container so it never blooms with old palette
       randomBtn.addEventListener("touchstart", handleRandom, {
         passive: false,
         capture: true,
@@ -918,7 +1139,6 @@
       });
       randomBtn.addEventListener("mousedown", handleRandom, { capture: true });
       randomBtn.addEventListener("click", handleRandom, { capture: true });
-      // ---------------------------------------------------------------------------------------
 
       // Startup
       window.addEventListener("resize", resize);
