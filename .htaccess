@@ -11,50 +11,48 @@ RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
-# (Optional) If your site lives at the domain root, this can help some setups.
-# RewriteBase /
-
 # Map clean endpoints to your PHP proxy
 RewriteRule "^api/now-playing$" "/api/lastfm.php?endpoint=now-playing" [QSA,L]
 RewriteRule "^api/cover$"       "/api/lastfm.php?endpoint=cover"       [QSA,L]
-RewriteRule "^img$"             "/api/img.php"                          [QSA,L]
+RewriteRule "^img$"             "/api/img.php"                         [QSA,L]
 
 # --- MIME types ---
 AddType image/avif avif
 AddType image/webp webp
 
-# --- Caching headers (override anything your host adds) ---
+# --- Security & Caching Headers ---
 <IfModule mod_headers.c>
+  # 1. SECURITY HEADERS (Added these for you)
+  # Force HTTPS for 1 year (HSTS) - prevent downgrade attacks
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  # Prevent your site from being embedded in iframes (prevents clickjacking)
+  Header always set X-Frame-Options "SAMEORIGIN"
+  # Stop browsers from guessing content types (prevents MIME-sniffing exploits)
+  Header always set X-Content-Type-Options "nosniff"
+  # Basic XSS protection for older browsers
+  Header always set X-XSS-Protection "1; mode=block"
+  # Referrer Policy (Privacy best practice)
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
 
-  # HTML should not be cached in the browser
-  <FilesMatch "\.(?:html)$">
+  # 2. CACHING HEADERS
+  # HTML: Never cache dynamic content
+  <FilesMatch "\.(?:html|php)$">
     Header always unset Cache-Control
     Header always unset Expires
     Header always unset Pragma
-    Header always set   Cache-Control "no-store"
+    Header always set Cache-Control "no-store, no-cache, must-revalidate"
   </FilesMatch>
 
-  # Versioned/static assets: cache for 1 year and mark immutable
+  # Static Assets: Cache for 1 year
   <FilesMatch "\.(?:css|js|mjs|ico|woff2?|ttf|eot|gif|png|jpe?g|webp|avif|svg)$">
     Header always unset Cache-Control
     Header always unset Expires
     Header always unset Pragma
-    Header always set   Cache-Control "public, max-age=31536000, immutable"
+    Header always set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
-
 </IfModule>
 
-# If your host is also using mod_expires, either turn it off here or restate your policy
+# Disable legacy mod_expires if acceptable (cleaner to manage headers in one place above)
 <IfModule mod_expires.c>
-  ExpiresActive Off  # disable inherited Expires rules in this directory
-  # (Optional) If you prefer to keep Expires, mirror the policy instead of turning it off:
-  # ExpiresActive On
-  # ExpiresByType text/html "access"
-  # ExpiresByType text/css "access plus 1 year"
-  # ExpiresByType application/javascript "access plus 1 year"
-  # ExpiresByType image/webp "access plus 1 year"
-  # ExpiresByType image/png "access plus 1 year"
-  # ExpiresByType image/jpeg "access plus 1 year"
-  # ExpiresByType image/svg+xml "access plus 1 year"
-  # ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresActive Off
 </IfModule>
