@@ -4,43 +4,89 @@ const themeRoot = document.documentElement;
 const themeQuery = window.matchMedia("(prefers-color-scheme: dark)");
 const themeStorageKey = "theme";
 
-const keepViewport = (fn) => {
-  const scrollEl = document.scrollingElement || document.documentElement;
-  const { scrollX, scrollY } = window;
-  const savedScrollLeft = scrollEl ? scrollEl.scrollLeft : scrollX;
-  const savedScrollTop = scrollEl ? scrollEl.scrollTop : scrollY;
-
+// Synchronous scroll lock - prevents any scroll jump during an operation
+const lockScrollDuring = (fn) => {
+  const scrollX = window.scrollX;
+  const scrollY = window.scrollY;
   fn();
-
-  const restore = () => {
-    if (window.scrollX !== scrollX || window.scrollY !== scrollY) {
-      window.scrollTo(scrollX, scrollY);
-    }
-
-    if (scrollEl) {
-      if (scrollEl.scrollLeft !== savedScrollLeft) {
-        scrollEl.scrollLeft = savedScrollLeft;
-      }
-      if (scrollEl.scrollTop !== savedScrollTop) {
-        scrollEl.scrollTop = savedScrollTop;
-      }
-    }
-  };
-
-  const now = () =>
-    typeof performance !== "undefined" ? performance.now() : Date.now();
-  const start = now();
-  const duration = 450;
-
-  const tick = () => {
-    restore();
-    if (now() - start < duration) {
-      requestAnimationFrame(tick);
-    }
-  };
-
-  requestAnimationFrame(tick);
+  // Immediately restore in same frame - no animation, no delay
+  if (window.scrollX !== scrollX || window.scrollY !== scrollY) {
+    window.scrollTo(scrollX, scrollY);
+  }
 };
+
+window.__scrollManager = { lockDuring: lockScrollDuring };
+
+// Browser Navigation Scroll Restoration
+(() => {
+  // Take manual control of scroll restoration
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
+  // Track scroll positions keyed by session storage
+  const STORAGE_KEY = "scrollPositions";
+  let scrollPositions = {};
+
+  // Load saved positions from sessionStorage
+  try {
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+    if (saved) scrollPositions = JSON.parse(saved);
+  } catch (e) {
+    // Ignore storage errors
+  }
+
+  const saveToStorage = () => {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(scrollPositions));
+    } catch (e) {
+      // Ignore storage errors
+    }
+  };
+
+  const getCurrentKey = () => window.location.href;
+
+  const saveCurrentPosition = () => {
+    scrollPositions[getCurrentKey()] = {
+      x: window.scrollX,
+      y: window.scrollY,
+    };
+    saveToStorage();
+  };
+
+  // Restore position on popstate (back/forward)
+  window.addEventListener("popstate", () => {
+    const key = getCurrentKey();
+    const saved = scrollPositions[key];
+
+    if (saved) {
+      // Single rAF - restore as soon as browser is ready
+      requestAnimationFrame(() => {
+        window.scrollTo(saved.x, saved.y);
+      });
+    }
+  });
+
+  // Save position before user navigates away
+  window.addEventListener("beforeunload", saveCurrentPosition);
+
+  // Save on page hide (mobile Safari)
+  window.addEventListener("pagehide", saveCurrentPosition);
+
+  // Debounced scroll position saving
+  let scrollSaveTimer = null;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (scrollSaveTimer) clearTimeout(scrollSaveTimer);
+      scrollSaveTimer = setTimeout(saveCurrentPosition, 150);
+    },
+    { passive: true }
+  );
+
+  // Save periodically for reliability
+  setInterval(saveCurrentPosition, 5000);
+})();
 
 const applyThemeToRoot = (mode) => {
   const shouldBeDark =
@@ -73,7 +119,7 @@ document.addEventListener("alpine:init", () => {
     if (immediate) {
       run();
     } else {
-      keepViewport(run);
+      lockScrollDuring(run);
     }
   };
 
@@ -610,6 +656,7 @@ document.addEventListener("keydown", (e) => {
     mediaQuery: null,
     mediaHandler: null,
     bodySnapshot: null,
+    bodyLocked: false,
   };
 
   const ensureMeta = (() => {
@@ -694,37 +741,33 @@ document.addEventListener("keydown", (e) => {
     }
   };
 
+  // Scroll lock without position:fixed - preserves scroll position naturally
+  // No scroll restoration needed on unlock!
   const lockBody = () => {
-    if (!body || state.bodySnapshot) return;
+    if (!body || state.bodyLocked) return;
+    state.bodyLocked = true;
+
+    // Store original styles
     state.bodySnapshot = {
-      overflow: body.style.overflow,
-      position: body.style.position,
-      width: body.style.width,
-      left: body.style.left,
-      top: body.style.top,
-      scrollX: window.scrollX,
-      scrollY: window.scrollY,
+      htmlOverflow: html.style.overflow,
+      bodyOverflow: body.style.overflow,
     };
+
+    // Lock scroll on both html and body - scroll position stays intact
+    html.style.overflow = "hidden";
     body.style.overflow = "hidden";
-    body.style.position = "fixed";
-    body.style.width = "100%";
-    body.style.left = "0";
-    body.style.top = `-${state.bodySnapshot.scrollY}px`;
   };
 
   const unlockBody = () => {
-    if (!body || !state.bodySnapshot) return;
+    if (!body || !state.bodyLocked) return;
     const snapshot = state.bodySnapshot;
-    body.style.overflow = snapshot.overflow || "";
-    body.style.position = snapshot.position || "";
-    body.style.width = snapshot.width || "";
-    body.style.left = snapshot.left || "";
-    body.style.top = snapshot.top || "";
-    state.bodySnapshot = null;
 
-    requestAnimationFrame(() => {
-      window.scrollTo(snapshot.scrollX, snapshot.scrollY);
-    });
+    // Simply restore - no scroll restoration needed!
+    html.style.overflow = snapshot?.htmlOverflow || "";
+    body.style.overflow = snapshot?.bodyOverflow || "";
+
+    state.bodySnapshot = null;
+    state.bodyLocked = false;
   };
 
   const removeFromStack = (source) => {

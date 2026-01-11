@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_cache/
+
+Sitemap: https://pierrelouis.net/sitemap.xml

@@ -567,9 +567,9 @@
         if (canUseController) {
           overlayController.open('drawer');
         } else {
+          // Simple scroll lock - no position:fixed needed
+          document.documentElement.style.overflow = 'hidden';
           document.body.style.overflow = 'hidden';
-          document.body.style.position = 'fixed';
-          document.body.style.width = '100%';
         }
 
         requestAnimationFrame(() => {
@@ -639,9 +639,9 @@
           self.drawerOpen = false;
           self.isAnimating = false;
           if (!canUseController) {
+            // Simple unlock - no scroll restoration needed
+            document.documentElement.style.overflow = '';
             document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.width = '';
           }
           self.searchQuery = '';
           self.drawerHeight = null;
