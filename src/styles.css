@@ -735,6 +735,7 @@ a.project-card:not(:hover) .lucide {
 #latest-posts .post-card-title {
   flex: 0 1 auto;
   min-width: 0;
+  margin-bottom: 0;
 }
 
 #latest-posts .post-card-title svg {
@@ -756,6 +757,10 @@ a.project-card:not(:hover) .lucide {
 
 #latest-posts .post-date-year-short {
   display: none;
+}
+
+#latest-posts .post-card {
+  margin-bottom: var(--space-2);
 }
 
 /* Now playing */
@@ -4177,7 +4182,8 @@ mjx-container:not([display="true"]):not([display="block"]) > svg {
     min-height: 3lh;
   }
 
-  mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac) > svg,
+  mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac)
+    > svg,
   mjx-container:not([display="true"]):not([display="block"]):has(
       [data-mml-node="mfrac"]
     )
