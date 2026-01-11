@@ -62,9 +62,9 @@
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-6031b9dbfe.css" as="style" />
+    <link rel="preload" href="/src/output-7eda44262a.css" as="style" />
 
-    <link rel="stylesheet" href="/src/output-6031b9dbfe.css" />
+    <link rel="stylesheet" href="/src/output-7eda44262a.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -823,7 +823,7 @@
                   @mouseleave="endDrag"
                   :style="drawerStyles()"
                   :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'ring-1 ring-white/10' : ''"
-                  class="absolute bottom-0 w-full bg-[var(--bg-primary)] rounded-t-[28px] shadow-2xl max-h-[75vh] flex flex-col"
+                  class="absolute bottom-0 w-full bg-[var(--bg-primary)] border-t border-[var(--border-secondary)] rounded-t-[28px] shadow-2xl max-h-[75vh] flex flex-col"
                   x-ref="drawerContainer"
                   style="
                     will-change: transform;
