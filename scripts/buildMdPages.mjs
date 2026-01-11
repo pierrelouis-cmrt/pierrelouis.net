@@ -60,6 +60,31 @@ const md = new MarkdownIt({ html: true, breaks: true, linkify: true })
     },
   });
 
+const isDisplayMathToken = (token) =>
+  token && (token.type === "display_math" || token.type === "math");
+
+const defaultSoftbreak =
+  md.renderer.rules.softbreak ||
+  ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options));
+const defaultHardbreak =
+  md.renderer.rules.hardbreak ||
+  ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options));
+
+// Suppress <br> directly after display math (e.g., $$...$$) to avoid extra gaps.
+md.renderer.rules.softbreak = (tokens, idx, options, env, self) => {
+  if (isDisplayMathToken(tokens[idx - 1])) {
+    return "\n";
+  }
+  return defaultSoftbreak(tokens, idx, options, env, self);
+};
+
+md.renderer.rules.hardbreak = (tokens, idx, options, env, self) => {
+  if (isDisplayMathToken(tokens[idx - 1])) {
+    return "\n";
+  }
+  return defaultHardbreak(tokens, idx, options, env, self);
+};
+
 /* -- custom footnote reference & back-reference renderers ---------------- */
 md.renderer.rules.footnote_ref = (tokens, idx) => {
   const id = String(tokens[idx].meta.id + 1);
