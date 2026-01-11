@@ -141,13 +141,18 @@ document.addEventListener("alpine:init", () => {
     },
 
     toggle() {
-      this.set(
+      const nextMode =
         this.mode === "system"
           ? "light"
           : this.mode === "light"
           ? "dark"
-          : "system"
-      );
+          : "system";
+
+      this.set(nextMode);
+
+      if (window.umami && typeof window.umami.track === "function") {
+        window.umami.track("Theme toggle", { mode: nextMode });
+      }
     },
 
     dark() {

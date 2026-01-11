@@ -55,6 +55,9 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(() => {
           if (tooltip) tooltip.textContent = "Copied";
           setIcon(copyCheckIconSVG);
+          if (window.umami && typeof window.umami.track === "function") {
+            window.umami.track("Email copied", { source: "footer" });
+          }
 
           clearTimeout(revertTimer);
           revertTimer = setTimeout(() => {

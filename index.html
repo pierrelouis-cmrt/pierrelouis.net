@@ -43,6 +43,10 @@
                 document.documentElement.classList.contains("dark");
               metaTheme.content = isDark ? "#0f0f0f" : "#faf9f9";
             }
+
+            if (window.umami && typeof window.umami.track === "function") {
+              window.umami.track("Theme toggle", { mode: this.mode });
+            }
           },
 
           apply() {
@@ -221,6 +225,9 @@
             x-init="
       $watch('commandOpen', function(value){
         if(value === true && !isTouchDevice){
+          if (window.innerWidth >= 768 && window.umami && typeof window.umami.track === 'function') {
+            window.umami.track('Command palette open', { surface: 'palette' });
+          }
           $nextTick(() => { window.dispatchEvent(new CustomEvent('command-input-focus')); });
         }
       })
@@ -625,6 +632,9 @@
 
         self.drawerHeight = null;
         self.drawerOpen = true;
+        if (window.umami && typeof window.umami.track === 'function') {
+          window.umami.track('Command palette open', { surface: 'drawer' });
+        }
         self.isAnimating = true;
         self.translateY = 100;
         self.velocity = 0;
