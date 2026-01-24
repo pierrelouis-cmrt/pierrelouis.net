@@ -1,8 +1,74 @@
 // Theme
 
 const themeRoot = document.documentElement;
-const themeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+const themeQuery = window.matchMedia
+  ? window.matchMedia("(prefers-color-scheme: dark)")
+  : { matches: false };
 const themeStorageKey = "theme";
+const themeColors = { dark: "#0f0f0f", light: "#faf9f9" };
+
+const themeStorage = {
+  get(key) {
+    try {
+      return localStorage.getItem(key);
+    } catch (error) {
+      return null;
+    }
+  },
+  set(key, value) {
+    try {
+      localStorage.setItem(key, value);
+    } catch (error) {
+      // Ignore storage errors (private mode, blocked, etc.)
+    }
+  },
+  remove(key) {
+    try {
+      localStorage.removeItem(key);
+    } catch (error) {
+      // Ignore storage errors (private mode, blocked, etc.)
+    }
+  },
+};
+
+const setThemeColorContent = (color) => {
+  const metas = document.querySelectorAll('meta[name="theme-color"]');
+  if (metas.length === 0) {
+    const meta = document.createElement("meta");
+    meta.name = "theme-color";
+    meta.content = color;
+    document.head.appendChild(meta);
+    return;
+  }
+  metas.forEach((meta) => meta.setAttribute("content", color));
+};
+
+const applyBaseThemeColor = () => {
+  const isDark = themeRoot.classList.contains("dark");
+  setThemeColorContent(isDark ? themeColors.dark : themeColors.light);
+};
+
+const updateThemeColor = () => {
+  const controller = window.__overlayChromeController;
+  if (
+    controller &&
+    typeof controller.hasActiveOverlays === "function" &&
+    controller.hasActiveOverlays()
+  ) {
+    controller.updateThemeColor();
+    return;
+  }
+  applyBaseThemeColor();
+};
+
+const onThemeQueryChange = (handler) => {
+  if (!themeQuery) return;
+  if (typeof themeQuery.addEventListener === "function") {
+    themeQuery.addEventListener("change", handler);
+  } else if (typeof themeQuery.addListener === "function") {
+    themeQuery.addListener(handler);
+  }
+};
 
 // Synchronous scroll lock - prevents any scroll jump during an operation
 const lockScrollDuring = (fn) => {
@@ -92,18 +158,19 @@ const applyThemeToRoot = (mode) => {
   const shouldBeDark =
     mode === "dark" || (mode === "system" && themeQuery.matches);
   themeRoot.classList.toggle("dark", shouldBeDark);
+  updateThemeColor();
 };
 
 const persistTheme = (mode) => {
   if (mode === "system") {
-    localStorage.removeItem(themeStorageKey);
+    themeStorage.remove(themeStorageKey);
   } else {
-    localStorage.setItem(themeStorageKey, mode);
+    themeStorage.set(themeStorageKey, mode);
   }
 };
 
 const loadStoredTheme = () => {
-  const saved = localStorage.getItem(themeStorageKey);
+  const saved = themeStorage.get(themeStorageKey);
   return saved === "dark" || saved === "light" ? saved : "system";
 };
 
@@ -129,7 +196,7 @@ document.addEventListener("alpine:init", () => {
     init() {
       apply(this, loadStoredTheme(), true);
 
-      themeQuery.addEventListener("change", () => {
+      onThemeQueryChange(() => {
         if (this.mode === "system") {
           apply(this, "system");
         }
@@ -664,18 +731,6 @@ document.addEventListener("keydown", (e) => {
     bodyLocked: false,
   };
 
-  const ensureMeta = (() => {
-    let meta;
-    return () => {
-      if (meta && meta.isConnected) return meta;
-      meta =
-        document.querySelector("meta[name='theme-color']") ||
-        Object.assign(document.createElement("meta"), { name: "theme-color" });
-      if (!meta.isConnected) document.head.appendChild(meta);
-      return meta;
-    };
-  })();
-
   const pickPalette = (source) => PALETTES[source] || DEFAULT_PALETTE;
 
   const resolveColor = (palette) =>
@@ -683,8 +738,7 @@ document.addEventListener("keydown", (e) => {
       html.classList.contains("dark") ? "dark" : "light"
     ];
 
-  const applyThemeColor = () =>
-    ensureMeta().setAttribute("content", resolveColor());
+  const applyThemeColor = () => setThemeColorContent(resolveColor());
 
   const scheduleThemeColor = () => {
     applyThemeColor();
@@ -701,7 +755,7 @@ document.addEventListener("keydown", (e) => {
 
   const scheduleReset = () => {
     state.resetTimer = setTimeout(() => {
-      ensureMeta().setAttribute("content", "#ffffff");
+      applyBaseThemeColor();
       state.resetTimer = null;
     }, RESET_DELAY);
   };
@@ -817,7 +871,7 @@ document.addEventListener("keydown", (e) => {
 
     resetThemeColor() {
       clearResetTimer();
-      ensureMeta().setAttribute("content", "#ffffff");
+      applyBaseThemeColor();
     },
 
     getColorFor(source, isDark) {
@@ -1266,32 +1320,18 @@ document.addEventListener("keydown", (e) => {
       }
     }
 
-    ensureMetaThemeTag() {
-      let meta = document.querySelector("meta[name='theme-color']");
-      if (!meta) {
-        meta = document.createElement("meta");
-        meta.name = "theme-color";
-        document.head.appendChild(meta);
-      }
-      return meta;
-    }
-
     updateThemeColor() {
-      const meta = this.ensureMetaThemeTag();
       const isDark = document.documentElement.classList.contains("dark");
       const controller = window.__overlayChromeController;
       if (controller && typeof controller.getColorFor === "function") {
-        meta.content = controller.getColorFor("lightbox", isDark);
+        setThemeColorContent(controller.getColorFor("lightbox", isDark));
         return;
       }
-      meta.content = isDark ? "#14161d" : "#e4e3e1";
+      setThemeColorContent(isDark ? "#14161d" : "#e4e3e1");
     }
 
     resetThemeColor() {
-      const meta = document.querySelector("meta[name='theme-color']");
-      if (meta) {
-        meta.content = "#ffffff";
-      }
+      applyBaseThemeColor();
     }
 
     startThemeWatchers() {

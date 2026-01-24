@@ -3,16 +3,41 @@
   <head>
     <script>
       (() => {
-        const theme = localStorage.theme || "system";
-        if (
-          theme === "dark" ||
-          (theme === "system" &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches)
-        ) {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
+        const storageKey = "theme";
+        const getStoredTheme = () => {
+          try {
+            const value = localStorage.getItem(storageKey);
+            return value === "dark" || value === "light" ? value : "system";
+          } catch (error) {
+            return "system";
+          }
+        };
+        const mode = getStoredTheme();
+        const prefersDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const isDark = mode === "dark" || (mode === "system" && prefersDark);
+
+        document.documentElement.classList.toggle("dark", isDark);
+
+        const color = isDark ? "#0f0f0f" : "#faf9f9";
+        const setThemeColor = (allowCreate) => {
+          const metas = document.querySelectorAll('meta[name="theme-color"]');
+          if (!metas.length) {
+            if (!allowCreate) return;
+            const meta = document.createElement("meta");
+            meta.name = "theme-color";
+            meta.content = color;
+            document.head.appendChild(meta);
+            return;
+          }
+          metas.forEach((meta) => meta.setAttribute("content", color));
+        };
+        setThemeColor(false);
+        const raf =
+          window.requestAnimationFrame ||
+          ((callback) => setTimeout(callback, 0));
+        raf(() => setThemeColor(true));
       })();
     </script>
     <script>
@@ -61,9 +86,9 @@
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
-    <meta name="theme-color" content="#ffffff" />
-    <link rel="preload" href="/src/output-7eda44262a.css" as="style" />
-    <link rel="stylesheet" href="/src/output-7eda44262a.css" />
+    <meta name="theme-color" content="#faf9f9" />
+    <link rel="preload" href="/src/output-dev.css" as="style" />
+    <link rel="stylesheet" href="/src/output-dev.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -662,7 +687,7 @@
 
         const metaTheme = document.querySelector('meta[name=\'theme-color\']');
         if (metaTheme) {
-          metaTheme.content = '#ffffff';
+          metaTheme.content = document.documentElement.classList.contains('dark') ? '#0f0f0f' : '#faf9f9';
         }
       },
 
