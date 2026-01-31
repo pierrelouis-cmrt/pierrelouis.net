@@ -19,7 +19,7 @@ The rough conversion: **1000 tokens ≈ 750 words**.
 
 The goal here is just to get an order of magnitude. Nothing precise, just coherent enough to get a rough idea.
 
-**Words per person per day:** ~15,000 (decent global average)
+**Words spoken per person per day:** ~15,000 (decent global average)
 
 **World population:** ~8 billion
 

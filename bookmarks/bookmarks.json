@@ -470,6 +470,19 @@
   },
   {
     "year": 2026,
+    "month": "Jan",
+    "link": "https://www.youtube.com/watch?v=kr3iXUcNt2g",
+    "title": "Hearing our universe",
+    "meta": {
+      "text": "by Cleo Abram",
+      "icon": "https://icons.duckduckgo.com/ip3/youtube.com.ico"
+    },
+    "description": "Fascinating.",
+    "image": "",
+    "tag": "Videos"
+  },
+  {
+    "year": 2026,
     "month": "Feb",
     "link": "https://x.com/DirtyTesLa/status/1975644389406855212",
     "title": "Tesla full self-driving (FSD) is magic",
