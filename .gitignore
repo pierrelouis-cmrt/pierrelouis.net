@@ -3,11 +3,14 @@ node_modules/
 article-template/
 src/fonts/
 src/output-dev.css
+src/output-*.css
+src/.output-temp.css
 
 /_cache/*
 !/_cache/.htaccess
 !/_cache/.gitkeep
 
+dist/
 /dist/*
 
 .env
@@ -17,4 +20,3 @@ src/output-dev.css
 .env.production.local
 
 .vscode/
-

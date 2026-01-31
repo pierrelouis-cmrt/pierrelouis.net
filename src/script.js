@@ -409,32 +409,32 @@ window.COMMAND_ITEMS_DATA = {
 
 window.COMMAND_ACTION_MAP = {
   home: "/",
-  about: "/about",
-  projects: "/projects",
-  now: "/now",
-  someday: "/someday",
-  writing: "/posts",
-  uses: "/uses",
-  photos: "/photos",
-  bookmarks: "/bookmarks",
-  colophon: "/colophon",
-  links: "/links",
+  about: "/about/",
+  projects: "/projects/",
+  now: "/now/",
+  someday: "/someday/",
+  writing: "/posts/",
+  uses: "/uses/",
+  photos: "/photos/",
+  bookmarks: "/bookmarks/",
+  colophon: "/colophon/",
+  links: "/links/",
   email: "mailto:contact@pierrelouis.net?subject=Just%20wanted%20to%20say%20hi",
 };
 
 // Mapping for quick navigation shortcuts using the "n" prefix
 window.SHORTCUT_MAP = {
   h: "/",
-  a: "/about",
-  p: "/projects",
-  k: "/now",
-  s: "/someday",
-  w: "/posts",
-  b: "/bookmarks",
-  u: "/uses",
-  g: "/photos",
-  c: "/colophon",
-  l: "/links",
+  a: "/about/",
+  p: "/projects/",
+  k: "/now/",
+  s: "/someday/",
+  w: "/posts/",
+  b: "/bookmarks/",
+  u: "/uses/",
+  g: "/photos/",
+  c: "/colophon/",
+  l: "/links/",
   e: "mailto:contact@pierrelouis.net?subject=Hi,%20I'm%20....%20and...%20",
 };
 
@@ -1408,6 +1408,40 @@ document.addEventListener("keydown", (e) => {
     if (!overlay) return;
     const gallery = new LightboxGallery(overlay);
     gallery.init();
+  });
+})();
+
+// Uses page icon reveal
+(() => {
+  document.addEventListener("DOMContentLoaded", () => {
+    const container = document.querySelector(".tech-stack-sections");
+    if (!container) return;
+    const icons = Array.from(
+      container.querySelectorAll(".tech-stack-items img")
+    );
+    if (icons.length === 0) return;
+
+    const root = document.documentElement;
+    root.classList.add("uses-icons-fade");
+
+    const markLoaded = (img) => {
+      img.classList.remove("uses-icon-loading");
+      img.classList.add("uses-icon-loaded");
+    };
+
+    icons.forEach((img) => {
+      img.classList.add("uses-icon-loading");
+      if (img.complete && img.naturalWidth > 0) {
+        markLoaded(img);
+        return;
+      }
+      img.addEventListener("load", () => markLoaded(img), { once: true });
+      img.addEventListener("error", () => markLoaded(img), { once: true });
+    });
+
+    window.setTimeout(() => {
+      icons.forEach((img) => markLoaded(img));
+    }, 800);
   });
 })();
 

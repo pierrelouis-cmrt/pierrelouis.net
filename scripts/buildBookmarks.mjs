@@ -4,7 +4,7 @@
 // skipping any bookmark dated in a FUTURE month (or year) relative to today.
 // -----------------------------------------------------------------------------
 
-import { readFile, writeFile } from "fs/promises";
+import { readFile, writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -16,6 +16,14 @@ const root = path.join(__dirname, "..");
 
 const JSON_PATH = path.join(root, "bookmarks", "bookmarks.json");
 const BOOKMARKS_HTML = path.join(root, "bookmarks", "index.html");
+
+const outArgIndex = process.argv.indexOf("--out");
+const outRoot =
+  outArgIndex !== -1 && process.argv[outArgIndex + 1]
+    ? path.resolve(root, process.argv[outArgIndex + 1])
+    : root;
+
+const BOOKMARKS_HTML_OUT = path.join(outRoot, "bookmarks", "index.html");
 
 /* -------------------------------------------------------------------------- */
 /*  Helpers                                                                   */
@@ -161,6 +169,7 @@ function replaceBlock(html, tag, content) {
   /* Render ---------------------------------------------------------------- */
   const htmlIn = await readFile(BOOKMARKS_HTML, "utf8");
   const htmlOut = replaceBlock(htmlIn, "BOOKMARKS", buildTimeline(filtered));
-  await writeFile(BOOKMARKS_HTML, htmlOut);
+  await mkdir(path.dirname(BOOKMARKS_HTML_OUT), { recursive: true });
+  await writeFile(BOOKMARKS_HTML_OUT, htmlOut);
   console.log("✔  bookmarks timeline updated");
 })();

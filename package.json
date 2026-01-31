@@ -1,5 +1,9 @@
 {
   "devDependencies": {
+    "@eslint/js": "^9.19.0",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^9.19.0",
+    "globals": "^15.12.0",
     "markdown-it": "^14.1.0",
     "markdown-it-abbr": "^2.0.0",
     "markdown-it-container": "^4.0.0",
@@ -9,16 +13,22 @@
     "markdown-it-mathjax": "^2.0.0",
     "markdown-it-task-lists": "^2.1.1",
     "nodemon": "^3.1.10",
-    "tailwindcss": "^3.4.14"
+    "postcss": "^8.4.38",
+    "prettier": "^3.4.2",
+    "tailwindcss": "^3.4.14",
+    "vite": "^7.3.1"
   },
   "scripts": {
-    "build:css": "node scripts/buildCssVersioned.mjs",
     "build:posts": "node scripts/buildPosts.mjs",
     "build:bookmarks": "node scripts/buildBookmarks.mjs",
     "build:md": "node scripts/buildMdPages.mjs",
-    "build:push": "node scripts/pushBuildBranch.mjs",
-    "build": "npm run build:css && npm run build:posts && npm run build:bookmarks && npm run build:md && npm run build:push",
-    "build:content": "npm run build:posts && npm run build:bookmarks && npm run build:md",
-    "dev": "node scripts/buildCssVersioned.mjs --dev && node scripts/buildPosts.mjs && node scripts/buildMdPages.mjs && npx tailwindcss -i ./src/styles.css -o ./src/output-dev.css --watch"
+    "build:content": "npm run build:posts && npm run build:bookmarks",
+    "build:uses-icons": "node scripts/cacheUsesIcons.mjs",
+    "dev": "npm run build:content && vite",
+    "build": "npm run build:content && vite build && node scripts/copyStatic.mjs && npm run build:uses-icons",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "format": "prettier . --check",
+    "format:write": "prettier . --write"
   }
 }

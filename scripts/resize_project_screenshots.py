@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 Resize project screenshots:
-1. Create 300px-tall WebP derivatives in projects/screenshots/lowres.
-2. Downscale originals so their shortest side is at most 1000px and convert to WebP.
+1. Create 300px-wide WebP derivatives in projects/screenshots/lowres.
+2. Downscale originals so their width is at most 1000px and convert to WebP.
 """
 
 import sys
@@ -13,8 +13,8 @@ from image_resize_utils import calculate_scaled_size, iter_image_paths, resize_a
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SCREENSHOTS_DIR = REPO_ROOT / "projects" / "screenshots"
-LOWRES_HEIGHT = 300
-HIRES_MIN_SIDE = 1000
+LOWRES_WIDTH = 300
+HIRES_MAX_WIDTH = 1000
 WEBP_QUALITY = 90
 
 
@@ -30,8 +30,8 @@ def ensure_lowres_dir(base_dir: Path) -> Path:
 def process_image(image_path: Path, lowres_dir: Path) -> Path:
     with Image.open(image_path) as img:
         img.load()
-        lowres_size = calculate_scaled_size(img.width, img.height, target_height=LOWRES_HEIGHT)
-        target_size = calculate_scaled_size(img.width, img.height, shortest_side=HIRES_MIN_SIDE)
+        lowres_size = calculate_scaled_size(img.width, img.height, target_width=LOWRES_WIDTH)
+        target_size = calculate_scaled_size(img.width, img.height, target_width=HIRES_MAX_WIDTH)
 
     lowres_path = lowres_dir / f"{image_path.stem}.webp"
     resize_and_save(

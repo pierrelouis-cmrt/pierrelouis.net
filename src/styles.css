@@ -2796,6 +2796,34 @@ img[data-lightbox-item] {
   max-width: 600px;
 }
 
+.uses-icons-fade .tech-stack-sections .tech-stack-items img {
+  transition: opacity 220ms ease, transform 220ms ease, filter 220ms ease;
+  will-change: opacity, transform, filter;
+}
+
+.uses-icons-fade .tech-stack-sections .tech-stack-items img.uses-icon-loading {
+  opacity: 0;
+  transform: translateY(2px) scale(0.96);
+  filter: blur(6px);
+}
+
+.uses-icons-fade .tech-stack-sections .tech-stack-items img.uses-icon-loaded {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .uses-icons-fade .tech-stack-sections .tech-stack-items img {
+    transition: none;
+  }
+
+  .uses-icons-fade .tech-stack-sections .tech-stack-items img.uses-icon-loading {
+    transform: none;
+    filter: none;
+  }
+}
+
 /* Last Updated block */
 .last-updated-block {
   max-width: 600px;
@@ -3219,6 +3247,22 @@ img[data-lightbox-item] {
   filter: brightness(0.98) contrast(1.02);
 }
 
+.photos-js .photo-trip-preview img {
+  opacity: 0;
+  transform: scale(1.015);
+  filter: brightness(0.98) contrast(1.02) blur(10px);
+  transition: opacity 420ms ease,
+    transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    filter 520ms ease;
+  will-change: opacity, transform, filter;
+}
+
+.photos-js .photo-trip-preview.is-loaded img {
+  opacity: 1;
+  transform: scale(1);
+  filter: brightness(0.98) contrast(1.02);
+}
+
 .photo-trip-card:hover .photo-trip-preview img {
   transform: scale(1.08);
   filter: brightness(1) contrast(1.05);
@@ -3394,6 +3438,11 @@ img[data-lightbox-item] {
   position: relative;
   overflow: hidden;
   border-radius: var(--radius-lg);
+  background: linear-gradient(
+    135deg,
+    var(--bg-hover) 0%,
+    var(--bg-primary) 100%
+  );
   transition: transform 200ms ease-in-out;
 }
 
@@ -3403,6 +3452,29 @@ img[data-lightbox-item] {
   display: block;
   border-radius: var(--radius-lg);
   transition: transform 300ms ease-in-out;
+}
+
+.photos-js .photos-gallery-item img {
+  opacity: 0;
+  transform: scale(1.01);
+  filter: blur(12px);
+  transition: opacity 500ms ease, transform 600ms ease, filter 600ms ease;
+  will-change: opacity, transform, filter;
+}
+
+.photos-js .photos-gallery-item.is-loaded img {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photos-js .photos-gallery-item img,
+  .photos-js .photo-trip-preview img {
+    transition: none;
+    transform: none;
+    filter: none;
+  }
 }
 
 /* -------- Article Styles -------- */

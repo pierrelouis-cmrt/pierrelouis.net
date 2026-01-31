@@ -98,8 +98,10 @@
 
   // Initialize
   function init() {
+    document.body.classList.add('photos-js');
     updateCounts();
     attachEventListeners();
+    hydrateTripPreviews();
     document.body.classList.remove('gallery-open');
   }
 
@@ -184,8 +186,8 @@
                          filterValue.charAt(0).toUpperCase() + filterValue.slice(1);
     galleryTitle.textContent = displayValue;
 
-    // Get filtered photos in a random order for each view
-    const photos = shufflePhotos(getFilteredPhotos(filterType, filterValue));
+    // Get filtered photos in their original order
+    const photos = getFilteredPhotos(filterType, filterValue);
 
     // Render gallery
     renderGallery(photos);
@@ -206,7 +208,7 @@
       if (photoData[filterValue]) {
         photoData[filterValue].forEach(photo => {
           photos.push({
-            src: `pics/${filterValue}/${photo.file}`,
+            src: `/photos/pics/${filterValue}/${photo.file}`,
             trip: filterValue,
             category: photo.category,
             file: photo.file
@@ -219,7 +221,7 @@
         tripPhotos.forEach(photo => {
           if (photo.category === filterValue) {
             photos.push({
-              src: `pics/${trip}/${photo.file}`,
+              src: `/photos/pics/${trip}/${photo.file}`,
               trip: trip,
               category: photo.category,
               file: photo.file
@@ -232,16 +234,26 @@
     return photos;
   }
 
-  // Shuffle photos to vary the gallery order on each open
-  function shufflePhotos(photos) {
-    const shuffled = photos.slice();
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const temp = shuffled[i];
-      shuffled[i] = shuffled[j];
-      shuffled[j] = temp;
+  // Smooth image loading helper
+  function hydrateImage(img, container) {
+    const target = container || img;
+    const markLoaded = () => target.classList.add('is-loaded');
+
+    img.decoding = 'async';
+
+    if (img.complete && img.naturalWidth > 0) {
+      markLoaded();
+      return;
     }
-    return shuffled;
+
+    img.addEventListener('load', markLoaded, { once: true });
+    img.addEventListener('error', markLoaded, { once: true });
+  }
+
+  function hydrateTripPreviews() {
+    document
+      .querySelectorAll('.photo-trip-preview img')
+      .forEach((img) => hydrateImage(img, img.parentElement));
   }
 
   // Render gallery in 2-column masonry layout
@@ -278,6 +290,7 @@
     img.alt = `${photo.category} photo from ${photo.trip}`;
     img.loading = 'lazy';
     item.appendChild(img);
+    hydrateImage(img, item);
     return item;
   }
 
