@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+  <head>
+    <script>
+      (() => {
+        const storageKey = "theme";
+        const getStoredTheme = () => {
+          try {
+            const value = localStorage.getItem(storageKey);
+            return value === "dark" || value === "light" ? value : "system";
+          } catch (error) {
+            return "system";
+          }
+        };
+        const mode = getStoredTheme();
+        const prefersDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const isDark = mode === "dark" || (mode === "system" && prefersDark);
+
+        document.documentElement.classList.toggle("dark", isDark);
+
+        const color = isDark ? "#0f0f0f" : "#faf9f9";
+        const setThemeColor = (allowCreate) => {
+          const metas = document.querySelectorAll('meta[name="theme-color"]');
+          if (!metas.length) {
+            if (!allowCreate) return;
+            const meta = document.createElement("meta");
+            meta.name = "theme-color";
+            meta.content = color;
+            document.head.appendChild(meta);
+            return;
+          }
+          metas.forEach((meta) => meta.setAttribute("content", color));
+        };
+        setThemeColor(false);
+        const raf =
+          window.requestAnimationFrame ||
+          ((callback) => setTimeout(callback, 0));
+        raf(() => setThemeColor(true));
+      })();
+    </script>
+    <script>
+      const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta name="google" content="notranslate" />
+    <title>Pierre-Louis &ndash; Web Dev</title>
+    <style>
+      [x-cloak] {
+        display: none;
+      }
+    </style>
+    <meta name="author" content="Pierre-Louis" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      name="description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      property="og:description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+    <meta property="og:url" content="https://pierrelouis.net" />
+    <meta property="og:image" content="assets/social-media-preview.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      name="twitter:description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+    <meta name="twitter:image" content="assets/social-media-preview.png" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-BkJ3dd7E.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32-BFRC2inS.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16-Dfjczovm.png" />
+    <link rel="manifest" href="/assets/site-C9eMkuJ2.webmanifest" />
+    <link rel="mask-icon" href="data:image/svg+xml,%3c?xml%20version='1.0'%20standalone='no'?%3e%3c!DOCTYPE%20svg%20PUBLIC%20'-//W3C//DTD%20SVG%2020010904//EN'%20'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'%3e%3csvg%20version='1.0'%20xmlns='http://www.w3.org/2000/svg'%20width='350.000000pt'%20height='350.000000pt'%20viewBox='0%200%20350.000000%20350.000000'%20preserveAspectRatio='xMidYMid%20meet'%3e%3cmetadata%3e%20Created%20by%20potrace%201.14,%20written%20by%20Peter%20Selinger%202001-2017%20%3c/metadata%3e%3cg%20transform='translate(0.000000,350.000000)%20scale(0.100000,-0.100000)'%20fill='%23000000'%20stroke='none'%3e%3cpath%20d='M2288%203445%20c-2%20-2%20-28%20-6%20-58%20-9%20-118%20-12%20-199%20-38%20-315%20-101%20-90%20-49%20-116%20-68%20-190%20-140%20-137%20-134%20-228%20-284%20-295%20-490%20-33%20-104%20-36%20-114%20-46%20-179%20-3%20-22%20-7%20-44%20-10%20-47%20-2%20-4%20-6%20-24%20-10%20-45%20-12%20-86%20-24%20-157%20-38%20-229%20-10%20-52%20-20%20-112%20-22%20-130%20-2%20-23%20-14%20-88%20-20%20-119%20-3%20-11%20-7%20-37%20-10%20-56%20-2%20-19%20-7%20-42%20-9%20-50%20-3%20-8%20-7%20-33%20-10%20-55%20-4%20-22%20-9%20-53%20-12%20-70%20-3%20-16%20-7%20-39%20-9%20-50%20-1%20-11%20-6%20-36%20-9%20-55%20-3%20-19%20-8%20-48%20-10%20-65%20-5%20-39%20-14%20-90%20-25%20-140%20-5%20-22%20-11%20-58%20-14%20-80%20-4%20-23%20-8%20-52%20-11%20-65%20-3%20-13%20-7%20-42%20-10%20-65%20-3%20-22%20-8%20-47%20-10%20-55%20-2%20-8%20-6%20-28%20-9%20-45%20-3%20-16%20-8%20-46%20-11%20-65%20-4%20-19%20-8%20-46%20-10%20-60%20-2%20-21%20-14%20-84%20-21%20-112%20-1%20-5%20-2%20-19%20-3%20-32%20-1%20-25%20-2%20-25%20-36%20-10%20-19%208%20-35%2012%20-35%209%200%20-3%20-12%201%20-27%208%20-35%2018%20-164%2041%20-208%2038%20-5%200%20-35%20-2%20-65%20-4%20-86%20-5%20-146%20-25%20-248%20-82%20-41%20-22%20-109%20-102%20-138%20-162%20-26%20-52%20-29%20-68%20-29%20-153%200%20-86%204%20-101%2032%20-160%2041%20-84%2092%20-135%20173%20-173%20138%20-66%20328%20-36%20487%2076%2086%2060%20223%20212%20223%20247%200%2017%2017%2010%20260%20-111%20122%20-61%20261%20-126%20307%20-145%20189%20-78%20372%20-125%20498%20-128%2070%20-2%20111%203%20221%2028%2037%208%20152%2064%20206%20100%20112%2074%20223%20204%20255%20299%208%2022%2012%2040%2011%2041%20-2%200%20-44%2022%20-94%2048%20l-92%2047%20-35%20-57%20c-61%20-100%20-131%20-161%20-243%20-216%20-118%20-57%20-238%20-64%20-389%20-21%20-49%2014%20-97%2027%20-105%2029%20-26%208%20-141%2056%20-218%2092%20-41%2019%20-76%2034%20-78%2034%20-2%200%20-66%2030%20-141%2066%20-76%2036%20-164%2077%20-196%2092%20-56%2026%20-57%2028%20-53%2062%203%2019%209%2053%2015%2075%2013%2053%2020%2090%2026%20145%203%2025%209%2054%2012%2065%203%2011%207%2034%209%2050%202%2017%205%2041%208%2055%203%2013%208%2042%2011%2065%203%2022%208%2047%2010%2055%202%208%206%2031%209%2050%203%2019%208%2046%2011%2060%203%2014%2012%2068%2020%20120%209%2052%2018%20106%2020%20120%203%2014%209%2052%2015%2085%205%2033%2012%2071%2015%2085%205%2026%208%2042%2025%20142%206%2032%2013%2070%2016%2085%205%2031%2012%2069%2018%20111%202%2015%207%2043%2011%2062%204%2019%208%2044%2010%2055%2012%2088%2062%20336%2080%20398%208%2026%2011%2047%208%2047%20-3%200%200%207%207%2015%207%208%2010%2015%207%2015%20-8%200%2057%20179%2087%20238%2028%2055%20132%20172%20153%20172%207%200%2013%204%2013%208%200%2012%20138%2080%20175%2086%2017%203%2044%2010%2060%2014%2045%2013%20193%207%20251%20-11%2099%20-29%20164%20-68%20232%20-136%2078%20-78%2079%20-79%20114%20-151%2081%20-168%2095%20-354%2043%20-590%20-2%20-8%20-4%20-15%20-5%20-15%20-1%200%20-4%20-11%20-6%20-25%20-3%20-14%20-25%20-67%20-50%20-118%20-116%20-240%20-361%20-360%20-588%20-287%20l-58%2018%207%2046%20c4%2025%208%2055%2010%2066%201%2011%2010%2063%2019%20115%209%2052%2018%20109%2021%20125%203%2017%208%2046%2011%2065%203%2019%208%2046%2010%2060%207%2047%2014%2085%2019%20110%207%2033%2023%20127%2029%20165%203%2017%2012%2073%2021%20125%209%2052%2019%20117%2022%20144%205%2045%204%2049%20-13%2041%20-18%20-7%20-128%20-48%20-221%20-81%20-26%20-10%20-43%20-22%20-44%20-32%20-1%20-18%20-2%20-24%20-17%20-99%20-5%20-26%20-10%20-55%20-10%20-63%200%20-8%20-3%20-28%20-7%20-45%20-11%20-59%20-26%20-141%20-41%20-230%20-17%20-102%20-22%20-129%20-29%20-165%20-3%20-14%20-8%20-41%20-11%20-60%20-5%20-35%20-7%20-46%20-18%20-110%20-4%20-19%20-8%20-48%20-11%20-65%20-2%20-16%20-6%20-39%20-8%20-50%20-3%20-11%20-8%20-40%20-12%20-65%20-4%20-25%20-9%20-54%20-11%20-65%20-3%20-11%20-7%20-36%20-10%20-55%20-4%20-31%20-27%20-159%20-38%20-215%20-2%20-11%20-7%20-40%20-11%20-65%20-10%20-68%20-14%20-93%20-20%20-120%20-5%20-24%20-10%20-51%20-20%20-115%20-3%20-16%20-9%20-55%20-15%20-85%20-5%20-30%20-12%20-71%20-15%20-90%20-3%20-19%20-8%20-42%20-10%20-50%20-2%20-8%20-6%20-31%20-9%20-50%20-15%20-99%20-17%20-116%20-21%20-130%20-2%20-8%20-7%20-31%20-10%20-50%20-3%20-19%20-8%20-46%20-10%20-60%20-5%20-21%200%20-27%2027%20-39%2018%20-8%2070%20-32%20115%20-53%2088%20-40%20109%20-45%20110%20-25%201%2015%2011%2074%2017%20103%202%2012%207%2039%2010%2060%2010%2063%2038%20228%2057%20334%206%2030%2012%2071%2014%2090%203%2019%209%2055%2014%2080%2010%2046%2020%20102%2027%20155%203%2017%209%2053%2015%2080%205%2028%2012%2070%2015%2095%2010%2084%2023%20122%2042%20115%20136%20-53%20271%20-66%20400%20-39%20137%2028%20300%20121%20381%20217%2014%2016%2030%2034%2036%2041%2056%2058%20152%20277%20170%20390%203%2017%207%2042%2010%2056%2022%20117%2020%20299%20-6%20417%20-13%2059%20-83%20242%20-96%20252%20-5%203%20-23%2029%20-42%2056%20-108%20159%20-321%20286%20-521%20310%20-71%209%20-148%2014%20-152%2010z%20m-1440%20-2821%20c20%20-4%2039%20-8%2042%20-8%2032%20-7%20101%20-30%20105%20-36%202%20-4%20-8%20-24%20-22%20-46%20-96%20-141%20-277%20-229%20-372%20-180%20-43%2023%20-71%2071%20-71%20123%200%20122%20136%20185%20318%20147z'/%3e%3c/g%3e%3c/svg%3e" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#faf9f9" />
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      />
+    </noscript>
+
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="51538055-0cc5-4a88-8f4f-8d3b77f708b4"
+    ></script>
+    <link rel="stylesheet" crossorigin href="/assets/styles-B8oWCZv0.css">
+  </head>
+
+  <body>
+    <nav class="site-navigation">
+      <div class="navigation-container">
+        <div class="navigation-left">
+          <a class="navigation-brand" href="/"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-circle-arrow-left back"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M16 12H8" />
+              <path d="m12 8-4 4 4 4" />
+            </svg>
+            Back Home</a
+          >
+          <div class="navigation-links"></div>
+        </div>
+        <div class="navigation-right">
+          <div
+            x-data="{ 
+      commandOpen: false,
+      isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+      isMac: /(Mac|iPhone|iPad|iPod)/i.test(navigator.platform) || (navigator.maxTouchPoints > 1 && /Mac/i.test(navigator.platform))
+    }"
+            x-init="
+      $watch('commandOpen', function(value){
+        if(value === true && !isTouchDevice){
+          if (window.innerWidth >= 768 && window.umami && typeof window.umami.track === 'function') {
+            window.umami.track('Command palette open', { surface: 'palette' });
+          }
+          $nextTick(() => { window.dispatchEvent(new CustomEvent('command-input-focus')); });
+        }
+      })
+    "
+            @keydown.escape.window="commandOpen = false"
+            @open-command-palette.window="commandOpen = true"
+            @keydown.window="
+      if (($event.ctrlKey || $event.metaKey) && !$event.shiftKey && $event.key.toLowerCase() === 'k') {
+        $event.preventDefault();
+        commandOpen = true;
+      }
+    "
+            class="relative z-50 w-auto h-auto"
+          >
+            <button
+              aria-label="Open command palette"
+              @click="commandOpen = true"
+              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium rounded-xl hover:bg-[var(--bg-hover)] disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <svg
+                class="w-4 h-4 mr-0 sm:mr-2 text-[var(--text-body)] shrink-0"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <span
+                class="flex-1 mr-5 text-left text-[var(--text-body)] hidden sm:inline"
+                >Search...</span
+              >
+              <span
+                class="ml-auto text-xs text-[var(--text-subtle)] border border-dashed border-[var(--border-light)] rounded-md px-1 hidden sm:inline"
+              >
+                <span x-text="isMac ? '⌘' : 'Ctrl'"></span>
+                &nbsp;+&nbsp;K
+              </span>
+            </button>
+
+            <!-- Desktop Command Palette (Alpine.js) -->
+            <template x-teleport="body">
+              <div
+                x-data="{}"
+                x-init="$watch('commandOpen', value => {
+        const touch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+        if (!touch) {
+          document.body.classList.toggle('overflow-hidden', value);
+        }
+      })"
+                x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
+                class="fixed inset-0 z-[99] flex items-start justify-center pt-[15vh] w-screen h-screen pointer-events-auto"
+                @click="commandOpen = false"
+                x-cloak
+              >
+                <div
+                  x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
+                  x-transition:enter="ease-out duration-150"
+                  x-transition:enter-start="opacity-0"
+                  x-transition:enter-end="opacity-100"
+                  x-transition:leave="ease-in duration-100"
+                  x-transition:leave-start="opacity-100"
+                  x-transition:leave-end="opacity-0"
+                  class="absolute inset-0 w-full h-full bg-[rgba(0,0,0,0.4)] backdrop-blur-sm will-change-opacity"
+                ></div>
+
+                <div
+                  x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
+                  x-transition:enter="ease-out duration-150 transform"
+                  x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                  x-transition:leave="ease-in duration-100 transform"
+                  x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                  x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  x-data="{
+        commandItemsData: window.COMMAND_ITEMS_DATA,
+        commandItems: [],
+        commandItemsFiltered: [],
+        commandItemActive: null,
+        commandItemSelected: null,
+        commandId: $id('command'),
+        commandSearch: '',
+        isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+        itemsCache: {},
+
+        commandSearchIsEmpty() {
+          return !this.commandSearch || this.commandSearch.length === 0;
+        },
+
+        commandItemIsActive(item) {
+          return this.commandItemActive && this.commandItemActive.value === item.value;
+        },
+
+        commandItemActiveNext() {
+          if (this._navigating) return;
+          this._navigating = true;
+
+          const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
+          if (index < this.commandItemsFiltered.length - 1) {
+            this.commandItemActive = this.commandItemsFiltered[index + 1];
+            this.$nextTick(() => {
+              this.commandScrollToActiveItem();
+              setTimeout(() => { this._navigating = false; }, 50);
+            });
+          } else {
+            this._navigating = false;
+          }
+        },
+
+        commandItemActivePrevious() {
+          if (this._navigating) return;
+          this._navigating = true;
+
+          const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
+          if (index > 0) {
+            this.commandItemActive = this.commandItemsFiltered[index - 1];
+            this.$nextTick(() => {
+              this.commandScrollToActiveItem();
+              setTimeout(() => { this._navigating = false; }, 50);
+            });
+          } else {
+            this._navigating = false;
+          }
+        },
+
+        commandScrollToActiveItem() {
+          if (!this.commandItemActive || !this.$refs.commandItemsList) return;
+
+          const activeElement = document.getElementById(this.commandItemActive.value + '-' + this.commandId);
+          if (!activeElement) return;
+
+          const container = this.$refs.commandItemsList;
+          const containerRect = container.getBoundingClientRect();
+          const elementRect = activeElement.getBoundingClientRect();
+
+          if (elementRect.bottom > containerRect.bottom) {
+            container.scrollTop += (elementRect.bottom - containerRect.bottom);
+          } else if (elementRect.top < containerRect.top) {
+            container.scrollTop -= (containerRect.top - elementRect.top);
+          }
+        },
+
+        _searchTimeoutId: null,
+        commandSearchItems() {
+          if (this._searchTimeoutId) {
+            clearTimeout(this._searchTimeoutId);
+          }
+
+          this._searchTimeoutId = setTimeout(() => {
+            const cacheKey = (this.commandSearch || '').toLowerCase();
+
+            if (this.itemsCache[cacheKey]) {
+              this.commandItemsFiltered = this.itemsCache[cacheKey];
+            } else {
+              if (!this.commandSearchIsEmpty()) {
+                const searchTerm = cacheKey.replace(/\*/g, '');
+                this.commandItemsFiltered = this.commandItems.filter(item =>
+                  item.title.toLowerCase().includes(searchTerm));
+              } else {
+                this.commandItemsFiltered = this.commandItems.filter(item => item.default);
+              }
+
+              this.itemsCache[cacheKey] = this.commandItemsFiltered;
+            }
+
+            this.commandItemActive = this.commandItemsFiltered[0] || null;
+          }, 100);
+        },
+
+        commandShowCategory(item, index) {
+          if (index === 0) return true;
+          if (!this.commandItemsFiltered[index - 1]) return false;
+          return item.category !== this.commandItemsFiltered[index - 1].category;
+        },
+
+        commandCategoryCapitalize(string) {
+          return string.charAt(0).toUpperCase() + string.slice(1);
+        },
+
+        commandItemsReorganize() {
+          const totalItems = Object.keys(this.commandItemsData).reduce(
+            (acc, category) => {
+              const items = this.commandItemsData[category];
+              return acc + (Array.isArray(items) ? items.length : 0);
+            },
+            0
+          );
+          this.commandItems = new Array(totalItems);
+
+          let index = 0;
+          for (const category in this.commandItemsData) {
+            const categoryItems = this.commandItemsData[category];
+            if (!Array.isArray(categoryItems)) continue;
+            for (const item of categoryItems) {
+              item.category = category;
+              this.commandItems[index++] = item;
+            }
+          }
+
+          if (index < this.commandItems.length) {
+            this.commandItems.length = index;
+          }
+
+          this.itemsCache = {};
+          this.itemsCache[''] = this.commandItems.filter(item => item.default);
+        },
+
+        handleSelectedItem(item) {
+          if (!item) return;
+
+          if (item.value === 'theme') {
+            $store.theme.toggle();
+            this.commandItemSelected = null;
+          } else {
+            const targetUrl = this.actionMap[item.value];
+            if (targetUrl) {
+              window.location.href = targetUrl;
+            }
+            commandOpen = false;
+          }
+        },
+        actionMap: window.COMMAND_ACTION_MAP
+      }"
+                  x-init="
+        const dataUpdateHandler = () => {
+          commandItemsReorganize();
+          commandSearchItems();
+        };
+        window.addEventListener('command-palette-data-updated', dataUpdateHandler);
+        commandItemsReorganize();
+        commandSearchItems();
+        $watch('commandSearch', () => commandSearchItems());
+        $watch('commandItemSelected', item => handleSelectedItem(item));
+        window.loadCommandPalettePosts && window.loadCommandPalettePosts().catch(() => {});
+      "
+                  @keydown.down.prevent="commandItemActiveNext()"
+                  @keydown.up.prevent="commandItemActivePrevious()"
+                  @keydown.enter="commandItemSelected = commandItemActive; commandItemActive = null;"
+                  @command-input-focus.window="$refs.commandInput.focus()"
+                  class="relative z-10 w-full max-w-[95%] sm:max-w-xl px-0"
+                  x-cloak
+                  @click.stop
+                >
+                  <div
+                    class="box-border border-2 border-[var(--border-secondary)] flex flex-col min-h-0 max-h-[80vh] w-full p-2 bg-[var(--bg-primary)] rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm pointer-events-auto relative"
+                  >
+                    <div
+                      class="absolute top-[-15px] left-5 px-4 py-1 border-2 rounded-full border-[var(--border-light)] bg-[var(--bg-primary)] hidden sm:block"
+                    >
+                      <p class="m-0 text-sm p-0">Command</p>
+                    </div>
+
+                    <div
+                      class="flex items-center px-3 border-dotted border-b border-[var(--bg-hover)]"
+                    >
+                      <svg
+                        class="w-4 h-4 mr-0 text-[var(--border-secondary)] shrink-0"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+                      </svg>
+                      <input
+                        type="text"
+                        x-ref="commandInput"
+                        x-model="commandSearch"
+                        class="flex w-full px-2 py-3 text-sm bg-transparent border-0 rounded-md outline-none focus:outline-none focus:ring-0 focus:border-0 placeholder:text-[var(--border-secondary)] h-11 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="Type a command or search..."
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                      />
+                    </div>
+
+                    <div
+                      x-ref="commandItemsList"
+                      class="grow min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain"
+                      data-command-list
+                    >
+                      <template
+                        x-for="(item, index) in commandItemsFiltered"
+                        :key="item.value"
+                      >
+                        <div class="pb-1 space-y-1">
+                          <template x-if="commandShowCategory(item, index)">
+                            <div class="px-1 overflow-hidden">
+                              <div
+                                class="px-2 py-1 my-1 text-xs font-medium text-[var(--text-primary)]"
+                                x-text="commandCategoryCapitalize(item.category)"
+                              ></div>
+                            </div>
+                          </template>
+                          <template
+                            x-if="(item.default && commandSearchIsEmpty()) || !commandSearchIsEmpty()"
+                          >
+                            <div class="px-1">
+                              <div
+                                :id="item.value + '-' + commandId"
+                                @click="commandItemSelected=item"
+                                @mouseenter="commandItemActive=item"
+                                x-bind:class="commandItemIsActive(item) ? 'bg-[var(--bg-hover)] text-[var(--text-body)]' : 'text-[var(--text-muted)]'"
+                                class="relative flex cursor-pointer select-none items-center rounded-[10px] px-2 py-1 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                              >
+                                <span x-html="item.icon"></span>
+                                <span
+                                  x-text="item.value === 'theme' ? ('Toggle Theme (current: ' + $store.theme.mode + ')') : item.title"
+                                ></span>
+                                <template x-if="item.right && !isTouchDevice">
+                                  <span
+                                    class="ml-auto text-xs px-1 py-1 tracking-widest text-[var(--text-body)] border border-[var(--bg-hover)] rounded-md"
+                                    x-text="item.right"
+                                  ></span>
+                                </template>
+                              </div>
+                            </div>
+                          </template>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!-- Mobile Bottom Drawer (Alpine.js) - Enhanced version -->
+            <template x-teleport="body">
+              <div
+                x-data="{
+      drawerOpen: false,
+      isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+      dragStartY: 0,
+      currentY: 0,
+      translateY: 100,
+      isDragging: false,
+      velocity: 0,
+      lastY: 0,
+      lastTime: 0,
+      snapThreshold: 20,
+      searchQuery: '',
+      isAnimating: false,
+      openDuration: 420,
+      closeDuration: 260,
+      animationCurve: 'cubic-bezier(0.16, 1, 0.3, 1)',
+      drawerHeight: null,
+      openFrame: null,
+      settleTimer: null,
+      themeTimer: null,
+      dataRevision: 0,
+
+      get allItems() {
+        void this.dataRevision;
+        const items = [];
+        const categories = Object.keys(window.COMMAND_ITEMS_DATA || {});
+
+        for (const category of categories) {
+          const bucket = window.COMMAND_ITEMS_DATA && window.COMMAND_ITEMS_DATA[category];
+          const categoryItems = Array.isArray(bucket) ? bucket : [];
+          const filtered = !this.searchQuery
+            ? categoryItems.filter(item => item.default)
+            : categoryItems.filter(item =>
+                item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+              );
+
+          if (filtered.length > 0) {
+            items.push({ type: 'header', category });
+            items.push(...filtered.map(item => ({ ...item, type: 'item' })));
+          }
+        }
+
+        return items;
+      },
+
+      openDrawer() {
+        const self = this;
+
+        if (self.settleTimer) {
+          clearTimeout(self.settleTimer);
+          self.settleTimer = null;
+        }
+        if (self.openFrame) {
+          cancelAnimationFrame(self.openFrame);
+          self.openFrame = null;
+        }
+        if (self.themeTimer) {
+          clearTimeout(self.themeTimer);
+          self.themeTimer = null;
+        }
+
+        self.drawerHeight = null;
+        self.drawerOpen = true;
+        if (window.umami && typeof window.umami.track === 'function') {
+          window.umami.track('Command palette open', { surface: 'drawer' });
+        }
+        self.isAnimating = true;
+        self.translateY = 100;
+        self.velocity = 0;
+        self.isDragging = false;
+
+        const overlayController = window.__overlayChromeController;
+        const canUseController =
+          overlayController && typeof overlayController.open === 'function';
+
+        if (canUseController) {
+          overlayController.open('drawer');
+        } else {
+          document.body.style.overflow = 'hidden';
+          document.body.style.position = 'fixed';
+          document.body.style.width = '100%';
+        }
+
+        requestAnimationFrame(() => {
+          self.openFrame = requestAnimationFrame(() => {
+            self.translateY = 0;
+            self.openFrame = null;
+            self.settleTimer = setTimeout(() => {
+              self.isAnimating = false;
+              self.settleTimer = null;
+            }, self.openDuration);
+            self.$nextTick(() => {
+              if (self.drawerHeight === null) {
+                const drawer = self.$refs.drawerContainer;
+                if (drawer) {
+                  self.drawerHeight = drawer.getBoundingClientRect().height;
+                }
+              }
+            });
+          });
+        });
+
+        // Update meta theme-color for Safari bottom bar
+        self.updateThemeColor();
+      },
+
+      closeDrawer() {
+        const self = this;
+
+        if (self.openFrame) {
+          cancelAnimationFrame(self.openFrame);
+          self.openFrame = null;
+        }
+        if (self.settleTimer) {
+          clearTimeout(self.settleTimer);
+          self.settleTimer = null;
+        }
+        if (self.themeTimer) {
+          clearTimeout(self.themeTimer);
+          self.themeTimer = null;
+        }
+
+        self.isAnimating = true;
+        self.isDragging = false;
+        self.translateY = 100;
+
+        // IMPORTANT: Reset commandOpen to fix Android button state
+        commandOpen = false;
+
+        const overlayController = window.__overlayChromeController;
+        const canUseController =
+          overlayController &&
+          typeof overlayController.close === 'function' &&
+          overlayController.hasActiveOverlays &&
+          overlayController.hasActiveOverlays();
+
+        if (canUseController) {
+          overlayController.close('drawer');
+        } else {
+          // Reset theme color slightly before drawer fully closes
+          self.themeTimer = setTimeout(() => {
+            self.resetThemeColor();
+            self.themeTimer = null;
+          }, Math.min(200, self.closeDuration));
+        }
+
+        self.settleTimer = setTimeout(() => {
+          self.drawerOpen = false;
+          self.isAnimating = false;
+          if (!canUseController) {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+          }
+          self.searchQuery = '';
+          self.drawerHeight = null;
+          self.settleTimer = null;
+        }, self.closeDuration);
+      },
+
+      updateThemeColor() {
+        const overlayController = window.__overlayChromeController;
+        if (overlayController) {
+          overlayController.updateThemeColor();
+          return;
+        }
+
+        let metaTheme = document.querySelector('meta[name=\'theme-color\']');
+        if (!metaTheme) {
+          metaTheme = document.createElement('meta');
+          metaTheme.name = 'theme-color';
+          document.head.appendChild(metaTheme);
+        }
+
+        const isDark = document.documentElement.classList.contains('dark');
+        metaTheme.content = isDark ? '#0f0f0f' : '#faf9f9';
+      },
+
+      resetThemeColor() {
+        const overlayController = window.__overlayChromeController;
+        if (overlayController) {
+          overlayController.resetThemeColor();
+          return;
+        }
+
+        const metaTheme = document.querySelector('meta[name=\'theme-color\']');
+        if (metaTheme) {
+          metaTheme.content = document.documentElement.classList.contains('dark') ? '#0f0f0f' : '#faf9f9';
+        }
+      },
+
+      startDrag(e) {
+        if (e.target.closest('[data-no-drag]')) return;
+        if (this.isAnimating) return;
+
+        this.isDragging = true;
+        this.dragStartY = e.touches ? e.touches[0].clientY : e.clientY;
+        this.lastY = this.dragStartY;
+        this.lastTime = Date.now();
+        this.velocity = 0;
+      },
+
+      onDrag(e) {
+        if (!this.isDragging || this.isAnimating) return;
+
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const deltaY = clientY - this.dragStartY;
+
+        // Calculate velocity
+        const now = Date.now();
+        const deltaTime = now - this.lastTime;
+        if (deltaTime > 0) {
+          this.velocity = (clientY - this.lastY) / deltaTime;
+        }
+        this.lastY = clientY;
+        this.lastTime = now;
+
+        // Apply resistance when dragging up
+        if (deltaY < 0) {
+          this.translateY = deltaY * 0.15;
+        } else {
+          this.translateY = Math.min(100, (deltaY / window.innerHeight) * 100);
+        }
+      },
+
+      endDrag() {
+        if (!this.isDragging) return;
+        this.isDragging = false;
+
+        const shouldClose = this.translateY > this.snapThreshold || this.velocity > 0.3;
+
+        if (shouldClose) {
+          this.closeDrawer();
+        } else {
+          this.translateY = 0;
+        }
+      },
+
+      handleItemClick(item) {
+        if (item.value === 'theme') {
+          $store.theme.toggle();
+          this.updateThemeColor();
+        } else if (item.value === 'email') {
+          window.location.href = window.COMMAND_ACTION_MAP[item.value];
+          this.closeDrawer();
+        } else {
+          const targetUrl = window.COMMAND_ACTION_MAP[item.value];
+          if (targetUrl) {
+            window.location.href = targetUrl;
+          }
+          this.closeDrawer();
+        }
+      },
+
+      formatCategoryName(category) {
+        return category.charAt(0).toUpperCase() + category.slice(1);
+      },
+
+      transitionStyle() {
+        if (this.isDragging) {
+          return 'none';
+        }
+
+        const duration = this.isAnimating ? this.openDuration : this.closeDuration;
+        return `transform ${duration}ms ${this.animationCurve}`;
+      },
+
+      drawerStyles() {
+        const styles = {
+          transform: `translate3d(-50%, ${Math.max(0, this.translateY)}%, 0)`,
+          transition: this.transitionStyle(),
+          left: '50%',
+          maxWidth: '640px',
+          width: '100%',
+        };
+
+        if (this.drawerHeight !== null) {
+          styles.height = `${this.drawerHeight}px`;
+        }
+
+        return styles;
+      }
+    }"
+                x-init="
+      const dataUpdateHandlerMobile = () => { dataRevision += 1; };
+      window.addEventListener('command-palette-data-updated', dataUpdateHandlerMobile);
+      window.loadCommandPalettePosts && window.loadCommandPalettePosts().catch(() => {});
+
+      $watch('commandOpen', value => {
+        if (value && (window.innerWidth < 768 || isTouchDevice)) {
+          commandOpen = false;
+          openDrawer();
+        }
+      });
+
+      // Watch for theme changes to update Safari chrome
+      $watch('$store.theme.mode', () => {
+        if (drawerOpen) {
+          updateThemeColor();
+        }
+      });
+    "
+                x-show="drawerOpen"
+                @click="closeDrawer()"
+                class="fixed inset-0 z-[100] touch-none"
+                x-cloak
+              >
+                <!-- Backdrop with better dark mode contrast -->
+                <div
+                  x-show="drawerOpen"
+                  x-transition:enter="ease-out duration-400"
+                  x-transition:enter-start="opacity-0"
+                  x-transition:enter-end="opacity-100"
+                  x-transition:leave="ease-in duration-200"
+                  x-transition:leave-start="opacity-100"
+                  x-transition:leave-end="opacity-0"
+                  :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'bg-black/60' : 'bg-black/30'"
+                  class="absolute inset-0 backdrop-blur-sm transition-colors duration-300"
+                  :style="`opacity: ${drawerOpen ? Math.max(0, 1 - (translateY / 100)) : 0}`"
+                ></div>
+
+                <!-- Bottom Sheet with smooth entrance animation -->
+                <div
+                  x-show="drawerOpen"
+                  @click.stop
+                  @touchstart="startDrag"
+                  @touchmove="onDrag"
+                  @touchend="endDrag"
+                  @mousedown="startDrag"
+                  @mousemove="onDrag"
+                  @mouseup="endDrag"
+                  @mouseleave="endDrag"
+                  :style="drawerStyles()"
+                  :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'ring-1 ring-white/10' : ''"
+                  class="absolute bottom-0 w-full bg-[var(--bg-primary)] border-t border-[var(--border-secondary)] rounded-t-[28px] shadow-2xl max-h-[75vh] flex flex-col"
+                  x-ref="drawerContainer"
+                  style="
+                    will-change: transform;
+                    padding-bottom: env(safe-area-inset-bottom);
+                  "
+                >
+                  <!-- Larger Invisible Drag Handle Area -->
+                  <div
+                    class="relative pt-3 pb-6 -mb-3 cursor-grab active:cursor-grabbing"
+                  >
+                    <!-- Visual Handle with better visibility in dark mode -->
+                    <div
+                      :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'opacity-40' : 'opacity-30'"
+                      class="mx-auto w-11 h-1 bg-[var(--border-secondary)] rounded-full transition-opacity duration-300"
+                    ></div>
+                  </div>
+
+                  <!-- Search Bar -->
+                  <div class="px-4 pb-3" data-no-drag>
+                    <div
+                      class="flex items-center border border-[var(--border-light)] rounded-xl px-3.5 py-2.5"
+                    >
+                      <svg
+                        class="w-4 h-4 text-[var(--text-subtle)] mr-2.5 opacity-60"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                      </svg>
+                      <input
+                        type="search"
+                        x-model="searchQuery"
+                        placeholder="Type a command or search..."
+                        class="flex-1 bg-transparent outline-none text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] text-base"
+                        style="font-size: 16px"
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                        data-no-drag
+                      />
+                      <button
+                        x-show="searchQuery"
+                        @click="searchQuery = ''"
+                        class="ml-2 p-1 -mr-1"
+                        data-no-drag
+                      >
+                        <svg
+                          class="w-4 h-4 text-[var(--text-subtle)]"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M18 6 6 18"></path>
+                          <path d="m6 6 12 12"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Scrollable Content with stagger animation -->
+                  <div
+                    class="flex-1 overflow-y-auto overscroll-contain px-2 pb-4"
+                    data-no-drag
+                  >
+                    <template x-for="(item, index) in allItems" :key="index">
+                      <div>
+                        <!-- Section Header -->
+                        <template x-if="item.type === 'header'">
+                          <div class="px-3 pt-3 pb-1.5">
+                            <div
+                              class="text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider opacity-60"
+                              x-text="formatCategoryName(item.category)"
+                            ></div>
+                          </div>
+                        </template>
+
+                        <!-- Item -->
+                        <template x-if="item.type === 'item'">
+                          <button
+                            @click="handleItemClick(item)"
+                            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-transform duration-150 active:scale-[0.98]"
+                            data-no-drag
+                          >
+                            <!-- Icon -->
+                            <span
+                              x-html="item.icon"
+                              class="[&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-[var(--text-subtle)]"
+                            ></span>
+
+                            <!-- Text -->
+                            <span
+                              class="flex-1 text-left text-[var(--text-body)] text-[15px]"
+                              x-text="item.value === 'theme' ? ('Toggle Theme (' + $store.theme.mode + ')') : item.title"
+                            ></span>
+
+                            <!-- Chevron -->
+                            <template x-if="item.value !== 'theme'">
+                              <svg
+                                class="w-4 h-4 text-[var(--border-secondary)] opacity-60"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path d="m9 18 6-6-6-6"></path>
+                              </svg>
+                            </template>
+                          </button>
+                        </template>
+                      </div>
+                    </template>
+
+                    <!-- Empty State -->
+                    <div
+                      x-show="allItems.length === 0"
+                      class="text-center pt-6 pb-12"
+                    >
+                      <p class="text-[var(--text-subtle)] text-sm">
+                        No results found
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <h2 class="section-heading">Bookmarks</h2>
+      <p class="page-subtitle text-italic">
+        This is where I share interesting things.
+      </p>
+      <hr class="divider-standard" />
+      <p>
+        An irregularly updated personal list of hand-picked sites, tools,
+        resources, posts, videos, and other share-worthy links from across the
+        web.
+      </p>
+
+      <div class="timeline-page">
+        <!-- Category filters -->
+        <div class="timeline-filters">
+          <a class="timeline-filter" data-tag="Reading">Reading</a>
+          <a class="timeline-filter" data-tag="Videos">Videos</a>
+          <a class="timeline-filter" data-tag="Inspiration">Inspiration</a>
+          <a class="timeline-filter" data-tag="Tools/Ressources"
+            >Tools/Ressources</a
+          >
+          <a class="timeline-filter" data-tag="People">People</a>
+          <a class="timeline-filter" id="clear-filter" style="display: none"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" /></svg
+            >Clear</a
+          >
+        </div>
+
+        <div class="content-timeline" id="posts-timeline">
+          <!-- AUTO-GEN:BOOKMARKS START -->
+
+        <div class="content-timeline-header">
+          <div class="content-timeline-year"><h2>2026</h2></div>
+          <div class="content-timeline-content">
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
+                <h3>Feb<span class="full-year"> 2026</span></h3>
+              </div>
+              <div class="content-timeline-month-items">
+                
+    <div class="timeline-item animate-on-scroll" data-tag="Videos">
+      <a href="https://x.com/DirtyTesLa/status/1975644389406855212" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Tesla full self-driving (FSD) is magic</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
+         <span>@DirtyTesLa on X</span>
+       </div>
+        <div class="timeline-item-description">In the clip shared in this X post, FSD uses a drivethru and understands the complex scenario and socia interactions perfectly. It knows when to stop, when to go. This is truly impressive. Tesla achieved this with camera vision only and a well trained neural network. No lidar required.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Reading">
+      <a href="https://www.tesla.com/fsd/safety" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">AI's impact on vehicle safety</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/tesla.com.ico" width="16" height="16" alt="">
+         <span>from Tesla</span>
+       </div>
+        <div class="timeline-item-description">AI's impact can be huge is some domains, very specifically in vehicle safety. Tesla's data shows that vehicles with FSD engaged are involved in significantly fewer accidents than those without (7 times less!). The more we wait before adopting that tech, the more lives we put at risk.</div>
+        <div class="timeline-item-preview">
+         <figure>
+           <img src="/assets/tesla_collision-CfeQVj29.webp" loading="lazy" alt="AI's impact on vehicle safety preview">
+         </figure>
+       </div>
+      </a>
+    </div>
+              </div>
+            </div>
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
+                <h3>Jan<span class="full-year"> 2026</span></h3>
+              </div>
+              <div class="content-timeline-month-items">
+                
+    <div class="timeline-item animate-on-scroll" data-tag="Reading">
+      <a href="https://arxiv.org/pdf/2507.07935" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">AI in the job industry</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/microsoft.com.ico" width="16" height="16" alt="">
+         <span>by Microsoft Research</span>
+       </div>
+        <div class="timeline-item-description">This paper shows that AI has high applicability across a wide range of jobs. Each career field is given a score from 0 to 1, 1 being the most easily automatable with current AI systems.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Videos">
+      <a href="https://www.youtube.com/watch?v=N10uWV3aMWA" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">This is more than an Ad</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/polestar.com.ico" width="16" height="16" alt="">
+         <span>by Polestar</span>
+       </div>
+        <div class="timeline-item-description">This is truely one of the best car ad I've ever seen. The motion graphic work is incredible, sound design is on point. Watch it, you'll be surprised.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Videos">
+      <a href="https://www.youtube.com/watch?v=kr3iXUcNt2g" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Hearing our universe</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
+         <span>by Cleo Abram</span>
+       </div>
+        <div class="timeline-item-description">Fascinating.</div>
+        
+      </a>
+    </div>
+              </div>
+            </div></div>
+        </div>
+        <div class="content-timeline-header">
+          <div class="content-timeline-year"><h2>2025</h2></div>
+          <div class="content-timeline-content">
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
+                <h3>Dec<span class="full-year"> 2025</span></h3>
+              </div>
+              <div class="content-timeline-month-items">
+                
+    <div class="timeline-item animate-on-scroll" data-tag="Reading">
+      <a href="https://www.anthropic.com/research/project-vend-2" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Anthropic's Project Vend</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/anthropic.com.ico" width="16" height="16" alt="">
+         <span>by Anthropic</span>
+       </div>
+        <div class="timeline-item-description">Project Vend consisted in letting Claude Sonnet run a small shop by itself. The goal was to better understand how AI agents can interact with the real world and what were the biggest limitations.</div>
+        <div class="timeline-item-preview">
+         <figure>
+           <img src="https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2Ffc74d2b498b54dba86feaaca166f7a64c221ae60-3840x2160.png&w=3840&q=75" loading="lazy" alt="Anthropic's Project Vend preview">
+         </figure>
+       </div>
+      </a>
+    </div>
+              </div>
+            </div>
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
+                <h3>Nov<span class="full-year"> 2025</span></h3>
+              </div>
+              <div class="content-timeline-month-items">
+                
+    <div class="timeline-item animate-on-scroll" data-tag="Videos">
+      <a href="https://www.youtube.com/watch?v=Mo1A45ShcMo" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">You're More Stressed Than Ever - Let's Change That</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
+         <span>by Kurzgesagt</span>
+       </div>
+        <div class="timeline-item-description">What exactly is stress, how did it evolve, and is it even possible to use it in a healthy way? This is a great video to learn more about stress, I highly recommend it.</div>
+        
+      </a>
+    </div>
+              </div>
+            </div>
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
+                <h3>Sep<span class="full-year"> 2025</span></h3>
+              </div>
+              <div class="content-timeline-month-items">
+                
+    <div class="timeline-item animate-on-scroll" data-tag="Reading">
+      <a href="https://x.com/kimmonismus/status/1966627812858855624" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">One of the biggest breakthroughs in AI</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
+         <span>by @kimmonismus on X</span>
+       </div>
+        <div class="timeline-item-description">OpenAI's o1 model was a huge deal: it introduced the notion of "reasoning", which is a fundamental step towards general intelligence. The model was the first to be able to solve bigger problems, step by step. This was truely a game changer.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="People">
+      <a href="https://x.com/kimmonismus" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Kim "Chubby" Isenberg</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="data:image/png;base64,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" width="16" height="16" alt="">
+         <span>@kimmonismus on X</span>
+       </div>
+        <div class="timeline-item-description">One of the most insightful thinkers about AI and the future on X. His posts are always worth reading. His newsletter is also very good.</div>
+        
+      </a>
+    </div>
+              </div>
+            </div>
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
+                <h3>Aug<span class="full-year"> 2025</span></h3>
+              </div>
+              <div class="content-timeline-month-items">
+                
+    <div class="timeline-item animate-on-scroll" data-tag="Videos">
+      <a href="https://www.youtube.com/watch?v=fHRS_NOs24w" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Ramanujan the Math Genius</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
+         <span>by Fern</span>
+       </div>
+        <div class="timeline-item-description">An overview of Ramanujan's life and contributions to mathematics. He truly was a genius with incredible talent and intuition.</div>
+        
+      </a>
+    </div>
+              </div>
+            </div>
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
+                <h3>Jul<span class="full-year"> 2025</span></h3>
+              </div>
+              <div class="content-timeline-month-items">
+                
+    <div class="timeline-item animate-on-scroll" data-tag="Videos">
+      <a href="https://www.youtube.com/watch?v=m_4zaXSLW5U" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">The incredible design of the ISS</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
+         <span>by Fern</span>
+       </div>
+        <div class="timeline-item-description">A super interesting video about the ISS by Fern.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Videos">
+      <a href="https://www.youtube.com/watch?v=v5YlreKsUGY" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">What is the future of art?</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
+         <span>by Answer in Progress</span>
+       </div>
+        <div class="timeline-item-description">A look at different opinions about AI art and the broader definition of art.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Reading">
+      <a href="https://x.com/joshm/status/1945860833306673409" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">The “Mac vs PC” era of AI</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/thebrowser.company.ico" width="16" height="16" alt="">
+         <span>by Josh Miller</span>
+       </div>
+        <div class="timeline-item-description">An interesting take on the two paths of AI development: the agents and the personal apps.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
+      <a href="https://x.com/lostdoesart/status/1917334803176907086" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Folders 📁</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
+         <span>Made by @lostdoesart on X</span>
+       </div>
+        
+        <div class="timeline-item-preview">
+         <figure>
+           <img src="https://pbs.twimg.com/media/Gpu9zrxWIAAoifH?format=jpg&name=small" loading="lazy" alt="Folders 📁 preview">
+         </figure>
+       </div>
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
+      <a href="https://x.com/yashwanth941v/status/1917929934737281108" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Notification</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
+         <span>by @yashwanth941v on X</span>
+       </div>
+        
+        <div class="timeline-item-preview">
+         <figure>
+           <img src="https://pbs.twimg.com/media/Gp3bGyoawAA5vPO?format=jpg&name=large" loading="lazy" alt="Notification preview">
+         </figure>
+       </div>
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
+      <a href="https://x.com/yashwanth941v/status/1916811810746851376" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Minimal Folder Design</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
+         <span>by @yashwanth941v on X</span>
+       </div>
+        
+        <div class="timeline-item-preview">
+         <figure>
+           <img src="https://pbs.twimg.com/media/GpniKi5asAAQ_No?format=jpg&name=small" loading="lazy" alt="Minimal Folder Design preview">
+         </figure>
+       </div>
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Tools/Ressources">
+      <a href="https://fmhy.xyz/" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">freemediaheckyeah</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/fmhy.xyz.ico" width="16" height="16" alt="">
+         <span>fmhy.xyz</span>
+       </div>
+        <div class="timeline-item-description">The largest collection of free stuff on the internet!</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Tools/Ressources">
+      <a href="https://www.realtimecolors.com/" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Color and font visualizer</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/realtimecolors.com.ico" width="16" height="16" alt="">
+         <span>realtimecolors.com</span>
+       </div>
+        <div class="timeline-item-description">Realtime Colors is a tool that lets you visualize the colors and fonts used on a dummy website in real-time. It is very useful for designers wanting to know if colors work and check for accessibility. It allows you to setup a light and dark mode, and then export the css.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Videos">
+      <a href="https://www.youtube.com/watch?v=2b1a3c4d8e0" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">When Your Body Attacks Itself</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
+         <span>by Kurzgesagt</span>
+       </div>
+        <div class="timeline-item-description">Autoimmunity. What happens when your immune system, designed to protect you, turns against you? And why does this happen?</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="People">
+      <a href="https://www.youtube.com/@CleoAbram" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Cleo Abram</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="data:image/png;base64,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" width="16" height="16" alt="">
+         <span>@CleoAbram on YouTube</span>
+       </div>
+        <div class="timeline-item-description">Video journalist behind the show 'Huge If True', delivering optimistic and beautifully produced science & tech explainers.</div>
+        
+      </a>
+    </div>
+              </div>
+            </div>
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
+                <h3>Jun<span class="full-year"> 2025</span></h3>
+              </div>
+              <div class="content-timeline-month-items">
+                
+    <div class="timeline-item animate-on-scroll" data-tag="Videos">
+      <a href="https://www.youtube.com/watch?v=IrGYUq1mklk" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Liquid Glass </span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
+         <span>by Apple Developer</span>
+       </div>
+        <div class="timeline-item-description">A video addressing the alleged accessibility issues of the upcoming iOS 26 update. It clearly defines the philosophy of this new design language. We've reached a point where this design process is closer to a physical approach than a software one.</div>
+        <div class="timeline-item-preview">
+         <figure>
+           <img src="https://media.licdn.com/dms/image/v2/D5612AQFjDO-bM9vmWg/article-cover_image-shrink_720_1280/B56ZdoVPjvGoAI-/0/1749802094973?e=2147483647&v=beta&t=9xro6iRnWNnoppSKN3SAAs9fnY7z62sbS5AUqporZ-8" loading="lazy" alt="Liquid Glass  preview">
+         </figure>
+       </div>
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
+      <a href="https://x.com/dhruvdeora2/status/1916120373990723973" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Landing Page</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
+         <span>by @dhruvdeora2 on X</span>
+       </div>
+        
+        <div class="timeline-item-preview">
+         <figure>
+           <img src="https://pbs.twimg.com/media/GpdtFZ_XYAIVVRJ?format=jpg&name=large" loading="lazy" alt="Landing Page preview">
+         </figure>
+       </div>
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Tools/Ressources">
+      <a href="https://penpot.app/penpothub/libraries-templates" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Open-source figma alternative</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/penpot.app.ico" width="16" height="16" alt="">
+         <span>penpot.app</span>
+       </div>
+        <div class="timeline-item-description">Penpot is a free and open-source design and prototyping platform. It is a great alternative to Figma!</div>
+        
+      </a>
+    </div>
+              </div>
+            </div>
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
+                <h3>May<span class="full-year"> 2025</span></h3>
+              </div>
+              <div class="content-timeline-month-items">
+                
+    <div class="timeline-item animate-on-scroll" data-tag="Videos">
+      <a href="https://x.com/mrexits/status/1917247659561066558" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">The Objects of Our Life</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
+         <span>from Steve Jobs</span>
+       </div>
+        <div class="timeline-item-description">Steve's talk at the 1983 International Design Conference in Aspen. He explains what a computer is, how software works, and what the next decades of advancements could look like, all with incredible foresight.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Reading">
+      <a href="https://x.com/kimmonismus/status/1920594810286571640" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Automated Cleaning</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
+         <span>by @kimmonismus on X</span>
+       </div>
+        <div class="timeline-item-description">A very important breakthrough: cleaning robots. Hygiene is what leads to healthier and longer living societies.</div>
+        <div class="timeline-item-preview">
+         <figure>
+           <video src="/assets/cleaning_robot-ClRd9_oQ.mp4" preload="metadata" playsinline controls aria-label="Automated Cleaning preview"></video>
+         </figure>
+       </div>
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Reading">
+      <a href="https://www.aboutamazon.com/news/operations/amazon-vulcan-robot-pick-stow-touch" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Vulcan robots: the next genreration warehouse</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/amazon.com.ico" width="16" height="16" alt="">
+         <span>by Amazon Robotics</span>
+       </div>
+        <div class="timeline-item-description">In addition to the real time vision systems, those robots can feel the environment arount them using sensors and tactile feedback. This is a huge step and allow the robots to grab stuff more efficiently without damaging them.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Videos">
+      <a href="https://www.reddit.com/r/interestingasfuck/comments/1lk73vi/the_bbc_uses_robocameras_disguised_as_dung_heaps/" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">A new way to film widelife</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/reddit.com.ico" width="16" height="16" alt="">
+         <span>from the BBC</span>
+       </div>
+        <div class="timeline-item-description">The BBC used robots looking like dung heaps to film close up shots of wild animals without scaring them away. This is a funny outcome of the recent advancements in robotics!</div>
+        <div class="timeline-item-preview">
+         <figure>
+           <img src="https://images.techeblog.com/wp-content/uploads/2025/05/09150947/bbc-dung-cam-elephants-2.jpg" loading="lazy" alt="A new way to film widelife preview">
+         </figure>
+       </div>
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
+      <a href="https://x.com/samstooff/status/1910665385051119979" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Nice graphic design with the help of GPT Image Gen</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
+         <span>by @samstooff on X</span>
+       </div>
+        
+        <div class="timeline-item-preview">
+         <figure>
+           <img src="https://pbs.twimg.com/media/Gn4J9r8WkAA6cWQ?format=jpg&name=4096x4096" loading="lazy" alt="Nice graphic design with the help of GPT Image Gen preview">
+         </figure>
+       </div>
+      </a>
+    </div>
+              </div>
+            </div>
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
+                <h3>Apr<span class="full-year"> 2025</span></h3>
+              </div>
+              <div class="content-timeline-month-items">
+                
+    <div class="timeline-item animate-on-scroll" data-tag="Videos">
+      <a href="https://www.youtube.com/watch?v=7QR9otLcnf0" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Bill Gates' 1993 prediction for the future of computers</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
+         <span>by the BBC</span>
+       </div>
+        <div class="timeline-item-description">Bill Gates and Paul Allen launched computing giant Microsoft 50 years ago. In 1993, he talked to the BBC about the online innovations that would define the 21st Century. He was truly a visionary.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Reading">
+      <a href="https://x.com/kimmonismus/status/1913559452730658871" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Beyond Human Training</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
+         <span>by @kimmonismus on X</span>
+       </div>
+        <div class="timeline-item-description">Google DeepMind's new “Streams” AI learns directly from the real world, discarding human data all by itself. This means the AI can come up with ideas that people might never have imagined or fully understood.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Reading">
+      <a href="https://blog.google/products/google-cloud/ironwood-tpu-age-of-inference/" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Google's advantage</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/google.com.ico" width="16" height="16" alt="">
+         <span>by Amin Vahdat</span>
+       </div>
+        <div class="timeline-item-description">Google decided to lean heavily towards TPU instead of GPU for their AI infrastructure. This is a bold move that will allow them to have a more efficient and powerful system in the long run. You could comapare that with Apple's M1 chip, which was a game changer for the company. Google won't have to rely on Nvidia at all for example.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Videos">
+      <a href="https://www.youtube.com/watch?v=DfznnKUwywQ" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">The design of mechanical characters</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/youtube.com.ico" width="16" height="16" alt="">
+         <span>by DysneyResearchHub on YouTube</span>
+       </div>
+        <div class="timeline-item-description">In 2013, Disney published a paper on the design of mechanical characters. It's basically an interactive design system that lets anyone (even without engineering experience) turn a digital, articulated character into a 3-D-printable mechanical toy/figure. It works for a wide range of characters and movements, from simple 2D to complex 3D animations.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
+      <a href="https://x.com/neybell_/status/1908878149611565176" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Graphic - tokyo</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
+         <span>by @neybell_ on X</span>
+       </div>
+        
+        <div class="timeline-item-preview">
+         <figure>
+           <img src="https://pbs.twimg.com/media/Gn2yTmhbkAASUAM?format=jpg&name=900x900" loading="lazy" alt="Graphic - tokyo preview">
+         </figure>
+       </div>
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
+      <a href="https://x.com/damonxart/status/1908832026297577477" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Poster - graphic design</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
+         <span>by @damonxart on X</span>
+       </div>
+        
+        <div class="timeline-item-preview">
+         <figure>
+           <img src="https://pbs.twimg.com/media/Gn2ImxXa4AAv3xV?format=jpg&name=900x900" loading="lazy" alt="Poster - graphic design preview">
+         </figure>
+       </div>
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Inspiration">
+      <a href="https://x.com/damonxart/status/1908832026297577477" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Poster - graphic design</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/x.com.ico" width="16" height="16" alt="">
+         <span>by @damonxart on X</span>
+       </div>
+        
+        <div class="timeline-item-preview">
+         <figure>
+           <img src="https://pbs.twimg.com/media/Gn2IjZobAAA3fCI?format=jpg&name=900x900" loading="lazy" alt="Poster - graphic design preview">
+         </figure>
+       </div>
+      </a>
+    </div>
+              </div>
+            </div>
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
+                <h3>Mar<span class="full-year"> 2025</span></h3>
+              </div>
+              <div class="content-timeline-month-items">
+                
+    <div class="timeline-item animate-on-scroll" data-tag="Reading">
+      <a href="https://medium.com/@disco_lu/saying-bye-to-4px-spacing-and-hello-to-fibonacci-58477e3ecca3" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Fibonacci in design</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/medium.com.ico" width="16" height="16" alt="">
+         <span>by Luis Ouriach</span>
+       </div>
+        <div class="timeline-item-description">Saying bye to 4px spacing and hello to Fibonacci. Very useful article about spacing in web design.</div>
+        
+      </a>
+    </div>
+    <div class="timeline-item animate-on-scroll" data-tag="Tools/Ressources">
+      <a href="https://lucide.dev/" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Open-source Icons</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/lucide.dev.ico" width="16" height="16" alt="">
+         <span>lucide.dev</span>
+       </div>
+        <div class="timeline-item-description">Free, open-source and consistent. I use those icons in most of my projects.</div>
+        
+      </a>
+    </div>
+              </div>
+            </div>
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
+                <h3>Feb<span class="full-year"> 2025</span></h3>
+              </div>
+              <div class="content-timeline-month-items">
+                
+    <div class="timeline-item animate-on-scroll" data-tag="Tools/Ressources">
+      <a href="https://fontjoy.com/" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">Font pairing made easy</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/fontjoy.com.ico" width="16" height="16" alt="">
+         <span>fontjoy.com</span>
+       </div>
+        <div class="timeline-item-description">Fontjoy is a tool that helps you find 3 complementary fonts that work well together. It uses a neural network and is very fun to play with.</div>
+        
+      </a>
+    </div>
+              </div>
+            </div>
+            <div class="content-timeline-month">
+              <div class="content-timeline-month-header">
+                <h3>Jan<span class="full-year"> 2025</span></h3>
+              </div>
+              <div class="content-timeline-month-items">
+                
+    <div class="timeline-item animate-on-scroll" data-tag="Reading">
+      <a href="https://freedium.cfd/https://medium.muz.li/ui-design-trends-in-2025-34987ed805c9" target="_blank" rel="noopener noreferrer">
+        <div class="timeline-item-title">
+          <span class="link-text">UI Design Trends In 2025</span>
+          <span class="external-link-icon" aria-hidden="true">↗</span>
+        </div>
+        <div class="timeline-item-meta">
+         <img src="https://icons.duckduckgo.com/ip3/medium.com.ico" width="16" height="16" alt="">
+         <span>by Souptik Debnath</span>
+       </div>
+        <div class="timeline-item-description">Interesting article.</div>
+        <div class="timeline-item-preview">
+         <figure>
+           <img src="https://miro.medium.com/v2/resize:fit:700/1*sOkarKseqH84zxnaXlFdOQ.png" loading="lazy" alt="UI Design Trends In 2025 preview">
+         </figure>
+       </div>
+      </a>
+    </div>
+              </div>
+            </div></div>
+        </div>
+<!-- AUTO-GEN:BOOKMARKS END -->
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="hero-links">
+        <p>
+          <a
+            class="link-with-icon"
+            rel="noopener"
+            href="#page-top"
+            data-back-to-top
+            >Back to top<svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              width="1em"
+              style="margin-left: 0.2em"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-up-icon lucide-arrow-up"
+            >
+              <path d="m5 12 7-7 7 7" />
+              <path d="M12 19V5" /></svg
+          ></a>
+        </p>
+        <div class="theme-toggle">
+          <button
+            aria-label="Toggle theme"
+            class="theme-toggle"
+            x-data
+            x-init="$store.theme.init()"
+            @click="$store.theme.toggle()"
+            :data-mode="$store.theme.mode"
+          >
+            <!-- System Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-monitor"
+              data-icon="system"
+            >
+              <rect width="20" height="14" x="2" y="3" rx="2" />
+              <line x1="8" x2="16" y1="21" y2="21" />
+              <line x1="12" x2="12" y1="17" y2="21" />
+            </svg>
+            <!-- Light/Sun Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-sun"
+              data-icon="light"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" />
+              <path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" />
+              <path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+            <!-- Dark/Moon Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-moon"
+              data-icon="dark"
+            >
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <p class="footer-meta-left">
+          Designed with
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#FE6F5E"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-heart w-3 h-3 mr-2 animate-bounce"
+          >
+            <path
+              d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+            />
+          </svg>
+          <span class="subtle">by</span> Pierre-Louis
+        </p>
+        <p class="footer-meta-right">© 2026</p>
+      </div>
+    </footer>
+    <script defer src="/src/script.js"></script>
+    <script defer src="bookmarks.js"></script>
+
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"
+    ></script>
+  </body>
+</html>

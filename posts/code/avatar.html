@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      /* Original Variables - Clean & Minimal (Light mode default) */
+      :root {
+        --font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        --text-primary: hsl(0, 0%, 25%);
+        --text-secondary: hsl(0, 0%, 50%);
+        --bg-primary: hsl(0, 0%, 94%);
+        --bg-secondary: hsl(0, 0%, 98%);
+        --border: hsl(0, 0%, 94%);
+        --border-darker: hsl(0, 0%, 88%);
+        --active-color: hsla(0, 0%, 30%);
+        --font-size-small: 12px;
+        --font-size-regular: 14px;
+        --radius-regular: 8px;
+        --radius-small: 4px;
+        --spacer-small: 2vh;
+        --spacer-medium: 6vh;
+      }
+
+      /* Dark mode variables - Applied via class or system preference */
+      .dark,
+      :root:not(.light) {
+        --text-primary: hsl(0, 0%, 90%);
+        --text-secondary: hsl(0, 0%, 60%);
+        --bg-primary: hsl(0, 0%, 10%);
+        --bg-secondary: hsl(0, 0%, 12%);
+        --border: hsl(0, 0%, 18%);
+        --border-darker: hsl(0, 0%, 25%);
+        --active-color: hsl(0, 0%, 90%);
+      }
+
+      /* System dark mode detection - Only applies if not forcing light */
+      @media (prefers-color-scheme: dark) {
+        :root:not(.light) {
+          --text-primary: hsl(0, 0%, 90%);
+          --text-secondary: hsl(0, 0%, 60%);
+          --bg-primary: hsl(0, 0%, 8%);
+          --bg-secondary: hsl(0, 0%, 12%);
+          --border: hsl(0, 0%, 18%);
+          --border-darker: hsl(0, 0%, 25%);
+          --active-color: hsl(0, 0%, 90%);
+        }
+      }
+
+      /* Global Reset */
+      *,
+      *:before,
+      *:after {
+        box-sizing: border-box;
+        outline: 0 !important;
+      }
+
+      body {
+        line-height: 1.6;
+        padding: 0;
+        margin: 0;
+        font-family: var(--font-primary);
+        font-size: var(--font-size-regular);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        transition: background-color 400ms ease-in-out, color 400ms ease-in-out;
+      }
+
+      /* Avatar Container */
+      .avatar-container {
+        text-align: center;
+        padding: 40px;
+      }
+
+      /* Enhanced Avatar - High Resolution + Firefox Optimization */
+      .avatar {
+        display: inline-block;
+        margin: 20px;
+        /* High resolution base - 4x larger */
+        width: 104px;
+        height: 104px;
+        /* Scale down to original size for crisp rendering */
+        transform: scale(0.25);
+        border-radius: 100%;
+        background: var(--bg-secondary);
+        border: 4px solid var(--text-secondary);
+        /* Firefox-optimized shadows */
+        box-shadow: inset 10px -10px 16px var(--text-secondary);
+        position: relative;
+        animation: head-rotation 8s infinite ease;
+        transform-origin: center center;
+        /* Enhanced will-change for Firefox */
+        will-change: transform, box-shadow;
+        /* Force hardware acceleration */
+        backface-visibility: hidden;
+        perspective: 1000px;
+      }
+
+      .avatar::before {
+        content: "";
+        /* High resolution eyes */
+        height: 12px;
+        width: 12px;
+        border-radius: 100%;
+        background: var(--text-secondary);
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        animation: eye-movement 8s infinite ease;
+        will-change: transform;
+        backface-visibility: hidden;
+      }
+
+      .avatar::after {
+        content: "";
+        height: 12px;
+        width: 12px;
+        border-radius: 100%;
+        background: var(--text-secondary);
+        position: absolute;
+        top: 40px;
+        left: 72px;
+        animation: eye-movement 8s infinite ease;
+        will-change: transform;
+        backface-visibility: hidden;
+      }
+
+      /* Controls */
+      .controls {
+        margin-top: 30px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* Zoom Control */
+      .zoom-control {
+        margin-bottom: 30px;
+      }
+
+      .zoom-control label,
+      .section-label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: var(--font-size-small);
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .section-label {
+        margin-bottom: 16px;
+      }
+
+      .zoom-slider {
+        width: 200px;
+        height: 2px;
+        border-radius: 1px;
+        background: var(--border-darker);
+        outline: none;
+        border: none;
+        cursor: pointer;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+             appearance: none;
+        transition: background 0.2s ease;
+      }
+
+      .zoom-slider:hover {
+        background: var(--border-darker);
+      }
+
+      .zoom-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--active-color);
+        cursor: pointer;
+        -webkit-transition: all 0.2s ease;
+        transition: all 0.2s ease;
+      }
+
+      .zoom-slider::-webkit-slider-thumb:hover {
+        transform: scale(1.1);
+      }
+
+      .zoom-slider::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--active-color);
+        cursor: pointer;
+        border: none;
+        -moz-transition: all 0.2s ease;
+        transition: all 0.2s ease;
+      }
+
+      /* Animation Controls */
+      .animation-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .button-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        max-width: 800px;
+      }
+
+      /* Enhanced Button Styles */
+      .button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        border-radius: var(--radius-regular);
+        font-family: var(--font-primary);
+        font-weight: 400;
+        transition: all 0.15s ease;
+        -webkit-user-select: none;
+           -moz-user-select: none;
+                user-select: none;
+      }
+
+      .button.secondary {
+        border: 1px solid var(--border);
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+      }
+
+      .button.secondary:hover {
+        border-color: var(--border-darker);
+        background: var(--bg-primary);
+        transform: translateY(-1px);
+      }
+
+      .button.secondary:active {
+        transform: translateY(0);
+        background: var(--border);
+      }
+
+      /* Only animation buttons get active state, not random button */
+      .button.secondary.active:not(.random-btn) {
+        background: var(--active-color);
+        color: var(--bg-primary);
+        border-color: var(--active-color);
+      }
+
+      .button.small {
+        padding: 6px 12px;
+        font-size: var(--font-size-small);
+      }
+
+      /* Shuffle icon styling */
+      .shuffle-icon {
+        flex-shrink: 0;
+      }
+
+      /* Enhanced Animation Keyframes - High Resolution + Firefox Optimization */
+      @keyframes head-rotation {
+        0% {
+          box-shadow: inset 10px -10px 16px var(--text-secondary);
+        }
+        20% {
+          box-shadow: inset 18px -10px 16px var(--text-secondary);
+        }
+        30% {
+          box-shadow: inset 10px -10px 16px var(--text-secondary);
+        }
+        55% {
+          box-shadow: inset 18px 6px 16px var(--text-secondary);
+        }
+        65% {
+          box-shadow: inset 10px -10px 16px var(--text-secondary);
+        }
+        100% {
+          box-shadow: inset 10px -10px 16px var(--text-secondary);
+        }
+      }
+
+      @keyframes eye-movement {
+        0% {
+          transform: translateX(0px) translateY(0) scaleY(1);
+        }
+        20% {
+          transform: translateX(8px) translateY(0) scaleY(1);
+        }
+        30% {
+          transform: translateX(-8px) translateY(0) scaleY(1);
+        }
+        55% {
+          transform: translateX(0px) translateY(16px) scaleY(1);
+        }
+        65% {
+          transform: translateX(0px) translateY(0px) scaleY(0.5);
+        }
+        70% {
+          transform: translateX(0px) translateY(0px) scaleY(1);
+        }
+        100% {
+          transform: translateX(0px) translateY(0px) scaleY(1);
+        }
+      }
+
+      /* All animation states with high resolution coordinates */
+      .avatar.blink::before {
+        animation: simple-blink 2s infinite ease-in-out;
+      }
+      .avatar.blink::after {
+        animation: simple-blink 2s infinite ease-in-out;
+      }
+      @keyframes simple-blink {
+        0%,
+        85%,
+        100% {
+          transform: scaleY(1);
+        }
+        90%,
+        95% {
+          transform: scaleY(0.1);
+        }
+      }
+
+      .avatar.wink::before {
+        animation: wink-left 3s infinite ease-in-out;
+      }
+      .avatar.wink::after {
+        animation: simple-blink 6s infinite ease-in-out;
+      }
+      @keyframes wink-left {
+        0%,
+        30%,
+        70%,
+        100% {
+          transform: scaleY(1);
+        }
+        35%,
+        65% {
+          transform: scaleY(0.1);
+        }
+      }
+
+      .avatar.sleepy::before {
+        animation: sleepy-drift 4s infinite ease-in-out;
+      }
+      .avatar.sleepy::after {
+        animation: sleepy-drift 4s infinite ease-in-out;
+      }
+      .avatar.sleepy {
+        animation: head-rotation 8s infinite ease,
+          sleepy-head 4s infinite ease-in-out;
+      }
+      @keyframes sleepy-drift {
+        0%,
+        100% {
+          transform: translateY(0) scaleY(1);
+        }
+        20%,
+        80% {
+          transform: translateY(4px) scaleY(0.7);
+        }
+        50% {
+          transform: translateY(8px) scaleY(0.3);
+        }
+      }
+      @keyframes sleepy-head {
+        0%,
+        100% {
+          transform: rotate(0deg) var(--zoom-scale, scale(0.25));
+        }
+        50% {
+          transform: rotate(-2deg) var(--zoom-scale, scale(0.25));
+        }
+      }
+
+      .avatar.alert::before {
+        animation: alert-eyes 1s infinite ease-in-out;
+        width: 16px;
+        height: 16px;
+        top: 36px;
+        left: 36px;
+      }
+      .avatar.alert::after {
+        animation: alert-eyes 1s infinite ease-in-out;
+        width: 16px;
+        height: 16px;
+        top: 36px;
+        left: 68px;
+      }
+      .avatar.alert {
+        animation: alert-head 1s infinite ease-in-out;
+      }
+      @keyframes alert-eyes {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+      @keyframes alert-head {
+        0%,
+        100% {
+          box-shadow: inset 10px -10px 16px var(--text-secondary);
+        }
+        50% {
+          box-shadow: inset 14px -14px 20px var(--text-secondary);
+        }
+      }
+
+      .avatar.focus::before {
+        animation: focus-eyes 3s infinite ease-in-out;
+        width: 8px;
+        height: 8px;
+        top: 40px;
+        left: 40px;
+      }
+      .avatar.focus::after {
+        animation: focus-eyes 3s infinite ease-in-out;
+        width: 8px;
+        height: 8px;
+        top: 40px;
+        left: 72px;
+      }
+      @keyframes focus-eyes {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-4px);
+        }
+      }
+
+      .avatar.scan::before {
+        animation: scan-movement 2s infinite linear;
+      }
+      .avatar.scan::after {
+        animation: scan-movement 2s infinite linear;
+      }
+      @keyframes scan-movement {
+        0% {
+          transform: translateX(-8px);
+        }
+        50% {
+          transform: translateX(8px);
+        }
+        100% {
+          transform: translateX(-8px);
+        }
+      }
+
+      .avatar.nervous::before {
+        animation: nervous-dart 0.3s infinite ease-in-out;
+      }
+      .avatar.nervous::after {
+        animation: nervous-dart 0.3s infinite ease-in-out 0.1s;
+      }
+      @keyframes nervous-dart {
+        0%,
+        100% {
+          transform: translateX(0) translateY(0);
+        }
+        25% {
+          transform: translateX(4px) translateY(-4px);
+        }
+        75% {
+          transform: translateX(-4px) translateY(4px);
+        }
+      }
+
+      .avatar.dizzy::before {
+        animation: dizzy-circle 1.5s infinite linear;
+      }
+      .avatar.dizzy::after {
+        animation: dizzy-circle 1.5s infinite linear 0.75s;
+      }
+      .avatar.dizzy {
+        animation: head-rotation 8s infinite ease,
+          dizzy-wobble 3s infinite ease-in-out;
+      }
+      @keyframes dizzy-circle {
+        0% {
+          transform: translateX(0) translateY(0);
+        }
+        25% {
+          transform: translateX(4px) translateY(-4px);
+        }
+        50% {
+          transform: translateX(0) translateY(-8px);
+        }
+        75% {
+          transform: translateX(-4px) translateY(-4px);
+        }
+        100% {
+          transform: translateX(0) translateY(0);
+        }
+      }
+      @keyframes dizzy-wobble {
+        0%,
+        100% {
+          transform: rotate(0deg) var(--zoom-scale, scale(0.25));
+        }
+        25% {
+          transform: rotate(1deg) var(--zoom-scale, scale(0.25));
+        }
+        75% {
+          transform: rotate(-1deg) var(--zoom-scale, scale(0.25));
+        }
+      }
+
+      .avatar.thinking::before {
+        animation: thinking-pattern 5s infinite ease-in-out;
+      }
+      .avatar.thinking::after {
+        animation: thinking-pattern 5s infinite ease-in-out 1s;
+      }
+      @keyframes thinking-pattern {
+        0%,
+        100% {
+          transform: translateX(0) translateY(0);
+        }
+        25% {
+          transform: translateX(-4px) translateY(-4px);
+        }
+        50% {
+          transform: translateX(4px) translateY(0);
+        }
+        75% {
+          transform: translateX(0) translateY(4px);
+        }
+      }
+
+      .avatar.surprised::before {
+        animation: surprised-pop 0.8s infinite ease-out;
+        width: 20px;
+        height: 20px;
+        top: 32px;
+        left: 32px;
+      }
+      .avatar.surprised::after {
+        animation: surprised-pop 0.8s infinite ease-out;
+        width: 20px;
+        height: 20px;
+        top: 32px;
+        left: 68px;
+      }
+      @keyframes surprised-pop {
+        0% {
+          transform: scale(0.6);
+        }
+        20% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .avatar.shy::before {
+        animation: shy-look 3s infinite ease-in-out;
+      }
+      .avatar.shy::after {
+        animation: shy-look 3s infinite ease-in-out 0.5s;
+      }
+      .avatar.shy {
+        animation: head-rotation 8s infinite ease,
+          shy-tilt 6s infinite ease-in-out;
+      }
+      @keyframes shy-look {
+        0%,
+        40%,
+        100% {
+          transform: translateX(0) translateY(0) scaleY(1);
+        }
+        20% {
+          transform: translateX(-4px) translateY(8px) scaleY(0.8);
+        }
+      }
+      @keyframes shy-tilt {
+        0%,
+        100% {
+          transform: rotate(0deg) var(--zoom-scale, scale(0.25));
+        }
+        50% {
+          transform: rotate(-3deg) var(--zoom-scale, scale(0.25));
+        }
+      }
+
+      .avatar.rolling::before {
+        animation: eye-roll 2s infinite ease-in-out;
+      }
+      .avatar.rolling::after {
+        animation: eye-roll 2s infinite ease-in-out;
+      }
+      @keyframes eye-roll {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        30% {
+          transform: translateY(-12px);
+        }
+        60% {
+          transform: translateY(-12px);
+        }
+      }
+
+      .avatar.tracking::before {
+        animation: tracking-motion 4s infinite ease-in-out;
+      }
+      .avatar.tracking::after {
+        animation: tracking-motion 4s infinite ease-in-out;
+      }
+      @keyframes tracking-motion {
+        0% {
+          transform: translateX(-8px) translateY(4px);
+        }
+        25% {
+          transform: translateX(8px) translateY(-4px);
+        }
+        50% {
+          transform: translateX(4px) translateY(8px);
+        }
+        75% {
+          transform: translateX(-4px) translateY(-8px);
+        }
+        100% {
+          transform: translateX(-8px) translateY(4px);
+        }
+      }
+
+      .avatar.micro::before {
+        animation: micro-twitch 0.1s infinite ease-in-out;
+      }
+      .avatar.micro::after {
+        animation: micro-twitch 0.1s infinite ease-in-out 0.05s;
+      }
+      @keyframes micro-twitch {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        50% {
+          transform: translateX(1.2px);
+        }
+      }
+
+      .avatar.pulse::before {
+        animation: pulse-rhythm 1.5s infinite ease-in-out;
+      }
+      .avatar.pulse::after {
+        animation: pulse-rhythm 1.5s infinite ease-in-out 0.2s;
+      }
+      @keyframes pulse-rhythm {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.3);
+        }
+      }
+
+      .avatar.peek::before {
+        animation: peek-motion 3s infinite ease-in-out;
+        width: 8px;
+        height: 8px;
+        top: 40px;
+        left: 44px;
+      }
+      .avatar.peek::after {
+        animation: peek-motion 3s infinite ease-in-out 0.3s;
+        width: 8px;
+        height: 8px;
+        top: 40px;
+        left: 68px;
+      }
+      @keyframes peek-motion {
+        0%,
+        80%,
+        100% {
+          transform: translateX(0) translateY(0) scaleY(1);
+        }
+        10%,
+        70% {
+          transform: translateX(4px) translateY(-4px) scaleY(0.8);
+        }
+        40% {
+          transform: translateX(-4px) translateY(4px) scaleY(0.6);
+        }
+      }
+
+      .avatar.crossed::before {
+        animation: cross-left 2s infinite ease-in-out;
+      }
+      .avatar.crossed::after {
+        animation: cross-right 2s infinite ease-in-out;
+      }
+      @keyframes cross-left {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        50% {
+          transform: translateX(8px);
+        }
+      }
+      @keyframes cross-right {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        50% {
+          transform: translateX(-8px);
+        }
+      }
+
+      .avatar.asymmetric::before {
+        animation: asym-left 3s infinite ease-in-out;
+      }
+      .avatar.asymmetric::after {
+        animation: asym-right 2s infinite linear;
+      }
+      @keyframes asym-left {
+        0%,
+        100% {
+          transform: translateY(0) scaleY(1);
+        }
+        50% {
+          transform: translateY(-8px) scaleY(0.5);
+        }
+      }
+      @keyframes asym-right {
+        0% {
+          transform: translateX(0) translateY(0);
+        }
+        25% {
+          transform: translateX(4px) translateY(-4px);
+        }
+        50% {
+          transform: translateX(0) translateY(-8px);
+        }
+        75% {
+          transform: translateX(-4px) translateY(-4px);
+        }
+        100% {
+          transform: translateX(0) translateY(0);
+        }
+      }
+
+      .avatar.intense::before {
+        animation: intense-stare 0.5s infinite ease-in-out;
+        width: 16px;
+        height: 16px;
+        top: 36px;
+        left: 36px;
+      }
+      .avatar.intense::after {
+        animation: intense-stare 0.5s infinite ease-in-out;
+        width: 16px;
+        height: 16px;
+        top: 36px;
+        left: 68px;
+      }
+      .avatar.intense {
+        animation: intense-shadow 1s infinite ease-in-out;
+      }
+      @keyframes intense-stare {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+      @keyframes intense-shadow {
+        0%,
+        100% {
+          box-shadow: inset 10px -10px 16px var(--text-secondary);
+        }
+        50% {
+          box-shadow: inset 18px -18px 24px var(--text-secondary);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="avatar-container">
+      <div class="avatar" id="avatar"></div>
+
+      <div class="controls">
+        <div class="zoom-control">
+          <label for="zoom-slider">Size</label>
+          <input
+            type="range"
+            id="zoom-slider"
+            min="0.5"
+            max="3"
+            step="0.1"
+            value="1"
+            class="zoom-slider"
+          />
+        </div>
+
+        <div class="animation-controls">
+          <label class="section-label">States</label>
+          <button
+            class="button small secondary random-btn"
+            onclick="randomAnimation()"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="shuffle-icon"
+            >
+              <path d="m18 14 4 4-4 4" />
+              <path d="m18 2 4 4-4 4" />
+              <path
+                d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"
+              />
+              <path d="M2 6h1.972a4 4 0 0 1 3.6 2.2" />
+              <path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" />
+            </svg>
+            Random
+          </button>
+
+          <div class="button-grid">
+            <button
+              class="button small secondary active"
+              onclick="setAnimation('default', event)"
+            >
+              Default
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('blink', event)"
+            >
+              Blink
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('wink', event)"
+            >
+              Wink
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('sleepy', event)"
+            >
+              Sleepy
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('alert', event)"
+            >
+              Alert
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('focus', event)"
+            >
+              Focus
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('scan', event)"
+            >
+              Scan
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('nervous', event)"
+            >
+              Nervous
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('dizzy', event)"
+            >
+              Dizzy
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('thinking', event)"
+            >
+              Thinking
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('surprised', event)"
+            >
+              Surprised
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('shy', event)"
+            >
+              Shy
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('rolling', event)"
+            >
+              Eye Roll
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('tracking', event)"
+            >
+              Tracking
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('micro', event)"
+            >
+              Micro
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('pulse', event)"
+            >
+              Pulse
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('peek', event)"
+            >
+              Peek
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('crossed', event)"
+            >
+              Cross-Eyed
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('asymmetric', event)"
+            >
+              Asymmetric
+            </button>
+            <button
+              class="button small secondary"
+              onclick="setAnimation('intense', event)"
+            >
+              Intense
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function setAnimation(animationType, ev) {
+        const avatar = document.getElementById("avatar");
+
+        // Remove all animation classes
+        avatar.className = "avatar";
+
+        // Remove active state from all buttons
+        document.querySelectorAll(".button.secondary").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+
+        // Add the specific animation class
+        if (animationType !== "default") {
+          avatar.classList.add(animationType);
+        }
+
+        // Add active state to the clicked button
+        if (ev && ev.target) {
+          ev.target.classList.add("active");
+        }
+
+        // Preserve zoom scale for animations that use transform
+        const currentScale =
+          avatar.style.transform ||
+          getComputedStyle(avatar).getPropertyValue("--zoom-scale") ||
+          "scale(0.25)";
+        if (
+          animationType === "sleepy" ||
+          animationType === "dizzy" ||
+          animationType === "shy"
+        ) {
+          avatar.style.setProperty("--zoom-scale", currentScale);
+        }
+      }
+
+      function randomAnimation() {
+        const animations = [
+          "default",
+          "blink",
+          "wink",
+          "sleepy",
+          "alert",
+          "focus",
+          "scan",
+          "nervous",
+          "dizzy",
+          "thinking",
+          "surprised",
+          "shy",
+          "rolling",
+          "tracking",
+          "micro",
+          "pulse",
+          "peek",
+          "crossed",
+          "asymmetric",
+          "intense",
+        ];
+
+        const buttons = document.querySelectorAll(
+          ".button.secondary:not(.random-btn)"
+        );
+
+        // Enhanced shuffle animation with progressive slowdown
+        let shuffleCount = 0;
+        const maxShuffles = 12;
+        let currentInterval = 40; // Start fast
+        const slowdownFactor = 1.3; // Increase interval by this factor each time
+
+        const shuffle = () => {
+          // Remove all active states
+          buttons.forEach((btn) => btn.classList.remove("active"));
+
+          // Add active to a random button during shuffling
+          const randomIndex = Math.floor(Math.random() * buttons.length);
+          buttons[randomIndex].classList.add("active");
+
+          shuffleCount++;
+
+          if (shuffleCount >= maxShuffles) {
+            // Final selection
+            const finalIndex = Math.floor(Math.random() * animations.length);
+            const finalAnim = animations[finalIndex];
+
+            // Remove all active states
+            buttons.forEach((btn) => btn.classList.remove("active"));
+
+            // Set the final animation
+            setAnimation(finalAnim);
+
+            // Find and activate the correct button
+            buttons.forEach((btn) => {
+              if (
+                btn.textContent.toLowerCase().replace(/[^a-z]/g, "") ===
+                finalAnim.replace("-", "")
+              ) {
+                btn.classList.add("active");
+              }
+            });
+          } else {
+            // Schedule next shuffle with increased interval (slowdown effect)
+            currentInterval *= slowdownFactor;
+            setTimeout(shuffle, currentInterval);
+          }
+        };
+
+        // Start the shuffle sequence
+        shuffle();
+      }
+
+      // Enhanced zoom functionality for high-resolution avatar
+      document
+        .getElementById("zoom-slider")
+        .addEventListener("input", function (e) {
+          const avatar = document.getElementById("avatar");
+          const scale = e.target.value;
+          // Combine base scale (0.25) with user zoom
+          const finalScale = 0.25 * scale;
+          const scaleTransform = `scale(${finalScale})`;
+
+          // Set CSS custom property for animations that need it
+          avatar.style.setProperty("--zoom-scale", scaleTransform);
+
+          // Apply direct transform for immediate effect
+          avatar.style.transform = scaleTransform;
+        });
+
+      // Initialize default active state on page load
+      document.addEventListener("DOMContentLoaded", function () {
+        // Set initial high-resolution scale
+        const avatar = document.getElementById("avatar");
+        avatar.style.transform = "scale(0.25)";
+        avatar.style.setProperty("--zoom-scale", "scale(0.25)");
+
+        // Ensure default button is marked active
+        const defaultBtn = document.querySelector(
+          ".button.small.secondary.active"
+        );
+        if (!defaultBtn) {
+          const first = document.querySelector(".button.small.secondary");
+          if (first) first.classList.add("active");
+        }
+      });
+    </script>
+  </body>
+</html>

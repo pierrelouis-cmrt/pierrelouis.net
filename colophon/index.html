@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+  <head>
+    <script>
+      (() => {
+        const storageKey = "theme";
+        const getStoredTheme = () => {
+          try {
+            const value = localStorage.getItem(storageKey);
+            return value === "dark" || value === "light" ? value : "system";
+          } catch (error) {
+            return "system";
+          }
+        };
+        const mode = getStoredTheme();
+        const prefersDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const isDark = mode === "dark" || (mode === "system" && prefersDark);
+
+        document.documentElement.classList.toggle("dark", isDark);
+
+        const color = isDark ? "#0f0f0f" : "#faf9f9";
+        const setThemeColor = (allowCreate) => {
+          const metas = document.querySelectorAll('meta[name="theme-color"]');
+          if (!metas.length) {
+            if (!allowCreate) return;
+            const meta = document.createElement("meta");
+            meta.name = "theme-color";
+            meta.content = color;
+            document.head.appendChild(meta);
+            return;
+          }
+          metas.forEach((meta) => meta.setAttribute("content", color));
+        };
+        setThemeColor(false);
+        const raf =
+          window.requestAnimationFrame ||
+          ((callback) => setTimeout(callback, 0));
+        raf(() => setThemeColor(true));
+      })();
+    </script>
+    <script>
+      const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta name="google" content="notranslate" />
+    <title>Pierre-Louis &ndash; Web Dev</title>
+    <style>
+      [x-cloak] {
+        display: none;
+      }
+    </style>
+    <meta name="author" content="Pierre-Louis" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      name="description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      property="og:description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+    <meta property="og:url" content="https://pierrelouis.net" />
+    <meta property="og:image" content="assets/social-media-preview.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      name="twitter:description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+    <meta name="twitter:image" content="assets/social-media-preview.png" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-BkJ3dd7E.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32-BFRC2inS.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16-Dfjczovm.png" />
+    <link rel="manifest" href="/assets/site-C9eMkuJ2.webmanifest" />
+    <link rel="mask-icon" href="data:image/svg+xml,%3c?xml%20version='1.0'%20standalone='no'?%3e%3c!DOCTYPE%20svg%20PUBLIC%20'-//W3C//DTD%20SVG%2020010904//EN'%20'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'%3e%3csvg%20version='1.0'%20xmlns='http://www.w3.org/2000/svg'%20width='350.000000pt'%20height='350.000000pt'%20viewBox='0%200%20350.000000%20350.000000'%20preserveAspectRatio='xMidYMid%20meet'%3e%3cmetadata%3e%20Created%20by%20potrace%201.14,%20written%20by%20Peter%20Selinger%202001-2017%20%3c/metadata%3e%3cg%20transform='translate(0.000000,350.000000)%20scale(0.100000,-0.100000)'%20fill='%23000000'%20stroke='none'%3e%3cpath%20d='M2288%203445%20c-2%20-2%20-28%20-6%20-58%20-9%20-118%20-12%20-199%20-38%20-315%20-101%20-90%20-49%20-116%20-68%20-190%20-140%20-137%20-134%20-228%20-284%20-295%20-490%20-33%20-104%20-36%20-114%20-46%20-179%20-3%20-22%20-7%20-44%20-10%20-47%20-2%20-4%20-6%20-24%20-10%20-45%20-12%20-86%20-24%20-157%20-38%20-229%20-10%20-52%20-20%20-112%20-22%20-130%20-2%20-23%20-14%20-88%20-20%20-119%20-3%20-11%20-7%20-37%20-10%20-56%20-2%20-19%20-7%20-42%20-9%20-50%20-3%20-8%20-7%20-33%20-10%20-55%20-4%20-22%20-9%20-53%20-12%20-70%20-3%20-16%20-7%20-39%20-9%20-50%20-1%20-11%20-6%20-36%20-9%20-55%20-3%20-19%20-8%20-48%20-10%20-65%20-5%20-39%20-14%20-90%20-25%20-140%20-5%20-22%20-11%20-58%20-14%20-80%20-4%20-23%20-8%20-52%20-11%20-65%20-3%20-13%20-7%20-42%20-10%20-65%20-3%20-22%20-8%20-47%20-10%20-55%20-2%20-8%20-6%20-28%20-9%20-45%20-3%20-16%20-8%20-46%20-11%20-65%20-4%20-19%20-8%20-46%20-10%20-60%20-2%20-21%20-14%20-84%20-21%20-112%20-1%20-5%20-2%20-19%20-3%20-32%20-1%20-25%20-2%20-25%20-36%20-10%20-19%208%20-35%2012%20-35%209%200%20-3%20-12%201%20-27%208%20-35%2018%20-164%2041%20-208%2038%20-5%200%20-35%20-2%20-65%20-4%20-86%20-5%20-146%20-25%20-248%20-82%20-41%20-22%20-109%20-102%20-138%20-162%20-26%20-52%20-29%20-68%20-29%20-153%200%20-86%204%20-101%2032%20-160%2041%20-84%2092%20-135%20173%20-173%20138%20-66%20328%20-36%20487%2076%2086%2060%20223%20212%20223%20247%200%2017%2017%2010%20260%20-111%20122%20-61%20261%20-126%20307%20-145%20189%20-78%20372%20-125%20498%20-128%2070%20-2%20111%203%20221%2028%2037%208%20152%2064%20206%20100%20112%2074%20223%20204%20255%20299%208%2022%2012%2040%2011%2041%20-2%200%20-44%2022%20-94%2048%20l-92%2047%20-35%20-57%20c-61%20-100%20-131%20-161%20-243%20-216%20-118%20-57%20-238%20-64%20-389%20-21%20-49%2014%20-97%2027%20-105%2029%20-26%208%20-141%2056%20-218%2092%20-41%2019%20-76%2034%20-78%2034%20-2%200%20-66%2030%20-141%2066%20-76%2036%20-164%2077%20-196%2092%20-56%2026%20-57%2028%20-53%2062%203%2019%209%2053%2015%2075%2013%2053%2020%2090%2026%20145%203%2025%209%2054%2012%2065%203%2011%207%2034%209%2050%202%2017%205%2041%208%2055%203%2013%208%2042%2011%2065%203%2022%208%2047%2010%2055%202%208%206%2031%209%2050%203%2019%208%2046%2011%2060%203%2014%2012%2068%2020%20120%209%2052%2018%20106%2020%20120%203%2014%209%2052%2015%2085%205%2033%2012%2071%2015%2085%205%2026%208%2042%2025%20142%206%2032%2013%2070%2016%2085%205%2031%2012%2069%2018%20111%202%2015%207%2043%2011%2062%204%2019%208%2044%2010%2055%2012%2088%2062%20336%2080%20398%208%2026%2011%2047%208%2047%20-3%200%200%207%207%2015%207%208%2010%2015%207%2015%20-8%200%2057%20179%2087%20238%2028%2055%20132%20172%20153%20172%207%200%2013%204%2013%208%200%2012%20138%2080%20175%2086%2017%203%2044%2010%2060%2014%2045%2013%20193%207%20251%20-11%2099%20-29%20164%20-68%20232%20-136%2078%20-78%2079%20-79%20114%20-151%2081%20-168%2095%20-354%2043%20-590%20-2%20-8%20-4%20-15%20-5%20-15%20-1%200%20-4%20-11%20-6%20-25%20-3%20-14%20-25%20-67%20-50%20-118%20-116%20-240%20-361%20-360%20-588%20-287%20l-58%2018%207%2046%20c4%2025%208%2055%2010%2066%201%2011%2010%2063%2019%20115%209%2052%2018%20109%2021%20125%203%2017%208%2046%2011%2065%203%2019%208%2046%2010%2060%207%2047%2014%2085%2019%20110%207%2033%2023%20127%2029%20165%203%2017%2012%2073%2021%20125%209%2052%2019%20117%2022%20144%205%2045%204%2049%20-13%2041%20-18%20-7%20-128%20-48%20-221%20-81%20-26%20-10%20-43%20-22%20-44%20-32%20-1%20-18%20-2%20-24%20-17%20-99%20-5%20-26%20-10%20-55%20-10%20-63%200%20-8%20-3%20-28%20-7%20-45%20-11%20-59%20-26%20-141%20-41%20-230%20-17%20-102%20-22%20-129%20-29%20-165%20-3%20-14%20-8%20-41%20-11%20-60%20-5%20-35%20-7%20-46%20-18%20-110%20-4%20-19%20-8%20-48%20-11%20-65%20-2%20-16%20-6%20-39%20-8%20-50%20-3%20-11%20-8%20-40%20-12%20-65%20-4%20-25%20-9%20-54%20-11%20-65%20-3%20-11%20-7%20-36%20-10%20-55%20-4%20-31%20-27%20-159%20-38%20-215%20-2%20-11%20-7%20-40%20-11%20-65%20-10%20-68%20-14%20-93%20-20%20-120%20-5%20-24%20-10%20-51%20-20%20-115%20-3%20-16%20-9%20-55%20-15%20-85%20-5%20-30%20-12%20-71%20-15%20-90%20-3%20-19%20-8%20-42%20-10%20-50%20-2%20-8%20-6%20-31%20-9%20-50%20-15%20-99%20-17%20-116%20-21%20-130%20-2%20-8%20-7%20-31%20-10%20-50%20-3%20-19%20-8%20-46%20-10%20-60%20-5%20-21%200%20-27%2027%20-39%2018%20-8%2070%20-32%20115%20-53%2088%20-40%20109%20-45%20110%20-25%201%2015%2011%2074%2017%20103%202%2012%207%2039%2010%2060%2010%2063%2038%20228%2057%20334%206%2030%2012%2071%2014%2090%203%2019%209%2055%2014%2080%2010%2046%2020%20102%2027%20155%203%2017%209%2053%2015%2080%205%2028%2012%2070%2015%2095%2010%2084%2023%20122%2042%20115%20136%20-53%20271%20-66%20400%20-39%20137%2028%20300%20121%20381%20217%2014%2016%2030%2034%2036%2041%2056%2058%20152%20277%20170%20390%203%2017%207%2042%2010%2056%2022%20117%2020%20299%20-6%20417%20-13%2059%20-83%20242%20-96%20252%20-5%203%20-23%2029%20-42%2056%20-108%20159%20-321%20286%20-521%20310%20-71%209%20-148%2014%20-152%2010z%20m-1440%20-2821%20c20%20-4%2039%20-8%2042%20-8%2032%20-7%20101%20-30%20105%20-36%202%20-4%20-8%20-24%20-22%20-46%20-96%20-141%20-277%20-229%20-372%20-180%20-43%2023%20-71%2071%20-71%20123%200%20122%20136%20185%20318%20147z'/%3e%3c/g%3e%3c/svg%3e" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#faf9f9" />
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      />
+    </noscript>
+
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="51538055-0cc5-4a88-8f4f-8d3b77f708b4"
+    ></script>
+    <link rel="stylesheet" crossorigin href="/assets/styles-B8oWCZv0.css">
+  </head>
+
+  <body>
+    <nav class="site-navigation">
+      <div class="navigation-container">
+        <div class="navigation-left">
+          <a class="navigation-brand" href="/"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-circle-arrow-left back"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M16 12H8" />
+              <path d="m12 8-4 4 4 4" />
+            </svg>
+            Back Home</a
+          >
+          <div class="navigation-links"></div>
+        </div>
+        <div class="navigation-right">
+          <div
+            x-data="{ 
+      commandOpen: false,
+      isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+      isMac: /(Mac|iPhone|iPad|iPod)/i.test(navigator.platform) || (navigator.maxTouchPoints > 1 && /Mac/i.test(navigator.platform))
+    }"
+            x-init="
+      $watch('commandOpen', function(value){
+        if(value === true && !isTouchDevice){
+          if (window.innerWidth >= 768 && window.umami && typeof window.umami.track === 'function') {
+            window.umami.track('Command palette open', { surface: 'palette' });
+          }
+          $nextTick(() => { window.dispatchEvent(new CustomEvent('command-input-focus')); });
+        }
+      })
+    "
+            @keydown.escape.window="commandOpen = false"
+            @open-command-palette.window="commandOpen = true"
+            @keydown.window="
+      if (($event.ctrlKey || $event.metaKey) && !$event.shiftKey && $event.key.toLowerCase() === 'k') {
+        $event.preventDefault();
+        commandOpen = true;
+      }
+    "
+            class="relative z-50 w-auto h-auto"
+          >
+            <button
+              aria-label="Open command palette"
+              @click="commandOpen = true"
+              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium rounded-xl hover:bg-[var(--bg-hover)] disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <svg
+                class="w-4 h-4 mr-0 sm:mr-2 text-[var(--text-body)] shrink-0"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <span
+                class="flex-1 mr-5 text-left text-[var(--text-body)] hidden sm:inline"
+                >Search...</span
+              >
+              <span
+                class="ml-auto text-xs text-[var(--text-subtle)] border border-dashed border-[var(--border-light)] rounded-md px-1 hidden sm:inline"
+              >
+                <span x-text="isMac ? '⌘' : 'Ctrl'"></span>
+                &nbsp;+&nbsp;K
+              </span>
+            </button>
+
+            <!-- Desktop Command Palette (Alpine.js) -->
+            <template x-teleport="body">
+              <div
+                x-data="{}"
+                x-init="$watch('commandOpen', value => {
+        const touch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+        if (!touch) {
+          document.body.classList.toggle('overflow-hidden', value);
+        }
+      })"
+                x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
+                class="fixed inset-0 z-[99] flex items-start justify-center pt-[15vh] w-screen h-screen pointer-events-auto"
+                @click="commandOpen = false"
+                x-cloak
+              >
+                <div
+                  x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
+                  x-transition:enter="ease-out duration-150"
+                  x-transition:enter-start="opacity-0"
+                  x-transition:enter-end="opacity-100"
+                  x-transition:leave="ease-in duration-100"
+                  x-transition:leave-start="opacity-100"
+                  x-transition:leave-end="opacity-0"
+                  class="absolute inset-0 w-full h-full bg-[rgba(0,0,0,0.4)] backdrop-blur-sm will-change-opacity"
+                ></div>
+
+                <div
+                  x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
+                  x-transition:enter="ease-out duration-150 transform"
+                  x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                  x-transition:leave="ease-in duration-100 transform"
+                  x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                  x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  x-data="{
+        commandItemsData: window.COMMAND_ITEMS_DATA,
+        commandItems: [],
+        commandItemsFiltered: [],
+        commandItemActive: null,
+        commandItemSelected: null,
+        commandId: $id('command'),
+        commandSearch: '',
+        isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+        itemsCache: {},
+
+        commandSearchIsEmpty() {
+          return !this.commandSearch || this.commandSearch.length === 0;
+        },
+
+        commandItemIsActive(item) {
+          return this.commandItemActive && this.commandItemActive.value === item.value;
+        },
+
+        commandItemActiveNext() {
+          if (this._navigating) return;
+          this._navigating = true;
+
+          const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
+          if (index < this.commandItemsFiltered.length - 1) {
+            this.commandItemActive = this.commandItemsFiltered[index + 1];
+            this.$nextTick(() => {
+              this.commandScrollToActiveItem();
+              setTimeout(() => { this._navigating = false; }, 50);
+            });
+          } else {
+            this._navigating = false;
+          }
+        },
+
+        commandItemActivePrevious() {
+          if (this._navigating) return;
+          this._navigating = true;
+
+          const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
+          if (index > 0) {
+            this.commandItemActive = this.commandItemsFiltered[index - 1];
+            this.$nextTick(() => {
+              this.commandScrollToActiveItem();
+              setTimeout(() => { this._navigating = false; }, 50);
+            });
+          } else {
+            this._navigating = false;
+          }
+        },
+
+        commandScrollToActiveItem() {
+          if (!this.commandItemActive || !this.$refs.commandItemsList) return;
+
+          const activeElement = document.getElementById(this.commandItemActive.value + '-' + this.commandId);
+          if (!activeElement) return;
+
+          const container = this.$refs.commandItemsList;
+          const containerRect = container.getBoundingClientRect();
+          const elementRect = activeElement.getBoundingClientRect();
+
+          if (elementRect.bottom > containerRect.bottom) {
+            container.scrollTop += (elementRect.bottom - containerRect.bottom);
+          } else if (elementRect.top < containerRect.top) {
+            container.scrollTop -= (containerRect.top - elementRect.top);
+          }
+        },
+
+        _searchTimeoutId: null,
+        commandSearchItems() {
+          if (this._searchTimeoutId) {
+            clearTimeout(this._searchTimeoutId);
+          }
+
+          this._searchTimeoutId = setTimeout(() => {
+            const cacheKey = (this.commandSearch || '').toLowerCase();
+
+            if (this.itemsCache[cacheKey]) {
+              this.commandItemsFiltered = this.itemsCache[cacheKey];
+            } else {
+              if (!this.commandSearchIsEmpty()) {
+                const searchTerm = cacheKey.replace(/\*/g, '');
+                this.commandItemsFiltered = this.commandItems.filter(item =>
+                  item.title.toLowerCase().includes(searchTerm));
+              } else {
+                this.commandItemsFiltered = this.commandItems.filter(item => item.default);
+              }
+
+              this.itemsCache[cacheKey] = this.commandItemsFiltered;
+            }
+
+            this.commandItemActive = this.commandItemsFiltered[0] || null;
+          }, 100);
+        },
+
+        commandShowCategory(item, index) {
+          if (index === 0) return true;
+          if (!this.commandItemsFiltered[index - 1]) return false;
+          return item.category !== this.commandItemsFiltered[index - 1].category;
+        },
+
+        commandCategoryCapitalize(string) {
+          return string.charAt(0).toUpperCase() + string.slice(1);
+        },
+
+        commandItemsReorganize() {
+          const totalItems = Object.keys(this.commandItemsData).reduce(
+            (acc, category) => {
+              const items = this.commandItemsData[category];
+              return acc + (Array.isArray(items) ? items.length : 0);
+            },
+            0
+          );
+          this.commandItems = new Array(totalItems);
+
+          let index = 0;
+          for (const category in this.commandItemsData) {
+            const categoryItems = this.commandItemsData[category];
+            if (!Array.isArray(categoryItems)) continue;
+            for (const item of categoryItems) {
+              item.category = category;
+              this.commandItems[index++] = item;
+            }
+          }
+
+          if (index < this.commandItems.length) {
+            this.commandItems.length = index;
+          }
+
+          this.itemsCache = {};
+          this.itemsCache[''] = this.commandItems.filter(item => item.default);
+        },
+
+        handleSelectedItem(item) {
+          if (!item) return;
+
+          if (item.value === 'theme') {
+            $store.theme.toggle();
+            this.commandItemSelected = null;
+          } else {
+            const targetUrl = this.actionMap[item.value];
+            if (targetUrl) {
+              window.location.href = targetUrl;
+            }
+            commandOpen = false;
+          }
+        },
+        actionMap: window.COMMAND_ACTION_MAP
+      }"
+                  x-init="
+        const dataUpdateHandler = () => {
+          commandItemsReorganize();
+          commandSearchItems();
+        };
+        window.addEventListener('command-palette-data-updated', dataUpdateHandler);
+        commandItemsReorganize();
+        commandSearchItems();
+        $watch('commandSearch', () => commandSearchItems());
+        $watch('commandItemSelected', item => handleSelectedItem(item));
+        window.loadCommandPalettePosts && window.loadCommandPalettePosts().catch(() => {});
+      "
+                  @keydown.down.prevent="commandItemActiveNext()"
+                  @keydown.up.prevent="commandItemActivePrevious()"
+                  @keydown.enter="commandItemSelected = commandItemActive; commandItemActive = null;"
+                  @command-input-focus.window="$refs.commandInput.focus()"
+                  class="relative z-10 w-full max-w-[95%] sm:max-w-xl px-0"
+                  x-cloak
+                  @click.stop
+                >
+                  <div
+                    class="box-border border-2 border-[var(--border-secondary)] flex flex-col min-h-0 max-h-[80vh] w-full p-2 bg-[var(--bg-primary)] rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm pointer-events-auto relative"
+                  >
+                    <div
+                      class="absolute top-[-15px] left-5 px-4 py-1 border-2 rounded-full border-[var(--border-light)] bg-[var(--bg-primary)] hidden sm:block"
+                    >
+                      <p class="m-0 text-sm p-0">Command</p>
+                    </div>
+
+                    <div
+                      class="flex items-center px-3 border-dotted border-b border-[var(--bg-hover)]"
+                    >
+                      <svg
+                        class="w-4 h-4 mr-0 text-[var(--border-secondary)] shrink-0"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+                      </svg>
+                      <input
+                        type="text"
+                        x-ref="commandInput"
+                        x-model="commandSearch"
+                        class="flex w-full px-2 py-3 text-sm bg-transparent border-0 rounded-md outline-none focus:outline-none focus:ring-0 focus:border-0 placeholder:text-[var(--border-secondary)] h-11 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="Type a command or search..."
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                      />
+                    </div>
+
+                    <div
+                      x-ref="commandItemsList"
+                      class="grow min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain"
+                      data-command-list
+                    >
+                      <template
+                        x-for="(item, index) in commandItemsFiltered"
+                        :key="item.value"
+                      >
+                        <div class="pb-1 space-y-1">
+                          <template x-if="commandShowCategory(item, index)">
+                            <div class="px-1 overflow-hidden">
+                              <div
+                                class="px-2 py-1 my-1 text-xs font-medium text-[var(--text-primary)]"
+                                x-text="commandCategoryCapitalize(item.category)"
+                              ></div>
+                            </div>
+                          </template>
+                          <template
+                            x-if="(item.default && commandSearchIsEmpty()) || !commandSearchIsEmpty()"
+                          >
+                            <div class="px-1">
+                              <div
+                                :id="item.value + '-' + commandId"
+                                @click="commandItemSelected=item"
+                                @mouseenter="commandItemActive=item"
+                                x-bind:class="commandItemIsActive(item) ? 'bg-[var(--bg-hover)] text-[var(--text-body)]' : 'text-[var(--text-muted)]'"
+                                class="relative flex cursor-pointer select-none items-center rounded-[10px] px-2 py-1 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                              >
+                                <span x-html="item.icon"></span>
+                                <span
+                                  x-text="item.value === 'theme' ? ('Toggle Theme (current: ' + $store.theme.mode + ')') : item.title"
+                                ></span>
+                                <template x-if="item.right && !isTouchDevice">
+                                  <span
+                                    class="ml-auto text-xs px-1 py-1 tracking-widest text-[var(--text-body)] border border-[var(--bg-hover)] rounded-md"
+                                    x-text="item.right"
+                                  ></span>
+                                </template>
+                              </div>
+                            </div>
+                          </template>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!-- Mobile Bottom Drawer (Alpine.js) - Enhanced version -->
+            <template x-teleport="body">
+              <div
+                x-data="{
+      drawerOpen: false,
+      isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+      dragStartY: 0,
+      currentY: 0,
+      translateY: 100,
+      isDragging: false,
+      velocity: 0,
+      lastY: 0,
+      lastTime: 0,
+      snapThreshold: 20,
+      searchQuery: '',
+      isAnimating: false,
+      openDuration: 420,
+      closeDuration: 260,
+      animationCurve: 'cubic-bezier(0.16, 1, 0.3, 1)',
+      drawerHeight: null,
+      openFrame: null,
+      settleTimer: null,
+      themeTimer: null,
+      dataRevision: 0,
+
+      get allItems() {
+        void this.dataRevision;
+        const items = [];
+        const categories = Object.keys(window.COMMAND_ITEMS_DATA || {});
+
+        for (const category of categories) {
+          const bucket = window.COMMAND_ITEMS_DATA && window.COMMAND_ITEMS_DATA[category];
+          const categoryItems = Array.isArray(bucket) ? bucket : [];
+          const filtered = !this.searchQuery
+            ? categoryItems.filter(item => item.default)
+            : categoryItems.filter(item =>
+                item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+              );
+
+          if (filtered.length > 0) {
+            items.push({ type: 'header', category });
+            items.push(...filtered.map(item => ({ ...item, type: 'item' })));
+          }
+        }
+
+        return items;
+      },
+
+      openDrawer() {
+        const self = this;
+
+        if (self.settleTimer) {
+          clearTimeout(self.settleTimer);
+          self.settleTimer = null;
+        }
+        if (self.openFrame) {
+          cancelAnimationFrame(self.openFrame);
+          self.openFrame = null;
+        }
+        if (self.themeTimer) {
+          clearTimeout(self.themeTimer);
+          self.themeTimer = null;
+        }
+
+        self.drawerHeight = null;
+        self.drawerOpen = true;
+        if (window.umami && typeof window.umami.track === 'function') {
+          window.umami.track('Command palette open', { surface: 'drawer' });
+        }
+        self.isAnimating = true;
+        self.translateY = 100;
+        self.velocity = 0;
+        self.isDragging = false;
+
+        const overlayController = window.__overlayChromeController;
+        const canUseController =
+          overlayController && typeof overlayController.open === 'function';
+
+        if (canUseController) {
+          overlayController.open('drawer');
+        } else {
+          document.body.style.overflow = 'hidden';
+          document.body.style.position = 'fixed';
+          document.body.style.width = '100%';
+        }
+
+        requestAnimationFrame(() => {
+          self.openFrame = requestAnimationFrame(() => {
+            self.translateY = 0;
+            self.openFrame = null;
+            self.settleTimer = setTimeout(() => {
+              self.isAnimating = false;
+              self.settleTimer = null;
+            }, self.openDuration);
+            self.$nextTick(() => {
+              if (self.drawerHeight === null) {
+                const drawer = self.$refs.drawerContainer;
+                if (drawer) {
+                  self.drawerHeight = drawer.getBoundingClientRect().height;
+                }
+              }
+            });
+          });
+        });
+
+        // Update meta theme-color for Safari bottom bar
+        self.updateThemeColor();
+      },
+
+      closeDrawer() {
+        const self = this;
+
+        if (self.openFrame) {
+          cancelAnimationFrame(self.openFrame);
+          self.openFrame = null;
+        }
+        if (self.settleTimer) {
+          clearTimeout(self.settleTimer);
+          self.settleTimer = null;
+        }
+        if (self.themeTimer) {
+          clearTimeout(self.themeTimer);
+          self.themeTimer = null;
+        }
+
+        self.isAnimating = true;
+        self.isDragging = false;
+        self.translateY = 100;
+
+        // IMPORTANT: Reset commandOpen to fix Android button state
+        commandOpen = false;
+
+        const overlayController = window.__overlayChromeController;
+        const canUseController =
+          overlayController &&
+          typeof overlayController.close === 'function' &&
+          overlayController.hasActiveOverlays &&
+          overlayController.hasActiveOverlays();
+
+        if (canUseController) {
+          overlayController.close('drawer');
+        } else {
+          // Reset theme color slightly before drawer fully closes
+          self.themeTimer = setTimeout(() => {
+            self.resetThemeColor();
+            self.themeTimer = null;
+          }, Math.min(200, self.closeDuration));
+        }
+
+        self.settleTimer = setTimeout(() => {
+          self.drawerOpen = false;
+          self.isAnimating = false;
+          if (!canUseController) {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+          }
+          self.searchQuery = '';
+          self.drawerHeight = null;
+          self.settleTimer = null;
+        }, self.closeDuration);
+      },
+
+      updateThemeColor() {
+        const overlayController = window.__overlayChromeController;
+        if (overlayController) {
+          overlayController.updateThemeColor();
+          return;
+        }
+
+        let metaTheme = document.querySelector('meta[name=\'theme-color\']');
+        if (!metaTheme) {
+          metaTheme = document.createElement('meta');
+          metaTheme.name = 'theme-color';
+          document.head.appendChild(metaTheme);
+        }
+
+        const isDark = document.documentElement.classList.contains('dark');
+        metaTheme.content = isDark ? '#0f0f0f' : '#faf9f9';
+      },
+
+      resetThemeColor() {
+        const overlayController = window.__overlayChromeController;
+        if (overlayController) {
+          overlayController.resetThemeColor();
+          return;
+        }
+
+        const metaTheme = document.querySelector('meta[name=\'theme-color\']');
+        if (metaTheme) {
+          metaTheme.content = document.documentElement.classList.contains('dark') ? '#0f0f0f' : '#faf9f9';
+        }
+      },
+
+      startDrag(e) {
+        if (e.target.closest('[data-no-drag]')) return;
+        if (this.isAnimating) return;
+
+        this.isDragging = true;
+        this.dragStartY = e.touches ? e.touches[0].clientY : e.clientY;
+        this.lastY = this.dragStartY;
+        this.lastTime = Date.now();
+        this.velocity = 0;
+      },
+
+      onDrag(e) {
+        if (!this.isDragging || this.isAnimating) return;
+
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const deltaY = clientY - this.dragStartY;
+
+        // Calculate velocity
+        const now = Date.now();
+        const deltaTime = now - this.lastTime;
+        if (deltaTime > 0) {
+          this.velocity = (clientY - this.lastY) / deltaTime;
+        }
+        this.lastY = clientY;
+        this.lastTime = now;
+
+        // Apply resistance when dragging up
+        if (deltaY < 0) {
+          this.translateY = deltaY * 0.15;
+        } else {
+          this.translateY = Math.min(100, (deltaY / window.innerHeight) * 100);
+        }
+      },
+
+      endDrag() {
+        if (!this.isDragging) return;
+        this.isDragging = false;
+
+        const shouldClose = this.translateY > this.snapThreshold || this.velocity > 0.3;
+
+        if (shouldClose) {
+          this.closeDrawer();
+        } else {
+          this.translateY = 0;
+        }
+      },
+
+      handleItemClick(item) {
+        if (item.value === 'theme') {
+          $store.theme.toggle();
+          this.updateThemeColor();
+        } else if (item.value === 'email') {
+          window.location.href = window.COMMAND_ACTION_MAP[item.value];
+          this.closeDrawer();
+        } else {
+          const targetUrl = window.COMMAND_ACTION_MAP[item.value];
+          if (targetUrl) {
+            window.location.href = targetUrl;
+          }
+          this.closeDrawer();
+        }
+      },
+
+      formatCategoryName(category) {
+        return category.charAt(0).toUpperCase() + category.slice(1);
+      },
+
+      transitionStyle() {
+        if (this.isDragging) {
+          return 'none';
+        }
+
+        const duration = this.isAnimating ? this.openDuration : this.closeDuration;
+        return `transform ${duration}ms ${this.animationCurve}`;
+      },
+
+      drawerStyles() {
+        const styles = {
+          transform: `translate3d(-50%, ${Math.max(0, this.translateY)}%, 0)`,
+          transition: this.transitionStyle(),
+          left: '50%',
+          maxWidth: '640px',
+          width: '100%',
+        };
+
+        if (this.drawerHeight !== null) {
+          styles.height = `${this.drawerHeight}px`;
+        }
+
+        return styles;
+      }
+    }"
+                x-init="
+      const dataUpdateHandlerMobile = () => { dataRevision += 1; };
+      window.addEventListener('command-palette-data-updated', dataUpdateHandlerMobile);
+      window.loadCommandPalettePosts && window.loadCommandPalettePosts().catch(() => {});
+
+      $watch('commandOpen', value => {
+        if (value && (window.innerWidth < 768 || isTouchDevice)) {
+          commandOpen = false;
+          openDrawer();
+        }
+      });
+
+      // Watch for theme changes to update Safari chrome
+      $watch('$store.theme.mode', () => {
+        if (drawerOpen) {
+          updateThemeColor();
+        }
+      });
+    "
+                x-show="drawerOpen"
+                @click="closeDrawer()"
+                class="fixed inset-0 z-[100] touch-none"
+                x-cloak
+              >
+                <!-- Backdrop with better dark mode contrast -->
+                <div
+                  x-show="drawerOpen"
+                  x-transition:enter="ease-out duration-400"
+                  x-transition:enter-start="opacity-0"
+                  x-transition:enter-end="opacity-100"
+                  x-transition:leave="ease-in duration-200"
+                  x-transition:leave-start="opacity-100"
+                  x-transition:leave-end="opacity-0"
+                  :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'bg-black/60' : 'bg-black/30'"
+                  class="absolute inset-0 backdrop-blur-sm transition-colors duration-300"
+                  :style="`opacity: ${drawerOpen ? Math.max(0, 1 - (translateY / 100)) : 0}`"
+                ></div>
+
+                <!-- Bottom Sheet with smooth entrance animation -->
+                <div
+                  x-show="drawerOpen"
+                  @click.stop
+                  @touchstart="startDrag"
+                  @touchmove="onDrag"
+                  @touchend="endDrag"
+                  @mousedown="startDrag"
+                  @mousemove="onDrag"
+                  @mouseup="endDrag"
+                  @mouseleave="endDrag"
+                  :style="drawerStyles()"
+                  :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'ring-1 ring-white/10' : ''"
+                  class="absolute bottom-0 w-full bg-[var(--bg-primary)] border-t border-[var(--border-secondary)] rounded-t-[28px] shadow-2xl max-h-[75vh] flex flex-col"
+                  x-ref="drawerContainer"
+                  style="
+                    will-change: transform;
+                    padding-bottom: env(safe-area-inset-bottom);
+                  "
+                >
+                  <!-- Larger Invisible Drag Handle Area -->
+                  <div
+                    class="relative pt-3 pb-6 -mb-3 cursor-grab active:cursor-grabbing"
+                  >
+                    <!-- Visual Handle with better visibility in dark mode -->
+                    <div
+                      :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'opacity-40' : 'opacity-30'"
+                      class="mx-auto w-11 h-1 bg-[var(--border-secondary)] rounded-full transition-opacity duration-300"
+                    ></div>
+                  </div>
+
+                  <!-- Search Bar -->
+                  <div class="px-4 pb-3" data-no-drag>
+                    <div
+                      class="flex items-center border border-[var(--border-light)] rounded-xl px-3.5 py-2.5"
+                    >
+                      <svg
+                        class="w-4 h-4 text-[var(--text-subtle)] mr-2.5 opacity-60"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                      </svg>
+                      <input
+                        type="search"
+                        x-model="searchQuery"
+                        placeholder="Type a command or search..."
+                        class="flex-1 bg-transparent outline-none text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] text-base"
+                        style="font-size: 16px"
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                        data-no-drag
+                      />
+                      <button
+                        x-show="searchQuery"
+                        @click="searchQuery = ''"
+                        class="ml-2 p-1 -mr-1"
+                        data-no-drag
+                      >
+                        <svg
+                          class="w-4 h-4 text-[var(--text-subtle)]"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M18 6 6 18"></path>
+                          <path d="m6 6 12 12"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Scrollable Content with stagger animation -->
+                  <div
+                    class="flex-1 overflow-y-auto overscroll-contain px-2 pb-4"
+                    data-no-drag
+                  >
+                    <template x-for="(item, index) in allItems" :key="index">
+                      <div>
+                        <!-- Section Header -->
+                        <template x-if="item.type === 'header'">
+                          <div class="px-3 pt-3 pb-1.5">
+                            <div
+                              class="text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider opacity-60"
+                              x-text="formatCategoryName(item.category)"
+                            ></div>
+                          </div>
+                        </template>
+
+                        <!-- Item -->
+                        <template x-if="item.type === 'item'">
+                          <button
+                            @click="handleItemClick(item)"
+                            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-transform duration-150 active:scale-[0.98]"
+                            data-no-drag
+                          >
+                            <!-- Icon -->
+                            <span
+                              x-html="item.icon"
+                              class="[&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-[var(--text-subtle)]"
+                            ></span>
+
+                            <!-- Text -->
+                            <span
+                              class="flex-1 text-left text-[var(--text-body)] text-[15px]"
+                              x-text="item.value === 'theme' ? ('Toggle Theme (' + $store.theme.mode + ')') : item.title"
+                            ></span>
+
+                            <!-- Chevron -->
+                            <template x-if="item.value !== 'theme'">
+                              <svg
+                                class="w-4 h-4 text-[var(--border-secondary)] opacity-60"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path d="m9 18 6-6-6-6"></path>
+                              </svg>
+                            </template>
+                          </button>
+                        </template>
+                      </div>
+                    </template>
+
+                    <!-- Empty State -->
+                    <div
+                      x-show="allItems.length === 0"
+                      class="text-center pt-6 pb-12"
+                    >
+                      <p class="text-[var(--text-subtle)] text-sm">
+                        No results found
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="colophon" aria-labelledby="colophon-heading">
+      <h2 id="colophon-heading" class="section-heading">Colophon</h2>
+      <p class="page-subtitle text-italic">
+        A peek behind the making of this portfolio.
+      </p>
+
+      <hr class="divider-standard" />
+
+      <!-- Build & Stack -->
+      <section class="animate-on-scroll" aria-labelledby="build-stack">
+        <h3 id="build-stack">Build & Stack</h3>
+        <p>
+          Designed and coded by me with semantic HTML, modern CSS, and vanilla
+          JavaScript. I sprinkle in Tailwind and AlpineJS for a few interactive
+          details (like the command palette). The entire codebase is open-source
+          on
+          <a
+            href="https://github.com/pierrelouis-cmrt/pierrelouis.net"
+            target="_blank"
+            >GitHub</a
+          >
+          under the MIT license.
+        </p>
+        <p>I design, prototype, and test directly in code using VS Code.</p>
+      </section>
+
+      <!-- Type & Icons -->
+      <section class="animate-on-scroll" aria-labelledby="type-icons">
+        <h3 id="type-icons">Type & Icons</h3>
+        <p>
+          The interface uses Geist for the sans-serif UI, with a touch of
+          <a
+            href="https://fonts.google.com/specimen/Libre+Baskerville"
+            target="_blank"
+            >Libre Baskerville</a
+          >
+          for accents. Icons are from
+          <a href="https://lucide.dev/" target="_blank">Lucide</a>, a free and
+          open-source set built by a great community.
+        </p>
+      </section>
+
+      <!-- Privacy-Friendly Analytics -->
+      <section class="animate-on-scroll" aria-labelledby="privacy-analytics">
+        <h3 id="privacy-analytics">Privacy-Friendly Analytics</h3>
+        <p>
+          I use <a href="https://umami.is/" target="_blank">Umami</a>, a
+          lightweight, open-source, cookieless analytics tool. I simply want to
+          understand how the site is used (how you discover it, which pages you
+          visit, etc.). That's it. No ads, no cross-site tracking, no cookies,
+          and no personally identifiable data — ever.
+        </p>
+      </section>
+
+      <!-- Sustainability (Ecology) -->
+      <section class="animate-on-scroll" aria-labelledby="sustainability">
+        <h3 id="sustainability">Sustainability</h3>
+        <p>
+          Performance and footprint matter. This site is cleaner than 96% of
+          tested web pages. Each visit produces about
+          <a
+            href="https://www.websitecarbon.com/website/pierrelouis-net/"
+            target="_blank"
+            >0.02g of CO₂</a
+          >. It runs on
+          <a
+            href="https://www.thegreenwebfoundation.org/green-web-check/?url=pierrelouis.net"
+            target="_blank"
+            >verified green hosting</a
+          >, and it's featured on
+          <a href="https://lowwwcarbon.com/" target="_blank">lowwwcarbon</a>
+          with an A+ rating.
+        </p>
+        <p>
+          What helps keep it lean: minimal JavaScript, compressed assets, a
+          focused type palette (Geist + Libre Baskerville), carefully
+          budgeted images, and a straightforward architecture.
+        </p>
+
+        <!--<div class="certification-badges">
+          <a
+            href="https://www.websitecarbon.com/website/pierrelouis-net/"
+            target="_blank"
+          >
+            <img
+              src="../src/assets/websitecarbon.webp"
+              alt="Website Carbon Analysis"
+              class="carbon-badge"
+            />
+          </a>
+          <a
+            href="https://www.thegreenwebfoundation.org/green-web-check/?url=pierrelouis.net"
+            target="_blank"
+          >
+            <img
+              src="https://app.greenweb.org/api/v3/greencheckimage/pierrelouis.net?nocache=true"
+              alt="This website runs on green hosting — verified by thegreenwebfoundation.org"
+              width="200"
+              height="95"
+            />
+          </a>
+        </div>-->
+      </section>
+
+      <hr class="divider-thin" />
+
+      <!-- Credits -->
+      <section class="animate-on-scroll" aria-labelledby="credits">
+        <h3 id="credits">Credits & Thanks</h3>
+        <p>
+          Huge thanks to
+          <a href="https://thu-le.com/" target="_blank">Thu Le</a>. Her work has
+          been a major source of inspiration for this site.
+        </p>
+      </section>
+
+      <hr class="divider-thin" />
+
+      <!-- Inspiration Gallery -->
+      <section class="animate-on-scroll" aria-labelledby="inspiration">
+        <h3 id="inspiration">Inspiration Gallery</h3>
+        <p>
+          Here's an evolving, unordered list of websites and portfolios that
+          inspired this one. You can find more hand-picked, minimal sites at
+          <a href="https://deadsimplesites.com/" target="_blank"
+            >Dead Simple Sites</a
+          >.
+        </p>
+
+        <div class="credits-grid">
+          <a
+            href="https://www.harshsingh.me"
+            target="_blank"
+            class="animate-on-scroll"
+            >harshsingh.me</a
+          >
+          <a
+            href="https://kaijordan.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >kaijordan.com</a
+          >
+          <a
+            href="https://www.emilykshen.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >emilykshen.com</a
+          >
+          <a href="https://asrvd.me" target="_blank" class="animate-on-scroll"
+            >asrvd.me</a
+          >
+          <a
+            href="https://jmswrnr.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >jmswrnr.com</a
+          >
+          <a
+            href="https://sigurdarson.is"
+            target="_blank"
+            class="animate-on-scroll"
+            >sigurdarson.is</a
+          >
+          <a
+            href="https://lyleklyne.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >lyleklyne.com</a
+          >
+          <a
+            href="https://mateusf.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >mateusf.com</a
+          >
+          <a href="https://nuro.dev" target="_blank" class="animate-on-scroll"
+            >nuro.dev</a
+          >
+          <a href="https://jahir.dev" target="_blank" class="animate-on-scroll"
+            >jahir.dev</a
+          >
+          <a
+            href="https://rishimohan.me"
+            target="_blank"
+            class="animate-on-scroll"
+            >rishimohan.me</a
+          >
+          <a href="https://kejk.tech" target="_blank" class="animate-on-scroll"
+            >kejk.tech</a
+          >
+          <a
+            href="https://pandadev.net"
+            target="_blank"
+            class="animate-on-scroll"
+            >pandadev.net</a
+          >
+          <a
+            href="https://hellobrianl.in"
+            target="_blank"
+            class="animate-on-scroll"
+            >hellobrianl.in</a
+          >
+          <a href="https://kyswtn.com" target="_blank" class="animate-on-scroll"
+            >kyswtn.com</a
+          >
+          <a
+            href="https://paulstamatiou.com/gear"
+            target="_blank"
+            class="animate-on-scroll"
+            >paulstamatiou.com</a
+          >
+          <a
+            href="https://aaronrolston.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >aaronrolston.com</a
+          >
+          <a
+            href="https://educalvolopez.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >educalvolopez.com</a
+          >
+          <a href="https://thu-le.com" target="_blank" class="animate-on-scroll"
+            >thu-le.com</a
+          >
+          <a href="https://paco.me" target="_blank" class="animate-on-scroll"
+            >paco.me</a
+          >
+          <a href="https://slrncl.com" target="_blank" class="animate-on-scroll"
+            >slrncl.com</a
+          >
+          <a
+            href="https://henribredt.de"
+            target="_blank"
+            class="animate-on-scroll"
+            >henribredt.de</a
+          >
+          <a href="https://sesame.com" target="_blank" class="animate-on-scroll"
+            >sesame.com</a
+          >
+          <a
+            href="https://sannedv.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >sannedv.com</a
+          >
+          <a
+            href="https://kyler.design"
+            target="_blank"
+            class="animate-on-scroll"
+            >kyler.design</a
+          >
+          <a
+            href="https://brianmaierjr.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >brianmaierjr.com</a
+          >
+          <a
+            href="https://daleanthony.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >daleanthony.com</a
+          >
+          <a
+            href="https://prosper.org"
+            target="_blank"
+            class="animate-on-scroll"
+            >prosper.org</a
+          >
+          <a
+            href="https://tdquang.vercel.app"
+            target="_blank"
+            class="animate-on-scroll"
+            >tdquang.vercel.app</a
+          >
+          <a
+            href="https://stepanpavlov.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >stepanpavlov.com</a
+          >
+          <a
+            href="https://youcefbelabed.webflow.io"
+            target="_blank"
+            class="animate-on-scroll"
+            >youcefbelabed</a
+          >
+          <a
+            href="https://thomasri.co"
+            target="_blank"
+            class="animate-on-scroll"
+            >thomasri.co</a
+          >
+          <a
+            href="https://timhoili.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >timhoili.com</a
+          >
+          <a
+            href="https://dominikhofer.me"
+            target="_blank"
+            class="animate-on-scroll"
+            >dominikhofer.me</a
+          >
+          <a
+            href="https://trangbui.me"
+            target="_blank"
+            class="animate-on-scroll"
+            >trangbui.me</a
+          >
+          <a
+            href="https://tomasmaillo.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >tomasmaillo.com</a
+          >
+          <a
+            href="https://milos.design"
+            target="_blank"
+            class="animate-on-scroll"
+            >milos.design</a
+          >
+          <a
+            href="https://mosadiq.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >mosadiq.com</a
+          >
+          <a
+            href="https://perrera.com"
+            target="_blank"
+            class="animate-on-scroll"
+            >perrera.com</a
+          >
+          <a
+            href="https://dylanatsmith.com/"
+            target="_blank"
+            class="animate-on-scroll"
+            >dylanatsmith.com</a
+          >
+          <a
+            href="https://nazhamid.com/"
+            target="_blank"
+            class="animate-on-scroll"
+            >nazhamid.com</a
+          >
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="hero-links">
+        <p>
+          <a
+            class="link-with-icon"
+            rel="noopener"
+            href="#page-top"
+            data-back-to-top
+            >Back to top<svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              width="1em"
+              style="margin-left: 0.2em"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-up-icon lucide-arrow-up"
+            >
+              <path d="m5 12 7-7 7 7" />
+              <path d="M12 19V5" /></svg
+          ></a>
+        </p>
+        <div class="theme-toggle">
+          <button
+            aria-label="Toggle theme"
+            class="theme-toggle"
+            x-data
+            x-init="$store.theme.init()"
+            @click="$store.theme.toggle()"
+            :data-mode="$store.theme.mode"
+          >
+            <!-- System Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-monitor"
+              data-icon="system"
+            >
+              <rect width="20" height="14" x="2" y="3" rx="2" />
+              <line x1="8" x2="16" y1="21" y2="21" />
+              <line x1="12" x2="12" y1="17" y2="21" />
+            </svg>
+            <!-- Light/Sun Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-sun"
+              data-icon="light"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" />
+              <path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" />
+              <path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+            <!-- Dark/Moon Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-moon"
+              data-icon="dark"
+            >
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <p class="footer-meta-left">
+          Designed with
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#FE6F5E"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-heart w-3 h-3 mr-2 animate-bounce"
+          >
+            <path
+              d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+            />
+          </svg>
+          <span class="subtle">by</span> Pierre-Louis
+        </p>
+        <p class="footer-meta-right">© 2026</p>
+      </div>
+    </footer>
+    <script defer src="/src/script.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"
+    ></script>
+  </body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Full-bleed trick</title>
+    <style>
+      :root {
+        --bg-primary: rgba(250, 249, 249, 1);
+        --bg-tag: rgba(240, 240, 240, 1);
+        --text-primary: rgba(13, 13, 13, 1);
+        --text-body: rgba(41, 41, 41, 1);
+        --text-subtle: rgba(112, 112, 112, 1);
+        --text-muted: rgba(77, 76, 76, 1);
+        --border-light: rgba(217, 217, 217, 1);
+        --border-secondary: rgba(174, 174, 174, 1);
+        --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system,
+          sans-serif;
+        --font-serif: "Libre Baskerville", serif;
+        --font-mono: ui-monospace, "SF Mono", Monaco, Consolas, monospace;
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --space-2: 0.5rem;
+        --space-3: 0.75rem;
+        --space-4: 1rem;
+        --space-6: 1.5rem;
+        --space-8: 2rem;
+        --space-12: 3rem;
+
+        /* Fluid column width: min 280px, preferred 65%, max 420px */
+        --col-w: clamp(280px, 65vw, 420px);
+      }
+
+      .dark {
+        --bg-primary: rgba(15, 15, 15, 1);
+        --bg-tag: rgba(40, 40, 40, 1);
+        --text-primary: rgba(242, 242, 242, 1);
+        --text-body: rgba(224, 224, 224, 1);
+        --text-subtle: rgba(138, 138, 138, 1);
+        --text-muted: rgba(199, 199, 199, 1);
+        --border-light: rgba(133, 133, 133, 1);
+        --border-secondary: rgba(100, 100, 100, 1);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root:not(.light) {
+          --bg-primary: rgba(15, 15, 15, 1);
+          --bg-tag: rgba(40, 40, 40, 1);
+          --text-primary: rgba(242, 242, 242, 1);
+          --text-body: rgba(224, 224, 224, 1);
+          --text-subtle: rgba(138, 138, 138, 1);
+          --text-muted: rgba(199, 199, 199, 1);
+          --border-light: rgba(133, 133, 133, 1);
+          --border-secondary: rgba(100, 100, 100, 1);
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: var(--font-sans);
+        font-size: clamp(14px, 1vw + 12px, 15px);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+
+      body {
+        overflow-x: clip;
+      }
+
+      main {
+        max-width: var(--col-w);
+        margin: 0 auto;
+        padding: 0 var(--space-4);
+      }
+
+      /* Column guides */
+      .column {
+        position: relative;
+        padding: var(--space-6) 0;
+        height: 400px !important;
+        margin: 0 auto;
+      }
+
+      @media (max-width: 768px) {
+        .column {
+          max-width: 70vw;
+        }
+      }
+
+      .column::before,
+      .column::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 1.5px;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          to bottom,
+          var(--border-light) 0 6px,
+          transparent 6px 12px
+        );
+      }
+
+      .column::before {
+        left: 0;
+      }
+      .column::after {
+        right: 0;
+      }
+
+      /* Examples */
+      .example {
+        margin-bottom: var(--space-8);
+      }
+
+      .example:last-child {
+        margin-bottom: 0;
+      }
+
+      .label {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        margin-bottom: var(--space-3);
+        margin-left: var(--space-2);
+        flex-wrap: wrap;
+      }
+
+      .status {
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: var(--text-muted);
+        flex-shrink: 0;
+      }
+
+      .status.fail {
+        color: #b54a4a;
+      }
+      .status.pass {
+        color: #4a8f4a;
+      }
+
+      code {
+        font-family: var(--font-mono);
+        font-size: clamp(0.625rem, 2vw, 0.75rem);
+        background: var(--bg-tag);
+        padding: 0.2rem 0.5rem;
+        border-radius: var(--radius-md);
+        color: var(--text-body);
+        word-break: break-word;
+      }
+
+      /* Strip blocks */
+      .strip {
+        height: clamp(80px, 20vw, 120px);
+        display: grid;
+        place-items: center;
+        background: var(--bg-tag);
+        border-radius: var(--radius-lg);
+        color: var(--text-subtle);
+        font-size: clamp(0.6875rem, 2vw, 0.8125rem);
+        -webkit-user-select: none;
+           -moz-user-select: none;
+                user-select: none;
+        text-align: center;
+        padding: var(--space-3);
+      }
+
+      .strip.misaligned {
+        width: 100vw;
+        border-radius: 0;
+      }
+
+      .strip.correct {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        border-radius: 0;
+      }
+
+      /* Tablet breakpoint */
+      @media (max-width: 768px) {
+        :root {
+          --col-w: clamp(240px, 60vw, 360px);
+          --space-6: 1.25rem;
+          --space-8: 1.5rem;
+        }
+      }
+
+      /* Mobile breakpoint */
+      @media (max-width: 480px) {
+        :root {
+          --col-w: min(85vw, 300px);
+          --space-4: 0.75rem;
+          --space-6: 1rem;
+          --space-8: 1.25rem;
+        }
+
+        .label {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: var(--space-2);
+        }
+      }
+
+      /* Very small screens */
+      @media (max-width: 360px) {
+        :root {
+          --col-w: 90vw;
+        }
+
+        code {
+          font-size: 0.625rem;
+          padding: 0.15rem 0.35rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="column">
+        <div class="example">
+          <div class="label">
+            <span class="status fail">✗</span>
+            <code>width: 100vw</code>
+          </div>
+          <div class="strip misaligned">
+            starts at column edge → spills right
+          </div>
+        </div>
+
+        <div class="example">
+          <div class="label">
+            <span class="status pass">✓</span>
+            <code
+              >width: 100vw; <br />
+              margin-left: calc(50% - 50vw)</code
+            >
+          </div>
+          <div class="strip correct">re-centers on viewport → full bleed</div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

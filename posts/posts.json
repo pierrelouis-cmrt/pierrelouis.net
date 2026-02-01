@@ -1,0 +1,122 @@
+[
+  {
+    "year": 2026,
+    "month": "Feb",
+    "day": 1,
+    "title": "Lissajous Curves: Where Mathematics Meets Music and Light",
+    "description": "A 19th-century physicist pointed lasers at tuning forks and created one of the most useful patterns in engineering. Turns out the same math connects musical harmony, graphic design, and the LIDAR in your car. A full explanation of the theory begind it, plus an interactive tool to make your own.",
+    "image": "",
+    "tag": "Articles",
+    "tags": [
+      "article"
+    ]
+  },
+  {
+    "year": 2026,
+    "month": "Jan",
+    "day": 10,
+    "title": "How Many Tokens Does Humanity Speak Per Year?",
+    "description": "How many tokens do the biggest AI labs process every year? How does that compare to humanity's spoken words?",
+    "image": "",
+    "tag": "Notes",
+    "tags": [
+      "note"
+    ]
+  },
+  {
+    "year": 2025,
+    "month": "Dec",
+    "day": 29,
+    "title": "Building a Carousel",
+    "description": "Tips & tricks behind my custom carousel",
+    "image": "",
+    "tag": "Experiments",
+    "tags": [
+      "experiment"
+    ]
+  },
+  {
+    "year": 2025,
+    "month": "Dec",
+    "day": 26,
+    "title": "How Marketing Renames Our World",
+    "description": "Some words we regularly use have really fun origins, far from a simple etymology perspective",
+    "image": "",
+    "tag": "Notes",
+    "tags": [
+      "note"
+    ]
+  },
+  {
+    "year": 2025,
+    "month": "Dec",
+    "day": 10,
+    "title": "Motivation - A personal take",
+    "description": "A small self-reflection on what motivation is to me.",
+    "image": "",
+    "tag": "Notes",
+    "tags": [
+      "note"
+    ]
+  },
+  {
+    "year": 2025,
+    "month": "Dec",
+    "day": 1,
+    "title": "Was maths invented or discovered?",
+    "description": "An exploration of the philosophy of mathematics and its origins.",
+    "image": "",
+    "tag": "Articles",
+    "tags": [
+      "article"
+    ]
+  },
+  {
+    "year": 2025,
+    "month": "Nov",
+    "day": 15,
+    "title": "The art of stressing",
+    "description": "Understanding stress: where it comes from and how to find balance in a hectic world.",
+    "image": "",
+    "tag": "Notes",
+    "tags": [
+      "note"
+    ]
+  },
+  {
+    "year": 2025,
+    "month": "Nov",
+    "day": 9,
+    "title": "How China Quietly Caught Up",
+    "description": "Why everyone chooses China as their manufacturing hub? Is China really on the verge of surpassing the US in AI?",
+    "image": "",
+    "tag": "Articles",
+    "tags": [
+      "article"
+    ]
+  },
+  {
+    "year": 2025,
+    "month": "Aug",
+    "day": 5,
+    "title": "Interactive Pixel Grid",
+    "description": "A fun experiment with a pixel grid that responds to user interaction.",
+    "image": "",
+    "tag": "Experiments",
+    "tags": [
+      "experiment"
+    ]
+  },
+  {
+    "year": 2025,
+    "month": "Aug",
+    "day": 1,
+    "title": "Animated Avatar",
+    "description": "Bringing life to a simple design element with CSS animations.",
+    "image": "",
+    "tag": "Experiments",
+    "tags": [
+      "experiment"
+    ]
+  }
+]
