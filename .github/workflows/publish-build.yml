@@ -1,8 +1,6 @@
 name: Publish build branch
 
 on:
-  push:
-    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -61,10 +59,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git show-ref --verify --quiet refs/heads/build; then
-            git branch -D build
+          git fetch origin build || true
+          if git show-ref --verify --quiet refs/remotes/origin/build; then
+            git checkout -B build origin/build
+          else
+            git checkout -b build
           fi
-          git checkout --orphan build
           git rm -rf .
           rsync -a --delete --exclude='.git' "$BUILD_OUTPUT"/ ./
           rm -rf "$BUILD_OUTPUT"
@@ -74,4 +74,4 @@ jobs:
             exit 0
           fi
           git commit -m "build: update site"
-          git push --force origin build
+          git push origin build
