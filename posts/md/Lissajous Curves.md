@@ -11,10 +11,10 @@ The curves we call "Lissajous" actually have an earlier origin. In 1815, America
 
 But it was French physicist Jules Antoine Lissajous who, in the 1850s, turned them into spectacle. His experiment was simple: mirrors attached to vibrating tuning forks, projecting beams of light onto screens in darkened lecture halls. Audiences could watch sound become "visible". The curves took his name and have remained scientifically useful ever since.
 
-![](https://www.researchgate.net/publication/369266058/figure/fig8/AS:11431281224713364@1708398969542/Experiment-of-Lissajous-The-light-figures-produced-by-the-compound-vibrations-of-two.png)
+![Historical image](https://www.researchgate.net/publication/369266058/figure/fig8/AS:11431281224713364@1708398969542/Experiment-of-Lissajous-The-light-figures-produced-by-the-compound-vibrations-of-two.png)
 **Figure 1.** Experiment of Lissajous. The light-figures produced by the compound vibrations of two tuning forks vibrating at different pitches. *Source: Privat-Deschanel A. and de Ochoa y Ronna E., Tratado elemental de física, Hachette, Paris (1872), pp. 696–697* [^1]
 
-![](experiment.webp)
+![Experiment](assets/experiment.webp)
 **Figure 2.** Modern recreation of Lissajous's experiment. Two tuning forks arranged at 90 degrees, each with a mirror on one tyne. A laser beam reflects off both mirrors in sequence; when the forks are struck, the beam traces a Lissajous pattern on the screen. *Source: UC Berkeley Physics Lecture Demonstrations* [^2]
 
 ---
@@ -76,7 +76,7 @@ $$
 
 The figure below shows how $k$ affects the trajectory for various frequency ratios. Notice that when $k = 2$ or $k = 6$, the figures achieve maximum symmetry: symmetric about both axes and the origin simultaneously.
 
-![](curves_k.webp)
+![Lissajous basic graphs for different frequency ratios](assets/curves_k.webp)
  **Figure 3.** Lissajous basic graphs for frequency ratios $n_x : n_y$ of 1:1, 2:1, 3:1, 3:2, 4:3, 5:3, and 5:4 (rows) with phase parameter $k$ from 0 to 7 (columns). When $k$ is constant, trajectory density increases with frequency. At constant frequency ratio, different $k$ values produce different trajectory densities. *Source: Wang et al., Microsystems & Nanoengineering (2020)* [^3]
 
 ### Symmetry Properties
@@ -182,7 +182,7 @@ Perhaps the most famous Lissajous figure hidden in plain sight: the **ABC televi
 
 More recently, Meta's 2021 rebrand introduced a logo that is essentially an infinite loop: a Lissajous-like figure rotated in 3D space, representing connection and infinity.
 
-![](https://upload.wikimedia.org/wikipedia/commons/a/ab/Meta-Logo.png)
+![Meta Logo](https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg)
 **Figure 4.** Current Meta Logo [^4]
 
 ---
@@ -215,11 +215,12 @@ Maths tends to be pretty abstract. The more you study it, the less visual it bec
 
 Try the online generator I built and play with the parameters by yourself.
 
-<iframe src="/lissajous/" class="article-embed lissajous-embed" loading="lazy"></iframe>
+<div class="lissajous-embed-wrapper">
+	<a class="lissajous-embed-link" href="/lissajous/" aria-label="Open the Lissajous generator fullscreen"></a>
+	<iframe src="/lissajous/" class="article-embed lissajous-embed" loading="lazy"></iframe>
+</div>
 
----
-
-## References
+Open in fullscreen by clicking [here](/lissajous/)
 
 [^1]: Privat-Deschanel, A. & de Ochoa y Ronna, E. *Tratado elemental de física*, Hachette, Paris (1872), pp. 696–697. Via ResearchGate. https://www.researchgate.net/figure/Experiment-of-Lissajous-The-light-figures-produced-by-the-compound-vibrations-of-two_fig8_369266058
 

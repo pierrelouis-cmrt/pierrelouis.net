@@ -25,8 +25,11 @@
     "build:content": "npm run build:posts && npm run build:bookmarks",
     "build:uses-icons": "node scripts/cacheUsesIcons.mjs",
     "dev": "npm run build:content && vite",
+    "d": "npm run dev",
     "build": "npm run build:content && vite build && node scripts/copyStatic.mjs && npm run build:uses-icons",
+    "b": "npm run build",
     "preview": "vite preview",
+    "p": "npm run preview",
     "lint": "eslint .",
     "format": "prettier . --check",
     "format:write": "prettier . --write"

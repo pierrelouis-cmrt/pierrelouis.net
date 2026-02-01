@@ -62,6 +62,7 @@ const md = new MarkdownIt({ html: true, breaks: true, linkify: true })
 
 const isDisplayMathToken = (token) =>
   token && (token.type === "display_math" || token.type === "math");
+const isImageToken = (token) => token && token.type === "image";
 
 const defaultSoftbreak =
   md.renderer.rules.softbreak ||
@@ -72,14 +73,14 @@ const defaultHardbreak =
 
 // Suppress <br> directly after display math (e.g., $$...$$) to avoid extra gaps.
 md.renderer.rules.softbreak = (tokens, idx, options, env, self) => {
-  if (isDisplayMathToken(tokens[idx - 1])) {
+  if (isDisplayMathToken(tokens[idx - 1]) || isImageToken(tokens[idx - 1])) {
     return "\n";
   }
   return defaultSoftbreak(tokens, idx, options, env, self);
 };
 
 md.renderer.rules.hardbreak = (tokens, idx, options, env, self) => {
-  if (isDisplayMathToken(tokens[idx - 1])) {
+  if (isDisplayMathToken(tokens[idx - 1]) || isImageToken(tokens[idx - 1])) {
     return "\n";
   }
   return defaultHardbreak(tokens, idx, options, env, self);
@@ -143,6 +144,22 @@ md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
   return defaultLinkRenderer(tokens, idx, options, env, self);
 };
 
+function wrapImageCaptions(html) {
+  return html.replace(
+    /<p>(\s*<img[^>]*>)(?:<br>\s*)?([\s\S]*?)<\/p>/g,
+    (match, img, caption) => {
+      const trimmed = caption.trim();
+      if (!trimmed) {
+        return `<p>${img}</p>`;
+      }
+      if (/^<img\b/i.test(trimmed)) {
+        return `<p>${img}${trimmed}</p>`;
+      }
+      return `<figure class="article-figure">${img}<figcaption class="article-figcaption">${trimmed}</figcaption></figure>`;
+    }
+  );
+}
+
 /* ---------- Pre-processing tweaks --------------------------------------- */
 function preprocess(markdown) {
   let txt = markdown;
@@ -195,6 +212,8 @@ export async function buildPostPages(
         'class="article-contains-task-list"'
       )
       .replace(/class="task-list"/g, 'class="article-task-list"');
+
+    rendered = wrapImageCaptions(rendered);
 
     const dateStr = `${monthName(post.month)} ${post.day}, ${post.year}`;
 

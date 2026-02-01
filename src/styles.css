@@ -42,13 +42,12 @@
   --bg-table-stripe: rgba(246, 246, 246, 1);
 
   /* Typography */
-  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI Variable Display", Roboto, "Helvetica Neue",
-    Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    "Geist", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI Variable Display", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif: "Libre Baskerville", serif;
-  --font-mono: ui-monospace, "SF Mono", Monaco, "Cascadia Code", "Roboto Mono",
-    Consolas, monospace;
+  --font-mono: ui-monospace, "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace;
 
   /* Font sizes */
   --text-xs: 0.75rem;
@@ -131,7 +130,9 @@ body {
   line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
   hanging-punctuation: first allow-end last;
-  transition: background-color 400ms ease-in-out, color 400ms ease-in-out;
+  transition:
+    background-color 400ms ease-in-out,
+    color 400ms ease-in-out;
   overflow-x: hidden;
 }
 
@@ -147,7 +148,9 @@ main {
 }
 
 .theme-transition {
-  transition: background-color 400ms ease-in-out, color 400ms ease-in-out,
+  transition:
+    background-color 400ms ease-in-out,
+    color 400ms ease-in-out,
     border-color 400ms ease-in-out;
 }
 
@@ -294,7 +297,9 @@ a.link-with-icon:hover .lucide {
 }
 
 a.link-with-icon:not(:hover) .lucide {
-  transition: color 120ms ease-in-out, transition-delay 120ms;
+  transition:
+    color 120ms ease-in-out,
+    transition-delay 120ms;
 }
 
 /* Navigation Bar */
@@ -478,7 +483,8 @@ a.link-with-icon:not(:hover) .lucide {
   width: 77px;
   height: 77px;
   border-radius: 33% 67% 40% 60% / 66% 39% 61% 34%;
-  box-shadow: 0px 0.7px 1.9px -24px rgba(0, 0, 0, 0.124),
+  box-shadow:
+    0px 0.7px 1.9px -24px rgba(0, 0, 0, 0.124),
     0px 1.7px 4.9px -24px rgba(0, 0, 0, 0.177),
     0px 3.5px 9.9px -24px rgba(0, 0, 0, 0.223),
     0px 7.3px 20.4px -24px rgba(0, 0, 0, 0.276),
@@ -662,7 +668,9 @@ a.project-card:hover .lucide {
 
 a.project-card:not(:hover) .lucide {
   transform: translate(0, 0);
-  transition: all 120ms ease-in-out, transition-delay 120ms;
+  transition:
+    all 120ms ease-in-out,
+    transition-delay 120ms;
 }
 
 .projects-view-all-link,
@@ -852,7 +860,9 @@ a.project-card:not(:hover) .lucide {
   background: var(--bg-primary);
   height: auto;
   line-height: normal;
-  transition: background-color 150ms ease-in-out, border-color 150ms ease-in-out,
+  transition:
+    background-color 150ms ease-in-out,
+    border-color 150ms ease-in-out,
     transform 150ms ease-in-out;
 }
 
@@ -889,7 +899,9 @@ a.project-card:not(:hover) .lucide {
   bottom: 0;
   width: 2px;
   background-color: var(--border-secondary);
-  transition: height 0.15s ease-in-out, background-color 120ms ease-in-out;
+  transition:
+    height 0.15s ease-in-out,
+    background-color 120ms ease-in-out;
   will-change: height;
   transform-origin: bottom;
   height: 10%;
@@ -1025,7 +1037,9 @@ a.project-card:not(:hover) .lucide {
   );
   height: auto;
   line-height: normal;
-  transition: background-color 150ms ease-in-out, border-color 150ms ease-in-out,
+  transition:
+    background-color 150ms ease-in-out,
+    border-color 150ms ease-in-out,
     transform 150ms ease-in-out;
 }
 
@@ -1260,7 +1274,9 @@ a.project-card:not(:hover) .lucide {
   border: 2px solid var(--border-light);
   background: var(--bg-primary);
   line-height: normal;
-  transition: background-color 150ms ease-in-out, border-color 150ms ease-in-out,
+  transition:
+    background-color 150ms ease-in-out,
+    border-color 150ms ease-in-out,
     transform 150ms ease-in-out;
 }
 
@@ -1288,9 +1304,7 @@ a.project-card:not(:hover) .lucide {
   --more-link-row-gap: var(--space-2);
   --more-link-title-size-base: var(--text-sm);
   --more-link-description-size-base: var(--text-xs);
-  --more-link-icon-offset: calc(
-    var(--space-3) + var(--more-link-icon-size) / 2
-  );
+  --more-link-icon-offset: calc(var(--space-3) + var(--more-link-icon-size) / 2);
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -1349,13 +1363,9 @@ a.project-card:not(:hover) .lucide {
 
 .more-link:is(:hover, :focus-visible, :focus-within) {
   --more-link-icon-size-current: var(--more-link-icon-size-hover);
-  --more-link-icon-border-width-current: var(
-    --more-link-icon-border-width-hover
-  );
+  --more-link-icon-border-width-current: var(--more-link-icon-border-width-hover);
   --more-link-title-size-current: calc(var(--more-link-title-size-base) * 1.04);
-  --more-link-description-size-current: calc(
-    var(--more-link-description-size-base) * 1.03
-  );
+  --more-link-description-size-current: calc(var(--more-link-description-size-base) * 1.03);
 }
 
 .more-link:focus-visible {
@@ -1370,13 +1380,14 @@ a.project-card:not(:hover) .lucide {
   width: var(--more-link-icon-size-current);
   height: var(--more-link-icon-size-current);
   border-radius: var(--radius-lg);
-  border: var(--more-link-icon-border-width-current) solid
-    var(--border-secondary);
+  border: var(--more-link-icon-border-width-current) solid var(--border-secondary);
   background: var(--bg-primary);
   color: var(--text-subtle);
-  transition: width 340ms cubic-bezier(0.2, 0.8, 0.2, 1),
+  transition:
+    width 340ms cubic-bezier(0.2, 0.8, 0.2, 1),
     height 340ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    border-width 340ms cubic-bezier(0.2, 0.8, 0.2, 1), color 260ms ease,
+    border-width 340ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    color 260ms ease,
     background-color 260ms ease;
   position: relative;
   z-index: 1;
@@ -1408,7 +1419,9 @@ a.project-card:not(:hover) .lucide {
   font-weight: var(--font-normal);
   color: var(--text-subtle);
   line-height: 1.3;
-  transition: font-size 300ms cubic-bezier(0.18, 0.9, 0.22, 1), color 260ms ease;
+  transition:
+    font-size 300ms cubic-bezier(0.18, 0.9, 0.22, 1),
+    color 260ms ease;
 }
 
 .more-links .lucide {
@@ -1741,7 +1754,10 @@ hr.divider-thin {
   border-radius: var(--radius-md);
   border: 1px solid var(--border-light);
   background-color: var(--bg-hover);
-  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease,
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    box-shadow 0.2s ease,
     border-color 0.2s ease;
 }
 
@@ -2465,7 +2481,10 @@ hr.divider-thin {
   object-fit: cover;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease,
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    box-shadow 0.2s ease,
     border-color 0.2s ease;
   border: 1px solid var(--border-light);
   background-color: var(--bg-hover);
@@ -2495,7 +2514,9 @@ img[data-lightbox-item] {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 160ms ease, visibility 160ms ease;
+  transition:
+    opacity 160ms ease,
+    visibility 160ms ease;
   z-index: 1200;
 }
 
@@ -2538,7 +2559,9 @@ img[data-lightbox-item] {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform 150ms ease, color 150ms ease;
+  transition:
+    transform 150ms ease,
+    color 150ms ease;
   z-index: 1300;
 }
 
@@ -2604,7 +2627,9 @@ img[data-lightbox-item] {
   background: none;
   color: rgba(255, 255, 255, 0.85);
   cursor: pointer;
-  transition: transform 150ms ease, color 150ms ease;
+  transition:
+    transform 150ms ease,
+    color 150ms ease;
 }
 
 .image-lightbox.lightbox--single .image-lightbox__nav {
@@ -2669,7 +2694,10 @@ img[data-lightbox-item] {
   padding: 0;
   background: none;
   cursor: pointer;
-  transition: transform 120ms ease, border-color 120ms ease, opacity 120ms ease;
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    opacity 120ms ease;
   opacity: 0.6;
   overflow: hidden;
 }
@@ -2797,7 +2825,10 @@ img[data-lightbox-item] {
 }
 
 .uses-icons-fade .tech-stack-sections .tech-stack-items img {
-  transition: opacity 220ms ease, transform 220ms ease, filter 220ms ease;
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease,
+    filter 220ms ease;
   will-change: opacity, transform, filter;
 }
 
@@ -3173,9 +3204,13 @@ img[data-lightbox-item] {
   display: flex;
   flex-direction: column;
   width: clamp(140px, 28vw, 180px);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
-  transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 350ms cubic-bezier(0.34, 1.56, 0.64, 1), border-color 250ms ease;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.06),
+    0 2px 6px rgba(0, 0, 0, 0.04);
+  transition:
+    transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color 250ms ease;
   transform-origin: center center;
   will-change: transform;
 }
@@ -3213,18 +3248,24 @@ img[data-lightbox-item] {
 /* Hover effects - lift and straighten with smooth physics */
 .photo-trip-card:hover {
   transform: rotate(0deg) translateY(-12px) scale(1.05) !important;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12), 0 6px 12px rgba(0, 0, 0, 0.08),
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.12),
+    0 6px 12px rgba(0, 0, 0, 0.08),
     0 0 0 1px rgba(0, 0, 0, 0.04);
   border-color: var(--border-secondary);
   z-index: 100 !important;
 }
 
 .dark .photo-trip-card {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .dark .photo-trip-card:hover {
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4), 0 8px 16px rgba(0, 0, 0, 0.3),
+  box-shadow:
+    0 16px 32px rgba(0, 0, 0, 0.4),
+    0 8px 16px rgba(0, 0, 0, 0.3),
     0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
@@ -3232,11 +3273,7 @@ img[data-lightbox-item] {
   width: 100%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: linear-gradient(
-    135deg,
-    var(--bg-hover) 0%,
-    var(--bg-primary) 100%
-  );
+  background: linear-gradient(135deg, var(--bg-hover) 0%, var(--bg-primary) 100%);
 }
 
 .photo-trip-preview img {
@@ -3251,7 +3288,8 @@ img[data-lightbox-item] {
   opacity: 0;
   transform: scale(1.015);
   filter: brightness(0.98) contrast(1.02) blur(10px);
-  transition: opacity 420ms ease,
+  transition:
+    opacity 420ms ease,
     transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1),
     filter 520ms ease;
   will-change: opacity, transform, filter;
@@ -3338,7 +3376,9 @@ img[data-lightbox-item] {
   border: 1px solid var(--border-light);
   border-radius: var(--radius-full);
   cursor: pointer;
-  transition: background-color 160ms ease, border-color 160ms ease;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
   text-align: left;
   width: 100%;
 }
@@ -3438,11 +3478,7 @@ img[data-lightbox-item] {
   position: relative;
   overflow: hidden;
   border-radius: var(--radius-lg);
-  background: linear-gradient(
-    135deg,
-    var(--bg-hover) 0%,
-    var(--bg-primary) 100%
-  );
+  background: linear-gradient(135deg, var(--bg-hover) 0%, var(--bg-primary) 100%);
   transition: transform 200ms ease-in-out;
 }
 
@@ -3458,7 +3494,10 @@ img[data-lightbox-item] {
   opacity: 0;
   transform: scale(1.01);
   filter: blur(12px);
-  transition: opacity 500ms ease, transform 600ms ease, filter 600ms ease;
+  transition:
+    opacity 500ms ease,
+    transform 600ms ease,
+    filter 600ms ease;
   will-change: opacity, transform, filter;
 }
 
@@ -3643,11 +3682,7 @@ article mark::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    45deg,
-    rgba(var(--color-accent-rgb), 0.1),
-    transparent 60%
-  );
+  background: linear-gradient(45deg, rgba(var(--color-accent-rgb), 0.1), transparent 60%);
   border-radius: var(--radius-sm);
   z-index: -1;
 }
@@ -3984,6 +4019,34 @@ article img:hover {
   box-shadow: 0 4px 12px hsl(from var(--text-primary) h s l / 8%);
 }
 
+article figure {
+  margin: var(--space-8) auto;
+}
+
+article figure > img {
+  margin: 0 auto;
+}
+
+article figcaption {
+  margin: var(--space-2) auto 0;
+  color: var(--text-muted);
+  text-align: center;
+  font-size: var(--text-sm);
+}
+
+article p > img:not(:last-child) {
+  margin-bottom: var(--space-2);
+}
+
+article
+  img[src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg"] {
+  width: 50%;
+  max-width: 50%;
+  padding: var(--space-3);
+  box-sizing: border-box;
+  background: #fff;
+}
+
 /* HTML page embed */
 
 article .article-embed {
@@ -4016,6 +4079,31 @@ article .article-embed {
   border-radius: 0 !important;
 }
 
+.lissajous-embed-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+}
+
+.lissajous-embed-link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.lissajous-embed-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+.lissajous-embed {
+  touch-action: none;
+  pointer-events: none;
+}
+
 article video {
   max-width: 100%;
   height: auto;
@@ -4024,9 +4112,7 @@ article video {
   border: 1px solid var(--border-light);
   border-radius: var(--radius-sm);
   background: var(--bg-primary);
-  accent-color: var(
-    --color-accent
-  ); /* Chrome/Edge progress bar + range knobs */
+  accent-color: var(--color-accent); /* Chrome/Edge progress bar + range knobs */
   outline: none;
 }
 
@@ -4237,16 +4323,12 @@ mjx-container:not([display="true"]):not([display="block"]) > svg {
 @supports selector(:has(*)) {
   /* let inline fractions expand to readable multi-line height */
   mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac),
-  mjx-container:not([display="true"]):not([display="block"]):has(
-      [data-mml-node="mfrac"]
-    ) {
+  mjx-container:not([display="true"]):not([display="block"]):has([data-mml-node="mfrac"]) {
     height: auto;
     min-height: 2lh;
   }
 
-  mjx-container:not([display="true"]):not([display="block"]):has(
-      mjx-mfrac mjx-mfrac
-    ),
+  mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac mjx-mfrac),
   mjx-container:not([display="true"]):not([display="block"]):has(
       [data-mml-node="mfrac"] [data-mml-node="mfrac"]
     ) {
@@ -4254,12 +4336,8 @@ mjx-container:not([display="true"]):not([display="block"]) > svg {
     min-height: 3lh;
   }
 
-  mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac)
-    > svg,
-  mjx-container:not([display="true"]):not([display="block"]):has(
-      [data-mml-node="mfrac"]
-    )
-    > svg {
+  mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac) > svg,
+  mjx-container:not([display="true"]):not([display="block"]):has([data-mml-node="mfrac"]) > svg {
     max-height: none;
     height: auto;
   }
@@ -4268,16 +4346,12 @@ mjx-container:not([display="true"]):not([display="block"]) > svg {
 @supports not (height: 1lh) {
   @supports selector(:has(*)) {
     mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac),
-    mjx-container:not([display="true"]):not([display="block"]):has(
-        [data-mml-node="mfrac"]
-      ) {
+    mjx-container:not([display="true"]):not([display="block"]):has([data-mml-node="mfrac"]) {
       height: auto;
       min-height: 2em;
     }
 
-    mjx-container:not([display="true"]):not([display="block"]):has(
-        mjx-mfrac mjx-mfrac
-      ),
+    mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac mjx-mfrac),
     mjx-container:not([display="true"]):not([display="block"]):has(
         [data-mml-node="mfrac"] [data-mml-node="mfrac"]
       ) {
