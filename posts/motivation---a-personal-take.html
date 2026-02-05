@@ -133,11 +133,46 @@
       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
     ></script>
 
-    <script
-      defer
-      src="https://cloud.umami.is/script.js"
-      data-website-id="51538055-0cc5-4a88-8f4f-8d3b77f708b4"
-    ></script>
+    <script>
+      (() => {
+        const websiteId = "51538055-0cc5-4a88-8f4f-8d3b77f708b4";
+        const hasDoNotTrack =
+          navigator.doNotTrack === "1" ||
+          window.doNotTrack === "1" ||
+          navigator.msDoNotTrack === "1" ||
+          navigator.globalPrivacyControl === true;
+
+        if (hasDoNotTrack || navigator.onLine === false) {
+          return;
+        }
+
+        const bait = document.createElement("div");
+        bait.className = "adsbox ad-banner ad-unit";
+        bait.style.cssText =
+          "position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;";
+        document.documentElement.appendChild(bait);
+
+        const baitStyle = window.getComputedStyle(bait);
+        const adBlockLikely =
+          baitStyle.display === "none" || baitStyle.visibility === "hidden";
+        bait.remove();
+
+        if (adBlockLikely) {
+          return;
+        }
+
+        const script = document.createElement("script");
+        script.defer = true;
+        script.src = "https://cloud.umami.is/script.js";
+        script.dataset.websiteId = websiteId;
+        script.referrerPolicy = "strict-origin-when-cross-origin";
+        script.onerror = () => {
+          script.remove();
+        };
+
+        document.head.appendChild(script);
+      })();
+    </script>
     <link rel="stylesheet" crossorigin href="/assets/styles-D9mL0_8n.css">
   </head>
 
