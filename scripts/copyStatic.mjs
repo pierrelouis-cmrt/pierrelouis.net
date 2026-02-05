@@ -4,9 +4,10 @@
 // This keeps legacy absolute/relative paths working (e.g. /src/assets/*).
 // ---------------------------------------------------------------------------
 
-import { copyFile, cp, mkdir, readdir } from "fs/promises";
+import { copyFile, cp, mkdir, readdir, readFile, writeFile } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
+import { transform } from "esbuild";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
@@ -27,10 +28,30 @@ const warnMissing = (label, src) => {
   console.warn(`WARN: ${label} missing at ${path.relative(root, src)}`);
 };
 
+const isJsLike = (filePath) => {
+  const ext = path.extname(filePath).toLowerCase();
+  return ext === ".js" || ext === ".mjs";
+};
+
+const writeMinifiedJs = async (src, dest) => {
+  const source = await readFile(src, "utf8");
+  const minified = await transform(source, {
+    loader: "js",
+    minify: true,
+    target: "es2018",
+    legalComments: "none",
+  });
+  await writeFile(dest, minified.code);
+};
+
 const copyFileSafe = async (src, dest, label) => {
   try {
     await mkdir(path.dirname(dest), { recursive: true });
-    await copyFile(src, dest);
+    if (isJsLike(dest)) {
+      await writeMinifiedJs(src, dest);
+    } else {
+      await copyFile(src, dest);
+    }
     logCopy(label, src, dest);
   } catch (error) {
     if (error?.code === "ENOENT") {

@@ -23,6 +23,7 @@ const artistEl = document.querySelector(".music-widget .music-track-artist");
 const coverEl = document.querySelector(".music-widget .music-album-cover");
 const statusEl = document.querySelector(".music-widget .music-player-status");
 const defaultCoverSvg = coverEl?.innerHTML ?? "";
+const hasMusicWidgetDom = Boolean(titleEl && artistEl && coverEl && statusEl);
 
 /** ===== State ===== */
 let currentTrackKey = null;
@@ -298,9 +299,11 @@ async function pollOnce() {
 }
 
 /** Visibility-aware polling */
-document.addEventListener("visibilitychange", () => {
-  scheduleNext(nextInterval({ isPlaying: currentTrackKey !== null }));
-});
+if (hasMusicWidgetDom) {
+  document.addEventListener("visibilitychange", () => {
+    scheduleNext(nextInterval({ isPlaying: currentTrackKey !== null }));
+  });
 
-/** Boot */
-pollOnce();
+  /** Boot */
+  pollOnce();
+}

@@ -297,17 +297,16 @@ function initializeAvatarFaceTracker() {
       overlayAvatar.style.opacity = '0';
       overlayAvatar.style.transition = 'none';
 
-      // Force reflow
-      overlayAvatar.offsetHeight;
-
-      // Enable transitions
-      mainAvatar.style.transition = `opacity ${TRANSITION_DURATION}ms ease-in-out`;
-      overlayAvatar.style.transition = `opacity ${TRANSITION_DURATION}ms ease-in-out`;
-
-      // Trigger crossfade
+      // Enable transitions and trigger the crossfade on subsequent frames to
+      // avoid synchronous layout reads (forced reflow).
       requestAnimationFrame(() => {
-        mainAvatar.style.opacity = '0';
-        overlayAvatar.style.opacity = '0.85';
+        mainAvatar.style.transition = `opacity ${TRANSITION_DURATION}ms ease-in-out`;
+        overlayAvatar.style.transition = `opacity ${TRANSITION_DURATION}ms ease-in-out`;
+
+        requestAnimationFrame(() => {
+          mainAvatar.style.opacity = '0';
+          overlayAvatar.style.opacity = '0.85';
+        });
       });
 
       // After transition completes
