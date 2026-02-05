@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" translate="no">
   <head>
+    <meta charset="UTF-8" />
     <script>
       (() => {
         const storageKey = "theme";
@@ -40,10 +41,6 @@
         raf(() => setThemeColor(true));
       })();
     </script>
-    <script>
-      const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
-    </script>
-    <meta charset="UTF-8" />
     <meta name="google" content="notranslate" />
     <title>Pierre-Louis &ndash; Web Dev</title>
     <style>
@@ -99,9 +96,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
-      rel="stylesheet"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
+      />
+    </noscript>
     <link
       rel="preload"
       as="style"
