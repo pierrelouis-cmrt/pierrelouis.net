@@ -4711,6 +4711,17 @@ mjx-container::-webkit-scrollbar-thumb {
   }
 }
 
+@media (min-width: 481px) {
+  .music-player-label,
+  .location-display-label {
+    padding: 2px 10px;
+  }
+
+  .music-album-cover {
+    transform: translateY(2px);
+  }
+}
+
 @media (max-width: 480px) {
   .hero-intro {
     grid-template-columns: 1fr;
