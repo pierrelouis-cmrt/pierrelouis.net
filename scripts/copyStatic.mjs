@@ -98,6 +98,7 @@ const copyNowAssets = async () => {
 };
 
 const ROOT_FILES = [
+  ".htaccess",
   "android-chrome-192x192.png",
   "android-chrome-256x256.png",
   "apple-touch-icon.png",

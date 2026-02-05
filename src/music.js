@@ -12,9 +12,9 @@ const INTERVALS = {
 };
 
 const REQUEST_TIMEOUT_MS = 8000; // hard timeout per request
-const PROXY_BASE = "/api"; // server JSON proxy base
+const LASTFM_PROXY_PATH = "/api/lastfm.php"; // server JSON proxy
 const IMAGE_SIZE = "large"; // ~174px Last.fm image from Last.fm
-const IMG_PROXY_PATH = "/img"; // PHP image proxy route (serves bytes directly)
+const IMG_PROXY_PATH = "/api/img.php"; // server image proxy route (serves bytes directly)
 const COVER_DISPLAY_WIDTH = 75; // CSS layout target in px
 
 /** ===== DOM ===== */
@@ -124,7 +124,8 @@ function preloadImage(url) {
 /** ===== API wrappers (via your PHP proxy) ===== */
 async function getRecentNowPlaying() {
   // PHP caches this briefly; much lower Last.fm traffic
-  const url = `${PROXY_BASE}/now-playing`;
+  const params = new URLSearchParams({ endpoint: "now-playing" });
+  const url = `${LASTFM_PROXY_PATH}?${params.toString()}`;
   const data = await fetchJsonWithRetry(url, { retries: 2 });
   const list = data?.recenttracks?.track;
   if (!Array.isArray(list) || list.length === 0) return null;
@@ -134,8 +135,8 @@ async function getRecentNowPlaying() {
 }
 
 async function getTrackInfoCover(artist, track) {
-  const params = new URLSearchParams({ artist, track });
-  const url = `${PROXY_BASE}/cover?${params.toString()}`;
+  const params = new URLSearchParams({ endpoint: "cover", artist, track });
+  const url = `${LASTFM_PROXY_PATH}?${params.toString()}`;
   const data = await fetchJsonWithRetry(url, { retries: 2 });
   const images = data?.track?.album?.image;
   const urlCandidate = imageUrlBySize(images, IMAGE_SIZE);
