@@ -11,10 +11,10 @@ The curves we call "Lissajous" actually have an earlier origin. In 1815, America
 
 But it was French physicist Jules Antoine Lissajous who, in the 1850s, turned them into spectacle. His experiment was simple: mirrors attached to vibrating tuning forks, projecting beams of light onto screens in darkened lecture halls. Audiences could watch sound become "visible". The curves took his name and have remained scientifically useful ever since.
 
-![Historical image](https://www.researchgate.net/publication/369266058/figure/fig8/AS:11431281224713364@1708398969542/Experiment-of-Lissajous-The-light-figures-produced-by-the-compound-vibrations-of-two.png)
+![Historical image](assets/historical_experiment_photo.webp)
 **Figure 1.** Experiment of Lissajous. The light-figures produced by the compound vibrations of two tuning forks vibrating at different pitches. *Source: Privat-Deschanel A. and de Ochoa y Ronna E., Tratado elemental de física, Hachette, Paris (1872), pp. 696–697* [^1]
 
-![Experiment](assets/experiment.webp)
+![Experiment](assets/experiment_diagram.webp)
 **Figure 2.** Modern recreation of Lissajous's experiment. Two tuning forks arranged at 90 degrees, each with a mirror on one tyne. A laser beam reflects off both mirrors in sequence; when the forks are struck, the beam traces a Lissajous pattern on the screen. *Source: UC Berkeley Physics Lecture Demonstrations* [^2]
 
 ---
