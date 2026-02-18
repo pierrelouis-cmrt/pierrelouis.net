@@ -2,6 +2,18 @@
   {
     "year": 2026,
     "month": "Feb",
+    "day": 25,
+    "title": "[FR] Croissance et objectivité",
+    "description": "Se détacher de la subjectivité en grandissant ? Est-ce trivial ?",
+    "image": "",
+    "tag": "Articles",
+    "tags": [
+      "article"
+    ]
+  },
+  {
+    "year": 2026,
+    "month": "Feb",
     "day": 18,
     "title": "Density vs quantity for our brain",
     "description": "novel, dense experiences fly by in the moment but expand in retrospect, while empty routine drags in the moment but feels short looking back",
