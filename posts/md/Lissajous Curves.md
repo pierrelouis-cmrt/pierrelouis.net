@@ -1,13 +1,13 @@
 ---
 title: "Lissajous Curves: Where Mathematics Meets Music and Light"
-description: "A 19th-century physicist pointed lasers at tuning forks and created one of the most useful patterns in engineering. Turns out the same math connects musical harmony, graphic design, and the LIDAR in your car. A full explanation of the theory begind it, plus an interactive tool to make your own."
+description: A 19th-century physicist pointed lasers at tuning forks and created one of the most useful patterns in engineering. Turns out the same math connects musical harmony, graphic design, and the LIDAR in your car. A full explanation of the theory behind it, plus an interactive tool to make your own.
 tags:
   - article
 date: 2026-02-01
 ---
 ## Obviously, it all begins with two physicists
 
-The curves we call "Lissajous" actually have an earlier origin. In 1815, American mathematician Nathaniel Bowditch first described these patterns while studying pendulum motion, which is why some prefer the name *Bowditch curves*.
+The curves we call "Lissajous" actually have an earlier origin. In 1815, American mathematician Nathaniel Bowditch first described these patterns while studying pendulum motion.
 
 But it was French physicist Jules Antoine Lissajous who, in the 1850s, turned them into spectacle. His experiment was simple: mirrors attached to vibrating tuning forks, projecting beams of light onto screens in darkened lecture halls. Audiences could watch sound become "visible". The curves took his name and have remained scientifically useful ever since.
 
@@ -21,7 +21,7 @@ But it was French physicist Jules Antoine Lissajous who, in the 1850s, turned th
 
 ## The Mathematics
 
-A Lissajous curve appears when two perpendicular oscillations combine. The equations are quite simple:
+A Lissajous curve appears when two perpendicular oscillations combine. Here is the math for those two oscillations:
 
 $$
 \begin{cases}
@@ -44,7 +44,7 @@ $$
 \frac{f_x}{f_y} = \frac{n_x f_0}{n_y f_0} = \frac{n_x}{n_y}
 $$
 
-where $n_x$ and $n_y$ are coprime integers. This ratio determines everything about the curve's structure. The value $f_0$ becomes the **frame rate**; the frequency at which the entire pattern repeats. In other words, every $1/f_0$ seconds, the trajectory traces exactly the same path.
+where $n_x$ and $n_y$ are coprime integers. This ratio determines everything about the curve's structure. The value $f_0$ becomes the **frame rate**; the frequency at which the entire pattern repeats. Another way of seeing it: every $1/f_0$ seconds, the trajectory traces exactly the same path.
 
 | Ratio $n_x : n_y$ | Result                                          |
 | ----------------- | ----------------------------------------------- |
@@ -53,11 +53,11 @@ where $n_x$ and $n_y$ are coprime integers. This ratio determines everything abo
 | $2:3$             | More complex closed loop                        |
 | $1:\sqrt{2}$      | Never closes: fills the rectangle forever       |
 
-Simple ratios produce closed curves. Irrational ratios create paths that wander eternally without repeating, gradually filling their bounds.
+Simple ratios produce closed curves. Irrational ratios create paths that wander eternally without repeating.
 
 ### The Phase Parameter $k$
 
-The combined effect of both phase offsets can be captured in a single parameter $k$, defined as:
+The combined effect of both phase offsets can be combined in a single parameter $k$, defined as:
 
 $$
 k = \frac{4}{\pi}(n_x \phi_y - n_y \phi_x)
@@ -97,15 +97,15 @@ where $m$ is any integer.
 
 ### Fill Factor: Measuring Trajectory Density
 
-A critical property for applications is the **fill factor (FF)**; a measure of how densely the curve covers its bounding rectangle. Lissajous trajectories are characteristically dense at the edges and sparse near the center. The maximum gap appears in an approximate parallelogram containing the origin.
+A critical property for applications is the **fill factor (FF)**. It's a measure of how densely the curve covers its bounding rectangle. Lissajous trajectories are characteristically dense at the edges and sparse near the center. The maximum gap appears in an approximate parallelogram containing the origin.
 
-For scanning applications like LIDAR, minimizing this gap (maximizing density) is essential. Research has shown that $k = 2$ produces optimal density for most frequency ratios, establishing a key design rule for Lissajous-based systems.
+For scanning applications like LIDAR (e.g. self driving cars), minimizing this gap (or maximizing density) is super important. Research has shown that $k = 2$ produces optimal density for most frequency ratios, establishing a key design rule for Lissajous-based systems.
 
 ---
 
 ## Seeing Sound: The Music Connection
 
-Here's where Lissajous curves become almost magical: those frequency ratios *are* musical intervals.
+Here's where Lissajous curves become magical: those frequency ratios *are* musical intervals.
 
 | Ratio | Musical Interval |
 |-------|------------------|
@@ -114,11 +114,9 @@ Here's where Lissajous curves become almost magical: those frequency ratios *are
 | $3:4$ | Perfect fourth |
 | $4:5$ | Major third |
 
-When two notes form a consonant harmony, their Lissajous figure is clean, closed, symmetrical. Dissonance produces chaos: curves that refuse to settle.
+When two notes form a consonant harmony, their Lissajous figure is clean, closed, symmetrical. Dissonance produces chaos: curves that refuse to close.
 
 **You can literally see whether two notes sound good together.**
-
-This isn't coincidence. Musical harmony is, at its core, a relationship between frequencies. Lissajous curves simply make that relationship visible.
 
 ---
 
@@ -128,7 +126,7 @@ This isn't coincidence. Musical harmony is, at its core, a relationship between 
 
 Before computers, there were harmonographs: pendulum-driven drawing machines popular in the 1800s. Two or more pendulums swing in perpendicular directions, and a pen traces their combined motion onto paper.
 
-### Simple Experiments
+### Simpler Experiments
 
 - **Sand pendulums**: A funnel of sand swinging over paper
 - **Laser on speakers**: Mount a mirror on one speaker cone, bounce a laser off it onto a wall, play two frequencies through stereo speakers (similar to how Lissajous did it)
@@ -136,7 +134,7 @@ Before computers, there were harmonographs: pendulum-driven drawing machines pop
 
 ### The Modern Way: Code
 
-A few lines in Python, Processing, or p5.js will generate infinite variations:
+A few lines in Python will generate infinite variations:
 
 ```python
 import numpy as np
@@ -155,7 +153,7 @@ plt.axis('equal')
 plt.show()
 ```
 
-Play with `nx`, `ny`, and `k`. Watch the curves transform.
+Play with `nx`, `ny`, and `k`. Watch the curves change.
 
 ---
 
@@ -169,18 +167,13 @@ Play with `nx`, `ny`, and `k`. Watch the curves transform.
 
 Modern microelectromechanical systems (MEMS) scanning mirrors exploit Lissajous trajectories for solid-state LIDAR systems. By driving a two-axis mirror with sinusoidal waveforms at carefully chosen frequencies, engineers create scanning patterns that cover a field of view with predictable density and timing.
 
-The design rules are precise:
-1. **Frame rate** is determined by $f_0$ (the GCD of driving frequencies)
-2. **Phase parameter** $k = 2$ ensures maximum symmetry and optimal coverage
-3. **Spatial resolution** depends on $n_x$ and $n_y$: higher values yield denser trajectories
-
 That enables various applications from autonomous vehicle sensing to 3D imaging microscopy.
 
 ### Art and Design
 
 Perhaps the most famous Lissajous figure hidden in plain sight: the **ABC television logo**, a stylized $1:3$ ratio curve that has represented the network since 1965.
 
-More recently, Meta's 2021 rebrand introduced a logo that is essentially an infinite loop: a Lissajous-like figure rotated in 3D space, representing connection and infinity.
+More recently, Meta's 2021 rebrand introduced a logo that is essentially an infinite loop: a Lissajous-like figure rotated, representing connection and infinity.
 
 ![Meta Logo](https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg)
 **Figure 4.** Current Meta Logo [^4]
