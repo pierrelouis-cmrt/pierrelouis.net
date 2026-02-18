@@ -2,9 +2,21 @@
   {
     "year": 2026,
     "month": "Feb",
+    "day": 18,
+    "title": "Density vs quantity for our brain",
+    "description": "novel, dense experiences fly by in the moment but expand in retrospect, while empty routine drags in the moment but feels short looking back",
+    "image": "",
+    "tag": "Notes",
+    "tags": [
+      "note"
+    ]
+  },
+  {
+    "year": 2026,
+    "month": "Feb",
     "day": 1,
     "title": "Lissajous Curves: Where Mathematics Meets Music and Light",
-    "description": "A 19th-century physicist pointed lasers at tuning forks and created one of the most useful patterns in engineering. Turns out the same math connects musical harmony, graphic design, and the LIDAR in your car. A full explanation of the theory begind it, plus an interactive tool to make your own.",
+    "description": "A 19th-century physicist pointed lasers at tuning forks and created one of the most useful patterns in engineering. Turns out the same math connects musical harmony, graphic design, and the LIDAR in your car. A full explanation of the theory behind it, plus an interactive tool to make your own.",
     "image": "",
     "tag": "Articles",
     "tags": [

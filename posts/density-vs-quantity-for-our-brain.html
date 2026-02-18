@@ -112,6 +112,31 @@
       />
     </noscript>
 
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ["\\(", "\\)"],
+            ["$", "$"],
+          ],
+          displayMath: [
+            ["\\[", "\\]"],
+            ["$$", "$$"],
+          ],
+        },
+        svg: { fontCache: "global" }, // better performance across pages
+      };
+    </script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
+    ></script>
+
     <script>
       (() => {
         const websiteId = "51538055-0cc5-4a88-8f4f-8d3b77f708b4";
@@ -159,7 +184,7 @@
     <nav class="site-navigation">
       <div class="navigation-container">
         <div class="navigation-left">
-          <a class="navigation-brand" href="/"
+          <a class="navigation-brand" href="/posts/"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -176,7 +201,7 @@
               <path d="M16 12H8" />
               <path d="m12 8-4 4 4 4" />
             </svg>
-            Back Home</a
+            Back to all posts</a
           >
           <div class="navigation-links"></div>
         </div>
@@ -536,7 +561,7 @@
               <div
                 x-data="{
       drawerOpen: false,
-      isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+      dataRevision: 0,
       dragStartY: 0,
       currentY: 0,
       translateY: 100,
@@ -554,7 +579,6 @@
       openFrame: null,
       settleTimer: null,
       themeTimer: null,
-      dataRevision: 0,
 
       get allItems() {
         void this.dataRevision;
@@ -612,9 +636,9 @@
         if (canUseController) {
           overlayController.open('drawer');
         } else {
+          // Simple scroll lock - no position:fixed needed
+          document.documentElement.style.overflow = 'hidden';
           document.body.style.overflow = 'hidden';
-          document.body.style.position = 'fixed';
-          document.body.style.width = '100%';
         }
 
         requestAnimationFrame(() => {
@@ -684,9 +708,9 @@
           self.drawerOpen = false;
           self.isAnimating = false;
           if (!canUseController) {
+            // Simple unlock - no scroll restoration needed
+            document.documentElement.style.overflow = '';
             document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.width = '';
           }
           self.searchQuery = '';
           self.drawerHeight = null;
@@ -1013,402 +1037,13 @@
     </nav>
 
     <main>
-      <h2 class="section-heading">Posts</h2>
-      <p class="page-subtitle text-italic">
-        This is where I share my thoughts.
-      </p>
-      <hr class="divider-standard" />
-      <p>
-        This is my personal blog. On here you'll find
-        <strong>notes</strong> (aka fleeting thoughts),
-        <strong>articles</strong> (aka longer, more polished posts) and
-        <strong>experiments</strong> (aka my playful coding projects).
-      </p>
+      <article data-lightbox-group="post-density-vs-quantity-for-our-brain">
+        <div class="article-meta-data"><h1>Density vs quantity for our brain</h1>
+<span class="article-publish-date">February 18, 2026</span></div> <p>I noticed something kinda interesting. During very dense periods of work, time passes faster. But when looking back at those periods, it feels like they were unusually long.</p>
+<p>I believe during an intense period, our brain is so focused that we don't properly register time passing. Our brain is always thinking of something, except time! And afterwards, that density is reinterpreted simply as a long period, because we no longer see time in the past, only the quantity of work.</p>
+<p>I think we can't really remember density <em>as</em> density in our memories; the compression doesn't survive, but the quantity does, so it automatically turns into lengthier experiences. Like our brain can only store amount, not intensity, and adjusts the felt length to match.</p>
 
-      <div class="timeline-page" id="posts">
-        <!-- Category filters -->
-        <div class="timeline-filters">
-          <a class="timeline-filter" data-tag="Notes"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"
-              />
-              <path d="M15 3v4a2 2 0 0 0 2 2h4" /></svg
-            >Notes</a
-          >
-          <a class="timeline-filter" data-tag="Articles"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
-              />
-              <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-              <path d="M10 9H8" />
-              <path d="M16 13H8" />
-              <path d="M16 17H8" /></svg
-            >Articles</a
-          >
-          <a class="timeline-filter" data-tag="Experiments"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"
-              />
-              <path d="M6.453 15h11.094" />
-              <path d="M8.5 2h7" /></svg
-            >Experiments</a
-          >
-          <a class="timeline-filter" id="clear-filter" style="display: none"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" /></svg
-            >Clear</a
-          >
-        </div>
-
-        <div class="content-timeline animate-on-scroll" id="posts-timeline">
-          <!-- AUTO-GEN:TIMELINE START -->
-
-        <div class="content-timeline-header">
-          <div class="content-timeline-year"><h2>2026</h2></div>
-          <div class="content-timeline-content">
-            <div class="content-timeline-month">
-              <div class="content-timeline-month-header">
-                <h3>Feb<span class="full-year"> 2026</span></h3>
-              </div>
-              <div class="content-timeline-month-items">
-                
-    <div class="timeline-item animate-on-scroll" data-tag="Notes">
-      <a href="/posts/density-vs-quantity-for-our-brain.html" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2"
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/>
-      <path d="M15 3v4a2 2 0 0 0 2 2h4"/>
-    </svg>
-          <span class="link-text">Density vs quantity for our brain</span>
-          <span class="external-link-icon" aria-hidden="true">
-  <svg xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
-    <path d="M7 7h10v10"></path>
-    <path d="M7 17 17 7"></path>
-  </svg></span>
-        </div>
-        <div class="timeline-item-description">novel, dense experiences fly by in the moment but expand in retrospect, while empty routine drags in the moment but feels short looking back</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Articles">
-      <a href="/posts/lissajous-curves-where-mathematics-meets-music-and-light.html" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2"
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
-      <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
-      <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
-    </svg>
-          <span class="link-text">Lissajous Curves: Where Mathematics Meets Music and Light</span>
-          <span class="external-link-icon" aria-hidden="true">
-  <svg xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
-    <path d="M7 7h10v10"></path>
-    <path d="M7 17 17 7"></path>
-  </svg></span>
-        </div>
-        <div class="timeline-item-description">A 19th-century physicist pointed lasers at tuning forks and created one of the most useful patterns in engineering. Turns out the same math connects musical harmony, graphic design, and the LIDAR in your car. A full explanation of the theory behind it, plus an interactive tool to make your own.</div>
-        
-      </a>
-    </div>
-              </div>
-            </div>
-            <div class="content-timeline-month">
-              <div class="content-timeline-month-header">
-                <h3>Jan<span class="full-year"> 2026</span></h3>
-              </div>
-              <div class="content-timeline-month-items">
-                
-    <div class="timeline-item animate-on-scroll" data-tag="Notes">
-      <a href="/posts/how-many-tokens-does-humanity-speak-per-year.html" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2"
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/>
-      <path d="M15 3v4a2 2 0 0 0 2 2h4"/>
-    </svg>
-          <span class="link-text">How Many Tokens Does Humanity Speak Per Year?</span>
-          <span class="external-link-icon" aria-hidden="true">
-  <svg xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
-    <path d="M7 7h10v10"></path>
-    <path d="M7 17 17 7"></path>
-  </svg></span>
-        </div>
-        <div class="timeline-item-description">How many tokens do the biggest AI labs process every year? How does that compare to humanity's spoken words?</div>
-        
-      </a>
-    </div>
-              </div>
-            </div></div>
-        </div>
-        <div class="content-timeline-header">
-          <div class="content-timeline-year"><h2>2025</h2></div>
-          <div class="content-timeline-content">
-            <div class="content-timeline-month">
-              <div class="content-timeline-month-header">
-                <h3>Dec<span class="full-year"> 2025</span></h3>
-              </div>
-              <div class="content-timeline-month-items">
-                
-    <div class="timeline-item animate-on-scroll" data-tag="Experiments">
-      <a href="/posts/building-a-carousel.html" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2" 
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/>
-      <path d="M6.453 15h11.094"/>
-      <path d="M8.5 2h7"/>
-    </svg>
-          <span class="link-text">Building a Carousel</span>
-          <span class="external-link-icon" aria-hidden="true">
-  <svg xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
-    <path d="M7 7h10v10"></path>
-    <path d="M7 17 17 7"></path>
-  </svg></span>
-        </div>
-        <div class="timeline-item-description">Tips & tricks behind my custom carousel</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Notes">
-      <a href="/posts/how-marketing-renames-our-world.html" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2"
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/>
-      <path d="M15 3v4a2 2 0 0 0 2 2h4"/>
-    </svg>
-          <span class="link-text">How Marketing Renames Our World</span>
-          <span class="external-link-icon" aria-hidden="true">
-  <svg xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
-    <path d="M7 7h10v10"></path>
-    <path d="M7 17 17 7"></path>
-  </svg></span>
-        </div>
-        <div class="timeline-item-description">Some words we regularly use have really fun origins, far from a simple etymology perspective</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Notes">
-      <a href="/posts/motivation---a-personal-take.html" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2"
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/>
-      <path d="M15 3v4a2 2 0 0 0 2 2h4"/>
-    </svg>
-          <span class="link-text">Motivation - A personal take</span>
-          <span class="external-link-icon" aria-hidden="true">
-  <svg xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
-    <path d="M7 7h10v10"></path>
-    <path d="M7 17 17 7"></path>
-  </svg></span>
-        </div>
-        <div class="timeline-item-description">A small self-reflection on what motivation is to me.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Articles">
-      <a href="/posts/was-maths-invented-or-discovered.html" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2"
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
-      <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
-      <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
-    </svg>
-          <span class="link-text">Was maths invented or discovered?</span>
-          <span class="external-link-icon" aria-hidden="true">
-  <svg xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
-    <path d="M7 7h10v10"></path>
-    <path d="M7 17 17 7"></path>
-  </svg></span>
-        </div>
-        <div class="timeline-item-description">An exploration of the philosophy of mathematics and its origins.</div>
-        
-      </a>
-    </div>
-              </div>
-            </div>
-            <div class="content-timeline-month">
-              <div class="content-timeline-month-header">
-                <h3>Nov<span class="full-year"> 2025</span></h3>
-              </div>
-              <div class="content-timeline-month-items">
-                
-    <div class="timeline-item animate-on-scroll" data-tag="Notes">
-      <a href="/posts/the-art-of-stressing.html" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2"
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/>
-      <path d="M15 3v4a2 2 0 0 0 2 2h4"/>
-    </svg>
-          <span class="link-text">The art of stressing</span>
-          <span class="external-link-icon" aria-hidden="true">
-  <svg xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
-    <path d="M7 7h10v10"></path>
-    <path d="M7 17 17 7"></path>
-  </svg></span>
-        </div>
-        <div class="timeline-item-description">Understanding stress: where it comes from and how to find balance in a hectic world.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Articles">
-      <a href="/posts/how-china-quietly-caught-up.html" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2"
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
-      <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
-      <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
-    </svg>
-          <span class="link-text">How China Quietly Caught Up</span>
-          <span class="external-link-icon" aria-hidden="true">
-  <svg xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
-    <path d="M7 7h10v10"></path>
-    <path d="M7 17 17 7"></path>
-  </svg></span>
-        </div>
-        <div class="timeline-item-description">Why everyone chooses China as their manufacturing hub? Is China really on the verge of surpassing the US in AI?</div>
-        
-      </a>
-    </div>
-              </div>
-            </div>
-            <div class="content-timeline-month">
-              <div class="content-timeline-month-header">
-                <h3>Aug<span class="full-year"> 2025</span></h3>
-              </div>
-              <div class="content-timeline-month-items">
-                
-    <div class="timeline-item animate-on-scroll" data-tag="Experiments">
-      <a href="/posts/interactive-pixel-grid.html" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2" 
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/>
-      <path d="M6.453 15h11.094"/>
-      <path d="M8.5 2h7"/>
-    </svg>
-          <span class="link-text">Interactive Pixel Grid</span>
-          <span class="external-link-icon" aria-hidden="true">
-  <svg xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
-    <path d="M7 7h10v10"></path>
-    <path d="M7 17 17 7"></path>
-  </svg></span>
-        </div>
-        <div class="timeline-item-description">A fun experiment with a pixel grid that responds to user interaction.</div>
-        
-      </a>
-    </div>
-    <div class="timeline-item animate-on-scroll" data-tag="Experiments">
-      <a href="/posts/animated-avatar.html" rel="noopener noreferrer">
-        <div class="timeline-item-title">
-          
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-         fill="none" stroke="currentColor" stroke-width="2" 
-         stroke-linecap="round" stroke-linejoin="round">
-      <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/>
-      <path d="M6.453 15h11.094"/>
-      <path d="M8.5 2h7"/>
-    </svg>
-          <span class="link-text">Animated Avatar</span>
-          <span class="external-link-icon" aria-hidden="true">
-  <svg xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right">
-    <path d="M7 7h10v10"></path>
-    <path d="M7 17 17 7"></path>
-  </svg></span>
-        </div>
-        <div class="timeline-item-description">Bringing life to a simple design element with CSS animations.</div>
-        
-      </a>
-    </div>
-              </div>
-            </div></div>
-        </div>
-<!-- AUTO-GEN:TIMELINE END -->
-        </div>
-      </div>
+      </article>
     </main>
 
     <footer>
@@ -1530,9 +1165,101 @@
         <p class="footer-meta-right">© 2026</p>
       </div>
     </footer>
-    <script defer src="/src/script.js"></script>
-    <script defer src="posts.js"></script>
 
+    <div
+      id="lightbox"
+      class="image-lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+    >
+      <div class="image-lightbox__backdrop" data-lightbox-close></div>
+      <div class="image-lightbox__shell" role="document">
+        <button
+          type="button"
+          class="image-lightbox__close"
+          aria-label="Close gallery"
+          data-lightbox-close
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="18" x2="6" y1="6" y2="18" />
+            <line x1="6" x2="18" y1="6" y2="18" />
+          </svg>
+        </button>
+        <div class="image-lightbox__stage">
+          <button
+            type="button"
+            class="image-lightbox__nav image-lightbox__nav--prev"
+            aria-label="Previous image"
+            data-lightbox-prev
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <figure class="image-lightbox__figure">
+            <img
+              class="image-lightbox__image"
+              alt=""
+              decoding="async"
+              data-lightbox-active-image
+            />
+            <figcaption
+              class="image-lightbox__caption"
+              data-lightbox-caption
+            ></figcaption>
+          </figure>
+          <button
+            type="button"
+            class="image-lightbox__nav image-lightbox__nav--next"
+            aria-label="Next image"
+            data-lightbox-next
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="image-lightbox__thumbnail-bar"
+          role="list"
+          data-lightbox-thumbnails
+        ></div>
+      </div>
+    </div>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+    <script defer src="/src/script.js"></script>
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"
