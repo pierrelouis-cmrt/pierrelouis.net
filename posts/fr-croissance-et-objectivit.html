@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      (() => {
+        const storageKey = "theme";
+        const getStoredTheme = () => {
+          try {
+            const value = localStorage.getItem(storageKey);
+            return value === "dark" || value === "light" ? value : "system";
+          } catch (error) {
+            return "system";
+          }
+        };
+        const mode = getStoredTheme();
+        const prefersDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const isDark = mode === "dark" || (mode === "system" && prefersDark);
+
+        document.documentElement.classList.toggle("dark", isDark);
+
+        const color = isDark ? "#0f0f0f" : "#faf9f9";
+        const setThemeColor = (allowCreate) => {
+          const metas = document.querySelectorAll('meta[name="theme-color"]');
+          if (!metas.length) {
+            if (!allowCreate) return;
+            const meta = document.createElement("meta");
+            meta.name = "theme-color";
+            meta.content = color;
+            document.head.appendChild(meta);
+            return;
+          }
+          metas.forEach((meta) => meta.setAttribute("content", color));
+        };
+        setThemeColor(false);
+        const raf =
+          window.requestAnimationFrame ||
+          ((callback) => setTimeout(callback, 0));
+        raf(() => setThemeColor(true));
+      })();
+    </script>
+    <meta name="google" content="notranslate" />
+    <title>Pierre-Louis &ndash; Web Dev</title>
+    <style>
+      [x-cloak] {
+        display: none;
+      }
+    </style>
+    <meta name="author" content="Pierre-Louis" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      name="description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      property="og:description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+    <meta property="og:url" content="https://pierrelouis.net" />
+    <meta property="og:image" content="assets/social-media-preview.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pierre-Louis &ndash; Web Designer" />
+    <meta
+      name="twitter:description"
+      content="Web Designer based in Saint-Etienne City, France."
+    />
+    <meta name="twitter:image" content="assets/social-media-preview.png" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#faf9f9" />
+
+    <link rel="stylesheet" href="/src/styles.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
+      />
+    </noscript>
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      />
+    </noscript>
+
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ["\\(", "\\)"],
+            ["$", "$"],
+          ],
+          displayMath: [
+            ["\\[", "\\]"],
+            ["$$", "$$"],
+          ],
+        },
+        svg: { fontCache: "global" }, // better performance across pages
+      };
+    </script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
+    ></script>
+
+    <script>
+      (() => {
+        const websiteId = "51538055-0cc5-4a88-8f4f-8d3b77f708b4";
+        const hasDoNotTrack =
+          navigator.doNotTrack === "1" ||
+          window.doNotTrack === "1" ||
+          navigator.msDoNotTrack === "1" ||
+          navigator.globalPrivacyControl === true;
+
+        if (hasDoNotTrack || navigator.onLine === false) {
+          return;
+        }
+
+        const bait = document.createElement("div");
+        bait.className = "adsbox ad-banner ad-unit";
+        bait.style.cssText =
+          "position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;";
+        document.documentElement.appendChild(bait);
+
+        const baitStyle = window.getComputedStyle(bait);
+        const adBlockLikely =
+          baitStyle.display === "none" || baitStyle.visibility === "hidden";
+        bait.remove();
+
+        if (adBlockLikely) {
+          return;
+        }
+
+        const script = document.createElement("script");
+        script.defer = true;
+        script.src = "https://cloud.umami.is/script.js";
+        script.dataset.websiteId = websiteId;
+        script.referrerPolicy = "strict-origin-when-cross-origin";
+        script.onerror = () => {
+          script.remove();
+        };
+
+        document.head.appendChild(script);
+      })();
+    </script>
+  </head>
+
+  <body>
+    <nav class="site-navigation">
+      <div class="navigation-container">
+        <div class="navigation-left">
+          <a class="navigation-brand" href="/posts/"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-circle-arrow-left back"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M16 12H8" />
+              <path d="m12 8-4 4 4 4" />
+            </svg>
+            Back to all posts</a
+          >
+          <div class="navigation-links"></div>
+        </div>
+        <div class="navigation-right">
+          <div
+            x-data="{ 
+      commandOpen: false,
+      isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+      isMac: /(Mac|iPhone|iPad|iPod)/i.test(navigator.platform) || (navigator.maxTouchPoints > 1 && /Mac/i.test(navigator.platform))
+    }"
+            x-init="
+      $watch('commandOpen', function(value){
+        if(value === true && !isTouchDevice){
+          if (window.innerWidth >= 768 && window.umami && typeof window.umami.track === 'function') {
+            window.umami.track('Command palette open', { surface: 'palette' });
+          }
+          $nextTick(() => { window.dispatchEvent(new CustomEvent('command-input-focus')); });
+        }
+      })
+    "
+            @keydown.escape.window="commandOpen = false"
+            @open-command-palette.window="commandOpen = true"
+            @keydown.window="
+      if (($event.ctrlKey || $event.metaKey) && !$event.shiftKey && $event.key.toLowerCase() === 'k') {
+        $event.preventDefault();
+        commandOpen = true;
+      }
+    "
+            class="relative z-50 w-auto h-auto"
+          >
+            <button
+              aria-label="Open command palette"
+              @click="commandOpen = true"
+              class="inline-flex items-center justify-between w-full h-8 px-2 text-sm font-medium rounded-xl hover:bg-[var(--bg-hover)] disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <svg
+                class="w-4 h-4 mr-0 sm:mr-2 text-[var(--text-body)] shrink-0"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <span
+                class="flex-1 mr-5 text-left text-[var(--text-body)] hidden sm:inline"
+                >Search...</span
+              >
+              <span
+                class="ml-auto text-xs text-[var(--text-subtle)] border border-dashed border-[var(--border-light)] rounded-md px-1 hidden sm:inline"
+              >
+                <span x-text="isMac ? '⌘' : 'Ctrl'"></span>
+                &nbsp;+&nbsp;K
+              </span>
+            </button>
+
+            <!-- Desktop Command Palette (Alpine.js) -->
+            <template x-teleport="body">
+              <div
+                x-data="{}"
+                x-init="$watch('commandOpen', value => {
+        const touch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+        if (!touch) {
+          document.body.classList.toggle('overflow-hidden', value);
+        }
+      })"
+                x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
+                x-transition:enter="command-palette-root-enter"
+                x-transition:enter-start="command-palette-root-enter-start"
+                x-transition:enter-end="command-palette-root-enter-end"
+                x-transition:leave="command-palette-root-leave"
+                x-transition:leave-start="command-palette-root-leave-start"
+                x-transition:leave-end="command-palette-root-leave-end"
+                class="command-palette-root fixed inset-0 z-[99] flex items-start justify-center pt-[15vh] w-screen h-screen pointer-events-none"
+                :class="commandOpen ? 'pointer-events-auto' : 'pointer-events-none'"
+                @click="commandOpen = false"
+                x-cloak
+              >
+                <div
+                  class="command-palette-backdrop absolute inset-0 w-full h-full bg-[rgba(0,0,0,0.34)] will-change-opacity"
+                ></div>
+
+                <div
+                  x-show="commandOpen && window.innerWidth >= 768 && !isTouchDevice"
+                  x-data="{
+        commandItemsData: window.COMMAND_ITEMS_DATA,
+        commandItems: [],
+        commandItemsFiltered: [],
+        commandItemActive: null,
+        commandItemSelected: null,
+        commandId: $id('command'),
+        commandSearch: '',
+        isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+        itemsCache: {},
+
+        commandSearchIsEmpty() {
+          return !this.commandSearch || this.commandSearch.length === 0;
+        },
+
+        commandItemIsActive(item) {
+          return this.commandItemActive && this.commandItemActive.value === item.value;
+        },
+
+        commandItemActiveNext() {
+          if (this._navigating) return;
+          this._navigating = true;
+
+          const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
+          if (index < this.commandItemsFiltered.length - 1) {
+            this.commandItemActive = this.commandItemsFiltered[index + 1];
+            this.$nextTick(() => {
+              this.commandScrollToActiveItem();
+              setTimeout(() => { this._navigating = false; }, 50);
+            });
+          } else {
+            this._navigating = false;
+          }
+        },
+
+        commandItemActivePrevious() {
+          if (this._navigating) return;
+          this._navigating = true;
+
+          const index = this.commandItemsFiltered.indexOf(this.commandItemActive);
+          if (index > 0) {
+            this.commandItemActive = this.commandItemsFiltered[index - 1];
+            this.$nextTick(() => {
+              this.commandScrollToActiveItem();
+              setTimeout(() => { this._navigating = false; }, 50);
+            });
+          } else {
+            this._navigating = false;
+          }
+        },
+
+        commandScrollToActiveItem() {
+          if (!this.commandItemActive || !this.$refs.commandItemsList) return;
+
+          const activeElement = document.getElementById(this.commandItemActive.value + '-' + this.commandId);
+          if (!activeElement) return;
+
+          const container = this.$refs.commandItemsList;
+          const containerRect = container.getBoundingClientRect();
+          const elementRect = activeElement.getBoundingClientRect();
+
+          if (elementRect.bottom > containerRect.bottom) {
+            container.scrollTop += (elementRect.bottom - containerRect.bottom);
+          } else if (elementRect.top < containerRect.top) {
+            container.scrollTop -= (containerRect.top - elementRect.top);
+          }
+        },
+
+        _searchTimeoutId: null,
+        commandSearchItems() {
+          if (this._searchTimeoutId) {
+            clearTimeout(this._searchTimeoutId);
+          }
+
+          this._searchTimeoutId = setTimeout(() => {
+            const cacheKey = (this.commandSearch || '').toLowerCase();
+
+            if (this.itemsCache[cacheKey]) {
+              this.commandItemsFiltered = this.itemsCache[cacheKey];
+            } else {
+              if (!this.commandSearchIsEmpty()) {
+                const searchTerm = cacheKey.replace(/\*/g, '');
+                this.commandItemsFiltered = this.commandItems.filter(item =>
+                  item.title.toLowerCase().includes(searchTerm));
+              } else {
+                this.commandItemsFiltered = this.commandItems.filter(item => item.default);
+              }
+
+              this.itemsCache[cacheKey] = this.commandItemsFiltered;
+            }
+
+            this.commandItemActive = this.commandItemsFiltered[0] || null;
+          }, 100);
+        },
+
+        commandShowCategory(item, index) {
+          if (index === 0) return true;
+          if (!this.commandItemsFiltered[index - 1]) return false;
+          return item.category !== this.commandItemsFiltered[index - 1].category;
+        },
+
+        commandCategoryCapitalize(string) {
+          return string.charAt(0).toUpperCase() + string.slice(1);
+        },
+
+        commandItemsReorganize() {
+          const totalItems = Object.keys(this.commandItemsData).reduce(
+            (acc, category) => {
+              const items = this.commandItemsData[category];
+              return acc + (Array.isArray(items) ? items.length : 0);
+            },
+            0
+          );
+          this.commandItems = new Array(totalItems);
+
+          let index = 0;
+          for (const category in this.commandItemsData) {
+            const categoryItems = this.commandItemsData[category];
+            if (!Array.isArray(categoryItems)) continue;
+            for (const item of categoryItems) {
+              item.category = category;
+              this.commandItems[index++] = item;
+            }
+          }
+
+          if (index < this.commandItems.length) {
+            this.commandItems.length = index;
+          }
+
+          this.itemsCache = {};
+          this.itemsCache[''] = this.commandItems.filter(item => item.default);
+        },
+
+        handleSelectedItem(item) {
+          if (!item) return;
+
+          if (item.value === 'theme') {
+            $store.theme.toggle();
+            this.commandItemSelected = null;
+          } else {
+            const targetUrl = this.actionMap[item.value];
+            if (targetUrl) {
+              window.location.href = targetUrl;
+            }
+            commandOpen = false;
+          }
+        },
+        actionMap: window.COMMAND_ACTION_MAP
+      }"
+                  x-init="
+        const dataUpdateHandler = () => {
+          commandItemsReorganize();
+          commandSearchItems();
+        };
+        window.addEventListener('command-palette-data-updated', dataUpdateHandler);
+        commandItemsReorganize();
+        commandSearchItems();
+        $watch('commandSearch', () => commandSearchItems());
+        $watch('commandItemSelected', item => handleSelectedItem(item));
+        window.loadCommandPalettePosts && window.loadCommandPalettePosts().catch(() => {});
+      "
+                  @keydown.down.prevent="commandItemActiveNext()"
+                  @keydown.up.prevent="commandItemActivePrevious()"
+                  @keydown.enter="commandItemSelected = commandItemActive; commandItemActive = null;"
+                  @command-input-focus.window="$refs.commandInput.focus()"
+                  x-transition:enter="command-palette-panel-enter"
+                  x-transition:enter-start="command-palette-panel-enter-start"
+                  x-transition:enter-end="command-palette-panel-enter-end"
+                  x-transition:leave="command-palette-panel-leave"
+                  x-transition:leave-start="command-palette-panel-leave-start"
+                  x-transition:leave-end="command-palette-panel-leave-end"
+                  class="command-palette-panel relative z-10 w-full max-w-[95%] sm:max-w-xl px-0"
+                  x-cloak
+                  @click.stop
+                >
+                  <div
+                    class="box-border border-2 border-[var(--border-secondary)] flex flex-col min-h-0 max-h-[80vh] w-full p-2 bg-[var(--bg-primary)] rounded-[25px] shadow-lg drop-shadow-md backdrop-blur-sm pointer-events-auto relative"
+                  >
+                    <div
+                      class="absolute top-[-15px] left-5 px-4 py-1 border-2 rounded-full border-[var(--border-light)] bg-[var(--bg-primary)] hidden sm:block"
+                    >
+                      <p class="m-0 text-sm p-0">Command</p>
+                    </div>
+
+                    <div
+                      class="flex items-center px-3 border-dotted border-b border-[var(--bg-hover)]"
+                    >
+                      <svg
+                        class="w-4 h-4 mr-0 text-[var(--border-secondary)] shrink-0"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+                      </svg>
+                      <input
+                        type="text"
+                        x-ref="commandInput"
+                        x-model="commandSearch"
+                        class="flex w-full px-2 py-3 text-sm bg-transparent border-0 rounded-md outline-none focus:outline-none focus:ring-0 focus:border-0 placeholder:text-[var(--border-secondary)] h-11 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="Type a command or search..."
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                      />
+                    </div>
+
+                    <div
+                      x-ref="commandItemsList"
+                      class="grow min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain"
+                      data-command-list
+                    >
+                      <template
+                        x-for="(item, index) in commandItemsFiltered"
+                        :key="item.value"
+                      >
+                        <div class="pb-1 space-y-1">
+                          <template x-if="commandShowCategory(item, index)">
+                            <div class="px-1 overflow-hidden">
+                              <div
+                                class="px-2 py-1 my-1 text-xs font-medium text-[var(--text-primary)]"
+                                x-text="commandCategoryCapitalize(item.category)"
+                              ></div>
+                            </div>
+                          </template>
+                          <template
+                            x-if="(item.default && commandSearchIsEmpty()) || !commandSearchIsEmpty()"
+                          >
+                            <div class="px-1">
+                              <div
+                                :id="item.value + '-' + commandId"
+                                @click="commandItemSelected=item"
+                                @mouseenter="commandItemActive=item"
+                                x-bind:class="commandItemIsActive(item) ? 'bg-[var(--bg-hover)] text-[var(--text-body)]' : 'text-[var(--text-muted)]'"
+                                class="relative flex cursor-pointer select-none items-center rounded-[10px] px-2 py-1 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                              >
+                                <span x-html="item.icon"></span>
+                                <span
+                                  x-text="item.value === 'theme' ? ('Toggle Theme (current: ' + $store.theme.mode + ')') : item.title"
+                                ></span>
+                                <template x-if="item.right && !isTouchDevice">
+                                  <span
+                                    class="ml-auto text-xs px-1 py-1 tracking-widest text-[var(--text-body)] border border-[var(--bg-hover)] rounded-md"
+                                    x-text="item.right"
+                                  ></span>
+                                </template>
+                              </div>
+                            </div>
+                          </template>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+
+            <!-- Mobile Bottom Drawer (Alpine.js) - Enhanced version -->
+            <template x-teleport="body">
+              <div
+                x-data="{
+      drawerOpen: false,
+      dataRevision: 0,
+      dragStartY: 0,
+      currentY: 0,
+      translateY: 100,
+      isDragging: false,
+      velocity: 0,
+      lastY: 0,
+      lastTime: 0,
+      snapThreshold: 20,
+      searchQuery: '',
+      isAnimating: false,
+      openDuration: 320,
+      closeDuration: 200,
+      animationCurve: 'cubic-bezier(0.16, 1, 0.3, 1)',
+      openFrame: null,
+      settleTimer: null,
+      themeTimer: null,
+      activeDuration: 0,
+      dragFrame: null,
+      pendingTranslateY: 100,
+      isReducedMotion: window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+
+      get allItems() {
+        void this.dataRevision;
+        const items = [];
+        const categories = Object.keys(window.COMMAND_ITEMS_DATA || {});
+
+        for (const category of categories) {
+          const bucket = window.COMMAND_ITEMS_DATA && window.COMMAND_ITEMS_DATA[category];
+          const categoryItems = Array.isArray(bucket) ? bucket : [];
+          const filtered = !this.searchQuery
+            ? categoryItems.filter(item => item.default)
+            : categoryItems.filter(item =>
+                item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+              );
+
+          if (filtered.length > 0) {
+            items.push({ type: 'header', category });
+            items.push(...filtered.map(item => ({ ...item, type: 'item' })));
+          }
+        }
+
+        return items;
+      },
+
+      openDrawer() {
+        const self = this;
+
+        if (self.settleTimer) {
+          clearTimeout(self.settleTimer);
+          self.settleTimer = null;
+        }
+        if (self.openFrame) {
+          cancelAnimationFrame(self.openFrame);
+          self.openFrame = null;
+        }
+        if (self.dragFrame) {
+          cancelAnimationFrame(self.dragFrame);
+          self.dragFrame = null;
+        }
+        if (self.themeTimer) {
+          clearTimeout(self.themeTimer);
+          self.themeTimer = null;
+        }
+
+        self.drawerOpen = true;
+        if (window.umami && typeof window.umami.track === 'function') {
+          window.umami.track('Command palette open', { surface: 'drawer' });
+        }
+
+        self.isAnimating = true;
+        self.activeDuration = self.isReducedMotion ? 1 : self.openDuration;
+        self.translateY = 100;
+        self.pendingTranslateY = 100;
+        self.velocity = 0;
+        self.isDragging = false;
+
+        const overlayController = window.__overlayChromeController;
+        const canUseController =
+          overlayController && typeof overlayController.open === 'function';
+
+        if (canUseController) {
+          overlayController.open('drawer');
+        } else {
+          document.documentElement.style.overflow = 'hidden';
+          document.body.style.overflow = 'hidden';
+        }
+
+        requestAnimationFrame(() => {
+          self.openFrame = requestAnimationFrame(() => {
+            self.translateY = 0;
+            self.pendingTranslateY = 0;
+            self.openFrame = null;
+            self.settleTimer = setTimeout(() => {
+              self.isAnimating = false;
+              self.settleTimer = null;
+            }, self.activeDuration);
+          });
+        });
+
+        self.updateThemeColor();
+      },
+
+      closeDrawer() {
+        const self = this;
+
+        if (self.openFrame) {
+          cancelAnimationFrame(self.openFrame);
+          self.openFrame = null;
+        }
+        if (self.dragFrame) {
+          cancelAnimationFrame(self.dragFrame);
+          self.dragFrame = null;
+        }
+        if (self.settleTimer) {
+          clearTimeout(self.settleTimer);
+          self.settleTimer = null;
+        }
+        if (self.themeTimer) {
+          clearTimeout(self.themeTimer);
+          self.themeTimer = null;
+        }
+
+        self.isAnimating = true;
+        self.activeDuration = self.isReducedMotion ? 1 : self.closeDuration;
+        self.isDragging = false;
+        self.translateY = 100;
+        self.pendingTranslateY = 100;
+
+        // IMPORTANT: Reset commandOpen to fix Android button state
+        commandOpen = false;
+
+        const overlayController = window.__overlayChromeController;
+        const canUseController =
+          overlayController &&
+          typeof overlayController.close === 'function' &&
+          overlayController.hasActiveOverlays &&
+          overlayController.hasActiveOverlays();
+
+        if (canUseController) {
+          overlayController.close('drawer');
+        } else {
+          self.themeTimer = setTimeout(() => {
+            self.resetThemeColor();
+            self.themeTimer = null;
+          }, Math.min(180, self.activeDuration));
+        }
+
+        self.settleTimer = setTimeout(() => {
+          self.drawerOpen = false;
+          self.isAnimating = false;
+          if (!canUseController) {
+            document.documentElement.style.overflow = '';
+            document.body.style.overflow = '';
+          }
+          self.searchQuery = '';
+          self.settleTimer = null;
+        }, self.activeDuration);
+      },
+
+      updateThemeColor() {
+        const overlayController = window.__overlayChromeController;
+        if (overlayController) {
+          overlayController.updateThemeColor();
+          return;
+        }
+
+        let metaTheme = document.querySelector('meta[name=\'theme-color\']');
+        if (!metaTheme) {
+          metaTheme = document.createElement('meta');
+          metaTheme.name = 'theme-color';
+          document.head.appendChild(metaTheme);
+        }
+
+        const isDark = document.documentElement.classList.contains('dark');
+        metaTheme.content = isDark ? '#0f0f0f' : '#faf9f9';
+      },
+
+      resetThemeColor() {
+        const overlayController = window.__overlayChromeController;
+        if (overlayController) {
+          overlayController.resetThemeColor();
+          return;
+        }
+
+        const metaTheme = document.querySelector('meta[name=\'theme-color\']');
+        if (metaTheme) {
+          metaTheme.content = document.documentElement.classList.contains('dark') ? '#0f0f0f' : '#faf9f9';
+        }
+      },
+
+      startDrag(e) {
+        if (e.target.closest('[data-no-drag]')) return;
+        if (this.isAnimating) return;
+
+        this.isDragging = true;
+        this.dragStartY = e.touches ? e.touches[0].clientY : e.clientY;
+        this.lastY = this.dragStartY;
+        this.lastTime = Date.now();
+        this.velocity = 0;
+      },
+
+      onDrag(e) {
+        if (!this.isDragging || this.isAnimating) return;
+
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const deltaY = clientY - this.dragStartY;
+
+        const now = Date.now();
+        const deltaTime = now - this.lastTime;
+        if (deltaTime > 0) {
+          this.velocity = (clientY - this.lastY) / deltaTime;
+        }
+        this.lastY = clientY;
+        this.lastTime = now;
+
+        const nextTranslate =
+          deltaY < 0
+            ? deltaY * 0.1
+            : Math.min(100, (deltaY / window.innerHeight) * 100);
+
+        this.pendingTranslateY = nextTranslate;
+
+        if (this.dragFrame) return;
+        this.dragFrame = requestAnimationFrame(() => {
+          this.translateY = this.pendingTranslateY;
+          this.dragFrame = null;
+        });
+      },
+
+      endDrag() {
+        if (!this.isDragging) return;
+        this.isDragging = false;
+
+        if (this.dragFrame) {
+          cancelAnimationFrame(this.dragFrame);
+          this.dragFrame = null;
+          this.translateY = this.pendingTranslateY;
+        }
+
+        const shouldClose =
+          this.translateY > this.snapThreshold || this.velocity > 0.3;
+
+        if (shouldClose) {
+          this.closeDrawer();
+          return;
+        }
+
+        if (this.settleTimer) {
+          clearTimeout(this.settleTimer);
+        }
+        this.isAnimating = true;
+        this.activeDuration = this.isReducedMotion ? 1 : 220;
+        this.translateY = 0;
+        this.pendingTranslateY = 0;
+        this.settleTimer = setTimeout(() => {
+          this.isAnimating = false;
+          this.settleTimer = null;
+        }, this.activeDuration);
+      },
+
+      handleItemClick(item) {
+        if (item.value === 'theme') {
+          $store.theme.toggle();
+          this.updateThemeColor();
+        } else if (item.value === 'email') {
+          window.location.href = window.COMMAND_ACTION_MAP[item.value];
+          this.closeDrawer();
+        } else {
+          const targetUrl = window.COMMAND_ACTION_MAP[item.value];
+          if (targetUrl) {
+            window.location.href = targetUrl;
+          }
+          this.closeDrawer();
+        }
+      },
+
+      formatCategoryName(category) {
+        return category.charAt(0).toUpperCase() + category.slice(1);
+      },
+
+      transitionStyle() {
+        if (this.isDragging) {
+          return 'none';
+        }
+
+        const duration = this.activeDuration || this.closeDuration;
+        return `transform ${duration}ms ${this.animationCurve}`;
+      },
+
+      drawerStyles() {
+        return {
+          transform: `translate3d(-50%, ${Math.max(0, this.translateY)}%, 0)`,
+          transition: this.transitionStyle(),
+          left: '50%',
+          maxWidth: '640px',
+          width: '100%',
+        };
+      }
+    }"
+                x-init="
+      const dataUpdateHandlerMobile = () => { dataRevision += 1; };
+      window.addEventListener('command-palette-data-updated', dataUpdateHandlerMobile);
+      window.loadCommandPalettePosts && window.loadCommandPalettePosts().catch(() => {});
+
+      $watch('commandOpen', value => {
+        if (value && (window.innerWidth < 768 || isTouchDevice)) {
+          commandOpen = false;
+          openDrawer();
+        }
+      });
+
+      // Watch for theme changes to update Safari chrome
+      $watch('$store.theme.mode', () => {
+        if (drawerOpen) {
+          updateThemeColor();
+        }
+      });
+    "
+                x-show="drawerOpen"
+                @click="closeDrawer()"
+                class="fixed inset-0 z-[100] touch-none command-drawer-overlay"
+                x-cloak
+              >
+                <!-- Backdrop with better dark mode contrast -->
+                <div
+                  x-show="drawerOpen"
+                  x-transition:enter="ease-out duration-400"
+                  x-transition:enter-start="opacity-0"
+                  x-transition:enter-end="opacity-100"
+                  x-transition:leave="ease-in duration-200"
+                  x-transition:leave-start="opacity-100"
+                  x-transition:leave-end="opacity-0"
+                  :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'bg-black/60' : 'bg-black/30'"
+                  class="absolute inset-0 transition-colors duration-300 command-drawer-backdrop"
+                  :style="`opacity: ${drawerOpen ? Math.max(0, 1 - (translateY / 100)) : 0}`"
+                ></div>
+
+                <!-- Bottom Sheet with smooth entrance animation -->
+                <div
+                  x-show="drawerOpen"
+                  @click.stop
+                  @touchstart="startDrag"
+                  @touchmove="onDrag"
+                  @touchend="endDrag"
+                  @touchcancel="endDrag"
+                  @mousedown="startDrag"
+                  @mousemove="onDrag"
+                  @mouseup="endDrag"
+                  @mouseleave="endDrag"
+                  :style="drawerStyles()"
+                  :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'ring-1 ring-white/10' : ''"
+                  class="absolute bottom-0 w-full bg-[var(--bg-primary)] border-t border-[var(--border-secondary)] rounded-t-[28px] shadow-2xl max-h-[75vh] flex flex-col command-drawer-sheet"
+                  x-ref="drawerContainer"
+                  style="
+                    will-change: transform;
+                    padding-bottom: env(safe-area-inset-bottom);
+                  "
+                >
+                  <!-- Larger Invisible Drag Handle Area -->
+                  <div
+                    class="relative pt-3 pb-6 -mb-3 cursor-grab active:cursor-grabbing"
+                  >
+                    <!-- Visual Handle with better visibility in dark mode -->
+                    <div
+                      :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'opacity-40' : 'opacity-30'"
+                      class="mx-auto w-11 h-1 bg-[var(--border-secondary)] rounded-full transition-opacity duration-300"
+                    ></div>
+                  </div>
+
+                  <!-- Search Bar -->
+                  <div class="px-4 pb-3" data-no-drag>
+                    <div
+                      class="flex items-center border border-[var(--border-light)] rounded-xl px-3.5 py-2.5"
+                    >
+                      <svg
+                        class="w-4 h-4 text-[var(--text-subtle)] mr-2.5 opacity-60"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                      </svg>
+                      <input
+                        type="search"
+                        x-model="searchQuery"
+                        placeholder="Type a command or search..."
+                        class="flex-1 bg-transparent outline-none text-[var(--text-primary)] placeholder:text-[var(--text-subtle)] text-base"
+                        style="font-size: 16px"
+                        autocomplete="off"
+                        autocorrect="off"
+                        spellcheck="false"
+                        data-no-drag
+                      />
+                      <button
+                        x-show="searchQuery"
+                        @click="searchQuery = ''"
+                        class="ml-2 p-1 -mr-1"
+                        data-no-drag
+                      >
+                        <svg
+                          class="w-4 h-4 text-[var(--text-subtle)]"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path d="M18 6 6 18"></path>
+                          <path d="m6 6 12 12"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Scrollable Content with stagger animation -->
+                  <div
+                    class="flex-1 overflow-y-auto overscroll-contain px-2 pb-4"
+                    data-no-drag
+                  >
+                    <template x-for="(item, index) in allItems" :key="index">
+                      <div>
+                        <!-- Section Header -->
+                        <template x-if="item.type === 'header'">
+                          <div class="px-3 pt-3 pb-1.5">
+                            <div
+                              class="text-xs font-medium text-[var(--text-subtle)] uppercase tracking-wider opacity-60"
+                              x-text="formatCategoryName(item.category)"
+                            ></div>
+                          </div>
+                        </template>
+
+                        <!-- Item -->
+                        <template x-if="item.type === 'item'">
+                          <button
+                            @click="handleItemClick(item)"
+                            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-transform duration-150 active:scale-[0.98]"
+                            data-no-drag
+                          >
+                            <!-- Icon -->
+                            <span
+                              x-html="item.icon"
+                              class="[&>svg]:w-4 [&>svg]:h-4 [&>svg]:text-[var(--text-subtle)]"
+                            ></span>
+
+                            <!-- Text -->
+                            <span
+                              class="flex-1 text-left text-[var(--text-body)] text-[15px]"
+                              x-text="item.value === 'theme' ? ('Toggle Theme (' + $store.theme.mode + ')') : item.title"
+                            ></span>
+
+                            <!-- Chevron -->
+                            <template x-if="item.value !== 'theme'">
+                              <svg
+                                class="w-4 h-4 text-[var(--border-secondary)] opacity-60"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              >
+                                <path d="m9 18 6-6-6-6"></path>
+                              </svg>
+                            </template>
+                          </button>
+                        </template>
+                      </div>
+                    </template>
+
+                    <!-- Empty State -->
+                    <div
+                      x-show="allItems.length === 0"
+                      class="text-center pt-6 pb-12"
+                    >
+                      <p class="text-[var(--text-subtle)] text-sm">
+                        No results found
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <article data-lightbox-group="post-fr-croissance-et-objectivit">
+        <div class="article-meta-data"><h1>[FR] Croissance et objectivité</h1>
+<span class="article-publish-date">February 25, 2026</span></div> <p>Se détacher de la subjectivité en grandissant ?</p>
+<p>Notre cerveau, durant sa croissance, évolue énormément. Nous percevons évidemment cette évolution tous les jours de manière concrète - l'exemple phare de sa catégorie : la maturité. Par maturité, j'entends bien évidemment sérieux, responsable ou encore réfléchi.</p>
+<p>Mais ces lentes modifications se traduisent également par un renforcement de l'esprit critique. C'est d'ailleurs ce que le psychologue Piaget a décrit sous le nom de <em>décentration</em> (passer d'une pensée égocentrée à la capacité de prendre d'autres points de vue). Ce sujet souvent évoqué - et souligné comme étant une importante capacité à développer - nous vient plus ou moins naturellement. Evidemment, l'enfant développe très tôt de la honte ou remise en question, chose fortement influencée par le contexte familial. Mais assez souvent, l'enfant, quoi qu'il fasse, est fier de lui. Cela est surtout vrai concernant des actions personnelles et un cadre bienveillant. Mais ce n'est vrai que jusqu'à un certain âge. Cet âge que j'évoque est, pour moi, centré sur l'adolescence. Le jeune adulte et l'adulte en général se remet bien plus souvent en cause.</p>
+<p>Il est ici tentant de conclure que l'homme gagne alors directement en objectivité, et que l'on ne peut que s'améliorer soi-même.</p>
+<p>Mais en réalité nous sommes dans une situation délicate. L'adulte peut se remettre en cause <em>trop</em> (anxiété, syndrome de l'imposteur) ou <em>mal</em> (se juger selon des normes sociales arbitraires). Plus d'autocritique ne signifie pas plus de justesse. En effet, dès l'adolescence, nous sommes exposés à une bien plus grande pression sociale, mais également à de nombreux biais cognitifs.</p>
+<p>Que peut-on alors conclure?</p>
+<p>Certes, nos yeux se sont ouverts, on s'améliore via une autocritique très puissante de nous-mêmes. Cela nous force souvent à évoluer vers ce que l'on pense être une meilleure version de nous-mêmes.</p>
+<p>Mais d'un autre côté, Daniel Kahneman (<em>Système 1 / Système 2</em>) a montré que les adultes sont bourrés de biais cognitifs : confirmation, ancrage, effet de halo… L'effet Dunning-Kruger montre même que des adultes incompétents dans un domaine <em>surestiment</em> leur niveau. L'enfant, lui, peut paradoxalement voir certaines choses plus clairement. Il suffit de lire le conte <em>Les habits neufs de l'empereur</em> pour s'en rendre compte. C'est l'histoire d'un enfant qui dit la vérité que tous les adultes refusent de voir.</p>
+<p>Ainsi, malgré l'ouverture de notre esprit, et la prise de conscience de nous-mêmes durant notre croissance, l'objectivité reste difficile à atteindre.</p>
+<p>En repérant nos propres biais, on comprend comment fonctionne l'esprit humain en général, et donc on lit déjà mieux le monde. Voir (autocritique brute) ne suffit plus, il faut cerner les choses précisément (analyse méthodique de ses biais).</p>
+<p>Socrate ne disait pas autre chose avec son « Connais-toi toi-même » : apprendre à se connaître soi-même est déjà une belle façon d'apprendre à connaître le monde.</p>
+
+      </article>
+    </main>
+
+    <footer>
+      <div class="hero-links">
+        <p>
+          <a
+            class="link-with-icon"
+            rel="noopener"
+            href="#page-top"
+            data-back-to-top
+            >Back to top<svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="1em"
+              width="1em"
+              style="margin-left: 0.2em"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-up-icon lucide-arrow-up"
+            >
+              <path d="m5 12 7-7 7 7" />
+              <path d="M12 19V5" /></svg
+          ></a>
+        </p>
+        <div class="theme-toggle">
+          <button
+            aria-label="Toggle theme"
+            class="theme-toggle"
+            x-data
+            x-init="$store.theme.init()"
+            @click="$store.theme.toggle()"
+            :data-mode="$store.theme.mode"
+          >
+            <!-- System Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-monitor"
+              data-icon="system"
+            >
+              <rect width="20" height="14" x="2" y="3" rx="2" />
+              <line x1="8" x2="16" y1="21" y2="21" />
+              <line x1="12" x2="12" y1="17" y2="21" />
+            </svg>
+            <!-- Light/Sun Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-sun"
+              data-icon="light"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" />
+              <path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" />
+              <path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+            <!-- Dark/Moon Icon -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-moon"
+              data-icon="dark"
+            >
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <p class="footer-meta-left">
+          Designed with
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#FE6F5E"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-heart w-3 h-3 mr-2 animate-bounce"
+          >
+            <path
+              d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+            />
+          </svg>
+          <span class="subtle">by</span> Pierre-Louis
+        </p>
+        <p class="footer-meta-right">© 2026</p>
+      </div>
+    </footer>
+
+    <div
+      id="lightbox"
+      class="image-lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+    >
+      <div class="image-lightbox__backdrop" data-lightbox-close></div>
+      <div class="image-lightbox__shell" role="document">
+        <button
+          type="button"
+          class="image-lightbox__close"
+          aria-label="Close gallery"
+          data-lightbox-close
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="18" x2="6" y1="6" y2="18" />
+            <line x1="6" x2="18" y1="6" y2="18" />
+          </svg>
+        </button>
+        <div class="image-lightbox__stage">
+          <button
+            type="button"
+            class="image-lightbox__nav image-lightbox__nav--prev"
+            aria-label="Previous image"
+            data-lightbox-prev
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <figure class="image-lightbox__figure">
+            <img
+              class="image-lightbox__image"
+              alt=""
+              decoding="async"
+              data-lightbox-active-image
+            />
+            <figcaption
+              class="image-lightbox__caption"
+              data-lightbox-caption
+            ></figcaption>
+          </figure>
+          <button
+            type="button"
+            class="image-lightbox__nav image-lightbox__nav--next"
+            aria-label="Next image"
+            data-lightbox-next
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="image-lightbox__thumbnail-bar"
+          role="list"
+          data-lightbox-thumbnails
+        ></div>
+      </div>
+    </div>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+    <script defer src="/src/script.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"
+    ></script>
+  </body>
+</html>
