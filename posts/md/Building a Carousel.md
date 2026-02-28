@@ -5,7 +5,7 @@ tags:
   - experiment
 date: 2025-12-29
 ---
-Swiper (the js library) does most of the heavy lifting for carousels. Loop it, center it, add some breakpoints, and bam, it's done! But the default pagination always felt static to me. A row of dots that just... sits there.
+Swiper (the js library) does most of the work for carousels. Loop it, center it, add some breakpoints, and bam, it's done! But the default pagination always felt static to me. A row of dots that just... sits there.
 
 So I built one that moves.
 
@@ -22,7 +22,7 @@ That `-4` nudges things to account for the dot's own width. Simple math, but it 
 
 ## Edge Fade
 
-Dots near the viewport edges get a `.edge` class—they shrink and fade out. It's a small thing, but it sells the illusion that the dots extend infinitely in both directions.
+Dots near the viewport edges get a `.edge` class: they shrink and fade out. It's a small thing, but it sells the illusion that the dots extend infinitely in both directions.
 
 ```js
 if (dotPosition < fadeZone || dotPosition > viewportWidth - fadeZone) {

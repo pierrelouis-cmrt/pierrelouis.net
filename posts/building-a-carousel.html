@@ -1039,7 +1039,7 @@
     <main>
       <article data-lightbox-group="post-building-a-carousel">
         <div class="article-meta-data"><h1>Building a Carousel</h1>
-<span class="article-publish-date">December 29, 2025</span></div> <p>Swiper (the js library) does most of the heavy lifting for carousels. Loop it, center it, add some breakpoints, and bam, it's done! But the default pagination always felt static to me. A row of dots that just... sits there.</p>
+<span class="article-publish-date">December 29, 2025</span></div> <p>Swiper (the js library) does most of the work for carousels. Loop it, center it, add some breakpoints, and bam, it's done! But the default pagination always felt static to me. A row of dots that just... sits there.</p>
 <p>So I built one that moves.</p>
 <h2>The Sliding Window</h2>
 <p>Instead of showing all dots at once, there's a 120px viewport that only reveals a handful. When you've got many images in a carousel, showing all dots can be pretty overwhelming. While swiping, the entire dot container translates to keep the active one centered:</p>
@@ -1048,7 +1048,7 @@ dotsContainer.style.transform = `translateX(${offset}px)`;
 </code></pre>
 <p>That <code>-4</code> nudges things to account for the dot's own width. Simple math, but it feels more interactive.</p>
 <h2>Edge Fade</h2>
-<p>Dots near the viewport edges get a <code>.edge</code> class—they shrink and fade out. It's a small thing, but it sells the illusion that the dots extend infinitely in both directions.</p>
+<p>Dots near the viewport edges get a <code>.edge</code> class: they shrink and fade out. It's a small thing, but it sells the illusion that the dots extend infinitely in both directions.</p>
 <pre><code class="language-js">if (dotPosition &lt; fadeZone || dotPosition &gt; viewportWidth - fadeZone) {
   dot.classList.add(&quot;edge&quot;);
 }

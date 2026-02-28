@@ -1,8 +1,9 @@
 ---
 title: "[FR] Croissance et objectivité"
-description: "Se détacher de la subjectivité en grandissant ? Est-ce trivial ?"
-tags: [article]
-date: 2026-02-25
+description: Se détacher de la subjectivité en grandissant ? Est-ce trivial ?
+tags:
+  - article
+date: 2026-02-28
 ---
 Se détacher de la subjectivité en grandissant ?
 
