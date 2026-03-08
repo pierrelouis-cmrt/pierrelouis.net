@@ -751,7 +751,9 @@ a.project-card:not(:hover) .lucide {
 }
 
 #latest-posts .post-card-title .link-text {
+  display: block;
   flex: 1 1 auto;
+  hanging-punctuation: none;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3035,6 +3037,7 @@ img[data-lightbox-item] {
 
 .timeline-item-title .link-text {
   color: var(--text-primary);
+  hanging-punctuation: none;
   text-decoration: underline solid var(--border-secondary);
   transition: all 120ms ease-in-out;
 }
@@ -3557,6 +3560,7 @@ article .article-meta-data {
 article .article-meta-data h1 {
   margin: var(--space-8) 0 var(--space-4);
   flex: 1;
+  hanging-punctuation: none;
 }
 
 article .article-publish-date {
