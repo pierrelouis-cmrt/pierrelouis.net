@@ -4,7 +4,7 @@
 // local files under dist/uses/icons. Keeps source HTML untouched.
 // -----------------------------------------------------------------------------
 
-import { readFile, writeFile, mkdir } from "fs/promises";
+import { readFile, writeFile, mkdir, access, copyFile } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
 import { fileURLToPath } from "url";
@@ -20,8 +20,12 @@ const outRoot =
 
 const usesHtmlPath = path.join(outRoot, "uses", "index.html");
 const iconsDir = path.join(outRoot, "uses", "icons");
+const cacheRoot = path.join(root, "_cache", "uses-icons");
+const cacheIconsDir = path.join(cacheRoot, "files");
+const cacheManifestPath = path.join(cacheRoot, "manifest.json");
 
 const MAX_CONCURRENCY = 8;
+const FETCH_TIMEOUT_MS = 8_000;
 const DUCKDUCKGO_FAVICON_BASE = "https://icons.duckduckgo.com/ip3/";
 const CONTENT_TYPE_EXT = new Map([
   ["image/png", ".png"],
@@ -102,8 +106,68 @@ const buildFileName = (urlValue, ext) => {
   return `${host}-${base}-${hash}${ext}`;
 };
 
+const fileExists = async (targetPath) => {
+  try {
+    await access(targetPath);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+const loadManifest = async () => {
+  try {
+    const raw = await readFile(cacheManifestPath, "utf8");
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch (error) {
+    if (error?.code === "ENOENT") return {};
+    console.warn(`WARN: failed to read uses icon manifest: ${error.message}`);
+    return {};
+  }
+};
+
+const saveManifest = async (manifest) => {
+  await writeFile(cacheManifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+};
+
+const restoreFromCache = async (original, manifest, mapping) => {
+  const entry = manifest[original];
+  if (!entry?.fileName) return false;
+
+  const cachePath = path.join(cacheIconsDir, entry.fileName);
+  if (!(await fileExists(cachePath))) return false;
+
+  const destPath = path.join(iconsDir, entry.fileName);
+  await copyFile(cachePath, destPath);
+  mapping.set(original, `/uses/icons/${entry.fileName}`);
+  return true;
+};
+
+const persistIcon = async (buffer, fileName) => {
+  const cachePath = path.join(cacheIconsDir, fileName);
+  const destPath = path.join(iconsDir, fileName);
+  await Promise.all([writeFile(cachePath, buffer), writeFile(destPath, buffer)]);
+};
+
 const fetchImage = async (urlValue) => {
-  const response = await fetch(urlValue, { redirect: "follow" });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  let response;
+  try {
+    response = await fetch(urlValue, {
+      redirect: "follow",
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      throw new Error(`Request timed out after ${FETCH_TIMEOUT_MS}ms`);
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
+
   if (!response.ok) {
     throw new Error(`Request failed: ${response.status}`);
   }
@@ -146,23 +210,35 @@ const run = async () => {
   }
 
   await mkdir(iconsDir, { recursive: true });
+  await mkdir(cacheIconsDir, { recursive: true });
+
+  const manifest = await loadManifest();
 
   const queue = remoteSrcs.slice();
   const mapping = new Map();
+  let cacheHits = 0;
+  let downloaded = 0;
   let failures = 0;
 
   const worker = async () => {
     while (queue.length > 0) {
       const original = queue.shift();
       if (!original) return;
+
+      if (await restoreFromCache(original, manifest, mapping)) {
+        cacheHits += 1;
+        continue;
+      }
+
       const normalized = normalizeUrl(original);
       try {
         const { buffer, contentType } = await fetchImage(normalized);
         const ext = resolveExtension(normalized, contentType);
         const fileName = buildFileName(normalized, ext);
-        const destPath = path.join(iconsDir, fileName);
-        await writeFile(destPath, buffer);
+        await persistIcon(buffer, fileName);
+        manifest[original] = { fileName, sourceUrl: normalized };
         mapping.set(original, `/uses/icons/${fileName}`);
+        downloaded += 1;
       } catch (error) {
         if (!isDuckDuckGoFavicon(normalized)) {
           const fallbackUrl = buildDuckDuckGoUrl(normalized);
@@ -171,9 +247,10 @@ const run = async () => {
               const { buffer, contentType } = await fetchImage(fallbackUrl);
               const ext = resolveExtension(fallbackUrl, contentType);
               const fileName = buildFileName(fallbackUrl, ext);
-              const destPath = path.join(iconsDir, fileName);
-              await writeFile(destPath, buffer);
+              await persistIcon(buffer, fileName);
+              manifest[original] = { fileName, sourceUrl: fallbackUrl };
               mapping.set(original, `/uses/icons/${fileName}`);
+              downloaded += 1;
               continue;
             } catch (fallbackError) {
               failures += 1;
@@ -195,6 +272,8 @@ const run = async () => {
   );
   await Promise.all(workers);
 
+  await saveManifest(manifest);
+
   if (mapping.size === 0) {
     console.warn("WARN: uses icons cache skipped (all downloads failed)");
     return;
@@ -211,9 +290,13 @@ const run = async () => {
 
   const successCount = mapping.size;
   const total = remoteSrcs.length;
+  const details = [];
+  if (cacheHits) details.push(`${cacheHits} restored from cache`);
+  if (downloaded) details.push(`${downloaded} downloaded`);
+  if (failures) details.push(`${failures} failed`);
   console.log(
     `OK uses icons: cached ${successCount}/${total} remote images` +
-      (failures ? ` (${failures} failed)` : "")
+      (details.length ? ` (${details.join(", ")})` : "")
   );
 };
 
