@@ -1,6 +1,6 @@
 ---
 title: "Don't let ideas expire"
-description: "_Your curiosity won't wait for you. Save your ideas quick, expand on them quicker."
+description: "Your curiosity won't wait for you. Save your ideas quick, expand on them quicker."
 tags: [note]
 date: 2026-03-29
 ---
