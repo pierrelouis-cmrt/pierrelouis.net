@@ -33,5 +33,9 @@
     "lint": "eslint .",
     "format": "prettier . --check",
     "format:write": "prettier . --write"
+  },
+  "dependencies": {
+    "katex": "^0.16.44",
+    "shiki": "^4.0.2"
   }
 }

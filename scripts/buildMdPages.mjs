@@ -10,7 +10,7 @@
 //   • abbreviations                     → markdown-it-abbr
 //   • definition list “= definition”    → markdown-it-deflist (pre-tweak)
 //   • callout “> [!info] … ”            → <div class="article-callout"><div class="article-callout-inner">
-//   • MathJax handled client-side
+//   • KaTeX rendered at build time
 //   • images: lazy + lightbox           → loading=lazy + onclick
 //   • “image” ending in .mp4/.webm      → <video>
 // ---------------------------------------------------------------------------
@@ -27,7 +27,8 @@ import abbr from "markdown-it-abbr";
 import taskLists from "markdown-it-task-lists";
 import deflist from "markdown-it-deflist";
 import container from "markdown-it-container";
-import mathjax from "markdown-it-mathjax"; // → leaves TeX for runtime MathJax
+import mathjax from "markdown-it-mathjax"; // → tokenizes TeX delimiters
+import katex from "katex";
 
 /* ---------- repo paths --------------------------------------------------- */
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -85,6 +86,25 @@ md.renderer.rules.hardbreak = (tokens, idx, options, env, self) => {
   }
   return defaultHardbreak(tokens, idx, options, env, self);
 };
+
+function renderKatex(tex, displayMode) {
+  return katex.renderToString(tex, {
+    displayMode,
+    output: "htmlAndMathml",
+    throwOnError: false,
+    strict: "ignore",
+    trust: false,
+  });
+}
+
+md.renderer.rules.inline_math = (tokens, idx) =>
+  `<span class="article-math-inline">${renderKatex(tokens[idx].content, false)}</span>`;
+
+md.renderer.rules.display_math = (tokens, idx) =>
+  `<!--article-math-display-start-->${renderKatex(tokens[idx].content, true)}<!--article-math-display-end-->`;
+
+md.renderer.rules.math = (tokens, idx) =>
+  `<!--article-math-display-start-->${renderKatex(tokens[idx].content, true)}<!--article-math-display-end-->`;
 
 /* -- custom footnote reference & back-reference renderers ---------------- */
 md.renderer.rules.footnote_ref = (tokens, idx) => {
@@ -160,6 +180,13 @@ function wrapImageCaptions(html) {
   );
 }
 
+function unwrapStandaloneDisplayMath(html) {
+  return html.replace(
+    /<p>\s*<!--article-math-display-start-->([\s\S]*?)<!--article-math-display-end-->\s*<\/p>/g,
+    '<div class="article-math-display">$1</div>'
+  );
+}
+
 /* ---------- Pre-processing tweaks --------------------------------------- */
 function preprocess(markdown) {
   let txt = markdown;
@@ -213,6 +240,7 @@ export async function buildPostPages(
       )
       .replace(/class="task-list"/g, 'class="article-task-list"');
 
+    rendered = unwrapStandaloneDisplayMath(rendered);
     rendered = wrapImageCaptions(rendered);
 
     const dateStr = `${monthName(post.month)} ${post.day}, ${post.year}`;

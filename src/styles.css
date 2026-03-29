@@ -3780,13 +3780,17 @@ code[class*="language-"] {
 /* Math rendering */
 article .article-math-display {
   margin: var(--space-6) auto;
-  text-align: center;
+  max-width: 600px;
   overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
   color: var(--text-primary);
 }
 
 article .article-math-inline {
   color: var(--text-primary);
+  white-space: normal;
 }
 
 /* Blockquotes */
@@ -4287,104 +4291,43 @@ li.article-task-list-item::marker {
   margin-right: 0.4em;
 }
 
-/* MathJax Styling */
+/* KaTeX article math */
 
-mjx-container {
-  max-width: 100%; /* never enlarge the page */
-  overflow-x: auto; /* let long equations scroll */
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch; /* smooth on iOS */
-  scrollbar-width: thin; /* Firefox */
-  font-size: 0.95em;
-}
-
-/* keep inline math truly inline + baseline-aligned */
-mjx-container:not([display="true"]):not([display="block"]) {
-  --math-inline-shift: -0.08em;
-  display: inline-flex;
-  align-items: center;
-  height: 1lh;
+article .article-math-inline .katex {
+  font-size: 1.02em;
   line-height: 1;
-  max-width: none;
-  overflow: visible;
-  padding-inline: 0.04em;
-  vertical-align: var(--math-inline-shift);
+  text-indent: 0;
 }
 
-@supports not (height: 1lh) {
-  mjx-container:not([display="true"]):not([display="block"]) {
-    height: 1em;
-  }
+article .article-math-inline .katex-display {
+  display: inline;
+  margin: 0;
 }
 
-mjx-container:not([display="true"]):not([display="block"]) > svg {
-  display: block;
-  height: auto;
-  width: auto;
-  max-height: 1em;
+article .article-math-inline .katex-display > .katex {
+  display: inline;
+  white-space: normal;
 }
 
-@supports selector(:has(*)) {
-  /* let inline fractions expand to readable multi-line height */
-  mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac),
-  mjx-container:not([display="true"]):not([display="block"]):has([data-mml-node="mfrac"]) {
-    height: auto;
-    min-height: 2lh;
-  }
-
-  mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac mjx-mfrac),
-  mjx-container:not([display="true"]):not([display="block"]):has(
-      [data-mml-node="mfrac"] [data-mml-node="mfrac"]
-    ) {
-    height: auto;
-    min-height: 3lh;
-  }
-
-  mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac) > svg,
-  mjx-container:not([display="true"]):not([display="block"]):has([data-mml-node="mfrac"]) > svg {
-    max-height: none;
-    height: auto;
-  }
+article .article-math-display > .katex-display {
+  margin: 0;
+  min-width: max-content;
+  padding: 0.08em 0;
 }
 
-@supports not (height: 1lh) {
-  @supports selector(:has(*)) {
-    mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac),
-    mjx-container:not([display="true"]):not([display="block"]):has([data-mml-node="mfrac"]) {
-      height: auto;
-      min-height: 2em;
-    }
-
-    mjx-container:not([display="true"]):not([display="block"]):has(mjx-mfrac mjx-mfrac),
-    mjx-container:not([display="true"]):not([display="block"]):has(
-        [data-mml-node="mfrac"] [data-mml-node="mfrac"]
-      ) {
-      height: auto;
-      min-height: 3em;
-    }
-  }
+article .article-math-display > .katex-display > .katex {
+  display: inline-block;
+  min-width: max-content;
 }
 
-/* keep the look & feel we already had for display math */
-mjx-container[display="true"],
-mjx-container[display="block"] {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 0;
-}
-@media (max-width: 640px) {
-  mjx-container[display="block"] {
-    /* mobile tweak */
-    max-width: 100%;
-    padding: 0 1.25rem;
-  }
+article :where(p, li, figcaption, td, th, h1, h2, h3, h4) .article-math-inline .katex {
+  color: inherit;
 }
 
-/* tiny WebKit scrollbar cosmetics (optional) */
-mjx-container::-webkit-scrollbar {
+article .article-math-display::-webkit-scrollbar {
   height: 6px;
 }
-mjx-container::-webkit-scrollbar-thumb {
+article .article-math-display::-webkit-scrollbar-thumb {
   background: var(--border-secondary);
   border-radius: 9999px;
 }
