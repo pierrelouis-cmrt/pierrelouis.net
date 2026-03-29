@@ -1,6 +1,18 @@
 [
   {
     "year": 2026,
+    "month": "Apr",
+    "day": 5,
+    "title": "Let It Sit",
+    "description": "Why good design takes time, and what actually happens when you let things sit.",
+    "image": "",
+    "tag": "Notes",
+    "tags": [
+      "note"
+    ]
+  },
+  {
+    "year": 2026,
     "month": "Mar",
     "day": 29,
     "title": "Don't let ideas expire",

@@ -1503,3 +1503,52 @@ document.addEventListener("keydown", (e) => {
     });
   });
 })();
+
+// Article code blocks
+(() => {
+  const copyIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy-icon lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+  const copyCheckIconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy-check-icon lucide-copy-check"><path d="m12 15 2 2 4-4"/><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+  const COPY_RESET_DELAY = 1200;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const codeBlocks = document.querySelectorAll("article pre");
+    if (codeBlocks.length === 0) return;
+
+    if (window.Prism && typeof window.Prism.highlightAllUnder === "function") {
+      window.Prism.highlightAllUnder(document);
+    }
+
+    codeBlocks.forEach((pre) => {
+      pre.classList.add("article-code-block");
+
+      const button = pre.querySelector(".article-code-copy");
+      const code = pre.querySelector("code");
+
+      if (!button || !code) return;
+
+      let resetTimer;
+
+      const setIcon = (svg) => {
+        button.innerHTML = svg;
+      };
+
+      button.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(code.textContent || "");
+          button.classList.add("is-copied");
+          button.setAttribute("aria-label", "Copied");
+          setIcon(copyCheckIconSVG);
+
+          clearTimeout(resetTimer);
+          resetTimer = window.setTimeout(() => {
+            button.classList.remove("is-copied");
+            button.setAttribute("aria-label", "Copy code");
+            setIcon(copyIconSVG);
+          }, COPY_RESET_DELAY);
+        } catch (error) {
+          console.error("Failed to copy code: ", error);
+        }
+      });
+    });
+  });
+})();

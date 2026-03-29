@@ -43,6 +43,7 @@ const outRoot =
 /* ---------- SVG icon for the ‘info’ call-out ---------------------------- */
 const INFO_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>`;
 const FOOTNOTE_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>`;
+const COPY_ICON = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy-icon lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
 
 /* ---------- Markdown-it set-up ------------------------------------------ */
 const md = new MarkdownIt({ html: true, breaks: true, linkify: true })
@@ -105,6 +106,22 @@ md.renderer.rules.display_math = (tokens, idx) =>
 
 md.renderer.rules.math = (tokens, idx) =>
   `<!--article-math-display-start-->${renderKatex(tokens[idx].content, true)}<!--article-math-display-end-->`;
+
+function renderCodeBlock(token, options) {
+  const info = token.info ? md.utils.unescapeAll(token.info).trim() : "";
+  const langName = info.split(/\s+/g)[0];
+  const languageClass = langName ? `${options.langPrefix}${langName}` : "";
+  const codeClass = languageClass ? ` class="${languageClass}"` : "";
+  const escaped = md.utils.escapeHtml(token.content);
+
+  return `<pre class="line-numbers"><button type="button" class="article-code-copy" aria-label="Copy code">${COPY_ICON}</button><code${codeClass}>${escaped}</code></pre>\n`;
+}
+
+md.renderer.rules.fence = (tokens, idx, options) =>
+  renderCodeBlock(tokens[idx], options);
+
+md.renderer.rules.code_block = (tokens, idx, options) =>
+  renderCodeBlock(tokens[idx], options);
 
 /* -- custom footnote reference & back-reference renderers ---------------- */
 md.renderer.rules.footnote_ref = (tokens, idx) => {
