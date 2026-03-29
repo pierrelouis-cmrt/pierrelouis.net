@@ -99,6 +99,7 @@
         href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
       />
     </noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" />
     <link
       rel="preload"
       as="style"
@@ -111,6 +112,21 @@
         href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
       />
     </noscript>
+
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="preconnect"
+      href="https://cdn.jsdelivr.net"
+      crossorigin
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.44/dist/katex.min.css"
+      crossorigin="anonymous"
+    />
 
     <script>
       (() => {
@@ -155,11 +171,11 @@
     <link rel="stylesheet" crossorigin href="/assets/styles-Zq3EZQ2A.css">
   </head>
 
-  <body id="page-top">
+  <body>
     <nav class="site-navigation">
       <div class="navigation-container">
         <div class="navigation-left">
-          <a class="navigation-brand" href="/"
+          <a class="navigation-brand" href="/posts/"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -176,7 +192,7 @@
               <path d="M16 12H8" />
               <path d="m12 8-4 4 4 4" />
             </svg>
-            Back Home</a
+            Back to all posts</a
           >
           <div class="navigation-links"></div>
         </div>
@@ -536,7 +552,7 @@
               <div
                 x-data="{
       drawerOpen: false,
-      isTouchDevice: ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches),
+      dataRevision: 0,
       dragStartY: 0,
       currentY: 0,
       translateY: 100,
@@ -554,7 +570,6 @@
       openFrame: null,
       settleTimer: null,
       themeTimer: null,
-      dataRevision: 0,
 
       get allItems() {
         void this.dataRevision;
@@ -612,9 +627,9 @@
         if (canUseController) {
           overlayController.open('drawer');
         } else {
+          // Simple scroll lock - no position:fixed needed
+          document.documentElement.style.overflow = 'hidden';
           document.body.style.overflow = 'hidden';
-          document.body.style.position = 'fixed';
-          document.body.style.width = '100%';
         }
 
         requestAnimationFrame(() => {
@@ -684,9 +699,9 @@
           self.drawerOpen = false;
           self.isAnimating = false;
           if (!canUseController) {
+            // Simple unlock - no scroll restoration needed
+            document.documentElement.style.overflow = '';
             document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.width = '';
           }
           self.searchQuery = '';
           self.drawerHeight = null;
@@ -1013,860 +1028,14 @@
     </nav>
 
     <main>
-      <h2 class="section-heading">Tech Arsenal</h2>
-      <p class="page-subtitle text-italic">
-        A curated collection of tools, software, and hardware that power my
-        creative workflow.
-      </p>
-      <hr class="divider-standard" />
+      <article data-lightbox-group="post-writing-follows-its-own-rhythm">
+        <div class="article-meta-data"><h1>Writing Follows Its Own Rhythm</h1>
+<span class="article-publish-date">April 15, 2026</span></div> <p>A few months ago, the pattern was clear: I was forcing myself to write more and more. It took me some time to realize a few things.</p>
+<p>First, quantity often comes with a quality trade-off. That alone was a sign that writing is something that naturally comes, that follows one's own desire to express feelings or make ideas feel concrete.</p>
+<p>And once I realized this quality drop, I had to ask: who am I even writing for? The answer is quite simple actually: I'm writing mainly for myself. The goal here is to give space for my ideas and feelings. Those two things are very volatile; they're far from something you get at a regular pace. Ideas pop in your mind randomly. Feelings disappear as quickly as they appeared. Writing needs to follow that rhythm, not the other way around.</p>
+<p>Many writers believe routine writing generates ideas. That those come during work, not beforehand. I totally see their point, but for me, forced sessions produce posts that feel hollow and never quite right. I like things that change, always evolve and stay spontaneous. This article is no exception.</p>
 
-      <div
-        class="tech-stack-sections w-full flex flex-col overflow-clip"
-        id="arsenal-sections"
-      >
-        <div
-          class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
-          style="border-bottom: 1px solid var(--border-light)"
-        >
-          <span
-            class="tech-stack-category text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
-            >Languages
-            <hr
-              class="tech-stack-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
-          /></span>
-          <div
-            class="tech-stack-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
-          >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://en.wikipedia.org/wiki/CSS"
-              ><img
-                alt="Favicon"
-                name="CSS"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                src="/uses/icons/upload-wikimedia-org-120px-official-css-logo-svg-957a9796.png"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">CSS</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://sass-lang.com/"
-              ><img
-                alt="Favicon"
-                name="SCSS"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/sass-lang-com-favicon-31f552c6.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">SCSS</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://en.wikipedia.org/wiki/JavaScript"
-              ><img
-                alt="Favicon"
-                name="JavaScript"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/upload-wikimedia-org-250px-javascript-736400-960-720-c2db68a7.png"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Javascript</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.python.org/"
-              ><img
-                alt="Favicon"
-                name="Python"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/www-python-org-favicon-1c9cd71c.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Python</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)"
-              ><img
-                alt="Favicon"
-                name="Bash"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/encrypted-tbn0-gstatic-com-images-2b8da293.png"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Bash</span>
-              </div></a
-            >
-          </div>
-        </div>
-        <div
-          class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
-          style="border-bottom: 1px solid var(--border-light)"
-        >
-          <span
-            class="tech-stack-category text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
-            >Tools/Saas
-            <hr
-              class="tech-stack-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
-          /></span>
-          <div
-            class="tech-stack-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
-          >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://prettier.io/"
-              ><img
-                alt="Favicon"
-                name="Prettier"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/prettier-io-icon-83184476.png"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Prettier</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.docker.com/"
-              ><img
-                alt="Favicon"
-                name="Docker"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/www-docker-com-favicon-31a682cc.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Docker</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://tailwindcss.com/"
-              ><img
-                alt="Favicon"
-                name="Tailwind CSS"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/tailwindcss-com-favicon-7d01e75a.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Tailwind</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://alpinejs.dev/"
-              ><img
-                alt="Favicon"
-                name="AlpineJS"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/alpinejs-dev-favicon-de7a34c9.png"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Alpine JS</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://github.com/"
-              ><img
-                alt="Favicon"
-                name="GitHub"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/encrypted-tbn0-gstatic-com-images-69140c58.jpg"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">GitHub</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://openai.com/index/introducing-gpt-5/"
-              ><img
-                alt="Favicon"
-                name="OpenAI"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/icons-duckduckgo-com-openai-com-92e5ab81.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">ChatGPT 5.2 Thinking</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://openai.com/codex/"
-              ><img
-                alt="Favicon"
-                name="OpenAI"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/icons-duckduckgo-com-openai-com-92e5ab81.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">OpenAI Codex</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.anthropic.com/"
-              ><img
-                alt="Favicon"
-                name="Anthropic"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/www-anthropic-com-favicon-7c94139c.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Claude 4.5 Opus</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://gemini.google.com/"
-              ><img
-                alt="Favicon"
-                name="Gemini"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/www-gstatic-com-gemini-aurora-icon-4g-53fff55fa07630c47c-006a14e3.svg"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Gemini 3 pro / 3 flash</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://huggingface.co/"
-              ><img
-                alt="Favicon"
-                name="Hugging Face"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/huggingface-co-favicon-82a8b07c.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Hugging Face</span>
-              </div></a
-            >
-            <!--<a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://t3.chat/"
-              ><img
-                alt="Favicon"
-                name="T3 Chat"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/icons-duckduckgo-com-t3-chat-85ffdca1.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">T3 Chat</span>
-              </div></a
-            >-->
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.hostinger.com/"
-              ><img
-                alt="Favicon"
-                name="Hostinger"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/www-hostinger-com-favicon-67ebc310.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Hostinger</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.last.fm/"
-              ><img
-                alt="Favicon"
-                name="Last.fm"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/www-last-fm-favicon-cf87e4c5.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Last FM</span>
-              </div></a
-            >
-          </div>
-        </div>
-        <div
-          class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
-          style="border-bottom: 1px solid var(--border-light)"
-        >
-          <span
-            class="tech-stack-category text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
-            >Apps
-            <hr
-              class="tech-stack-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
-          /></span>
-          <div
-            class="tech-stack-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
-          >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://code.visualstudio.com/"
-              ><img
-                alt="Favicon"
-                name="Visual Studio Code"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/code-visualstudio-com-favicon-3c7395a1.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Visual Studio Code</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.apple.com/fr/apple-music/"
-              ><img
-                alt="Favicon"
-                name="Apple Music"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/upload-wikimedia-org-120px-apple-music-icon-svg-db8e6649.png"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Apple Music</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://obsidian.md/"
-              ><img
-                alt="Favicon"
-                name="Obsidian"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/obsidian-md-favicon-a1ae3109.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Obsidian</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://zen-browser.app/"
-              ><img
-                alt="Favicon"
-                name="Zen Browser"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/zen-browser-app-favicon-186e35d0.svg"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Zen Browser</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://bitwarden.com/"
-              ><img
-                alt="Favicon"
-                name="Bitwarden"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/icons-duckduckgo-com-bitwarden-com-e87083f5.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Bitwarden</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.icloud.com/"
-              ><img
-                alt="Favicon"
-                name="iCloud"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/help-apple-com-dc4bdf1973030717f16d02d3e44e3793-ab068d65.png"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">iCloud</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.raycast.com/"
-              ><img
-                alt="Favicon"
-                name="Raycast"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/www-raycast-com-favicon-production-1d47bc30.png"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Raycast</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://crixet.com/"
-              ><img
-                alt="Favicon"
-                name="Crixet"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/framerusercontent-com-xtzmsgonsiizq4ecbn9lwse0os-e0e34d14.png"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Crixet</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://dropoverapp.com/"
-              ><img
-                alt="Favicon"
-                name="Dropover"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/dropoverapp-com-favicon-32x32-54157753.png"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Dropover</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.figma.com/"
-              ><img
-                alt="Favicon"
-                name="Figma"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/static-figma-com-favicon-e9a2f71b.png"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Figma</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://raindrop.io/"
-              ><img
-                alt="Favicon"
-                name="Raindrop.io"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/raindrop-io-favicon-29c045ff.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Raindrop.io</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://alexandersandberg.com/balance/"
-              ><img
-                alt="Favicon"
-                name="Balance"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/icons-duckduckgo-com-alexandersandberg-com-235c4ab5.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Balance</span>
-              </div></a
-            >
-          </div>
-        </div>
-        <div
-          class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
-        >
-          <span
-            class="tech-stack-category text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
-            >Hardware
-            <hr
-              class="tech-stack-separator absolute -inset-y-5 right-0 z-10 h-auto w-px border-r border-[var(--border-light)]"
-          /></span>
-          <div
-            class="tech-stack-items flex gap-x-4 gap-y-3 flex-row items-center place-content-start flex-wrap flex-1"
-          >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.apple.com/iphone/"
-              ><img
-                alt="Favicon"
-                name="iPhone 15 Pro (Daily Driver)"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/www-apple-com-favicon-b22ca086.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">iPhone 15 Pro (Daily Driver)</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.apple.com/airpods-pro/"
-              ><img
-                alt="Favicon"
-                name="AirPods Pro 2 (Daily Carry)"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/www-apple-com-favicon-b22ca086.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">AirPods Pro 2 (Daily Carry)</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.anker.com/"
-              ><img
-                alt="Favicon"
-                name="Anker 622 MagGo 5000mAh"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/www-anker-com-favicon-012c454e.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Anker 622 MagGo 5000mAh</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.apple.com/macbook-air/"
-              ><img
-                alt="Favicon"
-                name="MacBook Air M4"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/www-apple-com-favicon-b22ca086.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">MacBook Air M4</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.apple.com/ipad-air/"
-              ><img
-                alt="Favicon"
-                name="iPad Air M3 11 inch"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/www-apple-com-favicon-b22ca086.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">iPad Air M3 11 inch</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.samsung.com/fr/smartphones/galaxy-s24/"
-              ><img
-                alt="Favicon"
-                name="Samsung Galaxy S24"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/www-samsung-com-favicon-a70e2519.png"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Samsung Galaxy S24</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://www.shure.com/en-US"
-              ><img
-                alt="Favicon"
-                name="Shure MV7+"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="/uses/icons/www-shure-com-favicon-f629724b.ico"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Shure MV7+</span>
-              </div></a
-            >
-          </div>
-        </div>
-      </div>
-
-      <footer class="last-updated-block">
-        <div class="last-updated-block__dots">
-          <span></span><span></span><span></span>
-        </div>
-        <p class="last-updated"></p>
-      </footer>
+      </article>
     </main>
 
     <footer>
@@ -1989,29 +1158,100 @@
       </div>
     </footer>
 
-    <script>
-      fetch(window.location.href).then((response) => {
-        const lastModified = response.headers.get("Last-Modified");
-        if (lastModified) {
-          const footerText = document.querySelector(".last-updated");
-          footerText.innerHTML = `This list evolves as my workflow does.<br>Last updated: ${new Date(
-            lastModified
-          ).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-          })}`;
-        }
-      });
-    </script>
-    <script>
-      // Select all <a> inside the div with id="arsenal-sections"
-      const links = document.querySelectorAll("#arsenal-sections a");
-      links.forEach((link) => {
-        link.setAttribute("target", "_blank");
-        // optional: add rel="noopener" for security/performance
-        link.setAttribute("rel", "noopener");
-      });
-    </script>
+    <div
+      id="lightbox"
+      class="image-lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+    >
+      <div class="image-lightbox__backdrop" data-lightbox-close></div>
+      <div class="image-lightbox__shell" role="document">
+        <button
+          type="button"
+          class="image-lightbox__close"
+          aria-label="Close gallery"
+          data-lightbox-close
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="18" x2="6" y1="6" y2="18" />
+            <line x1="6" x2="18" y1="6" y2="18" />
+          </svg>
+        </button>
+        <div class="image-lightbox__stage">
+          <button
+            type="button"
+            class="image-lightbox__nav image-lightbox__nav--prev"
+            aria-label="Previous image"
+            data-lightbox-prev
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <figure class="image-lightbox__figure">
+            <img
+              class="image-lightbox__image"
+              alt=""
+              decoding="async"
+              data-lightbox-active-image
+            />
+            <figcaption
+              class="image-lightbox__caption"
+              data-lightbox-caption
+            ></figcaption>
+          </figure>
+          <button
+            type="button"
+            class="image-lightbox__nav image-lightbox__nav--next"
+            aria-label="Next image"
+            data-lightbox-next
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
+        <div
+          class="image-lightbox__thumbnail-bar"
+          role="list"
+          data-lightbox-thumbnails
+        ></div>
+      </div>
+    </div>
+
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
     <script defer src="/src/script.js"></script>
     <script
       defer
