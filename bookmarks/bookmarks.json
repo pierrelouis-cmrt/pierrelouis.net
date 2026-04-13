@@ -514,7 +514,7 @@
     "title": "Can robots feel?",
     "meta": {
       "text": "Science Robotics",
-      "icon": "https://www.science.org/products/aaas/releasedAssets/images/favicon/favicon-32x32-da7530e24672f255e6c1269e845c61a0.png"
+      "icon": "https://www.google.com/s2/favicons?domain=science.org&sz=32"
     },
     "description": "Creating an artificial electronic skin to cover the entire surface of a robot can be challenging. This article explores how robots could feel by only exploiting a few internal sensors on each limb/joint. Those sensors would measure the force/torque applied to them, and compute the exact contact points causing those forces. It even works when the robot gets touched in multiple places at the same time!",
     "image": "",
