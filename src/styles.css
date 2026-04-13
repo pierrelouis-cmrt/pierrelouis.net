@@ -3021,6 +3021,10 @@ img[data-lightbox-item] {
   transition: all 120ms ease-in-out;
 }
 
+.timeline-item-link--has-interactive-preview {
+  padding-bottom: 0 !important;
+}
+
 .timeline-item-title {
   display: flex;
   align-items: center;
@@ -3116,6 +3120,10 @@ img[data-lightbox-item] {
   margin-top: var(--space-3);
   display: grid;
   gap: var(--space-2);
+}
+
+.timeline-item > .timeline-item-preview--interactive {
+  padding: 0 var(--space-2) var(--space-4);
 }
 
 .timeline-item-preview figure {

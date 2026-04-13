@@ -65,30 +65,36 @@ function bookmarkItem(b) {
     : "";
 
   const previewSrc = (b.image || "").trim();
+  const hasVideoPreview = isVideoPath(previewSrc);
   const previewMedia = previewSrc
-    ? isVideoPath(previewSrc)
+    ? hasVideoPreview
       ? `<video src="${previewSrc}" preload="metadata" playsinline controls aria-label="${b.title} preview"></video>`
       : `<img src="${previewSrc}" loading="lazy" alt="${b.title} preview">`
     : "";
   const preview = previewMedia
-    ? `<div class="timeline-item-preview">
+    ? `<div class="timeline-item-preview${hasVideoPreview ? " timeline-item-preview--interactive" : ""}">
          <figure>
            ${previewMedia}
          </figure>
        </div>`
     : "";
+  const linkedPreview = hasVideoPreview ? "" : preview;
+  const standalonePreview = hasVideoPreview ? `\n      ${preview}` : "";
+  const linkClass = hasVideoPreview
+    ? ` class="timeline-item-link--has-interactive-preview"`
+    : "";
 
   return `
     <div class="timeline-item animate-on-scroll" data-tag="${b.tag}">
-      <a href="${b.link}" target="_blank" rel="noopener noreferrer">
+      <a${linkClass} href="${b.link}" target="_blank" rel="noopener noreferrer">
         <div class="timeline-item-title">
           <span class="link-text">${b.title}</span>
           <span class="external-link-icon" aria-hidden="true">↗</span>
         </div>
         ${meta}
         ${description}
-        ${preview}
-      </a>
+        ${linkedPreview}
+      </a>${standalonePreview}
     </div>`;
 }
 
