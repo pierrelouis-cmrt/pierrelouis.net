@@ -1,7 +1,8 @@
 ---
-title: "Writing Follows Its Own Rhythm"
-description: "Why I stopped forcing myself to write — and learned to follow the rhythm of my own ideas."
-tags: [experiment, note, article]
+title: Writing Follows Its Own Rhythm
+description: Why I stopped forcing myself to write — and learned to follow the rhythm of my own ideas.
+tags:
+  - note
 date: 2026-04-15
 ---
 
