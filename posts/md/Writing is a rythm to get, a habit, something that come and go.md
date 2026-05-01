@@ -3,7 +3,7 @@ title: Writing Follows Its Own Rhythm
 description: Why I stopped forcing myself to write — and learned to follow the rhythm of my own ideas.
 tags:
   - note
-date: 2026-04-15
+date: 2026-04-25
 ---
 
 A few months ago, the pattern was clear: I was forcing myself to write more and more. It took me some time to realize a few things.
