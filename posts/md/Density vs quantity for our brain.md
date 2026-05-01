@@ -1,7 +1,8 @@
 ---
-title: "Density vs quantity for our brain"
-description: "novel, dense experiences fly by in the moment but expand in retrospect, while empty routine drags in the moment but feels short looking back"
-tags: [note]
+title: Density vs quantity for our brain
+description: Novel, dense experiences fly by in the moment but expand in retrospect, while empty routine drags in the moment but feels short looking back
+tags:
+  - note
 date: 2026-02-18
 ---
 I noticed something kinda interesting. During very dense periods of work, time passes faster. But when looking back at those periods, it feels like they were unusually long.
