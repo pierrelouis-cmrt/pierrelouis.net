@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" translate="no">
   <head>
     <meta charset="UTF-8" />
@@ -15,8 +15,7 @@
         };
         const mode = getStoredTheme();
         const prefersDark =
-          window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches;
+          window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
         const isDark = mode === "dark" || (mode === "system" && prefersDark);
 
         document.documentElement.classList.toggle("dark", isDark);
@@ -35,9 +34,7 @@
           metas.forEach((meta) => meta.setAttribute("content", color));
         };
         setThemeColor(false);
-        const raf =
-          window.requestAnimationFrame ||
-          ((callback) => setTimeout(callback, 0));
+        const raf = window.requestAnimationFrame || ((callback) => setTimeout(callback, 0));
         raf(() => setThemeColor(true));
       })();
     </script>
@@ -49,31 +46,19 @@
       }
     </style>
     <meta name="author" content="Pierre-Louis" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="title" content="Pierre-Louis &ndash; Web Designer" />
-    <meta
-      name="description"
-      content="Web Designer based in Saint-Etienne City, France."
-    />
+    <meta name="description" content="Web Designer based in Saint-Etienne City, France." />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Pierre-Louis &ndash; Web Designer" />
-    <meta
-      property="og:description"
-      content="Web Designer based in Saint-Etienne City, France."
-    />
+    <meta property="og:description" content="Web Designer based in Saint-Etienne City, France." />
     <meta property="og:url" content="https://pierrelouis.net" />
     <meta property="og:image" content="assets/social-media-preview.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Pierre-Louis &ndash; Web Designer" />
-    <meta
-      name="twitter:description"
-      content="Web Designer based in Saint-Etienne City, France."
-    />
+    <meta name="twitter:description" content="Web Designer based in Saint-Etienne City, France." />
     <meta name="twitter:image" content="assets/social-media-preview.png" />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-BkJ3dd7E.png" />
@@ -90,7 +75,10 @@
       rel="preload"
       as="style"
       href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
     />
     <noscript>
       <link
@@ -102,7 +90,10 @@
       rel="preload"
       as="style"
       href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
     />
     <noscript>
       <link
@@ -126,13 +117,11 @@
 
         const bait = document.createElement("div");
         bait.className = "adsbox ad-banner ad-unit";
-        bait.style.cssText =
-          "position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;";
+        bait.style.cssText = "position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;";
         document.documentElement.appendChild(bait);
 
         const baitStyle = window.getComputedStyle(bait);
-        const adBlockLikely =
-          baitStyle.display === "none" || baitStyle.visibility === "hidden";
+        const adBlockLikely = baitStyle.display === "none" || baitStyle.visibility === "hidden";
         bait.remove();
 
         if (adBlockLikely) {
@@ -227,8 +216,7 @@
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.3-4.3" />
               </svg>
-              <span
-                class="flex-1 mr-5 text-left text-[var(--text-body)] hidden sm:inline"
+              <span class="flex-1 mr-5 text-left text-[var(--text-body)] hidden sm:inline"
                 >Search...</span
               >
               <span
@@ -486,10 +474,7 @@
                       class="grow min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain"
                       data-command-list
                     >
-                      <template
-                        x-for="(item, index) in commandItemsFiltered"
-                        :key="item.value"
-                      >
+                      <template x-for="(item, index) in commandItemsFiltered" :key="item.value">
                         <div class="pb-1 space-y-1">
                           <template x-if="commandShowCategory(item, index)">
                             <div class="px-1 overflow-hidden">
@@ -870,15 +855,10 @@
                   :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'ring-1 ring-white/10' : ''"
                   class="absolute bottom-0 w-full bg-[var(--bg-primary)] border-t border-[var(--border-secondary)] rounded-t-[28px] shadow-2xl max-h-[75vh] flex flex-col"
                   x-ref="drawerContainer"
-                  style="
-                    will-change: transform;
-                    padding-bottom: env(safe-area-inset-bottom);
-                  "
+                  style="will-change: transform; padding-bottom: env(safe-area-inset-bottom)"
                 >
                   <!-- Larger Invisible Drag Handle Area -->
-                  <div
-                    class="relative pt-3 pb-6 -mb-3 cursor-grab active:cursor-grabbing"
-                  >
+                  <div class="relative pt-3 pb-6 -mb-3 cursor-grab active:cursor-grabbing">
                     <!-- Visual Handle with better visibility in dark mode -->
                     <div
                       :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'opacity-40' : 'opacity-30'"
@@ -939,10 +919,7 @@
                   </div>
 
                   <!-- Scrollable Content with stagger animation -->
-                  <div
-                    class="flex-1 overflow-y-auto overscroll-contain px-2 pb-4"
-                    data-no-drag
-                  >
+                  <div class="flex-1 overflow-y-auto overscroll-contain px-2 pb-4" data-no-drag>
                     <template x-for="(item, index) in allItems" :key="index">
                       <div>
                         <!-- Section Header -->
@@ -995,13 +972,8 @@
                     </template>
 
                     <!-- Empty State -->
-                    <div
-                      x-show="allItems.length === 0"
-                      class="text-center pt-6 pb-12"
-                    >
-                      <p class="text-[var(--text-subtle)] text-sm">
-                        No results found
-                      </p>
+                    <div x-show="allItems.length === 0" class="text-center pt-6 pb-12">
+                      <p class="text-[var(--text-subtle)] text-sm">No results found</p>
                     </div>
                   </div>
                 </div>
@@ -1018,65 +990,34 @@
 
       <div class="animate-on-scroll now-entries">
         <div class="now-entry">
+          <p class="now-status-item">Currently studying engineering at Centrale Lyon</p>
+        </div>
+        <hr class="divider-thin" />
+
+        <div class="now-entry">
           <p class="now-status-item">
-            Currently studying engineering at Centrale Lyon
+            Listening to a lot of music, take a look at my
+            <a
+              href="https://www.last.fm/user/pierrelouis-c"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline hover:text-[var(--link-hover)]"
+              >lastfm profile</a
+            >!
           </p>
         </div>
         <hr class="divider-thin" />
 
         <div class="now-entry">
           <p class="now-status-item">
-            Reached 100k minutes of listening time on Apple Music in 2025
+            Taking more photos than ever, of everything and nothing<br />
+            This is from my last trip in La Rochelle, France
           </p>
-          <div class="now-entry-gallery" data-lightbox-group="now-apple-music">
+          <div class="now-entry-gallery" data-lightbox-group="now-chatgpt">
             <img
-              src="/assets/music1-ed0stxFO.webp"
-              data-lightbox-src="./music1.webp"
-              alt="Apple Music Replay 2025 replay screenshot 1 of 5"
-              loading="lazy"
-              decoding="async"
-              width="1000"
-              height="1333"
-              class="now-entry-image"
-              data-lightbox-item
-            />
-            <img
-              src="/assets/music2-C-or3-lp.webp"
-              data-lightbox-src="./music2.webp"
-              alt="Apple Music Replay 2025 replay screenshot 2 of 5"
-              loading="lazy"
-              decoding="async"
-              width="1000"
-              height="1333"
-              class="now-entry-image"
-              data-lightbox-item
-            />
-            <img
-              src="/assets/music3-gnvBKHrG.webp"
-              data-lightbox-src="./music3.webp"
-              alt="Apple Music Replay 2025 replay screenshot 3 of 5"
-              loading="lazy"
-              decoding="async"
-              width="1000"
-              height="1333"
-              class="now-entry-image"
-              data-lightbox-item
-            />
-            <img
-              src="/assets/music4-DVr0qglA.webp"
-              data-lightbox-src="./music4.webp"
-              alt="Apple Music Replay 2025 replay screenshot 4 of 5"
-              loading="lazy"
-              decoding="async"
-              width="1000"
-              height="1333"
-              class="now-entry-image"
-              data-lightbox-item
-            />
-            <img
-              src="/assets/music5-DJpMaGhH.webp"
-              data-lightbox-src="./music5.webp"
-              alt="Apple Music Replay 2025 replay screenshot 5 of 5"
+              src="/assets/photo-CWZJVPEz.png"
+              data-lightbox-src="./photo.png"
+              alt="ChatGPT 2025 recap screenshot 1 of 2"
               loading="lazy"
               decoding="async"
               width="1000"
@@ -1090,10 +1031,8 @@
 
         <div class="now-entry">
           <p class="now-status-item">
-            Trying to motivate myself to read and write more. Take a look at my
-            <a href="/posts/" class="underline hover:text-[var(--link-hover)]"
-              >posts</a
-            >!
+            Writing on a more regular basis. Take a look at my recent
+            <a href="/posts/" class="underline hover:text-[var(--link-hover)]">posts</a>!
           </p>
         </div>
         <hr class="divider-thin" />
@@ -1107,80 +1046,24 @@
 
         <div class="now-entry">
           <p class="now-status-item">
-            Designing websites in my free time, taking photos whenever something
-            catches my eye
+            Designing websites in my free time, getting more and more into graphic design too
           </p>
         </div>
         <hr class="divider-thin" />
 
         <div class="now-entry">
           <p class="now-status-item">
-            Learning more about AI everyday, it's kinda becoming my whole
-            personality lol<br />btw, here is my ChatGPT recap for 2025
-          </p>
-          <div class="now-entry-gallery" data-lightbox-group="now-chatgpt">
-            <img
-              src="/assets/chatgpt1-Cw2dUD1X.webp"
-              data-lightbox-src="./chatgpt1.webp"
-              alt="ChatGPT 2025 recap screenshot 1 of 2"
-              loading="lazy"
-              decoding="async"
-              width="1000"
-              height="1333"
-              class="now-entry-image"
-              data-lightbox-item
-            />
-            <img
-              src="/assets/chatgpt2-CWs3mM4b.webp"
-              data-lightbox-src="./chatgpt2.webp"
-              alt="ChatGPT 2025 recap screenshot 2 of 2"
-              loading="lazy"
-              decoding="async"
-              width="1000"
-              height="1333"
-              class="now-entry-image"
-              data-lightbox-item
-            />
-          </div>
-        </div>
-        <hr class="divider-thin" />
-
-        <div class="now-entry">
-          <p class="now-status-item">
-            Keeping up with tech news... FOMO is real
+            Learning more about AI everyday, it's kinda becoming my whole personality lol
           </p>
         </div>
         <hr class="divider-thin" />
 
         <div class="now-entry">
-          <p class="now-status-item">
-            Gaming occasionally when my free time is free-timing
-          </p>
-        </div>
-        <hr class="divider-thin" />
-
-        <div class="now-entry">
-          <p class="now-status-item">
-            Being slightly obsessed with my stats: Last.fm (music), Letterboxd
-            (movies), Babelio (books), Balance (time tracking)
-          </p>
-        </div>
-        <hr class="divider-thin" />
-
-        <div class="now-entry">
-          <p class="now-status-item">
-            Trying to learn new skills: right now it's graphic design
-          </p>
+          <p class="now-status-item">Keeping up with tech news... FOMO is real</p>
         </div>
       </div>
 
-      <div
-        id="lightbox"
-        class="image-lightbox"
-        role="dialog"
-        aria-modal="true"
-        aria-hidden="true"
-      >
+      <div id="lightbox" class="image-lightbox" role="dialog" aria-modal="true" aria-hidden="true">
         <div class="image-lightbox__backdrop" data-lightbox-close></div>
         <div class="image-lightbox__shell" role="document">
           <button
@@ -1230,10 +1113,7 @@
                 decoding="async"
                 data-lightbox-active-image
               />
-              <figcaption
-                class="image-lightbox__caption"
-                data-lightbox-caption
-              ></figcaption>
+              <figcaption class="image-lightbox__caption" data-lightbox-caption></figcaption>
             </figure>
             <button
               type="button"
@@ -1255,30 +1135,20 @@
               </svg>
             </button>
           </div>
-          <div
-            class="image-lightbox__thumbnail-bar"
-            role="list"
-            data-lightbox-thumbnails
-          ></div>
+          <div class="image-lightbox__thumbnail-bar" role="list" data-lightbox-thumbnails></div>
         </div>
       </div>
     </main>
 
     <footer class="last-updated-block">
-      <div class="last-updated-block__dots">
-        <span></span><span></span><span></span>
-      </div>
+      <div class="last-updated-block__dots"><span></span><span></span><span></span></div>
       <p class="last-updated"></p>
     </footer>
 
     <footer>
       <div class="hero-links">
         <p>
-          <a
-            class="link-with-icon"
-            rel="noopener"
-            href="#page-top"
-            data-back-to-top
+          <a class="link-with-icon" rel="noopener" href="#page-top" data-back-to-top
             >Back to top<svg
               xmlns="http://www.w3.org/2000/svg"
               height="1em"
@@ -1396,12 +1266,13 @@
         const lastModified = response.headers.get("Last-Modified");
         if (lastModified) {
           const footerText = document.querySelector(".last-updated");
-          footerText.innerHTML = `<br>Last updated: ${new Date(
-            lastModified
-          ).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-          })}`;
+          footerText.innerHTML = `<br>Last updated: ${new Date(lastModified).toLocaleDateString(
+            "en-US",
+            {
+              year: "numeric",
+              month: "short",
+            }
+          )}`;
         }
       });
     </script>
@@ -1412,9 +1283,6 @@
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"
       crossorigin="anonymous"
     ></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"
-    ></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
   </body>
 </html>
