@@ -33,6 +33,8 @@ AddType image/webp webp
   Header always set X-XSS-Protection "1; mode=block"
   # Referrer Policy (Privacy best practice)
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # Disable browser features this static site does not use
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), bluetooth=(), accelerometer=(), gyroscope=(), magnetometer=()"
 
   # 2. CACHING HEADERS
   # HTML: Never cache dynamic content

@@ -1,0 +1,3 @@
+Contact: mailto:contact@pierrelouis.net
+Preferred-Languages: en, fr
+Canonical: https://pierrelouis.net/.well-known/security.txt
