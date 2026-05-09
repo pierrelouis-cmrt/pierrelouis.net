@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" translate="no">
   <head>
     <meta charset="UTF-8" />
@@ -15,8 +15,7 @@
         };
         const mode = getStoredTheme();
         const prefersDark =
-          window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches;
+          window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
         const isDark = mode === "dark" || (mode === "system" && prefersDark);
 
         document.documentElement.classList.toggle("dark", isDark);
@@ -35,9 +34,7 @@
           metas.forEach((meta) => meta.setAttribute("content", color));
         };
         setThemeColor(false);
-        const raf =
-          window.requestAnimationFrame ||
-          ((callback) => setTimeout(callback, 0));
+        const raf = window.requestAnimationFrame || ((callback) => setTimeout(callback, 0));
         raf(() => setThemeColor(true));
       })();
     </script>
@@ -49,31 +46,19 @@
       }
     </style>
     <meta name="author" content="Pierre-Louis" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="title" content="Pierre-Louis &ndash; Web Designer" />
-    <meta
-      name="description"
-      content="Web Designer based in Saint-Etienne City, France."
-    />
+    <meta name="description" content="Web Designer based in Saint-Etienne City, France." />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Pierre-Louis &ndash; Web Designer" />
-    <meta
-      property="og:description"
-      content="Web Designer based in Saint-Etienne City, France."
-    />
+    <meta property="og:description" content="Web Designer based in Saint-Etienne City, France." />
     <meta property="og:url" content="https://pierrelouis.net" />
     <meta property="og:image" content="assets/social-media-preview.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Pierre-Louis &ndash; Web Designer" />
-    <meta
-      name="twitter:description"
-      content="Web Designer based in Saint-Etienne City, France."
-    />
+    <meta name="twitter:description" content="Web Designer based in Saint-Etienne City, France." />
     <meta name="twitter:image" content="assets/social-media-preview.png" />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -92,7 +77,10 @@
       rel="preload"
       as="style"
       href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
     />
     <noscript>
       <link
@@ -104,7 +92,10 @@
       rel="preload"
       as="style"
       href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
     />
     <noscript>
       <link
@@ -128,13 +119,11 @@
 
         const bait = document.createElement("div");
         bait.className = "adsbox ad-banner ad-unit";
-        bait.style.cssText =
-          "position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;";
+        bait.style.cssText = "position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;";
         document.documentElement.appendChild(bait);
 
         const baitStyle = window.getComputedStyle(bait);
-        const adBlockLikely =
-          baitStyle.display === "none" || baitStyle.visibility === "hidden";
+        const adBlockLikely = baitStyle.display === "none" || baitStyle.visibility === "hidden";
         bait.remove();
 
         if (adBlockLikely) {
@@ -227,8 +216,7 @@
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.3-4.3" />
               </svg>
-              <span
-                class="flex-1 mr-5 text-left text-[var(--text-body)] hidden sm:inline"
+              <span class="flex-1 mr-5 text-left text-[var(--text-body)] hidden sm:inline"
                 >Search...</span
               >
               <span
@@ -486,10 +474,7 @@
                       class="grow min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain"
                       data-command-list
                     >
-                      <template
-                        x-for="(item, index) in commandItemsFiltered"
-                        :key="item.value"
-                      >
+                      <template x-for="(item, index) in commandItemsFiltered" :key="item.value">
                         <div class="pb-1 space-y-1">
                           <template x-if="commandShowCategory(item, index)">
                             <div class="px-1 overflow-hidden">
@@ -870,15 +855,10 @@
                   :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'ring-1 ring-white/10' : ''"
                   class="absolute bottom-0 w-full bg-[var(--bg-primary)] border-t border-[var(--border-secondary)] rounded-t-[28px] shadow-2xl max-h-[75vh] flex flex-col"
                   x-ref="drawerContainer"
-                  style="
-                    will-change: transform;
-                    padding-bottom: env(safe-area-inset-bottom);
-                  "
+                  style="will-change: transform; padding-bottom: env(safe-area-inset-bottom)"
                 >
                   <!-- Larger Invisible Drag Handle Area -->
-                  <div
-                    class="relative pt-3 pb-6 -mb-3 cursor-grab active:cursor-grabbing"
-                  >
+                  <div class="relative pt-3 pb-6 -mb-3 cursor-grab active:cursor-grabbing">
                     <!-- Visual Handle with better visibility in dark mode -->
                     <div
                       :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'opacity-40' : 'opacity-30'"
@@ -939,10 +919,7 @@
                   </div>
 
                   <!-- Scrollable Content with stagger animation -->
-                  <div
-                    class="flex-1 overflow-y-auto overscroll-contain px-2 pb-4"
-                    data-no-drag
-                  >
+                  <div class="flex-1 overflow-y-auto overscroll-contain px-2 pb-4" data-no-drag>
                     <template x-for="(item, index) in allItems" :key="index">
                       <div>
                         <!-- Section Header -->
@@ -995,13 +972,8 @@
                     </template>
 
                     <!-- Empty State -->
-                    <div
-                      x-show="allItems.length === 0"
-                      class="text-center pt-6 pb-12"
-                    >
-                      <p class="text-[var(--text-subtle)] text-sm">
-                        No results found
-                      </p>
+                    <div x-show="allItems.length === 0" class="text-center pt-6 pb-12">
+                      <p class="text-[var(--text-subtle)] text-sm">No results found</p>
                     </div>
                   </div>
                 </div>
@@ -1015,15 +987,11 @@
     <main>
       <h2 class="section-heading">Tech Arsenal</h2>
       <p class="page-subtitle text-italic">
-        A curated collection of tools, software, and hardware that power my
-        creative workflow.
+        A curated collection of tools, software, and hardware that power my creative workflow.
       </p>
       <hr class="divider-standard" />
 
-      <div
-        class="tech-stack-sections w-full flex flex-col overflow-clip"
-        id="arsenal-sections"
-      >
+      <div class="tech-stack-sections w-full flex flex-col overflow-clip" id="arsenal-sections">
         <div
           class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
           style="border-bottom: 1px solid var(--border-light)"
@@ -1051,9 +1019,7 @@
                 class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Official_CSS_Logo.svg/120px-Official_CSS_Logo.svg.png"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">CSS</span>
               </div></a
             >
@@ -1072,9 +1038,7 @@
                 style="color: transparent"
                 src="https://sass-lang.com/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">SCSS</span>
               </div></a
             >
@@ -1093,9 +1057,7 @@
                 style="color: transparent"
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Javascript-736400_960_720.png/250px-Javascript-736400_960_720.png"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Javascript</span>
               </div></a
             >
@@ -1114,9 +1076,7 @@
                 style="color: transparent"
                 src="https://www.python.org/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Python</span>
               </div></a
             >
@@ -1135,9 +1095,7 @@
                 style="color: transparent"
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJFDJLaUHfkk5JOqF2RTfK4m3RgHi3kM7Txw&s"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Bash</span>
               </div></a
             >
@@ -1171,9 +1129,7 @@
                 style="color: transparent"
                 src="https://prettier.io/icon.png"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Prettier</span>
               </div></a
             >
@@ -1192,9 +1148,7 @@
                 style="color: transparent"
                 src="https://www.docker.com/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Docker</span>
               </div></a
             >
@@ -1213,9 +1167,7 @@
                 style="color: transparent"
                 src="https://tailwindcss.com/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Tailwind</span>
               </div></a
             >
@@ -1234,9 +1186,7 @@
                 style="color: transparent"
                 src="https://alpinejs.dev/favicon.png"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Alpine JS</span>
               </div></a
             >
@@ -1255,9 +1205,7 @@
                 style="color: transparent"
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbqj9Ii13d6hx5a9kyLnC5A8A96LDSaSZv_w&s"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">GitHub</span>
               </div></a
             >
@@ -1276,10 +1224,8 @@
                 style="color: transparent"
                 src="https://openai.com/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">ChatGPT 5.2 Thinking</span>
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
+                <span class="font-medium">GPT 5.5 Thinking High</span>
               </div></a
             >
             <a
@@ -1297,9 +1243,7 @@
                 style="color: transparent"
                 src="https://openai.com/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">OpenAI Codex</span>
               </div></a
             >
@@ -1318,31 +1262,8 @@
                 style="color: transparent"
                 src="https://www.anthropic.com/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Claude 4.5 Opus</span>
-              </div></a
-            >
-            <a
-              class="flex gap-x-2 gap-y-1 flex-row items-center place-content-start min-w-0 text-sm"
-              href="https://gemini.google.com/"
-              ><img
-                alt="Favicon"
-                name="Gemini"
-                loading="lazy"
-                width="64"
-                height="64"
-                decoding="async"
-                data-nimg="1"
-                class="rounded-[0.375em] mix-blend-multiply dark:mix-blend-normal p-[0.1875em] size-6"
-                style="color: transparent"
-                src="https://www.gstatic.com/lamda/images/gemini_aurora_icon_4g_53fff55fa07630c47cc6c.svg"
-              />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
-                <span class="font-medium">Gemini 3 pro / 3 flash</span>
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
+                <span class="font-medium">Claude 4.5/4.7 Opus</span>
               </div></a
             >
             <a
@@ -1360,9 +1281,7 @@
                 style="color: transparent"
                 src="https://huggingface.co/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Hugging Face</span>
               </div></a
             >
@@ -1402,9 +1321,7 @@
                 style="color: transparent"
                 src="https://www.hostinger.com/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Hostinger</span>
               </div></a
             >
@@ -1423,9 +1340,7 @@
                 style="color: transparent"
                 src="https://www.last.fm/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Last FM</span>
               </div></a
             >
@@ -1459,9 +1374,7 @@
                 style="color: transparent"
                 src="https://code.visualstudio.com/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Visual Studio Code</span>
               </div></a
             >
@@ -1480,9 +1393,7 @@
                 style="color: transparent"
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apple_Music_icon.svg/120px-Apple_Music_icon.svg.png"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Apple Music</span>
               </div></a
             >
@@ -1501,9 +1412,7 @@
                 style="color: transparent"
                 src="https://obsidian.md/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Obsidian</span>
               </div></a
             >
@@ -1522,9 +1431,7 @@
                 style="color: transparent"
                 src="https://zen-browser.app/favicon.svg"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Zen Browser</span>
               </div></a
             >
@@ -1543,9 +1450,7 @@
                 style="color: transparent"
                 src="https://bitwarden.com/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Bitwarden</span>
               </div></a
             >
@@ -1564,9 +1469,7 @@
                 style="color: transparent"
                 src="https://help.apple.com/assets/677EB6990E35CFE25809758B/677EB69E5AFECC5ECD0B4978/en_AU/dc4bdf1973030717f16d02d3e44e3793.png"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">iCloud</span>
               </div></a
             >
@@ -1585,9 +1488,7 @@
                 style="color: transparent"
                 src="https://www.raycast.com/favicon-production.png"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Raycast</span>
               </div></a
             >
@@ -1606,9 +1507,7 @@
                 style="color: transparent"
                 src="https://framerusercontent.com/images/xtZmsgOnsIizQ4EcbN9lWSe0Os.png"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Crixet</span>
               </div></a
             >
@@ -1627,9 +1526,7 @@
                 style="color: transparent"
                 src="https://dropoverapp.com/assets/images/favicon-32x32.png"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Dropover</span>
               </div></a
             >
@@ -1648,9 +1545,7 @@
                 style="color: transparent"
                 src="https://static.figma.com/app/icon/1/favicon.png"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Figma</span>
               </div></a
             >
@@ -1669,9 +1564,7 @@
                 style="color: transparent"
                 src="https://raindrop.io/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Raindrop.io</span>
               </div></a
             >
@@ -1690,17 +1583,13 @@
                 style="color: transparent"
                 src="https://alexandersandberg.com/balance-favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Balance</span>
               </div></a
             >
           </div>
         </div>
-        <div
-          class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4"
-        >
+        <div class="tech-stack-section flex flex-wrap gap-3 py-3 overflow-clip md:gap-4 md:py-4">
           <span
             class="tech-stack-category text-sm/tight font-sans font-medium relative w-24 mt-0.5 text-foreground md:w-28"
             >Hardware
@@ -1725,9 +1614,7 @@
                 style="color: transparent"
                 src="https://www.apple.com/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">iPhone 15 Pro (Daily Driver)</span>
               </div></a
             >
@@ -1746,9 +1633,7 @@
                 style="color: transparent"
                 src="https://www.apple.com/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">AirPods Pro 2 (Daily Carry)</span>
               </div></a
             >
@@ -1767,9 +1652,7 @@
                 style="color: transparent"
                 src="https://www.anker.com/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Anker 622 MagGo 5000mAh</span>
               </div></a
             >
@@ -1788,9 +1671,7 @@
                 style="color: transparent"
                 src="https://www.apple.com/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">MacBook Air M4</span>
               </div></a
             >
@@ -1809,9 +1690,7 @@
                 style="color: transparent"
                 src="https://www.apple.com/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">iPad Air M3 11 inch</span>
               </div></a
             >
@@ -1830,9 +1709,7 @@
                 style="color: transparent"
                 src="https://www.samsung.com/etc.clientlibs/samsung/clientlibs/consumer/global/clientlib-common/resources/images/Favicon.png"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Samsung Galaxy S24</span>
               </div></a
             >
@@ -1851,9 +1728,7 @@
                 style="color: transparent"
                 src="https://www.shure.com/en-US/favicon.ico"
               />
-              <div
-                class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0"
-              >
+              <div class="flex gap-1 flex-row items-center place-content-start flex-wrap min-w-0">
                 <span class="font-medium">Shure MV7+</span>
               </div></a
             >
@@ -1862,9 +1737,7 @@
       </div>
 
       <footer class="last-updated-block">
-        <div class="last-updated-block__dots">
-          <span></span><span></span><span></span>
-        </div>
+        <div class="last-updated-block__dots"><span></span><span></span><span></span></div>
         <p class="last-updated"></p>
       </footer>
     </main>
@@ -1872,11 +1745,7 @@
     <footer>
       <div class="hero-links">
         <p>
-          <a
-            class="link-with-icon"
-            rel="noopener"
-            href="#page-top"
-            data-back-to-top
+          <a class="link-with-icon" rel="noopener" href="#page-top" data-back-to-top
             >Back to top<svg
               xmlns="http://www.w3.org/2000/svg"
               height="1em"
@@ -2018,9 +1887,6 @@
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"
       crossorigin="anonymous"
     ></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"
-    ></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
   </body>
 </html>
