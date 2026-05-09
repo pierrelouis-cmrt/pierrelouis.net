@@ -1,6 +1,18 @@
 [
   {
     "year": 2026,
+    "month": "May",
+    "day": 9,
+    "title": "Making things readable by design",
+    "description": "Why readable design is not only about color, but also contrast and meaning.",
+    "image": "",
+    "tag": "Articles",
+    "tags": [
+      "article"
+    ]
+  },
+  {
+    "year": 2026,
     "month": "Apr",
     "day": 25,
     "title": "Writing Follows Its Own Rhythm",
