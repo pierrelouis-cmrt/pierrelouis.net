@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" translate="no">
   <head>
     <meta charset="UTF-8" />
@@ -15,8 +15,7 @@
         };
         const mode = getStoredTheme();
         const prefersDark =
-          window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches;
+          window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
         const isDark = mode === "dark" || (mode === "system" && prefersDark);
 
         document.documentElement.classList.toggle("dark", isDark);
@@ -35,9 +34,7 @@
           metas.forEach((meta) => meta.setAttribute("content", color));
         };
         setThemeColor(false);
-        const raf =
-          window.requestAnimationFrame ||
-          ((callback) => setTimeout(callback, 0));
+        const raf = window.requestAnimationFrame || ((callback) => setTimeout(callback, 0));
         raf(() => setThemeColor(true));
       })();
     </script>
@@ -49,31 +46,19 @@
       }
     </style>
     <meta name="author" content="Pierre-Louis" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="title" content="Pierre-Louis &ndash; Web Designer" />
-    <meta
-      name="description"
-      content="Web Designer based in Saint-Etienne City, France."
-    />
+    <meta name="description" content="Web Designer based in Saint-Etienne City, France." />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Pierre-Louis &ndash; Web Designer" />
-    <meta
-      property="og:description"
-      content="Web Designer based in Saint-Etienne City, France."
-    />
+    <meta property="og:description" content="Web Designer based in Saint-Etienne City, France." />
     <meta property="og:url" content="https://pierrelouis.net" />
     <meta property="og:image" content="assets/social-media-preview.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Pierre-Louis &ndash; Web Designer" />
-    <meta
-      name="twitter:description"
-      content="Web Designer based in Saint-Etienne City, France."
-    />
+    <meta name="twitter:description" content="Web Designer based in Saint-Etienne City, France." />
     <meta name="twitter:image" content="assets/social-media-preview.png" />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -92,7 +77,10 @@
       rel="preload"
       as="style"
       href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
     />
     <noscript>
       <link
@@ -104,7 +92,10 @@
       rel="preload"
       as="style"
       href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
+      onload="
+        this.onload = null;
+        this.rel = 'stylesheet';
+      "
     />
     <noscript>
       <link
@@ -128,13 +119,11 @@
 
         const bait = document.createElement("div");
         bait.className = "adsbox ad-banner ad-unit";
-        bait.style.cssText =
-          "position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;";
+        bait.style.cssText = "position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;";
         document.documentElement.appendChild(bait);
 
         const baitStyle = window.getComputedStyle(bait);
-        const adBlockLikely =
-          baitStyle.display === "none" || baitStyle.visibility === "hidden";
+        const adBlockLikely = baitStyle.display === "none" || baitStyle.visibility === "hidden";
         bait.remove();
 
         if (adBlockLikely) {
@@ -227,8 +216,7 @@
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.3-4.3" />
               </svg>
-              <span
-                class="flex-1 mr-5 text-left text-[var(--text-body)] hidden sm:inline"
+              <span class="flex-1 mr-5 text-left text-[var(--text-body)] hidden sm:inline"
                 >Search...</span
               >
               <span
@@ -486,10 +474,7 @@
                       class="grow min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain"
                       data-command-list
                     >
-                      <template
-                        x-for="(item, index) in commandItemsFiltered"
-                        :key="item.value"
-                      >
+                      <template x-for="(item, index) in commandItemsFiltered" :key="item.value">
                         <div class="pb-1 space-y-1">
                           <template x-if="commandShowCategory(item, index)">
                             <div class="px-1 overflow-hidden">
@@ -870,15 +855,10 @@
                   :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'ring-1 ring-white/10' : ''"
                   class="absolute bottom-0 w-full bg-[var(--bg-primary)] border-t border-[var(--border-secondary)] rounded-t-[28px] shadow-2xl max-h-[75vh] flex flex-col"
                   x-ref="drawerContainer"
-                  style="
-                    will-change: transform;
-                    padding-bottom: env(safe-area-inset-bottom);
-                  "
+                  style="will-change: transform; padding-bottom: env(safe-area-inset-bottom)"
                 >
                   <!-- Larger Invisible Drag Handle Area -->
-                  <div
-                    class="relative pt-3 pb-6 -mb-3 cursor-grab active:cursor-grabbing"
-                  >
+                  <div class="relative pt-3 pb-6 -mb-3 cursor-grab active:cursor-grabbing">
                     <!-- Visual Handle with better visibility in dark mode -->
                     <div
                       :class="$store.theme && ($store.theme.mode === 'dark' || ($store.theme.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) ? 'opacity-40' : 'opacity-30'"
@@ -939,10 +919,7 @@
                   </div>
 
                   <!-- Scrollable Content with stagger animation -->
-                  <div
-                    class="flex-1 overflow-y-auto overscroll-contain px-2 pb-4"
-                    data-no-drag
-                  >
+                  <div class="flex-1 overflow-y-auto overscroll-contain px-2 pb-4" data-no-drag>
                     <template x-for="(item, index) in allItems" :key="index">
                       <div>
                         <!-- Section Header -->
@@ -995,13 +972,8 @@
                     </template>
 
                     <!-- Empty State -->
-                    <div
-                      x-show="allItems.length === 0"
-                      class="text-center pt-6 pb-12"
-                    >
-                      <p class="text-[var(--text-subtle)] text-sm">
-                        No results found
-                      </p>
+                    <div x-show="allItems.length === 0" class="text-center pt-6 pb-12">
+                      <p class="text-[var(--text-subtle)] text-sm">No results found</p>
                     </div>
                   </div>
                 </div>
@@ -1020,72 +992,63 @@
         <div class="about-profile-image"></div>
 
         <p>
-          Hey! I'm <strong>Pierre-Louis</strong>. I'm 19 and currently studying
-          engineering at Centrale Lyon in Saint-Étienne, France. Being in a
-          preparatory class means around ten hours of maths and another ten
-          hours of physics each week. It's a lot. Maths even comes to haunt me
-          in my dreams...
+          Hey! I'm <strong>Pierre-Louis</strong>. I'm 20 and currently studying engineering at
+          Centrale Lyon in Saint-Étienne, France. Being in a preparatory class means around ten
+          hours of maths and another ten hours of physics each week. It's a lot. Maths even comes to
+          haunt me in my dreams...
         </p>
         <p>
-          If you want to know about me in a more broader sense, keep reading!
-          But if you want to know more about what I'm up to, see my
-          <a href="/now/">Now</a> page. And if you're curious about what I want
-          to become, see my <a href="/someday/">Someday</a> page.
-        </p>
-
-        <p>
-          I'll try my best here to describe myself in an honest and transparent
-          way. I'm what I would call an extroverted introvert (or maybe
-          introverted extrovert, I don't know). I love meeting new people and
-          having deep conversations, but I also need and cherish my alone time
-          to recharge. I guess this comes from being an only child, and it's now
-          a core part of who I am.
-        </p>
-        <p>
-          I move between French and English A LOT. I pick the one that carries
-          the feeling more honestly. Sometimes the emotion arrives first and
-          language follows, and you can't do anything about it. By the way, I
-          love writing stuff, but most of the time I never get around to it and
-          keep interesting thoughts for myself, which is quite a shame.
+          If you want to know about me in a more broader sense, keep reading! But if you want to
+          know more about what I'm up to, see my
+          <a href="/now/">Now</a> page. And if you're curious about what I want to become, see my
+          <a href="/someday/">Someday</a> page.
         </p>
 
         <p>
-          I've always been into computers: hardware, software, gaming, the whole
-          thing (literally the definition of a nerd). That curiosity turned into
-          a real love for design, especially web design and tech in general of
-          course. I learned by rebuilding sites I liked and tinkering until
-          things looked right. Back in high school I spent ages on Discord
-          helping random people fix their tech problems. I probably debugged
-          more for strangers than for my own projects, but that sense of
-          community kept me going.
+          I'll try my best here to describe myself in an honest and transparent way. I'm what I
+          would call an extroverted introvert (or maybe introverted extrovert, I don't know). I love
+          meeting new people and having deep conversations, but I also need and cherish my alone
+          time to recharge. I guess this comes from being an only child, and it's now a core part of
+          who I am.
+        </p>
+        <p>
+          I move between French and English A LOT. I pick the one that carries the feeling more
+          honestly. Sometimes the emotion arrives first and language follows, and you can't do
+          anything about it. By the way, I love writing stuff, but most of the time I never get
+          around to it and keep interesting thoughts for myself, which is quite a shame.
         </p>
 
         <p>
-          Somewhere along the way I got into modern art and architecture. Maybe
-          it's the clean lines. Maybe I'm just trying to find beauty wherever I
-          can.
+          I've always been into computers: hardware, software, gaming, the whole thing (literally
+          the definition of a nerd). That curiosity turned into a real love for design, especially
+          web design and tech in general of course. I learned by rebuilding sites I liked and
+          tinkering until things looked right. Back in high school I spent ages on Discord helping
+          random people fix their tech problems. I probably debugged more for strangers than for my
+          own projects, but that sense of community kept me going.
         </p>
 
         <p>
-          Lately I've been deep into AI, from language models to image
-          generation. And even a bit of robotics. A big goal of mine is a double
-          degree between Centrale and a university in the UK or the US, then
-          becoming an AI researcher. The ethics and safety side interests me as
-          much as the tech itself. I'm still young, I grow and evolve fast; so
-          seeing the tech around me evolve even faster is really motivating!
+          Somewhere along the way I got into modern art and architecture. Maybe it's the clean
+          lines. Maybe I'm just trying to find beauty wherever I can.
         </p>
 
         <p>
-          On a personal note, I'm not perfect. And I guess nobody is. We've all
-          got quirks. I'm trying to learn, experiment, and be a decent person
-          while I figure things out. In a time when AI is almost always better
-          than us in every way, embracing our imperfections is more important
-          than ever. This makes us human.
+          Lately I've been deep into AI, from language models to image generation. And even a bit of
+          robotics. A big goal of mine is a double degree between Centrale and a university in the
+          UK or the US, then becoming an AI researcher. The ethics and safety side interests me as
+          much as the tech itself. I'm still young, I grow and evolve fast; so seeing the tech
+          around me evolve even faster is really motivating!
         </p>
 
         <p>
-          That's pretty much what I know about myself for now. Thanks for
-          stopping by :D<br />
+          On a personal note, I'm not perfect. And I guess nobody is. We've all got quirks. I'm
+          trying to learn, experiment, and be a decent person while I figure things out. In a time
+          when AI is almost always better than us in every way, embracing our imperfections is more
+          important than ever. This makes us human.
+        </p>
+
+        <p>
+          That's pretty much what I know about myself for now. Thanks for stopping by :D<br />
           If you want to chat or connect, feel free to
           <a href="/links/" class="contact-link-inline">
             reach out
@@ -1110,8 +1073,7 @@
         </p>
 
         <p>
-          And if you want to learn more about this website, you can check out
-          the
+          And if you want to learn more about this website, you can check out the
           <a href="/colophon/">Colophon</a> page.
         </p>
       </div>
@@ -1239,11 +1201,7 @@
     <footer>
       <div class="hero-links">
         <p>
-          <a
-            class="link-with-icon"
-            rel="noopener"
-            href="#page-top"
-            data-back-to-top
+          <a class="link-with-icon" rel="noopener" href="#page-top" data-back-to-top
             >Back to top<svg
               xmlns="http://www.w3.org/2000/svg"
               height="1em"
@@ -1363,9 +1321,6 @@
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"
       crossorigin="anonymous"
     ></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"
-    ></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
   </body>
 </html>
