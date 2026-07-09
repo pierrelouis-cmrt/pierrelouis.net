@@ -1,0 +1,795 @@
+import { copyFile, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const CONTENT_DIR = path.join(ROOT, "content", "photos");
+const ASSETS_DIR = path.join(ROOT, "assets", "photos");
+const PHOTOS_DIR = path.join(ROOT, "photos");
+const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
+
+const INTRO_COPY =
+  "Some of my best shots from trips or everyday life. Everything was shot on iPhone 15 Pro and (sometimes) edited on Lightroom.";
+
+const PAGE_DESCRIPTION =
+  "Some of Pierre-Louis' best shots from trips and everyday life.";
+
+const isDirectRun = () => {
+  return process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+};
+
+const escapeHtml = (value) =>
+  String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+
+const parseScalar = (rawValue) => {
+  const value = rawValue.trim();
+
+  if (value === "") {
+    return "";
+  }
+
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
+    return value.slice(1, -1);
+  }
+
+  if (value.startsWith("[") && value.endsWith("]")) {
+    const inner = value.slice(1, -1).trim();
+
+    if (!inner) {
+      return [];
+    }
+
+    return inner.split(",").map((item) => parseScalar(item));
+  }
+
+  if (/^-?\d+(\.\d+)?$/.test(value)) {
+    return Number(value);
+  }
+
+  if (value === "true") {
+    return true;
+  }
+
+  if (value === "false") {
+    return false;
+  }
+
+  return value;
+};
+
+const getIndent = (line) => line.match(/^ */)[0].length;
+
+const stripComments = (line) => {
+  let quote = null;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const char = line[index];
+
+    if ((char === '"' || char === "'") && line[index - 1] !== "\\") {
+      quote = quote === char ? null : quote || char;
+    }
+
+    if (char === "#" && !quote && (index === 0 || /\s/.test(line[index - 1]))) {
+      return line.slice(0, index);
+    }
+  }
+
+  return line;
+};
+
+const parseKeyValue = (content) => {
+  const match = content.match(/^([^:]+):(.*)$/);
+
+  if (!match) {
+    throw new Error(`Invalid YAML line: ${content}`);
+  }
+
+  return [match[1].trim(), match[2].trim()];
+};
+
+const parseYaml = (text) => {
+  const lines = text
+    .split(/\r?\n/)
+    .map(stripComments)
+    .filter((line) => line.trim() !== "");
+
+  const parseBlock = (startIndex, indent) => {
+    const first = lines[startIndex];
+
+    if (!first || getIndent(first) < indent) {
+      return [null, startIndex];
+    }
+
+    if (first.trimStart().startsWith("- ")) {
+      return parseArray(startIndex, indent);
+    }
+
+    return parseObject(startIndex, indent);
+  };
+
+  const parseArray = (startIndex, indent) => {
+    const items = [];
+    let index = startIndex;
+
+    while (index < lines.length) {
+      const line = lines[index];
+      const currentIndent = getIndent(line);
+      const content = line.trimStart();
+
+      if (currentIndent < indent || !content.startsWith("- ")) {
+        break;
+      }
+
+      if (currentIndent > indent) {
+        throw new Error(`Unexpected indentation: ${line}`);
+      }
+
+      const itemContent = content.slice(2).trim();
+
+      if (itemContent === "") {
+        const [nested, nextIndex] = parseBlock(index + 1, indent + 2);
+        items.push(nested);
+        index = nextIndex;
+        continue;
+      }
+
+      if (/^[^:]+:/.test(itemContent)) {
+        const [key, rawValue] = parseKeyValue(itemContent);
+        const item = {
+          [key]: rawValue === "" ? null : parseScalar(rawValue),
+        };
+        index += 1;
+
+        while (index < lines.length && getIndent(lines[index]) > indent) {
+          const nestedIndent = getIndent(lines[index]);
+
+          if (nestedIndent !== indent + 2) {
+            throw new Error(`Unexpected indentation: ${lines[index]}`);
+          }
+
+          const [nestedKey, nestedRawValue] = parseKeyValue(lines[index].trim());
+
+          if (nestedRawValue === "") {
+            const [nestedValue, nextIndex] = parseBlock(index + 1, indent + 4);
+            item[nestedKey] = nestedValue;
+            index = nextIndex;
+          } else {
+            item[nestedKey] = parseScalar(nestedRawValue);
+            index += 1;
+          }
+        }
+
+        items.push(item);
+        continue;
+      }
+
+      items.push(parseScalar(itemContent));
+      index += 1;
+    }
+
+    return [items, index];
+  };
+
+  const parseObject = (startIndex, indent) => {
+    const object = {};
+    let index = startIndex;
+
+    while (index < lines.length) {
+      const line = lines[index];
+      const currentIndent = getIndent(line);
+
+      if (currentIndent < indent || line.trimStart().startsWith("- ")) {
+        break;
+      }
+
+      if (currentIndent > indent) {
+        throw new Error(`Unexpected indentation: ${line}`);
+      }
+
+      const [key, rawValue] = parseKeyValue(line.trim());
+
+      if (rawValue === "") {
+        const [nested, nextIndex] = parseBlock(index + 1, indent + 2);
+        object[key] = nested;
+        index = nextIndex;
+      } else {
+        object[key] = parseScalar(rawValue);
+        index += 1;
+      }
+    }
+
+    return [object, index];
+  };
+
+  const [data] = parseBlock(0, 0);
+  return data ?? {};
+};
+
+const readCollectionFile = async (directory) => {
+  for (const filename of ["collection.yml", "collection.yaml"]) {
+    const filePath = path.join(directory, filename);
+
+    try {
+      return {
+        filePath,
+        data: parseYaml(await readFile(filePath, "utf8")),
+      };
+    } catch (error) {
+      if (error.code !== "ENOENT") {
+        throw error;
+      }
+    }
+  }
+
+  throw new Error(`Missing collection.yml in ${path.relative(ROOT, directory)}`);
+};
+
+const discoverPhotoFiles = async (directory) => {
+  const entries = await readdir(directory, { withFileTypes: true });
+
+  return entries
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name)
+    .filter((filename) => IMAGE_EXTENSIONS.has(path.extname(filename).toLowerCase()))
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+};
+
+const toArray = (value) => {
+  if (Array.isArray(value)) {
+    return value.map(String);
+  }
+
+  if (value == null || value === "") {
+    return [];
+  }
+
+  return [String(value)];
+};
+
+const normalizeCollection = async (directoryName) => {
+  const sourceDir = path.join(CONTENT_DIR, directoryName);
+  const { data } = await readCollectionFile(sourceDir);
+  const discoveredFiles = await discoverPhotoFiles(sourceDir);
+  const photos = Array.isArray(data.photos)
+    ? data.photos
+    : discoveredFiles.map((file) => ({ file }));
+
+  for (const field of ["year", "place", "country", "description"]) {
+    if (!data[field]) {
+      throw new Error(`${directoryName}/collection.yml is missing "${field}"`);
+    }
+  }
+
+  if (photos.length === 0) {
+    throw new Error(`${directoryName} has no photos`);
+  }
+
+  return {
+    id: data.id || directoryName,
+    year: Number(data.year),
+    place: String(data.place),
+    country: String(data.country),
+    description: String(data.description),
+    tags: toArray(data.tags),
+    sourceDir,
+    photos: photos.map((photo, index) => {
+      if (!photo.file) {
+        throw new Error(`${directoryName}/collection.yml photo #${index + 1} is missing "file"`);
+      }
+
+      return {
+        id: photo.id || `${directoryName}-${String(index + 1).padStart(2, "0")}`,
+        file: String(photo.file),
+        alt: photo.alt || `${data.place}, ${data.country} photo ${index + 1}`,
+        themes: toArray(photo.themes),
+        colors: toArray(photo.colors),
+        vibe: toArray(photo.vibe),
+      };
+    }),
+  };
+};
+
+const loadCollections = async () => {
+  const entries = await readdir(CONTENT_DIR, { withFileTypes: true });
+  const directoryNames = entries
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+
+  const collections = [];
+
+  for (const directoryName of directoryNames) {
+    collections.push(await normalizeCollection(directoryName));
+  }
+
+  return collections;
+};
+
+const copyCollectionAssets = async (collections) => {
+  for (const collection of collections) {
+    const outputDir = path.join(ASSETS_DIR, collection.id);
+    await rm(outputDir, { force: true, recursive: true });
+    await mkdir(outputDir, { recursive: true });
+
+    for (const photo of collection.photos) {
+      await copyFile(
+        path.join(collection.sourceDir, photo.file),
+        path.join(outputDir, photo.file),
+      );
+      photo.src = `../assets/photos/${collection.id}/${photo.file}`;
+    }
+  }
+};
+
+const getCountries = (collections) => {
+  return [...new Set(collections.map((collection) => collection.country))]
+    .sort((a, b) => a.localeCompare(b));
+};
+
+const getPhotoCount = (collections) => {
+  return collections.reduce((total, collection) => total + collection.photos.length, 0);
+};
+
+const getCountryPhotoCounts = (collections) => {
+  return collections.reduce((counts, collection) => {
+    counts.set(
+      collection.country,
+      (counts.get(collection.country) || 0) + collection.photos.length,
+    );
+
+    return counts;
+  }, new Map());
+};
+
+const getOgImage = (collections) => {
+  return collections[0]?.photos[0]?.src.replace(/^\.\.\//, "https://pierrelouis.net/") ??
+    "https://pierrelouis.net/assets/image_featured_1.webp";
+};
+
+const renderDataAttribute = (items) => escapeHtml(items.join(", "));
+
+const normalizeSearchValue = (items) => {
+  return items
+    .flat()
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+};
+
+const renderPhotoFigure = (photo, index, collection) => {
+  const searchText = normalizeSearchValue([
+    collection.year,
+    collection.place,
+    collection.country,
+    collection.description,
+    collection.tags,
+    photo.alt,
+    photo.themes,
+    photo.colors,
+    photo.vibe,
+  ]);
+
+  return `              <figure
+                class="photo-card"
+                data-country="${escapeHtml(collection.country)}"
+                data-themes="${renderDataAttribute(photo.themes)}"
+                data-colors="${renderDataAttribute(photo.colors)}"
+                data-vibe="${renderDataAttribute(photo.vibe)}"
+                data-search="${escapeHtml(searchText)}"
+              >
+                <img
+                  class="photo-card__image"
+                  src="${escapeHtml(photo.src)}"
+                  alt="${escapeHtml(photo.alt)}"
+                  loading="lazy"
+                />
+                <figcaption class="photo-card__index">${String(index + 1).padStart(2, "0")}</figcaption>
+              </figure>`;
+};
+
+const renderCollection = (collection) => {
+  const collectionSearchText = normalizeSearchValue([
+    collection.year,
+    collection.place,
+    collection.country,
+    collection.description,
+    collection.tags,
+  ]);
+  const photos = collection.photos
+    .map((photo, index) => renderPhotoFigure(photo, index, collection))
+    .join("\n");
+
+  return `          <article
+            class="photo-album"
+            data-place="${escapeHtml(collection.place)}"
+            data-country="${escapeHtml(collection.country)}"
+            data-tags="${renderDataAttribute(collection.tags)}"
+            data-search="${escapeHtml(collectionSearchText)}"
+          >
+            <header class="photo-album__header">
+              <div class="photo-album__identity">
+                <span class="photo-album__year">${escapeHtml(collection.year)}</span>
+                <h2 class="photo-album__title">${escapeHtml(collection.place)}, ${escapeHtml(collection.country)}</h2>
+              </div>
+              <p class="photo-album__description">
+                ${escapeHtml(collection.description)}
+              </p>
+            </header>
+
+            <div class="photo-grid">
+${photos}
+            </div>
+          </article>`;
+};
+
+const renderCountryFilters = (collections) => {
+  const countries = getCountries(collections);
+  const countryCounts = getCountryPhotoCounts(collections);
+  const totalCount = getPhotoCount(collections);
+  const allButton = `<button
+                  class="photo-filter__button is-active"
+                  type="button"
+                  data-country-filter="all"
+                  aria-pressed="true"
+                >
+                  <span>All</span>
+                  <span class="photo-filter__count" data-filter-count>${totalCount}</span>
+                </button>`;
+  const countryButtons = countries
+    .map((country) => {
+      return `<button
+                  class="photo-filter__button"
+                  type="button"
+                  data-country-filter="${escapeHtml(country)}"
+                  aria-pressed="false"
+                >
+                  <span>${escapeHtml(country)}</span>
+                  <span class="photo-filter__count" data-filter-count hidden>${countryCounts.get(country) || 0}</span>
+                </button>`;
+    })
+    .join("\n");
+
+  return `${allButton}\n${countryButtons}`;
+};
+
+const renderPage = (collections) => {
+  const countries = getCountries(collections);
+  const albums = collections.map(renderCollection).join("\n\n");
+
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Photos - Pierre-Louis</title>
+    <meta
+      name="description"
+      content="${escapeHtml(PAGE_DESCRIPTION)}"
+    />
+    <meta property="og:title" content="Photos - Pierre-Louis" />
+    <meta
+      property="og:description"
+      content="${escapeHtml(PAGE_DESCRIPTION)}"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pierrelouis.net/photos/" />
+    <meta
+      property="og:image"
+      content="${escapeHtml(getOgImage(collections))}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="115x115"
+      href="../assets/favicon.png"
+    />
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://api.fontshare.com/v2/css?f[]=sora@400,500,600&display=swap"
+    />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="stylesheet" href="./photos.css" />
+    <script src="../script.js" defer></script>
+    <script src="./photos.js" defer></script>
+    <script src="../footer.js" defer></script>
+  </head>
+  <body>
+    <div class="site-shell photos-page">
+      <header class="site-header" aria-label="Primary navigation">
+        <a class="brand-mark" href="../" aria-label="Pierre-Louis home">
+          <span class="brand-mark__text">P—L</span>
+          <span class="brand-mark__copyright" aria-hidden="true">©</span>
+        </a>
+
+        <nav class="primary-nav" aria-label="Main pages">
+          <a class="primary-nav__link" href="../projects/">Projects</a>
+          <a class="primary-nav__link" href="../posts/">Posts</a>
+          <a
+            class="primary-nav__link primary-nav__link--active"
+            href="../photos/"
+            aria-current="page"
+            >Photos</a
+          >
+        </nav>
+
+        <div class="more-menu" data-more-menu>
+          <button
+            class="more-menu__toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="more-menu-panel"
+            data-more-menu-toggle
+          >
+            More ↓
+          </button>
+
+          <nav
+            class="more-menu__panel"
+            id="more-menu-panel"
+            aria-label="More pages"
+            data-more-menu-panel
+            hidden
+          >
+            <a class="more-menu__link" href="../about/">About</a>
+            <a class="more-menu__link" href="../now/">Now</a>
+            <a class="more-menu__link" href="../someday/">Someday</a>
+            <a class="more-menu__link" href="../lists/">Lists</a>
+          </nav>
+        </div>
+
+        <div class="mobile-menu" data-mobile-menu>
+          <button
+            class="mobile-menu__toggle"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-menu-panel"
+            data-mobile-menu-toggle
+          >
+            <span class="mobile-menu__toggle-line"></span>
+            <span class="mobile-menu__toggle-line"></span>
+          </button>
+
+          <div
+            class="mobile-menu__panel"
+            id="mobile-menu-panel"
+            data-mobile-menu-panel
+            hidden
+          >
+            <div class="mobile-menu__bar">
+              <a
+                class="mobile-menu__brand"
+                href="../"
+                aria-label="Pierre-Louis home"
+              >
+                <span class="brand-mark__text">P—L</span>
+                <span class="brand-mark__copyright" aria-hidden="true">©</span>
+              </a>
+            </div>
+
+            <div class="mobile-menu__layout">
+              <section
+                class="mobile-menu__section mobile-menu__section--main"
+                aria-labelledby="mobile-menu-main"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-main">
+                  Main Pages
+                </h2>
+                <nav class="mobile-menu__links" aria-label="Main pages">
+                  <a class="mobile-menu__link" href="../projects/">Projects</a>
+                  <a class="mobile-menu__link" href="../posts/">Posts</a>
+                  <a class="mobile-menu__link" href="../photos/">Photos</a>
+                </nav>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--latest"
+                aria-labelledby="mobile-menu-latest"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-latest">
+                  Latest
+                </h2>
+                <a
+                  class="mobile-menu__latest-link"
+                  href="../projects/conways-reverse-game-of-life/"
+                >
+                  <span class="mobile-menu__latest-title"
+                    >Reversing Conway's Game Of Life with Diffusion</span
+                  >
+                  <span class="mobile-menu__latest-media" aria-hidden="true">
+                    <span class="mobile-menu__latest-image"></span>
+                  </span>
+                  <span class="mobile-menu__see-more">See More ↗</span>
+                </a>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--about"
+                aria-labelledby="mobile-menu-about"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-about">
+                  More About Me
+                </h2>
+                <nav class="mobile-menu__links" aria-label="More about me">
+                  <a class="mobile-menu__link" href="../about/">Who I am</a>
+                  <a class="mobile-menu__link" href="../now/"
+                    >What I'm doing</a
+                  >
+                  <a class="mobile-menu__link" href="../someday/"
+                    >Where I'm going</a
+                  >
+                </nav>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--links"
+                aria-labelledby="mobile-menu-links"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-links">
+                  More Links
+                </h2>
+                <nav class="mobile-menu__links" aria-label="More links">
+                  <a class="mobile-menu__link" href="../lists/">Catalogs</a>
+                  <a class="mobile-menu__link" href="../links/"
+                    >Link &amp; Socials</a
+                  >
+                </nav>
+              </section>
+            </div>
+
+            <img
+              class="mobile-menu__watermark"
+              src="../assets/image_mobile_watermark.png"
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <h1 class="sr-only">Photos</h1>
+
+        <section class="photos-intro" aria-label="Photos introduction">
+          <div class="photo-filter" aria-label="Photo filters" data-photo-filters>
+            <span class="photo-filter__symbol" aria-hidden="true">✤</span>
+            <div class="photo-filter__content">
+              <div class="photo-filter__countries" aria-label="Countries">
+${renderCountryFilters(collections)}
+              </div>
+              <label class="photo-filter__search">
+                <span class="sr-only">Search photos</span>
+                <input
+                  class="photo-filter__input"
+                  type="search"
+                  placeholder="Search (color, vibe, place)..."
+                  autocomplete="off"
+                  spellcheck="false"
+                  data-photo-search
+                />
+              </label>
+              <p class="photo-filter__empty" data-photo-empty hidden>
+                No photos found
+              </p>
+            </div>
+          </div>
+
+          <p class="photos-intro__copy">
+            ${escapeHtml(INTRO_COPY)}
+          </p>
+        </section>
+
+        <section class="photo-albums" aria-label="Photo albums">
+${albums}
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer__content">
+          <div class="site-footer__location" aria-label="Location and weather">
+            <span>Lyon, France</span>
+            <span data-footer-weather>Weather loading...</span>
+          </div>
+
+          <nav
+            class="site-footer__group site-footer__group--contact"
+            aria-label="Contact links"
+          >
+            <a
+              class="site-footer__link"
+              href="mailto:contact@pierrelouis.net"
+              data-copy-email
+              data-email="contact@pierrelouis.net"
+              >Copy Email</a
+            >
+            <a class="site-footer__link" href="../links/">Links &amp; Socials</a>
+          </nav>
+
+          <nav
+            class="site-footer__group site-footer__group--info"
+            aria-label="Site information"
+          >
+            <a class="site-footer__link" href="../colophon/">Colophon</a>
+            <a class="site-footer__link" href="../imprint/">Imprint</a>
+            <span class="site-footer__copyright-slot">
+              <span class="site-footer__copyright"
+                >©<span data-footer-year>2026</span></span
+              >
+            </span>
+          </nav>
+        </div>
+
+        <div class="watermark" aria-hidden="true">
+          <span class="watermark__name watermark__name--first"></span>
+          <span class="watermark__dash"></span>
+          <span class="watermark__name watermark__name--last"></span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+`;
+};
+
+const renderData = (collections) => {
+  return collections.map((collection) => ({
+    id: collection.id,
+    year: collection.year,
+    place: collection.place,
+    country: collection.country,
+    description: collection.description,
+    tags: collection.tags,
+      photos: collection.photos.map((photo, index) => ({
+        id: photo.id,
+        index: index + 1,
+        collectionId: collection.id,
+        place: collection.place,
+        country: collection.country,
+        src: photo.src,
+      alt: photo.alt,
+      themes: photo.themes,
+      colors: photo.colors,
+      vibe: photo.vibe,
+    })),
+  }));
+};
+
+export const buildPhotos = async () => {
+  const collections = await loadCollections();
+
+  await mkdir(ASSETS_DIR, { recursive: true });
+  await mkdir(PHOTOS_DIR, { recursive: true });
+  await copyCollectionAssets(collections);
+  await writeFile(path.join(PHOTOS_DIR, "index.html"), renderPage(collections));
+  await writeFile(
+    path.join(PHOTOS_DIR, "photos-data.json"),
+    `${JSON.stringify(renderData(collections), null, 2)}\n`,
+  );
+
+  return {
+    collections: collections.length,
+    photos: getPhotoCount(collections),
+  };
+};
+
+if (isDirectRun()) {
+  try {
+    const result = await buildPhotos();
+    console.log(`Built photos page: ${result.collections} collection(s), ${result.photos} photo(s).`);
+  } catch (error) {
+    console.error(error.message);
+    process.exitCode = 1;
+  }
+}

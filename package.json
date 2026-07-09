@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "build": "node scripts/build-photos.mjs",
+    "dev": "node scripts/dev.mjs",
+    "preview": "node scripts/preview.mjs"
+  },
+  "devDependencies": {}
+}

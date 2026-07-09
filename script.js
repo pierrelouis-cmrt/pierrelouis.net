@@ -39,17 +39,22 @@ const mobileMenuPanel = document.querySelector(SELECTORS.mobileMenuPanel);
 const siteHeader = document.querySelector(SELECTORS.siteHeader);
 
 if (moreMenu && moreMenuToggle && moreMenuPanel) {
+  const moreMenuOpenLabel =
+    moreMenuToggle.dataset.moreMenuOpenLabel || LABELS.moreMenuOpen;
+  const moreMenuCloseLabel =
+    moreMenuToggle.dataset.moreMenuCloseLabel || LABELS.moreMenuClose;
+
   const openMenu = () => {
     moreMenu.classList.add("is-open");
     moreMenuToggle.setAttribute("aria-expanded", "true");
-    moreMenuToggle.textContent = LABELS.moreMenuClose;
+    moreMenuToggle.textContent = moreMenuCloseLabel;
     moreMenuPanel.hidden = false;
   };
 
   const closeMenu = () => {
     moreMenu.classList.remove("is-open");
     moreMenuToggle.setAttribute("aria-expanded", "false");
-    moreMenuToggle.textContent = LABELS.moreMenuOpen;
+    moreMenuToggle.textContent = moreMenuOpenLabel;
     window.setTimeout(() => {
       if (!moreMenu.classList.contains("is-open")) {
         moreMenuPanel.hidden = true;
