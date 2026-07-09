@@ -307,37 +307,91 @@
   inset: 0;
   border: 0;
   background: rgb(20 20 20 / 0.88);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
   cursor: zoom-out;
 }
 
-.photo-lightbox__image {
+.photo-lightbox__figure {
   position: fixed;
   z-index: 1;
   top: 50%;
   left: 50%;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-sm);
+  margin: 0;
+  transform: translate(-50%, -50%);
+}
+
+.photo-lightbox__image {
   display: block;
   width: auto;
   height: auto;
   max-width: min(100%, var(--photo-lightbox-max-width));
-  max-height: min(100%, var(--photo-lightbox-max-height));
-  max-height: min(100%, calc(100dvh - (var(--photo-lightbox-padding) * 2)));
+  max-height: min(100%, calc(var(--photo-lightbox-max-height) - 28px));
+  max-height: min(100%, calc(100dvh - (var(--photo-lightbox-padding) * 2) - 28px));
   object-fit: contain;
   object-position: center;
   box-shadow: 0 12px 56px rgb(0 0 0 / 0.28);
-  transform: translate(-50%, -50%);
+}
+
+.photo-lightbox__counter {
+  color: #ffffff;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-solid);
+  letter-spacing: var(--tracking-normal);
+  font-variant-numeric: tabular-nums;
 }
 
 .photo-lightbox__close {
   position: fixed;
   z-index: 2;
-  top: clamp(12px, 2vw, 24px);
-  right: clamp(12px, 2vw, 24px);
-  padding: 8px 10px;
+  top: calc((var(--header-height) - var(--font-size-base)) / 2);
+  right: var(--page-gutter);
+  padding: 0 0 var(--space-2xs);
   border: 0;
   background: transparent;
   color: #ffffff;
   font: inherit;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-solid);
   cursor: pointer;
+}
+
+.photo-lightbox__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2ch;
+  color: #ffffff;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-solid);
+}
+
+.photo-lightbox__nav[hidden] {
+  display: none;
+}
+
+.photo-lightbox__nav-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--space-2xl);
+  font-weight: inherit;
+  line-height: var(--line-height-solid);
+  transform: translateY(-0.1875em);
+  cursor: pointer;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.photo-lightbox__nav-button:hover {
+  opacity: var(--hover-opacity);
 }
 
 body.has-photo-lightbox-open {

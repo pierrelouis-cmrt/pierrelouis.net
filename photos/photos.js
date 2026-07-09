@@ -11,10 +11,16 @@
   const albums = [...document.querySelectorAll(".photo-album")];
   const lightbox = document.querySelector("[data-photo-lightbox]");
   const lightboxImage = lightbox?.querySelector("[data-photo-lightbox-image]");
+  const lightboxCounter = lightbox?.querySelector("[data-photo-lightbox-counter]");
+  const lightboxNav = lightbox?.querySelector("[data-photo-lightbox-nav]");
+  const lightboxPrev = lightbox?.querySelector("[data-photo-lightbox-prev]");
+  const lightboxNext = lightbox?.querySelector("[data-photo-lightbox-next]");
   const lightboxCloseButtons = [
     ...(lightbox?.querySelectorAll("[data-photo-lightbox-close]") || []),
   ];
   let lastFocusedElement = null;
+  let lightboxItems = [];
+  let lightboxIndex = -1;
 
   const state = {
     country: "all",
@@ -105,6 +111,39 @@
     applyFilters();
   });
 
+  const setLightboxImage = (index) => {
+    if (!lightboxImage || lightboxItems.length === 0) {
+      return;
+    }
+
+    lightboxIndex = (index + lightboxItems.length) % lightboxItems.length;
+
+    const trigger = lightboxItems[lightboxIndex];
+    lightboxImage.src = trigger.dataset.fullSrc || "";
+    lightboxImage.alt = trigger.dataset.alt || "";
+
+    if (lightboxCounter) {
+      const digits = Math.max(2, String(lightboxItems.length).length);
+      const current = String(lightboxIndex + 1).padStart(digits, "0");
+      const total = String(lightboxItems.length).padStart(digits, "0");
+      lightboxCounter.textContent = `${current}/${total}`;
+    }
+  };
+
+  const getLightboxItems = (trigger) => {
+    const album = trigger.closest(".photo-album");
+
+    return album ? [...album.querySelectorAll("[data-photo-zoom]")] : [trigger];
+  };
+
+  const cycleLightbox = (direction) => {
+    if (!lightbox || lightbox.hidden || lightboxItems.length <= 1) {
+      return;
+    }
+
+    setLightboxImage(lightboxIndex + direction);
+  };
+
   const closeLightbox = () => {
     if (!lightbox || lightbox.hidden) {
       return;
@@ -118,8 +157,14 @@
       lightboxImage.alt = "";
     }
 
+    if (lightboxCounter) {
+      lightboxCounter.textContent = "";
+    }
+
     lastFocusedElement?.focus();
     lastFocusedElement = null;
+    lightboxItems = [];
+    lightboxIndex = -1;
   };
 
   document.addEventListener("click", (event) => {
@@ -130,8 +175,19 @@
     }
 
     lastFocusedElement = trigger;
-    lightboxImage.src = trigger.dataset.fullSrc || "";
-    lightboxImage.alt = trigger.dataset.alt || "";
+    lightboxItems = getLightboxItems(trigger);
+    setLightboxImage(lightboxItems.indexOf(trigger));
+
+    if (lightboxNav) {
+      lightboxNav.hidden = false;
+    }
+
+    if (lightboxPrev && lightboxNext) {
+      const hasMultipleItems = lightboxItems.length > 1;
+      lightboxPrev.hidden = !hasMultipleItems;
+      lightboxNext.hidden = !hasMultipleItems;
+    }
+
     lightbox.hidden = false;
     document.body.classList.add("has-photo-lightbox-open");
     lightboxCloseButtons.at(-1)?.focus();
@@ -141,9 +197,25 @@
     button.addEventListener("click", closeLightbox);
   }
 
+  lightboxPrev?.addEventListener("click", () => {
+    cycleLightbox(-1);
+  });
+
+  lightboxNext?.addEventListener("click", () => {
+    cycleLightbox(1);
+  });
+
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeLightbox();
+    }
+
+    if (event.key === "ArrowLeft") {
+      cycleLightbox(-1);
+    }
+
+    if (event.key === "ArrowRight") {
+      cycleLightbox(1);
     }
   });
 
