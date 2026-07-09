@@ -1,0 +1,125 @@
+.info {
+  display: grid;
+  grid-template-columns: var(--page-grid-columns);
+  column-gap: var(--grid-gap);
+  padding: 360px var(--page-gutter) 44px;
+}
+
+.availability {
+  grid-column: 1 / span 2;
+  display: flex;
+  gap: var(--space-sm);
+  align-items: flex-start;
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--font-size-micro);
+  line-height: var(--line-height-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.availability__dot {
+  width: var(--space-md);
+  padding-top: 6px;
+}
+
+.availability__dot::before {
+  display: block;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: currentColor;
+  content: "";
+}
+
+.availability__copy {
+  display: block;
+}
+
+.info__bio {
+  grid-column: 3 / span 2;
+  width: min(var(--content-width-compact), 100%);
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-copy);
+  letter-spacing: var(--tracking-normal);
+}
+
+.general-section {
+  display: grid;
+  grid-template-columns: var(--page-grid-columns);
+  column-gap: var(--grid-gap);
+  padding-inline: var(--page-gutter);
+}
+
+.general-section__title {
+  grid-column: 1 / span 2;
+  margin: 0;
+  color: var(--color-subtle);
+  font-size: var(--font-size-micro);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.general-section__body {
+  grid-column: 3 / span 2;
+  width: min(var(--content-width-compact), 100%);
+  color: var(--color-caption);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-copy);
+  letter-spacing: var(--tracking-normal);
+}
+
+.general-section__body > :first-child {
+  margin-top: 0;
+}
+
+.general-section__body > :last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1100px) {
+  .info {
+    padding-top: 280px;
+  }
+
+  .availability {
+    grid-column: 1;
+  }
+
+  .info__bio,
+  .general-section__body {
+    grid-column: 2;
+  }
+
+  .general-section__title {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 760px) {
+  .info,
+  .general-section {
+    gap: var(--space-4xl);
+  }
+
+  .info {
+    padding: 128px var(--page-gutter) 42px;
+  }
+
+  .availability,
+  .info__bio,
+  .general-section__title,
+  .general-section__body {
+    grid-column: 1;
+  }
+
+  .info__bio,
+  .general-section__body {
+    width: 100%;
+    max-width: 520px;
+  }
+}
