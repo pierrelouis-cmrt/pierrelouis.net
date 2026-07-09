@@ -635,7 +635,7 @@ img {
 
   .mobile-menu__section--latest {
     grid-column: 2;
-    grid-row: 1 / span 3;
+    grid-row: 2 / span 2;
   }
 
   .mobile-menu__section--about {
@@ -688,7 +688,7 @@ img {
   .mobile-menu__latest-media {
     display: block;
     width: min(100%, 200px);
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 250 / 180;
     overflow: hidden;
   }
 
@@ -698,7 +698,8 @@ img {
     height: 100%;
     background-image: url("./assets/image_mobile_featured.gif");
     background-position: 50%;
-    background-size: cover;
+    background-repeat: no-repeat;
+    background-size: contain;
   }
 
   .mobile-menu__see-more {
