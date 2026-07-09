@@ -628,18 +628,29 @@ img {
     min-width: 0;
   }
 
+  .mobile-menu__section--main {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
   .mobile-menu__section--latest {
+    grid-column: 2;
     grid-row: 1 / span 3;
   }
 
-  .mobile-menu__section--links {
-    grid-column: 2;
+  .mobile-menu__section--about {
+    grid-column: 1;
     grid-row: 2;
   }
 
-  .mobile-menu__section--credits {
-    grid-column: 2;
+  .mobile-menu__section--links {
+    grid-column: 1;
     grid-row: 3;
+  }
+
+  .mobile-menu__section--credits {
+    grid-column: 1;
+    grid-row: 4;
     align-self: end;
   }
 
