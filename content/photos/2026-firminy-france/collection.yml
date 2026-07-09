@@ -1,0 +1,30 @@
+year: 2026
+order: 10
+place: "Firminy"
+country: "France"
+description: "Photos from Firminy, France."
+photos:
+  - file: 01.png
+    alt: "Firminy, France photo 01"
+  - file: 02.png
+    alt: "Firminy, France photo 02"
+  - file: 03.png
+    alt: "Firminy, France photo 03"
+  - file: 04.png
+    alt: "Firminy, France photo 04"
+  - file: 05.png
+    alt: "Firminy, France photo 05"
+  - file: 06.png
+    alt: "Firminy, France photo 06"
+  - file: 07.png
+    alt: "Firminy, France photo 07"
+  - file: 08.png
+    alt: "Firminy, France photo 08"
+  - file: 09.png
+    alt: "Firminy, France photo 09"
+  - file: 10.png
+    alt: "Firminy, France photo 10"
+  - file: 11.png
+    alt: "Firminy, France photo 11"
+  - file: 12.png
+    alt: "Firminy, France photo 12"

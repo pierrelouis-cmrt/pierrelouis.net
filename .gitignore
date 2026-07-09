@@ -23,3 +23,5 @@ dist/
 
 .claude/
 .playwright-mcp/
+
+assets/photos/.build-cache.json

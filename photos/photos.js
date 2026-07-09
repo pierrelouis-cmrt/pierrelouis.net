@@ -9,6 +9,12 @@
   const searchInput = root.querySelector("[data-photo-search]");
   const emptyState = root.querySelector("[data-photo-empty]");
   const albums = [...document.querySelectorAll(".photo-album")];
+  const lightbox = document.querySelector("[data-photo-lightbox]");
+  const lightboxImage = lightbox?.querySelector("[data-photo-lightbox-image]");
+  const lightboxCloseButtons = [
+    ...(lightbox?.querySelectorAll("[data-photo-lightbox-close]") || []),
+  ];
+  let lastFocusedElement = null;
 
   const state = {
     country: "all",
@@ -97,6 +103,48 @@
   searchInput?.addEventListener("input", () => {
     state.query = searchInput.value;
     applyFilters();
+  });
+
+  const closeLightbox = () => {
+    if (!lightbox || lightbox.hidden) {
+      return;
+    }
+
+    lightbox.hidden = true;
+    document.body.classList.remove("has-photo-lightbox-open");
+
+    if (lightboxImage) {
+      lightboxImage.removeAttribute("src");
+      lightboxImage.alt = "";
+    }
+
+    lastFocusedElement?.focus();
+    lastFocusedElement = null;
+  };
+
+  document.addEventListener("click", (event) => {
+    const trigger = event.target.closest("[data-photo-zoom]");
+
+    if (!trigger || !lightbox || !lightboxImage) {
+      return;
+    }
+
+    lastFocusedElement = trigger;
+    lightboxImage.src = trigger.dataset.fullSrc || "";
+    lightboxImage.alt = trigger.dataset.alt || "";
+    lightbox.hidden = false;
+    document.body.classList.add("has-photo-lightbox-open");
+    lightboxCloseButtons.at(-1)?.focus();
+  });
+
+  for (const button of lightboxCloseButtons) {
+    button.addEventListener("click", closeLightbox);
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeLightbox();
+    }
   });
 
   applyFilters();

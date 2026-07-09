@@ -2,7 +2,10 @@
   display: grid;
   grid-template-columns: var(--page-grid-columns);
   column-gap: var(--grid-gap);
-  padding: 360px var(--page-gutter) 44px;
+  min-height: var(--page-intro-min-height);
+  align-content: start;
+  padding: var(--page-intro-padding-top) var(--page-gutter)
+    var(--page-intro-padding-bottom);
 }
 
 .availability {
@@ -20,7 +23,7 @@
 
 .availability__dot {
   width: var(--space-md);
-  padding-top: 6px;
+  padding-top: 5px;
 }
 
 .availability__dot::before {
@@ -116,10 +119,6 @@
 }
 
 @media (max-width: 1100px) {
-  .intro {
-    padding-top: 280px;
-  }
-
   .availability {
     grid-column: 1;
   }
@@ -136,7 +135,6 @@
 @media (max-width: 760px) {
   .intro {
     gap: var(--space-4xl);
-    padding: 128px var(--page-gutter) 42px;
   }
 
   .availability,

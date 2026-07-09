@@ -1,18 +1,46 @@
-import { copyFile, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
+import { spawn } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_DIR = path.join(ROOT, "content", "photos");
 const ASSETS_DIR = path.join(ROOT, "assets", "photos");
+const FULL_ASSETS_DIR = path.join(ROOT, "assets", "photos-full");
 const PHOTOS_DIR = path.join(ROOT, "photos");
+const ASSET_CACHE_FILE = path.join(ASSETS_DIR, ".build-cache.json");
+const ASSET_CACHE_VERSION = 1;
 const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
+// Gallery tiles are capped at 520 CSS pixels. 1040px keeps thumbnails sharp
+// on standard high-density screens without downloading the original image.
+const THUMBNAIL_MAX_EDGE = 1040;
+const THUMBNAIL_WEBP_QUALITY = 82;
+// This variant loads only after a click, so it preserves source dimensions for
+// the lightbox while remaining significantly smaller than the source PNGs.
+const FULL_WEBP_QUALITY = 86;
+const ASSET_VARIANTS = {
+  thumbnail: {
+    directory: ASSETS_DIR,
+    options: {
+      maxEdge: THUMBNAIL_MAX_EDGE,
+      quality: THUMBNAIL_WEBP_QUALITY,
+    },
+  },
+  full: {
+    directory: FULL_ASSETS_DIR,
+    options: {
+      quality: FULL_WEBP_QUALITY,
+    },
+  },
+};
 
 const INTRO_COPY =
   "Some of my best shots from trips or everyday life. Everything was shot on iPhone 15 Pro and (sometimes) edited on Lightroom.";
 
 const PAGE_DESCRIPTION =
   "Some of Pierre-Louis' best shots from trips and everyday life.";
+
+const CURRENT_YEAR = new Date().getFullYear();
 
 const isDirectRun = () => {
   return process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
@@ -253,6 +281,92 @@ const toArray = (value) => {
   return [String(value)];
 };
 
+const normalizeOptionalNumber = (value, fieldName, directoryName) => {
+  if (value == null || value === "") {
+    return null;
+  }
+
+  const number = Number(value);
+
+  if (!Number.isFinite(number)) {
+    throw new Error(`${directoryName}/collection.yml has invalid "${fieldName}"`);
+  }
+
+  return number;
+};
+
+const normalizeYearNumber = (value, fieldName, directoryName) => {
+  const year = Number(value);
+
+  if (!Number.isInteger(year) || year < 1000 || year > 9999) {
+    throw new Error(`${directoryName}/collection.yml has invalid "${fieldName}"`);
+  }
+
+  return year;
+};
+
+const normalizeYearRangeBoundary = (value, fieldName, directoryName) => {
+  if (String(value).toLowerCase() === "current") {
+    return {
+      year: CURRENT_YEAR,
+      label: "current",
+    };
+  }
+
+  const year = normalizeYearNumber(value, fieldName, directoryName);
+
+  return {
+    year,
+    label: String(year),
+  };
+};
+
+const normalizeCollectionYears = (data, directoryName) => {
+  if (data.years != null && data.years !== "") {
+    const years = Array.isArray(data.years)
+      ? {
+          start: data.years[0],
+          end: data.years[1],
+        }
+      : data.years;
+
+    if (!years || typeof years !== "object" || years.start == null || years.end == null) {
+      throw new Error(`${directoryName}/collection.yml "years" must include "start" and "end"`);
+    }
+
+    const start = normalizeYearRangeBoundary(years.start, "years.start", directoryName);
+    const end = normalizeYearRangeBoundary(years.end, "years.end", directoryName);
+    const startYear = start.year;
+    const endYear = end.year;
+
+    if (startYear > endYear) {
+      throw new Error(`${directoryName}/collection.yml "years.start" must be before "years.end"`);
+    }
+
+    return {
+      startYear,
+      endYear,
+      year: endYear,
+      dateLabel: startYear === endYear && end.label !== "current"
+        ? String(endYear)
+        : `${start.label}-${end.label}`,
+    };
+  }
+
+  if (data.year == null || data.year === "") {
+    throw new Error(`${directoryName}/collection.yml is missing "year" or "years"`);
+  }
+
+  const year = normalizeYearNumber(data.year, "year", directoryName);
+
+  return {
+    startYear: year,
+    endYear: year,
+    year,
+    dateLabel: String(year),
+  };
+};
+
 const normalizeCollection = async (directoryName) => {
   const sourceDir = path.join(CONTENT_DIR, directoryName);
   const { data } = await readCollectionFile(sourceDir);
@@ -261,11 +375,13 @@ const normalizeCollection = async (directoryName) => {
     ? data.photos
     : discoveredFiles.map((file) => ({ file }));
 
-  for (const field of ["year", "place", "country", "description"]) {
+  for (const field of ["place", "country", "description"]) {
     if (!data[field]) {
       throw new Error(`${directoryName}/collection.yml is missing "${field}"`);
     }
   }
+
+  const years = normalizeCollectionYears(data, directoryName);
 
   if (photos.length === 0) {
     throw new Error(`${directoryName} has no photos`);
@@ -273,7 +389,8 @@ const normalizeCollection = async (directoryName) => {
 
   return {
     id: data.id || directoryName,
-    year: Number(data.year),
+    ...years,
+    order: normalizeOptionalNumber(data.order, "order", directoryName),
     place: String(data.place),
     country: String(data.country),
     description: String(data.description),
@@ -287,11 +404,15 @@ const normalizeCollection = async (directoryName) => {
       return {
         id: photo.id || `${directoryName}-${String(index + 1).padStart(2, "0")}`,
         file: String(photo.file),
+        sourceIndex: index,
+        favorite: Boolean(photo.favorite),
         alt: photo.alt || `${data.place}, ${data.country} photo ${index + 1}`,
         themes: toArray(photo.themes),
         colors: toArray(photo.colors),
         vibe: toArray(photo.vibe),
       };
+    }).sort((a, b) => {
+      return Number(b.favorite) - Number(a.favorite) || a.sourceIndex - b.sourceIndex;
     }),
   };
 };
@@ -309,23 +430,303 @@ const loadCollections = async () => {
     collections.push(await normalizeCollection(directoryName));
   }
 
-  return collections;
+  return collections.sort((a, b) => {
+    return (
+      (a.order ?? Number.POSITIVE_INFINITY) -
+        (b.order ?? Number.POSITIVE_INFINITY) ||
+      b.endYear - a.endYear ||
+      b.startYear - a.startYear ||
+      a.country.localeCompare(b.country) ||
+      a.place.localeCompare(b.place) ||
+      a.id.localeCompare(b.id)
+    );
+  });
 };
 
-const copyCollectionAssets = async (collections) => {
-  for (const collection of collections) {
-    const outputDir = path.join(ASSETS_DIR, collection.id);
-    await rm(outputDir, { force: true, recursive: true });
-    await mkdir(outputDir, { recursive: true });
+const runImageMagick = (args) =>
+  new Promise((resolve, reject) => {
+    const process = spawn("magick", args, { stdio: "inherit" });
 
-    for (const photo of collection.photos) {
-      await copyFile(
-        path.join(collection.sourceDir, photo.file),
-        path.join(outputDir, photo.file),
-      );
-      photo.src = `../assets/photos/${collection.id}/${photo.file}`;
+    process.on("error", reject);
+    process.on("close", (code) => {
+      if (code === 0) {
+        resolve();
+        return;
+      }
+
+      reject(new Error(`ImageMagick failed with exit code ${code}`));
+    });
+  });
+
+const getWebpFilename = (filename) => `${path.parse(filename).name}.webp`;
+
+const toPosixPath = (value) => value.split(path.sep).join("/");
+
+const getRelativePath = (filePath) => toPosixPath(path.relative(ROOT, filePath));
+
+const readAssetCache = async () => {
+  try {
+    const cache = JSON.parse(await readFile(ASSET_CACHE_FILE, "utf8"));
+
+    if (cache.version !== ASSET_CACHE_VERSION || !cache.entries) {
+      return {};
+    }
+
+    return cache.entries;
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      return {};
+    }
+
+    throw error;
+  }
+};
+
+const writeAssetCache = async (entries) => {
+  await mkdir(ASSETS_DIR, { recursive: true });
+  await writeFile(
+    ASSET_CACHE_FILE,
+    `${JSON.stringify(
+      {
+        version: ASSET_CACHE_VERSION,
+        entries,
+      },
+      null,
+      2,
+    )}\n`,
+  );
+};
+
+const getSourceSignature = async (source) => {
+  const sourceStat = await stat(source);
+
+  return {
+    path: getRelativePath(source),
+    size: sourceStat.size,
+    mtimeMs: sourceStat.mtimeMs,
+  };
+};
+
+const getAssetCacheKey = (variantName, collectionId, filename) =>
+  `${variantName}:${collectionId}/${filename}`;
+
+const signaturesMatch = (entry, sourceSignature, variantOptions) => {
+  return (
+    entry?.source?.path === sourceSignature.path &&
+    entry.source.size === sourceSignature.size &&
+    entry.source.mtimeMs === sourceSignature.mtimeMs &&
+    JSON.stringify(entry.options) === JSON.stringify(variantOptions)
+  );
+};
+
+const isGeneratedAssetCurrent = async (target, entry, sourceSignature, variantOptions) => {
+  try {
+    const targetStat = await stat(target);
+
+    if (targetStat.size === 0) {
+      return false;
+    }
+
+    if (entry) {
+      return signaturesMatch(entry, sourceSignature, variantOptions);
+    }
+
+    return targetStat.mtimeMs >= sourceSignature.mtimeMs;
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      return false;
+    }
+
+    throw error;
+  }
+};
+
+const generateThumbnail = (source, target) =>
+  runImageMagick([
+    source,
+    "-auto-orient",
+    "-resize",
+    `${THUMBNAIL_MAX_EDGE}x${THUMBNAIL_MAX_EDGE}>`,
+    "-strip",
+    "-quality",
+    String(THUMBNAIL_WEBP_QUALITY),
+    target,
+  ]);
+
+const generateFullImage = (source, target) =>
+  runImageMagick([
+    source,
+    "-auto-orient",
+    "-strip",
+    "-quality",
+    String(FULL_WEBP_QUALITY),
+    target,
+  ]);
+
+const generateAssetVariant = async ({
+  cache,
+  collection,
+  filename,
+  source,
+  sourceSignature,
+  stats,
+  target,
+  variantName,
+}) => {
+  const variant = ASSET_VARIANTS[variantName];
+  const cacheKey = getAssetCacheKey(variantName, collection.id, filename);
+  const cacheEntry = cache[cacheKey];
+
+  if (await isGeneratedAssetCurrent(target, cacheEntry, sourceSignature, variant.options)) {
+    cache[cacheKey] = {
+      source: sourceSignature,
+      output: getRelativePath(target),
+      options: variant.options,
+    };
+    stats.skipped += 1;
+    return;
+  }
+
+  if (variantName === "thumbnail") {
+    await generateThumbnail(source, target);
+  } else {
+    await generateFullImage(source, target);
+  }
+
+  cache[cacheKey] = {
+    source: sourceSignature,
+    output: getRelativePath(target),
+    options: variant.options,
+  };
+  stats.generated += 1;
+};
+
+const removeStaleGeneratedAssets = async (rootDir, expectedFilesByCollection) => {
+  let removed = 0;
+
+  try {
+    await mkdir(rootDir, { recursive: true });
+    const collectionEntries = await readdir(rootDir, { withFileTypes: true });
+
+    for (const collectionEntry of collectionEntries) {
+      if (collectionEntry.name === path.basename(ASSET_CACHE_FILE)) {
+        continue;
+      }
+
+      const collectionPath = path.join(rootDir, collectionEntry.name);
+
+      if (!collectionEntry.isDirectory()) {
+        await rm(collectionPath, { force: true, recursive: true });
+        removed += 1;
+        continue;
+      }
+
+      const expectedFiles = expectedFilesByCollection.get(collectionEntry.name);
+
+      if (!expectedFiles) {
+        await rm(collectionPath, { force: true, recursive: true });
+        removed += 1;
+        continue;
+      }
+
+      const fileEntries = await readdir(collectionPath, { withFileTypes: true });
+
+      for (const fileEntry of fileEntries) {
+        if (expectedFiles.has(fileEntry.name)) {
+          continue;
+        }
+
+        await rm(path.join(collectionPath, fileEntry.name), { force: true, recursive: true });
+        removed += 1;
+      }
+    }
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      throw error;
     }
   }
+
+  return removed;
+};
+
+const pruneAssetCache = (cache, expectedCacheKeys) => {
+  let removed = 0;
+
+  for (const cacheKey of Object.keys(cache)) {
+    if (!expectedCacheKeys.has(cacheKey)) {
+      delete cache[cacheKey];
+      removed += 1;
+    }
+  }
+
+  return removed;
+};
+
+const generateCollectionAssets = async (collections) => {
+  const cache = await readAssetCache();
+  const expectedFilesByCollection = new Map();
+  const expectedCacheKeys = new Set();
+  const stats = {
+    generated: 0,
+    skipped: 0,
+    removed: 0,
+  };
+
+  for (const collection of collections) {
+    const thumbnailDir = path.join(ASSETS_DIR, collection.id);
+    const fullDir = path.join(FULL_ASSETS_DIR, collection.id);
+    await Promise.all([
+      mkdir(thumbnailDir, { recursive: true }),
+      mkdir(fullDir, { recursive: true }),
+    ]);
+    expectedFilesByCollection.set(collection.id, new Set());
+
+    for (const photo of collection.photos) {
+      const source = path.join(collection.sourceDir, photo.file);
+      const filename = getWebpFilename(photo.file);
+      const thumbnail = path.join(thumbnailDir, filename);
+      const full = path.join(fullDir, filename);
+      const sourceSignature = await getSourceSignature(source);
+
+      expectedFilesByCollection.get(collection.id).add(filename);
+
+      for (const variantName of Object.keys(ASSET_VARIANTS)) {
+        expectedCacheKeys.add(getAssetCacheKey(variantName, collection.id, filename));
+      }
+
+      await generateAssetVariant({
+        cache,
+        collection,
+        filename,
+        source,
+        sourceSignature,
+        stats,
+        target: thumbnail,
+        variantName: "thumbnail",
+      });
+      await generateAssetVariant({
+        cache,
+        collection,
+        filename,
+        source,
+        sourceSignature,
+        stats,
+        target: full,
+        variantName: "full",
+      });
+
+      photo.src = `../assets/photos/${collection.id}/${filename}`;
+      photo.fullSrc = `../assets/photos-full/${collection.id}/${filename}`;
+    }
+  }
+
+  stats.removed += await removeStaleGeneratedAssets(ASSETS_DIR, expectedFilesByCollection);
+  stats.removed += await removeStaleGeneratedAssets(FULL_ASSETS_DIR, expectedFilesByCollection);
+  stats.removed += pruneAssetCache(cache, expectedCacheKeys);
+
+  await writeAssetCache(cache);
+
+  return stats;
 };
 
 const getCountries = (collections) => {
@@ -355,6 +756,24 @@ const getOgImage = (collections) => {
 
 const renderDataAttribute = (items) => escapeHtml(items.join(", "));
 
+const getYearSearchTerms = (collection) => {
+  if (collection.startYear === collection.endYear) {
+    return [collection.year];
+  }
+
+  if (collection.endYear - collection.startYear > 50) {
+    return [collection.startYear, collection.endYear, collection.dateLabel];
+  }
+
+  return [
+    collection.dateLabel,
+    ...Array.from(
+      { length: collection.endYear - collection.startYear + 1 },
+      (_, index) => collection.startYear + index,
+    ),
+  ];
+};
+
 const normalizeSearchValue = (items) => {
   return items
     .flat()
@@ -365,7 +784,7 @@ const normalizeSearchValue = (items) => {
 
 const renderPhotoFigure = (photo, index, collection) => {
   const searchText = normalizeSearchValue([
-    collection.year,
+    getYearSearchTerms(collection),
     collection.place,
     collection.country,
     collection.description,
@@ -376,27 +795,42 @@ const renderPhotoFigure = (photo, index, collection) => {
     photo.vibe,
   ]);
 
+  const favoriteMarker = photo.favorite
+    ? `
+                <span class="photo-card__favorite" aria-label="Favorite photo">★</span>`
+    : "";
+
   return `              <figure
                 class="photo-card"
                 data-country="${escapeHtml(collection.country)}"
+                data-favorite="${photo.favorite ? "true" : "false"}"
                 data-themes="${renderDataAttribute(photo.themes)}"
                 data-colors="${renderDataAttribute(photo.colors)}"
                 data-vibe="${renderDataAttribute(photo.vibe)}"
                 data-search="${escapeHtml(searchText)}"
               >
-                <img
-                  class="photo-card__image"
-                  src="${escapeHtml(photo.src)}"
-                  alt="${escapeHtml(photo.alt)}"
-                  loading="lazy"
-                />
+                <button
+                  class="photo-card__trigger"
+                  type="button"
+                  data-photo-zoom
+                  data-full-src="${escapeHtml(photo.fullSrc)}"
+                  data-alt="${escapeHtml(photo.alt)}"
+                  aria-label="Open ${escapeHtml(photo.alt)} in full size"
+                >
+                  <img
+                    class="photo-card__image"
+                    src="${escapeHtml(photo.src)}"
+                    alt=""
+                    loading="lazy"
+                  />
+                </button>${favoriteMarker}
                 <figcaption class="photo-card__index">${String(index + 1).padStart(2, "0")}</figcaption>
               </figure>`;
 };
 
 const renderCollection = (collection) => {
   const collectionSearchText = normalizeSearchValue([
-    collection.year,
+    getYearSearchTerms(collection),
     collection.place,
     collection.country,
     collection.description,
@@ -415,7 +849,7 @@ const renderCollection = (collection) => {
           >
             <header class="photo-album__header">
               <div class="photo-album__identity">
-                <span class="photo-album__year">${escapeHtml(collection.year)}</span>
+                <span class="photo-album__year">${escapeHtml(collection.dateLabel)}</span>
                 <h2 class="photo-album__title">${escapeHtml(collection.place)}, ${escapeHtml(collection.country)}</h2>
               </div>
               <p class="photo-album__description">
@@ -674,7 +1108,7 @@ ${renderCountryFilters(collections)}
                 <input
                   class="photo-filter__input"
                   type="search"
-                  placeholder="Search (color, vibe, place)..."
+                  placeholder="Search (place, country, year)..."
                   autocomplete="off"
                   spellcheck="false"
                   data-photo-search
@@ -695,6 +1129,14 @@ ${renderCountryFilters(collections)}
 ${albums}
         </section>
       </main>
+
+      <div class="photo-lightbox" data-photo-lightbox hidden>
+        <div class="photo-lightbox__dialog" role="dialog" aria-modal="true" aria-label="Expanded photo">
+          <button class="photo-lightbox__backdrop" type="button" data-photo-lightbox-close aria-label="Close expanded photo"></button>
+          <img class="photo-lightbox__image" data-photo-lightbox-image alt="" />
+          <button class="photo-lightbox__close" type="button" data-photo-lightbox-close aria-label="Close expanded photo">Close</button>
+        </div>
+      </div>
 
       <footer class="site-footer">
         <div class="site-footer__content">
@@ -747,17 +1189,25 @@ const renderData = (collections) => {
   return collections.map((collection) => ({
     id: collection.id,
     year: collection.year,
+    startYear: collection.startYear,
+    endYear: collection.endYear,
+    dateLabel: collection.dateLabel,
+    order: collection.order,
     place: collection.place,
     country: collection.country,
     description: collection.description,
     tags: collection.tags,
-      photos: collection.photos.map((photo, index) => ({
-        id: photo.id,
-        index: index + 1,
-        collectionId: collection.id,
-        place: collection.place,
-        country: collection.country,
-        src: photo.src,
+    photos: collection.photos.map((photo, index) => ({
+      id: photo.id,
+      index: index + 1,
+      collectionId: collection.id,
+      place: collection.place,
+      country: collection.country,
+      file: photo.file,
+      sourceIndex: photo.sourceIndex + 1,
+      favorite: photo.favorite,
+      src: photo.src,
+      fullSrc: photo.fullSrc,
       alt: photo.alt,
       themes: photo.themes,
       colors: photo.colors,
@@ -769,9 +1219,12 @@ const renderData = (collections) => {
 export const buildPhotos = async () => {
   const collections = await loadCollections();
 
-  await mkdir(ASSETS_DIR, { recursive: true });
+  await Promise.all([
+    mkdir(ASSETS_DIR, { recursive: true }),
+    mkdir(FULL_ASSETS_DIR, { recursive: true }),
+  ]);
   await mkdir(PHOTOS_DIR, { recursive: true });
-  await copyCollectionAssets(collections);
+  const assets = await generateCollectionAssets(collections);
   await writeFile(path.join(PHOTOS_DIR, "index.html"), renderPage(collections));
   await writeFile(
     path.join(PHOTOS_DIR, "photos-data.json"),
@@ -781,13 +1234,19 @@ export const buildPhotos = async () => {
   return {
     collections: collections.length,
     photos: getPhotoCount(collections),
+    assets,
   };
 };
 
 if (isDirectRun()) {
   try {
     const result = await buildPhotos();
-    console.log(`Built photos page: ${result.collections} collection(s), ${result.photos} photo(s).`);
+    console.log(
+      `Built photos page: ${result.collections} collection(s), ${result.photos} photo(s), ` +
+        `${result.assets.generated} generated asset(s), ` +
+        `${result.assets.skipped} cached asset(s), ` +
+        `${result.assets.removed} stale item(s) removed.`,
+    );
   } catch (error) {
     console.error(error.message);
     process.exitCode = 1;

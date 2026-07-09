@@ -1,0 +1,26 @@
+years:
+  start: 2024
+  end: 2026
+order: 11
+place: "Saint-Étienne"
+country: "France"
+description: "Photos from Saint-Étienne, France."
+photos:
+  - file: 01.png
+    alt: "Saint-Étienne, France photo 01"
+  - file: 02.png
+    alt: "Saint-Étienne, France photo 02"
+  - file: 03.png
+    alt: "Saint-Étienne, France photo 03"
+  - file: 04.png
+    alt: "Saint-Étienne, France photo 04"
+    favorite: true
+  - file: 05.png
+    alt: "Saint-Étienne, France photo 05"
+  - file: 06.png
+    alt: "Saint-Étienne, France photo 06"
+  - file: 07.png
+    alt: "Saint-Étienne, France photo 07"
+    favorite: true
+  - file: 08.png
+    alt: "Saint-Étienne, France photo 08"

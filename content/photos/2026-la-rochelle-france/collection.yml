@@ -1,0 +1,20 @@
+year: 2026
+order: 7
+place: "La Rochelle"
+country: "France"
+description: "Photos from La Rochelle, France."
+photos:
+  - file: 01.png
+    alt: "La Rochelle, France photo 01"
+  - file: 02.png
+    alt: "La Rochelle, France photo 02"
+  - file: 03.png
+    alt: "La Rochelle, France photo 03"
+  - file: 04.png
+    alt: "La Rochelle, France photo 04"
+    favorite: true
+  - file: 05.png
+    alt: "La Rochelle, France photo 05"
+    favorite: true
+  - file: 06.png
+    alt: "La Rochelle, France photo 06"

@@ -1,0 +1,15 @@
+year: 2025
+order: 1
+place: "Copenhagen"
+country: "Denmark"
+description: "Photos from Copenhagen, Denmark."
+photos:
+  - file: 01.png
+    alt: "Copenhagen, Denmark photo 01"
+    favorite: true
+  - file: 02.png
+    alt: "Copenhagen, Denmark photo 02"
+  - file: 05.png
+    alt: "Copenhagen, Denmark photo 05"
+  - file: 06.png
+    alt: "Copenhagen, Denmark photo 06"

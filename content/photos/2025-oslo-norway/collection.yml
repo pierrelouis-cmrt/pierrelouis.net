@@ -1,0 +1,23 @@
+year: 2025
+order: 4
+place: "Oslo"
+country: "Norway"
+description: "Photos from Oslo, Norway."
+photos:
+  - file: 01.png
+    alt: "Oslo, Norway photo 01"
+    favorite: true
+  - file: 02.png
+    alt: "Oslo, Norway photo 02"
+  - file: 03.png
+    alt: "Oslo, Norway photo 03"
+  - file: 04.png
+    alt: "Oslo, Norway photo 04"
+  - file: 05.png
+    alt: "Oslo, Norway photo 05"
+  - file: 06.png
+    alt: "Oslo, Norway photo 06"
+  - file: 07.png
+    alt: "Oslo, Norway photo 07"
+  - file: 08.png
+    alt: "Oslo, Norway photo 08"

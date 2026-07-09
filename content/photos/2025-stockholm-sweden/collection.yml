@@ -1,26 +1,31 @@
 year: 2025
-place: Stockholm
-country: Sweden
-description: 3 days trip, mainly landscape and architecture photography
-tags: [architecture, city, landscape, travel]
+order: 3
+place: "Stockholm"
+country: "Sweden"
+description: "Photos from Stockholm, Sweden."
 photos:
-  - file: 01.jpg
-    alt: Turning Torso tower in Stockholm
-    themes: [architecture, high-rise, city]
-    colors: [sky blue, white, cool grey]
-    vibe: [bright, clean, minimal]
-  - file: 02.jpg
-    alt: Glass and white building facade in Stockholm
-    themes: [architecture, facade, geometry]
-    colors: [pale blue, white, grey]
-    vibe: [calm, airy, precise]
-  - file: 03.jpg
-    alt: Colorful residential facades in Stockholm
-    themes: [architecture, street, residential]
-    colors: [ochre, brick red, olive green]
-    vibe: [warm, historic, dense]
-  - file: 04.jpg
-    alt: Modern waterfront building in Stockholm
-    themes: [architecture, waterfront, public space]
-    colors: [blue, white, concrete grey]
-    vibe: [open, modern, quiet]
+  - file: 01.png
+    alt: "Stockholm, Sweden photo 01"
+    favorite: true
+  - file: 02.png
+    alt: "Stockholm, Sweden photo 02"
+  - file: 03.png
+    alt: "Stockholm, Sweden photo 03"
+  - file: 04.png
+    alt: "Stockholm, Sweden photo 04"
+  - file: 05.png
+    alt: "Stockholm, Sweden photo 05"
+  - file: 06.png
+    alt: "Stockholm, Sweden photo 06"
+  - file: 07.png
+    alt: "Stockholm, Sweden photo 07"
+    favorite: true
+  - file: 08.png
+    alt: "Stockholm, Sweden photo 08"
+  - file: 09.png
+    alt: "Stockholm, Sweden photo 09"
+  - file: 10.png
+    alt: "Stockholm, Sweden photo 10"
+    favorite: true
+  - file: 11.png
+    alt: "Stockholm, Sweden photo 11"

@@ -1,0 +1,21 @@
+years:
+  start: 2023
+  end: 2026
+order: 8
+place: "Paris"
+country: "France"
+description: "Photos from Paris, France."
+photos:
+  - file: 01.png
+    alt: "Paris, France photo 01"
+    favorite: true
+  - file: 02.png
+    alt: "Paris, France photo 02"
+  - file: 03.png
+    alt: "Paris, France photo 03"
+  - file: 04.png
+    alt: "Paris, France photo 04"
+  - file: 05.png
+    alt: "Paris, France photo 05"
+  - file: 06.png
+    alt: "Paris, France photo 06"

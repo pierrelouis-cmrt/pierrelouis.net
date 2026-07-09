@@ -1,0 +1,22 @@
+year: 2025
+order: 5
+place: "Aurland"
+country: "Norway"
+description: "Photos from Aurland, Norway."
+photos:
+  - file: 01.png
+    alt: "Aurland, Norway photo 01"
+    favorite: true
+  - file: 02.png
+    alt: "Aurland, Norway photo 02"
+  - file: 03.png
+    alt: "Aurland, Norway photo 03"
+  - file: 04.png
+    alt: "Aurland, Norway photo 04"
+    favorite: true
+  - file: 05.png
+    alt: "Aurland, Norway photo 05"
+  - file: 06.png
+    alt: "Aurland, Norway photo 06"
+  - file: 07.png
+    alt: "Aurland, Norway photo 07"

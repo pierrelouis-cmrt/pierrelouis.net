@@ -40,7 +40,12 @@ const queue = (filename, reload) => {
     try {
       if (shouldRebuild(filename)) {
         const result = await buildPhotos();
-        console.log(`Rebuilt photos: ${result.collections} collection(s), ${result.photos} photo(s).`);
+        console.log(
+          `Rebuilt photos: ${result.collections} collection(s), ${result.photos} photo(s), ` +
+            `${result.assets.generated} generated asset(s), ` +
+            `${result.assets.skipped} cached asset(s), ` +
+            `${result.assets.removed} stale item(s) removed.`,
+        );
       }
 
       reload();
@@ -55,7 +60,12 @@ const queue = (filename, reload) => {
 const initial = await buildPhotos();
 const site = await startSiteServer({ dev: true, port: PORT });
 
-console.log(`Built photos: ${initial.collections} collection(s), ${initial.photos} photo(s).`);
+console.log(
+  `Built photos: ${initial.collections} collection(s), ${initial.photos} photo(s), ` +
+    `${initial.assets.generated} generated asset(s), ` +
+    `${initial.assets.skipped} cached asset(s), ` +
+    `${initial.assets.removed} stale item(s) removed.`,
+);
 console.log(`Dev server: http://${site.host}:${site.port}/photos/`);
 
 watch(ROOT, { recursive: true }, (eventType, rawFilename) => {

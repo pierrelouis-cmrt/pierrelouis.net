@@ -1,0 +1,16 @@
+year: 2025
+order: 2
+place: "Malmö"
+country: "Sweden"
+description: "Photos from Malmö, Sweden."
+photos:
+  - file: 01.png
+    alt: "Malmö, Sweden photo 01"
+  - file: 02.png
+    alt: "Malmö, Sweden photo 02"
+    favorite: true
+  - file: 03.png
+    alt: "Malmö, Sweden photo 03"
+    favorite: true
+  - file: 04.png
+    alt: "Malmö, Sweden photo 04"

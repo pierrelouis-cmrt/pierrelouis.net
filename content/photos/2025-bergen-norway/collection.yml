@@ -1,0 +1,19 @@
+year: 2025
+order: 6
+place: "Bergen"
+country: "Norway"
+description: "Photos from Bergen, Norway."
+photos:
+  - file: 01.png
+    alt: "Bergen, Norway photo 01"
+  - file: 02.png
+    alt: "Bergen, Norway photo 02"
+  - file: 03.png
+    alt: "Bergen, Norway photo 03"
+  - file: 04.png
+    alt: "Bergen, Norway photo 04"
+  - file: 05.png
+    alt: "Bergen, Norway photo 05"
+    favorite: true
+  - file: 06.png
+    alt: "Bergen, Norway photo 06"

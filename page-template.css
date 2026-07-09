@@ -16,7 +16,10 @@ main {
   display: grid;
   grid-template-columns: var(--page-grid-columns);
   column-gap: var(--grid-gap);
-  padding: 360px var(--page-gutter) 44px;
+  min-height: var(--page-intro-min-height);
+  align-content: start;
+  padding: var(--page-intro-padding-top) var(--page-gutter)
+    var(--page-intro-padding-bottom);
 }
 
 .availability {
@@ -96,10 +99,6 @@ main {
 }
 
 @media (max-width: 1100px) {
-  .info {
-    padding-top: 280px;
-  }
-
   .availability {
     grid-column: 1;
   }
@@ -118,10 +117,6 @@ main {
   .info,
   .general-section {
     gap: var(--space-4xl);
-  }
-
-  .info {
-    padding: 128px var(--page-gutter) 42px;
   }
 
   .availability,
