@@ -57,6 +57,7 @@
   --space-5xl: 40px;
   --space-6xl: 50px;
   --space-7xl: 80px;
+  --space-8xl: 120px;
 
   /* Motion */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -81,7 +82,7 @@
   --mobile-menu-button-overhang-y: -14px;
   --mobile-menu-icon-width: 13px;
   --mobile-menu-icon-height: 2px;
-  --mobile-menu-icon-open-offset: 4px;
+  --mobile-menu-icon-open-offset: 3.5px;
 }
 
 *,
@@ -144,7 +145,12 @@ img {
   top: 0;
   right: 0;
   left: 0;
+  display: grid;
+  grid-template-columns: var(--page-grid-columns);
+  column-gap: var(--grid-gap);
+  align-items: center;
   height: var(--header-height);
+  padding-inline: var(--page-gutter);
   color: var(--color-ink);
   filter: invert(1);
   mix-blend-mode: exclusion;
@@ -153,13 +159,13 @@ img {
 .brand-mark,
 .primary-nav,
 .more-menu {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  grid-row: 1;
+  min-width: 0;
 }
 
 .brand-mark {
-  left: var(--page-gutter);
+  grid-column: 1;
+  justify-self: start;
   display: inline-flex;
   align-items: flex-start;
   white-space: nowrap;
@@ -180,9 +186,11 @@ img {
 }
 
 .primary-nav {
-  right: calc((100vw - (var(--desktop-nav-width) * 2)) / 2);
+  grid-column: 3;
+  justify-self: start;
   display: flex;
   width: var(--desktop-nav-width);
+  max-width: 100%;
   justify-content: space-between;
 }
 
@@ -211,7 +219,9 @@ img {
 }
 
 .more-menu {
-  right: var(--space-xl);
+  position: relative;
+  grid-column: 4;
+  justify-self: end;
   width: fit-content;
   text-align: right;
 }
@@ -257,7 +267,7 @@ img {
 
 .site-footer {
   position: relative;
-  margin: var(--space-7xl) var(--footer-edge-margin) 0;
+  margin: var(--space-8xl) var(--footer-edge-margin) 0;
   padding: var(--space-3xl) calc(var(--page-gutter) - var(--footer-edge-margin))
     0;
   border-top: 1px solid var(--color-subtle);
@@ -382,8 +392,17 @@ img {
     overflow: visible;
   }
 
+  .primary-nav,
+  .more-menu {
+    grid-column: 2;
+  }
+
   .primary-nav {
-    right: 250px;
+    justify-self: start;
+  }
+
+  .more-menu {
+    justify-self: end;
   }
 
   .site-footer__content {
@@ -411,6 +430,7 @@ img {
     display: grid;
     grid-template-columns: auto max-content;
     justify-content: space-between;
+    align-items: start;
     gap: clamp(16px, 5vw, 24px);
     height: auto;
     min-height: var(--mobile-header-height);
