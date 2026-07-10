@@ -5,3 +5,5 @@
 - udpate capecl imprint too with my full name and adress, check if it is compliant too.
 - recrop in a better way the aurland pic used in the imprint page (so full mountain top is visible with a bit of sky uptop)
 - implement the lastfm api for the music live display in the now page
+- 404 page
+- loading animation on home page (see inspo folder in zen)
