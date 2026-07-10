@@ -7,3 +7,4 @@
 - implement the lastfm api for the music live display in the now page
 - 404 page
 - loading animation on home page (see inspo folder in zen)
+- create gradient for website hero image when sharing links and for socials banners
