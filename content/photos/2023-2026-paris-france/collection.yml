@@ -7,15 +7,33 @@ country: "France"
 description: "Photos from Paris, France."
 photos:
   - file: 01.png
-    alt: "Paris, France photo 01"
+    alt: "Curving golden corridor lined with black columns"
     favorite: true
+    themes: [architecture, interior, repetition, light]
+    colors: [gold, amber, black, beige]
+    vibe: [cinematic, warm, immersive, dramatic]
   - file: 02.png
-    alt: "Paris, France photo 02"
+    alt: "Yellow colonnade reflected in a glossy floor"
+    themes: [architecture, interior, reflection, geometry]
+    colors: [yellow, gold, black, grey]
+    vibe: [graphic, luminous, futuristic, quiet]
   - file: 03.png
-    alt: "Paris, France photo 03"
+    alt: "Ornate stone bell tower against a pale blue sky"
+    themes: [architecture, heritage, church, facade]
+    colors: [cream, stone, blue, white]
+    vibe: [classical, airy, dignified, calm]
   - file: 04.png
-    alt: "Paris, France photo 04"
+    alt: "Dark glass office tower rising into a blue sky"
+    themes: [architecture, skyscraper, city, modernism]
+    colors: [navy, charcoal, blue, silver]
+    vibe: [minimal, urban, imposing, crisp]
   - file: 05.png
-    alt: "Paris, France photo 05"
+    alt: "Ornate white corner building beneath textured clouds"
+    themes: [architecture, facade, heritage, city]
+    colors: [white, cream, blue, grey]
+    vibe: [elegant, bright, romantic, lively]
   - file: 06.png
-    alt: "Paris, France photo 06"
+    alt: "Tall modern tower viewed from its base"
+    themes: [architecture, skyscraper, perspective, city]
+    colors: [charcoal, blue, silver, green]
+    vibe: [monumental, urban, sharp, upward-looking]

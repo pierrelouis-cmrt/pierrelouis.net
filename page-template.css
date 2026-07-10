@@ -1,17 +1,3 @@
-.site-shell {
-  display: flex;
-  min-height: 100svh;
-  flex-direction: column;
-}
-
-main {
-  flex: 1;
-}
-
-.site-footer {
-  margin: auto var(--footer-edge-margin) 0;
-}
-
 .info {
   display: grid;
   grid-template-columns: var(--page-grid-columns);

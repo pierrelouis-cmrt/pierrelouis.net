@@ -5,27 +5,60 @@ country: "Sweden"
 description: "Photos from Stockholm, Sweden."
 photos:
   - file: 01.png
-    alt: "Stockholm, Sweden photo 01"
+    alt: "Close view of a curved modern glass facade reflecting soft clouds in Stockholm"
     favorite: true
+    themes: [modern architecture, glass facade, urban detail, geometry]
+    colors: [pale blue, white, silver grey, soft beige]
+    vibe: [minimal, airy, calm, contemporary]
   - file: 02.png
-    alt: "Stockholm, Sweden photo 02"
+    alt: "Colourful waterfront buildings and a church tower across rippling water in Stockholm"
+    themes: [waterfront, cityscape, historic architecture, harbour]
+    colors: [blue, ochre yellow, brick red, cream, dark green]
+    vibe: [scenic, summery, lively, postcard-like]
   - file: 03.png
-    alt: "Stockholm, Sweden photo 03"
+    alt: "Layered Stockholm skyline with historic buildings, a church spire and trees above the waterfront"
+    themes: [cityscape, historic architecture, waterfront, skyline]
+    colors: [slate blue, warm yellow, beige, dark green, grey]
+    vibe: [atmospheric, urban, calm, layered]
   - file: 04.png
-    alt: "Stockholm, Sweden photo 04"
+    alt: "Ornate dark church tower framed by leafy trees and a pale blue Stockholm sky"
+    themes: [church architecture, historic landmark, skyline, urban nature]
+    colors: [pale blue, dark green, charcoal, muted brown]
+    vibe: [stately, peaceful, classic, sunlit]
   - file: 05.png
-    alt: "Stockholm, Sweden photo 05"
+    alt: "Grand historic church facade and copper-topped tower seen from below in Stockholm"
+    themes: [church architecture, historic landmark, ornate facade, city detail]
+    colors: [bright blue, warm beige, dark brown, copper green]
+    vibe: [grand, crisp, sunlit, monumental]
   - file: 06.png
-    alt: "Stockholm, Sweden photo 06"
+    alt: "Stone facade of the Nordic Museum with its gilded name and a green roof spire"
+    themes: [museum architecture, historic landmark, facade detail, cultural heritage]
+    colors: [warm brown, gold, dark grey, copper green, pale blue]
+    vibe: [scholarly, grand, historic, dignified]
   - file: 07.png
-    alt: "Stockholm, Sweden photo 07"
+    alt: "Vintage silver American car parked beneath trees on a Stockholm street"
     favorite: true
+    themes: [classic car, street scene, automotive detail, urban life]
+    colors: [silver, black, dusty blue, warm beige, leaf green]
+    vibe: [nostalgic, cinematic, relaxed, summery]
   - file: 08.png
-    alt: "Stockholm, Sweden photo 08"
+    alt: "Dark chocolate-covered pastry with a pale filling displayed on a white plate"
+    themes: [food, pastry, dessert, café detail]
+    colors: [dark brown, cream, white, warm grey]
+    vibe: [indulgent, tactile, intimate, playful]
   - file: 09.png
-    alt: "Stockholm, Sweden photo 09"
+    alt: "Red-brick historic corner building with a rounded turret beneath drifting clouds in Stockholm"
+    themes: [historic architecture, brick facade, street corner, city detail]
+    colors: [brick red, charcoal, pale blue, white, muted beige]
+    vibe: [romantic, classic, textured, bright]
   - file: 10.png
-    alt: "Stockholm, Sweden photo 10"
+    alt: "Narrow Stockholm street lined with ochre, red and green historic facades"
     favorite: true
+    themes: [old town, historic architecture, street scene, colourful facades]
+    colors: [ochre yellow, brick red, olive green, charcoal, cream]
+    vibe: [warm, intimate, European, timeless]
   - file: 11.png
-    alt: "Stockholm, Sweden photo 11"
+    alt: "Sunlit cream stone facade with tall windows, carved details and black balconies in Stockholm"
+    themes: [historic architecture, ornate facade, street detail, urban elegance]
+    colors: [cream, white, black, pale blue, warm grey]
+    vibe: [elegant, refined, bright, stately]

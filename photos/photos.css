@@ -279,8 +279,16 @@
 
 .photo-lightbox {
   --photo-lightbox-padding: clamp(20px, 4vw, 64px);
+  --photo-lightbox-controls-gap: var(--space-md);
+  --photo-lightbox-controls-height: 44px;
+  --photo-lightbox-controls-space: calc(
+    var(--photo-lightbox-controls-height) + var(--photo-lightbox-controls-gap)
+  );
   --photo-lightbox-max-width: calc(100vw - (var(--photo-lightbox-padding) * 2));
-  --photo-lightbox-max-height: calc(100vh - (var(--photo-lightbox-padding) * 2));
+  --photo-lightbox-max-height: calc(
+    100vh - (var(--photo-lightbox-padding) * 2) -
+      var(--photo-lightbox-controls-space)
+  );
   position: fixed;
   z-index: 100;
   inset: 0;
@@ -315,13 +323,16 @@
 .photo-lightbox__figure {
   position: fixed;
   z-index: 1;
-  top: 50%;
-  left: 50%;
+  inset: var(--photo-lightbox-padding) var(--photo-lightbox-padding)
+    calc(
+      var(--photo-lightbox-padding) + var(--photo-lightbox-controls-space)
+    );
   display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  place-items: center;
   justify-items: center;
-  gap: var(--space-sm);
   margin: 0;
-  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 .photo-lightbox__image {
@@ -329,11 +340,18 @@
   width: auto;
   height: auto;
   max-width: min(100%, var(--photo-lightbox-max-width));
-  max-height: min(100%, calc(var(--photo-lightbox-max-height) - 28px));
-  max-height: min(100%, calc(100dvh - (var(--photo-lightbox-padding) * 2) - 28px));
+  max-height: min(100%, var(--photo-lightbox-max-height));
+  max-height: min(
+    100%,
+    calc(
+      100dvh - (var(--photo-lightbox-padding) * 2) -
+        var(--photo-lightbox-controls-space)
+    )
+  );
   object-fit: contain;
   object-position: center;
   box-shadow: 0 12px 56px rgb(0 0 0 / 0.28);
+  pointer-events: auto;
 }
 
 .photo-lightbox__counter {
@@ -360,13 +378,19 @@
 }
 
 .photo-lightbox__nav {
+  position: fixed;
+  bottom: var(--photo-lightbox-padding);
+  left: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 2ch;
+  height: var(--photo-lightbox-controls-height);
   color: #ffffff;
   font-size: var(--font-size-base);
   line-height: var(--line-height-solid);
+  transform: translateX(-50%);
+  pointer-events: auto;
 }
 
 .photo-lightbox__nav[hidden] {
@@ -388,6 +412,10 @@
   transform: translateY(-0.1875em);
   cursor: pointer;
   transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.photo-lightbox__nav-button[hidden] {
+  display: none;
 }
 
 .photo-lightbox__nav-button:hover {

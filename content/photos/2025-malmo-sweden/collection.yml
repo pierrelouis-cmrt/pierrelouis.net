@@ -5,12 +5,24 @@ country: "Sweden"
 description: "Photos from Malmö, Sweden."
 photos:
   - file: 01.png
-    alt: "Malmö, Sweden photo 01"
+    alt: "Sunlit row of ornate white and brick apartment facades beneath a clear blue Malmö sky"
+    themes: [historic architecture, residential street, facade details, cityscape]
+    colors: [white, brick brown, black, bright blue]
+    vibe: [crisp, sunny, elegant, everyday]
   - file: 02.png
-    alt: "Malmö, Sweden photo 02"
+    alt: "Close-up of a bright green snake coiled among dark tropical foliage"
     favorite: true
+    themes: [wildlife, reptile, tropical plants, animal portrait]
+    colors: [vivid green, teal, black, deep olive]
+    vibe: [intense, mysterious, tactile, tropical]
   - file: 03.png
-    alt: "Malmö, Sweden photo 03"
+    alt: "The Turning Torso tower seen close-up from below, with its white structural ribs against the sky"
     favorite: true
+    themes: [modern architecture, skyscraper, Turning Torso, geometric detail]
+    colors: [white, pale blue, slate grey, soft teal]
+    vibe: [futuristic, airy, graphic, monumental]
   - file: 04.png
-    alt: "Malmö, Sweden photo 04"
+    alt: "The Turning Torso tower rising dramatically from a low angle into a clear blue Malmö sky"
+    themes: [modern architecture, skyscraper, Turning Torso, upward perspective]
+    colors: [bright blue, white, silver grey, teal]
+    vibe: [bold, futuristic, soaring, clean]

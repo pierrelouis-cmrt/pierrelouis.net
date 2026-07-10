@@ -138,8 +138,15 @@ img {
 
 .site-shell {
   position: relative;
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
   overflow: hidden;
   background: var(--color-bg);
+}
+
+main {
+  flex: 1;
 }
 
 .site-header {
@@ -393,7 +400,7 @@ img {
   }
 
   .site-shell {
-    min-height: auto;
+    min-height: 100svh;
     overflow: visible;
   }
 

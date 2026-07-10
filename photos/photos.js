@@ -35,6 +35,46 @@
       .replace(/[\u0300-\u036f]/g, "");
   };
 
+  const countryToUrlValue = (country) => {
+    return normalize(country).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  };
+
+  const getCountryFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
+    const rawQuery = window.location.search.slice(1);
+    let bareCountry = "";
+
+    if (!rawQuery.includes("=") && !rawQuery.includes("&")) {
+      try {
+        bareCountry = decodeURIComponent(rawQuery.replace(/\+/g, " "));
+      } catch {
+        bareCountry = rawQuery;
+      }
+    }
+
+    const requestedCountry =
+      params.get("country") || bareCountry;
+    const requestedValue = countryToUrlValue(requestedCountry);
+    const matchingButton = buttons.find((button) => {
+      return countryToUrlValue(button.dataset.countryFilter) === requestedValue;
+    });
+
+    return matchingButton?.dataset.countryFilter || "all";
+  };
+
+  const updateCountryUrl = () => {
+    const url = new URL(window.location.href);
+    const countryValue = countryToUrlValue(state.country);
+
+    url.search = state.country === "all" ? "" : `?${countryValue}`;
+
+    if (url.href === window.location.href) {
+      return;
+    }
+
+    window.history.pushState({ country: state.country }, "", url);
+  };
+
   const getAlbumCards = (album) => {
     return [...album.querySelectorAll(".photo-card")];
   };
@@ -102,9 +142,15 @@
   for (const button of buttons) {
     button.addEventListener("click", () => {
       state.country = button.dataset.countryFilter || "all";
+      updateCountryUrl();
       applyFilters();
     });
   }
+
+  window.addEventListener("popstate", () => {
+    state.country = getCountryFromUrl();
+    applyFilters();
+  });
 
   searchInput?.addEventListener("input", () => {
     state.query = searchInput.value;
@@ -133,7 +179,13 @@
   const getLightboxItems = (trigger) => {
     const album = trigger.closest(".photo-album");
 
-    return album ? [...album.querySelectorAll("[data-photo-zoom]")] : [trigger];
+    return album
+      ? [
+          ...album.querySelectorAll(
+            ".photo-card:not([hidden]) [data-photo-zoom]",
+          ),
+        ]
+      : [trigger];
   };
 
   const cycleLightbox = (direction) => {
@@ -219,5 +271,6 @@
     }
   });
 
+  state.country = getCountryFromUrl();
   applyFilters();
 })();

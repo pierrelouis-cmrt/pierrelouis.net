@@ -7,38 +7,89 @@ country: "France"
 description: "Photos from Tours, France."
 photos:
   - file: 01.png
-    alt: "Tours, France photo 01"
+    alt: "Antique scale and deer bust on a warmly lit shelf"
+    themes: [still life, antiques, interior, collection]
+    colors: [brown, amber, black, brass]
+    vibe: [scholarly, intimate, vintage, warm]
   - file: 02.png
-    alt: "Tours, France photo 02"
+    alt: "Red squirrel moving through snow-dusted evergreen branches"
+    themes: [wildlife, squirrel, winter, evergreen]
+    colors: [green, white, brown, rust]
+    vibe: [wintry, lively, quiet, natural]
   - file: 03.png
-    alt: "Tours, France photo 03"
+    alt: "Red squirrel perched among frosted pine needles"
+    themes: [wildlife, squirrel, winter, close-up]
+    colors: [green, white, brown, grey]
+    vibe: [delicate, wintry, observant, soft]
   - file: 04.png
-    alt: "Tours, France photo 04"
+    alt: "White cat sitting on a leaf-strewn paved path"
+    themes: [cat, street, everyday life, autumn]
+    colors: [white, grey, brown, green]
+    vibe: [quiet, candid, gentle, watchful]
   - file: 05.png
-    alt: "Tours, France photo 05"
+    alt: "White cat walking along a moss-edged pavement"
     favorite: true
+    themes: [cat, street, everyday life, path]
+    colors: [white, grey, green, brown]
+    vibe: [calm, candid, tender, unhurried]
   - file: 06.png
-    alt: "Tours, France photo 06"
+    alt: "Vintage globe and old books in a warm wooden alcove"
+    themes: [still life, books, globe, interior]
+    colors: [brown, ochre, tan, brass]
+    vibe: [scholarly, nostalgic, cozy, warm]
   - file: 07.png
-    alt: "Tours, France photo 07"
+    alt: "Close-up of richly textured antique book spines"
+    themes: [books, antiques, texture, still life]
+    colors: [brown, gold, ochre, black]
+    vibe: [historic, tactile, intimate, moody]
   - file: 08.png
-    alt: "Tours, France photo 08"
+    alt: "Two carved religious figures in a warmly lit niche"
+    themes: [sculpture, religion, interior, antiques]
+    colors: [brown, amber, black, tan]
+    vibe: [solemn, intimate, historic, warm]
   - file: 09.png
-    alt: "Tours, France photo 09"
+    alt: "Sunlit upper facade with a small weather vane"
+    themes: [architecture, facade, roofline, city]
+    colors: [cream, terracotta, slate, blue]
+    vibe: [bright, quiet, architectural, crisp]
   - file: 10.png
-    alt: "Tours, France photo 10"
+    alt: "Extreme close-up of a brown eye"
+    themes: [portrait, eye, macro, human detail]
+    colors: [brown, amber, beige, black]
+    vibe: [intense, intimate, surreal, detailed]
   - file: 11.png
-    alt: "Tours, France photo 11"
+    alt: "Red squirrel framed by snowy evergreen branches"
+    themes: [wildlife, squirrel, winter, evergreen]
+    colors: [green, white, rust, brown]
+    vibe: [wintry, hidden, lively, natural]
   - file: 12.png
-    alt: "Tours, France photo 12"
+    alt: "Red squirrel climbing through snow-covered branches"
     favorite: true
+    themes: [wildlife, squirrel, winter, evergreen]
+    colors: [green, white, brown, rust]
+    vibe: [playful, wintry, lively, quiet]
   - file: 13.png
-    alt: "Tours, France photo 13"
+    alt: "Black cat resting on a weathered stone path"
+    themes: [cat, garden, everyday life, portrait]
+    colors: [black, green, grey, brown]
+    vibe: [relaxed, quiet, candid, soft]
   - file: 14.png
-    alt: "Tours, France photo 14"
+    alt: "Black cat lying among green garden leaves"
+    themes: [cat, garden, foliage, portrait]
+    colors: [black, green, brown, grey]
+    vibe: [calm, intimate, natural, gentle]
   - file: 15.png
-    alt: "Tours, France photo 15"
+    alt: "Village church and river valley beneath a cloudy sky"
+    themes: [landscape, village, church, river]
+    colors: [green, blue, grey, cream]
+    vibe: [peaceful, pastoral, overcast, expansive]
   - file: 16.png
-    alt: "Tours, France photo 16"
+    alt: "Paintbrushes in a glass jar beside a small mirror"
+    themes: [still life, art studio, tools, interior]
+    colors: [brown, amber, gold, black]
+    vibe: [creative, intimate, warm, nostalgic]
   - file: 17.png
-    alt: "Tours, France photo 17"
+    alt: "Black leather chair against a vivid red wall"
+    themes: [interior, furniture, color, still life]
+    colors: [red, black, teal, white]
+    vibe: [bold, graphic, moody, theatrical]

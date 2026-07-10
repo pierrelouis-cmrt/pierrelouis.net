@@ -5,11 +5,23 @@ country: "Denmark"
 description: "Photos from Copenhagen, Denmark."
 photos:
   - file: 01.png
-    alt: "Copenhagen, Denmark photo 01"
+    alt: "Ornate church spire glowing in the late-afternoon light against a pale blue Copenhagen sky"
     favorite: true
+    themes: [church architecture, historic landmark, city detail, skyline]
+    colors: [pale blue, warm gold, dark brown, charcoal]
+    vibe: [serene, luminous, stately, late-summer]
   - file: 02.png
-    alt: "Copenhagen, Denmark photo 02"
+    alt: "Cream-coloured historic corner building with Brønnum café seating at street level in Copenhagen"
+    themes: [historic architecture, café culture, street scene, ornate facade]
+    colors: [cream, beige, black, muted green, warm orange]
+    vibe: [elegant, leisurely, urban, welcoming]
   - file: 05.png
-    alt: "Copenhagen, Denmark photo 05"
+    alt: "White sculpture rising from a lily pond among dense tropical plants in a Copenhagen greenhouse"
+    themes: [botanical garden, sculpture, tropical plants, indoor nature]
+    colors: [deep green, white, dark grey, soft brown]
+    vibe: [lush, contemplative, secluded, dreamlike]
   - file: 06.png
-    alt: "Copenhagen, Denmark photo 06"
+    alt: "Palm-filled glass atrium with white columns and a yellow-brick interior courtyard in Copenhagen"
+    themes: [indoor garden, historic architecture, greenhouse, architectural detail]
+    colors: [leaf green, warm yellow, white, muted brown]
+    vibe: [tranquil, verdant, grand, sheltered]

@@ -5,26 +5,62 @@ country: "France"
 description: "Photos from Firminy, France."
 photos:
   - file: 01.png
-    alt: "Firminy, France photo 01"
+    alt: "Curving concrete viaduct crossing green grassland under a clear sky"
+    themes: [viaduct, infrastructure, concrete, landscape, engineering]
+    colors: [concrete grey, grass green, sky blue, beige, shadow black]
+    vibe: [open, monumental, calm, utilitarian]
   - file: 02.png
-    alt: "Firminy, France photo 02"
+    alt: "Steel cable crane tower silhouetted against a pale blue sky"
+    themes: [industrial heritage, crane, steel structure, engineering, geometry]
+    colors: [steel blue, charcoal, black, pale blue, grey]
+    vibe: [industrial, stark, graphic, nostalgic]
   - file: 03.png
-    alt: "Firminy, France photo 03"
+    alt: "Sculptural concrete church tower beneath bright clouds and blue sky"
+    themes: [Le Corbusier architecture, church, concrete, brutalism, landmark]
+    colors: [concrete grey, sky blue, cloud white, moss green, yellow]
+    vibe: [monumental, sculptural, serene, modernist]
   - file: 04.png
-    alt: "Firminy, France photo 04"
+    alt: "Dim concrete church interior with wooden benches and colored light bands"
+    themes: [church interior, Le Corbusier architecture, concrete, stained glass, benches]
+    colors: [charcoal, warm brown, emerald green, ruby red, amber]
+    vibe: [meditative, solemn, atmospheric, intimate]
   - file: 05.png
-    alt: "Firminy, France photo 05"
+    alt: "Curving wooden benches beneath low concrete ceilings and colored windows"
+    themes: [church interior, seating, concrete, colored light, modernism]
+    colors: [warm brown, concrete grey, emerald green, coral red, gold]
+    vibe: [quiet, contemplative, tactile, cinematic]
   - file: 06.png
-    alt: "Firminy, France photo 06"
+    alt: "Concrete church interior with curved wooden seating and a glowing green window band"
+    themes: [church interior, curved seating, concrete, colored light, Le Corbusier architecture]
+    colors: [concrete grey, walnut brown, teal green, black, soft yellow]
+    vibe: [serene, intimate, architectural, contemplative]
   - file: 07.png
-    alt: "Firminy, France photo 07"
+    alt: "Concrete church rising above a manicured lawn beneath a deep blue sky"
+    themes: [Le Corbusier architecture, church, concrete, landscape, modernism]
+    colors: [deep blue, concrete grey, grass green, cloud white, charcoal]
+    vibe: [monumental, clear, peaceful, sculptural]
   - file: 08.png
-    alt: "Firminy, France photo 08"
+    alt: "Long concrete residential facade with colorful window panels and deep shadows"
+    themes: [Le Corbusier architecture, housing, brutalism, facade, color accents]
+    colors: [concrete grey, black, red, yellow, blue]
+    vibe: [graphic, monumental, urban, modernist]
   - file: 09.png
-    alt: "Firminy, France photo 09"
+    alt: "Concrete church seen beyond stepped outdoor seating under scattered clouds"
+    themes: [Le Corbusier architecture, church, amphitheater, concrete, landscape]
+    colors: [concrete grey, sky blue, cloud white, grass green, charcoal]
+    vibe: [spacious, monumental, sunlit, contemplative]
   - file: 10.png
-    alt: "Firminy, France photo 10"
+    alt: "Modern concrete facade punctuated by tall red, yellow, green, and blue panels"
+    themes: [Le Corbusier architecture, housing, facade, color, modernism]
+    colors: [concrete grey, red, yellow, green, blue]
+    vibe: [graphic, playful, geometric, modernist]
   - file: 11.png
-    alt: "Firminy, France photo 11"
+    alt: "Close view of a tall residential facade with repeating balconies and colored panels"
+    themes: [Le Corbusier architecture, housing, balconies, facade, repetition]
+    colors: [concrete grey, white, black, red, blue]
+    vibe: [rhythmic, graphic, urban, monumental]
   - file: 12.png
-    alt: "Firminy, France photo 12"
+    alt: "Tall modernist apartment block with colorful balcony panels beside a green lawn"
+    themes: [Le Corbusier architecture, housing, apartment block, landscape, modernism]
+    colors: [concrete grey, white, red, blue, grass green]
+    vibe: [sunny, orderly, monumental, optimistic]

@@ -5,16 +5,34 @@ country: "France"
 description: "Photos from La Rochelle, France."
 photos:
   - file: 01.png
-    alt: "La Rochelle, France photo 01"
+    alt: "Young tree growing behind a pointed seaside fence"
+    themes: [coast, nature, fence, horizon]
+    colors: [sky blue, green, black, white]
+    vibe: [fresh, quiet, graphic, breezy]
   - file: 02.png
-    alt: "La Rochelle, France photo 02"
+    alt: "Silhouette facing the ocean at a red-orange sunset"
+    themes: [coast, sunset, silhouette, sea]
+    colors: [orange, coral, blue, black]
+    vibe: [contemplative, cinematic, warm, still]
   - file: 03.png
-    alt: "La Rochelle, France photo 03"
+    alt: "Modern waterfront building glowing after dusk"
+    themes: [architecture, waterfront, night, windows]
+    colors: [navy, black, warm white, blue]
+    vibe: [moody, modern, quiet, luminous]
   - file: 04.png
-    alt: "La Rochelle, France photo 04"
+    alt: "Wooden fishing hut on stilts above calm water"
     favorite: true
+    themes: [coast, fishing hut, water, shoreline]
+    colors: [grey, blue, brown, green]
+    vibe: [peaceful, rustic, muted, contemplative]
   - file: 05.png
-    alt: "La Rochelle, France photo 05"
+    alt: "Fishing hut on stilts reflected in the sea at dusk"
     favorite: true
+    themes: [coast, fishing hut, reflection, sunset]
+    colors: [blue, mauve, brown, peach]
+    vibe: [serene, atmospheric, coastal, delicate]
   - file: 06.png
-    alt: "La Rochelle, France photo 06"
+    alt: "Low sun shimmering on the sea behind a dark fence"
+    themes: [coast, sunset, sea, silhouette]
+    colors: [gold, black, grey, amber]
+    vibe: [dramatic, quiet, nostalgic, glowing]

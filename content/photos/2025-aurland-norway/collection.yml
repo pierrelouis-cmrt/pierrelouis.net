@@ -5,18 +5,39 @@ country: "Norway"
 description: "Photos from Aurland, Norway."
 photos:
   - file: 01.png
-    alt: "Aurland, Norway photo 01"
+    alt: "Mountain lake and green valley beneath scattered clouds near Aurland"
     favorite: true
+    themes: [mountain landscape, lake, rural valley]
+    colors: [blue, green, white, slate grey]
+    vibe: [open, peaceful, fresh]
   - file: 02.png
-    alt: "Aurland, Norway photo 02"
+    alt: "White waterfall rushing down dark rock in the Aurland mountains"
+    themes: [waterfall, mountain landscape, rocky terrain]
+    colors: [white, charcoal, green, blue]
+    vibe: [powerful, wild, refreshing]
   - file: 03.png
-    alt: "Aurland, Norway photo 03"
+    alt: "Sheer fjord cliffs framed by a shadowed rock wall"
+    themes: [fjord landscape, dramatic cliffs, boat journey]
+    colors: [blue, charcoal, stone grey, green]
+    vibe: [dramatic, remote, cinematic]
   - file: 04.png
-    alt: "Aurland, Norway photo 04"
+    alt: "Steep green mountains reflected in calm Aurlandsfjord water"
     favorite: true
+    themes: [fjord landscape, mountain reflection, calm water]
+    colors: [deep blue, forest green, stone grey, white]
+    vibe: [serene, grand, clear]
   - file: 05.png
-    alt: "Aurland, Norway photo 05"
+    alt: "Narrow fjord between towering cliffs seen from the water"
+    themes: [fjord landscape, dramatic cliffs, boat journey]
+    colors: [blue, green, grey, white]
+    vibe: [quiet, vast, adventurous]
   - file: 06.png
-    alt: "Aurland, Norway photo 06"
+    alt: "Sunlit rock face and green vegetation above the fjord"
+    themes: [mountain landscape, cliff detail, fjord shore]
+    colors: [stone grey, forest green, blue, white]
+    vibe: [rugged, sunlit, expansive]
   - file: 07.png
-    alt: "Aurland, Norway photo 07"
+    alt: "Green mountains rising sharply above a calm Norwegian fjord"
+    themes: [fjord landscape, mountain peaks, boat journey]
+    colors: [forest green, blue, stone grey, white]
+    vibe: [majestic, tranquil, immersive]

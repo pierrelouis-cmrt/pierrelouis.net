@@ -5,15 +5,33 @@ country: "Norway"
 description: "Photos from Bergen, Norway."
 photos:
   - file: 01.png
-    alt: "Bergen, Norway photo 01"
+    alt: "Colorful waterfront houses below a green Bergen hillside"
+    themes: [harbour city, hillside homes, waterfront architecture]
+    colors: [green, red, white, blue]
+    vibe: [lively, picturesque, summery]
   - file: 02.png
-    alt: "Bergen, Norway photo 02"
+    alt: "Bryggen's colorful wooden waterfront buildings across Bergen harbour"
+    themes: [Bryggen, historic waterfront, harbour city]
+    colors: [red, ochre yellow, white, blue]
+    vibe: [iconic, lively, scenic]
   - file: 03.png
-    alt: "Bergen, Norway photo 03"
+    alt: "Red wooden upper room above a whitewashed historic Bergen building"
+    themes: [historic architecture, wooden house, courtyard detail]
+    colors: [rust red, white, brown, green]
+    vibe: [rustic, quiet, storybook]
   - file: 04.png
-    alt: "Bergen, Norway photo 04"
+    alt: "Arched wooden door and bench against a whitewashed historic wall"
+    themes: [historic architecture, doorway detail, courtyard]
+    colors: [white, warm brown, green, grey]
+    vibe: [quiet, weathered, welcoming]
   - file: 05.png
-    alt: "Bergen, Norway photo 05"
+    alt: "Sun-dappled path through dense mossy woodland in Bergen"
     favorite: true
+    themes: [forest, woodland path, mossy ground]
+    colors: [forest green, brown, shadow, gold]
+    vibe: [peaceful, earthy, secluded]
   - file: 06.png
-    alt: "Bergen, Norway photo 06"
+    alt: "KODE museum facade and rounded tower beneath dramatic clouds"
+    themes: [museum architecture, city landmark, modernist facade]
+    colors: [white, blue grey, green, black]
+    vibe: [moody, refined, urban]

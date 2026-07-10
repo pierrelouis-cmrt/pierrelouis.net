@@ -7,20 +7,44 @@ country: "France"
 description: "Photos from Saint-Étienne, France."
 photos:
   - file: 01.png
-    alt: "Saint-Étienne, France photo 01"
+    alt: "Orange-lit clouds above a dark wooded ridge at sunset"
+    themes: [landscape, sky, sunset, weather]
+    colors: [navy, slate blue, charcoal, amber, cream]
+    vibe: [dramatic, contemplative, moody, tranquil]
   - file: 02.png
-    alt: "Saint-Étienne, France photo 02"
+    alt: "White cat standing beside a metal railing on a mossy path"
+    themes: [cat, animal portrait, everyday life, street detail]
+    colors: [white, moss green, asphalt grey, rust brown, pink]
+    vibe: [gentle, candid, quiet, curious]
   - file: 03.png
-    alt: "Saint-Étienne, France photo 03"
+    alt: "Stone dam curving through a green mountain valley beneath cloud-filled skies"
+    themes: [dam, mountains, engineering, landscape, water]
+    colors: [forest green, stone grey, sky blue, white, grass green]
+    vibe: [expansive, fresh, dramatic, serene]
   - file: 04.png
-    alt: "Saint-Étienne, France photo 04"
+    alt: "Rocky green hillside rising above a calm reservoir with a leafy tree in front"
+    themes: [reservoir, hillside, landscape, water, summer]
+    colors: [lake blue, olive green, limestone grey, leaf green, clear blue]
+    vibe: [sunny, peaceful, natural, spacious]
     favorite: true
   - file: 05.png
-    alt: "Saint-Étienne, France photo 05"
+    alt: "Orange brick building with a pale green roof against a clear blue sky"
+    themes: [architecture, facade, geometric composition, city]
+    colors: [sky blue, terracotta, pale green, white, charcoal]
+    vibe: [clean, bright, graphic, playful]
   - file: 06.png
-    alt: "Saint-Étienne, France photo 06"
+    alt: "Pink and orange sunset behind a dark city ridge and layered clouds"
+    themes: [sunset, sky, city silhouette, weather]
+    colors: [coral, peach, plum, navy, black]
+    vibe: [atmospheric, warm, moody, reflective]
   - file: 07.png
-    alt: "Saint-Étienne, France photo 07"
+    alt: "Modern glass-fronted building rising into a soft pink evening sky"
+    themes: [modern architecture, facade, windows, city, dusk]
+    colors: [dusty pink, mauve, charcoal, steel blue, black]
+    vibe: [calm, cinematic, minimal, urban]
     favorite: true
   - file: 08.png
-    alt: "Saint-Étienne, France photo 08"
+    alt: "Angular dark red modern buildings framed against a pale evening sky"
+    themes: [modern architecture, red facade, geometric composition, city]
+    colors: [burgundy, crimson, pale blue, black, grey]
+    vibe: [bold, graphic, contemporary, quiet]

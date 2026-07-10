@@ -5,19 +5,43 @@ country: "Norway"
 description: "Photos from Oslo, Norway."
 photos:
   - file: 01.png
-    alt: "Oslo, Norway photo 01"
+    alt: "Red-brick apartment balconies against a blue Oslo sky"
     favorite: true
+    themes: [contemporary architecture, apartment building, urban geometry]
+    colors: [terracotta, blue, black, white]
+    vibe: [sunny, graphic, modern]
   - file: 02.png
-    alt: "Oslo, Norway photo 02"
+    alt: "Angular red-brick apartments viewed from below in Oslo"
+    themes: [contemporary architecture, apartment building, upward perspective]
+    colors: [terracotta, deep blue, charcoal, black]
+    vibe: [bold, geometric, sunlit]
   - file: 03.png
-    alt: "Oslo, Norway photo 03"
+    alt: "White ribbed modern building facade under a clear blue sky"
+    themes: [modern architecture, facade detail, geometric pattern]
+    colors: [white, pale grey, blue, shadow]
+    vibe: [minimal, crisp, monumental]
   - file: 04.png
-    alt: "Oslo, Norway photo 04"
+    alt: "Reflective glass buildings and a lone person on a broad Oslo plaza"
+    themes: [modern architecture, public plaza, glass facade]
+    colors: [blue, silver, grey, black]
+    vibe: [quiet, spacious, contemporary]
   - file: 05.png
-    alt: "Oslo, Norway photo 05"
+    alt: "Warmly lit hotel bed with green cushions at night"
+    themes: [hotel interior, bedroom, travel stay]
+    colors: [olive green, cream, brown, black]
+    vibe: [cozy, intimate, restful]
   - file: 06.png
-    alt: "Oslo, Norway photo 06"
+    alt: "Ornate pale building with dark mansard roofs in Oslo"
+    themes: [historic architecture, city facade, roofline]
+    colors: [white, slate blue, blue, grey]
+    vibe: [elegant, sunny, European]
   - file: 07.png
-    alt: "Oslo, Norway photo 07"
+    alt: "Cobblestone passage through a stone arch looking toward Oslofjord"
+    themes: [historic fortification, stone arch, fjord view]
+    colors: [charcoal, grey, blue, green]
+    vibe: [quiet, textured, exploratory]
   - file: 08.png
-    alt: "Oslo, Norway photo 08"
+    alt: "Yellow historic facade with arched windows and wrought-iron balconies"
+    themes: [historic architecture, ornate facade, city detail]
+    colors: [ochre yellow, cream, blue, black]
+    vibe: [ornate, bright, stately]
