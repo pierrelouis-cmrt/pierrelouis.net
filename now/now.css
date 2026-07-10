@@ -1,0 +1,343 @@
+.now-intro {
+  display: grid;
+  grid-template-columns: var(--page-grid-columns);
+  column-gap: var(--grid-gap);
+  min-height: 504px;
+  align-content: start;
+  padding: var(--page-intro-padding-top) var(--page-gutter)
+    var(--page-intro-padding-bottom);
+}
+
+.now-intro__title {
+  grid-column: 1 / span 2;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-md);
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: var(--tracking-label);
+}
+
+.now-intro__dot {
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.now-intro__copy {
+  grid-column: 3 / span 2;
+  width: min(526px, 100%);
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-copy);
+  letter-spacing: -0.3px;
+}
+
+.now-content {
+  display: grid;
+  grid-template-columns: var(--page-grid-columns);
+  column-gap: var(--grid-gap);
+  min-height: 468px;
+  padding-inline: var(--page-gutter);
+  color: var(--color-ink);
+  font-size: var(--font-size-base);
+  line-height: 22px;
+  letter-spacing: -0.3px;
+}
+
+.now-sidebar {
+  grid-column: 1 / span 2;
+  grid-row: 1;
+  display: flex;
+  min-width: 0;
+  min-height: 468px;
+  padding-bottom: var(--space-lg);
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.recent-image {
+  display: block;
+  width: 274px;
+  max-width: 100%;
+}
+
+.recent-image__media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 274 / 180;
+  overflow: hidden;
+  background: var(--color-media-bg);
+}
+
+.recent-image__asset {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center 49%;
+  transition: transform var(--duration-image) var(--ease-out);
+}
+
+.recent-image__caption {
+  display: block;
+  padding-top: var(--space-md);
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.recent-image__title,
+.recent-image__meta {
+  display: block;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-solid);
+}
+
+.recent-image__title {
+  color: var(--color-caption);
+  font-size: var(--font-size-base);
+}
+
+.recent-image__meta {
+  padding-top: 6px;
+  color: var(--color-subtle);
+  font-size: var(--font-size-small);
+}
+
+.recent-image:hover .recent-image__asset {
+  transform: scale(1.025);
+}
+
+.recent-image:hover .recent-image__caption {
+  opacity: var(--hover-opacity);
+}
+
+.listening {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.listening__title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  font: inherit;
+  line-height: 20px;
+}
+
+.listening__status {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6abe26;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 8%);
+}
+
+.listening__track {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: var(--space-lg);
+}
+
+.listening__artwork {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--color-media-bg);
+  animation: listening-record-spin 18s linear infinite;
+}
+
+@keyframes listening-record-spin {
+  from {
+    transform: rotate(-9deg);
+  }
+
+  to {
+    transform: rotate(351deg);
+  }
+}
+
+.listening__artwork img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.listening__spindle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 8%);
+  transform: translate(-50%, -50%);
+}
+
+.listening__details {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  line-height: 20px;
+}
+
+.listening__song,
+.listening__artist {
+  display: block;
+}
+
+.listening__song {
+  overflow: hidden;
+  color: var(--color-ink);
+  font-size: var(--font-size-base);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.listening__artist {
+  color: var(--color-subtle);
+  font-size: var(--font-size-small);
+}
+
+.now-list {
+  grid-column: 3 / span 2;
+  grid-row: 1;
+  display: flex;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  list-style: none;
+}
+
+.now-list li {
+  min-height: 52px;
+  padding-block: 14px 15px;
+  border-top: 1px solid rgb(127 127 127 / 70%);
+}
+
+.now-page .site-footer {
+  --watermark-gap: 62px;
+
+  margin-top: 96px;
+}
+
+@media (max-width: 1100px) {
+  .now-intro {
+    min-height: var(--page-intro-min-height);
+  }
+
+  .now-intro__title,
+  .now-sidebar {
+    grid-column: 1;
+  }
+
+  .now-intro__copy,
+  .now-list {
+    grid-column: 2;
+  }
+
+  .now-content,
+  .now-sidebar {
+    min-height: 0;
+  }
+
+  .now-sidebar {
+    height: 100%;
+    justify-content: space-between;
+    gap: var(--space-8xl);
+  }
+
+  .now-list li {
+    min-height: 0;
+  }
+
+  .now-page .site-footer {
+    --watermark-gap: clamp(20px, 3vw, 36px);
+
+    margin-top: var(--space-8xl);
+  }
+}
+
+@media (max-width: 760px) {
+  .now-intro {
+    row-gap: var(--space-4xl);
+  }
+
+  .now-intro__title,
+  .now-intro__copy,
+  .now-sidebar,
+  .now-list {
+    grid-column: 1;
+  }
+
+  .now-intro__title {
+    font-size: 20px;
+    line-height: var(--line-height-compact);
+  }
+
+  .now-intro__copy {
+    max-width: 520px;
+  }
+
+  .now-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .now-sidebar {
+    height: auto;
+    margin-top: var(--space-7xl);
+    padding-bottom: 0;
+    justify-content: flex-start;
+    gap: var(--space-7xl);
+  }
+
+  .recent-image {
+    width: min(100%, 360px);
+  }
+
+  .now-list {
+    margin-top: 0;
+  }
+
+  .now-list li {
+    padding-block: var(--space-md);
+  }
+
+  .now-list li:last-child {
+    border-bottom: 1px solid rgb(127 127 127 / 70%);
+  }
+
+  .now-page .site-footer {
+    margin-top: var(--space-7xl);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recent-image__asset {
+    transition: none;
+  }
+
+  .listening__artwork {
+    animation: none;
+    transform: rotate(-9deg);
+  }
+}

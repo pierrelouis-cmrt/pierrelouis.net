@@ -842,6 +842,7 @@ const renderCollection = (collection) => {
 
   return `          <article
             class="photo-album"
+            data-album-id="${escapeHtml(collection.id)}"
             data-place="${escapeHtml(collection.place)}"
             data-country="${escapeHtml(collection.country)}"
             data-tags="${renderDataAttribute(collection.tags)}"

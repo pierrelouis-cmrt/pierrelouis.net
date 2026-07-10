@@ -23,6 +23,7 @@
   let lightboxIndex = -1;
 
   const state = {
+    albumId: "",
     country: "all",
     query: "",
   };
@@ -112,36 +113,55 @@
     });
   };
 
-  const countryToUrlValue = (country) => {
-    return normalize(country).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const toUrlValue = (value) => {
+    return normalize(value).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   };
 
-  const getCountryFromUrl = () => {
+  const getFilterFromUrl = () => {
     const params = new URLSearchParams(window.location.search);
     const rawQuery = window.location.search.slice(1);
-    let bareCountry = "";
+    let bareFilter = "";
 
     if (!rawQuery.includes("=") && !rawQuery.includes("&")) {
       try {
-        bareCountry = decodeURIComponent(rawQuery.replace(/\+/g, " "));
+        bareFilter = decodeURIComponent(rawQuery.replace(/\+/g, " "));
       } catch {
-        bareCountry = rawQuery;
+        bareFilter = rawQuery;
       }
     }
 
-    const requestedCountry =
-      params.get("country") || bareCountry;
-    const requestedValue = countryToUrlValue(requestedCountry);
+    const requestedFilter =
+      params.get("album") ||
+      params.get("place") ||
+      params.get("country") ||
+      bareFilter;
+    const requestedValue = toUrlValue(requestedFilter);
     const matchingButton = buttons.find((button) => {
-      return countryToUrlValue(button.dataset.countryFilter) === requestedValue;
+      return toUrlValue(button.dataset.countryFilter) === requestedValue;
     });
 
-    return matchingButton?.dataset.countryFilter || "all";
+    if (matchingButton) {
+      return {
+        albumId: "",
+        country: matchingButton.dataset.countryFilter || "all",
+      };
+    }
+
+    const matchingAlbum = albums.find((album) => {
+      return [album.dataset.albumId, album.dataset.place].some((value) => {
+        return toUrlValue(value) === requestedValue;
+      });
+    });
+
+    return {
+      albumId: matchingAlbum?.dataset.albumId || "",
+      country: "all",
+    };
   };
 
   const updateCountryUrl = () => {
     const url = new URL(window.location.href);
-    const countryValue = countryToUrlValue(state.country);
+    const countryValue = toUrlValue(state.country);
 
     url.search = state.country === "all" ? "" : `?${countryValue}`;
 
@@ -182,17 +202,19 @@
 
     for (const album of albums) {
       const albumCountry = album.dataset.country || "";
+      const matchesAlbum =
+        !state.albumId || album.dataset.albumId === state.albumId;
       const matchesCountry =
         state.country === "all" || albumCountry === state.country;
       let visibleInAlbum = 0;
 
       for (const card of getAlbumCards(album)) {
         const matchesSearch = matchesQuery(getCardSearchText(card, album), state.query);
-        const isVisible = matchesCountry && matchesSearch;
+        const isVisible = matchesAlbum && matchesCountry && matchesSearch;
 
         card.hidden = !isVisible;
 
-        if (matchesSearch) {
+        if (matchesAlbum && matchesSearch) {
           counts.set("all", (counts.get("all") || 0) + 1);
           counts.set(albumCountry, (counts.get(albumCountry) || 0) + 1);
         }
@@ -217,6 +239,7 @@
 
   for (const button of buttons) {
     button.addEventListener("click", () => {
+      state.albumId = "";
       state.country = button.dataset.countryFilter || "all";
       updateCountryUrl();
       applyFilters();
@@ -224,7 +247,7 @@
   }
 
   window.addEventListener("popstate", () => {
-    state.country = getCountryFromUrl();
+    Object.assign(state, getFilterFromUrl());
     applyFilters();
   });
 
@@ -347,6 +370,6 @@
     }
   });
 
-  state.country = getCountryFromUrl();
+  Object.assign(state, getFilterFromUrl());
   applyFilters();
 })();

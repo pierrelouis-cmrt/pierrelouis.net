@@ -336,12 +336,7 @@
   }
 
   .values {
-    width: 100%;
-    margin-top: var(--space-7xl);
-  }
-
-  .values__columns {
-    gap: var(--space-2xl);
+    display: none;
   }
 
   .about-story {
@@ -360,11 +355,5 @@
     --watermark-gap: clamp(20px, 3vw, 36px);
 
     margin-top: var(--space-7xl);
-  }
-}
-
-@media (max-width: 520px) {
-  .values__columns {
-    grid-template-columns: 1fr;
   }
 }
