@@ -6,6 +6,7 @@
   --color-caption: #474747;
   --color-subtle: #7f7f7f;
   --color-media-bg: #f4f4f4;
+  --color-external-link-bg: #ededed;
 
   /* Typography */
   --font-family-sans:
@@ -119,7 +120,29 @@ body.has-mobile-menu-open {
 
 a {
   color: inherit;
+  cursor: pointer;
   text-decoration: none;
+}
+
+.external-link {
+  padding: 1px 3px;
+  background: var(--color-external-link-bg);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.external-link:hover,
+.external-link:focus-visible {
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+
+.external-link:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
 }
 
 a,

@@ -1,0 +1,7 @@
+- align the black dot with the titles of the someday, now pages and similar.
+- update imprint to be fully compliant (except for the phone number maybe)
+- create a design for internal links (cf now page and the posts page link)
+- improve design of the h2 titles from the imprint page (less space between text and line)
+- udpate capecl imprint too with my full name and adress, check if it is compliant too.
+- recrop in a better way the aurland pic used in the imprint page (so full mountain top is visible with a bit of sky uptop)
+- implement the lastfm api for the music live display in the now page
