@@ -8,3 +8,7 @@
 - 404 page
 - loading animation on home page (see inspo folder in zen)
 - create gradient for website hero image when sharing links and for socials banners
+- lightbox arrows are too small on mobile
+- horizontal overflow/scrolling on photos page
+- imprint on mobile text above image uggly cause bad contrast, solution to be find
+- opening mobile menu on safari when bottom browser bar in minimized (i.e. after having scrolled down a bit on the page), the menu doesn't fill the bar anymore and doesn't extend to the far bottom enough.
