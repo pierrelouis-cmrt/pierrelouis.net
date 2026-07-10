@@ -2,7 +2,7 @@ year: 2026
 order: 7
 place: "La Rochelle"
 country: "France"
-description: "Photos from La Rochelle, France."
+description: "Fishing huts, sea horizons, and coastal sunsets."
 photos:
   - file: 01.png
     alt: "Young tree growing behind a pointed seaside fence"

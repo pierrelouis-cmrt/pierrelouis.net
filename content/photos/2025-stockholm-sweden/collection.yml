@@ -2,7 +2,7 @@ year: 2025
 order: 3
 place: "Stockholm"
 country: "Sweden"
-description: "Photos from Stockholm, Sweden."
+description: "Waterfront views, historic facades, museums, and street details."
 photos:
   - file: 01.png
     alt: "Close view of a curved modern glass facade reflecting soft clouds in Stockholm"
@@ -26,13 +26,13 @@ photos:
     colors: [pale blue, dark green, charcoal, muted brown]
     vibe: [stately, peaceful, classic, sunlit]
   - file: 05.png
-    alt: "Grand historic church facade and copper-topped tower seen from below in Stockholm"
-    themes: [church architecture, historic landmark, ornate facade, city detail]
+    alt: "Sunlit tower and ornate facade of Stockholm's Nordic Museum against a clear blue sky"
+    themes: [museum architecture, Nordic Museum, historic landmark, ornate tower]
     colors: [bright blue, warm beige, dark brown, copper green]
     vibe: [grand, crisp, sunlit, monumental]
   - file: 06.png
     alt: "Stone facade of the Nordic Museum with its gilded name and a green roof spire"
-    themes: [museum architecture, historic landmark, facade detail, cultural heritage]
+    themes: [Nordic Museum, museum architecture, historic facade, cultural heritage]
     colors: [warm brown, gold, dark grey, copper green, pale blue]
     vibe: [scholarly, grand, historic, dignified]
   - file: 07.png

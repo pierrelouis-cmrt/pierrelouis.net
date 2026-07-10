@@ -8,7 +8,7 @@
     "order": 1,
     "place": "Copenhagen",
     "country": "Denmark",
-    "description": "Photos from Copenhagen, Denmark.",
+    "description": "Church spires, historic streets, and botanical interiors.",
     "tags": [],
     "photos": [
       {
@@ -25,9 +25,9 @@
         "alt": "Ornate church spire glowing in the late-afternoon light against a pale blue Copenhagen sky",
         "themes": [
           "church architecture",
-          "historic landmark",
-          "city detail",
-          "skyline"
+          "historic spire",
+          "bell tower",
+          "architectural detail"
         ],
         "colors": [
           "pale blue",
@@ -37,9 +37,9 @@
         ],
         "vibe": [
           "serene",
-          "luminous",
+          "golden",
           "stately",
-          "late-summer"
+          "luminous"
         ]
       },
       {
@@ -88,9 +88,9 @@
         "alt": "White sculpture rising from a lily pond among dense tropical plants in a Copenhagen greenhouse",
         "themes": [
           "botanical garden",
-          "sculpture",
-          "tropical plants",
-          "indoor nature"
+          "classical sculpture",
+          "tropical greenhouse",
+          "lily pond"
         ],
         "colors": [
           "deep green",
@@ -118,10 +118,10 @@
         "fullSrc": "../assets/photos-full/2025-copenhagen-denmark/06.webp",
         "alt": "Palm-filled glass atrium with white columns and a yellow-brick interior courtyard in Copenhagen",
         "themes": [
-          "indoor garden",
-          "historic architecture",
-          "greenhouse",
-          "architectural detail"
+          "palm house",
+          "greenhouse architecture",
+          "botanical garden",
+          "indoor garden"
         ],
         "colors": [
           "leaf green",
@@ -147,7 +147,7 @@
     "order": 2,
     "place": "Malmö",
     "country": "Sweden",
-    "description": "Photos from Malmö, Sweden.",
+    "description": "Turning Torso geometry, historic facades, and tropical wildlife.",
     "tags": [],
     "photos": [
       {
@@ -163,9 +163,9 @@
         "fullSrc": "../assets/photos-full/2025-malmo-sweden/02.webp",
         "alt": "Close-up of a bright green snake coiled among dark tropical foliage",
         "themes": [
-          "wildlife",
+          "green tree python",
           "reptile",
-          "tropical plants",
+          "tropical wildlife",
           "animal portrait"
         ],
         "colors": [
@@ -226,21 +226,21 @@
         "alt": "Sunlit row of ornate white and brick apartment facades beneath a clear blue Malmö sky",
         "themes": [
           "historic architecture",
-          "residential street",
-          "facade details",
-          "cityscape"
+          "ornate facade",
+          "architectural detail",
+          "European architecture"
         ],
         "colors": [
           "white",
-          "brick brown",
+          "charcoal",
           "black",
-          "bright blue"
+          "deep blue"
         ],
         "vibe": [
           "crisp",
-          "sunny",
+          "sunlit",
           "elegant",
-          "everyday"
+          "grand"
         ]
       },
       {
@@ -285,7 +285,7 @@
     "order": 3,
     "place": "Stockholm",
     "country": "Sweden",
-    "description": "Photos from Stockholm, Sweden.",
+    "description": "Waterfront views, historic facades, museums, and street details.",
     "tags": [],
     "photos": [
       {
@@ -489,12 +489,12 @@
         "favorite": false,
         "src": "../assets/photos/2025-stockholm-sweden/05.webp",
         "fullSrc": "../assets/photos-full/2025-stockholm-sweden/05.webp",
-        "alt": "Grand historic church facade and copper-topped tower seen from below in Stockholm",
+        "alt": "Sunlit tower and ornate facade of Stockholm's Nordic Museum against a clear blue sky",
         "themes": [
-          "church architecture",
+          "museum architecture",
+          "Nordic Museum",
           "historic landmark",
-          "ornate facade",
-          "city detail"
+          "ornate tower"
         ],
         "colors": [
           "bright blue",
@@ -522,9 +522,9 @@
         "fullSrc": "../assets/photos-full/2025-stockholm-sweden/06.webp",
         "alt": "Stone facade of the Nordic Museum with its gilded name and a green roof spire",
         "themes": [
+          "Nordic Museum",
           "museum architecture",
-          "historic landmark",
-          "facade detail",
+          "historic facade",
           "cultural heritage"
         ],
         "colors": [
@@ -647,7 +647,7 @@
     "order": 4,
     "place": "Oslo",
     "country": "Norway",
-    "description": "Photos from Oslo, Norway.",
+    "description": "Modern geometry, historic facades, and quiet interiors.",
     "tags": [],
     "photos": [
       {
@@ -893,7 +893,7 @@
     "order": 5,
     "place": "Aurland",
     "country": "Norway",
-    "description": "Photos from Aurland, Norway.",
+    "description": "Fjords, waterfalls, cliffs, and mountain reflections.",
     "tags": [],
     "photos": [
       {
@@ -909,9 +909,9 @@
         "fullSrc": "../assets/photos-full/2025-aurland-norway/01.webp",
         "alt": "Mountain lake and green valley beneath scattered clouds near Aurland",
         "themes": [
-          "mountain landscape",
-          "lake",
-          "rural valley"
+          "mountain lake",
+          "rocky shoreline",
+          "alpine landscape"
         ],
         "colors": [
           "blue",
@@ -1110,7 +1110,7 @@
     "order": 6,
     "place": "Bergen",
     "country": "Norway",
-    "description": "Photos from Bergen, Norway.",
+    "description": "Bryggen waterfronts, historic courtyards, and mossy woodland.",
     "tags": [],
     "photos": [
       {
@@ -1272,8 +1272,8 @@
         "alt": "KODE museum facade and rounded tower beneath dramatic clouds",
         "themes": [
           "museum architecture",
-          "city landmark",
-          "modernist facade"
+          "functionalist architecture",
+          "cylindrical tower"
         ],
         "colors": [
           "white",
@@ -1282,7 +1282,7 @@
           "black"
         ],
         "vibe": [
-          "moody",
+          "dramatic",
           "refined",
           "urban"
         ]
@@ -1298,7 +1298,7 @@
     "order": 7,
     "place": "La Rochelle",
     "country": "France",
-    "description": "Photos from La Rochelle, France.",
+    "description": "Fishing huts, sea horizons, and coastal sunsets.",
     "tags": [],
     "photos": [
       {
@@ -1498,7 +1498,7 @@
     "order": 8,
     "place": "Paris",
     "country": "France",
-    "description": "Photos from Paris, France.",
+    "description": "Monumental architecture, ornate facades, and luminous interiors.",
     "tags": [],
     "photos": [
       {
@@ -1698,7 +1698,7 @@
     "order": 9,
     "place": "Tours",
     "country": "France",
-    "description": "Photos from Tours, France.",
+    "description": "Wildlife, cats, antiques, and intimate still lifes.",
     "tags": [],
     "photos": [
       {
@@ -1841,7 +1841,7 @@
           "wildlife",
           "squirrel",
           "winter",
-          "close-up"
+          "evergreen"
         ],
         "colors": [
           "green",
@@ -2007,7 +2007,7 @@
         "vibe": [
           "bright",
           "quiet",
-          "architectural",
+          "sunlit",
           "crisp"
         ]
       },
@@ -2210,9 +2210,9 @@
         "fullSrc": "../assets/photos-full/2023-current-tours-france/17.webp",
         "alt": "Black leather chair against a vivid red wall",
         "themes": [
-          "interior",
+          "painting",
           "furniture",
-          "color",
+          "jazz",
           "still life"
         ],
         "colors": [
@@ -2239,7 +2239,7 @@
     "order": 10,
     "place": "Firminy",
     "country": "France",
-    "description": "Photos from Firminy, France.",
+    "description": "Le Corbusier concrete, sacred interiors, and modernist housing.",
     "tags": [],
     "photos": [
       {
@@ -2295,11 +2295,10 @@
           "geometry"
         ],
         "colors": [
-          "steel blue",
+          "pale blue",
           "charcoal",
           "black",
-          "pale blue",
-          "grey"
+          "steel grey"
         ],
         "vibe": [
           "industrial",
@@ -2649,7 +2648,7 @@
     "order": 11,
     "place": "Saint-Étienne",
     "country": "France",
-    "description": "Photos from Saint-Étienne, France.",
+    "description": "Reservoir landscapes, modern facades, and dramatic skies.",
     "tags": [],
     "photos": [
       {

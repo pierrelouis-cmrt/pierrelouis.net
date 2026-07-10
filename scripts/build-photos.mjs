@@ -1108,7 +1108,7 @@ ${renderCountryFilters(collections)}
                 <input
                   class="photo-filter__input"
                   type="search"
-                  placeholder="Search (place, country, year)..."
+                  placeholder="Search place, color, mood..."
                   autocomplete="off"
                   spellcheck="false"
                   data-photo-search

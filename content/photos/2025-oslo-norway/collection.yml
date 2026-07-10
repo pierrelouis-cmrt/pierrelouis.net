@@ -2,7 +2,7 @@ year: 2025
 order: 4
 place: "Oslo"
 country: "Norway"
-description: "Photos from Oslo, Norway."
+description: "Modern geometry, historic facades, and quiet interiors."
 photos:
   - file: 01.png
     alt: "Red-brick apartment balconies against a blue Oslo sky"

@@ -4,7 +4,7 @@ years:
 order: 9
 place: "Tours"
 country: "France"
-description: "Photos from Tours, France."
+description: "Wildlife, cats, antiques, and intimate still lifes."
 photos:
   - file: 01.png
     alt: "Antique scale and deer bust on a warmly lit shelf"
@@ -18,7 +18,7 @@ photos:
     vibe: [wintry, lively, quiet, natural]
   - file: 03.png
     alt: "Red squirrel perched among frosted pine needles"
-    themes: [wildlife, squirrel, winter, close-up]
+    themes: [wildlife, squirrel, winter, evergreen]
     colors: [green, white, brown, grey]
     vibe: [delicate, wintry, observant, soft]
   - file: 04.png
@@ -51,7 +51,7 @@ photos:
     alt: "Sunlit upper facade with a small weather vane"
     themes: [architecture, facade, roofline, city]
     colors: [cream, terracotta, slate, blue]
-    vibe: [bright, quiet, architectural, crisp]
+    vibe: [bright, quiet, sunlit, crisp]
   - file: 10.png
     alt: "Extreme close-up of a brown eye"
     themes: [portrait, eye, macro, human detail]
@@ -90,6 +90,6 @@ photos:
     vibe: [creative, intimate, warm, nostalgic]
   - file: 17.png
     alt: "Black leather chair against a vivid red wall"
-    themes: [interior, furniture, color, still life]
+    themes: [painting, furniture, jazz, still life]
     colors: [red, black, teal, white]
     vibe: [bold, graphic, moody, theatrical]

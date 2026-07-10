@@ -2,17 +2,17 @@ year: 2025
 order: 2
 place: "Malmö"
 country: "Sweden"
-description: "Photos from Malmö, Sweden."
+description: "Turning Torso geometry, historic facades, and tropical wildlife."
 photos:
   - file: 01.png
     alt: "Sunlit row of ornate white and brick apartment facades beneath a clear blue Malmö sky"
-    themes: [historic architecture, residential street, facade details, cityscape]
-    colors: [white, brick brown, black, bright blue]
-    vibe: [crisp, sunny, elegant, everyday]
+    themes: [historic architecture, ornate facade, architectural detail, European architecture]
+    colors: [white, charcoal, black, deep blue]
+    vibe: [crisp, sunlit, elegant, grand]
   - file: 02.png
     alt: "Close-up of a bright green snake coiled among dark tropical foliage"
     favorite: true
-    themes: [wildlife, reptile, tropical plants, animal portrait]
+    themes: [green tree python, reptile, tropical wildlife, animal portrait]
     colors: [vivid green, teal, black, deep olive]
     vibe: [intense, mysterious, tactile, tropical]
   - file: 03.png

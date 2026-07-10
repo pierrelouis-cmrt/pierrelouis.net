@@ -27,12 +27,89 @@
     query: "",
   };
 
+  // Small, gallery-specific groups outperform a remote thesaurus here: they are
+  // instant, predictable, and work offline. Every word in a group is equivalent.
+  const SEARCH_SYNONYM_GROUPS = [
+    ["architecture", "building", "structure"],
+    ["city", "urban"],
+    ["historic", "historical", "heritage", "old"],
+    ["modern", "modernist", "contemporary"],
+    ["sea", "ocean"],
+    ["coast", "coastal", "seaside", "shore", "shoreline"],
+    ["waterfront", "harbour", "harbor"],
+    ["mountain", "mountains", "alpine"],
+    ["forest", "woodland", "woods"],
+    ["sunset", "dusk", "twilight"],
+    ["calm", "peaceful", "serene", "tranquil"],
+    ["quiet", "still", "secluded"],
+    ["bright", "sunny", "luminous", "glowing"],
+    ["moody", "atmospheric", "dramatic", "cinematic"],
+    ["warm", "cozy", "cosy", "intimate"],
+    ["grand", "majestic", "monumental", "stately"],
+    ["green", "verdant"],
+    ["grey", "gray", "silver", "slate"],
+    ["gold", "golden", "amber", "ochre"],
+    ["red", "crimson", "coral", "burgundy"],
+  ];
+  const SEARCH_STOP_WORDS = new Set([
+    "a",
+    "an",
+    "and",
+    "at",
+    "from",
+    "in",
+    "of",
+    "on",
+    "the",
+    "with",
+  ]);
+
   const normalize = (value) => {
     return String(value || "")
       .trim()
       .toLowerCase()
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  };
+
+  const searchSynonyms = new Map();
+
+  for (const group of SEARCH_SYNONYM_GROUPS) {
+    for (const term of group) {
+      searchSynonyms.set(term, group);
+    }
+  }
+
+  const getQueryTerms = (query) => {
+    return [
+      ...new Set(
+        normalize(query)
+          .split(/\s+/)
+          .filter((term) => term && !SEARCH_STOP_WORDS.has(term)),
+      ),
+    ];
+  };
+
+  const matchesQuery = (searchText, query) => {
+    const terms = getQueryTerms(query);
+    const searchWords = new Set(searchText.split(/\s+/).filter(Boolean));
+
+    return terms.every((term) => {
+      const alternatives = searchSynonyms.get(term) || [term];
+      return alternatives.some((alternative) => {
+        if (searchWords.has(alternative)) {
+          return true;
+        }
+
+        // Preserve convenient partial typing for the word the user entered,
+        // without allowing short terms such as "old" to match "gold".
+        return alternative === term && term.length >= 3
+          ? [...searchWords].some((word) => word.startsWith(term))
+          : false;
+      });
+    });
   };
 
   const countryToUrlValue = (country) => {
@@ -98,7 +175,6 @@
   };
 
   const applyFilters = () => {
-    const query = normalize(state.query);
     const counts = new Map();
     let visibleTotal = 0;
 
@@ -111,7 +187,7 @@
       let visibleInAlbum = 0;
 
       for (const card of getAlbumCards(album)) {
-        const matchesSearch = !query || getCardSearchText(card, album).includes(query);
+        const matchesSearch = matchesQuery(getCardSearchText(card, album), state.query);
         const isVisible = matchesCountry && matchesSearch;
 
         card.hidden = !isVisible;

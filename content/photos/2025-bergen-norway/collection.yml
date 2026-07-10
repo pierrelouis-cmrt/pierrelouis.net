@@ -2,7 +2,7 @@ year: 2025
 order: 6
 place: "Bergen"
 country: "Norway"
-description: "Photos from Bergen, Norway."
+description: "Bryggen waterfronts, historic courtyards, and mossy woodland."
 photos:
   - file: 01.png
     alt: "Colorful waterfront houses below a green Bergen hillside"
@@ -32,6 +32,6 @@ photos:
     vibe: [peaceful, earthy, secluded]
   - file: 06.png
     alt: "KODE museum facade and rounded tower beneath dramatic clouds"
-    themes: [museum architecture, city landmark, modernist facade]
+    themes: [museum architecture, functionalist architecture, cylindrical tower]
     colors: [white, blue grey, green, black]
-    vibe: [moody, refined, urban]
+    vibe: [dramatic, refined, urban]

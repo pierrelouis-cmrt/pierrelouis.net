@@ -2,7 +2,7 @@ year: 2026
 order: 10
 place: "Firminy"
 country: "France"
-description: "Photos from Firminy, France."
+description: "Le Corbusier concrete, sacred interiors, and modernist housing."
 photos:
   - file: 01.png
     alt: "Curving concrete viaduct crossing green grassland under a clear sky"
@@ -12,7 +12,7 @@ photos:
   - file: 02.png
     alt: "Steel cable crane tower silhouetted against a pale blue sky"
     themes: [industrial heritage, crane, steel structure, engineering, geometry]
-    colors: [steel blue, charcoal, black, pale blue, grey]
+    colors: [pale blue, charcoal, black, steel grey]
     vibe: [industrial, stark, graphic, nostalgic]
   - file: 03.png
     alt: "Sculptural concrete church tower beneath bright clouds and blue sky"

@@ -4,7 +4,7 @@ years:
 order: 8
 place: "Paris"
 country: "France"
-description: "Photos from Paris, France."
+description: "Monumental architecture, ornate facades, and luminous interiors."
 photos:
   - file: 01.png
     alt: "Curving golden corridor lined with black columns"

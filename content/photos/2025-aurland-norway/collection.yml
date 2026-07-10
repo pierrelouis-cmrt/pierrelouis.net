@@ -2,12 +2,12 @@ year: 2025
 order: 5
 place: "Aurland"
 country: "Norway"
-description: "Photos from Aurland, Norway."
+description: "Fjords, waterfalls, cliffs, and mountain reflections."
 photos:
   - file: 01.png
     alt: "Mountain lake and green valley beneath scattered clouds near Aurland"
     favorite: true
-    themes: [mountain landscape, lake, rural valley]
+    themes: [mountain lake, rocky shoreline, alpine landscape]
     colors: [blue, green, white, slate grey]
     vibe: [open, peaceful, fresh]
   - file: 02.png

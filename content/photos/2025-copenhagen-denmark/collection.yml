@@ -2,14 +2,14 @@ year: 2025
 order: 1
 place: "Copenhagen"
 country: "Denmark"
-description: "Photos from Copenhagen, Denmark."
+description: "Church spires, historic streets, and botanical interiors."
 photos:
   - file: 01.png
     alt: "Ornate church spire glowing in the late-afternoon light against a pale blue Copenhagen sky"
     favorite: true
-    themes: [church architecture, historic landmark, city detail, skyline]
+    themes: [church architecture, historic spire, bell tower, architectural detail]
     colors: [pale blue, warm gold, dark brown, charcoal]
-    vibe: [serene, luminous, stately, late-summer]
+    vibe: [serene, golden, stately, luminous]
   - file: 02.png
     alt: "Cream-coloured historic corner building with Brønnum café seating at street level in Copenhagen"
     themes: [historic architecture, café culture, street scene, ornate facade]
@@ -17,11 +17,11 @@ photos:
     vibe: [elegant, leisurely, urban, welcoming]
   - file: 05.png
     alt: "White sculpture rising from a lily pond among dense tropical plants in a Copenhagen greenhouse"
-    themes: [botanical garden, sculpture, tropical plants, indoor nature]
+    themes: [botanical garden, classical sculpture, tropical greenhouse, lily pond]
     colors: [deep green, white, dark grey, soft brown]
     vibe: [lush, contemplative, secluded, dreamlike]
   - file: 06.png
     alt: "Palm-filled glass atrium with white columns and a yellow-brick interior courtyard in Copenhagen"
-    themes: [indoor garden, historic architecture, greenhouse, architectural detail]
+    themes: [palm house, greenhouse architecture, botanical garden, indoor garden]
     colors: [leaf green, warm yellow, white, muted brown]
     vibe: [tranquil, verdant, grand, sheltered]
