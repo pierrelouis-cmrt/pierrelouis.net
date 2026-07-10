@@ -12,3 +12,5 @@
 - horizontal overflow/scrolling on photos page
 - imprint on mobile text above image uggly cause bad contrast, solution to be find
 - opening mobile menu on safari when bottom browser bar in minimized (i.e. after having scrolled down a bit on the page), the menu doesn't fill the bar anymore and doesn't extend to the far bottom enough.
+- in footer, copy email should not open a draft and only copy
+- worth it to never display email hardcoded and only use hiden stuff from bots and all?
