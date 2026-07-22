@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Lists and Catalogs - Pierre-Louis</title>
+    <meta
+      name="description"
+      content="Pierre-Louis' lists and catalogs: things, places, media, articles, and everyday gear."
+    />
+    <meta property="og:title" content="Lists and Catalogs - Pierre-Louis" />
+    <meta
+      property="og:description"
+      content="Things I like, places I've been, media worth sharing, and the gear I use."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pierrelouis.net/lists/" />
+    <meta
+      property="og:image"
+      content="https://pierrelouis.net/assets/lists/things-i-like.webp"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/favicon/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/favicon/apple-touch-icon.png"
+    />
+    <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://api.fontshare.com/v2/css?f[]=sora@400,500,600&amp;display=swap"
+    />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="stylesheet" href="./lists.css" />
+    <script src="../script.js" defer></script>
+    <script src="../footer.js" defer></script>
+  </head>
+  <body>
+    <div class="site-shell lists-page">
+      <header class="site-header" aria-label="Primary navigation">
+        <a class="brand-mark" href="../" aria-label="Pierre-Louis home">
+          <span class="brand-mark__text">P—L</span>
+          <span class="brand-mark__copyright" aria-hidden="true">©</span>
+        </a>
+
+        <nav class="primary-nav" aria-label="Main pages">
+          <a class="primary-nav__link" href="../projects/">Projects</a>
+          <a class="primary-nav__link" href="../posts/">Posts</a>
+          <a class="primary-nav__link" href="../photos/">Photos</a>
+        </nav>
+
+        <div class="more-menu" data-more-menu>
+          <button
+            class="more-menu__toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="more-menu-panel"
+            data-more-menu-toggle
+          >
+            More ↓
+          </button>
+
+          <nav
+            class="more-menu__panel"
+            id="more-menu-panel"
+            aria-label="More pages"
+            data-more-menu-panel
+            hidden
+          >
+            <a class="more-menu__link" href="../about/">About</a>
+            <a class="more-menu__link" href="../now/">Now</a>
+            <a class="more-menu__link" href="../someday/">Someday</a>
+            <a class="more-menu__link" href="./" aria-current="page">Lists</a>
+          </nav>
+        </div>
+
+        <div class="mobile-menu" data-mobile-menu>
+          <button
+            class="mobile-menu__toggle"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-menu-panel"
+            data-mobile-menu-toggle
+          >
+            <span class="mobile-menu__toggle-line"></span>
+            <span class="mobile-menu__toggle-line"></span>
+          </button>
+
+          <div
+            class="mobile-menu__panel"
+            id="mobile-menu-panel"
+            data-mobile-menu-panel
+            hidden
+          >
+            <div class="mobile-menu__bar">
+              <a
+                class="mobile-menu__brand"
+                href="../"
+                aria-label="Pierre-Louis home"
+              >
+                <span class="brand-mark__text">P—L</span>
+                <span class="brand-mark__copyright" aria-hidden="true">©</span>
+              </a>
+            </div>
+
+            <div class="mobile-menu__layout">
+              <section
+                class="mobile-menu__section mobile-menu__section--main"
+                aria-labelledby="mobile-menu-main"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-main">
+                  Main Pages
+                </h2>
+                <nav class="mobile-menu__links" aria-label="Main pages">
+                  <a class="mobile-menu__link" href="../projects/">Projects</a>
+                  <a class="mobile-menu__link" href="../posts/">Posts</a>
+                  <a class="mobile-menu__link" href="../photos/">Photos</a>
+                </nav>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--latest"
+                aria-labelledby="mobile-menu-latest"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-latest">
+                  Latest
+                </h2>
+                <a
+                  class="mobile-menu__latest-link"
+                  href="../projects/conways-reverse-game-of-life/"
+                >
+                  <span class="mobile-menu__latest-title"
+                    >Reversing Conway's Game Of Life with Diffusion</span
+                  >
+                  <span class="mobile-menu__latest-media" aria-hidden="true">
+                    <span class="mobile-menu__latest-image"></span>
+                  </span>
+                  <span class="mobile-menu__see-more">See More ↗</span>
+                </a>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--about"
+                aria-labelledby="mobile-menu-about"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-about">
+                  More About Me
+                </h2>
+                <nav class="mobile-menu__links" aria-label="More about me">
+                  <a class="mobile-menu__link" href="../about/">Who I am</a>
+                  <a class="mobile-menu__link" href="../now/"
+                    >What I'm doing</a
+                  >
+                  <a class="mobile-menu__link" href="../someday/"
+                    >Where I'm going</a
+                  >
+                </nav>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--links"
+                aria-labelledby="mobile-menu-links"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-links">
+                  More Links
+                </h2>
+                <nav class="mobile-menu__links" aria-label="More links">
+                  <a class="mobile-menu__link" href="./" aria-current="page"
+                    >Catalogs</a
+                  >
+                  <a class="mobile-menu__link" href="../links/"
+                    >Link &amp; Socials</a
+                  >
+                </nav>
+              </section>
+            </div>
+
+            <img
+              class="mobile-menu__watermark"
+              src="../assets/image_mobile_watermark.png"
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="lists-intro" aria-labelledby="lists-title">
+          <h1 class="lists-intro__title" id="lists-title">
+            <span class="lists-intro__dot" aria-hidden="true"></span>
+            <span>Lists and Catalogs</span>
+          </h1>
+
+          <p class="lists-intro__copy">
+            I like statistics. Espacially stats about myself. Sounds a bit
+            egocentric, but it's more about understanding my own habits and
+            visualise my life as progress. Here you'll find articles I liked,
+            videos I find worth sharing, the gear I use, etc.
+          </p>
+        </section>
+
+        <section class="lists-canvas" aria-label="Lists and catalogs">
+          <figure class="list-card list-card--likes">
+            <div class="list-card__media">
+              <img
+                class="list-card__image"
+                src="../assets/lists/things-i-like.webp"
+                width="512"
+                height="512"
+                alt="People crossing a pale plaza, casting long blue shadows."
+                decoding="async"
+              />
+            </div>
+            <figcaption class="list-card__caption">Things I like</figcaption>
+          </figure>
+
+          <figure class="list-card list-card--dislikes">
+            <div class="list-card__media">
+              <img
+                class="list-card__image"
+                src="../assets/lists/things-i-dislike.webp"
+                width="512"
+                height="512"
+                alt="A person seated in front of a garden exhibition display."
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="list-card__caption">Things I dislike</figcaption>
+          </figure>
+
+          <figure class="list-card list-card--tv">
+            <div
+              class="list-card__media list-card__media--tv"
+              role="img"
+              aria-label="A collage of interface and interaction design projects."
+            >
+              <span class="tv-collage" aria-hidden="true">
+                <img src="../assets/lists/tv-1.webp" alt="" />
+                <img src="../assets/lists/tv-2.webp" alt="" />
+                <img src="../assets/lists/tv-3.webp" alt="" />
+                <img src="../assets/lists/tv-4.webp" alt="" />
+                <img class="tv-collage__focus" src="../assets/lists/tv-5.webp" alt="" />
+                <img src="../assets/lists/tv-6.webp" alt="" />
+                <img src="../assets/lists/tv-7.webp" alt="" />
+                <img src="../assets/lists/tv-8.webp" alt="" />
+                <img src="../assets/lists/tv-9.webp" alt="" />
+              </span>
+            </div>
+            <figcaption class="list-card__caption">
+              TV Show I've watched
+            </figcaption>
+          </figure>
+
+          <figure class="list-card list-card--articles">
+            <div class="list-card__media">
+              <img
+                class="list-card__image"
+                src="../assets/lists/articles-and-videos.webp"
+                width="512"
+                height="512"
+                alt="A soft pink inflated-letter wordmark on light gray."
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="list-card__caption">
+              Articles and videos worth taking a look at
+            </figcaption>
+          </figure>
+
+          <figure class="list-card list-card--places">
+            <div
+              class="list-card__media list-card__media--checkerboard"
+              role="img"
+              aria-label="A blue and white checkerboard."
+            >
+            </div>
+            <figcaption class="list-card__caption">
+              Places I've been to
+            </figcaption>
+          </figure>
+
+          <figure class="list-card list-card--gear">
+            <div class="list-card__media">
+              <img
+                class="list-card__image"
+                src="../assets/lists/tech-and-gear.webp"
+                width="512"
+                height="512"
+                alt="A green-tinted overhead view of electronic instruments and everyday gear."
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="list-card__caption">
+              Tech stack and everyday gear
+            </figcaption>
+          </figure>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer__content">
+          <div class="site-footer__location" aria-label="Location and weather">
+            <span>Lyon, France</span>
+            <span data-footer-weather>Weather loading...</span>
+          </div>
+
+          <nav
+            class="site-footer__group site-footer__group--contact"
+            aria-label="Contact links"
+          >
+            <a
+              class="site-footer__link"
+              href="mailto:contact@pierrelouis.net"
+              data-copy-email
+              data-email="contact@pierrelouis.net"
+              >Copy Email</a
+            >
+            <a class="site-footer__link" href="../links/"
+              >Links &amp; Socials</a
+            >
+          </nav>
+
+          <nav
+            class="site-footer__group site-footer__group--info"
+            aria-label="Site information"
+          >
+            <a class="site-footer__link" href="../colophon/">Colophon</a>
+            <a class="site-footer__link" href="../imprint/">Imprint</a>
+            <span class="site-footer__copyright-slot">
+              <span class="site-footer__copyright"
+                >©<span data-footer-year>2026</span></span
+              >
+            </span>
+          </nav>
+        </div>
+
+        <div class="watermark" aria-hidden="true">
+          <span class="watermark__name watermark__name--first"></span>
+          <span class="watermark__dash"></span>
+          <span class="watermark__name watermark__name--last"></span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

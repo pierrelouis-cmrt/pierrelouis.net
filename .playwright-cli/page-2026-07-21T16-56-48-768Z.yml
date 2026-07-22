@@ -1,0 +1,47 @@
+- generic [ref=f12e2]:
+  - banner "Primary navigation" [ref=f12e3]:
+    - link "Pierre-Louis home" [ref=f12e4] [cursor=pointer]:
+      - /url: ../
+      - generic [ref=f12e5]: P—L
+      - generic [ref=f12e6]: ©
+    - navigation "Main pages" [ref=f12e7]:
+      - link "Projects" [ref=f12e8] [cursor=pointer]:
+        - /url: ../projects/
+      - link "Posts" [ref=f12e9] [cursor=pointer]:
+        - /url: ../posts/
+      - link "Photos" [ref=f12e10] [cursor=pointer]:
+        - /url: ../photos/
+    - button "More ↓" [ref=f12e12] [cursor=pointer]
+  - main [ref=f12e13]:
+    - region [ref=f12e14]:
+      - heading "Lists and Catalogs" [level=1] [ref=f12e15]
+      - paragraph [ref=f12e18]: I like statistics. Espacially stats about myself. Sounds a bit egocentric, but it's more about understanding my own habits and visualise my life as progress. Here you'll find articles I liked, videos I find worth sharing, the gear I use, etc.
+    - region "Lists and catalogs" [ref=f12e19]:
+      - figure "Things I like" [ref=f12e20]:
+        - img "People crossing a pale plaza, casting long blue shadows." [ref=f12e22]
+      - figure "Things I dislike" [ref=f12e24]:
+        - img "A person seated in front of a garden exhibition display." [ref=f12e26]
+      - figure "TV Show I've watched" [ref=f12e28]:
+        - img "A collage of interface and interaction design projects." [ref=f12e29]
+      - figure "Articles and videos worth taking a look at" [ref=f12e32]:
+        - img "A soft pink inflated-letter wordmark on light gray." [ref=f12e34]
+      - figure "Places I've been to" [ref=f12e36]:
+        - img "A blue and white checkerboard." [ref=f12e37]
+      - figure "Tech stack and everyday gear" [ref=f12e39]:
+        - img "A green-tinted overhead view of electronic instruments and everyday gear." [ref=f12e41]
+  - contentinfo [ref=f12e43]:
+    - generic [ref=f12e44]:
+      - generic "Location and weather" [ref=f12e45]:
+        - generic [ref=f12e46]: Lyon, France
+        - generic [ref=f12e47]: 6:56 PM, Clear at 28°C
+      - navigation "Contact links" [ref=f12e48]:
+        - link "Copy Email" [ref=f12e49] [cursor=pointer]:
+          - /url: mailto:contact@pierrelouis.net
+        - link "Links & Socials" [ref=f12e50] [cursor=pointer]:
+          - /url: ../links/
+      - navigation "Site information" [ref=f12e51]:
+        - link "Colophon" [ref=f12e52] [cursor=pointer]:
+          - /url: ../colophon/
+        - link "Imprint" [ref=f12e53] [cursor=pointer]:
+          - /url: ../imprint/
+        - generic [ref=f12e54]: ©2026

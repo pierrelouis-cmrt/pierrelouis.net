@@ -1290,12 +1290,560 @@
     ]
   },
   {
-    "id": "2026-la-rochelle-france",
+    "id": "2026-cadaques-spain",
     "year": 2026,
     "startYear": 2026,
     "endYear": 2026,
     "dateLabel": "2026",
     "order": 7,
+    "place": "Cadaqués",
+    "country": "Spain",
+    "description": "Mediterranean coves, whitewashed lanes, and Dalí's surrealist geometry.",
+    "tags": [
+      "Cadaqués",
+      "Empuriabrava",
+      "Figueres",
+      "Roses",
+      "Costa Brava",
+      "Mediterranean"
+    ],
+    "photos": [
+      {
+        "id": "2026-cadaques-spain-01",
+        "index": 1,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "01.png",
+        "sourceIndex": 1,
+        "favorite": true,
+        "src": "../assets/photos/2026-cadaques-spain/01.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/01.webp",
+        "alt": "Rocky islets and umbrella pines shimmering beyond the Cadaqués bay",
+        "themes": [
+          "Mediterranean coast",
+          "rocky islets",
+          "pine trees",
+          "bay"
+        ],
+        "colors": [
+          "silver blue",
+          "deep green",
+          "charcoal",
+          "white"
+        ],
+        "vibe": [
+          "luminous",
+          "coastal",
+          "peaceful",
+          "summery"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-02",
+        "index": 2,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "02.png",
+        "sourceIndex": 2,
+        "favorite": true,
+        "src": "../assets/photos/2026-cadaques-spain/02.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/02.webp",
+        "alt": "Whitewashed Cadaqués terrace descending toward the blue sea",
+        "themes": [
+          "whitewashed architecture",
+          "terrace",
+          "sea view",
+          "Mediterranean"
+        ],
+        "colors": [
+          "white",
+          "blue",
+          "green",
+          "ochre"
+        ],
+        "vibe": [
+          "bright",
+          "intimate",
+          "coastal",
+          "serene"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-08",
+        "index": 3,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "08.png",
+        "sourceIndex": 8,
+        "favorite": true,
+        "src": "../assets/photos/2026-cadaques-spain/08.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/08.webp",
+        "alt": "Dry grasses and low shrubs above the deep-blue Costa Brava sea",
+        "themes": [
+          "coastal landscape",
+          "scrubland",
+          "sea",
+          "headland"
+        ],
+        "colors": [
+          "straw",
+          "olive green",
+          "deep blue",
+          "mauve"
+        ],
+        "vibe": [
+          "wild",
+          "breezy",
+          "quiet",
+          "expansive"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-03",
+        "index": 4,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "03.png",
+        "sourceIndex": 3,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/03.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/03.webp",
+        "alt": "Sculptural white wall and olive tree casting shadows in Cadaqués",
+        "themes": [
+          "whitewashed architecture",
+          "olive tree",
+          "shadows",
+          "courtyard"
+        ],
+        "colors": [
+          "white",
+          "olive green",
+          "charcoal",
+          "beige"
+        ],
+        "vibe": [
+          "graphic",
+          "sunlit",
+          "quiet",
+          "organic"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-04",
+        "index": 5,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "04.png",
+        "sourceIndex": 4,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/04.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/04.webp",
+        "alt": "Wide hazy view across the green plains toward Roses and the Mediterranean",
+        "themes": [
+          "landscape",
+          "coastal plain",
+          "panorama",
+          "Mediterranean"
+        ],
+        "colors": [
+          "sage green",
+          "pale blue",
+          "grey",
+          "cream"
+        ],
+        "vibe": [
+          "expansive",
+          "hazy",
+          "soft",
+          "contemplative"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-05",
+        "index": 6,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "05.png",
+        "sourceIndex": 5,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/05.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/05.webp",
+        "alt": "Glass dome and surrealist figure on the Dalí Theatre-Museum in Figueres",
+        "themes": [
+          "Dalí Theatre-Museum",
+          "surrealism",
+          "architecture",
+          "sculpture"
+        ],
+        "colors": [
+          "brick",
+          "blue",
+          "yellow",
+          "black"
+        ],
+        "vibe": [
+          "surreal",
+          "playful",
+          "monumental",
+          "curious"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-06",
+        "index": 7,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "06.png",
+        "sourceIndex": 6,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/06.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/06.webp",
+        "alt": "Geodesic glass dome rising above the Dalí Theatre-Museum courtyard",
+        "themes": [
+          "Dalí Theatre-Museum",
+          "glass dome",
+          "courtyard",
+          "architecture"
+        ],
+        "colors": [
+          "blue",
+          "stone",
+          "black",
+          "amber"
+        ],
+        "vibe": [
+          "geometric",
+          "dramatic",
+          "airy",
+          "surreal"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-07",
+        "index": 8,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "07.png",
+        "sourceIndex": 7,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/07.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/07.webp",
+        "alt": "Curved dark gallery lined with framed works at the Dalí Theatre-Museum",
+        "themes": [
+          "museum interior",
+          "gallery",
+          "art",
+          "curved architecture"
+        ],
+        "colors": [
+          "black",
+          "terracotta",
+          "cream",
+          "soft gold"
+        ],
+        "vibe": [
+          "moody",
+          "rhythmic",
+          "theatrical",
+          "contemplative"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-09",
+        "index": 9,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "09.png",
+        "sourceIndex": 9,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/09.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/09.webp",
+        "alt": "Olive-dotted hillside and a small stone chapel beneath the summer sky",
+        "themes": [
+          "rural landscape",
+          "olive trees",
+          "chapel",
+          "hillside"
+        ],
+        "colors": [
+          "ochre",
+          "olive green",
+          "stone",
+          "pale blue"
+        ],
+        "vibe": [
+          "rustic",
+          "dry",
+          "peaceful",
+          "timeless"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-10",
+        "index": 10,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "10.png",
+        "sourceIndex": 10,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/10.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/10.webp",
+        "alt": "Rocky Cap de Creus headland curving into a calm pale-blue sea",
+        "themes": [
+          "Cap de Creus",
+          "headland",
+          "sea",
+          "coastal landscape"
+        ],
+        "colors": [
+          "slate blue",
+          "olive green",
+          "beige",
+          "grey"
+        ],
+        "vibe": [
+          "remote",
+          "calm",
+          "hazy",
+          "expansive"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-11",
+        "index": 11,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "11.png",
+        "sourceIndex": 11,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/11.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/11.webp",
+        "alt": "Sunlight breaking into bright patterns across shallow Mediterranean water",
+        "themes": [
+          "water",
+          "reflections",
+          "sunlight",
+          "abstract nature"
+        ],
+        "colors": [
+          "silver",
+          "olive",
+          "charcoal",
+          "gold"
+        ],
+        "vibe": [
+          "shimmering",
+          "tactile",
+          "hypnotic",
+          "fluid"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-12",
+        "index": 12,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "12.png",
+        "sourceIndex": 12,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/12.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/12.webp",
+        "alt": "Cadaqués harbour and white waterfront framed by dark pine branches",
+        "themes": [
+          "Cadaqués",
+          "harbour",
+          "boats",
+          "pine trees"
+        ],
+        "colors": [
+          "silver blue",
+          "white",
+          "deep green",
+          "grey"
+        ],
+        "vibe": [
+          "picturesque",
+          "sheltered",
+          "coastal",
+          "calm"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-13",
+        "index": 13,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "13.png",
+        "sourceIndex": 13,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/13.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/13.webp",
+        "alt": "Sunbeams breaking through storm clouds above the Cadaqués waterfront",
+        "themes": [
+          "Cadaqués",
+          "waterfront",
+          "dramatic sky",
+          "sea"
+        ],
+        "colors": [
+          "charcoal",
+          "silver",
+          "white",
+          "deep green"
+        ],
+        "vibe": [
+          "dramatic",
+          "atmospheric",
+          "luminous",
+          "still"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-14",
+        "index": 14,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "14.png",
+        "sourceIndex": 14,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/14.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/14.webp",
+        "alt": "Orange sun setting behind the mountains across a Mediterranean bay",
+        "themes": [
+          "sunset",
+          "mountains",
+          "bay",
+          "palm tree"
+        ],
+        "colors": [
+          "orange",
+          "gold",
+          "charcoal",
+          "deep blue"
+        ],
+        "vibe": [
+          "warm",
+          "cinematic",
+          "tranquil",
+          "glowing"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-15",
+        "index": 15,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "15.png",
+        "sourceIndex": 15,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/15.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/15.webp",
+        "alt": "Single white sailboat crossing the blue horizon beyond Roses beach",
+        "themes": [
+          "sailboat",
+          "sea",
+          "beach",
+          "horizon"
+        ],
+        "colors": [
+          "blue",
+          "sand",
+          "white",
+          "green"
+        ],
+        "vibe": [
+          "minimal",
+          "breezy",
+          "bright",
+          "leisurely"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-16",
+        "index": 16,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "16.png",
+        "sourceIndex": 16,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/16.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/16.webp",
+        "alt": "Golden reflections rippling across clear shallow water",
+        "themes": [
+          "water",
+          "reflections",
+          "sunlight",
+          "abstract nature"
+        ],
+        "colors": [
+          "gold",
+          "blue",
+          "charcoal",
+          "amber"
+        ],
+        "vibe": [
+          "sparkling",
+          "abstract",
+          "warm",
+          "fluid"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-17",
+        "index": 17,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "17.png",
+        "sourceIndex": 17,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/17.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/17.webp",
+        "alt": "Quiet Roses beach and pale Mediterranean horizon framed by palm trees",
+        "themes": [
+          "Roses",
+          "beach",
+          "palm trees",
+          "sea"
+        ],
+        "colors": [
+          "pale blue",
+          "sand",
+          "green",
+          "white"
+        ],
+        "vibe": [
+          "soft",
+          "open",
+          "quiet",
+          "coastal"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2026-la-rochelle-france",
+    "year": 2026,
+    "startYear": 2026,
+    "endYear": 2026,
+    "dateLabel": "2026",
+    "order": 8,
     "place": "La Rochelle",
     "country": "France",
     "description": "Fishing huts, sea horizons, and coastal sunsets.",
@@ -1495,7 +2043,7 @@
     "startYear": 2023,
     "endYear": 2026,
     "dateLabel": "2023-2026",
-    "order": 8,
+    "order": 9,
     "place": "Paris",
     "country": "France",
     "description": "Monumental architecture, ornate facades, and luminous interiors.",
@@ -1533,8 +2081,39 @@
         ]
       },
       {
-        "id": "2023-2026-paris-france-02",
+        "id": "2023-2026-paris-france-09",
         "index": 2,
+        "collectionId": "2023-2026-paris-france",
+        "place": "Paris",
+        "country": "France",
+        "file": "09.png",
+        "sourceIndex": 9,
+        "favorite": true,
+        "src": "../assets/photos/2023-2026-paris-france/09.webp",
+        "fullSrc": "../assets/photos-full/2023-2026-paris-france/09.webp",
+        "alt": "Wooden motorboat passing beneath the steel arches of a Paris bridge",
+        "themes": [
+          "Seine",
+          "bridge",
+          "boat",
+          "steel architecture"
+        ],
+        "colors": [
+          "charcoal",
+          "brown",
+          "blue",
+          "stone"
+        ],
+        "vibe": [
+          "cinematic",
+          "leisurely",
+          "urban",
+          "graphic"
+        ]
+      },
+      {
+        "id": "2023-2026-paris-france-02",
+        "index": 3,
         "collectionId": "2023-2026-paris-france",
         "place": "Paris",
         "country": "France",
@@ -1565,7 +2144,7 @@
       },
       {
         "id": "2023-2026-paris-france-03",
-        "index": 3,
+        "index": 4,
         "collectionId": "2023-2026-paris-france",
         "place": "Paris",
         "country": "France",
@@ -1596,7 +2175,7 @@
       },
       {
         "id": "2023-2026-paris-france-04",
-        "index": 4,
+        "index": 5,
         "collectionId": "2023-2026-paris-france",
         "place": "Paris",
         "country": "France",
@@ -1627,7 +2206,7 @@
       },
       {
         "id": "2023-2026-paris-france-05",
-        "index": 5,
+        "index": 6,
         "collectionId": "2023-2026-paris-france",
         "place": "Paris",
         "country": "France",
@@ -1658,7 +2237,7 @@
       },
       {
         "id": "2023-2026-paris-france-06",
-        "index": 6,
+        "index": 7,
         "collectionId": "2023-2026-paris-france",
         "place": "Paris",
         "country": "France",
@@ -1686,6 +2265,99 @@
           "sharp",
           "upward-looking"
         ]
+      },
+      {
+        "id": "2023-2026-paris-france-07",
+        "index": 8,
+        "collectionId": "2023-2026-paris-france",
+        "place": "Paris",
+        "country": "France",
+        "file": "07.png",
+        "sourceIndex": 7,
+        "favorite": false,
+        "src": "../assets/photos/2023-2026-paris-france/07.webp",
+        "fullSrc": "../assets/photos-full/2023-2026-paris-france/07.webp",
+        "alt": "Bronze sea-horse fountain figures carrying a globe beneath a clear Paris sky",
+        "themes": [
+          "fountain",
+          "sculpture",
+          "public garden",
+          "heritage"
+        ],
+        "colors": [
+          "bronze",
+          "pale stone",
+          "blue",
+          "green"
+        ],
+        "vibe": [
+          "ornate",
+          "sunlit",
+          "classical",
+          "lively"
+        ]
+      },
+      {
+        "id": "2023-2026-paris-france-08",
+        "index": 9,
+        "collectionId": "2023-2026-paris-france",
+        "place": "Paris",
+        "country": "France",
+        "file": "08.png",
+        "sourceIndex": 8,
+        "favorite": false,
+        "src": "../assets/photos/2023-2026-paris-france/08.webp",
+        "fullSrc": "../assets/photos-full/2023-2026-paris-france/08.webp",
+        "alt": "Ornate Louvre facade glowing in warm late-afternoon light",
+        "themes": [
+          "architecture",
+          "Louvre",
+          "palace",
+          "facade"
+        ],
+        "colors": [
+          "cream",
+          "gold",
+          "slate",
+          "green"
+        ],
+        "vibe": [
+          "grand",
+          "luminous",
+          "historic",
+          "elegant"
+        ]
+      },
+      {
+        "id": "2023-2026-paris-france-10",
+        "index": 10,
+        "collectionId": "2023-2026-paris-france",
+        "place": "Paris",
+        "country": "France",
+        "file": "11.png",
+        "sourceIndex": 10,
+        "favorite": false,
+        "src": "../assets/photos/2023-2026-paris-france/11.webp",
+        "fullSrc": "../assets/photos-full/2023-2026-paris-france/11.webp",
+        "alt": "Busy Paris cafe terrace and Haussmann facades at dusk",
+        "themes": [
+          "cafe",
+          "street scene",
+          "nightlife",
+          "architecture"
+        ],
+        "colors": [
+          "amber",
+          "charcoal",
+          "cream",
+          "red"
+        ],
+        "vibe": [
+          "lively",
+          "intimate",
+          "urban",
+          "glowing"
+        ]
       }
     ]
   },
@@ -1695,7 +2367,7 @@
     "startYear": 2023,
     "endYear": 2026,
     "dateLabel": "2023-current",
-    "order": 9,
+    "order": 10,
     "place": "Tours",
     "country": "France",
     "description": "Wildlife, cats, antiques, and intimate still lifes.",
@@ -2236,7 +2908,7 @@
     "startYear": 2026,
     "endYear": 2026,
     "dateLabel": "2026",
-    "order": 10,
+    "order": 11,
     "place": "Firminy",
     "country": "France",
     "description": "Le Corbusier concrete, sacred interiors, and modernist housing.",
@@ -2645,7 +3317,7 @@
     "startYear": 2024,
     "endYear": 2026,
     "dateLabel": "2024-2026",
-    "order": 11,
+    "order": 12,
     "place": "Saint-Étienne",
     "country": "France",
     "description": "Reservoir landscapes, modern facades, and dramatic skies.",

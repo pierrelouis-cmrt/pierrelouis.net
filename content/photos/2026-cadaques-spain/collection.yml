@@ -1,0 +1,95 @@
+year: 2026
+order: 7
+place: "Cadaqués"
+country: "Spain"
+description: "Mediterranean coves, whitewashed lanes, and Dalí's surrealist geometry."
+tags: [Cadaqués, Empuriabrava, Figueres, Roses, Costa Brava, Mediterranean]
+photos:
+  - file: 01.png
+    favorite: true
+    alt: "Rocky islets and umbrella pines shimmering beyond the Cadaqués bay"
+    themes: [Mediterranean coast, rocky islets, pine trees, bay]
+    colors: [silver blue, deep green, charcoal, white]
+    vibe: [luminous, coastal, peaceful, summery]
+  - file: 02.png
+    favorite: true
+    alt: "Whitewashed Cadaqués terrace descending toward the blue sea"
+    themes: [whitewashed architecture, terrace, sea view, Mediterranean]
+    colors: [white, blue, green, ochre]
+    vibe: [bright, intimate, coastal, serene]
+  - file: 03.png
+    alt: "Sculptural white wall and olive tree casting shadows in Cadaqués"
+    themes: [whitewashed architecture, olive tree, shadows, courtyard]
+    colors: [white, olive green, charcoal, beige]
+    vibe: [graphic, sunlit, quiet, organic]
+  - file: 04.png
+    alt: "Wide hazy view across the green plains toward Roses and the Mediterranean"
+    themes: [landscape, coastal plain, panorama, Mediterranean]
+    colors: [sage green, pale blue, grey, cream]
+    vibe: [expansive, hazy, soft, contemplative]
+  - file: 05.png
+    alt: "Glass dome and surrealist figure on the Dalí Theatre-Museum in Figueres"
+    themes: [Dalí Theatre-Museum, surrealism, architecture, sculpture]
+    colors: [brick, blue, yellow, black]
+    vibe: [surreal, playful, monumental, curious]
+  - file: 06.png
+    alt: "Geodesic glass dome rising above the Dalí Theatre-Museum courtyard"
+    themes: [Dalí Theatre-Museum, glass dome, courtyard, architecture]
+    colors: [blue, stone, black, amber]
+    vibe: [geometric, dramatic, airy, surreal]
+  - file: 07.png
+    alt: "Curved dark gallery lined with framed works at the Dalí Theatre-Museum"
+    themes: [museum interior, gallery, art, curved architecture]
+    colors: [black, terracotta, cream, soft gold]
+    vibe: [moody, rhythmic, theatrical, contemplative]
+  - file: 08.png
+    favorite: true
+    alt: "Dry grasses and low shrubs above the deep-blue Costa Brava sea"
+    themes: [coastal landscape, scrubland, sea, headland]
+    colors: [straw, olive green, deep blue, mauve]
+    vibe: [wild, breezy, quiet, expansive]
+  - file: 09.png
+    alt: "Olive-dotted hillside and a small stone chapel beneath the summer sky"
+    themes: [rural landscape, olive trees, chapel, hillside]
+    colors: [ochre, olive green, stone, pale blue]
+    vibe: [rustic, dry, peaceful, timeless]
+  - file: 10.png
+    alt: "Rocky Cap de Creus headland curving into a calm pale-blue sea"
+    themes: [Cap de Creus, headland, sea, coastal landscape]
+    colors: [slate blue, olive green, beige, grey]
+    vibe: [remote, calm, hazy, expansive]
+  - file: 11.png
+    alt: "Sunlight breaking into bright patterns across shallow Mediterranean water"
+    themes: [water, reflections, sunlight, abstract nature]
+    colors: [silver, olive, charcoal, gold]
+    vibe: [shimmering, tactile, hypnotic, fluid]
+  - file: 12.png
+    alt: "Cadaqués harbour and white waterfront framed by dark pine branches"
+    themes: [Cadaqués, harbour, boats, pine trees]
+    colors: [silver blue, white, deep green, grey]
+    vibe: [picturesque, sheltered, coastal, calm]
+  - file: 13.png
+    alt: "Sunbeams breaking through storm clouds above the Cadaqués waterfront"
+    themes: [Cadaqués, waterfront, dramatic sky, sea]
+    colors: [charcoal, silver, white, deep green]
+    vibe: [dramatic, atmospheric, luminous, still]
+  - file: 14.png
+    alt: "Orange sun setting behind the mountains across a Mediterranean bay"
+    themes: [sunset, mountains, bay, palm tree]
+    colors: [orange, gold, charcoal, deep blue]
+    vibe: [warm, cinematic, tranquil, glowing]
+  - file: 15.png
+    alt: "Single white sailboat crossing the blue horizon beyond Roses beach"
+    themes: [sailboat, sea, beach, horizon]
+    colors: [blue, sand, white, green]
+    vibe: [minimal, breezy, bright, leisurely]
+  - file: 16.png
+    alt: "Golden reflections rippling across clear shallow water"
+    themes: [water, reflections, sunlight, abstract nature]
+    colors: [gold, blue, charcoal, amber]
+    vibe: [sparkling, abstract, warm, fluid]
+  - file: 17.png
+    alt: "Quiet Roses beach and pale Mediterranean horizon framed by palm trees"
+    themes: [Roses, beach, palm trees, sea]
+    colors: [pale blue, sand, green, white]
+    vibe: [soft, open, quiet, coastal]

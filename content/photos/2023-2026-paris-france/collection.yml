@@ -1,7 +1,7 @@
 years:
   start: 2023
   end: 2026
-order: 8
+order: 9
 place: "Paris"
 country: "France"
 description: "Monumental architecture, ornate facades, and luminous interiors."
@@ -37,3 +37,24 @@ photos:
     themes: [architecture, skyscraper, perspective, city]
     colors: [charcoal, blue, silver, green]
     vibe: [monumental, urban, sharp, upward-looking]
+  - file: 07.png
+    alt: "Bronze sea-horse fountain figures carrying a globe beneath a clear Paris sky"
+    themes: [fountain, sculpture, public garden, heritage]
+    colors: [bronze, pale stone, blue, green]
+    vibe: [ornate, sunlit, classical, lively]
+  - file: 08.png
+    alt: "Ornate Louvre facade glowing in warm late-afternoon light"
+    themes: [architecture, Louvre, palace, facade]
+    colors: [cream, gold, slate, green]
+    vibe: [grand, luminous, historic, elegant]
+  - file: 09.png
+    favorite: true
+    alt: "Wooden motorboat passing beneath the steel arches of a Paris bridge"
+    themes: [Seine, bridge, boat, steel architecture]
+    colors: [charcoal, brown, blue, stone]
+    vibe: [cinematic, leisurely, urban, graphic]
+  - file: 11.png
+    alt: "Busy Paris cafe terrace and Haussmann facades at dusk"
+    themes: [cafe, street scene, nightlife, architecture]
+    colors: [amber, charcoal, cream, red]
+    vibe: [lively, intimate, urban, glowing]

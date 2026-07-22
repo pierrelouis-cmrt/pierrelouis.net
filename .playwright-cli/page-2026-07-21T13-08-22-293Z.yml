@@ -1,0 +1,69 @@
+- generic [ref=e2]:
+  - banner "Primary navigation" [ref=e3]:
+    - link "Pierre-Louis home" [ref=e4] [cursor=pointer]:
+      - /url: ../
+      - generic [ref=e5]: P—L
+      - generic [ref=e6]: ©
+    - navigation "Main pages" [ref=e7]:
+      - link "Projects" [ref=e8] [cursor=pointer]:
+        - /url: ../projects/
+      - link "Posts" [ref=e9] [cursor=pointer]:
+        - /url: ../posts/
+      - link "Photos" [ref=e10] [cursor=pointer]:
+        - /url: ../photos/
+    - button "More ↓" [ref=e12] [cursor=pointer]
+  - main [ref=e13]:
+    - region [ref=e14]:
+      - heading "Someday I will..." [level=1] [ref=e15]
+      - paragraph [ref=e18]:
+        - text: A glimpse into where I'm headed. This page is part of the Someday Page Movement, started by
+        - link "Alexander Sandberg" [ref=e19] [cursor=pointer]:
+          - /url: https://someday.page/
+        - text: .
+    - region "Plans for someday" [ref=e20]:
+      - generic [ref=e21]:
+        - region [ref=e22]:
+          - heading "Bucket List ↓" [level=2] [ref=e23]
+          - list [ref=e24]:
+            - listitem [ref=e25]: ✓ Start my journey as an engineering student
+            - listitem [ref=e26]: ✓ Visit the nordic countries (Denmark, Sweden, Norway)
+            - listitem [ref=e27]: — Visit the US and do a West Coast trip from San Francisco down to Los Angeles, stopping in Silicon Valley on the way
+            - listitem [ref=e28]: — Spend a week in New York, just walking, taking photos, and visiting museums
+            - listitem [ref=e29]: — Do an internship or short-term job in a company where AI, hardware and design truly meet
+        - link "See Pierre-Louis' photos from the Nordic trip" [ref=e30] [cursor=pointer]:
+          - /url: ../photos/?norway
+          - img "A mountain reflected in the calm waters of Aurlandsfjord, Norway." [ref=e32]
+          - generic [ref=e33]:
+            - generic [ref=e34]: Nordic Trip
+            - generic [ref=e35]: See all photos I took
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - region [ref=e38]:
+            - heading "I. Career, the ultimate dream" [level=2] [ref=e39]
+            - paragraph [ref=e40]: Someday I would like to find a job that perfectly combines state-of-the-art AI, robotics, and design. I love tech and pure, hardcore science, but design is a core part of who I am, and it cannot remain just a side aspect of my life. Studying STEM is demanding and the path to becoming an engineer is not easy, but the opportunities it opens up are incredible.
+          - region [ref=e41]:
+            - heading "II. Side Quests" [level=2] [ref=e42]
+            - paragraph [ref=e43]: Someday I would like to enter Silicon Valley's tech world and really grasp what they are up to, from the inside.
+            - paragraph [ref=e44]: Someday I'll create a small yet sophisticated audio setup at home to properly listen to music. I'm getting a bit tired of the mid-tier headsets and portable speakers I've owned all my life. I really need high-quality audio in my life, and I want to discover what music actually is.
+        - region [ref=e45]:
+          - heading "III. Learning new skills" [level=2] [ref=e46]
+          - paragraph [ref=e47]: Someday I will be a Graphic Designer. I have always loved design and art, and I want to be able to create beautiful things, with more freedom than user interfaces allow. I'm sure that my experience in web design could be a great foundation for that. I just need to learn to use the right tools.
+          - paragraph [ref=e48]: I also want to learn proper photography. I'm taking all my pictures with my iPhone 15 Pro, which has an amazing camera system, but I want to learn how to use a real camera and understand the fundamentals of photography.
+          - paragraph [ref=e49]: I've been wanting to learn more about Machine Learning. Many free courses are available online, and I want to explore them. Experimenting with this in python seems like a good and pretty fun start.
+          - paragraph [ref=e50]: And finally, let's speak about language. I want to be able to speak German correctly. I learned German in school for many years, but I was never really good at it. It's been two years since I last studied it, and I want to get back into it properly.
+  - contentinfo [ref=e51]:
+    - generic [ref=e52]:
+      - generic "Location and weather" [ref=e53]:
+        - generic [ref=e54]: Lyon, France
+        - generic [ref=e55]: 3:08 PM, Clear at 28°C
+      - navigation "Contact links" [ref=e56]:
+        - link "Copy Email" [ref=e57] [cursor=pointer]:
+          - /url: mailto:contact@pierrelouis.net
+        - link "Links & Socials" [ref=e58] [cursor=pointer]:
+          - /url: ../links/
+      - navigation "Site information" [ref=e59]:
+        - link "Colophon" [ref=e60] [cursor=pointer]:
+          - /url: ../colophon/
+        - link "Imprint" [ref=e61] [cursor=pointer]:
+          - /url: ../imprint/
+        - generic [ref=e62]: ©2026

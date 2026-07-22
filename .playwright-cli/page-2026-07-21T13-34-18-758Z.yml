@@ -1,0 +1,47 @@
+- generic [ref=f4e2]:
+  - banner "Primary navigation" [ref=f4e3]:
+    - link "Pierre-Louis home" [ref=f4e4] [cursor=pointer]:
+      - /url: ../
+      - generic [ref=f4e5]: P—L
+      - generic [ref=f4e6]: ©
+    - navigation "Main pages" [ref=f4e7]:
+      - link "Projects" [ref=f4e8] [cursor=pointer]:
+        - /url: ../projects/
+      - link "Posts" [ref=f4e9] [cursor=pointer]:
+        - /url: ../posts/
+      - link "Photos" [ref=f4e10] [cursor=pointer]:
+        - /url: ../photos/
+    - button "More ↓" [ref=f4e12] [cursor=pointer]
+  - main [ref=f4e13]:
+    - region [ref=f4e14]:
+      - heading "Lists and Catalogs" [level=1] [ref=f4e15]
+      - paragraph [ref=f4e18]: I like statistics. Espacially stats about myself. Sounds a bit egocentric, but it's more about understanding my own habits and visualise my life as progress. Here you'll find articles I liked, videos I find worth sharing, the gear I use, etc.
+    - region "Lists and catalogs" [ref=f4e19]:
+      - figure "Things I like" [ref=f4e20]:
+        - img "People crossing a pale plaza, casting long blue shadows." [ref=f4e22]
+      - figure "Things I dislike" [ref=f4e24]:
+        - img "A person seated in front of a garden exhibition display." [ref=f4e26]
+      - figure "TV Show I've watched" [ref=f4e28]:
+        - img "A collage of interface and interaction design projects." [ref=f4e29]
+      - figure "Articles and videos worth taking a look at" [ref=f4e32]:
+        - img "A soft pink inflated-letter wordmark on light gray." [ref=f4e34]
+      - figure "Places I've been to" [ref=f4e36]:
+        - img "A blue and white checkerboard." [ref=f4e37]
+      - figure "Tech stack and everyday gear" [ref=f4e39]:
+        - img "A green-tinted overhead view of electronic instruments and everyday gear." [ref=f4e41]
+  - contentinfo [ref=f4e43]:
+    - generic [ref=f4e44]:
+      - generic "Location and weather" [ref=f4e45]:
+        - generic [ref=f4e46]: Lyon, France
+        - generic [ref=f4e47]: 3:34 PM, Clear at 28°C
+      - navigation "Contact links" [ref=f4e48]:
+        - link "Copy Email" [ref=f4e49] [cursor=pointer]:
+          - /url: mailto:contact@pierrelouis.net
+        - link "Links & Socials" [ref=f4e50] [cursor=pointer]:
+          - /url: ../links/
+      - navigation "Site information" [ref=f4e51]:
+        - link "Colophon" [ref=f4e52] [cursor=pointer]:
+          - /url: ../colophon/
+        - link "Imprint" [ref=f4e53] [cursor=pointer]:
+          - /url: ../imprint/
+        - generic [ref=f4e54]: ©2026
