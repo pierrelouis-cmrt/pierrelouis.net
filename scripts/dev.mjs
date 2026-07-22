@@ -16,6 +16,10 @@ const shouldRebuild = (filename) => {
   );
 };
 
+const shouldSyncSharedComponents = (filename) => {
+  return filename.endsWith(".html") || filename === "scripts/shared-components.mjs";
+};
+
 const shouldIgnore = (filename) => {
   return (
     filename.startsWith(".git/") ||
@@ -49,6 +53,12 @@ const queue = (filename, reload) => {
             `${result.assets.skipped} cached asset(s), ` +
             `${result.assets.removed} stale item(s) removed.`,
         );
+      } else if (shouldSyncSharedComponents(filename)) {
+        const changed = await syncSharedComponents();
+
+        if (changed.length > 0) {
+          console.log(`Synced shared components: ${changed.join(", ")}.`);
+        }
       }
 
       reload();

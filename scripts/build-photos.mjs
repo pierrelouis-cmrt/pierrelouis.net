@@ -870,24 +870,24 @@ const renderCountryFilters = (collections) => {
   const countryCounts = getCountryPhotoCounts(collections);
   const totalCount = getPhotoCount(collections);
   const allButton = `<button
-                  class="photo-filter__button is-active"
+                  class="content-filter__button is-active"
                   type="button"
                   data-country-filter="all"
                   aria-pressed="true"
                 >
                   <span>All</span>
-                  <span class="photo-filter__count" data-filter-count>${totalCount}</span>
+                  <span class="content-filter__count" data-filter-count>${totalCount}</span>
                 </button>`;
   const countryButtons = countries
     .map((country) => {
       return `<button
-                  class="photo-filter__button"
+                  class="content-filter__button"
                   type="button"
                   data-country-filter="${escapeHtml(country)}"
                   aria-pressed="false"
                 >
                   <span>${escapeHtml(country)}</span>
-                  <span class="photo-filter__count" data-filter-count hidden>${countryCounts.get(country) || 0}</span>
+                  <span class="content-filter__count" data-filter-count hidden>${countryCounts.get(country) || 0}</span>
                 </button>`;
     })
     .join("\n");
@@ -1107,16 +1107,16 @@ const renderPage = (collections) => {
         <h1 class="sr-only">Photos</h1>
 
         <section class="photos-intro page-intro" aria-label="Photos introduction">
-          <div class="photo-filter" aria-label="Photo filters" data-photo-filters>
-            <span class="photo-filter__symbol" aria-hidden="true">✤</span>
-            <div class="photo-filter__content">
-              <div class="photo-filter__countries" aria-label="Countries">
+          <div class="content-filter" aria-label="Photo filters" data-photo-filters>
+            <span class="content-filter__symbol" aria-hidden="true">✤</span>
+            <div class="content-filter__content">
+              <div class="content-filter__options" aria-label="Countries">
 ${renderCountryFilters(collections)}
               </div>
-              <label class="photo-filter__search">
+              <label class="content-filter__search">
                 <span class="sr-only">Search photos</span>
                 <input
-                  class="photo-filter__input"
+                  class="content-filter__input"
                   type="search"
                   placeholder="Search place, color, mood..."
                   autocomplete="off"
@@ -1124,7 +1124,7 @@ ${renderCountryFilters(collections)}
                   data-photo-search
                 />
               </label>
-              <p class="photo-filter__empty" data-photo-empty hidden>
+              <p class="content-filter__empty" data-photo-empty hidden>
                 No photos found
               </p>
             </div>

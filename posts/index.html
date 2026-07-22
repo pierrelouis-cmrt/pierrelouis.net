@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Posts - Pierre-Louis</title>
+    <meta
+      name="description"
+      content="Articles, notes and experiments from Pierre-Louis on design, code, science and reflection."
+    />
+    <meta property="og:title" content="Posts - Pierre-Louis" />
+    <meta
+      property="og:description"
+      content="Articles, notes and experiments on design, code, science and reflection."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pierrelouis.net/posts/" />
+    <meta
+      property="og:image"
+      content="https://pierrelouis.net/assets/image_mobile_featured.gif"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/favicon/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/favicon/apple-touch-icon.png"
+    />
+    <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="stylesheet" href="./posts.css" />
+    <script src="../script.js" defer></script>
+    <script src="./posts.js" defer></script>
+    <script src="../footer.js" defer></script>
+  </head>
+  <body>
+    <div class="site-shell posts-page">
+      <header class="site-header" aria-label="Primary navigation">
+        <a class="brand-mark" href="../" aria-label="Pierre-Louis home">
+          <span class="brand-mark__text">P—L</span>
+          <span class="brand-mark__copyright" aria-hidden="true">©</span>
+        </a>
+
+        <nav class="primary-nav" aria-label="Main pages">
+          <a class="primary-nav__link" href="../projects/">Projects</a>
+          <a class="primary-nav__link" href="../posts/" aria-current="page">Posts</a>
+          <a class="primary-nav__link" href="../photos/">Photos</a>
+        </nav>
+
+        <div class="more-menu" data-more-menu>
+          <button
+            class="more-menu__toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="more-menu-panel"
+            data-more-menu-toggle
+          >
+            More ↓
+          </button>
+
+          <nav
+            class="more-menu__panel"
+            id="more-menu-panel"
+            aria-label="More pages"
+            data-more-menu-panel
+            hidden
+          >
+            <a class="more-menu__link" href="../about/">About</a>
+            <a class="more-menu__link" href="../now/">Now</a>
+            <a class="more-menu__link" href="../someday/">Someday</a>
+            <a class="more-menu__link" href="../lists/">Lists</a>
+          </nav>
+        </div>
+
+        <div class="mobile-menu" data-mobile-menu>
+          <button
+            class="mobile-menu__toggle"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-menu-panel"
+            data-mobile-menu-toggle
+          >
+            <span class="mobile-menu__toggle-line"></span>
+            <span class="mobile-menu__toggle-line"></span>
+          </button>
+
+          <div
+            class="mobile-menu__panel"
+            id="mobile-menu-panel"
+            data-mobile-menu-panel
+            hidden
+          >
+            <div class="mobile-menu__bar">
+              <a
+                class="mobile-menu__brand"
+                href="../"
+                aria-label="Pierre-Louis home"
+              >
+                <span class="brand-mark__text">P—L</span>
+                <span class="brand-mark__copyright" aria-hidden="true">©</span>
+              </a>
+            </div>
+
+            <div class="mobile-menu__layout">
+              <section
+                class="mobile-menu__section mobile-menu__section--main"
+                aria-labelledby="mobile-menu-main"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-main">
+                  Main Pages
+                </h2>
+                <nav class="mobile-menu__links" aria-label="Main pages">
+                  <a class="mobile-menu__link" href="../projects/">Projects</a>
+                  <a class="mobile-menu__link" href="../posts/" aria-current="page">Posts</a>
+                  <a class="mobile-menu__link" href="../photos/">Photos</a>
+                </nav>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--latest"
+                aria-labelledby="mobile-menu-latest"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-latest">
+                  Latest
+                </h2>
+                <a
+                  class="mobile-menu__latest-link"
+                  href="../projects/conways-reverse-game-of-life/"
+                >
+                  <span class="mobile-menu__latest-title"
+                    >Reversing Conway's Game Of Life with Diffusion</span
+                  >
+                  <span class="mobile-menu__latest-media" aria-hidden="true">
+                    <span class="mobile-menu__latest-image"></span>
+                  </span>
+                  <span class="mobile-menu__see-more">See More ↗</span>
+                </a>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--about"
+                aria-labelledby="mobile-menu-about"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-about">
+                  More About Me
+                </h2>
+                <nav class="mobile-menu__links" aria-label="More about me">
+                  <a class="mobile-menu__link" href="../about/">Who I am</a>
+                  <a class="mobile-menu__link" href="../now/">What I'm doing</a>
+                  <a class="mobile-menu__link" href="../someday/">Where I'm going</a>
+                </nav>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--links"
+                aria-labelledby="mobile-menu-links"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-links">
+                  More Links
+                </h2>
+                <nav class="mobile-menu__links" aria-label="More links">
+                  <a class="mobile-menu__link" href="../lists/">Catalogs</a>
+                  <a class="mobile-menu__link" href="../links/">Links &amp; Socials</a>
+                </nav>
+              </section>
+            </div>
+
+            <img
+              class="mobile-menu__watermark"
+              src="../assets/image_mobile_watermark.png"
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <h1 class="sr-only">Posts</h1>
+
+        <section class="posts-intro page-intro" aria-label="Posts introduction">
+          <div class="content-filter" aria-label="Post filters" data-post-filters>
+            <span class="content-filter__symbol" aria-hidden="true">✱</span>
+            <div class="content-filter__content">
+              <div class="content-filter__options" aria-label="Post types">
+                <button
+                  class="content-filter__button is-active"
+                  type="button"
+                  data-post-filter="all"
+                  aria-pressed="true"
+                >
+                  <span>All</span>
+                  <span class="content-filter__count" data-filter-count>6</span>
+                </button>
+                <button
+                  class="content-filter__button"
+                  type="button"
+                  data-post-filter="article"
+                  aria-pressed="false"
+                >
+                  <span>Articles</span>
+                  <span class="content-filter__count" data-filter-count hidden
+                    >2</span
+                  >
+                </button>
+                <button
+                  class="content-filter__button"
+                  type="button"
+                  data-post-filter="note"
+                  aria-pressed="false"
+                >
+                  <span>Notes</span>
+                  <span class="content-filter__count" data-filter-count hidden
+                    >3</span
+                  >
+                </button>
+                <button
+                  class="content-filter__button"
+                  type="button"
+                  data-post-filter="experiment"
+                  aria-pressed="false"
+                >
+                  <span>Experiments</span>
+                  <span class="content-filter__count" data-filter-count hidden
+                    >1</span
+                  >
+                </button>
+              </div>
+              <label class="content-filter__search">
+                <span class="sr-only">Search posts</span>
+                <input
+                  class="content-filter__input"
+                  type="search"
+                  placeholder="Search..."
+                  autocomplete="off"
+                  spellcheck="false"
+                  data-post-search
+                />
+              </label>
+              <p class="content-filter__empty" data-post-empty hidden>
+                No posts found
+              </p>
+            </div>
+          </div>
+
+          <p class="posts-intro__copy intro-copy">
+            My personal blog. On here you'll find some self reflection, some
+            coding or very scientific oriented content, etc. Articles are long,
+            Notes are shorter and Experiments are coding things!
+          </p>
+        </section>
+
+        <section class="posts-content" aria-label="Published posts">
+          <ol class="post-list">
+            <li
+              class="post-row"
+              data-post-type="article"
+              data-post-search="making things readable by design readable color contrast meaning"
+              style="--post-indent: 0px"
+            >
+              <div class="post-row__primary">
+                <div class="post-row__date">
+                  <span class="post-row__year">2026</span>
+                  <time class="post-row__month" datetime="2026-05">May</time>
+                </div>
+                <h2 class="post-row__title">Making things readable by design</h2>
+              </div>
+              <div class="post-row__secondary">
+                <p class="post-row__summary">
+                  Why readable design is not only about color, but also contrast
+                  and meaning.
+                </p>
+                <a
+                  class="post-row__link internal-link"
+                  href="./making-things-readable-by-design/"
+                  aria-label="Read Making things readable by design"
+                  ><span class="post-row__link-label--full">Read More</span
+                  ><span class="post-row__link-label--compact">Read</span>
+                  <span aria-hidden="true">→</span></a
+                >
+              </div>
+            </li>
+
+            <li
+              class="post-row"
+              data-post-type="note"
+              data-post-search="writing follows its own rhythm ideas write"
+              style="--post-indent: 90px"
+            >
+              <div class="post-row__primary">
+                <div class="post-row__date">
+                  <span class="post-row__year" aria-hidden="true"></span>
+                  <time class="post-row__month" datetime="2026-04">Apr</time>
+                </div>
+                <h2 class="post-row__title">Writing Follows Its Own Rhythm</h2>
+              </div>
+              <div class="post-row__secondary">
+                <p class="post-row__summary">
+                  Why I stopped forcing myself to write — and learned to follow
+                  the rhythm of my own ideas.
+                </p>
+                <a
+                  class="post-row__link internal-link"
+                  href="./writing-follows-its-own-rhythm/"
+                  aria-label="Read Writing Follows Its Own Rhythm"
+                  ><span class="post-row__link-label--full">Read More</span
+                  ><span class="post-row__link-label--compact">Read</span>
+                  <span aria-hidden="true">→</span></a
+                >
+              </div>
+            </li>
+
+            <li
+              class="post-row"
+              data-post-type="article"
+              data-post-search="let it sit design time process"
+              style="--post-indent: 190px"
+            >
+              <div class="post-row__primary">
+                <div class="post-row__date">
+                  <span class="post-row__year" aria-hidden="true"></span>
+                  <span class="post-row__month" aria-hidden="true"></span>
+                </div>
+                <h2 class="post-row__title">Let It Sit</h2>
+              </div>
+              <div class="post-row__secondary">
+                <p class="post-row__summary">
+                  Why good design takes time, and what actually happens when you
+                  let things sit.
+                </p>
+                <a
+                  class="post-row__link internal-link"
+                  href="./let-it-sit/"
+                  aria-label="Read Let It Sit"
+                  ><span class="post-row__link-label--full">Read More</span
+                  ><span class="post-row__link-label--compact">Read</span>
+                  <span aria-hidden="true">→</span></a
+                >
+              </div>
+            </li>
+
+            <li
+              class="post-row"
+              data-post-type="note"
+              data-post-search="don't let ideas expire curiosity save expand"
+              style="--post-indent: 90px"
+            >
+              <div class="post-row__primary">
+                <div class="post-row__date">
+                  <span class="post-row__year" aria-hidden="true"></span>
+                  <time class="post-row__month" datetime="2026-03">Mar</time>
+                </div>
+                <h2 class="post-row__title">Don't let ideas expire</h2>
+              </div>
+              <div class="post-row__secondary">
+                <p class="post-row__summary">
+                  Your curiosity won't wait for you. Save your ideas quick,
+                  expand on them quicker.
+                </p>
+                <a
+                  class="post-row__link internal-link"
+                  href="./dont-let-ideas-expire/"
+                  aria-label="Read Don't let ideas expire"
+                  ><span class="post-row__link-label--full">Read More</span
+                  ><span class="post-row__link-label--compact">Read</span>
+                  <span aria-hidden="true">→</span></a
+                >
+              </div>
+            </li>
+
+            <li
+              class="post-row"
+              data-post-type="note"
+              data-post-search="croissance et objectivité subjectivité grandissant trivial french"
+              style="--post-indent: 90px"
+            >
+              <div class="post-row__primary">
+                <div class="post-row__date">
+                  <span class="post-row__year" aria-hidden="true"></span>
+                  <time class="post-row__month" datetime="2026-02">Feb</time>
+                </div>
+                <h2 class="post-row__title">Croissance et objectivité</h2>
+              </div>
+              <div class="post-row__secondary">
+                <p class="post-row__summary">
+                  Se détacher de la subjectivité en grandissant&nbsp;? Est-ce
+                  trivial&nbsp;?
+                </p>
+                <a
+                  class="post-row__link internal-link"
+                  href="./croissance-et-objectivite/"
+                  aria-label="Read Croissance et objectivité"
+                  ><span class="post-row__link-label--full">Read More</span
+                  ><span class="post-row__link-label--compact">Read</span>
+                  <span aria-hidden="true">→</span></a
+                >
+              </div>
+            </li>
+
+            <li
+              class="post-row"
+              data-post-type="experiment"
+              data-post-search="density vs quantity for our brain novel experiences routine time"
+              style="--post-indent: 190px"
+            >
+              <div class="post-row__primary">
+                <div class="post-row__date">
+                  <span class="post-row__year" aria-hidden="true"></span>
+                  <span class="post-row__month" aria-hidden="true"></span>
+                </div>
+                <h2 class="post-row__title">Density vs quantity for our brain</h2>
+              </div>
+              <div class="post-row__secondary">
+                <p class="post-row__summary">
+                  Novel, dense experiences fly by in the moment but expand in
+                  retrospect, while empty routine drags in the moment but feels
+                  short looking back.
+                </p>
+                <a
+                  class="post-row__link internal-link"
+                  href="./density-vs-quantity-for-our-brain/"
+                  aria-label="Read Density vs quantity for our brain"
+                  ><span class="post-row__link-label--full">Read More</span
+                  ><span class="post-row__link-label--compact">Read</span>
+                  <span aria-hidden="true">→</span></a
+                >
+              </div>
+            </li>
+          </ol>
+
+          <aside class="featured-post" aria-label="Featured post">
+            <span class="featured-post__eyebrow">Featured Post</span>
+            <a
+              class="featured-article"
+              href="../projects/conways-reverse-game-of-life/"
+            >
+              <span class="featured-article__title"
+                >Reversing Conway's Game Of Life with Diffusion</span
+              >
+              <span class="featured-article__media">
+                <img
+                  class="featured-article__image"
+                  src="../assets/image_mobile_featured.gif"
+                  width="250"
+                  height="180"
+                  alt="Animated cellular automata evolving across a white field."
+                />
+              </span>
+              <span class="featured-article__cta">See More ↗</span>
+            </a>
+          </aside>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer__content">
+          <div class="site-footer__location" aria-label="Location and weather">
+            <span>Lyon, France</span>
+            <span data-footer-weather>Weather loading...</span>
+          </div>
+
+          <nav
+            class="site-footer__group site-footer__group--contact"
+            aria-label="Contact links"
+          >
+            <a
+              class="site-footer__link"
+              href="mailto:contact@pierrelouis.net"
+              data-copy-email
+              data-email="contact@pierrelouis.net"
+              >Copy Email</a
+            >
+            <a class="site-footer__link" href="../links/">Links &amp; Socials</a>
+          </nav>
+
+          <nav
+            class="site-footer__group site-footer__group--info"
+            aria-label="Site information"
+          >
+            <a class="site-footer__link" href="../colophon/">Colophon</a>
+            <a class="site-footer__link" href="../imprint/">Imprint</a>
+            <span class="site-footer__copyright-slot">
+              <span class="site-footer__copyright"
+                >©<span data-footer-year>2026</span></span
+              >
+            </span>
+          </nav>
+        </div>
+
+        <div class="watermark" aria-hidden="true">
+          <span class="watermark__name watermark__name--first"></span>
+          <span class="watermark__dash"></span>
+          <span class="watermark__name watermark__name--last"></span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

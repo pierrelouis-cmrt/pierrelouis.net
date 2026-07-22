@@ -28,6 +28,73 @@
     query: "",
   };
 
+  const setupRevealMotion = () => {
+    const page = document.querySelector(".photos-page");
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (!page || prefersReducedMotion) {
+      return;
+    }
+
+    const intro = page.querySelector(".photos-intro");
+    const revealTargets = [
+      ...page.querySelectorAll(".photo-album__header, .photo-card"),
+    ];
+    const revealTarget = (target) => {
+      target.classList.add("is-reveal-visible");
+    };
+
+    page.classList.add("has-photo-reveal-motion");
+
+    for (const image of page.querySelectorAll(".photo-card__image")) {
+      const card = image.closest(".photo-card");
+      const markLoaded = () => card?.classList.add("is-image-loaded");
+
+      if (image.complete) {
+        markLoaded();
+      } else {
+        image.addEventListener("load", markLoaded, { once: true });
+        image.addEventListener("error", markLoaded, { once: true });
+      }
+    }
+
+    const startReveal = () => {
+      intro?.classList.add("is-reveal-visible");
+
+      if (!("IntersectionObserver" in window)) {
+        revealTargets.forEach(revealTarget);
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) {
+              continue;
+            }
+
+            revealTarget(entry.target);
+            observer.unobserve(entry.target);
+          }
+        },
+        {
+          rootMargin: "0px 0px -8% 0px",
+          threshold: 0.08,
+        },
+      );
+
+      revealTargets.forEach((target) => observer.observe(target));
+    };
+
+    // Let the browser paint the hidden state once before observing visible
+    // content. Otherwise the initial observer callback can beat first paint.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(startReveal);
+    });
+  };
+
   // Small, gallery-specific groups outperform a remote thesaurus here: they are
   // instant, predictable, and work offline. Every word in a group is equivalent.
   const SEARCH_SYNONYM_GROUPS = [
@@ -372,4 +439,5 @@
 
   Object.assign(state, getFilterFromUrl());
   applyFilters();
+  setupRevealMotion();
 })();

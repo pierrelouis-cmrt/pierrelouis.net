@@ -46,14 +46,6 @@
   margin-top: var(--space-xl);
 }
 
-.about-guide__copy a {
-  transition: opacity var(--duration-fast) var(--ease-out);
-}
-
-.about-guide__copy a:hover {
-  opacity: var(--hover-opacity);
-}
-
 .values {
   width: min(579px, 100%);
   margin-top: 341px;
