@@ -2,6 +2,7 @@ import { mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises"
 import { spawn } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { applySharedComponents } from "./shared-components.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_DIR = path.join(ROOT, "content", "photos");
@@ -898,7 +899,7 @@ const renderPage = (collections) => {
   const countries = getCountries(collections);
   const albums = collections.map(renderCollection).join("\n\n");
 
-  return `<!doctype html>
+  const page = `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -961,7 +962,7 @@ const renderPage = (collections) => {
           <a class="primary-nav__link" href="../projects/">Projects</a>
           <a class="primary-nav__link" href="../posts/">Posts</a>
           <a
-            class="primary-nav__link primary-nav__link--active"
+            class="primary-nav__link"
             href="../photos/"
             aria-current="page"
             >Photos</a
@@ -1034,7 +1035,12 @@ const renderPage = (collections) => {
                 <nav class="mobile-menu__links" aria-label="Main pages">
                   <a class="mobile-menu__link" href="../projects/">Projects</a>
                   <a class="mobile-menu__link" href="../posts/">Posts</a>
-                  <a class="mobile-menu__link" href="../photos/">Photos</a>
+                  <a
+                    class="mobile-menu__link"
+                    href="../photos/"
+                    aria-current="page"
+                    >Photos</a
+                  >
                 </nav>
               </section>
 
@@ -1087,7 +1093,7 @@ const renderPage = (collections) => {
                 <nav class="mobile-menu__links" aria-label="More links">
                   <a class="mobile-menu__link" href="../lists/">Catalogs</a>
                   <a class="mobile-menu__link" href="../links/"
-                    >Link &amp; Socials</a
+                    >Links &amp; Socials</a
                   >
                 </nav>
               </section>
@@ -1106,7 +1112,7 @@ const renderPage = (collections) => {
       <main>
         <h1 class="sr-only">Photos</h1>
 
-        <section class="photos-intro" aria-label="Photos introduction">
+        <section class="photos-intro page-intro" aria-label="Photos introduction">
           <div class="photo-filter" aria-label="Photo filters" data-photo-filters>
             <span class="photo-filter__symbol" aria-hidden="true">✤</span>
             <div class="photo-filter__content">
@@ -1130,7 +1136,7 @@ ${renderCountryFilters(collections)}
             </div>
           </div>
 
-          <p class="photos-intro__copy">
+          <p class="photos-intro__copy intro-copy">
             ${escapeHtml(INTRO_COPY)}
           </p>
         </section>
@@ -1200,6 +1206,12 @@ ${albums}
   </body>
 </html>
 `;
+
+  return applySharedComponents(
+    page,
+    { root: "../", active: "photos" },
+    "generated photos/index.html",
+  );
 };
 
 const renderData = (collections) => {

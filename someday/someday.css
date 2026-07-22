@@ -1,44 +1,3 @@
-.someday-intro {
-  display: grid;
-  grid-template-columns: var(--page-grid-columns);
-  column-gap: var(--grid-gap);
-  min-height: var(--page-intro-min-height);
-  align-content: start;
-  padding: var(--page-intro-padding-top) var(--page-gutter)
-    var(--page-intro-padding-bottom);
-}
-
-.someday-intro__title {
-  grid-column: 1 / span 2;
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-md);
-  margin: 0;
-  color: var(--color-ink);
-  font-size: 22px;
-  font-weight: 500;
-  line-height: 1.67;
-  letter-spacing: var(--tracking-label);
-}
-
-.someday-intro__dot {
-  flex: 0 0 auto;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.someday-intro__copy {
-  grid-column: 3 / span 2;
-  width: min(526px, 100%);
-  margin: 0;
-  color: var(--color-ink);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-copy);
-  letter-spacing: -0.3px;
-}
-
 .someday-content {
   display: grid;
   grid-template-columns: var(--page-grid-columns);
@@ -119,13 +78,6 @@
   max-width: none;
   object-fit: cover;
   object-position: center;
-  transition: transform var(--duration-image) var(--ease-out);
-}
-
-.trip-card__caption {
-  display: block;
-  padding-top: var(--space-md);
-  transition: opacity var(--duration-fast) var(--ease-out);
 }
 
 .trip-card__title,
@@ -144,14 +96,6 @@
   padding-top: 6px;
   color: var(--color-subtle);
   font-size: var(--font-size-small);
-}
-
-.trip-card:hover .trip-card__image {
-  transform: scale(1.025);
-}
-
-.trip-card:hover .trip-card__caption {
-  opacity: var(--hover-opacity);
 }
 
 .someday-stories {
@@ -180,21 +124,11 @@
   margin-top: 2lh;
 }
 
-@media (min-width: 1101px) {
-  .someday-page .site-footer {
-    --watermark-gap: 62px;
-
-    margin-top: 89px;
-  }
-}
-
 @media (max-width: 1100px) {
-  .someday-intro__title,
   .someday-rail {
     grid-column: 1;
   }
 
-  .someday-intro__copy,
   .someday-stories {
     grid-column: 2;
   }
@@ -220,24 +154,9 @@
 }
 
 @media (max-width: 760px) {
-  .someday-intro {
-    row-gap: var(--space-4xl);
-  }
-
-  .someday-intro__title,
-  .someday-intro__copy,
   .someday-rail,
   .someday-stories {
     grid-column: 1;
-  }
-
-  .someday-intro__title {
-    font-size: 20px;
-    line-height: var(--line-height-compact);
-  }
-
-  .someday-intro__copy {
-    max-width: 520px;
   }
 
   .someday-content {
@@ -263,15 +182,5 @@
     order: 3;
     width: min(100%, 360px);
     margin-top: var(--space-7xl);
-  }
-
-  .someday-page .site-footer {
-    margin-top: var(--space-7xl);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .trip-card__image {
-    transition: none;
   }
 }

@@ -1,68 +1,35 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
-    <title>Page template - Pierre-Louis</title>
-    <meta
-      name="description"
-      content="Reusable page template for Pierre-Louis' website."
-    />
-    <meta property="og:title" content="Page template - Pierre-Louis" />
-    <meta
-      property="og:description"
-      content="Reusable page template for Pierre-Louis' website."
-    />
-    <meta property="og:type" content="website" />
-    <meta
-      property="og:url"
-      content="https://pierrelouis.net/page-template.html"
-    />
-    <meta
-      property="og:image"
-      content="https://pierrelouis.net/assets/image_featured_1.webp"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      href="/favicon/favicon-96x96.png"
-      sizes="96x96"
-    />
-    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon/favicon.ico" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/favicon/apple-touch-icon.png"
-    />
-    <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
-    <link rel="manifest" href="/favicon/site.webmanifest" />
-    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
-    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://api.fontshare.com/v2/css?f[]=sora@400,500,600&display=swap"
-    />
-    <link rel="stylesheet" href="./base.css" />
-    <link rel="stylesheet" href="./page-template.css" />
-    <script src="./script.js" defer></script>
-    <script src="./footer.js" defer></script>
-  </head>
-  <body>
-    <div class="site-shell">
-      <header class="site-header" aria-label="Primary navigation">
-        <a class="brand-mark" href="./" aria-label="Pierre-Louis home">
+import { readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+
+const PAGE_CONFIGS = [
+  { file: "index.html", root: "./", active: "home" },
+  { file: "page-template.html", root: "./", active: null },
+  { file: "about/index.html", root: "../", active: "about" },
+  { file: "photos/index.html", root: "../", active: "photos" },
+  { file: "links/index.html", root: "../", active: "links" },
+  { file: "now/index.html", root: "../", active: "now" },
+  { file: "lists/index.html", root: "../", active: "lists" },
+  { file: "someday/index.html", root: "../", active: "someday" },
+  { file: "colophon/index.html", root: "../", active: "colophon" },
+  { file: "imprint/index.html", root: "../", active: "imprint" },
+];
+
+const currentPage = (active, page) =>
+  active === page ? ' aria-current="page"' : "";
+
+export const renderSiteHeader = ({ root, active }) => `      <header class="site-header" aria-label="Primary navigation">
+        <a class="brand-mark" href="${root}" aria-label="Pierre-Louis home">
           <span class="brand-mark__text">P—L</span>
           <span class="brand-mark__copyright" aria-hidden="true">©</span>
         </a>
 
         <nav class="primary-nav" aria-label="Main pages">
-          <a class="primary-nav__link" href="./projects/">Projects</a>
-          <a class="primary-nav__link" href="./posts/">Posts</a>
-          <a class="primary-nav__link" href="./photos/">Photos</a>
+          <a class="primary-nav__link" href="${root}projects/">Projects</a>
+          <a class="primary-nav__link" href="${root}posts/">Posts</a>
+          <a class="primary-nav__link" href="${root}photos/"${currentPage(active, "photos")}>Photos</a>
         </nav>
 
         <div class="more-menu" data-more-menu>
@@ -83,10 +50,10 @@
             data-more-menu-panel
             hidden
           >
-            <a class="more-menu__link" href="./about/">About</a>
-            <a class="more-menu__link" href="./now/">Now</a>
-            <a class="more-menu__link" href="./someday/">Someday</a>
-            <a class="more-menu__link" href="./lists/">Lists</a>
+            <a class="more-menu__link" href="${root}about/"${currentPage(active, "about")}>About</a>
+            <a class="more-menu__link" href="${root}now/"${currentPage(active, "now")}>Now</a>
+            <a class="more-menu__link" href="${root}someday/"${currentPage(active, "someday")}>Someday</a>
+            <a class="more-menu__link" href="${root}lists/"${currentPage(active, "lists")}>Lists</a>
           </nav>
         </div>
 
@@ -112,7 +79,7 @@
             <div class="mobile-menu__bar">
               <a
                 class="mobile-menu__brand"
-                href="./"
+                href="${root}"
                 aria-label="Pierre-Louis home"
               >
                 <span class="brand-mark__text">P—L</span>
@@ -129,9 +96,9 @@
                   Main Pages
                 </h2>
                 <nav class="mobile-menu__links" aria-label="Main pages">
-                  <a class="mobile-menu__link" href="./projects/">Projects</a>
-                  <a class="mobile-menu__link" href="./posts/">Posts</a>
-                  <a class="mobile-menu__link" href="./photos/">Photos</a>
+                  <a class="mobile-menu__link" href="${root}projects/">Projects</a>
+                  <a class="mobile-menu__link" href="${root}posts/">Posts</a>
+                  <a class="mobile-menu__link" href="${root}photos/"${currentPage(active, "photos")}>Photos</a>
                 </nav>
               </section>
 
@@ -144,7 +111,7 @@
                 </h2>
                 <a
                   class="mobile-menu__latest-link"
-                  href="./projects/conways-reverse-game-of-life/"
+                  href="${root}projects/conways-reverse-game-of-life/"
                 >
                   <span class="mobile-menu__latest-title"
                     >Reversing Conway's Game Of Life with Diffusion</span
@@ -164,9 +131,9 @@
                   More About Me
                 </h2>
                 <nav class="mobile-menu__links" aria-label="More about me">
-                  <a class="mobile-menu__link" href="./about/">Who I am</a>
-                  <a class="mobile-menu__link" href="./now/">What I'm doing</a>
-                  <a class="mobile-menu__link" href="./someday/">Where I'm going</a>
+                  <a class="mobile-menu__link" href="${root}about/"${currentPage(active, "about")}>Who I am</a>
+                  <a class="mobile-menu__link" href="${root}now/"${currentPage(active, "now")}>What I'm doing</a>
+                  <a class="mobile-menu__link" href="${root}someday/"${currentPage(active, "someday")}>Where I'm going</a>
                 </nav>
               </section>
 
@@ -178,56 +145,23 @@
                   More Links
                 </h2>
                 <nav class="mobile-menu__links" aria-label="More links">
-                  <a class="mobile-menu__link" href="./lists/">Catalogs</a>
-                  <a class="mobile-menu__link" href="./links/">Links &amp; Socials</a>
+                  <a class="mobile-menu__link" href="${root}lists/"${currentPage(active, "lists")}>Catalogs</a>
+                  <a class="mobile-menu__link" href="${root}links/"${currentPage(active, "links")}>Links &amp; Socials</a>
                 </nav>
               </section>
             </div>
 
             <img
               class="mobile-menu__watermark"
-              src="./assets/image_mobile_watermark.png"
+              src="${root}assets/image_mobile_watermark.png"
               alt=""
               aria-hidden="true"
             />
           </div>
         </div>
-      </header>
+      </header>`;
 
-      <main>
-        <h1 class="sr-only">Reusable page template</h1>
-
-        <section class="info page-intro" aria-label="Information">
-          <p class="availability">
-            <span class="availability__dot" aria-hidden="true"></span>
-            <span class="availability__copy">
-              Studying @ Centrale Lyon<br />
-              Based in France, open to work
-            </span>
-          </p>
-
-          <p class="info__bio intro-copy">
-            I'm Pierre-Louis, an engineering student, design nerd, and tech
-            enthusiast. I move between code and modern art, between French and
-            English, between building things and wondering why they matter.
-          </p>
-        </section>
-
-        <section class="general-section" aria-labelledby="general-section-title">
-          <h2 class="general-section__title" id="general-section-title">
-            General section
-          </h2>
-
-          <div class="general-section__body">
-            <p>
-              Replace this area with the page-specific content. The navigation,
-              mobile menu, information block and footer are already wired.
-            </p>
-          </div>
-        </section>
-      </main>
-
-      <footer class="site-footer">
+export const renderSiteFooter = ({ root, active }) => `      <footer class="site-footer">
         <div class="site-footer__content">
           <div class="site-footer__location" aria-label="Location and weather">
             <span>Lyon, France</span>
@@ -245,18 +179,18 @@
               data-email="contact@pierrelouis.net"
               >Copy Email</a
             >
-            <a class="site-footer__link" href="./links/">Links &amp; Socials</a>
+            <a class="site-footer__link" href="${root}links/"${currentPage(active, "links")}>Links &amp; Socials</a>
           </nav>
 
           <nav
             class="site-footer__group site-footer__group--info"
             aria-label="Site information"
           >
-            <a class="site-footer__link" href="./colophon/">Colophon</a>
-            <a class="site-footer__link" href="./imprint/">Imprint</a>
+            <a class="site-footer__link" href="${root}colophon/"${currentPage(active, "colophon")}>Colophon</a>
+            <a class="site-footer__link" href="${root}imprint/"${currentPage(active, "imprint")}>Imprint</a>
             <span class="site-footer__copyright-slot">
               <span class="site-footer__copyright"
-                >©<span data-footer-year>2026</span></span
+                >©<span data-footer-year>${new Date().getFullYear()}</span></span
               >
             </span>
           </nav>
@@ -267,7 +201,55 @@
           <span class="watermark__dash"></span>
           <span class="watermark__name watermark__name--last"></span>
         </div>
-      </footer>
-    </div>
-  </body>
-</html>
+      </footer>`;
+
+const replaceComponent = (html, pattern, component, file) => {
+  if (!pattern.test(html)) {
+    throw new Error(`Shared component not found in ${file}`);
+  }
+
+  return html.replace(pattern, component);
+};
+
+export const applySharedComponents = (source, config, file = "HTML source") => {
+  let output = replaceComponent(
+    source,
+    /      <header class="site-header"[\s\S]*?      <\/header>/,
+    renderSiteHeader(config),
+    file,
+  );
+  output = replaceComponent(
+    output,
+    /      <footer class="site-footer">[\s\S]*?      <\/footer>/,
+    renderSiteFooter(config),
+    file,
+  );
+
+  return output;
+};
+
+export const syncSharedComponents = async () => {
+  const changed = [];
+
+  for (const config of PAGE_CONFIGS) {
+    const filePath = path.join(ROOT, config.file);
+    const source = await readFile(filePath, "utf8");
+    const output = applySharedComponents(source, config, config.file);
+
+    if (output !== source) {
+      await writeFile(filePath, output);
+      changed.push(config.file);
+    }
+  }
+
+  return changed;
+};
+
+const isDirectRun =
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+if (isDirectRun) {
+  const changed = await syncSharedComponents();
+  console.log(`Synced shared components: ${changed.length} file(s) updated.`);
+}

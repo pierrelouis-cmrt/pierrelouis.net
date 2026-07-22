@@ -2,6 +2,7 @@ import { watch } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildPhotos } from "./build-photos.mjs";
+import { syncSharedComponents } from "./shared-components.mjs";
 import { startSiteServer } from "./site-server.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -10,7 +11,8 @@ const PORT = Number(process.env.PORT || 8000);
 const shouldRebuild = (filename) => {
   return (
     filename.startsWith("content/photos/") ||
-    filename === "scripts/build-photos.mjs"
+    filename === "scripts/build-photos.mjs" ||
+    filename === "scripts/shared-components.mjs"
   );
 };
 
@@ -40,6 +42,7 @@ const queue = (filename, reload) => {
     try {
       if (shouldRebuild(filename)) {
         const result = await buildPhotos();
+        await syncSharedComponents();
         console.log(
           `Rebuilt photos: ${result.collections} collection(s), ${result.photos} photo(s), ` +
             `${result.assets.generated} generated asset(s), ` +
@@ -58,6 +61,7 @@ const queue = (filename, reload) => {
 };
 
 const initial = await buildPhotos();
+await syncSharedComponents();
 const site = await startSiteServer({ dev: true, port: PORT });
 
 console.log(

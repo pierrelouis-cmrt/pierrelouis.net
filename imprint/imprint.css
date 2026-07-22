@@ -8,36 +8,6 @@
   padding: var(--page-intro-padding-top) var(--page-gutter) 0;
 }
 
-.imprint-title {
-  grid-column: 1 / span 2;
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-md);
-  margin: 0;
-  color: var(--color-ink);
-  font-size: 22px;
-  font-weight: 500;
-  line-height: 1.67;
-  letter-spacing: var(--tracking-label);
-}
-
-.imprint-title__dot {
-  width: 9px;
-  height: 9px;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.imprint-copy {
-  grid-column: 3 / span 2;
-  width: min(526px, 100%);
-  color: var(--color-ink);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-copy);
-  letter-spacing: -0.3px;
-}
-
 .imprint-copy__section + .imprint-copy__section {
   margin-top: var(--space-5xl);
 }
@@ -97,25 +67,11 @@
   letter-spacing: -0.3px;
 }
 
-.imprint-page .site-footer {
-  --watermark-gap: 62px;
-
-  margin-top: 73px;
-}
-
 @media (max-width: 1100px) {
   .imprint-content {
     height: auto;
     min-height: 0;
     padding-top: var(--page-intro-padding-top);
-  }
-
-  .imprint-title {
-    grid-column: 1;
-  }
-
-  .imprint-copy {
-    grid-column: 2;
   }
 
   .imprint-landscape {
@@ -129,20 +85,6 @@
     padding-top: var(--page-intro-padding-top);
   }
 
-  .imprint-title,
-  .imprint-copy {
-    grid-column: 1;
-  }
-
-  .imprint-title {
-    font-size: 20px;
-    line-height: var(--line-height-compact);
-  }
-
-  .imprint-copy {
-    width: 100%;
-  }
-
   .imprint-landscape {
     aspect-ratio: 4 / 3;
     margin-top: var(--space-7xl);
@@ -151,11 +93,5 @@
   .imprint-landscape__caption {
     top: var(--space-md);
     left: var(--page-gutter);
-  }
-
-  .imprint-page .site-footer {
-    --watermark-gap: clamp(18px, 5vw, 28px);
-
-    margin-top: var(--space-6xl);
   }
 }
