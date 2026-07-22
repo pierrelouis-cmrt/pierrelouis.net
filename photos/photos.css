@@ -53,8 +53,9 @@
 }
 
 .photo-filter__button.is-active {
+  font-weight: var(--font-weight-italic);
   font-style: italic;
-  font-synthesis: style;
+  font-variation-settings: "wght" var(--font-weight-italic);
 }
 
 .photo-filter__count::before {

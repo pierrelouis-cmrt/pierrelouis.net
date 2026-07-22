@@ -938,12 +938,6 @@ const renderPage = (collections) => {
     />
     <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
-    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
-    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://api.fontshare.com/v2/css?f[]=sora@400,500,600&display=swap"
-    />
     <link rel="stylesheet" href="../base.css" />
     <link rel="stylesheet" href="./photos.css" />
     <script src="../script.js" defer></script>
