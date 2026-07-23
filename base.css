@@ -447,8 +447,7 @@ main {
   opacity: var(--hover-opacity);
 }
 
-.content-filter__button:focus-visible,
-.content-filter__input:focus-visible {
+.content-filter__button:focus-visible {
   outline: 1px solid currentColor;
   outline-offset: 3px;
 }
