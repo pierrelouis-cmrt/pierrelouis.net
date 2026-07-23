@@ -409,6 +409,12 @@
     --posts-date-sticky-top: 0px;
   }
 
+  .post-row__year,
+  .post-row__month {
+    transition: top var(--mobile-header-motion-duration)
+      var(--mobile-header-motion-easing);
+  }
+
   .post-row {
     grid-template-columns: var(--post-date-rail-width) minmax(0, 1fr);
     column-gap: var(--space-xl);

@@ -87,6 +87,8 @@
   --duration-medium: 260ms;
   --duration-menu: 420ms;
   --duration-image: 600ms;
+  --mobile-header-motion-duration: var(--duration-medium);
+  --mobile-header-motion-easing: var(--ease-out);
   --hover-opacity: 0.62;
   --watermark-opacity: 0.05;
 
@@ -853,7 +855,8 @@ main {
     transform: translate3d(0, 0, 0);
     transition:
       opacity var(--duration-fast) var(--ease-out),
-      transform var(--duration-medium) var(--ease-out);
+      transform var(--mobile-header-motion-duration)
+        var(--mobile-header-motion-easing);
     will-change: transform;
   }
 
