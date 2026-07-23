@@ -14,11 +14,9 @@
   grid-column: 1 / span 2;
   display: flex;
   min-width: 0;
-  height: 648px;
   min-height: 648px;
   flex-direction: column;
   align-items: flex-start;
-  align-self: start;
   justify-content: space-between;
 }
 
@@ -138,17 +136,14 @@
     min-height: 0;
   }
 
-  .someday-rail {
-    height: auto;
-  }
-
   .someday-stories {
     grid-template-columns: 1fr;
     gap: var(--space-6xl);
   }
 
   .someday-rail {
-    justify-content: flex-start;
+    height: 100%;
+    justify-content: space-between;
     gap: var(--space-8xl);
   }
 }

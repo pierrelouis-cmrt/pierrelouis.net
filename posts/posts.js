@@ -9,6 +9,10 @@
   const searchInput = root.querySelector("[data-post-search]");
   const emptyState = root.querySelector("[data-post-empty]");
   const posts = [...document.querySelectorAll("[data-post-type]")];
+  const monthGroups = [
+    ...document.querySelectorAll("[data-post-month-group]"),
+  ];
+  const yearGroups = [...document.querySelectorAll("[data-post-year-group]")];
   const state = { type: "all", query: "" };
 
   const setupRevealMotion = () => {
@@ -95,6 +99,18 @@
         counts.set("all", (counts.get("all") || 0) + 1);
         counts.set(postType, (counts.get(postType) || 0) + 1);
       }
+    }
+
+    for (const group of monthGroups) {
+      group.hidden = ![...group.querySelectorAll("[data-post-type]")].some(
+        (post) => !post.hidden,
+      );
+    }
+
+    for (const group of yearGroups) {
+      group.hidden = ![...group.querySelectorAll("[data-post-month-group]")].some(
+        (month) => !month.hidden,
+      );
     }
 
     for (const button of buttons) {
