@@ -4,6 +4,8 @@
 }
 
 .posts-page {
+  --posts-date-sticky-top: var(--space-2xl);
+
   overflow: visible;
 }
 
@@ -55,18 +57,35 @@
 }
 
 .post-list {
-  grid-column: 2 / 5;
-  justify-self: end;
+  --post-date-rail-width: 110px;
+  --post-month-slot-width: 30px;
+  --post-date-edge-inset: var(--space-xl);
+  --post-date-pair-gap: 6px;
+  --post-date-row-offset: var(--space-sm);
+
+  grid-column: 1 / -1;
+  grid-row: 1;
   display: flex;
-  width: min(895px, 100%);
+  width: 100%;
+  min-width: 0;
   flex-direction: column;
   gap: var(--space-xl);
 }
 
-.post-year-group__layout {
+.post-year-group,
+.post-month-group {
+  min-width: 0;
+}
+
+.post-year-group__layout,
+.post-month-group__layout,
+.post-row {
   display: grid;
-  grid-template-columns: 60px minmax(0, 1fr);
-  column-gap: var(--space-3xl);
+  grid-template-columns: var(--page-grid-columns);
+  column-gap: var(--grid-gap);
+}
+
+.post-year-group__layout {
   align-items: start;
 }
 
@@ -78,21 +97,24 @@
   gap: var(--space-xl);
 }
 
+.post-year-group__months {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
 .post-month-group__layout {
-  display: grid;
-  grid-template-columns: 70px minmax(0, 1fr);
-  column-gap: var(--space-3xl);
   align-items: start;
 }
 
+.post-month-group__posts {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
 .post-row {
-  --post-indent: 0px;
-  --post-date-columns-width: 190px;
+  --post-rule-inset: calc((100% + var(--grid-gap)) / 2);
 
   position: relative;
-  display: grid;
-  grid-template-columns: 240px 290px max-content;
-  gap: var(--space-3xl);
   min-height: 72px;
   padding-block: var(--space-sm);
   align-items: start;
@@ -103,34 +125,88 @@
 
 .post-row__primary,
 .post-row__secondary {
+  min-width: 0;
+}
+
+.post-row__primary {
   display: contents;
+}
+
+.post-row__secondary {
+  grid-column: 4;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: var(--space-3xl);
+  padding-right: var(--space-xl);
+  align-items: start;
 }
 
 .post-row::before {
   position: absolute;
-  z-index: 3;
+  z-index: 2;
   top: 0;
-  right: 0;
-  left: calc(var(--post-indent) - var(--post-date-columns-width));
-  border-top: 1px solid var(--color-subtle);
+  right: var(--space-xl);
+  left: var(--post-rule-inset);
+  border-top: 1px solid var(--color-external-link-bg);
+  border-color: color-mix(
+    in srgb,
+    var(--color-subtle) 20%,
+    var(--color-external-link-bg)
+  );
   content: "";
   pointer-events: none;
+}
+
+.post-row--year-start {
+  --post-rule-inset: calc(
+    ((100% - var(--grid-gap)) / 2) - var(--post-date-rail-width)
+  );
+}
+
+.post-row--month-start {
+  --post-rule-inset: calc(
+    ((100% - var(--grid-gap)) / 2) - var(--post-date-edge-inset) -
+      var(--post-month-slot-width)
+  );
 }
 
 .post-row__year,
 .post-row__month {
   position: sticky;
-  z-index: 2;
-  top: var(--space-2xl);
-  min-width: 0;
-  padding-top: var(--space-sm);
+  z-index: 5;
+  top: var(--posts-date-sticky-top);
+  grid-column: 2;
+  grid-row: 1;
   align-self: start;
-  background: transparent;
+  justify-self: end;
+  background: var(--color-bg);
+  background-clip: content-box;
+  color: var(--color-caption);
+  font: inherit;
   font-variant-numeric: tabular-nums;
+  text-align: right;
+  transform: translateY(var(--post-date-row-offset));
+}
+
+.post-row__year {
+  width: calc(
+    var(--post-date-rail-width) - var(--post-date-edge-inset) -
+      var(--post-month-slot-width) - var(--post-date-pair-gap)
+  );
+  margin-right: calc(
+    var(--post-date-edge-inset) + var(--post-month-slot-width) +
+      var(--post-date-pair-gap)
+  );
 }
 
 .post-row__month {
-  z-index: 1;
+  z-index: 6;
+  width: var(--post-month-slot-width);
+  margin-right: var(--post-date-edge-inset);
+}
+
+.post-row__compact-date {
+  display: none;
 }
 
 .post-row__title,
@@ -138,6 +214,11 @@
   min-width: 0;
   margin: 0;
   font: inherit;
+}
+
+.post-row__title {
+  grid-column: 3;
+  padding-right: var(--space-xl);
 }
 
 .post-row__summary {
@@ -193,6 +274,7 @@
   --featured-post-height: 285px;
 
   position: sticky;
+  z-index: 4;
   top: var(--space-2xl);
   grid-column: 1;
   grid-row: 1;
@@ -204,6 +286,7 @@
       var(--page-gutter)
   );
   align-self: start;
+  background: var(--color-bg);
 }
 
 .featured-post__eyebrow {
@@ -214,58 +297,63 @@
   line-height: var(--line-height-compact);
 }
 
-@media (max-width: 1200px) {
-  .post-list {
-    width: 100%;
-  }
-
-  .post-year-group__layout {
-    grid-template-columns: 52px minmax(0, 1fr);
-    column-gap: var(--space-xl);
-  }
-
-  .post-month-group__layout {
-    grid-template-columns: 58px minmax(0, 1fr);
-    column-gap: var(--space-xl);
-  }
-
-  .post-row {
-    --post-date-columns-width: 150px;
-
-    grid-template-columns:
-      minmax(170px, 1fr) minmax(200px, 1.2fr)
-      max-content;
-    gap: var(--space-xl);
+@media (min-width: 1101px) and (max-width: 1360px) {
+  .post-row__secondary {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-lg);
   }
 }
 
 @media (max-width: 1100px) {
+  .post-year-group__months,
+  .post-month-group__posts {
+    gap: 0;
+  }
+
   .post-list {
-    grid-column: 1 / -1;
-  }
-
-  .post-year-group__layout {
-    grid-template-columns: 56px minmax(0, 1fr);
-    column-gap: var(--space-lg);
-  }
-
-  .post-month-group__layout {
-    grid-template-columns: 56px minmax(0, 1fr);
-    column-gap: var(--space-lg);
-  }
-
-  .post-row {
-    --post-date-columns-width: 142px;
-
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: clamp(var(--space-3xl), 7vw, 96px);
-    min-height: 0;
-    padding-block: var(--space-lg);
+    --post-date-rail-width: 90px;
+    --post-date-edge-inset: 0px;
+    --post-date-pair-gap: 4px;
+    --post-date-row-offset: var(--space-lg);
   }
 
   .post-row__year,
   .post-row__month {
-    padding-top: var(--space-lg);
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .post-row__year {
+    width: calc(
+      var(--post-date-rail-width) - var(--post-month-slot-width) -
+        var(--post-date-pair-gap)
+    );
+    margin-right: 0;
+  }
+
+  .post-row__month {
+    width: var(--post-month-slot-width);
+    margin-right: 0;
+    margin-left: calc(
+      var(--post-date-rail-width) - var(--post-month-slot-width)
+    );
+  }
+
+  .post-row {
+    grid-template-columns: var(--page-grid-columns);
+    min-height: 0;
+    padding-block: var(--space-lg);
+  }
+
+  .post-row--year-start {
+    --post-rule-inset: 0;
+  }
+
+  .post-row--month-start {
+    --post-rule-inset: calc(
+      var(--post-date-rail-width) - var(--post-month-slot-width) -
+        var(--post-date-edge-inset)
+    );
   }
 
   .post-row__primary,
@@ -277,90 +365,53 @@
 
   .post-row__primary {
     grid-column: 1;
+    grid-template-columns: var(--post-date-rail-width) minmax(0, 1fr);
+    column-gap: var(--space-xl);
+    row-gap: 0;
+    padding-right: var(--space-xl);
   }
 
   .post-row__secondary {
     grid-column: 2;
-    gap: var(--space-md);
-  }
-
-  .post-row__title,
-  .post-row__summary,
-  .post-row__link {
-    grid-column: 1;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    gap: var(--space-xl);
   }
 
   .post-row__title {
-    padding-right: var(--space-lg);
-  }
-
-  .post-row__link-label--full {
-    display: none;
-  }
-
-  .post-row__link-label--compact {
-    display: inline;
+    grid-column: 2;
+    padding-right: 0;
   }
 
   .featured-post {
     display: none;
   }
+
+  .post-row--month-continuation {
+    --post-rule-inset: calc(
+      var(--post-date-rail-width) + var(--space-xl)
+    );
+  }
+}
+
+@media (max-width: 900px) {
+  .post-row__secondary {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-md);
+  }
 }
 
 @media (max-width: 760px) {
   .posts-page {
-    --posts-sticky-mobile-top: var(--mobile-header-height);
+    --posts-date-sticky-top: var(--mobile-header-height);
   }
 
   .posts-page:has(.site-header.is-mobile-hidden) {
-    --posts-sticky-mobile-top: 0px;
-  }
-
-  .posts-content {
-    display: block;
-    padding-inline: var(--page-gutter);
-  }
-
-  .post-list,
-  .post-year-group__months,
-  .post-month-group__posts {
-    gap: 0;
-  }
-
-  .post-year-group__layout,
-  .post-month-group__layout {
-    display: block;
-  }
-
-  .post-row__year,
-  .post-row__month {
-    display: block;
-    width: 100%;
-    padding-block: var(--space-sm);
-    border-top: 1px solid var(--color-subtle);
-    background: var(--color-bg);
-    color: var(--color-caption);
-    font-size: var(--font-size-micro);
-    line-height: var(--line-height-label);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-  }
-
-  .post-row__year {
-    top: var(--posts-sticky-mobile-top);
-  }
-
-  .post-row__month {
-    top: calc(var(--posts-sticky-mobile-top) + 40px);
+    --posts-date-sticky-top: 0px;
   }
 
   .post-row {
-    --post-date-columns-width: 0px;
-    --post-indent: 0px !important;
-
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: var(--page-grid-columns);
     gap: 0;
-    padding-block: clamp(20px, 6vw, 30px);
   }
 
   .post-row__primary,
@@ -368,37 +419,32 @@
     grid-column: 1;
   }
 
+  .post-row__primary {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-xs);
+  }
+
+  .post-row--year-start .post-row__primary,
+  .post-row--month-start .post-row__primary {
+    padding-top: calc(1.375em + var(--space-xs));
+  }
+
   .post-row__title {
-    padding-right: 0;
-    font-size: clamp(17px, 4.4vw, 20px);
-    line-height: 1.3;
-    letter-spacing: -0.2px;
+    grid-column: 1;
   }
 
   .post-row__secondary {
-    gap: var(--space-md);
     margin-top: var(--space-md);
   }
 
-  .post-row__summary {
-    width: min(100%, 38ch);
-    font-size: var(--font-size-small);
-    line-height: 1.5;
+  .post-row--month-start {
+    --post-rule-inset: calc(
+      var(--post-date-rail-width) - var(--post-month-slot-width)
+    );
   }
 
-  .post-row__link {
-    font-size: var(--font-size-small);
-    line-height: var(--line-height-compact);
-  }
-}
-
-@media (max-width: 420px) {
-  .posts-intro__copy {
-    font-size: var(--font-size-small);
-  }
-
-  .post-row {
-    padding-block: var(--space-xl);
+  .post-row--month-continuation {
+    --post-rule-inset: 0;
   }
 }
 
