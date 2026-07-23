@@ -13,6 +13,11 @@
     ...document.querySelectorAll("[data-post-month-group]"),
   ];
   const yearGroups = [...document.querySelectorAll("[data-post-year-group]")];
+  const postPositionClasses = [
+    "post-row--year-start",
+    "post-row--month-start",
+    "post-row--month-continuation",
+  ];
   const state = { type: "all", query: "" };
 
   const setupRevealMotion = () => {
@@ -79,6 +84,33 @@
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "");
 
+  const syncPostPositions = () => {
+    posts.forEach((post) => post.classList.remove(...postPositionClasses));
+
+    for (const year of yearGroups) {
+      const visibleMonths = [
+        ...year.querySelectorAll("[data-post-month-group]"),
+      ].filter((month) => !month.hidden);
+
+      visibleMonths.forEach((month, monthIndex) => {
+        const visiblePosts = [
+          ...month.querySelectorAll("[data-post-type]"),
+        ].filter((post) => !post.hidden);
+
+        visiblePosts.forEach((post, postIndex) => {
+          const positionClass =
+            postIndex > 0
+              ? "post-row--month-continuation"
+              : monthIndex === 0
+                ? "post-row--year-start"
+                : "post-row--month-start";
+
+          post.classList.add(positionClass);
+        });
+      });
+    }
+  };
+
   const update = () => {
     const counts = new Map([["all", 0]]);
     let visibleCount = 0;
@@ -112,6 +144,8 @@
         (month) => !month.hidden,
       );
     }
+
+    syncPostPositions();
 
     for (const button of buttons) {
       const filter = button.dataset.postFilter || "all";

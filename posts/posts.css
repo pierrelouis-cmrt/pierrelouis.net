@@ -410,13 +410,14 @@
   }
 
   .post-row {
-    grid-template-columns: var(--page-grid-columns);
-    gap: 0;
+    grid-template-columns: var(--post-date-rail-width) minmax(0, 1fr);
+    column-gap: var(--space-xl);
   }
 
   .post-row__primary,
   .post-row__secondary {
-    grid-column: 1;
+    grid-column: 2;
+    padding-right: 0;
   }
 
   .post-row__primary {
@@ -426,7 +427,7 @@
 
   .post-row--year-start .post-row__primary,
   .post-row--month-start .post-row__primary {
-    padding-top: calc(1.375em + var(--space-xs));
+    padding-top: 0;
   }
 
   .post-row__title {
@@ -444,7 +445,13 @@
   }
 
   .post-row--month-continuation {
-    --post-rule-inset: 0;
+    --post-rule-inset: calc(
+      var(--post-date-rail-width) + var(--space-xl)
+    );
+  }
+
+  .post-row--month-continuation::before {
+    right: 0;
   }
 }
 
