@@ -2,6 +2,13 @@
   height: 285px;
   padding-top: var(--header-height);
   overflow: hidden;
+  opacity: 1;
+  transition: opacity var(--duration-medium) var(--ease-out);
+}
+
+.links-page:has(.more-menu.is-open) .links-gallery {
+  pointer-events: none;
+  opacity: 0;
 }
 
 .links-gallery__track {
@@ -281,6 +288,7 @@
 @media (prefers-reduced-motion: reduce) {
   .contact-email,
   .social-links a,
+  .links-gallery,
   .links-gallery__item img {
     transition: none;
   }
