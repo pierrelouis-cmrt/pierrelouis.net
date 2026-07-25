@@ -7,6 +7,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PAGE_CONFIGS = [
   { file: "index.html", root: "./", active: "home" },
   { file: "page-template.html", root: "./", active: null },
+  { file: "projects/index.html", root: "../", active: "projects" },
   { file: "about/index.html", root: "../", active: "about" },
   { file: "posts/index.html", root: "../", active: "posts" },
   { file: "photos/index.html", root: "../", active: "photos" },
@@ -28,7 +29,7 @@ export const renderSiteHeader = ({ root, active }) => `      <header class="site
         </a>
 
         <nav class="primary-nav" aria-label="Main pages">
-          <a class="primary-nav__link" href="${root}projects/">Projects</a>
+          <a class="primary-nav__link" href="${root}projects/"${currentPage(active, "projects")}>Projects</a>
           <a class="primary-nav__link" href="${root}posts/"${currentPage(active, "posts")}>Posts</a>
           <a class="primary-nav__link" href="${root}photos/"${currentPage(active, "photos")}>Photos</a>
         </nav>
@@ -97,7 +98,7 @@ export const renderSiteHeader = ({ root, active }) => `      <header class="site
                   Main Pages
                 </h2>
                 <nav class="mobile-menu__links" aria-label="Main pages">
-                  <a class="mobile-menu__link" href="${root}projects/">Projects</a>
+                  <a class="mobile-menu__link" href="${root}projects/"${currentPage(active, "projects")}>Projects</a>
                   <a class="mobile-menu__link" href="${root}posts/"${currentPage(active, "posts")}>Posts</a>
                   <a class="mobile-menu__link" href="${root}photos/"${currentPage(active, "photos")}>Photos</a>
                 </nav>

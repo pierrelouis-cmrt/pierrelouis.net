@@ -308,7 +308,6 @@
   font-size: var(--space-2xl);
   font-weight: inherit;
   line-height: var(--line-height-solid);
-  transform: translateY(-0.1875em);
   cursor: pointer;
   transition: opacity var(--duration-fast) var(--ease-out);
 }

@@ -24,6 +24,26 @@
   background: var(--color-media-bg);
 }
 
+.list-card__media::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  width: clamp(32px, 18%, 38px);
+  aspect-ratio: 1;
+  place-items: center;
+  background: var(--color-media-bg);
+  color: var(--color-ink);
+  content: "→";
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  line-height: 1;
+  transform: translate3d(0, 100%, 0);
+  transition: transform var(--duration-panel) var(--ease-out);
+  pointer-events: none;
+}
+
 .list-card__image {
   display: block;
   width: 100%;
@@ -43,6 +63,22 @@
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-copy);
   letter-spacing: var(--tracking-normal);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .list-card {
+    cursor: pointer;
+  }
+
+  .list-card:hover .list-card__caption-text {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  .list-card:hover .list-card__media::after {
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 .list-card--likes {
@@ -248,7 +284,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .list-card__image {
+  .list-card__media::after {
     transition: none;
   }
 }

@@ -1,14 +1,28 @@
 .links-gallery {
+  position: relative;
   height: 285px;
   padding-top: var(--header-height);
   overflow: hidden;
-  opacity: 1;
+}
+
+.links-gallery::after {
+  position: absolute;
+  z-index: 1;
+  inset: var(--header-height) 0 0 50%;
+  background: linear-gradient(
+    to right,
+    rgb(255 255 255 / 0),
+    var(--color-bg)
+  );
+  content: "";
+  opacity: 0;
+  pointer-events: none;
   transition: opacity var(--duration-medium) var(--ease-out);
 }
 
-.links-page:has(.more-menu.is-open) .links-gallery {
-  pointer-events: none;
-  opacity: 0;
+.links-page:has(.more-menu.is-open) .links-gallery::after {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .links-gallery__track {
@@ -288,7 +302,7 @@
 @media (prefers-reduced-motion: reduce) {
   .contact-email,
   .social-links a,
-  .links-gallery,
+  .links-gallery::after,
   .links-gallery__item img {
     transition: none;
   }
