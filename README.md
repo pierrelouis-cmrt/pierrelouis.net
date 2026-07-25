@@ -25,10 +25,11 @@ The site is a static, multi-page application served directly from the repository
 
 ## Build system
 
-`npm run build` runs two build stages:
+`npm run build` runs three build stages:
 
-1. `scripts/build-photos.mjs` reads the collections in `content/photos/`, validates their metadata, generates optimized gallery assets, and writes the photo page and its searchable JSON data.
-2. `scripts/shared-components.mjs` renders the canonical header and footer into every configured HTML page, adjusting paths and active navigation state per route.
+1. `scripts/build-projects.mjs` reads `content/projects/projects.yml`, validates project metadata and images, then regenerates the marked project-listing region.
+2. `scripts/build-photos.mjs` reads the collections in `content/photos/`, validates their metadata, generates optimized gallery assets, and writes the photo page and its searchable JSON data.
+3. `scripts/shared-components.mjs` renders the canonical header and footer into every configured HTML page, adjusting paths and active navigation state per route.
 
 The photo pipeline maintains two WebP variants for each source image:
 
@@ -63,6 +64,7 @@ This performs an initial build, starts the site at `http://localhost:8000`, watc
 ```text
 .
 ├── assets/                 # Fonts, static media, and generated photo variants
+├── content/projects/       # Projects-page content and editing guide
 ├── content/photos/         # Original photographs and collection.yml metadata
 ├── scripts/                # Build pipeline, component sync, and local server
 ├── projects/               # Project case studies
@@ -78,6 +80,7 @@ This performs an initial build, starts the site at `http://localhost:8000`, watc
 ## Maintenance notes
 
 - Edit shared navigation and footer markup in `scripts/shared-components.mjs`, then run the build; direct edits to generated copies will be overwritten.
+- Add or update projects in `content/projects/projects.yml`. The format and image workflow are documented in [`content/projects/README.md`](./content/projects/README.md).
 - Add or update photography in `content/photos/`. The collection format is documented in [`content/photos/README.md`](./content/photos/README.md).
 - Generated photo HTML, JSON, and WebP assets are committed alongside their sources so production hosting only needs to serve static files.
 - Clean URLs work through directory-level `index.html` files; the project does not require server-side routing.

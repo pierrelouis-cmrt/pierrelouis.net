@@ -1,0 +1,77 @@
+page:
+  categories: [Web Design, Branding, Graphic Design]
+  intro: Featured projects & experiments, curated from 3 years of work. I mostly do web design but I also like to play around with graphic design work.
+  playgroundIntro: Everything below are small projects and experiments. They do not have any associated case studies and are the result of me playing around. (In other words, this is the fun stuff!)
+
+# Featured projects always link to /projects/<slug>/.
+# Their order here is their order on the page.
+featured:
+  - slug: sweetgreen-nicolandria
+    title: "Sweetgreen: Nicolandria"
+    description: Photography
+    images:
+      - file: featured/sweetgreen-01.webp
+        alt: Editorial photograph for Sweetgreen's Nicolandria project.
+      - file: featured/sweetgreen-02.webp
+        alt: Close-up campaign image from the Sweetgreen Nicolandria project.
+        wide: true
+      - file: featured/sweetgreen-03.webp
+        alt: Sweetgreen pickle ketchup surrounded by tomatoes.
+
+  - slug: hotel-wren
+    title: Hotel Wren
+    description: Web
+    images:
+      - file: featured/hotel-wren-01.gif
+        alt: Animated Hotel Wren website presentation.
+        wide: true
+        dark: true
+        framed: true
+      - file: featured/hotel-wren-02.webp
+        alt: The Green Room entrance for Hotel Wren.
+      - file: featured/hotel-wren-03.webp
+        alt: Editorial beach portrait from the Hotel Wren project.
+
+  - slug: flamingo-estate
+    title: Flamingo Estate
+    description: Photography, Motion
+    images:
+      - file: featured/flamingo-estate-01.gif
+        alt: Animated Flamingo Estate campaign still life.
+      - file: featured/flamingo-estate-02.webp
+        alt: Warm interior photograph from the Flamingo Estate project.
+      - file: featured/flamingo-estate-03.webp
+        alt: Sunlit lounge from the Flamingo Estate project.
+        wide: true
+
+# Playground projects are image cards without case-study links.
+playground:
+  - title: Willow
+    description: A clear path to wellness
+    image: playground/willow.png
+    alt: Willow identity artwork.
+
+  - title: Path work
+    description: Insurance at the speed of life
+    image: playground/pathwork.png
+    alt: Pathwork identity artwork.
+
+  - title: Mañana Golf
+    description: There is always tomorrow
+    image: playground/manana-golf.png
+    alt: Mañana Golf identity artwork.
+
+  - title: NodeKit
+    description: Unchain the blockchain
+    image: playground/nodekit.png
+    alt: NodeKit product rendering.
+
+  - title: Utility Brewing Co.
+    description: Built with blood, sweat, and beers
+    image: playground/utility-brewing.png
+    alt: Utility Brewing Co. neon sign.
+
+  - title: Playground
+    description: Collection of experiments
+    image: playground/playground.png
+    alt: Playground typographic experiment.

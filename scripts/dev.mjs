@@ -2,17 +2,28 @@ import { watch } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildPhotos } from "./build-photos.mjs";
+import { buildProjects } from "./build-projects.mjs";
 import { syncSharedComponents } from "./shared-components.mjs";
 import { startSiteServer } from "./site-server.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PORT = Number(process.env.PORT || 8000);
 
-const shouldRebuild = (filename) => {
+const shouldRebuildPhotos = (filename) => {
   return (
     filename.startsWith("content/photos/") ||
     filename === "scripts/build-photos.mjs" ||
-    filename === "scripts/shared-components.mjs"
+    filename === "scripts/lib/yaml.mjs"
+  );
+};
+
+const shouldRebuildProjects = (filename) => {
+  return (
+    filename.startsWith("content/projects/") ||
+    filename.startsWith("assets/projects/") ||
+    filename === "scripts/build-projects.mjs" ||
+    filename === "scripts/lib/image-dimensions.mjs" ||
+    filename === "scripts/lib/yaml.mjs"
   );
 };
 
@@ -44,16 +55,32 @@ const queue = (filename, reload) => {
     isBuilding = true;
 
     try {
-      if (shouldRebuild(filename)) {
+      const rebuildPhotos = shouldRebuildPhotos(filename);
+      const rebuildProjects = shouldRebuildProjects(filename);
+
+      if (rebuildPhotos) {
         const result = await buildPhotos();
-        await syncSharedComponents();
         console.log(
           `Rebuilt photos: ${result.collections} collection(s), ${result.photos} photo(s), ` +
             `${result.assets.generated} generated asset(s), ` +
             `${result.assets.skipped} cached asset(s), ` +
             `${result.assets.removed} stale item(s) removed.`,
         );
-      } else if (shouldSyncSharedComponents(filename)) {
+      }
+
+      if (rebuildProjects) {
+        const result = await buildProjects();
+        console.log(
+          `Rebuilt projects: ${result.featured} featured, ` +
+            `${result.playground} playground (${result.total} total).`,
+        );
+      }
+
+      if (
+        rebuildPhotos ||
+        rebuildProjects ||
+        shouldSyncSharedComponents(filename)
+      ) {
         const changed = await syncSharedComponents();
 
         if (changed.length > 0) {
@@ -70,17 +97,22 @@ const queue = (filename, reload) => {
   }, 120);
 };
 
-const initial = await buildPhotos();
+const initialProjects = await buildProjects();
+const initialPhotos = await buildPhotos();
 await syncSharedComponents();
 const site = await startSiteServer({ dev: true, port: PORT });
 
 console.log(
-  `Built photos: ${initial.collections} collection(s), ${initial.photos} photo(s), ` +
-    `${initial.assets.generated} generated asset(s), ` +
-    `${initial.assets.skipped} cached asset(s), ` +
-    `${initial.assets.removed} stale item(s) removed.`,
+  `Built projects: ${initialProjects.featured} featured, ` +
+    `${initialProjects.playground} playground (${initialProjects.total} total).`,
 );
-console.log(`Dev server: http://${site.host}:${site.port}/photos/`);
+console.log(
+  `Built photos: ${initialPhotos.collections} collection(s), ${initialPhotos.photos} photo(s), ` +
+    `${initialPhotos.assets.generated} generated asset(s), ` +
+    `${initialPhotos.assets.skipped} cached asset(s), ` +
+    `${initialPhotos.assets.removed} stale item(s) removed.`,
+);
+console.log(`Dev server: http://${site.host}:${site.port}/`);
 
 watch(ROOT, { recursive: true }, (eventType, rawFilename) => {
   if (!rawFilename) {
