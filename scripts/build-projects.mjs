@@ -1,17 +1,40 @@
-import { readFile, stat, writeFile } from "node:fs/promises";
+import { spawn } from "node:child_process";
+import {
+  mkdir,
+  readdir,
+  readFile,
+  rename,
+  rm,
+  rmdir,
+  stat,
+  writeFile,
+} from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getImageDimensions } from "./lib/image-dimensions.mjs";
 import { parseYaml } from "./lib/yaml.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const CONTENT_FILE = path.join(ROOT, "content", "projects", "projects.yml");
+const CONTENT_DIR = path.join(ROOT, "content", "projects");
+const CONTENT_FILE = path.join(CONTENT_DIR, "projects.yml");
 const ASSETS_DIR = path.join(ROOT, "assets", "projects");
+const ASSET_CACHE_FILE = path.join(ASSETS_DIR, ".build-cache.json");
 const PAGE_FILE = path.join(ROOT, "projects", "index.html");
 const GENERATED_START = "        <!-- projects:generated:start -->";
 const GENERATED_END = "        <!-- projects:generated:end -->";
 const IMAGE_EXTENSIONS = new Set([".gif", ".jpeg", ".jpg", ".png", ".webp"]);
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const ASSET_CACHE_VERSION = 1;
+const STILL_WEBP_QUALITY = 84;
+const ANIMATED_WEBP_QUALITY = 80;
+// These are 2x approximations of the largest CSS boxes at the 760px and
+// 1100px breakpoints. Cover images may retain extra pixels on one axis so
+// browser cropping stays sharp without baking a crop into the source asset.
+const REGULAR_RENDER_BOXES = [{ width: 1440, height: 1800 }];
+const WIDE_RENDER_BOXES = [
+  { width: 2048, height: 1300 },
+  { width: 1440, height: 1800 },
+];
 
 const isDirectRun = () => {
   return (
@@ -35,7 +58,7 @@ const requireText = (value, field) => {
   return value.trim();
 };
 
-const normalizeAssetPath = (value, field) => {
+const normalizeSourcePath = (value, field) => {
   const relativePath = requireText(value, field).replaceAll("\\", "/");
   const extension = path.extname(relativePath).toLowerCase();
 
@@ -43,7 +66,7 @@ const normalizeAssetPath = (value, field) => {
     path.posix.isAbsolute(relativePath) ||
     relativePath.split("/").includes("..")
   ) {
-    throw new Error(`"${field}" must stay inside assets/projects`);
+    throw new Error(`"${field}" must stay inside content/projects`);
   }
 
   if (!IMAGE_EXTENSIONS.has(extension)) {
@@ -56,18 +79,18 @@ const normalizeAssetPath = (value, field) => {
 };
 
 const loadImage = async (value, field) => {
-  const file = normalizeAssetPath(value, field);
-  const filePath = path.join(ASSETS_DIR, ...file.split("/"));
+  const file = normalizeSourcePath(value, field);
+  const sourcePath = path.join(CONTENT_DIR, ...file.split("/"));
 
   try {
-    const fileStat = await stat(filePath);
+    const fileStat = await stat(sourcePath);
 
     if (!fileStat.isFile()) {
       throw new Error("not a file");
     }
   } catch (error) {
     if (error.code === "ENOENT" || error.message === "not a file") {
-      throw new Error(`"${field}" does not exist: assets/projects/${file}`);
+      throw new Error(`"${field}" does not exist: content/projects/${file}`);
     }
 
     throw error;
@@ -75,8 +98,8 @@ const loadImage = async (value, field) => {
 
   return {
     file,
-    src: `../assets/projects/${file}`,
-    ...(await getImageDimensions(filePath)),
+    sourcePath,
+    outputFile: `${file.slice(0, -path.extname(file).length)}.webp`,
   };
 };
 
@@ -106,6 +129,10 @@ const normalizeFeaturedProject = async (project, index) => {
       wide: Boolean(image?.wide),
       dark: Boolean(image?.dark),
       framed: Boolean(image?.framed),
+      resizeMode: "cover",
+      renderBoxes: image?.wide
+        ? WIDE_RENDER_BOXES
+        : REGULAR_RENDER_BOXES,
     });
   }
 
@@ -125,6 +152,8 @@ const normalizePlaygroundProject = async (project, index) => {
     description: requireText(project?.description, `${prefix}.description`),
     alt: requireText(project?.alt, `${prefix}.alt`),
     ...(await loadImage(project?.image, `${prefix}.image`)),
+    resizeMode: "contain",
+    renderBoxes: REGULAR_RENDER_BOXES,
   };
 };
 
@@ -185,6 +214,301 @@ const loadProjects = async () => {
     featured,
     playground,
   };
+};
+
+const runImageMagick = (args) =>
+  new Promise((resolve, reject) => {
+    const process = spawn("magick", args, { stdio: "inherit" });
+
+    process.on("error", (error) => {
+      if (error.code === "ENOENT") {
+        reject(
+          new Error(
+            "ImageMagick is required to build project images. Install the `magick` command and try again.",
+          ),
+        );
+        return;
+      }
+
+      reject(error);
+    });
+    process.on("close", (code) => {
+      if (code === 0) {
+        resolve();
+        return;
+      }
+
+      reject(new Error(`ImageMagick failed with exit code ${code}`));
+    });
+  });
+
+const readAssetCache = async () => {
+  try {
+    const cache = JSON.parse(await readFile(ASSET_CACHE_FILE, "utf8"));
+
+    if (cache.version !== ASSET_CACHE_VERSION || !cache.entries) {
+      return {};
+    }
+
+    return cache.entries;
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      return {};
+    }
+
+    throw error;
+  }
+};
+
+const writeAssetCache = async (entries) => {
+  await mkdir(ASSETS_DIR, { recursive: true });
+  await writeFile(
+    ASSET_CACHE_FILE,
+    `${JSON.stringify(
+      {
+        version: ASSET_CACHE_VERSION,
+        entries,
+      },
+      null,
+      2,
+    )}\n`,
+  );
+};
+
+const getSourceSignature = async (sourcePath) => {
+  const sourceStat = await stat(sourcePath);
+
+  return {
+    path: path.relative(ROOT, sourcePath).split(path.sep).join("/"),
+    size: sourceStat.size,
+    mtimeMs: sourceStat.mtimeMs,
+  };
+};
+
+const getRequiredScale = (image, sourceDimensions) => {
+  const scales = image.renderBoxes.map((box) => {
+    const widthScale = box.width / sourceDimensions.width;
+    const heightScale = box.height / sourceDimensions.height;
+
+    return image.resizeMode === "cover"
+      ? Math.max(widthScale, heightScale)
+      : Math.min(widthScale, heightScale);
+  });
+
+  return Math.max(...scales);
+};
+
+const getResizeWidth = (job, sourceDimensions) => {
+  const requiredScale = Math.max(
+    ...job.references.map((image) =>
+      getRequiredScale(image, sourceDimensions),
+    ),
+  );
+
+  return Math.ceil(
+    sourceDimensions.width * Math.min(requiredScale, 1),
+  );
+};
+
+const getAssetOptions = (job, sourceDimensions) => {
+  const animated = path.extname(job.sourcePath).toLowerCase() === ".gif";
+
+  return {
+    animated,
+    quality: animated ? ANIMATED_WEBP_QUALITY : STILL_WEBP_QUALITY,
+    resizeWidth: getResizeWidth(job, sourceDimensions),
+  };
+};
+
+const cacheMatches = (entry, source, options) => {
+  return (
+    entry?.source?.path === source.path &&
+    entry.source.size === source.size &&
+    entry.source.mtimeMs === source.mtimeMs &&
+    JSON.stringify(entry.options) === JSON.stringify(options)
+  );
+};
+
+const outputIsCurrent = async (outputPath, entry, source, options) => {
+  try {
+    const outputStat = await stat(outputPath);
+    return outputStat.size > 0 && cacheMatches(entry, source, options);
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      return false;
+    }
+
+    throw error;
+  }
+};
+
+const generateProjectImage = async (job, outputPath, options) => {
+  await mkdir(path.dirname(outputPath), { recursive: true });
+
+  const sharedArgs = [
+    "-resize",
+    `${options.resizeWidth}x>`,
+    "-strip",
+    "-quality",
+    String(options.quality),
+    "-define",
+    "webp:method=6",
+    "-define",
+    "webp:thread-level=1",
+  ];
+
+  if (options.animated) {
+    await runImageMagick([
+      job.sourcePath,
+      "-coalesce",
+      ...sharedArgs,
+      "-loop",
+      "0",
+      "-layers",
+      "Optimize",
+      outputPath,
+    ]);
+    return;
+  }
+
+  await runImageMagick([
+    job.sourcePath,
+    "-auto-orient",
+    ...sharedArgs,
+    outputPath,
+  ]);
+};
+
+const getImageReferences = (projects) => [
+  ...projects.featured.flatMap((project) => project.images),
+  ...projects.playground,
+];
+
+const collectAssetJobs = (projects) => {
+  const jobs = new Map();
+
+  for (const image of getImageReferences(projects)) {
+    const existing = jobs.get(image.outputFile);
+
+    if (existing && existing.sourcePath !== image.sourcePath) {
+      throw new Error(
+        `Project images "${existing.file}" and "${image.file}" both generate ` +
+          `assets/projects/${image.outputFile}. Rename one of the source files.`,
+      );
+    }
+
+    if (existing) {
+      existing.references.push(image);
+      continue;
+    }
+
+    jobs.set(image.outputFile, {
+      file: image.file,
+      sourcePath: image.sourcePath,
+      outputFile: image.outputFile,
+      references: [image],
+    });
+  }
+
+  return jobs;
+};
+
+const removeStaleAssets = async (directory, expectedFiles) => {
+  let removed = 0;
+  const entries = await readdir(directory, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const entryPath = path.join(directory, entry.name);
+
+    if (entryPath === ASSET_CACHE_FILE) {
+      continue;
+    }
+
+    if (entry.isDirectory()) {
+      removed += await removeStaleAssets(entryPath, expectedFiles);
+
+      try {
+        await rmdir(entryPath);
+      } catch (error) {
+        if (error.code !== "ENOTEMPTY" && error.code !== "EEXIST") {
+          throw error;
+        }
+      }
+
+      continue;
+    }
+
+    const relativePath = path.relative(ASSETS_DIR, entryPath).split(path.sep).join("/");
+
+    if (!expectedFiles.has(relativePath)) {
+      await rm(entryPath);
+      removed += 1;
+    }
+  }
+
+  return removed;
+};
+
+const generateProjectAssets = async (projects) => {
+  const jobs = collectAssetJobs(projects);
+  const cache = await readAssetCache();
+  const expectedFiles = new Set(jobs.keys());
+  const stats = {
+    generated: 0,
+    skipped: 0,
+    removed: 0,
+  };
+
+  await mkdir(ASSETS_DIR, { recursive: true });
+
+  for (const [cacheKey, job] of jobs) {
+    const outputPath = path.join(ASSETS_DIR, ...job.outputFile.split("/"));
+    const source = await getSourceSignature(job.sourcePath);
+    const sourceDimensions = await getImageDimensions(job.sourcePath);
+    const options = getAssetOptions(job, sourceDimensions);
+
+    if (await outputIsCurrent(outputPath, cache[cacheKey], source, options)) {
+      stats.skipped += 1;
+    } else {
+      const temporaryOutput = path.join(
+        path.dirname(outputPath),
+        `.${path.basename(outputPath, ".webp")}.tmp-${process.pid}.webp`,
+      );
+
+      try {
+        await generateProjectImage(job, temporaryOutput, options);
+        await rename(temporaryOutput, outputPath);
+      } finally {
+        await rm(temporaryOutput, { force: true });
+      }
+
+      stats.generated += 1;
+    }
+
+    const dimensions = await getImageDimensions(outputPath);
+    const src = `../assets/projects/${job.outputFile}`;
+
+    for (const reference of job.references) {
+      Object.assign(reference, dimensions, { src });
+    }
+
+    cache[cacheKey] = {
+      source,
+      options,
+      output: `assets/projects/${job.outputFile}`,
+    };
+  }
+
+  stats.removed = await removeStaleAssets(ASSETS_DIR, expectedFiles);
+
+  for (const cacheKey of Object.keys(cache)) {
+    if (!expectedFiles.has(cacheKey)) {
+      delete cache[cacheKey];
+    }
+  }
+
+  await writeAssetCache(cache);
+  return stats;
 };
 
 const renderFeaturedImage = (image) => {
@@ -383,9 +707,11 @@ const updatePage = async (projects) => {
 
 export const buildProjects = async () => {
   const projects = await loadProjects();
+  const assets = await generateProjectAssets(projects);
   const changed = await updatePage(projects);
 
   return {
+    assets,
     changed,
     featured: projects.featured.length,
     playground: projects.playground.length,
@@ -397,6 +723,8 @@ if (isDirectRun()) {
   const result = await buildProjects();
   console.log(
     `Built projects page: ${result.featured} featured, ` +
-      `${result.playground} playground (${result.total} total).`,
+      `${result.playground} playground (${result.total} total), ` +
+      `${result.assets.generated} generated, ${result.assets.skipped} cached, ` +
+      `${result.assets.removed} stale asset(s) removed.`,
   );
 }

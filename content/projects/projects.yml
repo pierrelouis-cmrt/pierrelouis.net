@@ -5,6 +5,7 @@ page:
 
 # Featured projects always link to /projects/<slug>/.
 # Their order here is their order on the page.
+# Image paths are relative to content/projects/; assets/projects/ is generated.
 featured:
   - slug: sweetgreen-nicolandria
     title: "Sweetgreen: Nicolandria"

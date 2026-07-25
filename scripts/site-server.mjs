@@ -33,10 +33,10 @@ const getRequestPath = (url) => {
   return normalized === "/" ? "/index.html" : normalized;
 };
 
-const resolveFile = async (url) => {
+const resolveFile = async (url, root) => {
   const requestPath = getRequestPath(url);
-  const fullPath = path.join(ROOT, requestPath);
-  const relativePath = path.relative(ROOT, fullPath);
+  const fullPath = path.join(root, requestPath);
+  const relativePath = path.relative(root, fullPath);
 
   if (relativePath.startsWith("..") || path.isAbsolute(relativePath)) {
     return null;
@@ -73,8 +73,10 @@ export const startSiteServer = async ({
   dev = false,
   host = "127.0.0.1",
   port = 8000,
+  root = ROOT,
 } = {}) => {
   const clients = new Set();
+  const siteRoot = path.resolve(root);
 
   const server = createServer(async (request, response) => {
     if (dev && request.url === "/__dev/events") {
@@ -89,7 +91,7 @@ export const startSiteServer = async ({
       return;
     }
 
-    const filePath = await resolveFile(request.url);
+    const filePath = await resolveFile(request.url, siteRoot);
 
     if (!filePath) {
       response.writeHead(403);

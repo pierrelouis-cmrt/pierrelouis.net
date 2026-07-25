@@ -20,7 +20,6 @@ const shouldRebuildPhotos = (filename) => {
 const shouldRebuildProjects = (filename) => {
   return (
     filename.startsWith("content/projects/") ||
-    filename.startsWith("assets/projects/") ||
     filename === "scripts/build-projects.mjs" ||
     filename === "scripts/lib/image-dimensions.mjs" ||
     filename === "scripts/lib/yaml.mjs"
@@ -34,8 +33,11 @@ const shouldSyncSharedComponents = (filename) => {
 const shouldIgnore = (filename) => {
   return (
     filename.startsWith(".git/") ||
+    filename.startsWith(".dist-tmp-") ||
+    filename.startsWith("dist/") ||
     filename.startsWith("node_modules/") ||
     filename.startsWith(".playwright") ||
+    filename.startsWith("assets/projects/") ||
     filename.startsWith("assets/photos/") ||
     filename === "photos/index.html" ||
     filename === "photos/photos-data.json"
@@ -72,7 +74,9 @@ const queue = (filename, reload) => {
         const result = await buildProjects();
         console.log(
           `Rebuilt projects: ${result.featured} featured, ` +
-            `${result.playground} playground (${result.total} total).`,
+            `${result.playground} playground (${result.total} total), ` +
+            `${result.assets.generated} generated, ${result.assets.skipped} cached, ` +
+            `${result.assets.removed} stale asset(s) removed.`,
         );
       }
 
@@ -104,7 +108,10 @@ const site = await startSiteServer({ dev: true, port: PORT });
 
 console.log(
   `Built projects: ${initialProjects.featured} featured, ` +
-    `${initialProjects.playground} playground (${initialProjects.total} total).`,
+    `${initialProjects.playground} playground (${initialProjects.total} total), ` +
+    `${initialProjects.assets.generated} generated, ` +
+    `${initialProjects.assets.skipped} cached, ` +
+    `${initialProjects.assets.removed} stale asset(s) removed.`,
 );
 console.log(
   `Built photos: ${initialPhotos.collections} collection(s), ${initialPhotos.photos} photo(s), ` +

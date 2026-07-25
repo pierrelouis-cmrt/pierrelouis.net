@@ -25,3 +25,4 @@ dist/
 .playwright-mcp/
 
 assets/photos/.build-cache.json
+assets/projects/.build-cache.json
