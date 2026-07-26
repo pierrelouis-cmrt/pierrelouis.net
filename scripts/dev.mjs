@@ -76,7 +76,8 @@ const queue = (filename, reload) => {
           `Rebuilt projects: ${result.featured} featured, ` +
             `${result.playground} playground (${result.total} total), ` +
             `${result.assets.generated} generated, ${result.assets.skipped} cached, ` +
-            `${result.assets.removed} stale asset(s) removed.`,
+            `${result.assets.removed} stale asset(s) removed, ` +
+            `${result.caseStudies.total} case study page(s).`,
         );
       }
 
@@ -111,7 +112,8 @@ console.log(
     `${initialProjects.playground} playground (${initialProjects.total} total), ` +
     `${initialProjects.assets.generated} generated, ` +
     `${initialProjects.assets.skipped} cached, ` +
-    `${initialProjects.assets.removed} stale asset(s) removed.`,
+    `${initialProjects.assets.removed} stale asset(s) removed, ` +
+    `${initialProjects.caseStudies.total} case study page(s).`,
 );
 console.log(
   `Built photos: ${initialPhotos.collections} collection(s), ${initialPhotos.photos} photo(s), ` +

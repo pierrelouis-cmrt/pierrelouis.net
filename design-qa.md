@@ -121,7 +121,8 @@ No actionable P0, P1, or P2 findings remain.
 
 ## Open questions
 
-None. The case-study destinations are intentionally provisional internal routes because the supplied project content is illustrative.
+None. Each featured project now has a generated case-study destination backed
+by the same project data and exports as the Projects page.
 
 ## Implementation checklist
 

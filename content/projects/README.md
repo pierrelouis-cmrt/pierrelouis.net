@@ -57,19 +57,43 @@ featured:
         wide: true
 ```
 
-Create the associated case study at
-`projects/my-new-project/index.html`. Slugs must use lowercase words separated
-by hyphens.
-
-Featured images support three optional presentation switches:
+Each featured project also requires a `caseStudy` block:
 
 ```yaml
+    caseStudy:
+      year: "2025"
+      description: A concise project introduction.
+      note: A quieter secondary paragraph about the approach or deliverables.
+```
+
+The build generates `projects/<slug>/index.html`; do not edit those pages
+directly. It selects the image marked `wide` as the full-width lead visual and
+places the remaining exports in two-column rows, preserving the layout intent
+already used on the Projects page. Rows collapse to one column on mobile.
+
+All generated pages share `projects/case-study.css`,
+`projects/case-study.js`, the responsive “Back to projects” navigation and the
+usual footer. Each page also ends with automatically generated links to the two
+featured case studies that follow it in YAML order, wrapping back to the start
+when needed. These previews use the same image-and-caption language as the
+Playground grid. Removing a featured entry also removes its generated
+case-study directory without touching manually authored project directories.
+
+Featured images support one required selection switch and three optional
+presentation switches:
+
+```yaml
+        main: true     # use this image in “More Projects” previews
         wide: true     # span two columns on desktop
         dark: true     # use a black media background
         framed: true   # use the existing tall framed-image treatment
 ```
 
-Only add a switch when an image needs it. All switches default to `false`.
+Every featured project must mark exactly one image with `main: true`. Its
+natural aspect ratio is preserved in the “More Projects” section, using the
+same sizing behavior as Playground images. `wide` still controls the
+full-width lead image inside the case study; the two choices are independent.
+Only add the other switches when an image needs them. They default to `false`.
 
 ## Add a playground project
 

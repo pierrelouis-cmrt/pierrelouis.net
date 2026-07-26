@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, readdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -19,14 +19,94 @@ const PAGE_CONFIGS = [
   { file: "imprint/index.html", root: "../", active: "imprint" },
 ];
 
+const getCaseStudyConfigs = async () => {
+  const projectsDirectory = path.join(ROOT, "projects");
+  const entries = await readdir(projectsDirectory, { withFileTypes: true });
+  const configs = [];
+
+  for (const entry of entries) {
+    if (!entry.isDirectory() || entry.name.startsWith(".")) {
+      continue;
+    }
+
+    const file = path.posix.join("projects", entry.name, "index.html");
+
+    try {
+      const index = await stat(path.join(ROOT, file));
+
+      if (!index.isFile()) {
+        continue;
+      }
+    } catch (error) {
+      if (error.code === "ENOENT") {
+        continue;
+      }
+
+      throw error;
+    }
+
+    configs.push({
+      file,
+      root: "../../",
+      active: "projects",
+      back: {
+        href: "../../projects/",
+        label: "Back to projects",
+        shortLabel: "Back",
+      },
+    });
+  }
+
+  return configs.sort((first, second) =>
+    first.file.localeCompare(second.file),
+  );
+};
+
 const currentPage = (active, page) =>
   active === page ? ' aria-current="page"' : "";
 
-export const renderSiteHeader = ({ root, active }) => `      <header class="site-header" aria-label="Primary navigation">
-        <a class="brand-mark" href="${root}" aria-label="Pierre-Louis home">
+const renderHeaderBrand = ({ root, back }, className) => {
+  const isMobileBrand = className === "mobile-menu__brand";
+
+  if (isMobileBrand) {
+    const classNames = back
+      ? `${className} ${className}--back`
+      : className;
+    const href = back?.href ?? root;
+    const ariaLabel = back?.label ?? "Pierre-Louis home";
+    const content = back
+      ? `<span class="${className}__back-full">${back.label}</span>
+                <span class="${className}__back-short" aria-hidden="true">${back.shortLabel}</span>`
+      : `<span class="brand-mark__text">P—L</span>
+                <span class="brand-mark__copyright" aria-hidden="true">©</span>`;
+
+    return `<a
+                class="${classNames}"
+                href="${href}"
+                aria-label="${ariaLabel}"
+              >
+                ${content}
+              </a>`;
+  }
+
+  if (back) {
+    return `<a class="${className} ${className}--back" href="${back.href}" aria-label="${back.label}">
+          <span class="${className}__back-full">${back.label}</span>
+          <span class="${className}__back-short" aria-hidden="true">${back.shortLabel}</span>
+        </a>`;
+  }
+
+  return `<a class="${className}" href="${root}" aria-label="Pierre-Louis home">
           <span class="brand-mark__text">P—L</span>
           <span class="brand-mark__copyright" aria-hidden="true">©</span>
-        </a>
+        </a>`;
+};
+
+export const renderSiteHeader = (config) => {
+  const { root, active } = config;
+
+  return `      <header class="site-header" aria-label="Primary navigation">
+        ${renderHeaderBrand(config, "brand-mark")}
 
         <nav class="primary-nav" aria-label="Main pages">
           <a class="primary-nav__link" href="${root}projects/"${currentPage(active, "projects")}>Projects</a>
@@ -79,14 +159,7 @@ export const renderSiteHeader = ({ root, active }) => `      <header class="site
             hidden
           >
             <div class="mobile-menu__bar">
-              <a
-                class="mobile-menu__brand"
-                href="${root}"
-                aria-label="Pierre-Louis home"
-              >
-                <span class="brand-mark__text">P—L</span>
-                <span class="brand-mark__copyright" aria-hidden="true">©</span>
-              </a>
+              ${renderHeaderBrand(config, "mobile-menu__brand")}
             </div>
 
             <div class="mobile-menu__layout">
@@ -162,6 +235,7 @@ export const renderSiteHeader = ({ root, active }) => `      <header class="site
           </div>
         </div>
       </header>`;
+};
 
 export const renderSiteFooter = ({ root, active }) => `      <footer class="site-footer">
         <div class="site-footer__content">
@@ -232,8 +306,9 @@ export const applySharedComponents = (source, config, file = "HTML source") => {
 
 export const syncSharedComponents = async () => {
   const changed = [];
+  const configs = [...PAGE_CONFIGS, ...(await getCaseStudyConfigs())];
 
-  for (const config of PAGE_CONFIGS) {
+  for (const config of configs) {
     const filePath = path.join(ROOT, config.file);
     const source = await readFile(filePath, "utf8");
     const output = applySharedComponents(source, config, config.file);

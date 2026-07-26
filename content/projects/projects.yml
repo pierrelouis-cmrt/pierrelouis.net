@@ -10,6 +10,10 @@ featured:
   - slug: sweetgreen-nicolandria
     title: "Sweetgreen: Nicolandria"
     description: Photography
+    caseStudy:
+      year: "2025"
+      description: "An editorial campaign for Sweetgreen's Nicolandria, bringing cinematic character, warm light and saturated food styling into one playful visual world."
+      note: "The series moves between portraiture, tactile product detail and still-life photography, keeping every frame bold, direct and recognisable."
     images:
       - file: featured/sweetgreen-01.webp
         alt: Editorial photograph for Sweetgreen's Nicolandria project.
@@ -18,10 +22,15 @@ featured:
         wide: true
       - file: featured/sweetgreen-03.webp
         alt: Sweetgreen pickle ketchup surrounded by tomatoes.
+        main: true
 
   - slug: hotel-wren
     title: Hotel Wren
     description: Web
+    caseStudy:
+      year: "2025"
+      description: "A digital direction for Hotel Wren, translating the property's intimate interiors and coastal atmosphere into a quiet, image-led web experience."
+      note: "Restrained navigation, warm editorial photography and measured motion let the place lead the story."
     images:
       - file: featured/hotel-wren-01.gif
         alt: Animated Hotel Wren website presentation.
@@ -30,12 +39,17 @@ featured:
         framed: true
       - file: featured/hotel-wren-02.webp
         alt: The Green Room entrance for Hotel Wren.
+        main: true
       - file: featured/hotel-wren-03.webp
         alt: Editorial beach portrait from the Hotel Wren project.
 
   - slug: flamingo-estate
     title: Flamingo Estate
     description: Photography, Motion
+    caseStudy:
+      year: "2025"
+      description: "A photography and motion study for Flamingo Estate, focused on the ritual, texture and lived-in atmosphere surrounding the brand."
+      note: "Still life, interior photography and short-form motion are sequenced as one warm, tactile campaign system."
     images:
       - file: featured/flamingo-estate-01.gif
         alt: Animated Flamingo Estate campaign still life.
@@ -43,6 +57,7 @@ featured:
         alt: Warm interior photograph from the Flamingo Estate project.
       - file: featured/flamingo-estate-03.webp
         alt: Sunlit lounge from the Flamingo Estate project.
+        main: true
         wide: true
 
 # Playground projects are image cards without case-study links.

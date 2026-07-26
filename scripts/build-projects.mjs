@@ -13,6 +13,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getImageDimensions } from "./lib/image-dimensions.mjs";
 import { parseYaml } from "./lib/yaml.mjs";
+import {
+  renderSiteFooter,
+  renderSiteHeader,
+} from "./shared-components.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_DIR = path.join(ROOT, "content", "projects");
@@ -20,6 +24,8 @@ const CONTENT_FILE = path.join(CONTENT_DIR, "projects.yml");
 const ASSETS_DIR = path.join(ROOT, "assets", "projects");
 const ASSET_CACHE_FILE = path.join(ASSETS_DIR, ".build-cache.json");
 const PAGE_FILE = path.join(ROOT, "projects", "index.html");
+const CASE_STUDIES_DIR = path.join(ROOT, "projects");
+const CASE_STUDY_MARKER = "<!-- case-study:generated -->";
 const GENERATED_START = "        <!-- projects:generated:start -->";
 const GENERATED_END = "        <!-- projects:generated:end -->";
 const IMAGE_EXTENSIONS = new Set([".gif", ".jpeg", ".jpg", ".png", ".webp"]);
@@ -126,6 +132,7 @@ const normalizeFeaturedProject = async (project, index) => {
     images.push({
       ...(await loadImage(image?.file, `${imagePrefix}.file`)),
       alt: requireText(image?.alt, `${imagePrefix}.alt`),
+      main: Boolean(image?.main),
       wide: Boolean(image?.wide),
       dark: Boolean(image?.dark),
       framed: Boolean(image?.framed),
@@ -136,10 +143,26 @@ const normalizeFeaturedProject = async (project, index) => {
     });
   }
 
+  const mainImages = images.filter((image) => image.main);
+
+  if (mainImages.length !== 1) {
+    throw new Error(
+      `"${prefix}.images" must mark exactly one image with "main: true"`,
+    );
+  }
+
   return {
     slug,
     title: requireText(project.title, `${prefix}.title`),
     description: requireText(project.description, `${prefix}.description`),
+    caseStudy: {
+      year: requireText(project.caseStudy?.year, `${prefix}.caseStudy.year`),
+      description: requireText(
+        project.caseStudy?.description,
+        `${prefix}.caseStudy.description`,
+      ),
+      note: requireText(project.caseStudy?.note, `${prefix}.caseStudy.note`),
+    },
     images,
   };
 };
@@ -682,6 +705,321 @@ ${playground.map(renderPlaygroundProject).join("\n\n")}
         </section>`;
 };
 
+const getCaseStudyHero = (project) =>
+  project.images.find((image) => image.wide) ?? project.images[0];
+
+const groupSupportingImages = (project, hero) => {
+  const supporting = project.images.filter((image) => image !== hero);
+  const rows = [];
+
+  for (let index = 0; index < supporting.length; index += 2) {
+    rows.push(supporting.slice(index, index + 2));
+  }
+
+  return rows;
+};
+
+const renderCaseStudyMedia = (image, { priority = false } = {}) => {
+  const mediaClasses = [
+    "case-study-media",
+    image.dark && "case-study-media--dark",
+    image.framed && "case-study-media--framed",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const imageClasses = [
+    "case-study-media__image",
+    image.framed && "case-study-media__image--framed",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const loadingAttributes = priority
+    ? '\n                fetchpriority="high"'
+    : '\n                loading="lazy"\n                decoding="async"';
+
+  return `            <figure class="${mediaClasses}">
+              <img
+                class="${imageClasses}"
+                src="../../assets/projects/${escapeHtml(image.outputFile)}"
+                width="${image.width}"
+                height="${image.height}"
+                alt="${escapeHtml(image.alt)}"${loadingAttributes}
+              />
+            </figure>`;
+};
+
+const renderRelatedProject = (project) => {
+  const preview = project.images.find((image) => image.main);
+  const contentWidth = Math.min(
+    100,
+    (preview.width / preview.height) * 125,
+  ).toFixed(4);
+
+  return `            <li class="case-study-related__item">
+              <a
+                class="case-study-related__link media-card"
+                href="../${escapeHtml(project.slug)}/"
+                aria-label="View ${escapeHtml(project.title)} case study"
+              >
+                <figure
+                  class="case-study-related__figure"
+                  style="--case-study-related-content-width: ${contentWidth}%"
+                >
+                  <span class="case-study-related__media">
+                    <img
+                      class="case-study-related__image media-card__image"
+                      src="../../assets/projects/${escapeHtml(preview.outputFile)}"
+                      width="${preview.width}"
+                      height="${preview.height}"
+                      alt="${escapeHtml(preview.alt)}"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </span>
+                  <figcaption
+                    class="case-study-related__caption media-card__caption"
+                  >
+                    <span class="case-study-related__title">${escapeHtml(project.title)}</span>
+                    <span class="case-study-related__description">${escapeHtml(project.description)}</span>
+                  </figcaption>
+                </figure>
+              </a>
+            </li>`;
+};
+
+const getRelatedProjects = (featured, currentSlug, limit = 2) => {
+  const currentIndex = featured.findIndex(
+    (project) => project.slug === currentSlug,
+  );
+  const relatedCount = Math.min(limit, Math.max(featured.length - 1, 0));
+
+  return Array.from({ length: relatedCount }, (_, index) => {
+    return featured[(currentIndex + index + 1) % featured.length];
+  });
+};
+
+const renderCaseStudyPage = (project, featured) => {
+  const hero = getCaseStudyHero(project);
+  const supportingRows = groupSupportingImages(project, hero);
+  const relatedProjects = getRelatedProjects(featured, project.slug);
+  const pageUrl = `https://pierrelouis.net/projects/${project.slug}/`;
+  const imageUrl =
+    `https://pierrelouis.net/assets/projects/${hero.outputFile}`;
+  const header = renderSiteHeader({
+    root: "../../",
+    active: "projects",
+    back: {
+      href: "../../projects/",
+      label: "Back to projects",
+      shortLabel: "Back",
+    },
+  });
+  const footer = renderSiteFooter({
+    root: "../../",
+    active: "projects",
+  });
+  const supportingMarkup = supportingRows
+    .map((row) => {
+      const rowClasses = [
+        "case-study-gallery__row",
+        row.length === 1 && "case-study-gallery__row--full",
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      return `          <div class="${rowClasses}">
+${row.map((image) => renderCaseStudyMedia(image)).join("\n")}
+          </div>`;
+    })
+    .join("\n\n");
+
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>${escapeHtml(project.title)} - Pierre-Louis</title>
+    <meta
+      name="description"
+      content="${escapeHtml(project.caseStudy.description)}"
+    />
+    <meta property="og:title" content="${escapeHtml(project.title)} - Pierre-Louis" />
+    <meta
+      property="og:description"
+      content="${escapeHtml(project.caseStudy.description)}"
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="${escapeHtml(pageUrl)}" />
+    <meta property="og:image" content="${escapeHtml(imageUrl)}" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/favicon/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/favicon/apple-touch-icon.png"
+    />
+    <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="stylesheet" href="../case-study.css" />
+    <script src="../../script.js" defer></script>
+    <script src="../case-study.js" defer></script>
+    <script src="../../footer.js" defer></script>
+  </head>
+  <body>
+    ${CASE_STUDY_MARKER}
+    <div class="site-shell case-study-page">
+${header}
+
+      <main>
+        <h1 class="sr-only">${escapeHtml(project.title)} case study</h1>
+
+        <section
+          class="case-study-intro"
+          aria-labelledby="case-study-title"
+        >
+          <header class="case-study-header">
+            <div class="case-study-header__identity">
+              <span class="case-study-header__year">${escapeHtml(project.caseStudy.year)}</span>
+              <h2 class="case-study-header__title" id="case-study-title">
+                ${escapeHtml(project.title)}
+              </h2>
+            </div>
+
+            <div class="case-study-header__copy">
+              <p class="case-study-header__description">
+                ${escapeHtml(project.caseStudy.description)}
+              </p>
+              <p class="case-study-header__note">
+                ${escapeHtml(project.caseStudy.note)}
+              </p>
+            </div>
+          </header>
+        </section>
+
+        <section
+          class="case-study-gallery"
+          aria-label="${escapeHtml(project.title)} project gallery"
+        >
+          <div class="case-study-gallery__row case-study-gallery__row--full">
+${renderCaseStudyMedia(hero, { priority: true })}
+          </div>
+
+${supportingMarkup}
+        </section>
+
+        <nav
+          class="case-study-related"
+          aria-label="More Projects"
+        >
+          <h2
+            class="case-study-related__heading"
+            id="case-study-related-title"
+          >
+            More Projects
+          </h2>
+
+          <ul class="case-study-related__list">
+${relatedProjects.map(renderRelatedProject).join("\n\n")}
+          </ul>
+
+          <a
+            class="internal-link case-study-related__all"
+            href="../../projects/"
+          >
+            All projects <span aria-hidden="true">→</span>
+          </a>
+        </nav>
+      </main>
+
+${footer}
+    </div>
+  </body>
+</html>
+`;
+};
+
+const removeStaleCaseStudyPages = async (expectedSlugs) => {
+  const entries = await readdir(CASE_STUDIES_DIR, { withFileTypes: true });
+  let removed = 0;
+
+  for (const entry of entries) {
+    if (
+      !entry.isDirectory() ||
+      entry.name.startsWith(".") ||
+      expectedSlugs.has(entry.name)
+    ) {
+      continue;
+    }
+
+    const directory = path.join(CASE_STUDIES_DIR, entry.name);
+    const indexPath = path.join(directory, "index.html");
+
+    try {
+      const source = await readFile(indexPath, "utf8");
+
+      if (!source.includes(CASE_STUDY_MARKER)) {
+        continue;
+      }
+    } catch (error) {
+      if (error.code === "ENOENT") {
+        continue;
+      }
+
+      throw error;
+    }
+
+    await rm(directory, { recursive: true });
+    removed += 1;
+  }
+
+  return removed;
+};
+
+const updateCaseStudyPages = async (featured) => {
+  const stats = {
+    changed: 0,
+    removed: 0,
+    total: featured.length,
+  };
+  const expectedSlugs = new Set(featured.map((project) => project.slug));
+
+  for (const project of featured) {
+    const directory = path.join(CASE_STUDIES_DIR, project.slug);
+    const pagePath = path.join(directory, "index.html");
+    const output = renderCaseStudyPage(project, featured);
+    let source = "";
+
+    try {
+      source = await readFile(pagePath, "utf8");
+    } catch (error) {
+      if (error.code !== "ENOENT") {
+        throw error;
+      }
+    }
+
+    if (source === output) {
+      continue;
+    }
+
+    await mkdir(directory, { recursive: true });
+    await writeFile(pagePath, output);
+    stats.changed += 1;
+  }
+
+  stats.removed = await removeStaleCaseStudyPages(expectedSlugs);
+  return stats;
+};
+
 const updatePage = async (projects) => {
   const source = await readFile(PAGE_FILE, "utf8");
   const startIndex = source.indexOf(GENERATED_START);
@@ -709,9 +1047,11 @@ export const buildProjects = async () => {
   const projects = await loadProjects();
   const assets = await generateProjectAssets(projects);
   const changed = await updatePage(projects);
+  const caseStudies = await updateCaseStudyPages(projects.featured);
 
   return {
     assets,
+    caseStudies,
     changed,
     featured: projects.featured.length,
     playground: projects.playground.length,
@@ -725,6 +1065,7 @@ if (isDirectRun()) {
     `Built projects page: ${result.featured} featured, ` +
       `${result.playground} playground (${result.total} total), ` +
       `${result.assets.generated} generated, ${result.assets.skipped} cached, ` +
-      `${result.assets.removed} stale asset(s) removed.`,
+      `${result.assets.removed} stale asset(s) removed, ` +
+      `${result.caseStudies.total} case study page(s).`,
   );
 }

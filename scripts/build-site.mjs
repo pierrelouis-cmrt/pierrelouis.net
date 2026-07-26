@@ -99,7 +99,8 @@ console.log(
   `Built projects page: ${projects.featured} featured, ` +
     `${projects.playground} playground (${projects.total} total), ` +
     `${projects.assets.generated} generated, ${projects.assets.skipped} cached, ` +
-    `${projects.assets.removed} stale asset(s) removed.`,
+    `${projects.assets.removed} stale asset(s) removed, ` +
+    `${projects.caseStudies.total} case study page(s).`,
 );
 console.log(
   `Built photos page: ${photos.collections} collection(s), ${photos.photos} photo(s), ` +
