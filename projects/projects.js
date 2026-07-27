@@ -205,7 +205,6 @@ document.querySelectorAll("[data-project-carousel]").forEach((carousel) => {
 
   const sheets = new Map();
   const closeDuration = 420;
-  const projectsPath = new URL("./", window.location.href).pathname;
   let activeSheet = null;
   let activeSlug = null;
   let activeTrigger = null;
@@ -218,27 +217,24 @@ document.querySelectorAll("[data-project-carousel]").forEach((carousel) => {
     document.body.append(sheet);
   });
 
-  const slugFromLocation = () => {
-    if (!window.location.pathname.startsWith(projectsPath)) {
-      return null;
-    }
+  const sheetSlugFromUrl = () => {
+    const slug = new URL(window.location.href).searchParams.get("sheet");
 
-    const relativePath = window.location.pathname
-      .slice(projectsPath.length)
-      .replace(/^\/+|\/+$/g, "");
-    const slug = decodeURIComponent(relativePath);
-
-    return !slug.includes("/") && sheets.has(slug) ? slug : null;
+    return slug && sheets.has(slug) ? slug : null;
   };
 
-  const sheetUrl = (slug) => {
+  const urlWithSheet = (slug) => {
     const url = new URL(window.location.href);
-    return `${projectsPath}${encodeURIComponent(slug)}/${url.search}`;
+    url.searchParams.set("sheet", slug);
+
+    return `${url.pathname}${url.search}${url.hash}`;
   };
 
-  const pageUrl = () => {
+  const urlWithoutSheet = () => {
     const url = new URL(window.location.href);
-    return `${projectsPath}${url.search}`;
+    url.searchParams.delete("sheet");
+
+    return `${url.pathname}${url.search}${url.hash}`;
   };
 
   const showDialog = (sheet) => {
@@ -366,7 +362,7 @@ document.querySelectorAll("[data-project-carousel]").forEach((carousel) => {
 
     if (
       window.history.state?.playgroundSheet === activeSlug &&
-      slugFromLocation() === activeSlug
+      sheetSlugFromUrl() === activeSlug
     ) {
       window.history.back();
       return;
@@ -375,7 +371,7 @@ document.querySelectorAll("[data-project-carousel]").forEach((carousel) => {
     window.history.replaceState(
       { ...window.history.state, playgroundSheet: null },
       "",
-      pageUrl(),
+      urlWithoutSheet(),
     );
     animateClose({ dragY });
   };
@@ -415,7 +411,7 @@ document.querySelectorAll("[data-project-carousel]").forEach((carousel) => {
       window.history.pushState(
         { ...window.history.state, playgroundSheet: slug },
         "",
-        sheetUrl(slug),
+        urlWithSheet(slug),
       );
     }
 
@@ -425,23 +421,10 @@ document.querySelectorAll("[data-project-carousel]").forEach((carousel) => {
         sheet.focus({ preventScroll: true });
       });
     });
-
   };
 
   triggers.forEach((trigger) => {
-    trigger.addEventListener("click", (event) => {
-      if (
-        event.defaultPrevented ||
-        event.button !== 0 ||
-        event.metaKey ||
-        event.ctrlKey ||
-        event.shiftKey ||
-        event.altKey
-      ) {
-        return;
-      }
-
-      event.preventDefault();
+    trigger.addEventListener("click", () => {
       openSheet(trigger.dataset.playgroundSheetOpen, { trigger });
     });
   });
@@ -563,9 +546,9 @@ document.querySelectorAll("[data-project-carousel]").forEach((carousel) => {
   });
 
   window.addEventListener("popstate", () => {
-    const nextSlug = slugFromLocation();
+    const nextSlug = sheetSlugFromUrl();
 
-    if (nextSlug) {
+    if (nextSlug && sheets.has(nextSlug)) {
       if (activeSlug === nextSlug && !isClosing) {
         return;
       }
@@ -586,9 +569,9 @@ document.querySelectorAll("[data-project-carousel]").forEach((carousel) => {
     }
   });
 
-  const initialSlug = slugFromLocation();
+  const initialSlug = sheetSlugFromUrl();
 
-  if (initialSlug) {
+  if (initialSlug && sheets.has(initialSlug)) {
     openSheet(initialSlug, { updateHistory: false });
   }
 })();

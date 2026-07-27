@@ -176,9 +176,10 @@ a titled text block: the heading occupies column one and the following copy
 starts on the same row in columns two and three. On mobile, both stack in
 reading order.
 
-The Markdown body is rendered from the same parsed content in the Playground
-drawer and at the permanent `/projects/<slug>/` URL. Without JavaScript, cards
-still open the normal project page.
+The Markdown body is rendered inside a Playground sheet on the Projects page.
+Playground projects do not generate standalone `/projects/<slug>/` pages;
+those URLs are reserved for featured case studies. Open sheets use shareable
+query URLs such as `/projects/?sheet=my-experiment`.
 
 ## Validation and assets
 

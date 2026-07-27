@@ -1132,9 +1132,9 @@ const renderPlaygroundProject = (project) => {
               class="playground-card media-card"
               data-project-category="${escapeHtml(categoryKey(project.category))}"
             >
-              <a
+              <button
                 class="playground-card__button"
-                href="./${escapeHtml(project.slug)}/"
+                type="button"
                 aria-haspopup="dialog"
                 aria-controls="playground-sheet-${escapeHtml(project.slug)}"
                 aria-label="${escapeHtml(project.title)}: ${escapeHtml(project.description)}"
@@ -1157,7 +1157,7 @@ const renderPlaygroundProject = (project) => {
                   <span class="playground-card__title">${escapeHtml(project.title)}</span>
                   <span class="playground-card__description">${escapeHtml(project.description)}</span>
                 </span>
-              </a>
+              </button>
             </li>`;
 };
 
@@ -1661,10 +1661,7 @@ export const buildProjects = async () => {
   const projects = await loadProjects();
   const assets = await generateProjectAssets(projects);
   const changed = await updatePage(projects);
-  const projectPages = await updateProjectPages([
-    ...projects.featured,
-    ...projects.playground,
-  ]);
+  const projectPages = await updateProjectPages(projects.featured);
 
   for (const warning of projects.warnings) {
     console.warn(`Warning: ${warning}`);
