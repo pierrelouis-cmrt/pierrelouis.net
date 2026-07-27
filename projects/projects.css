@@ -465,19 +465,19 @@
 .playground-sheet__close {
   position: sticky;
   z-index: 3;
-  top: 24px;
-  right: 24px;
+  top: 16px;
+  right: 16px;
   float: right;
   display: grid;
   width: 52px;
   aspect-ratio: 1;
-  margin: 24px 24px -76px 0;
+  margin: 16px 16px -68px 0;
   padding: 0;
   place-items: center;
   appearance: none;
   border: 0;
   border-radius: 50%;
-  background: #ffffff;
+  background: var(--color-external-link-bg);
   box-shadow: 0 1px 8px rgb(0 0 0 / 0.035);
   color: #000000;
   cursor: pointer;
@@ -490,8 +490,8 @@
 .playground-sheet__close span::after {
   position: absolute;
   display: block;
-  width: 16px;
-  height: 1.5px;
+  width: var(--mobile-menu-icon-width);
+  height: var(--mobile-menu-icon-height);
   background: currentColor;
   content: "";
 }
