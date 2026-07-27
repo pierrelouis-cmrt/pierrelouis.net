@@ -750,10 +750,6 @@ const renderCaseStudyMedia = (image, { priority = false } = {}) => {
 
 const renderRelatedProject = (project) => {
   const preview = project.images.find((image) => image.main);
-  const contentWidth = Math.min(
-    100,
-    (preview.width / preview.height) * 125,
-  ).toFixed(4);
 
   return `            <li class="case-study-related__item">
               <a
@@ -761,10 +757,7 @@ const renderRelatedProject = (project) => {
                 href="../${escapeHtml(project.slug)}/"
                 aria-label="View ${escapeHtml(project.title)} case study"
               >
-                <figure
-                  class="case-study-related__figure"
-                  style="--case-study-related-content-width: ${contentWidth}%"
-                >
+                <figure class="case-study-related__figure">
                   <span class="case-study-related__media">
                     <img
                       class="case-study-related__image media-card__image"
