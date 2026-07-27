@@ -11,6 +11,7 @@ import {
 } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { marked } from "marked";
 import { getImageDimensions } from "./lib/image-dimensions.mjs";
 import { parseYaml } from "./lib/yaml.mjs";
 import {
@@ -20,7 +21,7 @@ import {
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_DIR = path.join(ROOT, "content", "projects");
-const CONTENT_FILE = path.join(CONTENT_DIR, "projects.yml");
+const PAGE_CONTENT_FILE = path.join(CONTENT_DIR, "projects.yml");
 const ASSETS_DIR = path.join(ROOT, "assets", "projects");
 const ASSET_CACHE_FILE = path.join(ASSETS_DIR, ".build-cache.json");
 const PAGE_FILE = path.join(ROOT, "projects", "index.html");
@@ -30,6 +31,8 @@ const GENERATED_START = "        <!-- projects:generated:start -->";
 const GENERATED_END = "        <!-- projects:generated:end -->";
 const IMAGE_EXTENSIONS = new Set([".gif", ".jpeg", ".jpg", ".png", ".webp"]);
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const PROJECT_COLLECTIONS = ["featured", "playground"];
+const PUBLIC_PROJECT_ASSET_ROOT = "/assets/projects/";
 const ASSET_CACHE_VERSION = 1;
 const STILL_WEBP_QUALITY = 84;
 const ANIMATED_WEBP_QUALITY = 80;
@@ -41,6 +44,7 @@ const WIDE_RENDER_BOXES = [
   { width: 2048, height: 1300 },
   { width: 1440, height: 1800 },
 ];
+const BODY_RENDER_BOXES = [{ width: 2048, height: 2048 }];
 
 const isDirectRun = () => {
   return (
@@ -56,146 +60,21 @@ const escapeHtml = (value) =>
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
 
+const categoryKey = (value) =>
+  String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
 const requireText = (value, field) => {
   if (typeof value !== "string" || value.trim() === "") {
     throw new Error(`content/projects/projects.yml is missing "${field}"`);
   }
 
   return value.trim();
-};
-
-const normalizeSourcePath = (value, field) => {
-  const relativePath = requireText(value, field).replaceAll("\\", "/");
-  const extension = path.extname(relativePath).toLowerCase();
-
-  if (
-    path.posix.isAbsolute(relativePath) ||
-    relativePath.split("/").includes("..")
-  ) {
-    throw new Error(`"${field}" must stay inside content/projects`);
-  }
-
-  if (!IMAGE_EXTENSIONS.has(extension)) {
-    throw new Error(
-      `"${field}" must use GIF, JPEG, PNG, or WebP (received "${relativePath}")`,
-    );
-  }
-
-  return relativePath;
-};
-
-const loadImage = async (value, field) => {
-  const file = normalizeSourcePath(value, field);
-  const sourcePath = path.join(CONTENT_DIR, ...file.split("/"));
-
-  try {
-    const fileStat = await stat(sourcePath);
-
-    if (!fileStat.isFile()) {
-      throw new Error("not a file");
-    }
-  } catch (error) {
-    if (error.code === "ENOENT" || error.message === "not a file") {
-      throw new Error(`"${field}" does not exist: content/projects/${file}`);
-    }
-
-    throw error;
-  }
-
-  return {
-    file,
-    sourcePath,
-    outputFile: `${file.slice(0, -path.extname(file).length)}.webp`,
-  };
-};
-
-const normalizeFeaturedProject = async (project, index) => {
-  const prefix = `featured[${index}]`;
-  const slug = requireText(project?.slug, `${prefix}.slug`);
-  const rawSections = project.caseStudy?.sections ?? [];
-
-  if (!SLUG_PATTERN.test(slug)) {
-    throw new Error(
-      `"${prefix}.slug" must contain lowercase words separated by hyphens`,
-    );
-  }
-
-  if (!Array.isArray(rawSections)) {
-    throw new Error(`"${prefix}.caseStudy.sections" must be an array`);
-  }
-
-  if (!Array.isArray(project.images) || project.images.length === 0) {
-    throw new Error(`"${prefix}.images" must contain at least one image`);
-  }
-
-  const images = [];
-
-  for (let imageIndex = 0; imageIndex < project.images.length; imageIndex += 1) {
-    const image = project.images[imageIndex];
-    const imagePrefix = `${prefix}.images[${imageIndex}]`;
-
-    images.push({
-      ...(await loadImage(image?.file, `${imagePrefix}.file`)),
-      alt: requireText(image?.alt, `${imagePrefix}.alt`),
-      main: Boolean(image?.main),
-      wide: Boolean(image?.wide),
-      dark: Boolean(image?.dark),
-      framed: Boolean(image?.framed),
-      resizeMode: "cover",
-      renderBoxes: image?.wide
-        ? WIDE_RENDER_BOXES
-        : REGULAR_RENDER_BOXES,
-    });
-  }
-
-  const mainImages = images.filter((image) => image.main);
-
-  if (mainImages.length !== 1) {
-    throw new Error(
-      `"${prefix}.images" must mark exactly one image with "main: true"`,
-    );
-  }
-
-  return {
-    slug,
-    title: requireText(project.title, `${prefix}.title`),
-    description: requireText(project.description, `${prefix}.description`),
-    caseStudy: {
-      year: requireText(project.caseStudy?.year, `${prefix}.caseStudy.year`),
-      description: requireText(
-        project.caseStudy?.description,
-        `${prefix}.caseStudy.description`,
-      ),
-      note: requireText(project.caseStudy?.note, `${prefix}.caseStudy.note`),
-      sections: rawSections.map((section, sectionIndex) => {
-        const sectionPrefix =
-          `${prefix}.caseStudy.sections[${sectionIndex}]`;
-        const title =
-          typeof section?.title === "string" && section.title.trim() !== ""
-            ? section.title.trim()
-            : null;
-
-        return {
-          title,
-          copy: requireText(section?.copy, `${sectionPrefix}.copy`),
-        };
-      }),
-    },
-    images,
-  };
-};
-
-const normalizePlaygroundProject = async (project, index) => {
-  const prefix = `playground[${index}]`;
-
-  return {
-    title: requireText(project?.title, `${prefix}.title`),
-    description: requireText(project?.description, `${prefix}.description`),
-    alt: requireText(project?.alt, `${prefix}.alt`),
-    ...(await loadImage(project?.image, `${prefix}.image`)),
-    resizeMode: "contain",
-    renderBoxes: REGULAR_RENDER_BOXES,
-  };
 };
 
 const assertUnique = (items, field, label) => {
@@ -212,48 +91,639 @@ const assertUnique = (items, field, label) => {
   }
 };
 
-const loadProjects = async () => {
-  const data = parseYaml(await readFile(CONTENT_FILE, "utf8"));
+const projectError = (projectKey, message) =>
+  new Error(`content/projects/${projectKey}/index.md: ${message}`);
 
-  if (!Array.isArray(data.featured) || data.featured.length === 0) {
-    throw new Error('"featured" must contain at least one project');
+const requireProjectText = (value, projectKey, field) => {
+  if (typeof value !== "string" || value.trim() === "") {
+    throw projectError(projectKey, `missing "${field}"`);
   }
 
-  if (!Array.isArray(data.playground)) {
-    throw new Error('"playground" must be an array');
+  return value.trim();
+};
+
+const parseProjectDocument = (source, projectKey) => {
+  const normalized = source.replaceAll("\r\n", "\n");
+  const match = normalized.match(/^---\n([\s\S]*?)\n---(?:\n|$)([\s\S]*)$/);
+
+  if (!match) {
+    throw projectError(
+      projectKey,
+      'must start with YAML front matter between two "---" lines',
+    );
   }
 
-  if (!Array.isArray(data.page?.categories) || data.page.categories.length === 0) {
-    throw new Error('"page.categories" must contain at least one category');
+  let frontMatter;
+
+  try {
+    frontMatter = parseYaml(match[1]);
+  } catch (error) {
+    throw projectError(projectKey, `invalid front matter: ${error.message}`);
   }
-
-  const featured = [];
-  const playground = [];
-
-  for (let index = 0; index < data.featured.length; index += 1) {
-    featured.push(await normalizeFeaturedProject(data.featured[index], index));
-  }
-
-  for (let index = 0; index < data.playground.length; index += 1) {
-    playground.push(await normalizePlaygroundProject(data.playground[index], index));
-  }
-
-  assertUnique(featured, "slug", "featured project slug");
-  assertUnique([...featured, ...playground], "title", "project title");
 
   return {
+    frontMatter,
+    markdown: match[2].trim(),
+  };
+};
+
+const normalizeProjectSourcePath = (
+  value,
+  projectKey,
+  field,
+  requiredDirectory,
+) => {
+  const relativePath = requireProjectText(
+    value,
+    projectKey,
+    field,
+  ).replaceAll(
+    "\\",
+    "/",
+  );
+  const extension = path.posix.extname(relativePath).toLowerCase();
+
+  if (
+    path.posix.isAbsolute(relativePath) ||
+    relativePath.split("/").includes("..")
+  ) {
+    throw projectError(
+      projectKey,
+      `"${field}" must stay inside its project folder`,
+    );
+  }
+
+  if (!IMAGE_EXTENSIONS.has(extension)) {
+    throw projectError(
+      projectKey,
+      `"${field}" must use GIF, JPEG, PNG, or WebP (received "${relativePath}")`,
+    );
+  }
+
+  if (relativePath.split("/")[0] !== requiredDirectory) {
+    throw projectError(
+      projectKey,
+      `"${field}" must point inside "${requiredDirectory}/"`,
+    );
+  }
+
+  return relativePath;
+};
+
+const loadProjectImage = async ({
+  allowedDirectory,
+  alt,
+  field,
+  file: rawFile,
+  projectDirectory,
+  projectKey,
+  resizeMode,
+  renderBoxes,
+  ...options
+}) => {
+  const file = normalizeProjectSourcePath(
+    rawFile,
+    projectKey,
+    `${field}.file`,
+    allowedDirectory,
+  );
+  const sourcePath = path.join(projectDirectory, ...file.split("/"));
+
+  try {
+    const fileStat = await stat(sourcePath);
+
+    if (!fileStat.isFile()) {
+      throw new Error("not a file");
+    }
+  } catch (error) {
+    if (error.code === "ENOENT" || error.message === "not a file") {
+      throw projectError(
+        projectKey,
+        `"${field}.file" does not exist: ${file}`,
+      );
+    }
+
+    throw error;
+  }
+
+  return {
+    alt: requireProjectText(alt, projectKey, `${field}.alt`),
+    file,
+    outputFile:
+      `${projectKey}/${file.slice(0, -path.posix.extname(file).length)}.webp`,
+    projectDirectory,
+    resizeMode,
+    renderBoxes,
+    sourcePath,
+    ...options,
+  };
+};
+
+const standaloneMarkdownImage = (token) => {
+  if (token.type !== "paragraph" || !Array.isArray(token.tokens)) {
+    return null;
+  }
+
+  const [image, modifier, ...rest] = token.tokens;
+
+  if (image?.type !== "image" || rest.length > 0) {
+    return null;
+  }
+
+  if (!modifier) {
+    return { image, layout: "normal" };
+  }
+
+  if (modifier.type === "text") {
+    const modifierName = modifier.text.trim().match(/^\{([a-z-]+)\}$/)?.[1];
+
+    if (modifierName === "wide" || modifierName === "contained") {
+      return { image, layout: modifierName };
+    }
+
+    if (modifierName) {
+      return {
+        error:
+          `unknown image modifier "{${modifierName}}"; use {wide}, ` +
+          "{contained}, or no modifier",
+        image,
+      };
+    }
+  }
+
+  return null;
+};
+
+const standaloneMarkdownImages = (token) => {
+  if (token.type !== "paragraph") {
+    return null;
+  }
+
+  const images = [];
+
+  for (const line of token.raw.split("\n")) {
+    const lineTokens = marked.lexer(line.trim(), { gfm: true });
+
+    if (lineTokens.length !== 1) {
+      return null;
+    }
+
+    const image = standaloneMarkdownImage(lineTokens[0]);
+
+    if (!image) {
+      return null;
+    }
+
+    images.push(image);
+  }
+
+  return images.length > 0 ? images : null;
+};
+
+const tokenContainsImage = (token) => {
+  if (token?.type === "image") {
+    return true;
+  }
+
+  return Object.values(token ?? {}).some((value) => {
+    if (Array.isArray(value)) {
+      return value.some((item) => tokenContainsImage(item));
+    }
+
+    return value && typeof value === "object"
+      ? tokenContainsImage(value)
+      : false;
+  });
+};
+
+const loadMarkdownContent = async ({
+  markdown,
+  projectDirectory,
+  projectKey,
+}) => {
+  const tokens = marked.lexer(markdown, {
+    gfm: true,
+    headerIds: false,
+    mangle: false,
+  });
+  const blocks = [];
+  const images = [];
+
+  for (const token of tokens) {
+    if (token.type === "space") {
+      continue;
+    }
+
+    const standaloneImages = standaloneMarkdownImages(token);
+
+    if (standaloneImages) {
+      for (const standalone of standaloneImages) {
+        if (standalone.error) {
+          throw projectError(projectKey, standalone.error);
+        }
+
+        const image = await loadProjectImage({
+          allowedDirectory: "media",
+          alt: standalone.image.text,
+          field: `Markdown image "${standalone.image.href}"`,
+          file: standalone.image.href,
+          projectDirectory,
+          projectKey,
+          resizeMode:
+            standalone.layout === "contained" ? "contain" : "cover",
+          renderBoxes:
+            standalone.layout === "wide"
+              ? WIDE_RENDER_BOXES
+              : standalone.layout === "contained"
+                ? BODY_RENDER_BOXES
+                : REGULAR_RENDER_BOXES,
+          contained: standalone.layout === "contained",
+          wide: standalone.layout === "wide",
+        });
+
+        images.push(image);
+        blocks.push({
+          image,
+          layout: standalone.layout,
+          type: "image",
+        });
+      }
+
+      continue;
+    }
+
+    if (tokenContainsImage(token)) {
+      throw projectError(
+        projectKey,
+        "Markdown images must be alone on their line; optional modifiers are {wide} and {contained}",
+      );
+    }
+
+    const html = marked.parser([token], {
+      gfm: true,
+      headerIds: false,
+      mangle: false,
+    });
+    const previousBlock = blocks.at(-1);
+
+    if (previousBlock?.type === "text" && token.type !== "heading") {
+      previousBlock.html += html;
+    } else {
+      blocks.push({
+        html,
+        titled: token.type === "heading",
+        type: "text",
+      });
+    }
+  }
+
+  for (let index = 0; index < blocks.length; index += 1) {
+    if (blocks[index].type !== "image" || blocks[index].layout !== "normal") {
+      continue;
+    }
+
+    const run = [];
+
+    while (
+      index < blocks.length &&
+      blocks[index].type === "image" &&
+      blocks[index].layout === "normal"
+    ) {
+      run.push(blocks[index]);
+      index += 1;
+    }
+
+    if (run.length % 2 === 1) {
+      run.at(-1).isolated = true;
+    }
+
+    index -= 1;
+  }
+
+  return { blocks, images };
+};
+
+const listProjectMedia = async (directory, prefix = "") => {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = [];
+
+  for (const entry of entries) {
+    if (entry.name.startsWith(".")) {
+      continue;
+    }
+
+    const relativePath = prefix
+      ? `${prefix}/${entry.name}`
+      : entry.name;
+    const absolutePath = path.join(directory, entry.name);
+
+    if (entry.isDirectory()) {
+      files.push(...(await listProjectMedia(absolutePath, relativePath)));
+      continue;
+    }
+
+    if (IMAGE_EXTENSIONS.has(path.extname(entry.name).toLowerCase())) {
+      files.push(relativePath);
+    }
+  }
+
+  return files;
+};
+
+const normalizeListingImages = async ({
+  collection,
+  frontMatter,
+  projectDirectory,
+  projectKey,
+}) => {
+  const listing = frontMatter.listing;
+
+  if (!listing || typeof listing !== "object") {
+    throw projectError(projectKey, 'missing "listing"');
+  }
+
+  let rawImages;
+
+  if (Array.isArray(listing.images)) {
+    rawImages = listing.images;
+  } else if (listing.image) {
+    rawImages = [
+      {
+        alt: listing.alt,
+        dark: listing.dark,
+        file: listing.image,
+        framed: listing.framed,
+        main: listing.main,
+        wide: listing.wide,
+      },
+    ];
+  } else {
+    throw projectError(projectKey, '"listing" needs "image" or "images"');
+  }
+
+  if (rawImages.length === 0) {
+    throw projectError(
+      projectKey,
+      '"listing.images" needs at least one image',
+    );
+  }
+
+  const images = [];
+
+  for (let index = 0; index < rawImages.length; index += 1) {
+    const rawImage = rawImages[index];
+    const wide = Boolean(rawImage?.wide);
+
+    images.push(
+      await loadProjectImage({
+        allowedDirectory: "listing",
+        alt: rawImage?.alt,
+        dark: Boolean(rawImage?.dark),
+        field: `listing.images[${index}]`,
+        file: rawImage?.file,
+        framed: Boolean(rawImage?.framed),
+        main: Boolean(rawImage?.main),
+        projectDirectory,
+        projectKey,
+        resizeMode: collection === "featured" ? "cover" : "contain",
+        renderBoxes: wide ? WIDE_RENDER_BOXES : REGULAR_RENDER_BOXES,
+        wide,
+      }),
+    );
+  }
+
+  const explicitMainImages = images.filter((image) => image.main);
+
+  if (explicitMainImages.length > 1) {
+    throw projectError(
+      projectKey,
+      '"listing.images" can mark at most one image with "main: true"',
+    );
+  }
+
+  (explicitMainImages[0] ?? images[0]).main = true;
+  return images;
+};
+
+const loadProject = async (entry, collection) => {
+  const slug = entry.name;
+  const projectKey = `${collection}/${slug}`;
+
+  if (!SLUG_PATTERN.test(slug)) {
+    throw new Error(
+      `content/projects/${projectKey}: folder names must contain lowercase words separated by hyphens`,
+    );
+  }
+
+  const projectDirectory = path.join(CONTENT_DIR, collection, slug);
+  const documentPath = path.join(projectDirectory, "index.md");
+  const { frontMatter, markdown } = parseProjectDocument(
+    await readFile(documentPath, "utf8"),
+    projectKey,
+  );
+
+  if (frontMatter.collection !== undefined) {
+    throw projectError(
+      projectKey,
+      'remove "collection"; the parent folder already defines it',
+    );
+  }
+
+  if (!Number.isFinite(frontMatter.order)) {
+    throw projectError(projectKey, '"order" must be a number');
+  }
+
+  const images = await normalizeListingImages({
+    collection,
+    frontMatter,
+    projectDirectory,
+    projectKey,
+  });
+  const content = await loadMarkdownContent({
+    markdown,
+    projectDirectory,
+    projectKey,
+  });
+  const referencedMedia = new Set(
+    [...images, ...content.images].map((image) => image.file),
+  );
+  const unusedMedia = (await listProjectMedia(projectDirectory)).filter(
+    (file) => !referencedMedia.has(file),
+  );
+
+  return {
+    category: requireProjectText(
+      frontMatter.category,
+      projectKey,
+      "category",
+    ),
+    collection,
+    contentBlocks: content.blocks,
+    contentImages: content.images,
+    description: requireProjectText(
+      frontMatter.description,
+      projectKey,
+      "description",
+    ),
+    images,
+    note:
+      typeof frontMatter.note === "string" && frontMatter.note.trim()
+        ? frontMatter.note.trim()
+        : null,
+    order: frontMatter.order,
+    projectKey,
+    slug,
+    summary:
+      typeof frontMatter.summary === "string" && frontMatter.summary.trim()
+        ? frontMatter.summary.trim()
+        : requireProjectText(
+            frontMatter.description,
+            projectKey,
+            "description",
+          ),
+    title: requireProjectText(frontMatter.title, projectKey, "title"),
+    unusedMedia,
+    year:
+      typeof frontMatter.year === "string" && frontMatter.year.trim()
+        ? frontMatter.year.trim()
+        : Number.isFinite(frontMatter.year)
+          ? String(frontMatter.year)
+          : null,
+  };
+};
+
+const assertUniqueOrder = (projects, collection) => {
+  const orders = new Map();
+
+  for (const project of projects) {
+    if (orders.has(project.order)) {
+      throw new Error(
+        `Projects "${orders.get(project.order)}" and "${project.slug}" both use ` +
+          `order ${project.order} in collection "${collection}"`,
+      );
+    }
+
+    orders.set(project.order, project.slug);
+  }
+};
+
+const loadProjects = async () => {
+  const data = parseYaml(await readFile(PAGE_CONTENT_FILE, "utf8"));
+
+  if (
+    !Array.isArray(data.page?.categories) ||
+    data.page.categories.length === 0
+  ) {
+    throw new Error(
+      'content/projects/projects.yml: "page.categories" must contain at least one category',
+    );
+  }
+
+  const projects = [];
+
+  for (const collection of PROJECT_COLLECTIONS) {
+    const collectionDirectory = path.join(CONTENT_DIR, collection);
+    let entries;
+
+    try {
+      entries = await readdir(collectionDirectory, { withFileTypes: true });
+    } catch (error) {
+      if (error.code === "ENOENT") {
+        throw new Error(
+          `content/projects: missing "${collection}/" collection folder`,
+        );
+      }
+
+      throw error;
+    }
+
+    for (const entry of entries) {
+      if (
+        !entry.isDirectory() ||
+        entry.name.startsWith(".")
+      ) {
+        continue;
+      }
+
+      try {
+        const indexStat = await stat(
+          path.join(collectionDirectory, entry.name, "index.md"),
+        );
+
+        if (indexStat.isFile()) {
+          projects.push(await loadProject(entry, collection));
+        }
+      } catch (error) {
+        if (error.code !== "ENOENT") {
+          throw error;
+        }
+      }
+    }
+  }
+
+  if (projects.length === 0) {
+    throw new Error(
+      "content/projects: add at least one featured/<slug>/index.md project",
+    );
+  }
+
+  assertUnique(projects, "slug", "project slug");
+  assertUnique(projects, "title", "project title");
+
+  const categories = data.page.categories.map((category, index) =>
+    requireText(category, `page.categories[${index}]`),
+  );
+  const categoryKeys = new Set(categories.map(categoryKey));
+
+  for (const project of projects) {
+    if (!categoryKeys.has(categoryKey(project.category))) {
+      throw projectError(
+        project.projectKey,
+        `category "${project.category}" is not listed in projects.yml`,
+      );
+    }
+  }
+
+  const byOrder = (a, b) => a.order - b.order || a.slug.localeCompare(b.slug);
+  const featured = projects
+    .filter((project) => project.collection === "featured")
+    .sort(byOrder);
+  const playground = projects
+    .filter((project) => project.collection === "playground")
+    .sort(byOrder);
+
+  if (featured.length === 0) {
+    throw new Error(
+      'content/projects: at least one project needs collection "featured"',
+    );
+  }
+
+  assertUniqueOrder(featured, "featured");
+  assertUniqueOrder(playground, "playground");
+
+  playground.forEach((project, index) => {
+    project.sequence = String(index + 1).padStart(2, "0");
+  });
+
+  const warnings = projects.flatMap((project) =>
+    project.unusedMedia.map(
+      (file) =>
+        `Unused project media: content/projects/${project.projectKey}/${file}`,
+    ),
+  );
+
+  return {
+    featured,
     page: {
-      categories: data.page.categories.map((category, index) =>
-        requireText(category, `page.categories[${index}]`),
-      ),
+      categories,
       intro: requireText(data.page.intro, "page.intro"),
       playgroundIntro: requireText(
         data.page.playgroundIntro,
         "page.playgroundIntro",
       ),
     },
-    featured,
     playground,
+    warnings,
   };
 };
 
@@ -421,8 +891,10 @@ const generateProjectImage = async (job, outputPath, options) => {
 };
 
 const getImageReferences = (projects) => [
-  ...projects.featured.flatMap((project) => project.images),
-  ...projects.playground,
+  ...[...projects.featured, ...projects.playground].flatMap((project) => [
+    ...project.images,
+    ...project.contentImages,
+  ]),
 ];
 
 const collectAssetJobs = (projects) => {
@@ -527,10 +999,8 @@ const generateProjectAssets = async (projects) => {
     }
 
     const dimensions = await getImageDimensions(outputPath);
-    const src = `../assets/projects/${job.outputFile}`;
-
     for (const reference of job.references) {
-      Object.assign(reference, dimensions, { src });
+      Object.assign(reference, dimensions);
     }
 
     cache[cacheKey] = {
@@ -576,7 +1046,7 @@ const renderFeaturedImage = (image) => {
                   <span class="${mediaClasses}">
                     <img
                       class="${imageClasses}"
-                      src="${escapeHtml(image.src)}"
+                      src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + image.outputFile)}"
                       width="${image.width}"
                       height="${image.height}"
                       alt="${escapeHtml(image.alt)}"
@@ -589,7 +1059,11 @@ const renderFeaturedProject = (project) => {
   const footerId = `${project.slug}-carousel-footer`;
   const projectLabel = project.title.replace(/:\s.*$/, "");
 
-  return `            <li class="featured-project" data-project-carousel>
+  return `            <li
+              class="featured-project"
+              data-project-carousel
+              data-project-category="${escapeHtml(categoryKey(project.category))}"
+            >
               <div
                 class="featured-project__track"
                 role="region"
@@ -651,31 +1125,199 @@ ${project.images.map(renderFeaturedImage).join("\n\n")}
 };
 
 const renderPlaygroundProject = (project) => {
-  return `            <li class="playground-card media-card">
-              <figure class="playground-card__figure">
+  const preview =
+    project.images.find((image) => image.main) ?? project.images[0];
+
+  return `            <li
+              class="playground-card media-card"
+              data-project-category="${escapeHtml(categoryKey(project.category))}"
+            >
+              <a
+                class="playground-card__button"
+                href="./${escapeHtml(project.slug)}/"
+                aria-haspopup="dialog"
+                aria-controls="playground-sheet-${escapeHtml(project.slug)}"
+                aria-label="${escapeHtml(project.title)}: ${escapeHtml(project.description)}"
+                data-playground-sheet-open="${escapeHtml(project.slug)}"
+              >
                 <span class="playground-card__media">
                   <img
                     class="playground-card__image media-card__image"
-                    src="${escapeHtml(project.src)}"
-                    width="${project.width}"
-                    height="${project.height}"
-                    alt="${escapeHtml(project.alt)}"
+                    src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + preview.outputFile)}"
+                    width="${preview.width}"
+                    height="${preview.height}"
+                    alt="${escapeHtml(preview.alt)}"
                     loading="lazy"
                     decoding="async"
                   />
                 </span>
-                <figcaption
+                <span
                   class="playground-card__caption media-card__caption"
                 >
                   <span class="playground-card__title">${escapeHtml(project.title)}</span>
                   <span class="playground-card__description">${escapeHtml(project.description)}</span>
-                </figcaption>
-              </figure>
+                </span>
+              </a>
             </li>`;
 };
 
+const renderProjectContent = (
+  project,
+  { priorityFirstImage = false } = {},
+) => {
+  let imageIndex = 0;
+
+  return project.contentBlocks
+    .map((block) => {
+      if (block.type === "text") {
+        const textClasses = [
+          "project-content__text",
+          block.titled && "project-content__text--titled",
+        ]
+          .filter(Boolean)
+          .join(" ");
+
+        return `                <div class="${textClasses}">
+${block.html.trim()}
+                </div>`;
+      }
+
+      const priority = priorityFirstImage && imageIndex === 0;
+      imageIndex += 1;
+      const classes = [
+        "project-content__media",
+        block.image.wide && "project-content__media--wide",
+        block.image.contained && "project-content__media--contained",
+        block.isolated && "project-content__media--isolated",
+      ]
+        .filter(Boolean)
+        .join(" ");
+      const loading = priority
+        ? ' fetchpriority="high"'
+        : ' loading="lazy" decoding="async"';
+
+      return `                <figure class="${classes}">
+                  <img
+                    class="project-content__image"
+                    src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + block.image.outputFile)}"
+                    width="${block.image.width}"
+                    height="${block.image.height}"
+                    alt="${escapeHtml(block.image.alt)}"${loading}
+                  />
+                </figure>`;
+    })
+    .join("\n\n");
+};
+
+const renderPlaygroundSheet = (project) => {
+  const titleId = `playground-sheet-title-${project.slug}`;
+  const descriptionId = `playground-sheet-description-${project.slug}`;
+
+  return `        <dialog
+          class="playground-sheet"
+          id="playground-sheet-${escapeHtml(project.slug)}"
+          aria-labelledby="${escapeHtml(titleId)}"
+          aria-describedby="${escapeHtml(descriptionId)}"
+          tabindex="-1"
+          data-playground-sheet="${escapeHtml(project.slug)}"
+        >
+          <div class="playground-sheet__surface">
+            <button
+              class="playground-sheet__handle"
+              type="button"
+              aria-label="Close ${escapeHtml(project.title)}"
+              data-playground-sheet-handle
+            >
+              <span class="playground-sheet__handle-bar"></span>
+            </button>
+
+            <button
+              class="playground-sheet__close"
+              type="button"
+              aria-label="Close ${escapeHtml(project.title)}"
+              data-playground-sheet-close
+            >
+              <span aria-hidden="true"></span>
+            </button>
+
+            <div class="playground-sheet__content">
+              <header class="playground-sheet__intro">
+                <h2 class="playground-sheet__title" id="${escapeHtml(titleId)}">${escapeHtml(project.title)}</h2>
+                <p class="playground-sheet__description" id="${escapeHtml(descriptionId)}">${escapeHtml(project.description)}</p>
+                <div class="playground-sheet__meta" aria-label="Project details">
+                  <span>${escapeHtml(project.sequence)} - ${escapeHtml(project.category)}</span>
+                </div>
+              </header>
+
+              <div
+                class="project-content playground-sheet__body"
+                aria-label="${escapeHtml(project.title)} project content"
+              >
+${renderProjectContent(project, {
+})}
+              </div>
+            </div>
+          </div>
+        </dialog>`;
+};
+
 const renderProjectsContent = ({ page, featured, playground }) => {
+  const projects = [...featured, ...playground];
   const projectCount = featured.length + playground.length;
+  const categoryCounts = new Map(
+    page.categories.map((category) => [
+      categoryKey(category),
+      projects.filter(
+        (project) => categoryKey(project.category) === categoryKey(category),
+      ).length,
+    ]),
+  );
+  const categoryFilters = page.categories
+    .map((category) => {
+      const key = categoryKey(category);
+
+      return `                <button
+                  class="content-filter__button"
+                  type="button"
+                  data-project-filter="${escapeHtml(key)}"
+                  aria-pressed="false"
+                >
+                  <span>${escapeHtml(category)}</span>
+                  <span class="content-filter__count" data-filter-count hidden>${categoryCounts.get(key) || 0}</span>
+                </button>`;
+    })
+    .join("\n");
+  const randomAction =
+    playground.length > 0
+      ? `              <button
+                class="content-filter__button projects-intro__random"
+                type="button"
+                data-playground-sheet-random
+              >
+                See a random experiment
+              </button>`
+      : "";
+  const playgroundContent =
+    playground.length > 0
+      ? `        <section
+          class="playground"
+          aria-labelledby="playground-title"
+          data-project-section
+        >
+          <header class="playground__header">
+            <h2 class="playground__title" id="playground-title">Playground</h2>
+            <p class="playground__description">
+              ${escapeHtml(page.playgroundIntro)}
+            </p>
+          </header>
+
+          <ul class="playground-grid">
+${playground.map(renderPlaygroundProject).join("\n\n")}
+          </ul>
+        </section>
+
+${playground.map(renderPlaygroundSheet).join("\n\n")}`
+      : "";
 
   return `        <h1 class="sr-only">Projects and experiments</h1>
 
@@ -683,11 +1325,26 @@ const renderProjectsContent = ({ page, featured, playground }) => {
           class="projects-intro page-intro"
           aria-label="Projects overview"
         >
-          <div class="content-filter" aria-label="Work categories">
+          <div
+            class="content-filter"
+            aria-label="Work categories"
+            data-project-filters
+          >
             <span class="content-filter__symbol" aria-hidden="true">✦</span>
             <div class="content-filter__content">
-              <span class="projects-intro__label">All Work (${projectCount})</span>
-              <span>${escapeHtml(page.categories.join(", "))}</span>
+              <div class="content-filter__options" aria-label="Project types">
+                <button
+                  class="content-filter__button is-active"
+                  type="button"
+                  data-project-filter="all"
+                  aria-pressed="true"
+                >
+                  <span>All Work</span>
+                  <span class="content-filter__count" data-filter-count>${projectCount}</span>
+                </button>
+${categoryFilters}
+              </div>
+${randomAction}
             </div>
           </div>
 
@@ -699,6 +1356,7 @@ const renderProjectsContent = ({ page, featured, playground }) => {
         <section
           class="featured-projects"
           aria-labelledby="featured-projects-title"
+          data-project-section
         >
           <h2 class="sr-only" id="featured-projects-title">
             Featured projects
@@ -709,87 +1367,7 @@ ${featured.map(renderFeaturedProject).join("\n\n")}
           </ol>
         </section>
 
-        <section class="playground" aria-labelledby="playground-title">
-          <header class="playground__header">
-            <h2 class="playground__title" id="playground-title">Playground</h2>
-            <p class="playground__description">
-              ${escapeHtml(page.playgroundIntro)}
-            </p>
-          </header>
-
-          <ul class="playground-grid">
-${playground.map(renderPlaygroundProject).join("\n\n")}
-          </ul>
-        </section>`;
-};
-
-const getCaseStudyHero = (project) =>
-  project.images.find((image) => image.wide) ?? project.images[0];
-
-const groupSupportingImages = (project, hero) => {
-  const supporting = project.images.filter((image) => image !== hero);
-  const rows = [];
-
-  for (let index = 0; index < supporting.length; index += 2) {
-    rows.push(supporting.slice(index, index + 2));
-  }
-
-  return rows;
-};
-
-const renderCaseStudyMedia = (image, { priority = false } = {}) => {
-  const mediaClasses = [
-    "case-study-media",
-    image.dark && "case-study-media--dark",
-    image.framed && "case-study-media--framed",
-  ]
-    .filter(Boolean)
-    .join(" ");
-  const imageClasses = [
-    "case-study-media__image",
-    image.framed && "case-study-media__image--framed",
-  ]
-    .filter(Boolean)
-    .join(" ");
-  const loadingAttributes = priority
-    ? '\n                fetchpriority="high"'
-    : '\n                loading="lazy"\n                decoding="async"';
-
-  return `            <figure class="${mediaClasses}">
-              <img
-                class="${imageClasses}"
-                src="../../assets/projects/${escapeHtml(image.outputFile)}"
-                width="${image.width}"
-                height="${image.height}"
-                alt="${escapeHtml(image.alt)}"${loadingAttributes}
-              />
-            </figure>`;
-};
-
-const renderCaseStudyNarrative = (sections) => {
-  if (sections.length === 0) {
-    return "";
-  }
-
-  const blocks = sections
-    .map((section) => {
-      const titleMarkup = section.title
-        ? `            <h3 class="case-study-narrative__title">${escapeHtml(section.title)}</h3>\n`
-        : "";
-
-      return `          <div class="case-study-narrative__block">
-${titleMarkup}            <p class="case-study-narrative__copy">
-              ${escapeHtml(section.copy)}
-            </p>
-          </div>`;
-    })
-    .join("\n\n");
-
-  return `
-
-        <div class="case-study-narrative">
-${blocks}
-        </div>`;
+${playgroundContent}`;
 };
 
 const renderRelatedProject = (project) => {
@@ -799,13 +1377,13 @@ const renderRelatedProject = (project) => {
               <a
                 class="case-study-related__link media-card"
                 href="../${escapeHtml(project.slug)}/"
-                aria-label="View ${escapeHtml(project.title)} case study"
+                aria-label="View ${escapeHtml(project.title)} project"
               >
                 <figure class="case-study-related__figure">
                   <span class="case-study-related__media">
                     <img
                       class="case-study-related__image media-card__image"
-                      src="../../assets/projects/${escapeHtml(preview.outputFile)}"
+                      src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + preview.outputFile)}"
                       width="${preview.width}"
                       height="${preview.height}"
                       alt="${escapeHtml(preview.alt)}"
@@ -835,19 +1413,18 @@ const getRelatedProjects = (featured, currentSlug, limit = 2) => {
   });
 };
 
-const renderCaseStudyPage = (project, featured) => {
-  const hero = getCaseStudyHero(project);
-  const supportingRows = groupSupportingImages(project, hero);
-  const relatedProjects = getRelatedProjects(featured, project.slug);
+const renderCaseStudyPage = (project, peers) => {
+  const preview = project.images.find((image) => image.main) ?? project.images[0];
+  const relatedProjects = getRelatedProjects(peers, project.slug);
   const pageUrl = `https://pierrelouis.net/projects/${project.slug}/`;
   const imageUrl =
-    `https://pierrelouis.net/assets/projects/${hero.outputFile}`;
+    `https://pierrelouis.net/assets/projects/${preview.outputFile}`;
   const header = renderSiteHeader({
     root: "../../",
-    active: "projects",
+    active: null,
     back: {
       href: "../../projects/",
-      label: "Back to projects",
+      label: "Back",
       shortLabel: "Back",
     },
   });
@@ -855,20 +1432,11 @@ const renderCaseStudyPage = (project, featured) => {
     root: "../../",
     active: "projects",
   });
-  const supportingMarkup = supportingRows
-    .map((row) => {
-      const rowClasses = [
-        "case-study-gallery__row",
-        row.length === 1 && "case-study-gallery__row--full",
-      ]
-        .filter(Boolean)
-        .join(" ");
-
-      return `          <div class="${rowClasses}">
-${row.map((image) => renderCaseStudyMedia(image)).join("\n")}
-          </div>`;
-    })
-    .join("\n\n");
+  const note = project.note
+    ? `              <p class="case-study-header__note">
+                ${escapeHtml(project.note)}
+              </p>`
+    : "";
 
   return `<!doctype html>
 <html lang="en">
@@ -881,12 +1449,12 @@ ${row.map((image) => renderCaseStudyMedia(image)).join("\n")}
     <title>${escapeHtml(project.title)} - Pierre-Louis</title>
     <meta
       name="description"
-      content="${escapeHtml(project.caseStudy.description)}"
+      content="${escapeHtml(project.summary)}"
     />
     <meta property="og:title" content="${escapeHtml(project.title)} - Pierre-Louis" />
     <meta
       property="og:description"
-      content="${escapeHtml(project.caseStudy.description)}"
+      content="${escapeHtml(project.summary)}"
     />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="${escapeHtml(pageUrl)}" />
@@ -918,7 +1486,7 @@ ${row.map((image) => renderCaseStudyMedia(image)).join("\n")}
 ${header}
 
       <main>
-        <h1 class="sr-only">${escapeHtml(project.title)} case study</h1>
+        <h1 class="sr-only">${escapeHtml(project.title)} project</h1>
 
         <section
           class="case-study-intro"
@@ -926,7 +1494,7 @@ ${header}
         >
           <header class="case-study-header">
             <div class="case-study-header__identity">
-              <span class="case-study-header__year">${escapeHtml(project.caseStudy.year)}</span>
+              <span class="case-study-header__year">${escapeHtml(project.year ?? project.category)}</span>
               <h2 class="case-study-header__title" id="case-study-title">
                 ${escapeHtml(project.title)}
               </h2>
@@ -934,24 +1502,20 @@ ${header}
 
             <div class="case-study-header__copy">
               <p class="case-study-header__description">
-                ${escapeHtml(project.caseStudy.description)}
+                ${escapeHtml(project.summary)}
               </p>
-              <p class="case-study-header__note">
-                ${escapeHtml(project.caseStudy.note)}
-              </p>
+${note}
             </div>
           </header>
         </section>
 
         <section
-          class="case-study-gallery"
-          aria-label="${escapeHtml(project.title)} project gallery"
+          class="project-content case-study-content"
+          aria-label="${escapeHtml(project.title)} project content"
         >
-          <div class="case-study-gallery__row case-study-gallery__row--full">
-${renderCaseStudyMedia(hero, { priority: true })}
-          </div>${renderCaseStudyNarrative(project.caseStudy.sections)}
-
-${supportingMarkup}
+${renderProjectContent(project, {
+  priorityFirstImage: true,
+})}
         </section>
 
         <nav
@@ -1022,18 +1586,21 @@ const removeStaleCaseStudyPages = async (expectedSlugs) => {
   return removed;
 };
 
-const updateCaseStudyPages = async (featured) => {
+const updateProjectPages = async (projects) => {
   const stats = {
     changed: 0,
     removed: 0,
-    total: featured.length,
+    total: projects.length,
   };
-  const expectedSlugs = new Set(featured.map((project) => project.slug));
+  const expectedSlugs = new Set(projects.map((project) => project.slug));
 
-  for (const project of featured) {
+  for (const project of projects) {
     const directory = path.join(CASE_STUDIES_DIR, project.slug);
     const pagePath = path.join(directory, "index.html");
-    const output = renderCaseStudyPage(project, featured);
+    const peers = projects.filter(
+      (candidate) => candidate.collection === project.collection,
+    );
+    const output = renderCaseStudyPage(project, peers);
     let source = "";
 
     try {
@@ -1070,7 +1637,17 @@ const updatePage = async (projects) => {
 
   const before = source.slice(0, startIndex + GENERATED_START.length);
   const after = source.slice(endIndex);
-  const output = `${before}\n${renderProjectsContent(projects)}\n${after}`;
+  const preview =
+    projects.featured[0].images.find((image) => image.main) ??
+    projects.featured[0].images[0];
+  const ogImageTag = `<meta
+      property="og:image"
+      content="https://pierrelouis.net/assets/projects/${escapeHtml(preview.outputFile)}"
+    />`;
+  const output = `${before}\n${renderProjectsContent(projects)}\n${after}`.replace(
+    /<meta\s+property="og:image"\s+content="[^"]+"\s*\/>/,
+    ogImageTag,
+  );
 
   if (output !== source) {
     await writeFile(PAGE_FILE, output);
@@ -1084,15 +1661,23 @@ export const buildProjects = async () => {
   const projects = await loadProjects();
   const assets = await generateProjectAssets(projects);
   const changed = await updatePage(projects);
-  const caseStudies = await updateCaseStudyPages(projects.featured);
+  const projectPages = await updateProjectPages([
+    ...projects.featured,
+    ...projects.playground,
+  ]);
+
+  for (const warning of projects.warnings) {
+    console.warn(`Warning: ${warning}`);
+  }
 
   return {
     assets,
-    caseStudies,
+    caseStudies: projectPages,
     changed,
     featured: projects.featured.length,
     playground: projects.playground.length,
     total: projects.featured.length + projects.playground.length,
+    warnings: projects.warnings,
   };
 };
 
@@ -1103,6 +1688,6 @@ if (isDirectRun()) {
       `${result.playground} playground (${result.total} total), ` +
       `${result.assets.generated} generated, ${result.assets.skipped} cached, ` +
       `${result.assets.removed} stale asset(s) removed, ` +
-      `${result.caseStudies.total} case study page(s).`,
+      `${result.caseStudies.total} project page(s).`,
   );
 }

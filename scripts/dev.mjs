@@ -77,7 +77,7 @@ const queue = (filename, reload) => {
             `${result.playground} playground (${result.total} total), ` +
             `${result.assets.generated} generated, ${result.assets.skipped} cached, ` +
             `${result.assets.removed} stale asset(s) removed, ` +
-            `${result.caseStudies.total} case study page(s).`,
+            `${result.caseStudies.total} project page(s).`,
         );
       }
 
@@ -110,10 +110,10 @@ const site = await startSiteServer({ dev: true, port: PORT });
 console.log(
   `Built projects: ${initialProjects.featured} featured, ` +
     `${initialProjects.playground} playground (${initialProjects.total} total), ` +
-    `${initialProjects.assets.generated} generated, ` +
-    `${initialProjects.assets.skipped} cached, ` +
-    `${initialProjects.assets.removed} stale asset(s) removed, ` +
-    `${initialProjects.caseStudies.total} case study page(s).`,
+  `${initialProjects.assets.generated} generated, ` +
+  `${initialProjects.assets.skipped} cached, ` +
+  `${initialProjects.assets.removed} stale asset(s) removed, ` +
+  `${initialProjects.caseStudies.total} project page(s).`,
 );
 console.log(
   `Built photos: ${initialPhotos.collections} collection(s), ${initialPhotos.photos} photo(s), ` +

@@ -48,10 +48,10 @@ const getCaseStudyConfigs = async () => {
     configs.push({
       file,
       root: "../../",
-      active: "projects",
+      active: null,
       back: {
         href: "../../projects/",
-        label: "Back to projects",
+        label: "Back",
         shortLabel: "Back",
       },
     });

@@ -576,6 +576,119 @@ main {
   opacity: var(--hover-opacity);
 }
 
+/* Shared project Markdown layout. */
+.project-content {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--grid-gap);
+  align-items: start;
+}
+
+.project-content__media {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  aspect-ratio: var(--project-media-ratio);
+  background: var(--color-media-bg);
+}
+
+.project-content__media--wide,
+.project-content__media--contained,
+.project-content__media--isolated,
+.project-content__text {
+  grid-column: 1 / -1;
+}
+
+.project-content__media--wide {
+  aspect-ratio: 16 / 9;
+}
+
+.project-content__media--isolated {
+  justify-self: center;
+  width: min(calc((100% - var(--grid-gap)) / 2), 700px);
+}
+
+.project-content__media--contained {
+  display: grid;
+  min-height: min(72svh, 760px);
+  padding: clamp(24px, 5vw, 80px);
+  place-items: center;
+  aspect-ratio: auto;
+}
+
+.project-content__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.project-content__media--contained .project-content__image {
+  width: auto;
+  max-width: min(78%, 1000px);
+  height: auto;
+  max-height: min(66svh, 700px);
+  object-fit: contain;
+}
+
+.project-content__text {
+  display: grid;
+  grid-template-columns: var(--page-grid-columns);
+  column-gap: var(--grid-gap);
+  padding-block: calc(var(--space-7xl) - var(--grid-gap));
+  color: var(--color-caption);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-copy);
+  overflow-wrap: anywhere;
+}
+
+.project-content__text > * {
+  grid-column: 2 / span 2;
+  width: 100%;
+  margin: 0;
+}
+
+.project-content__text:not(.project-content__text--titled) > * + *,
+.project-content__text--titled
+  > :not(h1, h2, h3, h4, h5, h6)
+  + :not(h1, h2, h3, h4, h5, h6) {
+  margin-top: var(--space-xl);
+}
+
+.project-content__text--titled > :is(h1, h2, h3, h4, h5, h6) {
+  grid-column: 1;
+  grid-row: 1;
+  color: var(--color-ink);
+  font-size: calc(var(--font-size-base) + 2px);
+  font-style: italic;
+  font-weight: var(--font-weight-italic);
+  letter-spacing: var(--tracking-normal);
+  text-align: left;
+}
+
+.project-content__text ul,
+.project-content__text ol {
+  padding-left: 1.25em;
+}
+
+.project-content__text blockquote {
+  padding-left: var(--space-xl);
+  border-left: 1px solid var(--color-subtle);
+}
+
+.project-content__text pre {
+  max-width: 100%;
+  padding: var(--space-xl);
+  overflow-x: auto;
+  background: var(--color-media-bg);
+}
+
+.project-content__text a {
+  color: inherit;
+  text-underline-offset: 0.16em;
+}
+
 /* Shared presentation for the Conway feature on index pages and in the menu. */
 .featured-article,
 .mobile-menu__latest-link {
@@ -766,6 +879,14 @@ main {
 }
 
 @media (max-width: 1100px) {
+  .project-content__text > * {
+    grid-column: 2;
+  }
+
+  .project-content__text--titled > :is(h1, h2, h3, h4, h5, h6) {
+    grid-column: 1;
+  }
+
   :root {
     --page-grid-columns: repeat(2, minmax(0, 1fr));
     --page-intro-padding-top: 280px;
@@ -828,6 +949,40 @@ main {
 }
 
 @media (max-width: 760px) {
+  .project-content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .project-content__media {
+    grid-column: 1;
+  }
+
+  .project-content__media--isolated {
+    width: min(100%, 520px);
+  }
+
+  .project-content__media--contained {
+    min-height: min(60svh, 580px);
+    padding: var(--space-xl);
+  }
+
+  .project-content__media--contained .project-content__image {
+    max-width: 88%;
+    max-height: min(56svh, 540px);
+  }
+
+  .project-content__text {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-xl);
+    padding-block: calc(var(--space-6xl) - var(--grid-gap));
+  }
+
+  .project-content__text > *,
+  .project-content__text--titled > :is(h1, h2, h3, h4, h5, h6) {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
   :root {
     --page-gutter: 20px;
     --grid-gap: 24px;

@@ -3,8 +3,8 @@
   const revealItems = document.querySelectorAll(
     [
       ".case-study-header",
-      ".case-study-media",
-      ".case-study-narrative__block",
+      ".case-study-content .project-content__media",
+      ".case-study-content .project-content__text",
       ".case-study-related__heading",
       ".case-study-related__all",
       ".case-study-related__item",

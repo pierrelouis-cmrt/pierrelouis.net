@@ -1,132 +1,209 @@
-# Projects content
+# Editing projects
 
-The projects page is built from [`projects.yml`](./projects.yml). You should not
-edit the HTML between the `projects:generated` comments in
-`projects/index.html`; `npm run build` replaces that region.
+Projects are split into two explicit collections:
 
-## Everyday workflow
+```text
+content/projects/
+├── projects.yml
+├── featured/
+│   └── my-case-study/
+│       ├── index.md
+│       ├── listing/
+│       │   ├── 01.webp
+│       │   └── 02.webp
+│       └── media/
+│           ├── hero.webp
+│           └── detail.webp
+└── playground/
+    └── my-experiment/
+        ├── index.md
+        ├── listing/
+        │   └── cover.webp
+        └── media/
+            └── presentation.webp
+```
 
-1. Add original project images under `content/projects/featured/` or
-   `content/projects/playground/`.
-2. Add or edit the corresponding entry in `projects.yml`.
-3. Run `npm run dev` and open `http://localhost:8000/projects/`.
-4. Commit the YAML, original images, generated `assets/projects/` images, and
-   generated `projects/index.html` together.
+The parent folder defines the collection, so project front matter does not need
+a `collection` field. `projects.yml` only contains copy shared by the Projects
+page.
 
-The order of entries in the YAML file is the order shown on the page. Image
-width and height are read automatically. The build also checks required text,
-alt text, duplicate titles and slugs, supported image formats, output-name
-collisions, and missing files.
+## `listing/` versus `media/`
 
-Do not edit images in `assets/projects/` manually. That directory contains only
-generated production files and is cleaned during builds. All source images live
-under `content/projects/`.
+The separation is strict and intentional:
 
-### What the image build does
+- `listing/` contains only images used by the Projects index: featured rows,
+  Playground cards, social previews and related-project previews.
+- `media/` contains only images used in the Markdown body of a case study or
+  Playground sheet.
 
-- Every source becomes WebP, including animated GIFs.
-- Outputs target approximately twice the largest responsive render box.
-- The calculation accounts for `cover` cropping on featured images and
-  `contain` sizing on Playground images.
-- Image aspect ratios are preserved; crops remain controlled by CSS.
-- Smaller sources are never enlarged.
-- Metadata is stripped and WebP encoding is optimized.
-- Unchanged images are skipped using a local build cache.
-- Generated files no longer referenced by `projects.yml` are removed.
-
-The target boxes are based on the current 760 px and 1100 px breakpoints. This
-keeps images sharp on high-density displays without carrying unnecessarily
-large originals into production. A landscape image may retain extra width when
-it needs that width to stay sharp inside a portrait `cover` crop.
+The build rejects a listing reference outside `listing/` and a Markdown image
+outside `media/`. An image can be copied into both folders when it genuinely
+serves both roles. This avoids coupling the index composition to the detailed
+project content.
 
 ## Add a featured project
 
-Every featured project has a case study. Its `slug` automatically becomes the
-link `/projects/<slug>/`, so there is no separate link field to keep in sync.
+Create `content/projects/featured/<slug>/index.md`:
 
-```yaml
-featured:
-  - slug: my-new-project
-    title: My New Project
-    description: Web Design, Development
-    images:
-      - file: featured/my-new-project-01.jpg
-        alt: Homepage of the My New Project website.
-      - file: featured/my-new-project-02.png
-        alt: Mobile screens from the My New Project website.
-        wide: true
+```md
+---
+title: My Project
+order: 10
+description: Web Design
+category: Web Design
+year: "2026"
+summary: A short description used in metadata and the page introduction.
+note: An optional second note for the introduction.
+listing:
+  images:
+    - file: listing/01.webp
+      alt: Homepage of the My Project website.
+      main: true
+    - file: listing/02.webp
+      alt: Detail view of the My Project website.
+      wide: true
+---
+
+![Project overview](media/hero.webp){wide}
+
+Write the case study in ordinary Markdown, in its final order.
+
+![First detail](media/detail-01.webp)
+![Second detail](media/detail-02.webp)
+
+## A section heading
+
+The heading sits in column one while this copy begins at the same vertical
+position across columns two and three.
 ```
 
-Each featured project also requires a `caseStudy` block:
+Featured orders can stay spaced (`10`, `20`, `30`) so inserting `15` later is
+easy.
 
-```yaml
-    caseStudy:
-      year: "2025"
-      description: A concise project introduction.
-      note: A quieter secondary paragraph about the approach or deliverables.
+## Add a Playground project
+
+Create `content/projects/playground/<slug>/index.md`:
+
+```md
+---
+title: Small Experiment
+order: 1
+description: A short listing caption
+category: Branding
+summary: Optional longer metadata description.
+listing:
+  image: listing/cover.webp
+  alt: Small Experiment identity artwork.
+---
+
+![Identity presentation](media/presentation.webp){contained}
+
+A short note about the experiment.
 ```
 
-The build generates `projects/<slug>/index.html`; do not edit those pages
-directly. It selects the image marked `wide` as the full-width lead visual and
-places the remaining exports in two-column rows, preserving the layout intent
-already used on the Projects page. Rows collapse to one column on mobile.
+Playground uses simple sequential orders (`1`, `2`, `3`, …).
 
-All generated pages share `projects/case-study.css`,
-`projects/case-study.js`, the responsive “Back to projects” navigation and the
-usual footer. Each page also ends with automatically generated links to the two
-featured case studies that follow it in YAML order, wrapping back to the start
-when needed. These previews use the same image-and-caption language as the
-Playground grid. Removing a featured entry also removes its generated
-case-study directory without touching manually authored project directories.
+## Listing images
 
-Featured images support one required selection switch and three optional
-presentation switches:
+Featured projects normally use an image list:
 
 ```yaml
-        main: true     # use this image in “More Projects” previews
-        wide: true     # span two columns on desktop
-        dark: true     # use a black media background
-        framed: true   # use the existing tall framed-image treatment
+listing:
+  images:
+    - file: listing/01.webp
+      alt: A meaningful description.
+      main: true
+    - file: listing/02.gif
+      alt: An animated website presentation.
+      wide: true
+      dark: true
+      framed: true
 ```
 
-Every featured project must mark exactly one image with `main: true`. Its
-natural aspect ratio is preserved in the “More Projects” section, using the
-same sizing behavior as Playground images. `wide` still controls the
-full-width lead image inside the case study; the two choices are independent.
-Only add the other switches when an image needs them. They default to `false`.
+`main` selects the social and related-project preview. If omitted, the first
+listing image is used. Only one image can be `main`.
 
-## Add a playground project
-
-Playground projects are simple image cards and do not link to case studies:
+Playground projects can use the concise single-image form:
 
 ```yaml
-playground:
-  - title: Small Experiment
-    description: A one-line explanation
-    image: playground/small-experiment.png
-    alt: Geometric artwork made for Small Experiment.
+listing:
+  image: listing/cover.png
+  alt: Willow identity artwork.
 ```
 
-## Edit page copy
+## Markdown image layouts
 
-The `page` section at the top of `projects.yml` controls the category line,
-intro paragraph, and Playground introduction:
+Markdown images must be alone on their line and point inside `media/`.
 
-```yaml
-page:
-  categories: [Web Design, Branding, Graphic Design]
-  intro: Featured projects and experiments...
-  playgroundIntro: Everything below...
+### Normal
+
+```md
+![First study](media/01.webp)
+![Second study](media/02.webp)
 ```
 
-The “All Work” number is calculated from the featured and playground entries.
+Normal images use a 4:5 slot and fill it with a centered crop. Two consecutive
+normal images sit side by side. If a normal image is left alone by surrounding
+text, `{wide}` or `{contained}` images, the build centers it automatically at
+one-column width instead of stretching it across the screen.
+
+### Wide
+
+```md
+![Final result](media/final.webp){wide}
+```
+
+`{wide}` spans both columns, uses a 16:9 slot and fills it with a centered crop.
+
+### Contained
+
+```md
+![Packaging presentation](media/packaging.webp){contained}
+```
+
+`{contained}` spans both columns but keeps the full image visible, centered at
+a restrained size inside a tall gray presentation area. This is the intended
+layout for artwork and mockups in Playground sheets.
+
+On mobile, normal pairs collapse to one column. Contained images keep their
+presentation area, while automatically isolated normal images remain centered
+and size-limited.
+
+## Text layout
+
+Plain text occupies columns two and three on desktop. A Markdown heading starts
+a titled text block: the heading occupies column one and the following copy
+starts on the same row in columns two and three. On mobile, both stack in
+reading order.
+
+The Markdown body is rendered from the same parsed content in the Playground
+drawer and at the permanent `/projects/<slug>/` URL. Without JavaScript, cards
+still open the normal project page.
+
+## Validation and assets
+
+The build stops when:
+
+- required metadata is missing;
+- a slug, order or category is invalid;
+- two projects in one collection share an order;
+- a redundant `collection` field is present;
+- an image has no alt text or does not exist;
+- a listing image leaves `listing/`;
+- a Markdown image leaves `media/`;
+- an image is embedded inline instead of being placed on its own line;
+- an unknown image modifier is used.
+
+Unused image files produce warnings but do not block the build. Only referenced
+GIF, JPEG, PNG and WebP files are optimized into `assets/projects/`.
 
 ## Commands
 
-- `npm run dev`: rebuild projects while YAML or project images change, serve
-  the site, and reload the browser.
-- `npm run build`: build projects, photos, and shared components.
-- `npm run build:projects`: validate and rebuild only the projects page.
+```bash
+npm run build:projects
+npm run dev
+npm run build
+npm run preview
+```
 
-Source images can be GIF, JPEG, PNG, or WebP. Keep the best practical source in
-`content/projects/`; the build decides the production format and size.
+`npm run dev` watches `content/projects/` and rebuilds automatically.

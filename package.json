@@ -5,5 +5,7 @@
     "dev": "node scripts/dev.mjs",
     "preview": "node scripts/preview.mjs"
   },
-  "devDependencies": {}
+  "dependencies": {
+    "marked": "^18.0.7"
+  }
 }

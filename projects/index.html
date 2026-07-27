@@ -20,23 +20,23 @@
     <meta property="og:url" content="https://pierrelouis.net/projects/" />
     <meta
       property="og:image"
-      content="https://pierrelouis.net/assets/projects/featured/sweetgreen-02.webp"
+      content="https://pierrelouis.net/assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
     />
     <link
       rel="icon"
       type="image/png"
-      href="../favicon/favicon-96x96.png"
+      href="/favicon/favicon-96x96.png"
       sizes="96x96"
     />
-    <link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg" />
-    <link rel="shortcut icon" href="../favicon/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="../favicon/apple-touch-icon.png"
+      href="/favicon/apple-touch-icon.png"
     />
     <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
-    <link rel="manifest" href="../favicon/site.webmanifest" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
     <link rel="stylesheet" href="../base.css" />
     <link rel="stylesheet" href="./projects.css" />
     <script src="../script.js" defer></script>
@@ -194,11 +194,58 @@
           class="projects-intro page-intro"
           aria-label="Projects overview"
         >
-          <div class="content-filter" aria-label="Work categories">
+          <div
+            class="content-filter"
+            aria-label="Work categories"
+            data-project-filters
+          >
             <span class="content-filter__symbol" aria-hidden="true">✦</span>
             <div class="content-filter__content">
-              <span class="projects-intro__label">All Work (9)</span>
-              <span>Web Design, Branding, Graphic Design</span>
+              <div class="content-filter__options" aria-label="Project types">
+                <button
+                  class="content-filter__button is-active"
+                  type="button"
+                  data-project-filter="all"
+                  aria-pressed="true"
+                >
+                  <span>All Work</span>
+                  <span class="content-filter__count" data-filter-count>9</span>
+                </button>
+                <button
+                  class="content-filter__button"
+                  type="button"
+                  data-project-filter="web-design"
+                  aria-pressed="false"
+                >
+                  <span>Web Design</span>
+                  <span class="content-filter__count" data-filter-count hidden>1</span>
+                </button>
+                <button
+                  class="content-filter__button"
+                  type="button"
+                  data-project-filter="branding"
+                  aria-pressed="false"
+                >
+                  <span>Branding</span>
+                  <span class="content-filter__count" data-filter-count hidden>5</span>
+                </button>
+                <button
+                  class="content-filter__button"
+                  type="button"
+                  data-project-filter="graphic-design"
+                  aria-pressed="false"
+                >
+                  <span>Graphic Design</span>
+                  <span class="content-filter__count" data-filter-count hidden>3</span>
+                </button>
+              </div>
+              <button
+                class="content-filter__button projects-intro__random"
+                type="button"
+                data-playground-sheet-random
+              >
+                See a random experiment
+              </button>
             </div>
           </div>
 
@@ -210,13 +257,18 @@
         <section
           class="featured-projects"
           aria-labelledby="featured-projects-title"
+          data-project-section
         >
           <h2 class="sr-only" id="featured-projects-title">
             Featured projects
           </h2>
 
           <ol class="featured-projects__list">
-            <li class="featured-project" data-project-carousel>
+            <li
+              class="featured-project"
+              data-project-carousel
+              data-project-category="graphic-design"
+            >
               <div
                 class="featured-project__track"
                 role="region"
@@ -229,10 +281,10 @@
                   <span class="featured-project__media">
                     <img
                       class="featured-project__image"
-                      src="../assets/projects/featured/sweetgreen-01.webp"
+                      src="/assets/projects/featured/sweetgreen-nicolandria/listing/01.webp"
                       width="750"
                       height="938"
-                      alt="Editorial photograph for Sweetgreen's Nicolandria project."
+                      alt="Editorial photograph for the Sweetgreen Nicolandria project."
                     />
                   </span>
                 </figure>
@@ -241,7 +293,7 @@
                   <span class="featured-project__media">
                     <img
                       class="featured-project__image"
-                      src="../assets/projects/featured/sweetgreen-02.webp"
+                      src="/assets/projects/featured/sweetgreen-nicolandria/listing/02.webp"
                       width="750"
                       height="937"
                       alt="Close-up campaign image from the Sweetgreen Nicolandria project."
@@ -253,7 +305,7 @@
                   <span class="featured-project__media">
                     <img
                       class="featured-project__image"
-                      src="../assets/projects/featured/sweetgreen-03.webp"
+                      src="/assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
                       width="750"
                       height="1125"
                       alt="Sweetgreen pickle ketchup surrounded by tomatoes."
@@ -310,7 +362,11 @@
               </footer>
             </li>
 
-            <li class="featured-project" data-project-carousel>
+            <li
+              class="featured-project"
+              data-project-carousel
+              data-project-category="web-design"
+            >
               <div
                 class="featured-project__track"
                 role="region"
@@ -323,7 +379,7 @@
                   <span class="featured-project__media featured-project__media--dark">
                     <img
                       class="featured-project__image featured-project__image--framed"
-                      src="../assets/projects/featured/hotel-wren-01.webp"
+                      src="/assets/projects/featured/hotel-wren/listing/01.webp"
                       width="750"
                       height="965"
                       alt="Animated Hotel Wren website presentation."
@@ -335,7 +391,7 @@
                   <span class="featured-project__media">
                     <img
                       class="featured-project__image"
-                      src="../assets/projects/featured/hotel-wren-02.webp"
+                      src="/assets/projects/featured/hotel-wren/listing/02.webp"
                       width="750"
                       height="1000"
                       alt="The Green Room entrance for Hotel Wren."
@@ -347,7 +403,7 @@
                   <span class="featured-project__media">
                     <img
                       class="featured-project__image"
-                      src="../assets/projects/featured/hotel-wren-03.webp"
+                      src="/assets/projects/featured/hotel-wren/listing/03.webp"
                       width="750"
                       height="937"
                       alt="Editorial beach portrait from the Hotel Wren project."
@@ -404,7 +460,11 @@
               </footer>
             </li>
 
-            <li class="featured-project" data-project-carousel>
+            <li
+              class="featured-project"
+              data-project-carousel
+              data-project-category="graphic-design"
+            >
               <div
                 class="featured-project__track"
                 role="region"
@@ -417,7 +477,7 @@
                   <span class="featured-project__media">
                     <img
                       class="featured-project__image"
-                      src="../assets/projects/featured/flamingo-estate-01.webp"
+                      src="/assets/projects/featured/flamingo-estate/listing/01.webp"
                       width="480"
                       height="853"
                       alt="Animated Flamingo Estate campaign still life."
@@ -429,7 +489,7 @@
                   <span class="featured-project__media">
                     <img
                       class="featured-project__image"
-                      src="../assets/projects/featured/flamingo-estate-02.webp"
+                      src="/assets/projects/featured/flamingo-estate/listing/02.webp"
                       width="1500"
                       height="1000"
                       alt="Warm interior photograph from the Flamingo Estate project."
@@ -441,7 +501,7 @@
                   <span class="featured-project__media">
                     <img
                       class="featured-project__image"
-                      src="../assets/projects/featured/flamingo-estate-03.webp"
+                      src="/assets/projects/featured/flamingo-estate/listing/03.webp"
                       width="750"
                       height="1146"
                       alt="Sunlit lounge from the Flamingo Estate project."
@@ -500,21 +560,35 @@
           </ol>
         </section>
 
-        <section class="playground" aria-labelledby="playground-title">
+        <section
+          class="playground"
+          aria-labelledby="playground-title"
+          data-project-section
+        >
           <header class="playground__header">
             <h2 class="playground__title" id="playground-title">Playground</h2>
             <p class="playground__description">
-              Everything below are small projects and experiments. They do not have any associated case studies and are the result of me playing around. (In other words, this is the fun stuff!)
+              Everything below is made from small projects and experiments: the fun stuff.
             </p>
           </header>
 
           <ul class="playground-grid">
-            <li class="playground-card media-card">
-              <figure class="playground-card__figure">
+            <li
+              class="playground-card media-card"
+              data-project-category="branding"
+            >
+              <a
+                class="playground-card__button"
+                href="./willow/"
+                aria-haspopup="dialog"
+                aria-controls="playground-sheet-willow"
+                aria-label="Willow: A clear path to wellness"
+                data-playground-sheet-open="willow"
+              >
                 <span class="playground-card__media">
                   <img
                     class="playground-card__image media-card__image"
-                    src="../assets/projects/playground/willow.webp"
+                    src="/assets/projects/playground/willow/listing/cover.webp"
                     width="1000"
                     height="1250"
                     alt="Willow identity artwork."
@@ -522,21 +596,31 @@
                     decoding="async"
                   />
                 </span>
-                <figcaption
+                <span
                   class="playground-card__caption media-card__caption"
                 >
                   <span class="playground-card__title">Willow</span>
                   <span class="playground-card__description">A clear path to wellness</span>
-                </figcaption>
-              </figure>
+                </span>
+              </a>
             </li>
 
-            <li class="playground-card media-card">
-              <figure class="playground-card__figure">
+            <li
+              class="playground-card media-card"
+              data-project-category="branding"
+            >
+              <a
+                class="playground-card__button"
+                href="./pathwork/"
+                aria-haspopup="dialog"
+                aria-controls="playground-sheet-pathwork"
+                aria-label="Path work: Insurance at the speed of life"
+                data-playground-sheet-open="pathwork"
+              >
                 <span class="playground-card__media">
                   <img
                     class="playground-card__image media-card__image"
-                    src="../assets/projects/playground/pathwork.webp"
+                    src="/assets/projects/playground/pathwork/listing/cover.webp"
                     width="1000"
                     height="1130"
                     alt="Pathwork identity artwork."
@@ -544,21 +628,31 @@
                     decoding="async"
                   />
                 </span>
-                <figcaption
+                <span
                   class="playground-card__caption media-card__caption"
                 >
                   <span class="playground-card__title">Path work</span>
                   <span class="playground-card__description">Insurance at the speed of life</span>
-                </figcaption>
-              </figure>
+                </span>
+              </a>
             </li>
 
-            <li class="playground-card media-card">
-              <figure class="playground-card__figure">
+            <li
+              class="playground-card media-card"
+              data-project-category="branding"
+            >
+              <a
+                class="playground-card__button"
+                href="./manana-golf/"
+                aria-haspopup="dialog"
+                aria-controls="playground-sheet-manana-golf"
+                aria-label="Mañana Golf: There is always tomorrow"
+                data-playground-sheet-open="manana-golf"
+              >
                 <span class="playground-card__media">
                   <img
                     class="playground-card__image media-card__image"
-                    src="../assets/projects/playground/manana-golf.webp"
+                    src="/assets/projects/playground/manana-golf/listing/cover.webp"
                     width="1000"
                     height="800"
                     alt="Mañana Golf identity artwork."
@@ -566,21 +660,31 @@
                     decoding="async"
                   />
                 </span>
-                <figcaption
+                <span
                   class="playground-card__caption media-card__caption"
                 >
                   <span class="playground-card__title">Mañana Golf</span>
                   <span class="playground-card__description">There is always tomorrow</span>
-                </figcaption>
-              </figure>
+                </span>
+              </a>
             </li>
 
-            <li class="playground-card media-card">
-              <figure class="playground-card__figure">
+            <li
+              class="playground-card media-card"
+              data-project-category="branding"
+            >
+              <a
+                class="playground-card__button"
+                href="./nodekit/"
+                aria-haspopup="dialog"
+                aria-controls="playground-sheet-nodekit"
+                aria-label="NodeKit: Unchain the blockchain"
+                data-playground-sheet-open="nodekit"
+              >
                 <span class="playground-card__media">
                   <img
                     class="playground-card__image media-card__image"
-                    src="../assets/projects/playground/nodekit.webp"
+                    src="/assets/projects/playground/nodekit/listing/cover.webp"
                     width="1000"
                     height="1000"
                     alt="NodeKit product rendering."
@@ -588,21 +692,31 @@
                     decoding="async"
                   />
                 </span>
-                <figcaption
+                <span
                   class="playground-card__caption media-card__caption"
                 >
                   <span class="playground-card__title">NodeKit</span>
                   <span class="playground-card__description">Unchain the blockchain</span>
-                </figcaption>
-              </figure>
+                </span>
+              </a>
             </li>
 
-            <li class="playground-card media-card">
-              <figure class="playground-card__figure">
+            <li
+              class="playground-card media-card"
+              data-project-category="branding"
+            >
+              <a
+                class="playground-card__button"
+                href="./utility-brewing/"
+                aria-haspopup="dialog"
+                aria-controls="playground-sheet-utility-brewing"
+                aria-label="Utility Brewing Co.: Built with blood, sweat, and beers"
+                data-playground-sheet-open="utility-brewing"
+              >
                 <span class="playground-card__media">
                   <img
                     class="playground-card__image media-card__image"
-                    src="../assets/projects/playground/utility-brewing.webp"
+                    src="/assets/projects/playground/utility-brewing/listing/cover.webp"
                     width="1000"
                     height="1130"
                     alt="Utility Brewing Co. neon sign."
@@ -610,21 +724,31 @@
                     decoding="async"
                   />
                 </span>
-                <figcaption
+                <span
                   class="playground-card__caption media-card__caption"
                 >
                   <span class="playground-card__title">Utility Brewing Co.</span>
                   <span class="playground-card__description">Built with blood, sweat, and beers</span>
-                </figcaption>
-              </figure>
+                </span>
+              </a>
             </li>
 
-            <li class="playground-card media-card">
-              <figure class="playground-card__figure">
+            <li
+              class="playground-card media-card"
+              data-project-category="graphic-design"
+            >
+              <a
+                class="playground-card__button"
+                href="./playground/"
+                aria-haspopup="dialog"
+                aria-controls="playground-sheet-playground"
+                aria-label="Playground: Collection of experiments"
+                data-playground-sheet-open="playground"
+              >
                 <span class="playground-card__media">
                   <img
                     class="playground-card__image media-card__image"
-                    src="../assets/projects/playground/playground.webp"
+                    src="/assets/projects/playground/playground/listing/cover.webp"
                     width="1000"
                     height="1000"
                     alt="Playground typographic experiment."
@@ -632,16 +756,367 @@
                     decoding="async"
                   />
                 </span>
-                <figcaption
+                <span
                   class="playground-card__caption media-card__caption"
                 >
                   <span class="playground-card__title">Playground</span>
                   <span class="playground-card__description">Collection of experiments</span>
-                </figcaption>
-              </figure>
+                </span>
+              </a>
             </li>
           </ul>
         </section>
+
+        <dialog
+          class="playground-sheet"
+          id="playground-sheet-willow"
+          aria-labelledby="playground-sheet-title-willow"
+          aria-describedby="playground-sheet-description-willow"
+          tabindex="-1"
+          data-playground-sheet="willow"
+        >
+          <div class="playground-sheet__surface">
+            <button
+              class="playground-sheet__handle"
+              type="button"
+              aria-label="Close Willow"
+              data-playground-sheet-handle
+            >
+              <span class="playground-sheet__handle-bar"></span>
+            </button>
+
+            <button
+              class="playground-sheet__close"
+              type="button"
+              aria-label="Close Willow"
+              data-playground-sheet-close
+            >
+              <span aria-hidden="true"></span>
+            </button>
+
+            <div class="playground-sheet__content">
+              <header class="playground-sheet__intro">
+                <h2 class="playground-sheet__title" id="playground-sheet-title-willow">Willow</h2>
+                <p class="playground-sheet__description" id="playground-sheet-description-willow">A clear path to wellness</p>
+                <div class="playground-sheet__meta" aria-label="Project details">
+                  <span>01 - Branding</span>
+                </div>
+              </header>
+
+              <div
+                class="project-content playground-sheet__body"
+                aria-label="Willow project content"
+              >
+                <figure class="project-content__media project-content__media--contained">
+                  <img
+                    class="project-content__image"
+                    src="/assets/projects/playground/willow/media/cover.webp"
+                    width="1000"
+                    height="1250"
+                    alt="Willow identity artwork" loading="lazy" decoding="async"
+                  />
+                </figure>
+
+                <div class="project-content__text">
+<p>A wellness identity built around calm direction, soft contrast and a clear sense of forward movement.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dialog>
+
+        <dialog
+          class="playground-sheet"
+          id="playground-sheet-pathwork"
+          aria-labelledby="playground-sheet-title-pathwork"
+          aria-describedby="playground-sheet-description-pathwork"
+          tabindex="-1"
+          data-playground-sheet="pathwork"
+        >
+          <div class="playground-sheet__surface">
+            <button
+              class="playground-sheet__handle"
+              type="button"
+              aria-label="Close Path work"
+              data-playground-sheet-handle
+            >
+              <span class="playground-sheet__handle-bar"></span>
+            </button>
+
+            <button
+              class="playground-sheet__close"
+              type="button"
+              aria-label="Close Path work"
+              data-playground-sheet-close
+            >
+              <span aria-hidden="true"></span>
+            </button>
+
+            <div class="playground-sheet__content">
+              <header class="playground-sheet__intro">
+                <h2 class="playground-sheet__title" id="playground-sheet-title-pathwork">Path work</h2>
+                <p class="playground-sheet__description" id="playground-sheet-description-pathwork">Insurance at the speed of life</p>
+                <div class="playground-sheet__meta" aria-label="Project details">
+                  <span>02 - Branding</span>
+                </div>
+              </header>
+
+              <div
+                class="project-content playground-sheet__body"
+                aria-label="Path work project content"
+              >
+                <figure class="project-content__media project-content__media--contained">
+                  <img
+                    class="project-content__image"
+                    src="/assets/projects/playground/pathwork/media/cover.webp"
+                    width="1000"
+                    height="1130"
+                    alt="Pathwork identity artwork" loading="lazy" decoding="async"
+                  />
+                </figure>
+
+                <div class="project-content__text project-content__text--titled">
+<h2>Direction</h2>
+<p>A visual system that makes insurance feel quick, legible and built for real life.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dialog>
+
+        <dialog
+          class="playground-sheet"
+          id="playground-sheet-manana-golf"
+          aria-labelledby="playground-sheet-title-manana-golf"
+          aria-describedby="playground-sheet-description-manana-golf"
+          tabindex="-1"
+          data-playground-sheet="manana-golf"
+        >
+          <div class="playground-sheet__surface">
+            <button
+              class="playground-sheet__handle"
+              type="button"
+              aria-label="Close Mañana Golf"
+              data-playground-sheet-handle
+            >
+              <span class="playground-sheet__handle-bar"></span>
+            </button>
+
+            <button
+              class="playground-sheet__close"
+              type="button"
+              aria-label="Close Mañana Golf"
+              data-playground-sheet-close
+            >
+              <span aria-hidden="true"></span>
+            </button>
+
+            <div class="playground-sheet__content">
+              <header class="playground-sheet__intro">
+                <h2 class="playground-sheet__title" id="playground-sheet-title-manana-golf">Mañana Golf</h2>
+                <p class="playground-sheet__description" id="playground-sheet-description-manana-golf">There is always tomorrow</p>
+                <div class="playground-sheet__meta" aria-label="Project details">
+                  <span>03 - Branding</span>
+                </div>
+              </header>
+
+              <div
+                class="project-content playground-sheet__body"
+                aria-label="Mañana Golf project content"
+              >
+                <figure class="project-content__media project-content__media--contained">
+                  <img
+                    class="project-content__image"
+                    src="/assets/projects/playground/manana-golf/media/cover.webp"
+                    width="1000"
+                    height="800"
+                    alt="Mañana Golf identity artwork" loading="lazy" decoding="async"
+                  />
+                </figure>
+
+                <div class="project-content__text">
+<p>A golf identity shaped around patience, optimism and the promise that there is always another round.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dialog>
+
+        <dialog
+          class="playground-sheet"
+          id="playground-sheet-nodekit"
+          aria-labelledby="playground-sheet-title-nodekit"
+          aria-describedby="playground-sheet-description-nodekit"
+          tabindex="-1"
+          data-playground-sheet="nodekit"
+        >
+          <div class="playground-sheet__surface">
+            <button
+              class="playground-sheet__handle"
+              type="button"
+              aria-label="Close NodeKit"
+              data-playground-sheet-handle
+            >
+              <span class="playground-sheet__handle-bar"></span>
+            </button>
+
+            <button
+              class="playground-sheet__close"
+              type="button"
+              aria-label="Close NodeKit"
+              data-playground-sheet-close
+            >
+              <span aria-hidden="true"></span>
+            </button>
+
+            <div class="playground-sheet__content">
+              <header class="playground-sheet__intro">
+                <h2 class="playground-sheet__title" id="playground-sheet-title-nodekit">NodeKit</h2>
+                <p class="playground-sheet__description" id="playground-sheet-description-nodekit">Unchain the blockchain</p>
+                <div class="playground-sheet__meta" aria-label="Project details">
+                  <span>04 - Branding</span>
+                </div>
+              </header>
+
+              <div
+                class="project-content playground-sheet__body"
+                aria-label="NodeKit project content"
+              >
+                <figure class="project-content__media project-content__media--contained">
+                  <img
+                    class="project-content__image"
+                    src="/assets/projects/playground/nodekit/media/cover.webp"
+                    width="1000"
+                    height="1000"
+                    alt="NodeKit product rendering" loading="lazy" decoding="async"
+                  />
+                </figure>
+
+                <div class="project-content__text project-content__text--titled">
+<h2>System</h2>
+<p>A technical brand system that turns modular infrastructure into something direct, energetic and easy to navigate.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dialog>
+
+        <dialog
+          class="playground-sheet"
+          id="playground-sheet-utility-brewing"
+          aria-labelledby="playground-sheet-title-utility-brewing"
+          aria-describedby="playground-sheet-description-utility-brewing"
+          tabindex="-1"
+          data-playground-sheet="utility-brewing"
+        >
+          <div class="playground-sheet__surface">
+            <button
+              class="playground-sheet__handle"
+              type="button"
+              aria-label="Close Utility Brewing Co."
+              data-playground-sheet-handle
+            >
+              <span class="playground-sheet__handle-bar"></span>
+            </button>
+
+            <button
+              class="playground-sheet__close"
+              type="button"
+              aria-label="Close Utility Brewing Co."
+              data-playground-sheet-close
+            >
+              <span aria-hidden="true"></span>
+            </button>
+
+            <div class="playground-sheet__content">
+              <header class="playground-sheet__intro">
+                <h2 class="playground-sheet__title" id="playground-sheet-title-utility-brewing">Utility Brewing Co.</h2>
+                <p class="playground-sheet__description" id="playground-sheet-description-utility-brewing">Built with blood, sweat, and beers</p>
+                <div class="playground-sheet__meta" aria-label="Project details">
+                  <span>05 - Branding</span>
+                </div>
+              </header>
+
+              <div
+                class="project-content playground-sheet__body"
+                aria-label="Utility Brewing Co. project content"
+              >
+                <figure class="project-content__media project-content__media--contained">
+                  <img
+                    class="project-content__image"
+                    src="/assets/projects/playground/utility-brewing/media/cover.webp"
+                    width="1000"
+                    height="1130"
+                    alt="Utility Brewing Co. neon sign" loading="lazy" decoding="async"
+                  />
+                </figure>
+
+                <div class="project-content__text">
+<p>An identity for a working brewery, balancing industrial utility with the warmth and humor of the taproom.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dialog>
+
+        <dialog
+          class="playground-sheet"
+          id="playground-sheet-playground"
+          aria-labelledby="playground-sheet-title-playground"
+          aria-describedby="playground-sheet-description-playground"
+          tabindex="-1"
+          data-playground-sheet="playground"
+        >
+          <div class="playground-sheet__surface">
+            <button
+              class="playground-sheet__handle"
+              type="button"
+              aria-label="Close Playground"
+              data-playground-sheet-handle
+            >
+              <span class="playground-sheet__handle-bar"></span>
+            </button>
+
+            <button
+              class="playground-sheet__close"
+              type="button"
+              aria-label="Close Playground"
+              data-playground-sheet-close
+            >
+              <span aria-hidden="true"></span>
+            </button>
+
+            <div class="playground-sheet__content">
+              <header class="playground-sheet__intro">
+                <h2 class="playground-sheet__title" id="playground-sheet-title-playground">Playground</h2>
+                <p class="playground-sheet__description" id="playground-sheet-description-playground">Collection of experiments</p>
+                <div class="playground-sheet__meta" aria-label="Project details">
+                  <span>06 - Graphic Design</span>
+                </div>
+              </header>
+
+              <div
+                class="project-content playground-sheet__body"
+                aria-label="Playground project content"
+              >
+                <figure class="project-content__media project-content__media--contained">
+                  <img
+                    class="project-content__image"
+                    src="/assets/projects/playground/playground/media/cover.webp"
+                    width="1000"
+                    height="1000"
+                    alt="Playground typographic experiment" loading="lazy" decoding="async"
+                  />
+                </figure>
+
+                <div class="project-content__text project-content__text--titled">
+<h2>Ongoing</h2>
+<p>An evolving collection of visual experiments, small systems and ideas made to learn by making.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dialog>
         <!-- projects:generated:end -->
       </main>
 
