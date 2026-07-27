@@ -112,11 +112,16 @@ const loadImage = async (value, field) => {
 const normalizeFeaturedProject = async (project, index) => {
   const prefix = `featured[${index}]`;
   const slug = requireText(project?.slug, `${prefix}.slug`);
+  const rawSections = project.caseStudy?.sections ?? [];
 
   if (!SLUG_PATTERN.test(slug)) {
     throw new Error(
       `"${prefix}.slug" must contain lowercase words separated by hyphens`,
     );
+  }
+
+  if (!Array.isArray(rawSections)) {
+    throw new Error(`"${prefix}.caseStudy.sections" must be an array`);
   }
 
   if (!Array.isArray(project.images) || project.images.length === 0) {
@@ -162,6 +167,19 @@ const normalizeFeaturedProject = async (project, index) => {
         `${prefix}.caseStudy.description`,
       ),
       note: requireText(project.caseStudy?.note, `${prefix}.caseStudy.note`),
+      sections: rawSections.map((section, sectionIndex) => {
+        const sectionPrefix =
+          `${prefix}.caseStudy.sections[${sectionIndex}]`;
+        const title =
+          typeof section?.title === "string" && section.title.trim() !== ""
+            ? section.title.trim()
+            : null;
+
+        return {
+          title,
+          copy: requireText(section?.copy, `${sectionPrefix}.copy`),
+        };
+      }),
     },
     images,
   };
@@ -748,6 +766,32 @@ const renderCaseStudyMedia = (image, { priority = false } = {}) => {
             </figure>`;
 };
 
+const renderCaseStudyNarrative = (sections) => {
+  if (sections.length === 0) {
+    return "";
+  }
+
+  const blocks = sections
+    .map((section) => {
+      const titleMarkup = section.title
+        ? `            <h3 class="case-study-narrative__title">${escapeHtml(section.title)}</h3>\n`
+        : "";
+
+      return `          <div class="case-study-narrative__block">
+${titleMarkup}            <p class="case-study-narrative__copy">
+              ${escapeHtml(section.copy)}
+            </p>
+          </div>`;
+    })
+    .join("\n\n");
+
+  return `
+
+        <div class="case-study-narrative">
+${blocks}
+        </div>`;
+};
+
 const renderRelatedProject = (project) => {
   const preview = project.images.find((image) => image.main);
 
@@ -905,7 +949,7 @@ ${header}
         >
           <div class="case-study-gallery__row case-study-gallery__row--full">
 ${renderCaseStudyMedia(hero, { priority: true })}
-          </div>
+          </div>${renderCaseStudyNarrative(project.caseStudy.sections)}
 
 ${supportingMarkup}
         </section>

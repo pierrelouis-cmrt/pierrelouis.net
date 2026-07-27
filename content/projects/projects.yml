@@ -50,6 +50,10 @@ featured:
       year: "2025"
       description: "A photography and motion study for Flamingo Estate, focused on the ritual, texture and lived-in atmosphere surrounding the brand."
       note: "Still life, interior photography and short-form motion are sequenced as one warm, tactile campaign system."
+      sections:
+        - copy: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vitae lectus sed erat faucibus volutpat. Integer tempor, augue non posuere tincidunt, nibh justo vulputate sapien, sit amet feugiat mauris arcu vel lorem."
+        - title: Approach
+          copy: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti. Curabitur euismod, nisl vel tincidunt luctus, sapien justo sollicitudin purus, vitae facilisis neque sem a justo. Donec feugiat posuere tortor, sed convallis nibh."
     images:
       - file: featured/flamingo-estate-01.gif
         alt: Animated Flamingo Estate campaign still life.
