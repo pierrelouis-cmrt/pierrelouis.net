@@ -124,7 +124,7 @@
 }
 
 .featured-project__media--dark {
-  background: #000000;
+  background: var(--color-ink);
 }
 
 .featured-project__image {
@@ -391,7 +391,7 @@
   color: var(--color-ink);
   opacity: 1;
   outline: 0;
-  touch-action: pan-y;
+  touch-action: pan-x pan-y;
   transform: translateY(100vh);
   transform-origin: center top;
   transition: transform var(--playground-sheet-open-duration)
@@ -424,7 +424,7 @@
   overscroll-behavior: contain;
   border-radius: 24px 24px 0 0;
   background: #f8f8f7;
-  touch-action: pan-y;
+  touch-action: pan-x pan-y;
 }
 
 .playground-sheet__handle {
@@ -593,6 +593,88 @@
   content: "/";
 }
 
+.project-carousel {
+  --project-carousel-image-height: clamp(400px, 42vw, 540px);
+
+  grid-column: 1 / -1;
+  min-width: 0;
+  width: calc(100% + var(--page-gutter));
+}
+
+.project-carousel__viewport {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+  touch-action: pan-x pan-y;
+  cursor: grab;
+}
+
+.project-carousel__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.project-carousel__viewport.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.project-carousel__track {
+  display: flex;
+  width: max-content;
+  align-items: flex-start;
+  gap: var(--grid-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-carousel__track::after {
+  width: var(--page-gutter);
+  height: 1px;
+  flex: 0 0 auto;
+  margin-left: calc(var(--grid-gap) * -1);
+  content: "";
+}
+
+.project-carousel__item,
+.project-carousel__slide {
+  width: max-content;
+}
+
+.project-carousel__item {
+  flex: 0 0 auto;
+}
+
+.project-carousel__slide {
+  margin: 0;
+}
+
+.project-carousel__image-wrap {
+  display: block;
+  width: auto;
+  height: var(--project-carousel-image-height);
+  overflow: hidden;
+  aspect-ratio: var(--project-carousel-ratio);
+  background: var(--color-media-bg);
+}
+
+.project-carousel__image {
+  display: block;
+  width: auto;
+  max-width: none;
+  height: 100%;
+  object-fit: contain;
+}
+
+.project-carousel__item--portrait {
+  --project-carousel-ratio: 3 / 4;
+}
+
+.project-carousel__item--landscape {
+  --project-carousel-ratio: 4 / 3;
+}
+
 @media (max-width: 1100px) {
   .projects-page {
     --project-column-width: calc(
@@ -759,6 +841,10 @@
     text-align: left;
   }
 
+  .project-carousel {
+    --project-carousel-image-height: min(56svh, 440px);
+  }
+
 }
 
 @media (pointer: coarse) {
@@ -795,6 +881,10 @@
   }
 
   .playground-sheet {
+    scroll-behavior: auto;
+  }
+
+  .project-carousel__viewport {
     scroll-behavior: auto;
   }
 }

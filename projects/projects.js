@@ -186,6 +186,92 @@ document.querySelectorAll("[data-project-carousel]").forEach((carousel) => {
   syncMode();
 });
 
+document.querySelectorAll("[data-project-gallery]").forEach((gallery) => {
+  const viewport = gallery.querySelector("[data-project-gallery-viewport]");
+
+  if (!viewport) {
+    return;
+  }
+
+  let dragStartX = 0;
+  let dragStartScroll = 0;
+  let didDrag = false;
+
+  viewport.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
+      return;
+    }
+
+    event.preventDefault();
+    const direction = event.key === "ArrowRight" ? 1 : -1;
+    viewport.scrollBy({
+      left: viewport.clientWidth * 0.75 * direction,
+      behavior: reducedMotionQuery.matches ? "auto" : "smooth",
+    });
+  });
+
+  viewport.addEventListener("pointerdown", (event) => {
+    if (event.pointerType !== "mouse" || event.button !== 0) {
+      return;
+    }
+
+    dragStartX = event.clientX;
+    dragStartScroll = viewport.scrollLeft;
+    didDrag = false;
+    viewport.classList.add("is-dragging");
+  });
+
+  viewport.addEventListener("pointermove", (event) => {
+    if (!viewport.classList.contains("is-dragging")) {
+      return;
+    }
+
+    const dragDistance = event.clientX - dragStartX;
+
+    if (Math.abs(dragDistance) > 4) {
+      didDrag = true;
+
+      if (!viewport.hasPointerCapture(event.pointerId)) {
+        viewport.setPointerCapture(event.pointerId);
+      }
+    }
+
+    viewport.scrollLeft = dragStartScroll - dragDistance;
+  });
+
+  const endDrag = (event) => {
+    if (!viewport.classList.contains("is-dragging")) {
+      return;
+    }
+
+    viewport.classList.remove("is-dragging");
+
+    if (viewport.hasPointerCapture(event.pointerId)) {
+      viewport.releasePointerCapture(event.pointerId);
+    }
+
+    window.setTimeout(() => {
+      didDrag = false;
+    }, 0);
+  };
+
+  viewport.addEventListener(
+    "click",
+    (event) => {
+      if (!didDrag) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    true,
+  );
+
+  viewport.addEventListener("pointerup", endDrag);
+  viewport.addEventListener("pointercancel", endDrag);
+});
+
 (() => {
   const page = document.body;
   const stage = document.querySelector(".site-shell");

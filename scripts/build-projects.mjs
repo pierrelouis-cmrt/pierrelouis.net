@@ -237,7 +237,11 @@ const standaloneMarkdownImage = (token) => {
   if (modifier.type === "text") {
     const modifierName = modifier.text.trim().match(/^\{([a-z-]+)\}$/)?.[1];
 
-    if (modifierName === "wide" || modifierName === "contained") {
+    if (
+      modifierName === "wide" ||
+      modifierName === "contained" ||
+      modifierName === "carousel"
+    ) {
       return { image, layout: modifierName };
     }
 
@@ -245,7 +249,7 @@ const standaloneMarkdownImage = (token) => {
       return {
         error:
           `unknown image modifier "{${modifierName}}"; use {wide}, ` +
-          "{contained}, or no modifier",
+          "{contained}, {carousel}, or no modifier",
         image,
       };
     }
@@ -297,6 +301,7 @@ const tokenContainsImage = (token) => {
 };
 
 const loadMarkdownContent = async ({
+  collection,
   markdown,
   projectDirectory,
   projectKey,
@@ -322,6 +327,16 @@ const loadMarkdownContent = async ({
           throw projectError(projectKey, standalone.error);
         }
 
+        if (
+          standalone.layout === "carousel" &&
+          collection !== "playground"
+        ) {
+          throw projectError(
+            projectKey,
+            '"{carousel}" is only available in Playground projects',
+          );
+        }
+
         const image = await loadProjectImage({
           allowedDirectory: "media",
           alt: standalone.image.text,
@@ -330,11 +345,15 @@ const loadMarkdownContent = async ({
           projectDirectory,
           projectKey,
           resizeMode:
-            standalone.layout === "contained" ? "contain" : "cover",
+            standalone.layout === "contained" ||
+            standalone.layout === "carousel"
+              ? "contain"
+              : "cover",
           renderBoxes:
             standalone.layout === "wide"
               ? WIDE_RENDER_BOXES
-              : standalone.layout === "contained"
+              : standalone.layout === "contained" ||
+                  standalone.layout === "carousel"
                 ? BODY_RENDER_BOXES
                 : REGULAR_RENDER_BOXES,
           contained: standalone.layout === "contained",
@@ -355,7 +374,7 @@ const loadMarkdownContent = async ({
     if (tokenContainsImage(token)) {
       throw projectError(
         projectKey,
-        "Markdown images must be alone on their line; optional modifiers are {wide} and {contained}",
+        "Markdown images must be alone on their line; optional modifiers are {wide}, {contained}, and {carousel}",
       );
     }
 
@@ -375,6 +394,36 @@ const loadMarkdownContent = async ({
         type: "text",
       });
     }
+  }
+
+  for (let index = 0; index < blocks.length; index += 1) {
+    if (blocks[index].type !== "image" || blocks[index].layout !== "carousel") {
+      continue;
+    }
+
+    const carouselBlocks = [];
+
+    while (
+      index < blocks.length &&
+      blocks[index].type === "image" &&
+      blocks[index].layout === "carousel"
+    ) {
+      carouselBlocks.push(blocks[index]);
+      index += 1;
+    }
+
+    if (carouselBlocks.length < 2) {
+      throw projectError(
+        projectKey,
+        "a carousel needs at least two consecutive {carousel} images",
+      );
+    }
+
+    blocks.splice(index - carouselBlocks.length, carouselBlocks.length, {
+      images: carouselBlocks.map((block) => block.image),
+      type: "carousel",
+    });
+    index = index - carouselBlocks.length;
   }
 
   for (let index = 0; index < blocks.length; index += 1) {
@@ -540,6 +589,7 @@ const loadProject = async (entry, collection) => {
     projectKey,
   });
   const content = await loadMarkdownContent({
+    collection,
     markdown,
     projectDirectory,
     projectKey,
@@ -1184,6 +1234,47 @@ const renderProjectContent = (
         return `                <div class="${textClasses}">
 ${block.html.trim()}
                 </div>`;
+      }
+
+      if (block.type === "carousel") {
+        return `                <section
+                  class="project-carousel"
+                  aria-label="${escapeHtml(project.title)} image gallery"
+                  data-project-gallery
+                >
+                  <div
+                    class="project-carousel__viewport"
+                    role="region"
+                    aria-label="${escapeHtml(project.title)} image gallery"
+                    tabindex="0"
+                    data-project-gallery-viewport
+                  >
+                    <ol class="project-carousel__track">
+${block.images
+  .map((image) => {
+    const orientation =
+      image.height > image.width ? "portrait" : "landscape";
+
+    return `                      <li class="project-carousel__item project-carousel__item--${orientation}">
+                        <figure class="project-carousel__slide">
+                          <span class="project-carousel__image-wrap">
+                            <img
+                              class="project-carousel__image"
+                              src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + image.outputFile)}"
+                              width="${image.width}"
+                              height="${image.height}"
+                              loading="lazy"
+                              decoding="async"
+                              alt="${escapeHtml(image.alt)}"
+                            />
+                          </span>
+                        </figure>
+                      </li>`;
+  })
+  .join("\n")}
+                    </ol>
+                  </div>
+                </section>`;
       }
 
       const priority = priorityFirstImage && imageIndex === 0;

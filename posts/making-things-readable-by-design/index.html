@@ -50,7 +50,7 @@
     <script src="../../footer.js" defer></script>
   </head>
   <body>
-    <div class="site-shell post-page">
+    <div class="site-shell post-page post-page--backdrop">
       <header class="site-header" aria-label="Primary navigation">
         <a class="brand-mark post-back" href="../" aria-label="Back">
           <span>Back</span>
@@ -200,7 +200,19 @@
 
       <main>
         <article>
-          <header class="post-hero">
+          <header class="post-hero post-hero--with-backdrop">
+            <iframe
+              class="post-hero__backdrop"
+              src="../headers/bidi-blue.html"
+              title="Decorative animated blue gradient"
+              aria-hidden="true"
+              role="presentation"
+              tabindex="-1"
+              loading="eager"
+              sandbox="allow-scripts"
+              data-post-hero-backdrop
+            ></iframe>
+
             <p class="post-hero__meta">
               <time class="post-hero__date" datetime="2026-05-18"
                 >May 18, 2026</time

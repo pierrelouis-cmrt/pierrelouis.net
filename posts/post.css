@@ -24,6 +24,10 @@
   overflow: clip;
 }
 
+.post-page--backdrop .site-header {
+  background: transparent;
+}
+
 .post-back,
 .mobile-menu__brand--post-back {
   transition: opacity var(--duration-fast) var(--ease-out);
@@ -46,7 +50,33 @@
 }
 
 .post-hero {
+  position: relative;
+  isolation: isolate;
   padding-top: calc(var(--header-height) + var(--space-8xl));
+}
+
+.post-hero__backdrop {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(34rem, 42vw, 46rem);
+  border: 0;
+  background: linear-gradient(
+    180deg,
+    #606af5 0%,
+    #8b9ffc 28%,
+    #c1cbfd 48%,
+    #f8fbff 66%,
+    #ffffff 80%
+  );
+  pointer-events: none;
+}
+
+.post-hero--with-backdrop {
+  min-height: clamp(34rem, 42vw, 46rem);
 }
 
 .post-hero__meta,
