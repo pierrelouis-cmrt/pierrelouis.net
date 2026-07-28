@@ -522,7 +522,6 @@
   margin-top: var(--space-sm);
 }
 
-.post-sources a,
 .post-footnotes__item a {
   text-decoration-line: underline;
   text-decoration-thickness: 1px;
@@ -531,8 +530,6 @@
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-.post-sources a:hover,
-.post-sources a:focus-visible,
 .post-footnotes__item a:hover,
 .post-footnotes__item a:focus-visible {
   color: var(--color-subtle);
