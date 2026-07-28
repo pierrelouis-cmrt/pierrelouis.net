@@ -571,9 +571,12 @@
   scroll-margin-top: calc(var(--header-height) + var(--space-xl));
 }
 
+.post-footnote-tail {
+  white-space: nowrap;
+}
+
 .post-footnotes__item .post-footnote-backref {
   display: inline-block;
-  margin-left: 0.35em;
   color: var(--color-subtle);
   text-decoration: none;
 }
