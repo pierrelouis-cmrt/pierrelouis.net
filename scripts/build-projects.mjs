@@ -1246,10 +1246,7 @@ const renderPlaygroundSheet = (project) => {
 
             <div class="playground-sheet__content">
               <header class="playground-sheet__intro">
-                <div class="playground-sheet__identity">
-                  <span class="playground-sheet__number">No. ${escapeHtml(project.sequence)}</span>
-                  <h2 class="playground-sheet__title" id="${escapeHtml(titleId)}">${escapeHtml(project.title)}</h2>
-                </div>
+                <h2 class="playground-sheet__title" id="${escapeHtml(titleId)}">${escapeHtml(project.title)}</h2>
                 <p class="playground-sheet__description" id="${escapeHtml(descriptionId)}">${escapeHtml(project.description)}</p>
                 <div class="playground-sheet__meta" aria-label="Project details">
                   <span class="playground-sheet__category">${escapeHtml(project.category)}</span>

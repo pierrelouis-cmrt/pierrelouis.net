@@ -370,11 +370,10 @@
   display: grid;
   grid-template-columns: var(--page-grid-columns);
   column-gap: var(--grid-gap);
-  align-items: start;
+  align-items: end;
   min-height: 116px;
 }
 
-.list-sheet__number,
 .list-sheet__title,
 .list-sheet__description,
 .list-sheet__meta {
@@ -383,34 +382,15 @@
   letter-spacing: var(--tracking-normal);
 }
 
-.list-sheet__identity {
-  grid-column: 1;
-  position: relative;
-  display: block;
-  width: 100%;
-  justify-self: center;
-  text-align: center;
-}
-
-.list-sheet__number {
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + var(--space-sm));
-  left: 0;
-  color: var(--color-subtle);
-  font-size: var(--font-size-micro);
-  line-height: var(--line-height-label);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-}
-
 .list-sheet__title {
+  grid-column: 1;
   width: 100%;
   color: #000000;
   font-size: calc(var(--font-size-base) + 2px);
   font-style: italic;
   font-weight: var(--font-weight-italic);
   line-height: var(--line-height-copy);
+  text-align: center;
 }
 
 .list-sheet__description {
@@ -617,7 +597,7 @@
     min-height: 0;
   }
 
-  .list-sheet__identity,
+  .list-sheet__title,
   .list-sheet__description,
   .list-sheet__meta {
     grid-column: 1 / -1;
