@@ -1,6 +1,7 @@
 {
   "scripts": {
     "build": "node scripts/build-site.mjs",
+    "build:lists": "node scripts/build-lists.mjs",
     "build:projects": "node scripts/build-projects.mjs",
     "dev": "node scripts/dev.mjs",
     "preview": "node scripts/preview.mjs"

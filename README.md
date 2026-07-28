@@ -25,12 +25,13 @@ The site is a static, multi-page application served directly from the repository
 
 ## Build system
 
-`npm run build` runs four build stages:
+`npm run build` runs five build stages:
 
-1. `scripts/build-projects.mjs` reads `content/projects/projects.yml`, validates project metadata and source images, generates resized WebP production assets, then regenerates the marked project-listing region.
-2. `scripts/build-photos.mjs` reads the collections in `content/photos/`, validates their metadata, generates optimized gallery assets, and writes the photo page and its searchable JSON data.
-3. `scripts/shared-components.mjs` renders the canonical header and footer into every configured HTML page, adjusting paths and active navigation state per route.
-4. The deployable site is assembled in the Git-ignored `dist/` directory.
+1. `scripts/build-lists.mjs` validates the dedicated HTML source for every Lists card and compiles each fragment into a project-style sheet.
+2. `scripts/build-projects.mjs` reads `content/projects/projects.yml`, validates project metadata and source images, generates resized WebP production assets, then regenerates the marked project-listing region.
+3. `scripts/build-photos.mjs` reads the collections in `content/photos/`, validates their metadata, generates optimized gallery assets, and writes the photo page and its searchable JSON data.
+4. `scripts/shared-components.mjs` renders the canonical header and footer into every configured HTML page, adjusting paths and active navigation state per route.
+5. The deployable site is assembled in the Git-ignored `dist/` directory.
 
 The projects pipeline keeps original images in `content/projects/` and writes
 production-only WebP files to `assets/projects/`. Regular images are capped at
@@ -68,6 +69,7 @@ This performs an initial build, starts the site at `http://localhost:8000`, watc
 | --- | --- |
 | `npm run dev` | Build, serve, watch, and live reload |
 | `npm run build` | Regenerate source outputs and assemble the production site in `dist/` |
+| `npm run build:lists` | Compile `lists/sheets/*.html` into the Lists page |
 | `npm run preview` | Serve the existing `dist/` build on port 4173 |
 
 ## Repository structure
@@ -81,6 +83,7 @@ This performs an initial build, starts the site at `http://localhost:8000`, watc
 ├── projects/               # Project case studies
 ├── posts/                  # Writing
 ├── photos/                 # Generated gallery page, data, styles, and behavior
+├── lists/sheets/           # Hand-authored HTML, CSS, and JS for list sheets
 ├── about/, now/, ...       # Other route directories
 ├── base.css                # Shared visual system and layout primitives
 ├── script.js               # Shared navigation and interaction behavior
@@ -93,6 +96,7 @@ This performs an initial build, starts the site at `http://localhost:8000`, watc
 - Edit shared navigation and footer markup in `scripts/shared-components.mjs`, then run the build; direct edits to generated copies will be overwritten.
 - Add project sources under `content/projects/` and update `content/projects/projects.yml`. The complete workflow is documented in [`content/projects/README.md`](./content/projects/README.md).
 - Add or update photography in `content/photos/`. The collection format is documented in [`content/photos/README.md`](./content/photos/README.md).
+- Edit list-sheet content in `lists/sheets/`. Each card has one HTML fragment and the complete format is documented in [`lists/sheets/README.md`](./lists/sheets/README.md).
 - Generated project and photo HTML, JSON, and WebP assets are committed alongside their sources so production hosting only needs to serve static files.
 - Clean URLs work through directory-level `index.html` files; the project does not require server-side routing.
 

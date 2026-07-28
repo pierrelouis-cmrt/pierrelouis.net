@@ -40,10 +40,11 @@
     <link rel="stylesheet" href="../base.css" />
     <link rel="stylesheet" href="./lists.css" />
     <script src="../script.js" defer></script>
+    <script src="./lists.js" defer></script>
     <script src="../footer.js" defer></script>
   </head>
-  <body>
-    <div class="site-shell lists-page">
+  <body class="lists-page">
+    <div class="site-shell">
       <header class="site-header" aria-label="Primary navigation">
         <a class="brand-mark" href="../" aria-label="Pierre-Louis home">
           <span class="brand-mark__text">P—L</span>
@@ -188,12 +189,15 @@
       <main>
         <section class="lists-intro page-intro" aria-labelledby="lists-title">
           <h1 class="lists-intro__title split-title" id="lists-title">
-            <span class="lists-intro__dot split-title__dot" aria-hidden="true"></span>
+            <span
+              class="lists-intro__dot split-title__dot"
+              aria-hidden="true"
+            ></span>
             <span>Lists and Catalogs</span>
           </h1>
 
           <p class="lists-intro__copy split-copy">
-            I like statistics. Espacially stats about myself. Sounds a bit
+            I like statistics, especially the ones about myself. Sounds a bit
             egocentric, but it's more about understanding my own habits and
             visualise my life as progress. Here you'll find articles I liked,
             videos I find worth sharing, the gear I use, etc.
@@ -201,8 +205,15 @@
         </section>
 
         <section class="lists-canvas" aria-label="Lists and catalogs">
-          <figure class="list-card list-card--likes">
-            <div class="list-card__media">
+          <button
+            class="list-card list-card--likes"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="list-sheet-things-i-like"
+            aria-label="Things I like"
+            data-list-sheet-open="things-i-like"
+          >
+            <span class="list-card__media">
               <img
                 class="list-card__image"
                 src="../assets/lists/things-i-like.webp"
@@ -211,14 +222,21 @@
                 alt="People crossing a pale plaza, casting long blue shadows."
                 decoding="async"
               />
-            </div>
-            <figcaption class="list-card__caption">
+            </span>
+            <span class="list-card__caption">
               <span class="list-card__caption-text">Things I like</span>
-            </figcaption>
-          </figure>
+            </span>
+          </button>
 
-          <figure class="list-card list-card--dislikes">
-            <div class="list-card__media">
+          <button
+            class="list-card list-card--dislikes"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="list-sheet-things-i-dislike"
+            aria-label="Things I dislike"
+            data-list-sheet-open="things-i-dislike"
+          >
+            <span class="list-card__media">
               <img
                 class="list-card__image"
                 src="../assets/lists/things-i-dislike.webp"
@@ -228,14 +246,21 @@
                 loading="lazy"
                 decoding="async"
               />
-            </div>
-            <figcaption class="list-card__caption">
+            </span>
+            <span class="list-card__caption">
               <span class="list-card__caption-text">Things I dislike</span>
-            </figcaption>
-          </figure>
+            </span>
+          </button>
 
-          <figure class="list-card list-card--tv">
-            <div
+          <button
+            class="list-card list-card--tv"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="list-sheet-tv-shows"
+            aria-label="TV shows I've watched"
+            data-list-sheet-open="tv-shows"
+          >
+            <span
               class="list-card__media list-card__media--tv"
               role="img"
               aria-label="A collage of interface and interaction design projects."
@@ -245,20 +270,31 @@
                 <img src="../assets/lists/tv-2.webp" alt="" />
                 <img src="../assets/lists/tv-3.webp" alt="" />
                 <img src="../assets/lists/tv-4.webp" alt="" />
-                <img class="tv-collage__focus" src="../assets/lists/tv-5.webp" alt="" />
+                <img
+                  class="tv-collage__focus"
+                  src="../assets/lists/tv-5.webp"
+                  alt=""
+                />
                 <img src="../assets/lists/tv-6.webp" alt="" />
                 <img src="../assets/lists/tv-7.webp" alt="" />
                 <img src="../assets/lists/tv-8.webp" alt="" />
                 <img src="../assets/lists/tv-9.webp" alt="" />
               </span>
-            </div>
-            <figcaption class="list-card__caption">
+            </span>
+            <span class="list-card__caption">
               <span class="list-card__caption-text">TV Show I've watched</span>
-            </figcaption>
-          </figure>
+            </span>
+          </button>
 
-          <figure class="list-card list-card--articles">
-            <div class="list-card__media">
+          <button
+            class="list-card list-card--articles"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="list-sheet-articles-and-videos"
+            aria-label="Articles and videos worth taking a look at"
+            data-list-sheet-open="articles-and-videos"
+          >
+            <span class="list-card__media">
               <img
                 class="list-card__image"
                 src="../assets/lists/articles-and-videos.webp"
@@ -268,28 +304,42 @@
                 loading="lazy"
                 decoding="async"
               />
-            </div>
-            <figcaption class="list-card__caption">
+            </span>
+            <span class="list-card__caption">
               <span class="list-card__caption-text">
                 Articles and videos worth taking a look at
               </span>
-            </figcaption>
-          </figure>
+            </span>
+          </button>
 
-          <figure class="list-card list-card--places">
-            <div
+          <button
+            class="list-card list-card--places"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="list-sheet-places-ive-been"
+            aria-label="Places I've been to"
+            data-list-sheet-open="places-ive-been"
+          >
+            <span
               class="list-card__media list-card__media--checkerboard"
               role="img"
               aria-label="A blue and white checkerboard."
             >
-            </div>
-            <figcaption class="list-card__caption">
+            </span>
+            <span class="list-card__caption">
               <span class="list-card__caption-text">Places I've been to</span>
-            </figcaption>
-          </figure>
+            </span>
+          </button>
 
-          <figure class="list-card list-card--gear">
-            <div class="list-card__media">
+          <button
+            class="list-card list-card--gear"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="list-sheet-tech-and-gear"
+            aria-label="Tech stack and everyday gear"
+            data-list-sheet-open="tech-and-gear"
+          >
+            <span class="list-card__media">
               <img
                 class="list-card__image"
                 src="../assets/lists/tech-and-gear.webp"
@@ -299,14 +349,464 @@
                 loading="lazy"
                 decoding="async"
               />
-            </div>
-            <figcaption class="list-card__caption">
+            </span>
+            <span class="list-card__caption">
               <span class="list-card__caption-text">
                 Tech stack and everyday gear
               </span>
-            </figcaption>
-          </figure>
+            </span>
+          </button>
         </section>
+
+        <!-- list-sheets:generated:start -->
+        <dialog
+          class="list-sheet"
+          id="list-sheet-things-i-like"
+          aria-labelledby="list-sheet-title-things-i-like"
+          aria-describedby="list-sheet-description-things-i-like"
+          tabindex="-1"
+          data-list-sheet="things-i-like"
+        >
+          <div class="list-sheet__surface">
+            <button
+              class="list-sheet__handle"
+              type="button"
+              aria-label="Close Things I like"
+              data-list-sheet-handle
+            >
+              <span class="list-sheet__handle-bar"></span>
+            </button>
+
+            <button
+              class="list-sheet__close"
+              type="button"
+              aria-label="Close Things I like"
+              data-list-sheet-close
+            >
+              <span aria-hidden="true"></span>
+            </button>
+
+            <!-- Source: lists/sheets/things-i-like.html -->
+            <div
+              class="list-sheet__content list-sheet-content--things-i-like"
+              data-list-sheet-title="Things I like"
+            >
+              <header class="list-sheet__intro">
+                <div class="list-sheet__identity">
+                  <span class="list-sheet__number">List 01</span>
+                  <h2
+                    class="list-sheet__title"
+                    id="list-sheet-title-things-i-like"
+                  >
+                    Things I like
+                  </h2>
+                </div>
+
+                <p
+                  class="list-sheet__description"
+                  id="list-sheet-description-things-i-like"
+                >
+                  A living index of objects, ideas and details worth returning
+                  to.
+                </p>
+
+                <div class="list-sheet__meta" aria-label="List details">
+                  <span data-list-entry-count>0 entries</span>
+                </div>
+              </header>
+
+              <div class="project-content list-sheet__body">
+                <figure
+                  class="project-content__media project-content__media--contained list-sheet-cover"
+                  data-list-sheet-cover
+                ></figure>
+
+                <div
+                  class="project-content__text project-content__text--titled"
+                >
+                  <h3>About this list</h3>
+                  <p>
+                    A collection of things I enjoy, from everyday objects and
+                    small details to ideas worth remembering.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dialog>
+
+        <dialog
+          class="list-sheet"
+          id="list-sheet-things-i-dislike"
+          aria-labelledby="list-sheet-title-things-i-dislike"
+          aria-describedby="list-sheet-description-things-i-dislike"
+          tabindex="-1"
+          data-list-sheet="things-i-dislike"
+        >
+          <div class="list-sheet__surface">
+            <button
+              class="list-sheet__handle"
+              type="button"
+              aria-label="Close Things I dislike"
+              data-list-sheet-handle
+            >
+              <span class="list-sheet__handle-bar"></span>
+            </button>
+
+            <button
+              class="list-sheet__close"
+              type="button"
+              aria-label="Close Things I dislike"
+              data-list-sheet-close
+            >
+              <span aria-hidden="true"></span>
+            </button>
+
+            <!-- Source: lists/sheets/things-i-dislike.html -->
+            <div
+              class="list-sheet__content list-sheet-content--things-i-dislike"
+              data-list-sheet-title="Things I dislike"
+            >
+              <header class="list-sheet__intro">
+                <div class="list-sheet__identity">
+                  <span class="list-sheet__number">List 02</span>
+                  <h2
+                    class="list-sheet__title"
+                    id="list-sheet-title-things-i-dislike"
+                  >
+                    Things I dislike
+                  </h2>
+                </div>
+
+                <p
+                  class="list-sheet__description"
+                  id="list-sheet-description-things-i-dislike"
+                >
+                  Friction, habits and small details that could be better.
+                </p>
+
+                <div class="list-sheet__meta" aria-label="List details">
+                  <span data-list-entry-count>0 entries</span>
+                </div>
+              </header>
+
+              <div class="project-content list-sheet__body">
+                <figure
+                  class="project-content__media project-content__media--contained list-sheet-cover"
+                  data-list-sheet-cover
+                ></figure>
+
+                <div
+                  class="project-content__text project-content__text--titled"
+                >
+                  <h3>About this list</h3>
+                  <p>
+                    A record of the habits, objects and small points of friction
+                    I would rather do without.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dialog>
+
+        <dialog
+          class="list-sheet"
+          id="list-sheet-tv-shows"
+          aria-labelledby="list-sheet-title-tv-shows"
+          aria-describedby="list-sheet-description-tv-shows"
+          tabindex="-1"
+          data-list-sheet="tv-shows"
+        >
+          <div class="list-sheet__surface">
+            <button
+              class="list-sheet__handle"
+              type="button"
+              aria-label="Close TV shows I've watched"
+              data-list-sheet-handle
+            >
+              <span class="list-sheet__handle-bar"></span>
+            </button>
+
+            <button
+              class="list-sheet__close"
+              type="button"
+              aria-label="Close TV shows I've watched"
+              data-list-sheet-close
+            >
+              <span aria-hidden="true"></span>
+            </button>
+
+            <!-- Source: lists/sheets/tv-shows.html -->
+            <div
+              class="list-sheet__content list-sheet-content--tv-shows"
+              data-list-sheet-title="TV shows I've watched"
+            >
+              <header class="list-sheet__intro">
+                <div class="list-sheet__identity">
+                  <span class="list-sheet__number">List 03</span>
+                  <h2 class="list-sheet__title" id="list-sheet-title-tv-shows">
+                    TV shows I've watched
+                  </h2>
+                </div>
+
+                <p
+                  class="list-sheet__description"
+                  id="list-sheet-description-tv-shows"
+                >
+                  A watch history with the shows that stayed with me.
+                </p>
+
+                <div class="list-sheet__meta" aria-label="List details">
+                  <span data-list-entry-count>0 entries</span>
+                </div>
+              </header>
+
+              <div class="project-content list-sheet__body">
+                <figure
+                  class="project-content__media project-content__media--contained list-sheet-cover"
+                  data-list-sheet-cover
+                ></figure>
+
+                <div
+                  class="project-content__text project-content__text--titled"
+                >
+                  <h3>About this list</h3>
+                  <p>
+                    A simple watch history for the television shows I have
+                    finished and the ones that stayed with me.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dialog>
+
+        <dialog
+          class="list-sheet"
+          id="list-sheet-articles-and-videos"
+          aria-labelledby="list-sheet-title-articles-and-videos"
+          aria-describedby="list-sheet-description-articles-and-videos"
+          tabindex="-1"
+          data-list-sheet="articles-and-videos"
+        >
+          <div class="list-sheet__surface">
+            <button
+              class="list-sheet__handle"
+              type="button"
+              aria-label="Close Articles and videos"
+              data-list-sheet-handle
+            >
+              <span class="list-sheet__handle-bar"></span>
+            </button>
+
+            <button
+              class="list-sheet__close"
+              type="button"
+              aria-label="Close Articles and videos"
+              data-list-sheet-close
+            >
+              <span aria-hidden="true"></span>
+            </button>
+
+            <!-- Source: lists/sheets/articles-and-videos.html -->
+            <div
+              class="list-sheet__content list-sheet-content--articles-and-videos"
+              data-list-sheet-title="Articles and videos"
+            >
+              <header class="list-sheet__intro">
+                <div class="list-sheet__identity">
+                  <span class="list-sheet__number">List 04</span>
+                  <h2
+                    class="list-sheet__title"
+                    id="list-sheet-title-articles-and-videos"
+                  >
+                    Articles and videos
+                  </h2>
+                </div>
+
+                <p
+                  class="list-sheet__description"
+                  id="list-sheet-description-articles-and-videos"
+                >
+                  Reading and watching worth passing along.
+                </p>
+
+                <div class="list-sheet__meta" aria-label="List details">
+                  <span data-list-entry-count>0 entries</span>
+                </div>
+              </header>
+
+              <div class="project-content list-sheet__body">
+                <figure
+                  class="project-content__media project-content__media--contained list-sheet-cover"
+                  data-list-sheet-cover
+                ></figure>
+
+                <div
+                  class="project-content__text project-content__text--titled"
+                >
+                  <h3>About this list</h3>
+                  <p>
+                    Articles and videos that taught me something, changed my
+                    perspective or felt worth sharing.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dialog>
+
+        <dialog
+          class="list-sheet"
+          id="list-sheet-places-ive-been"
+          aria-labelledby="list-sheet-title-places-ive-been"
+          aria-describedby="list-sheet-description-places-ive-been"
+          tabindex="-1"
+          data-list-sheet="places-ive-been"
+        >
+          <div class="list-sheet__surface">
+            <button
+              class="list-sheet__handle"
+              type="button"
+              aria-label="Close Places I've been to"
+              data-list-sheet-handle
+            >
+              <span class="list-sheet__handle-bar"></span>
+            </button>
+
+            <button
+              class="list-sheet__close"
+              type="button"
+              aria-label="Close Places I've been to"
+              data-list-sheet-close
+            >
+              <span aria-hidden="true"></span>
+            </button>
+
+            <!-- Source: lists/sheets/places-ive-been.html -->
+            <div
+              class="list-sheet__content list-sheet-content--places-ive-been"
+              data-list-sheet-title="Places I've been to"
+            >
+              <header class="list-sheet__intro">
+                <div class="list-sheet__identity">
+                  <span class="list-sheet__number">List 05</span>
+                  <h2
+                    class="list-sheet__title"
+                    id="list-sheet-title-places-ive-been"
+                  >
+                    Places I've been to
+                  </h2>
+                </div>
+
+                <p
+                  class="list-sheet__description"
+                  id="list-sheet-description-places-ive-been"
+                >
+                  Cities, landscapes and stops collected along the way.
+                </p>
+
+                <div class="list-sheet__meta" aria-label="List details">
+                  <span data-list-entry-count>0 entries</span>
+                </div>
+              </header>
+
+              <div class="project-content list-sheet__body">
+                <figure
+                  class="project-content__media project-content__media--contained list-sheet-cover"
+                  data-list-sheet-cover
+                ></figure>
+
+                <div
+                  class="project-content__text project-content__text--titled"
+                >
+                  <h3>About this list</h3>
+                  <p>
+                    Cities, landscapes and stops collected from longer trips and
+                    everyday travel.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dialog>
+
+        <dialog
+          class="list-sheet"
+          id="list-sheet-tech-and-gear"
+          aria-labelledby="list-sheet-title-tech-and-gear"
+          aria-describedby="list-sheet-description-tech-and-gear"
+          tabindex="-1"
+          data-list-sheet="tech-and-gear"
+        >
+          <div class="list-sheet__surface">
+            <button
+              class="list-sheet__handle"
+              type="button"
+              aria-label="Close Tech stack and everyday gear"
+              data-list-sheet-handle
+            >
+              <span class="list-sheet__handle-bar"></span>
+            </button>
+
+            <button
+              class="list-sheet__close"
+              type="button"
+              aria-label="Close Tech stack and everyday gear"
+              data-list-sheet-close
+            >
+              <span aria-hidden="true"></span>
+            </button>
+
+            <!-- Source: lists/sheets/tech-and-gear.html -->
+            <div
+              class="list-sheet__content list-sheet-content--tech-and-gear"
+              data-list-sheet-title="Tech stack and everyday gear"
+            >
+              <header class="list-sheet__intro">
+                <div class="list-sheet__identity">
+                  <span class="list-sheet__number">List 06</span>
+                  <h2
+                    class="list-sheet__title"
+                    id="list-sheet-title-tech-and-gear"
+                  >
+                    Tech stack and everyday gear
+                  </h2>
+                </div>
+
+                <p
+                  class="list-sheet__description"
+                  id="list-sheet-description-tech-and-gear"
+                >
+                  The software, tools and objects I rely on most days.
+                </p>
+
+                <div class="list-sheet__meta" aria-label="List details">
+                  <span data-list-entry-count>0 entries</span>
+                </div>
+              </header>
+
+              <div class="project-content list-sheet__body">
+                <figure
+                  class="project-content__media project-content__media--contained list-sheet-cover"
+                  data-list-sheet-cover
+                ></figure>
+
+                <div
+                  class="project-content__text project-content__text--titled"
+                >
+                  <h3>About this list</h3>
+                  <p>
+                    The software, tools and everyday objects that make up my
+                    current working setup.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dialog>
+        <!-- list-sheets:generated:end -->
       </main>
 
       <footer class="site-footer">

@@ -1,0 +1,157 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner "Primary navigation" [ref=e3]:
+      - link "Pierre-Louis home" [ref=e4] [cursor=pointer]:
+        - /url: ../
+        - generic [ref=e5]: P—L
+        - generic [ref=e6]: ©
+      - navigation "Main pages" [ref=e7]:
+        - link "Projects" [ref=e8] [cursor=pointer]:
+          - /url: ../projects/
+        - link "Posts" [ref=e9] [cursor=pointer]:
+          - /url: ../posts/
+        - link "Photos" [ref=e10] [cursor=pointer]:
+          - /url: ../photos/
+      - button "More ↓" [ref=e12] [cursor=pointer]
+    - main [ref=e13]:
+      - heading "Projects and experiments" [level=1] [ref=e14]
+      - region "Projects overview" [ref=e15]:
+        - generic "Work categories" [ref=e16]:
+          - generic [ref=e17]: ✦
+          - generic [ref=e18]:
+            - generic "Project types" [ref=e19]:
+              - button "All Work (9) ," [pressed] [ref=e20] [cursor=pointer]:
+                - generic [ref=e21]: All Work
+                - generic [ref=e22]: (9)
+                - text: ","
+              - button "Web Design ," [ref=e23] [cursor=pointer]:
+                - generic [ref=e24]: Web Design
+                - text: () ,
+              - button "Branding ," [ref=e25] [cursor=pointer]:
+                - generic [ref=e26]: Branding
+                - text: () ,
+              - button "Graphic Design" [ref=e27] [cursor=pointer]: ()
+            - button "See a random experiment" [ref=e29] [cursor=pointer]
+        - paragraph [ref=e30]: Featured projects & experiments, curated from 3 years of work. I mostly do web design but I also like to play around with graphic design work.
+      - region [ref=e31]:
+        - heading "Featured projects" [level=2] [ref=e32]
+        - list [ref=e33]:
+          - listitem [ref=e34]:
+            - region "Sweetgreen project gallery" [ref=e35]:
+              - figure [ref=e36]:
+                - img "Editorial photograph for the Sweetgreen Nicolandria project." [ref=e38]
+              - figure [ref=e39]:
+                - img "Close-up campaign image from the Sweetgreen Nicolandria project." [ref=e41]
+              - figure [ref=e42]:
+                - img "Sweetgreen pickle ketchup surrounded by tomatoes." [ref=e44]
+            - generic [ref=e45]:
+              - generic [ref=e46]:
+                - generic [ref=e47]: "Sweetgreen: Nicolandria"
+                - generic [ref=e48]: Photography
+              - link "See Case Study" [ref=e49] [cursor=pointer]:
+                - /url: ./sweetgreen-nicolandria/
+                - generic [ref=e51]: →
+          - listitem [ref=e52]:
+            - region "Hotel Wren project gallery" [ref=e53]:
+              - figure [ref=e54]:
+                - img "Animated Hotel Wren website presentation." [ref=e56]
+              - figure [ref=e57]:
+                - img "The Green Room entrance for Hotel Wren." [ref=e59]
+              - figure [ref=e60]:
+                - img "Editorial beach portrait from the Hotel Wren project." [ref=e62]
+            - generic [ref=e63]:
+              - generic [ref=e64]:
+                - generic [ref=e65]: Hotel Wren
+                - generic [ref=e66]: Web
+              - link "See Case Study" [ref=e67] [cursor=pointer]:
+                - /url: ./hotel-wren/
+                - generic [ref=e69]: →
+          - listitem [ref=e70]:
+            - region "Flamingo Estate project gallery" [ref=e71]:
+              - figure [ref=e72]:
+                - img "Animated Flamingo Estate campaign still life." [ref=e74]
+              - figure [ref=e75]:
+                - img "Warm interior photograph from the Flamingo Estate project." [ref=e77]
+              - figure [ref=e78]:
+                - img "Sunlit lounge from the Flamingo Estate project." [ref=e80]
+            - generic [ref=e81]:
+              - generic [ref=e82]:
+                - generic [ref=e83]: Flamingo Estate
+                - generic [ref=e84]: Photography, Motion
+              - link "See Case Study" [ref=e85] [cursor=pointer]:
+                - /url: ./flamingo-estate/
+                - generic [ref=e87]: →
+      - region [ref=e88]:
+        - generic [ref=e89]:
+          - heading "Playground" [level=2] [ref=e90]
+          - paragraph [ref=e91]: "Everything below is made from small projects and experiments: the fun stuff."
+        - list [ref=e92]:
+          - listitem [ref=e93]:
+            - 'button "Willow: A clear path to wellness" [ref=e94] [cursor=pointer]':
+              - img "Willow identity artwork." [ref=e96]
+              - generic [ref=e97]:
+                - generic [ref=e98]: Willow
+                - generic [ref=e99]: A clear path to wellness
+          - listitem [ref=e100]:
+            - 'button "Path work: Insurance at the speed of life" [ref=e101] [cursor=pointer]':
+              - img "Pathwork identity artwork." [ref=e103]
+              - generic [ref=e104]:
+                - generic [ref=e105]: Path work
+                - generic [ref=e106]: Insurance at the speed of life
+          - listitem [ref=e107]:
+            - 'button "Mañana Golf: There is always tomorrow" [ref=e108] [cursor=pointer]':
+              - img "Mañana Golf identity artwork." [ref=e110]
+              - generic [ref=e111]:
+                - generic [ref=e112]: Mañana Golf
+                - generic [ref=e113]: There is always tomorrow
+          - listitem [ref=e114]:
+            - 'button "NodeKit: Unchain the blockchain" [ref=e115] [cursor=pointer]':
+              - img "NodeKit product rendering." [ref=e117]
+              - generic [ref=e118]:
+                - generic [ref=e119]: NodeKit
+                - generic [ref=e120]: Unchain the blockchain
+          - listitem [ref=e121]:
+            - 'button "Utility Brewing Co.: Built with blood, sweat, and beers" [ref=e122] [cursor=pointer]':
+              - img "Utility Brewing Co. neon sign." [ref=e124]
+              - generic [ref=e125]:
+                - generic [ref=e126]: Utility Brewing Co.
+                - generic [ref=e127]: Built with blood, sweat, and beers
+          - listitem [ref=e128]:
+            - 'button "Playground: Collection of experiments" [ref=e129] [cursor=pointer]':
+              - img "Playground typographic experiment." [ref=e131]
+              - generic [ref=e132]:
+                - generic [ref=e133]: Playground
+                - generic [ref=e134]: Collection of experiments
+    - contentinfo [ref=e135]:
+      - generic [ref=e136]:
+        - generic "Location and weather" [ref=e137]:
+          - generic [ref=e138]: Lyon, France
+          - generic [ref=e139]: Weather loading...
+        - navigation "Contact links" [ref=e140]:
+          - link "Copy Email" [ref=e141] [cursor=pointer]:
+            - /url: mailto:contact@pierrelouis.net
+          - link "Links & Socials" [ref=e142] [cursor=pointer]:
+            - /url: ../links/
+        - navigation "Site information" [ref=e143]:
+          - link "Colophon" [ref=e144] [cursor=pointer]:
+            - /url: ../colophon/
+          - link "Imprint" [ref=e145] [cursor=pointer]:
+            - /url: ../imprint/
+          - generic [ref=e146]: ©2026
+  - dialog [active] [ref=e148]:
+    - generic [ref=e149]:
+      - button "Close Willow" [ref=e150] [cursor=pointer]
+      - generic [ref=e152]:
+        - banner [ref=e153]:
+          - generic [ref=e154]:
+            - generic [ref=e155]: No. 01
+            - heading "Willow" [level=2] [ref=e156]
+            - paragraph [ref=e157]: A clear path to wellness
+          - generic "Project details" [ref=e158]:
+            - generic [ref=e159]: Branding
+            - time [ref=e160]: / 2025
+        - generic "Willow project content" [ref=e161]:
+          - figure [ref=e162]:
+            - img "Willow identity artwork" [ref=e163]
+          - paragraph [ref=e165]: A wellness identity built around calm direction, soft contrast and a clear sense of forward movement.
+  - text: / / / / /

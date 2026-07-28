@@ -1,6 +1,7 @@
 import { watch } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { buildLists } from "./build-lists.mjs";
 import { buildPhotos } from "./build-photos.mjs";
 import { buildProjects } from "./build-projects.mjs";
 import { syncSharedComponents } from "./shared-components.mjs";
@@ -8,6 +9,14 @@ import { startSiteServer } from "./site-server.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PORT = Number(process.env.PORT || 8000);
+
+const shouldRebuildLists = (filename) => {
+  return (
+    filename.startsWith("lists/sheets/") ||
+    filename === "lists/index.html" ||
+    filename === "scripts/build-lists.mjs"
+  );
+};
 
 const shouldRebuildPhotos = (filename) => {
   return (
@@ -59,6 +68,16 @@ const queue = (filename, reload) => {
     try {
       const rebuildPhotos = shouldRebuildPhotos(filename);
       const rebuildProjects = shouldRebuildProjects(filename);
+      const rebuildLists = shouldRebuildLists(filename);
+
+      if (rebuildLists) {
+        const result = await buildLists();
+        console.log(
+          `Rebuilt Lists: ${result.sheets} sheet(s)${
+            result.changed ? "" : " (unchanged)"
+          }.`,
+        );
+      }
 
       if (rebuildPhotos) {
         const result = await buildPhotos();
@@ -82,6 +101,7 @@ const queue = (filename, reload) => {
       }
 
       if (
+        rebuildLists ||
         rebuildPhotos ||
         rebuildProjects ||
         shouldSyncSharedComponents(filename)
@@ -102,11 +122,17 @@ const queue = (filename, reload) => {
   }, 120);
 };
 
+const initialLists = await buildLists();
 const initialProjects = await buildProjects();
 const initialPhotos = await buildPhotos();
 await syncSharedComponents();
 const site = await startSiteServer({ dev: true, port: PORT });
 
+console.log(
+  `Built Lists: ${initialLists.sheets} sheet(s)${
+    initialLists.changed ? "" : " (unchanged)"
+  }.`,
+);
 console.log(
   `Built projects: ${initialProjects.featured} featured, ` +
     `${initialProjects.playground} playground (${initialProjects.total} total), ` +

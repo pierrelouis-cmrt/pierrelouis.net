@@ -552,16 +552,18 @@
 
 .playground-sheet__identity {
   grid-column: 1;
-  display: flex;
+  position: relative;
+  display: block;
   width: 100%;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
   justify-self: center;
   text-align: center;
 }
 
 .playground-sheet__number {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + var(--space-sm));
+  left: 0;
   color: var(--color-subtle);
   font-size: var(--font-size-micro);
   line-height: var(--line-height-label);

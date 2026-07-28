@@ -1,6 +1,7 @@
 import { cp, mkdir, readdir, rename, rm, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { buildLists } from "./build-lists.mjs";
 import { buildPhotos } from "./build-photos.mjs";
 import { buildProjects } from "./build-projects.mjs";
 import { syncSharedComponents } from "./shared-components.mjs";
@@ -27,6 +28,15 @@ const PUBLIC_ROOT_FILES = [
 ];
 
 const isBuildCache = (source) => path.basename(source) === ".build-cache.json";
+
+const isAuthoringSource = (source) => {
+  const relativePath = path.relative(ROOT, source).split(path.sep).join("/");
+
+  return (
+    relativePath === "lists/sheets" ||
+    relativePath.startsWith("lists/sheets/")
+  );
+};
 
 const getPageDirectories = async () => {
   const entries = await readdir(ROOT, { withFileTypes: true });
@@ -63,7 +73,7 @@ const copyPublicPath = async (relativePath) => {
     path.join(ROOT, relativePath),
     path.join(TEMP_DIST_DIR, relativePath),
     {
-      filter: (source) => !isBuildCache(source),
+      filter: (source) => !isBuildCache(source) && !isAuthoringSource(source),
       recursive: true,
     },
   );
@@ -90,11 +100,17 @@ const assembleDist = async () => {
   return publicPaths.length;
 };
 
+const lists = await buildLists();
 const projects = await buildProjects();
 const photos = await buildPhotos();
 const sharedComponents = await syncSharedComponents();
 const copiedPaths = await assembleDist();
 
+console.log(
+  `Built Lists page: ${lists.sheets} sheet(s)${
+    lists.changed ? "" : " (unchanged)"
+  }.`,
+);
 console.log(
   `Built projects page: ${projects.featured} featured, ` +
     `${projects.playground} playground (${projects.total} total), ` +
