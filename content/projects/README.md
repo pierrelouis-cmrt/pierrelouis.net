@@ -90,6 +90,7 @@ title: Small Experiment
 order: 1
 description: A short listing caption
 category: Branding
+year: "2026"
 summary: Optional longer metadata description.
 listing:
   image: listing/cover.webp

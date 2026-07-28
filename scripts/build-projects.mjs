@@ -702,6 +702,10 @@ const loadProjects = async () => {
   assertUniqueOrder(playground, "playground");
 
   playground.forEach((project, index) => {
+    if (!project.year) {
+      throw projectError(project.projectKey, 'missing "year"');
+    }
+
     project.sequence = String(index + 1).padStart(2, "0");
   });
 
@@ -1242,10 +1246,14 @@ const renderPlaygroundSheet = (project) => {
 
             <div class="playground-sheet__content">
               <header class="playground-sheet__intro">
-                <h2 class="playground-sheet__title" id="${escapeHtml(titleId)}">${escapeHtml(project.title)}</h2>
+                <div class="playground-sheet__identity">
+                  <span class="playground-sheet__number">No. ${escapeHtml(project.sequence)}</span>
+                  <h2 class="playground-sheet__title" id="${escapeHtml(titleId)}">${escapeHtml(project.title)}</h2>
+                </div>
                 <p class="playground-sheet__description" id="${escapeHtml(descriptionId)}">${escapeHtml(project.description)}</p>
                 <div class="playground-sheet__meta" aria-label="Project details">
-                  <span>${escapeHtml(project.sequence)} - ${escapeHtml(project.category)}</span>
+                  <span class="playground-sheet__category">${escapeHtml(project.category)}</span>
+                  <time datetime="${escapeHtml(project.year)}">${escapeHtml(project.year)}</time>
                 </div>
               </header>
 

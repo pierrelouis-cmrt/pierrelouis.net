@@ -3,6 +3,7 @@ title: Mañana Golf
 order: 3
 description: There is always tomorrow
 category: Branding
+year: "2025"
 summary: A golf identity shaped around patience, optimism and the promise that there is always another round.
 listing:
   image: listing/cover.png
