@@ -1252,12 +1252,12 @@ ${block.html.trim()}
                     <ol class="project-carousel__track">
 ${block.images
   .map((image) => {
-    const orientation =
-      image.height > image.width ? "portrait" : "landscape";
-
-    return `                      <li class="project-carousel__item project-carousel__item--${orientation}">
+    return `                      <li class="project-carousel__item">
                         <figure class="project-carousel__slide">
-                          <span class="project-carousel__image-wrap">
+                          <span
+                            class="project-carousel__image-wrap"
+                            style="--project-carousel-ratio: ${image.width} / ${image.height}"
+                          >
                             <img
                               class="project-carousel__image"
                               src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + image.outputFile)}"

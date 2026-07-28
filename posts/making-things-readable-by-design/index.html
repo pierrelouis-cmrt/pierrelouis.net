@@ -50,7 +50,13 @@
     <script src="../../footer.js" defer></script>
   </head>
   <body>
-    <div class="site-shell post-page post-page--backdrop">
+    <!--
+      Navbar theme: keep post-page--nav-light for light links over a dark
+      header, or remove it to use the site's default dark navigation.
+    -->
+    <div
+      class="site-shell post-page post-page--backdrop post-page--nav-light"
+    >
       <header class="site-header" aria-label="Primary navigation">
         <a class="brand-mark post-back" href="../" aria-label="Back">
           <span>Back</span>

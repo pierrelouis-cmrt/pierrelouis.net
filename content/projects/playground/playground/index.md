@@ -10,7 +10,8 @@ listing:
   alt: Playground typographic experiment.
 ---
 
-![Playground typographic experiment](media/cover.png){carousel}
+![Playground typographic experiment](media/cover.png){contained}
+
 ![Mañana Golf identity artwork](media/manana-golf.webp){carousel}
 ![Willow identity artwork](media/willow.webp){carousel}
 ![Pathwork identity artwork](media/pathwork.webp){carousel}

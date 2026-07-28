@@ -53,10 +53,10 @@
         background: linear-gradient(
           180deg,
           #606bf6 0%,
-          #8b9ffc 28%,
-          #c1cbfd 48%,
-          #f8fbff 66%,
-          #ffffff 80%
+          #8b9ffc 22%,
+          #c1cbfd 36%,
+          #f8fbff 50%,
+          #ffffff 64%
         );
         background: linear-gradient(
           180deg,
@@ -71,20 +71,20 @@
               var(--backdrop-secondary) 86%,
               var(--backdrop-surface)
             )
-            28%,
+            22%,
           color-mix(
               in srgb,
               var(--backdrop-secondary) 46%,
               var(--backdrop-surface)
             )
-            48%,
+            36%,
           color-mix(
               in srgb,
               var(--backdrop-mist) 18%,
               var(--backdrop-surface)
             )
-            66%,
-          var(--backdrop-surface) 80%
+            50%,
+          var(--backdrop-surface) 64%
         );
       }
 
@@ -182,13 +182,13 @@
           }
 
           vec3 verticalPalette(float y) {
-            vec3 color = mix(PRIMARY, SECONDARY, smoothstep(0.0, 0.28, y));
+            vec3 color = mix(PRIMARY, SECONDARY, smoothstep(0.0, 0.22, y));
             color = mix(
               color,
               mix(SECONDARY, MIST, 0.56),
-              smoothstep(0.28, 0.54, y)
+              smoothstep(0.20, 0.38, y)
             );
-            color = mix(color, SURFACE, smoothstep(0.46, 0.82, y));
+            color = mix(color, SURFACE, smoothstep(0.30, 0.64, y));
             return color;
           }
 
@@ -215,7 +215,7 @@
             float atmosphere = broad * 0.66 + detail * 0.34;
 
             vec3 color = verticalPalette(uv.y);
-            float upperField = 1.0 - smoothstep(0.08, 0.66, uv.y);
+            float upperField = 1.0 - smoothstep(0.06, 0.48, uv.y);
             color = mix(
               color,
               mix(PRIMARY * 0.83, SECONDARY * 1.06, atmosphere),
@@ -229,7 +229,7 @@
                 0.21,
                 abs((uv.x - 0.30) + (uv.y - 0.05) * 0.42)
               );
-            leftFold *= 1.0 - smoothstep(0.04, 0.42, uv.y);
+            leftFold *= 1.0 - smoothstep(0.04, 0.30, uv.y);
 
             float rightFold =
               1.0 -
@@ -238,7 +238,7 @@
                 0.34,
                 abs((uv.x - 0.72) - (uv.y - 0.03) * 0.48)
               );
-            rightFold *= 1.0 - smoothstep(0.02, 0.48, uv.y);
+            rightFold *= 1.0 - smoothstep(0.02, 0.36, uv.y);
 
             color = mix(color, PRIMARY * 0.78, leftFold * 0.12);
             color = mix(color, MIST, rightFold * 0.10);
@@ -255,10 +255,10 @@
             color = mix(color, MIST, light * 0.13 * upperField);
 
             float mistLine =
-              smoothstep(0.23, 0.74, uv.y) +
+              smoothstep(0.16, 0.54, uv.y) +
               (atmosphere - 0.5) * 0.075 * upperField;
             color = mix(color, SURFACE, smoothstep(0.48, 0.92, mistLine));
-            color = mix(color, SURFACE, smoothstep(0.69, 0.82, uv.y));
+            color = mix(color, SURFACE, smoothstep(0.50, 0.66, uv.y));
 
             float grain = hash(gl_FragCoord.xy + u_time) - 0.5;
             color += grain * 0.006 * upperField;
