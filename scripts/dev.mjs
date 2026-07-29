@@ -7,9 +7,14 @@ import { buildPosts } from "./build-posts.mjs";
 import { buildProjects } from "./build-projects.mjs";
 import { syncSharedComponents } from "./shared-components.mjs";
 import { startSiteServer } from "./site-server.mjs";
+import {
+  syncAndBuildPosts,
+  VAULT_POSTS_DIR,
+} from "./vault-posts.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PORT = Number(process.env.PORT || 8000);
+const VAULT_POSTS_CHANGE = "@vault/posts";
 
 const shouldRebuildLists = (filename) => {
   return (
@@ -38,6 +43,7 @@ const shouldRebuildProjects = (filename) => {
 
 const shouldRebuildPosts = (filename) => {
   return (
+    filename === VAULT_POSTS_CHANGE ||
     filename.startsWith("content/posts/") ||
     filename.startsWith("posts/headers/") ||
     filename.startsWith("posts/components/") ||
@@ -59,6 +65,10 @@ const shouldIgnore = (filename) => {
     filename.startsWith("dist/") ||
     filename.startsWith("node_modules/") ||
     filename.startsWith(".playwright") ||
+    filename.startsWith("content/.articles-backup-") ||
+    filename.startsWith("content/posts/.articles-sync-") ||
+    filename === "content/posts/articles" ||
+    filename.startsWith("content/posts/articles/") ||
     filename.startsWith("assets/projects/") ||
     filename.startsWith("assets/photos/") ||
     filename.startsWith("posts/assets/") ||
@@ -76,6 +86,7 @@ const queue = (filename, reload) => {
   clearTimeout(timer);
   timer = setTimeout(async () => {
     if (isBuilding) {
+      queue(filename, reload);
       return;
     }
 
@@ -86,6 +97,7 @@ const queue = (filename, reload) => {
       const rebuildProjects = shouldRebuildProjects(filename);
       const rebuildLists = shouldRebuildLists(filename);
       const rebuildPosts = shouldRebuildPosts(filename);
+      const syncVaultPosts = filename === VAULT_POSTS_CHANGE;
 
       if (rebuildLists) {
         const result = await buildLists();
@@ -118,9 +130,11 @@ const queue = (filename, reload) => {
       }
 
       if (rebuildPosts) {
-        const result = await buildPosts();
+        const result = syncVaultPosts
+          ? await syncAndBuildPosts()
+          : await buildPosts();
         console.log(
-          `Rebuilt posts: ${result.posts} page(s), ` +
+          `${syncVaultPosts ? "Synced and rebuilt" : "Rebuilt"} posts: ${result.posts} page(s), ` +
             `${result.removed} stale page(s) removed, ` +
             `${result.warnings.length} warning(s).`,
         );
@@ -152,7 +166,7 @@ const queue = (filename, reload) => {
 const initialLists = await buildLists();
 const initialProjects = await buildProjects();
 const initialPhotos = await buildPhotos();
-const initialPosts = await buildPosts();
+const initialPosts = await syncAndBuildPosts();
 await syncSharedComponents();
 const site = await startSiteServer({ dev: true, port: PORT });
 
@@ -180,6 +194,11 @@ console.log(
     `${initialPosts.removed} stale page(s) removed, ` +
     `${initialPosts.warnings.length} warning(s).`,
 );
+if (initialPosts.source) {
+  console.log(
+    `Synced ${initialPosts.synced} post(s) from ${initialPosts.source}.`,
+  );
+}
 console.log(`Dev server: http://${site.host}:${site.port}/`);
 
 watch(ROOT, { recursive: true }, (eventType, rawFilename) => {
@@ -195,3 +214,15 @@ watch(ROOT, { recursive: true }, (eventType, rawFilename) => {
 
   queue(filename, site.reload);
 });
+
+if (initialPosts.source) {
+  watch(VAULT_POSTS_DIR, { recursive: true }, (eventType, rawFilename) => {
+    if (rawFilename && path.basename(rawFilename) === ".DS_Store") {
+      return;
+    }
+
+    queue(VAULT_POSTS_CHANGE, site.reload);
+  });
+
+  console.log(`Watching Obsidian posts: ${VAULT_POSTS_DIR}`);
+}

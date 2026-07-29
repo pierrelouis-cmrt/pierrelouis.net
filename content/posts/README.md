@@ -19,27 +19,28 @@ The default vault source is:
 /Users/pierrelouis/Documents/Obsidian/Main Vault/Writing/Final Versions
 ```
 
-Run:
+Start the development server:
 
 ```bash
-npm run sync:posts
+npm run dev
 ```
 
-This command:
+The development and production builds automatically:
 
 1. copies that folder into `content/posts/articles/`, excluding `.DS_Store`;
 2. validates the candidate mirror before replacing the current mirror;
 3. keeps the previous mirror as a rollback until the remaining steps pass;
 4. replaces only the repository mirror, never the vault;
-5. builds every post and `posts/index.html`;
-6. runs cached desktop/mobile browser QA for changed posts.
+5. builds every post and `posts/index.html`.
 
-If the build or browser QA fails, the command restores the previous mirror and
-regenerates its pages before reporting the original error.
+During `npm run dev`, changes in the Obsidian folder are watched and imported
+automatically. `npm run build` performs a fresh import before assembling
+`dist/`. If the post build fails, the pipeline restores the previous mirror
+and regenerates its pages before reporting the original error.
 
-Set `OBSIDIAN_POSTS_DIR` to use another source folder. Use
-`npm run sync:posts -- --skip-qa` only for a quick local sync when you know a
-full QA run will follow.
+Set `OBSIDIAN_POSTS_DIR` to use another source folder. On machines where the
+default vault folder is unavailable, builds use the checked-in repository
+mirror. If `OBSIDIAN_POSTS_DIR` is explicitly set, that folder must exist.
 
 Other commands:
 
@@ -50,9 +51,6 @@ Other commands:
 | `npm run dev` | Build, watch and serve at `http://127.0.0.1:8000/` |
 | `npm run qa:posts` | Force browser QA and regenerate all QA screenshots |
 | `npm run preview` | Serve the production `dist/` build |
-
-`npm run build` never reads the Obsidian vault. This keeps CI and other
-machines reproducible.
 
 ## Directory map
 

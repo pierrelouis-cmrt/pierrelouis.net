@@ -555,7 +555,7 @@ export const loadPostManifest = async ({
   } catch (error) {
     if (error.code === "ENOENT") {
       throw new Error(
-        `Post source mirror not found at ${toPosix(path.relative(ROOT, articlesDir))}. Run \`npm run sync:posts\` first.`,
+        `Post source mirror not found at ${toPosix(path.relative(ROOT, articlesDir))}. Run \`npm run dev\` or \`npm run build\` to import it from Obsidian.`,
       );
     }
     throw error;

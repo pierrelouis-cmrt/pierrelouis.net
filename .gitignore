@@ -28,3 +28,5 @@ assets/photos/.build-cache.json
 assets/projects/.build-cache.json
 output/playwright/posts-qa/
 .playwright-cli/
+content/.articles-backup-*/
+content/posts/.articles-sync-*/

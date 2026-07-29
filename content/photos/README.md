@@ -16,6 +16,13 @@ The folder name becomes the album's stable internal ID by default. Use a
 descriptive lowercase, hyphen-separated name; renaming it changes generated
 asset paths and album URLs.
 
+## Page settings
+
+The `PHOTOS_PAGE` object near the top of `scripts/build-photos.mjs` controls the
+page title and description, social metadata, hidden heading, intro, filter and
+search copy, gallery label, and lightbox labels. Album-specific titles,
+descriptions, tags, and photo metadata remain in each album's `collection.yml`.
+
 ## Complete example
 
 ```yaml

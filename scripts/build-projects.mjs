@@ -14,14 +14,10 @@ import { fileURLToPath } from "node:url";
 import { marked, Renderer } from "marked";
 import { getImageDimensions } from "./lib/image-dimensions.mjs";
 import { parseYaml } from "./lib/yaml.mjs";
-import {
-  renderSiteFooter,
-  renderSiteHeader,
-} from "./shared-components.mjs";
+import { renderSiteFooter, renderSiteHeader } from "./shared-components.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const CONTENT_DIR = path.join(ROOT, "content", "projects");
-const PAGE_CONTENT_FILE = path.join(CONTENT_DIR, "projects.yml");
 const ASSETS_DIR = path.join(ROOT, "assets", "projects");
 const ASSET_CACHE_FILE = path.join(ASSETS_DIR, ".build-cache.json");
 const PAGE_FILE = path.join(ROOT, "projects", "index.html");
@@ -36,6 +32,20 @@ const PUBLIC_PROJECT_ASSET_ROOT = "/assets/projects/";
 const ASSET_CACHE_VERSION = 1;
 const STILL_WEBP_QUALITY = 84;
 const ANIMATED_WEBP_QUALITY = 80;
+const PROJECTS_PAGE = {
+  title: "Projects — Pierre-Louis",
+  description: "Selected projects and experiments by Pierre-Louis.",
+  heading: "Projects and experiments",
+  categories: ["Web Design", "Graphic Design"],
+  allWorkLabel: "All Work",
+  intro:
+    "Featured projects & experiments, curated from 3 years of work. I mostly do web design but I also like to play around with graphic design work.",
+  randomProjectLabel: "See a random experiment",
+  featuredHeading: "Featured projects",
+  playgroundHeading: "Playground",
+  playgroundIntro:
+    "Everything below is made from small projects and experiments: the fun stuff.",
+};
 // These are 2x approximations of the largest CSS boxes at the 760px and
 // 1100px breakpoints. Cover images may retain extra pixels on one axis so
 // browser cropping stays sharp without baking a crop into the source asset.
@@ -87,14 +97,6 @@ const categoryKey = (value) =>
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
-
-const requireText = (value, field) => {
-  if (typeof value !== "string" || value.trim() === "") {
-    throw new Error(`content/projects/projects.yml is missing "${field}"`);
-  }
-
-  return value.trim();
-};
 
 const assertUnique = (items, field, label) => {
   const seen = new Set();
@@ -245,11 +247,7 @@ const normalizeProjectSourcePath = (
   field,
   requiredDirectory,
 ) => {
-  const relativePath = requireProjectText(
-    value,
-    projectKey,
-    field,
-  ).replaceAll(
+  const relativePath = requireProjectText(value, projectKey, field).replaceAll(
     "\\",
     "/",
   );
@@ -309,10 +307,7 @@ const loadProjectImage = async ({
     }
   } catch (error) {
     if (error.code === "ENOENT" || error.message === "not a file") {
-      throw projectError(
-        projectKey,
-        `"${field}.file" does not exist: ${file}`,
-      );
+      throw projectError(projectKey, `"${field}.file" does not exist: ${file}`);
     }
 
     throw error;
@@ -321,8 +316,7 @@ const loadProjectImage = async ({
   return {
     alt: requireProjectText(alt, projectKey, `${field}.alt`),
     file,
-    outputFile:
-      `${projectKey}/${file.slice(0, -path.posix.extname(file).length)}.webp`,
+    outputFile: `${projectKey}/${file.slice(0, -path.posix.extname(file).length)}.webp`,
     projectDirectory,
     resizeMode,
     renderBoxes,
@@ -439,10 +433,7 @@ const loadMarkdownContent = async ({
           throw projectError(projectKey, standalone.error);
         }
 
-        if (
-          standalone.layout === "carousel" &&
-          collection !== "playground"
-        ) {
+        if (standalone.layout === "carousel" && collection !== "playground") {
           throw projectError(
             projectKey,
             '"{carousel}" is only available in Playground projects',
@@ -574,9 +565,7 @@ const listProjectMedia = async (directory, prefix = "") => {
       continue;
     }
 
-    const relativePath = prefix
-      ? `${prefix}/${entry.name}`
-      : entry.name;
+    const relativePath = prefix ? `${prefix}/${entry.name}` : entry.name;
     const absolutePath = path.join(directory, entry.name);
 
     if (entry.isDirectory()) {
@@ -624,10 +613,7 @@ const normalizeListingImages = async ({
   }
 
   if (rawImages.length === 0) {
-    throw projectError(
-      projectKey,
-      '"listing.images" needs at least one image',
-    );
+    throw projectError(projectKey, '"listing.images" needs at least one image');
   }
 
   const images = [];
@@ -720,11 +706,7 @@ const loadProject = async (entry, collection) => {
   );
 
   return {
-    category: requireProjectText(
-      frontMatter.category,
-      projectKey,
-      "category",
-    ),
+    category: requireProjectText(frontMatter.category, projectKey, "category"),
     collection,
     contentBlocks: content.blocks,
     contentImages: content.images,
@@ -777,16 +759,7 @@ const assertUniqueOrder = (projects, collection) => {
 };
 
 const loadProjects = async () => {
-  const data = parseYaml(await readFile(PAGE_CONTENT_FILE, "utf8"));
-
-  if (
-    !Array.isArray(data.page?.categories) ||
-    data.page.categories.length === 0
-  ) {
-    throw new Error(
-      'content/projects/projects.yml: "page.categories" must contain at least one category',
-    );
-  }
+  const categories = PROJECTS_PAGE.categories;
 
   const projects = [];
 
@@ -807,10 +780,7 @@ const loadProjects = async () => {
     }
 
     for (const entry of entries) {
-      if (
-        !entry.isDirectory() ||
-        entry.name.startsWith(".")
-      ) {
+      if (!entry.isDirectory() || entry.name.startsWith(".")) {
         continue;
       }
 
@@ -839,16 +809,13 @@ const loadProjects = async () => {
   assertUnique(projects, "slug", "project slug");
   assertUnique(projects, "title", "project title");
 
-  const categories = data.page.categories.map((category, index) =>
-    requireText(category, `page.categories[${index}]`),
-  );
   const categoryKeys = new Set(categories.map(categoryKey));
 
   for (const project of projects) {
     if (!categoryKeys.has(categoryKey(project.category))) {
       throw projectError(
         project.projectKey,
-        `category "${project.category}" is not listed in projects.yml`,
+        `category "${project.category}" is not listed in PROJECTS_PAGE.categories`,
       );
     }
   }
@@ -887,14 +854,6 @@ const loadProjects = async () => {
 
   return {
     featured,
-    page: {
-      categories,
-      intro: requireText(data.page.intro, "page.intro"),
-      playgroundIntro: requireText(
-        data.page.playgroundIntro,
-        "page.playgroundIntro",
-      ),
-    },
     playground,
     warnings,
   };
@@ -984,14 +943,10 @@ const getRequiredScale = (image, sourceDimensions) => {
 
 const getResizeWidth = (job, sourceDimensions) => {
   const requiredScale = Math.max(
-    ...job.references.map((image) =>
-      getRequiredScale(image, sourceDimensions),
-    ),
+    ...job.references.map((image) => getRequiredScale(image, sourceDimensions)),
   );
 
-  return Math.ceil(
-    sourceDimensions.width * Math.min(requiredScale, 1),
-  );
+  return Math.ceil(sourceDimensions.width * Math.min(requiredScale, 1));
 };
 
 const getAssetOptions = (job, sourceDimensions) => {
@@ -1124,7 +1079,10 @@ const removeStaleAssets = async (directory, expectedFiles) => {
       continue;
     }
 
-    const relativePath = path.relative(ASSETS_DIR, entryPath).split(path.sep).join("/");
+    const relativePath = path
+      .relative(ASSETS_DIR, entryPath)
+      .split(path.sep)
+      .join("/");
 
     if (!expectedFiles.has(relativePath)) {
       await rm(entryPath);
@@ -1334,10 +1292,7 @@ const renderPlaygroundProject = (project) => {
             </li>`;
 };
 
-const renderProjectContent = (
-  project,
-  { priorityFirstImage = false } = {},
-) => {
+const renderProjectContent = (project, { priorityFirstImage = false } = {}) => {
   let imageIndex = 0;
 
   return project.contentBlocks
@@ -1493,26 +1448,25 @@ const renderPlaygroundSheet = (project) => {
                 class="project-content playground-sheet__body"
                 aria-label="${escapeHtml(project.title)} project content"
               >
-${renderProjectContent(project, {
-})}${renderProjectInteractive(project)}
+${renderProjectContent(project, {})}${renderProjectInteractive(project)}
               </div>
             </div>
           </div>
         </dialog>`;
 };
 
-const renderProjectsContent = ({ page, featured, playground }) => {
+const renderProjectsContent = ({ featured, playground }) => {
   const projects = [...featured, ...playground];
   const projectCount = featured.length + playground.length;
   const categoryCounts = new Map(
-    page.categories.map((category) => [
+    PROJECTS_PAGE.categories.map((category) => [
       categoryKey(category),
       projects.filter(
         (project) => categoryKey(project.category) === categoryKey(category),
       ).length,
     ]),
   );
-  const categoryFilters = page.categories
+  const categoryFilters = PROJECTS_PAGE.categories
     .map((category) => {
       const key = categoryKey(category);
 
@@ -1534,7 +1488,7 @@ const renderProjectsContent = ({ page, featured, playground }) => {
                 type="button"
                 data-playground-sheet-random
               >
-                See a random experiment
+                ${escapeHtml(PROJECTS_PAGE.randomProjectLabel)}
               </button>`
       : "";
   const playgroundContent =
@@ -1545,9 +1499,9 @@ const renderProjectsContent = ({ page, featured, playground }) => {
           data-project-section
         >
           <header class="playground__header">
-            <h2 class="playground__title" id="playground-title">Playground</h2>
+            <h2 class="playground__title" id="playground-title">${escapeHtml(PROJECTS_PAGE.playgroundHeading)}</h2>
             <p class="playground__description">
-              ${escapeHtml(page.playgroundIntro)}
+              ${escapeHtml(PROJECTS_PAGE.playgroundIntro)}
             </p>
           </header>
 
@@ -1559,7 +1513,7 @@ ${playground.map(renderPlaygroundProject).join("\n\n")}
 ${playground.map(renderPlaygroundSheet).join("\n\n")}`
       : "";
 
-  return `        <h1 class="sr-only">Projects and experiments</h1>
+  return `        <h1 class="sr-only">${escapeHtml(PROJECTS_PAGE.heading)}</h1>
 
         <section
           class="projects-intro page-intro"
@@ -1579,7 +1533,7 @@ ${playground.map(renderPlaygroundSheet).join("\n\n")}`
                   data-project-filter="all"
                   aria-pressed="true"
                 >
-                  <span>All Work</span>
+                  <span>${escapeHtml(PROJECTS_PAGE.allWorkLabel)}</span>
                   <span class="content-filter__count" data-filter-count>${projectCount}</span>
                 </button>
 ${categoryFilters}
@@ -1589,7 +1543,7 @@ ${randomAction}
           </div>
 
           <p class="intro-copy">
-            ${escapeHtml(page.intro)}
+            ${escapeHtml(PROJECTS_PAGE.intro)}
           </p>
         </section>
 
@@ -1599,7 +1553,7 @@ ${randomAction}
           data-project-section
         >
           <h2 class="sr-only" id="featured-projects-title">
-            Featured projects
+            ${escapeHtml(PROJECTS_PAGE.featuredHeading)}
           </h2>
 
           <ol class="featured-projects__list">
@@ -1654,11 +1608,11 @@ const getRelatedProjects = (featured, currentSlug, limit = 2) => {
 };
 
 const renderCaseStudyPage = (project, peers) => {
-  const preview = project.images.find((image) => image.main) ?? project.images[0];
+  const preview =
+    project.images.find((image) => image.main) ?? project.images[0];
   const relatedProjects = getRelatedProjects(peers, project.slug);
   const pageUrl = `https://pierrelouis.net/projects/${project.slug}/`;
-  const imageUrl =
-    `https://pierrelouis.net/assets/projects/${preview.outputFile}`;
+  const imageUrl = `https://pierrelouis.net/assets/projects/${preview.outputFile}`;
   const header = renderSiteHeader({
     root: "../../",
     active: null,
@@ -1864,6 +1818,26 @@ const updateProjectPages = async (projects) => {
   return stats;
 };
 
+const updatePageMetadata = (source) => {
+  const title = escapeHtml(PROJECTS_PAGE.title);
+  const description = escapeHtml(PROJECTS_PAGE.description);
+
+  return source
+    .replace(/<title>[^<]*<\/title>/, `<title>${title}</title>`)
+    .replace(
+      /(<meta\s+name="description"\s+content=")[^"]*("\s*\/>)/,
+      `$1${description}$2`,
+    )
+    .replace(
+      /(<meta\s+property="og:title"\s+content=")[^"]*("\s*\/>)/,
+      `$1${title}$2`,
+    )
+    .replace(
+      /(<meta\s+property="og:description"\s+content=")[^"]*("\s*\/>)/,
+      `$1${description}$2`,
+    );
+};
+
 const updatePage = async (projects) => {
   const source = await readFile(PAGE_FILE, "utf8");
   const startIndex = source.indexOf(GENERATED_START);
@@ -1884,9 +1858,11 @@ const updatePage = async (projects) => {
       property="og:image"
       content="https://pierrelouis.net/assets/projects/${escapeHtml(preview.outputFile)}"
     />`;
-  const output = `${before}\n${renderProjectsContent(projects)}\n${after}`.replace(
-    /<meta\s+property="og:image"\s+content="[^"]+"\s*\/>/,
-    ogImageTag,
+  const output = updatePageMetadata(
+    `${before}\n${renderProjectsContent(projects)}\n${after}`.replace(
+      /<meta\s+property="og:image"\s+content="[^"]+"\s*\/>/,
+      ogImageTag,
+    ),
   );
 
   if (output !== source) {

@@ -7,8 +7,7 @@
     "build:projects": "node scripts/build-projects.mjs",
     "dev": "node scripts/dev.mjs",
     "preview": "node scripts/preview.mjs",
-    "qa:posts": "node scripts/qa-posts.mjs",
-    "sync:posts": "node scripts/sync-posts.mjs"
+    "qa:posts": "node scripts/qa-posts.mjs"
   },
   "dependencies": {
     "@11ty/eleventy": "3.1.6",

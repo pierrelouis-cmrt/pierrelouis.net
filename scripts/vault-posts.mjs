@@ -13,7 +13,6 @@ import {
   POST_ARTICLES_DIR,
   loadPostManifest,
 } from "./lib/posts.mjs";
-import { runPostQa } from "./qa-posts.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DEFAULT_VAULT_POSTS = path.resolve(
@@ -22,6 +21,7 @@ const DEFAULT_VAULT_POSTS = path.resolve(
 const SOURCE_DIR = path.resolve(
   process.env.OBSIDIAN_POSTS_DIR || DEFAULT_VAULT_POSTS,
 );
+export const VAULT_POSTS_DIR = SOURCE_DIR;
 const TEMP_DIR = path.join(
   ROOT,
   "content/posts",
@@ -61,23 +61,23 @@ const rebuildRestoredPosts = () =>
     });
   });
 
-const assertDirectory = async (directory, label) => {
+const directoryExists = async (directory, label) => {
   try {
     const value = await stat(directory);
 
     if (!value.isDirectory()) {
       throw new Error(`${label} is not a directory: ${directory}`);
     }
+    return true;
   } catch (error) {
     if (error.code === "ENOENT") {
-      throw new Error(`${label} does not exist: ${directory}`);
+      return false;
     }
     throw error;
   }
 };
 
 const mirrorVaultPosts = async () => {
-  await assertDirectory(SOURCE_DIR, "Obsidian post source");
   await rm(TEMP_DIR, { force: true, recursive: true });
   await mkdir(TEMP_DIR, { recursive: true });
 
@@ -119,22 +119,35 @@ const mirrorVaultPosts = async () => {
   }
 };
 
-export const syncPosts = async ({ qa = true } = {}) => {
+export const syncAndBuildPosts = async () => {
+  const sourceExists = await directoryExists(
+    SOURCE_DIR,
+    "Obsidian post source",
+  );
+
+  if (!sourceExists) {
+    if (process.env.OBSIDIAN_POSTS_DIR) {
+      throw new Error(`Obsidian post source does not exist: ${SOURCE_DIR}`);
+    }
+
+    return {
+      ...(await buildPosts()),
+      source: null,
+      synced: null,
+    };
+  }
+
   const mirrored = await mirrorVaultPosts();
 
   try {
     const build = await buildPosts();
-    const visualQa = qa
-      ? await runPostQa({ build: false, changedOnly: true })
-      : null;
 
     await rm(BACKUP_DIR, { force: true, recursive: true });
 
     return {
-      build,
+      ...build,
       source: SOURCE_DIR,
       synced: mirrored.candidate.posts.length,
-      visualQa,
     };
   } catch (error) {
     let rollbackError = null;
@@ -159,22 +172,3 @@ export const syncPosts = async ({ qa = true } = {}) => {
     throw error;
   }
 };
-
-const isDirectRun =
-  process.argv[1] &&
-  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
-
-if (isDirectRun) {
-  const result = await syncPosts({
-    qa: !process.argv.includes("--skip-qa"),
-  });
-  console.log(
-    `Synced ${result.synced} post(s) from ${result.source}. Built ${result.build.posts} page(s).`,
-  );
-
-  if (result.visualQa) {
-    console.log(
-      `Visual QA: ${result.visualQa.checked} checked, ${result.visualQa.cached} cached.`,
-    );
-  }
-}

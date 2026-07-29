@@ -28,9 +28,9 @@ The site is a static, multi-page application served directly from the repository
 `npm run build` runs six build stages:
 
 1. `scripts/build-lists.mjs` validates the dedicated HTML source for every Lists card and compiles each fragment into a project-style sheet.
-2. `scripts/build-projects.mjs` reads `content/projects/projects.yml`, validates project metadata and source images, generates resized WebP production assets, then regenerates the marked project-listing region.
-3. `scripts/build-photos.mjs` reads the collections in `content/photos/`, validates their metadata, generates optimized gallery assets, and writes the photo page and its searchable JSON data.
-4. `scripts/build-posts.mjs` validates and compiles the mirrored Obsidian articles, build-time math and code rendering, post index, and local asset references.
+2. `scripts/build-projects.mjs` owns the Projects page settings, validates project metadata and source images, generates resized WebP production assets, then regenerates the marked project-listing region.
+3. `scripts/build-photos.mjs` owns the Photos page settings, reads and validates the collections in `content/photos/`, generates optimized gallery assets, and writes the photo page and its searchable JSON data.
+4. The post pipeline imports the latest Obsidian articles into the repository mirror, then `scripts/build-posts.mjs` validates and compiles them with build-time math and code rendering, the post index, and local asset references.
 5. `scripts/shared-components.mjs` renders the canonical header and footer into every configured HTML page, adjusting paths and active navigation state per route.
 6. The deployable site is assembled in the Git-ignored `dist/` directory.
 
@@ -65,7 +65,7 @@ npm install
 npm run dev
 ```
 
-This performs an initial build, starts the site at `http://localhost:8000`, watches the repository, and reloads connected pages through Server-Sent Events. Set `PORT` to override the default port.
+This imports and builds the latest Obsidian posts, starts the site at `http://localhost:8000`, watches both the repository and the Obsidian post folder, and reloads connected pages through Server-Sent Events. Set `PORT` to override the default port.
 
 | Command | Purpose |
 | --- | --- |
@@ -73,7 +73,6 @@ This performs an initial build, starts the site at `http://localhost:8000`, watc
 | `npm run build` | Regenerate source outputs and assemble the production site in `dist/` |
 | `npm run build:lists` | Compile `lists/sheets/*.html` into the Lists page |
 | `npm run build:posts` | Validate and compile the local post source mirror |
-| `npm run sync:posts` | Safely mirror the Obsidian articles, build them, and run changed-page browser QA |
 | `npm run qa:posts` | Build and browser-test every generated post at desktop and mobile sizes |
 | `npm run preview` | Serve the existing `dist/` build on port 4173 |
 
@@ -100,9 +99,9 @@ This performs an initial build, starts the site at `http://localhost:8000`, watc
 ## Maintenance notes
 
 - Edit shared navigation and footer markup in `scripts/shared-components.mjs`, then run the build; direct edits to generated copies will be overwritten.
-- Add project sources under `content/projects/` and update `content/projects/projects.yml`. The complete workflow is documented in [`content/projects/README.md`](./content/projects/README.md).
-- Add or update photography in `content/photos/`. The collection format is documented in [`content/photos/README.md`](./content/photos/README.md).
-- Write posts in the Obsidian vault, then run `npm run sync:posts`. The Markdown contract, components, migration rules, and full example are documented in [`content/posts/README.md`](./content/posts/README.md).
+- Add project sources under `content/projects/` and edit page-level Projects settings in `scripts/build-projects.mjs`. The complete workflow is documented in [`content/projects/README.md`](./content/projects/README.md).
+- Add or update photography in `content/photos/`; edit page-level Photos settings in `scripts/build-photos.mjs`. The complete workflow is documented in [`content/photos/README.md`](./content/photos/README.md).
+- Write posts in the Obsidian vault. `npm run dev` imports changes as they happen, and `npm run build` imports the latest posts before assembling `dist/`. The Markdown contract, components, migration rules, and full example are documented in [`content/posts/README.md`](./content/posts/README.md).
 - Edit list-sheet content in `lists/sheets/`. Each card has one HTML fragment and the complete format is documented in [`lists/sheets/README.md`](./lists/sheets/README.md).
 - Generated project, photo, and post HTML and assets are committed alongside their sources so production hosting only needs to serve static files.
 - Clean URLs work through directory-level `index.html` files; the project does not require server-side routing.

@@ -35,12 +35,29 @@ const ASSET_VARIANTS = {
     },
   },
 };
-
-const INTRO_COPY =
-  "Some of my best shots from trips or everyday life. Everything was shot on iPhone 15 Pro and (sometimes) edited on Lightroom.";
-
-const PAGE_DESCRIPTION =
-  "Some of Pierre-Louis' best shots from trips and everyday life.";
+const PHOTOS_PAGE = {
+  title: "Photos - Pierre-Louis",
+  description:
+    "Some of Pierre-Louis' best shots from trips and everyday life.",
+  url: "https://pierrelouis.net/photos/",
+  heading: "Photos",
+  intro:
+    "Some of my best shots from trips or everyday life. Everything was shot on iPhone 15 Pro and (sometimes) edited on Lightroom.",
+  introLabel: "Photos introduction",
+  filtersLabel: "Photo filters",
+  countryFiltersLabel: "Countries",
+  allPhotosLabel: "All",
+  searchLabel: "Search photos",
+  searchPlaceholder: "Search place, color, mood...",
+  noResultsMessage: "No photos found",
+  albumsLabel: "Photo albums",
+  lightboxLabel: "Expanded photo",
+  closeLightboxLabel: "Close expanded photo",
+  lightboxNavigationLabel: "Photo navigation",
+  previousPhotoLabel: "Previous photo",
+  nextPhotoLabel: "Next photo",
+  closeLabel: "Close",
+};
 
 const CURRENT_YEAR = new Date().getFullYear();
 
@@ -689,7 +706,7 @@ const renderCountryFilters = (collections) => {
                   data-country-filter="all"
                   aria-pressed="true"
                 >
-                  <span>All</span>
+                  <span>${escapeHtml(PHOTOS_PAGE.allPhotosLabel)}</span>
                   <span class="content-filter__count" data-filter-count>${totalCount}</span>
                 </button>`;
   const countryButtons = countries
@@ -710,7 +727,6 @@ const renderCountryFilters = (collections) => {
 };
 
 const renderPage = (collections) => {
-  const countries = getCountries(collections);
   const albums = collections.map(renderCollection).join("\n\n");
 
   const page = `<!doctype html>
@@ -721,18 +737,18 @@ const renderPage = (collections) => {
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <title>Photos - Pierre-Louis</title>
+    <title>${escapeHtml(PHOTOS_PAGE.title)}</title>
     <meta
       name="description"
-      content="${escapeHtml(PAGE_DESCRIPTION)}"
+      content="${escapeHtml(PHOTOS_PAGE.description)}"
     />
-    <meta property="og:title" content="Photos - Pierre-Louis" />
+    <meta property="og:title" content="${escapeHtml(PHOTOS_PAGE.title)}" />
     <meta
       property="og:description"
-      content="${escapeHtml(PAGE_DESCRIPTION)}"
+      content="${escapeHtml(PHOTOS_PAGE.description)}"
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://pierrelouis.net/photos/" />
+    <meta property="og:url" content="${escapeHtml(PHOTOS_PAGE.url)}" />
     <meta
       property="og:image"
       content="${escapeHtml(getOgImage(collections))}"
@@ -922,54 +938,54 @@ const renderPage = (collections) => {
       </header>
 
       <main>
-        <h1 class="sr-only">Photos</h1>
+        <h1 class="sr-only">${escapeHtml(PHOTOS_PAGE.heading)}</h1>
 
-        <section class="photos-intro page-intro" aria-label="Photos introduction">
-          <div class="content-filter" aria-label="Photo filters" data-photo-filters>
+        <section class="photos-intro page-intro" aria-label="${escapeHtml(PHOTOS_PAGE.introLabel)}">
+          <div class="content-filter" aria-label="${escapeHtml(PHOTOS_PAGE.filtersLabel)}" data-photo-filters>
             <span class="content-filter__symbol" aria-hidden="true">✤</span>
             <div class="content-filter__content">
-              <div class="content-filter__options" aria-label="Countries">
+              <div class="content-filter__options" aria-label="${escapeHtml(PHOTOS_PAGE.countryFiltersLabel)}">
 ${renderCountryFilters(collections)}
               </div>
               <label class="content-filter__search">
-                <span class="sr-only">Search photos</span>
+                <span class="sr-only">${escapeHtml(PHOTOS_PAGE.searchLabel)}</span>
                 <input
                   class="content-filter__input"
                   type="search"
-                  placeholder="Search place, color, mood..."
+                  placeholder="${escapeHtml(PHOTOS_PAGE.searchPlaceholder)}"
                   autocomplete="off"
                   spellcheck="false"
                   data-photo-search
                 />
               </label>
               <p class="content-filter__empty" data-photo-empty hidden>
-                No photos found
+                ${escapeHtml(PHOTOS_PAGE.noResultsMessage)}
               </p>
             </div>
           </div>
 
           <p class="photos-intro__copy intro-copy">
-            ${escapeHtml(INTRO_COPY)}
+            ${escapeHtml(PHOTOS_PAGE.intro)}
           </p>
         </section>
 
-        <section class="photo-albums" aria-label="Photo albums">
+        <section class="photo-albums" aria-label="${escapeHtml(PHOTOS_PAGE.albumsLabel)}">
 ${albums}
         </section>
       </main>
 
       <div class="photo-lightbox" data-photo-lightbox hidden>
-        <div class="photo-lightbox__dialog" role="dialog" aria-modal="true" aria-label="Expanded photo">
-          <button class="photo-lightbox__backdrop" type="button" data-photo-lightbox-close aria-label="Close expanded photo"></button>
+        <div class="photo-lightbox__dialog" role="dialog" aria-modal="true" aria-label="${escapeHtml(PHOTOS_PAGE.lightboxLabel)}">
+          <button class="photo-lightbox__backdrop" type="button" data-photo-lightbox-close aria-label="${escapeHtml(PHOTOS_PAGE.closeLightboxLabel)}"></button>
           <figure class="photo-lightbox__figure">
             <img class="photo-lightbox__image" data-photo-lightbox-image alt="" />
-            <figcaption class="photo-lightbox__nav" data-photo-lightbox-nav aria-label="Photo navigation">
-              <button class="photo-lightbox__nav-button" type="button" data-photo-lightbox-prev aria-label="Previous photo">←</button>
+            <figcaption class="photo-lightbox__nav" data-photo-lightbox-nav aria-label="${escapeHtml(PHOTOS_PAGE.lightboxNavigationLabel)}">
+              <button class="photo-lightbox__nav-button" type="button" data-photo-lightbox-prev aria-label="${escapeHtml(PHOTOS_PAGE.previousPhotoLabel)}">←</button>
               <span class="photo-lightbox__counter" data-photo-lightbox-counter aria-live="polite"></span>
-              <button class="photo-lightbox__nav-button" type="button" data-photo-lightbox-next aria-label="Next photo">→</button>
+              <button class="photo-lightbox__nav-button" type="button" data-photo-lightbox-next aria-label="${escapeHtml(PHOTOS_PAGE.nextPhotoLabel)}">→</button>
             </figcaption>
           </figure>
-          <button class="photo-lightbox__close" type="button" data-photo-lightbox-close aria-label="Close expanded photo">Close</button>
+          <button class="photo-lightbox__close" type="button" data-photo-lightbox-close aria-label="${escapeHtml(PHOTOS_PAGE.closeLightboxLabel)}">${escapeHtml(PHOTOS_PAGE.closeLabel)}</button>
         </div>
       </div>
 

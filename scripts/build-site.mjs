@@ -3,9 +3,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildLists } from "./build-lists.mjs";
 import { buildPhotos } from "./build-photos.mjs";
-import { buildPosts } from "./build-posts.mjs";
 import { buildProjects } from "./build-projects.mjs";
 import { syncSharedComponents } from "./shared-components.mjs";
+import { syncAndBuildPosts } from "./vault-posts.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIST_DIR = path.join(ROOT, "dist");
@@ -104,7 +104,7 @@ const assembleDist = async () => {
 const lists = await buildLists();
 const projects = await buildProjects();
 const photos = await buildPhotos();
-const posts = await buildPosts();
+const posts = await syncAndBuildPosts();
 const sharedComponents = await syncSharedComponents();
 const copiedPaths = await assembleDist();
 
@@ -130,6 +130,9 @@ console.log(
   `Built posts: ${posts.posts} page(s), ${posts.removed} stale page(s) removed, ` +
     `${posts.warnings.length} warning(s).`,
 );
+if (posts.source) {
+  console.log(`Synced ${posts.synced} post(s) from ${posts.source}.`);
+}
 console.log(
   `Synced shared components: ${sharedComponents.length} file(s) updated.`,
 );

@@ -12,7 +12,6 @@ a project decides where it appears:
 
 ```text
 content/projects/
-├── projects.yml                 # Projects-page copy and category filters
 ├── featured/
 │   └── my-case-study/
 │       ├── index.md
@@ -37,18 +36,13 @@ from `media/`. Copy an image into both folders if it serves both purposes.
 
 ## Page settings
 
-`projects.yml` controls shared page content:
+The `PROJECTS_PAGE` object near the top of `scripts/build-projects.mjs` controls
+the page title and description, social metadata, hidden heading, filter labels
+and categories, intro copy, and Playground copy.
 
-```yaml
-page:
-  categories: [Web Design, Branding, Graphic Design]
-  intro: Featured projects and experiments from recent years.
-  playgroundIntro: Small projects, studies and experiments.
-```
-
-All three fields are required. A project's `category` must match one of the
-listed categories; spelling, case, accents, and punctuation are normalized for
-matching and filters. Category order here is also filter order on the page.
+A project's `category` must match one of `PROJECTS_PAGE.categories`; spelling,
+case, accents, and punctuation are normalized for matching and filters.
+Category order there is also filter order on the page.
 
 ## Project template
 
@@ -92,7 +86,7 @@ Explain the work with normal Markdown.
 | `title` | Yes | Display title; must be unique. |
 | `order` | Yes | Numeric position within its collection; lower comes first and duplicates are rejected. Spaced values such as `10`, `20`, `30` make insertion easy. |
 | `description` | Yes | Short label shown on the Projects listing/card. |
-| `category` | Yes | Category filter; must exist in `projects.yml`. |
+| `category` | Yes | Category filter; must exist in `PROJECTS_PAGE.categories` in the build script. |
 | `year` | Playground | Shown in the Playground sheet. Featured projects may omit it, in which case their case-study label falls back to `category`. |
 | `summary` | No | Case-study introduction and description metadata; falls back to `description`. |
 | `note` | No | Second case-study introduction paragraph; has no visible effect in Playground. |
