@@ -593,6 +593,22 @@
   content: "/";
 }
 
+.project-interactive {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: var(--space-sm);
+  min-width: 0;
+  margin: 0;
+}
+
+.project-interactive__frame {
+  display: block;
+  width: 100%;
+  height: var(--project-interactive-height, 600px);
+  border: 0;
+  background: #f8f8f7;
+}
+
 .project-carousel {
   --project-carousel-image-height: clamp(400px, 42vw, 540px);
   --project-carousel-column-width: calc(
@@ -852,6 +868,10 @@
   .project-carousel {
     --project-carousel-image-height: min(56svh, 440px);
     --project-carousel-start-edge: var(--page-gutter);
+  }
+
+  .project-interactive__frame {
+    height: var(--project-interactive-mobile-height, 750px);
   }
 
 }

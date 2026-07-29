@@ -1,5 +1,4 @@
 .post-body > :is(
-  pl-animated-avatar,
   pl-carousel-demo,
   pl-full-bleed-demo,
   pl-lissajous-lab,
@@ -8,10 +7,6 @@
   --article-demo-height: 400px;
   display: block;
   margin-top: var(--space-4xl);
-}
-
-.post-body > pl-animated-avatar {
-  --article-demo-height: 600px;
 }
 
 .post-body > pl-carousel-demo {
@@ -51,7 +46,6 @@
 
 .post-body
   > :is(
-    pl-animated-avatar,
     pl-carousel-demo,
     pl-full-bleed-demo,
     pl-lissajous-lab,
@@ -62,7 +56,6 @@
 }
 
 .post-body > :is(
-  pl-animated-avatar,
   pl-carousel-demo,
   pl-full-bleed-demo,
   pl-lissajous-lab,
@@ -71,10 +64,4 @@
   padding: var(--space-xl);
   border: 1px solid var(--post-rule);
   border-radius: 8px;
-}
-
-@media (max-width: 48rem) {
-  .post-body > pl-animated-avatar {
-    --article-demo-height: 750px;
-  }
 }

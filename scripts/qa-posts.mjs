@@ -32,7 +32,6 @@ const COMPONENT_SELECTOR = Object.keys(POST_COMPONENTS)
   .map((tag) => `.post-body ${tag}`)
   .join(", ");
 const LIGHT_COMPONENT_BACKGROUNDS = Object.freeze({
-  "pl-animated-avatar": "rgb(255, 255, 255)",
   "pl-carousel-demo": "rgb(250, 249, 249)",
   "pl-full-bleed-demo": "rgb(250, 249, 249)",
   "pl-lissajous-lab": "rgb(247, 248, 251)",
@@ -151,13 +150,7 @@ const exerciseArticleComponents = async (
         }
       }
 
-      if (tag === "pl-animated-avatar") {
-        await frame.getByRole("button", { exact: true, name: "Blink" }).click();
-
-        if (!(await frame.locator("#avatar").getAttribute("class"))?.includes("blink")) {
-          throw new Error("state button did not update the avatar");
-        }
-      } else if (tag === "pl-carousel-demo") {
+      if (tag === "pl-carousel-demo") {
         await frame.locator(".swiper-slide-active").waitFor({
           state: "visible",
         });

@@ -3,12 +3,6 @@
  * article and only loads the styles and modules used by that page.
  */
 export const POST_COMPONENTS = Object.freeze({
-  "pl-animated-avatar": {
-    app: "apps/avatar.html",
-    label: "Animated avatar states",
-    script: "article-demos.js",
-    style: "article-demos.css",
-  },
   "pl-carousel-demo": {
     app: "apps/carousel.html",
     label: "Sliding-window carousel",

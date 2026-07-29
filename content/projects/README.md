@@ -96,6 +96,7 @@ Explain the work with normal Markdown.
 | `year` | Playground | Shown in the Playground sheet. Featured projects may omit it, in which case their case-study label falls back to `category`. |
 | `summary` | No | Case-study introduction and description metadata; falls back to `description`. |
 | `note` | No | Second case-study introduction paragraph; has no visible effect in Playground. |
+| `interactive` | Playground | Optional same-site iframe demo appended after the Markdown body. |
 | `listing` | Yes | One or more images from this project's `listing/` folder. |
 
 Do not add `collection`: the `featured/` or `playground/` parent already defines
@@ -162,6 +163,10 @@ text block: the heading uses column one while the content following it starts on
 the same row. Both stack in reading order on mobile. An image ends the current
 text block; another heading starts a new one.
 
+Markdown links automatically use the shared styles from `base.css`: relative,
+root-relative, and hash links receive `internal-link`; protocol and `//` links
+receive `external-link`.
+
 ### Image layouts
 
 Every Markdown image must:
@@ -190,6 +195,23 @@ Text or a differently modified image ends the carousel group; blank lines
 between carousel images do not. Carousel captions are not visible, but alt text
 remains available to assistive technology. On mobile, normal pairs become a
 single column; contained and isolated images remain size-limited.
+
+### Interactive demos
+
+Playground projects can append a same-site interactive app after their Markdown
+body:
+
+```yaml
+interactive:
+  src: /path/to/demo.html
+  title: Accessible title for the embedded demo
+  height: 600
+  mobileHeight: 750
+```
+
+`src` must begin with `/` and resolve to an existing public file in the site.
+Heights are pixels, must be between `240` and `1200`, and default to `600`.
+Links or other supporting controls should be authored explicitly in Markdown.
 
 ## Build, validation, and generated files
 

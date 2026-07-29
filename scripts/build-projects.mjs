@@ -11,7 +11,7 @@ import {
 } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { marked } from "marked";
+import { marked, Renderer } from "marked";
 import { getImageDimensions } from "./lib/image-dimensions.mjs";
 import { parseYaml } from "./lib/yaml.mjs";
 import {
@@ -60,6 +60,25 @@ const escapeHtml = (value) =>
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
 
+const REMOTE_REFERENCE = /^(?:[a-z][a-z\d+.-]*:|\/\/)/i;
+const PROJECT_MARKDOWN_RENDERER = new Renderer();
+const renderDefaultMarkdownLink = PROJECT_MARKDOWN_RENDERER.link;
+
+PROJECT_MARKDOWN_RENDERER.link = function renderProjectMarkdownLink(token) {
+  const html = renderDefaultMarkdownLink.call(this, token);
+
+  if (!html.startsWith("<a ")) {
+    return html;
+  }
+
+  const external = REMOTE_REFERENCE.test(token.href);
+  const attributes = external
+    ? 'class="external-link" rel="noreferrer"'
+    : 'class="internal-link"';
+
+  return html.replace("<a ", `<a ${attributes} `);
+};
+
 const categoryKey = (value) =>
   String(value ?? "")
     .trim()
@@ -100,6 +119,99 @@ const requireProjectText = (value, projectKey, field) => {
   }
 
   return value.trim();
+};
+
+const normalizeInteractiveDemo = async ({
+  collection,
+  frontMatter,
+  projectKey,
+}) => {
+  const interactive = frontMatter.interactive;
+
+  if (interactive === undefined) {
+    return null;
+  }
+
+  if (collection !== "playground") {
+    throw projectError(
+      projectKey,
+      '"interactive" is only available in Playground projects',
+    );
+  }
+
+  if (!interactive || typeof interactive !== "object") {
+    throw projectError(projectKey, '"interactive" must be an object');
+  }
+
+  const src = requireProjectText(
+    interactive.src,
+    projectKey,
+    "interactive.src",
+  );
+
+  if (
+    !src.startsWith("/") ||
+    src.startsWith("//") ||
+    !/^[/?#A-Za-z0-9._~!$&'()*+,;=:@%-]+$/.test(src)
+  ) {
+    throw projectError(
+      projectKey,
+      '"interactive.src" must be a same-site absolute path beginning with "/"',
+    );
+  }
+
+  const pathname = new URL(src, "https://pierrelouis.net").pathname;
+  const sourcePath = path.resolve(ROOT, `.${pathname}`);
+
+  if (!sourcePath.startsWith(`${ROOT}${path.sep}`)) {
+    throw projectError(
+      projectKey,
+      '"interactive.src" must stay inside the site root',
+    );
+  }
+
+  try {
+    const sourceStat = await stat(sourcePath);
+
+    if (!sourceStat.isFile()) {
+      throw new Error("not a file");
+    }
+  } catch (error) {
+    if (error.code === "ENOENT" || error.message === "not a file") {
+      throw projectError(
+        projectKey,
+        `"interactive.src" does not exist: ${pathname}`,
+      );
+    }
+
+    throw error;
+  }
+
+  const height = interactive.height ?? 600;
+  const mobileHeight = interactive.mobileHeight ?? height;
+
+  for (const [field, value] of [
+    ["interactive.height", height],
+    ["interactive.mobileHeight", mobileHeight],
+  ]) {
+    if (!Number.isFinite(value) || value < 240 || value > 1200) {
+      throw projectError(
+        projectKey,
+        `"${field}" must be a number between 240 and 1200`,
+      );
+    }
+  }
+
+  return {
+    height,
+    mobileHeight,
+    src,
+    title: requireProjectText(
+      interactive.title,
+      projectKey,
+      "interactive.title",
+    ),
+  };
 };
 
 const parseProjectDocument = (source, projectKey) => {
@@ -382,6 +494,7 @@ const loadMarkdownContent = async ({
       gfm: true,
       headerIds: false,
       mangle: false,
+      renderer: PROJECT_MARKDOWN_RENDERER,
     });
     const previousBlock = blocks.at(-1);
 
@@ -594,6 +707,11 @@ const loadProject = async (entry, collection) => {
     projectDirectory,
     projectKey,
   });
+  const interactive = await normalizeInteractiveDemo({
+    collection,
+    frontMatter,
+    projectKey,
+  });
   const referencedMedia = new Set(
     [...images, ...content.images].map((image) => image.file),
   );
@@ -616,6 +734,7 @@ const loadProject = async (entry, collection) => {
       "description",
     ),
     images,
+    interactive,
     note:
       typeof frontMatter.note === "string" && frontMatter.note.trim()
         ? frontMatter.note.trim()
@@ -1304,6 +1423,31 @@ ${block.images
     .join("\n\n");
 };
 
+const renderProjectInteractive = (project) => {
+  if (!project.interactive) {
+    return "";
+  }
+
+  const { height, mobileHeight, src, title } = project.interactive;
+
+  return `
+
+                <figure
+                  class="project-interactive"
+                  style="--project-interactive-height: ${height}px; --project-interactive-mobile-height: ${mobileHeight}px"
+                >
+                  <iframe
+                    class="project-interactive__frame"
+                    src="${escapeHtml(src)}"
+                    title="${escapeHtml(title)}"
+                    loading="lazy"
+                    referrerpolicy="no-referrer"
+                    sandbox="allow-scripts allow-same-origin allow-downloads"
+                    allow="fullscreen"
+                  ></iframe>
+                </figure>`;
+};
+
 const renderPlaygroundSheet = (project) => {
   const titleId = `playground-sheet-title-${project.slug}`;
   const descriptionId = `playground-sheet-description-${project.slug}`;
@@ -1350,7 +1494,7 @@ const renderPlaygroundSheet = (project) => {
                 aria-label="${escapeHtml(project.title)} project content"
               >
 ${renderProjectContent(project, {
-})}
+})}${renderProjectInteractive(project)}
               </div>
             </div>
           </div>

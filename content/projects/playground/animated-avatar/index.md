@@ -1,15 +1,18 @@
 ---
-title: "Animated Avatar"
-description: "Bringing life to a simple design element with CSS animations."
-date: 2025-08-01
-slug: animated-avatar
-type: experiment
-tags:
-  - animation
-  - css
-  - interaction
-lang: en
-toc: false
+title: Animated Avatar
+order: 7
+description: Bringing life to a simple design element
+category: Web Design
+year: "2025"
+summary: Bringing life to a simple design element with CSS animations.
+interactive:
+  src: /projects/apps/animated-avatar.html
+  title: Interactive animated avatar states
+  height: 600
+  mobileHeight: 750
+listing:
+  image: listing/cover.png
+  alt: The animated avatar's round head and eyes.
 ---
 
 I've always wanted to bring life to the most simple design element possible. Using only code.
@@ -19,9 +22,3 @@ When I stumbled upon Nicolas' small avatar in the footer of his [portfolio](http
 I then played around for a bit, and created a dozen more animations with keyframes in CSS. It's incredible to see how much emotion you can give to a simple design element: 1 circle, 2 dots and a gradient.
 
 Here it is, in all its glory:
-
-<pl-animated-avatar class="post-media">
-  <p class="post-component-fallback">The interactive animated avatar demo requires JavaScript.</p>
-</pl-animated-avatar>
-
-[Click here for fullscreen](/posts/components/apps/avatar.html).

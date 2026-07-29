@@ -685,11 +685,6 @@ main {
   background: var(--color-media-bg);
 }
 
-.project-content__text a {
-  color: inherit;
-  text-underline-offset: 0.16em;
-}
-
 /* Shared presentation for the Conway feature on index pages and in the menu. */
 .featured-article,
 .mobile-menu__latest-link {

@@ -27,7 +27,6 @@ scrolling. Keep independent viewport-owning applications in iframes instead.
 The five built-in interactive article elements use `article-demos.js` as a
 progressive-enhancement shell around isolated local applications:
 
-- `pl-animated-avatar`
 - `pl-carousel-demo`
 - `pl-full-bleed-demo`
 - `pl-lissajous-lab`
