@@ -2,7 +2,7 @@
 title: Flamingo Estate
 order: 30
 description: Photography, Motion
-category: Graphic Design
+tags: [Graphic Design]
 year: "2025"
 summary: A photography and motion study focused on the ritual, texture and lived-in atmosphere surrounding Flamingo Estate.
 note: Still life, interior photography and short-form motion are sequenced as one warm, tactile campaign system.

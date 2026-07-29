@@ -35,12 +35,13 @@ const ANIMATED_WEBP_QUALITY = 80;
 const PROJECTS_PAGE = {
   title: "Projects — Pierre-Louis",
   description: "Selected projects and experiments by Pierre-Louis.",
+  // Hidden H1 used for the page's accessible document outline.
   heading: "Projects and experiments",
-  categories: ["Web Design", "Graphic Design"],
   allWorkLabel: "All Work",
   intro:
     "Featured projects & experiments, curated from 3 years of work. I mostly do web design but I also like to play around with graphic design work.",
   randomProjectLabel: "See a random experiment",
+  // Hidden H2 that labels the Featured projects section.
   featuredHeading: "Featured projects",
   playgroundHeading: "Playground",
   playgroundIntro:
@@ -89,7 +90,7 @@ PROJECT_MARKDOWN_RENDERER.link = function renderProjectMarkdownLink(token) {
   return html.replace("<a ", `<a ${attributes} `);
 };
 
-const categoryKey = (value) =>
+const tagKey = (value) =>
   String(value ?? "")
     .trim()
     .toLowerCase()
@@ -121,6 +122,33 @@ const requireProjectText = (value, projectKey, field) => {
   }
 
   return value.trim();
+};
+
+const requireProjectTags = (value, projectKey) => {
+  if (!Array.isArray(value) || value.length === 0) {
+    throw projectError(projectKey, '"tags" must be a non-empty list');
+  }
+
+  const tags = value.map((tag, index) =>
+    requireProjectText(tag, projectKey, `tags[${index}]`),
+  );
+  const seen = new Set();
+
+  for (const tag of tags) {
+    const key = tagKey(tag);
+
+    if (!key) {
+      throw projectError(projectKey, `tag "${tag}" cannot be used as a filter`);
+    }
+
+    if (seen.has(key)) {
+      throw projectError(projectKey, `duplicate tag "${tag}"`);
+    }
+
+    seen.add(key);
+  }
+
+  return tags;
 };
 
 const normalizeInteractiveDemo = async ({
@@ -705,8 +733,9 @@ const loadProject = async (entry, collection) => {
     (file) => !referencedMedia.has(file),
   );
 
+  const tags = requireProjectTags(frontMatter.tags, projectKey);
+
   return {
-    category: requireProjectText(frontMatter.category, projectKey, "category"),
     collection,
     contentBlocks: content.blocks,
     contentImages: content.images,
@@ -733,6 +762,9 @@ const loadProject = async (entry, collection) => {
             "description",
           ),
     title: requireProjectText(frontMatter.title, projectKey, "title"),
+    tags,
+    tagKeys: tags.map(tagKey),
+    primaryTag: tags[0],
     unusedMedia,
     year:
       typeof frontMatter.year === "string" && frontMatter.year.trim()
@@ -759,8 +791,6 @@ const assertUniqueOrder = (projects, collection) => {
 };
 
 const loadProjects = async () => {
-  const categories = PROJECTS_PAGE.categories;
-
   const projects = [];
 
   for (const collection of PROJECT_COLLECTIONS) {
@@ -809,17 +839,6 @@ const loadProjects = async () => {
   assertUnique(projects, "slug", "project slug");
   assertUnique(projects, "title", "project title");
 
-  const categoryKeys = new Set(categories.map(categoryKey));
-
-  for (const project of projects) {
-    if (!categoryKeys.has(categoryKey(project.category))) {
-      throw projectError(
-        project.projectKey,
-        `category "${project.category}" is not listed in PROJECTS_PAGE.categories`,
-      );
-    }
-  }
-
   const byOrder = (a, b) => a.order - b.order || a.slug.localeCompare(b.slug);
   const featured = projects
     .filter((project) => project.collection === "featured")
@@ -836,6 +855,22 @@ const loadProjects = async () => {
 
   assertUniqueOrder(featured, "featured");
   assertUniqueOrder(playground, "playground");
+
+  const filterLabels = new Map();
+
+  for (const project of [...featured, ...playground]) {
+    for (const tag of project.tags) {
+      const key = tagKey(tag);
+
+      if (!filterLabels.has(key)) {
+        filterLabels.set(key, tag);
+      }
+    }
+  }
+
+  const filters = [...filterLabels]
+    .map(([key, label]) => ({ key, label }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
   playground.forEach((project, index) => {
     if (!project.year) {
@@ -854,6 +889,7 @@ const loadProjects = async () => {
 
   return {
     featured,
+    filters,
     playground,
     warnings,
   };
@@ -1193,7 +1229,7 @@ const renderFeaturedProject = (project) => {
   return `            <li
               class="featured-project"
               data-project-carousel
-              data-project-category="${escapeHtml(categoryKey(project.category))}"
+              data-project-tags="${escapeHtml(project.tagKeys.join(" "))}"
             >
               <div
                 class="featured-project__track"
@@ -1261,7 +1297,7 @@ const renderPlaygroundProject = (project) => {
 
   return `            <li
               class="playground-card media-card"
-              data-project-category="${escapeHtml(categoryKey(project.category))}"
+              data-project-tags="${escapeHtml(project.tagKeys.join(" "))}"
             >
               <button
                 class="playground-card__button"
@@ -1439,7 +1475,7 @@ const renderPlaygroundSheet = (project) => {
                 <h2 class="playground-sheet__title" id="${escapeHtml(titleId)}">${escapeHtml(project.title)}</h2>
                 <p class="playground-sheet__description" id="${escapeHtml(descriptionId)}">${escapeHtml(project.description)}</p>
                 <div class="playground-sheet__meta" aria-label="Project details">
-                  <span class="playground-sheet__category">${escapeHtml(project.category)}</span>
+                  <span class="playground-sheet__category">${escapeHtml(project.primaryTag)}</span>
                   <time datetime="${escapeHtml(project.year)}">${escapeHtml(project.year)}</time>
                 </div>
               </header>
@@ -1455,29 +1491,25 @@ ${renderProjectContent(project, {})}${renderProjectInteractive(project)}
         </dialog>`;
 };
 
-const renderProjectsContent = ({ featured, playground }) => {
+const renderProjectsContent = ({ featured, filters, playground }) => {
   const projects = [...featured, ...playground];
   const projectCount = featured.length + playground.length;
-  const categoryCounts = new Map(
-    PROJECTS_PAGE.categories.map((category) => [
-      categoryKey(category),
-      projects.filter(
-        (project) => categoryKey(project.category) === categoryKey(category),
-      ).length,
+  const filterCounts = new Map(
+    filters.map(({ key }) => [
+      key,
+      projects.filter((project) => project.tagKeys.includes(key)).length,
     ]),
   );
-  const categoryFilters = PROJECTS_PAGE.categories
-    .map((category) => {
-      const key = categoryKey(category);
-
+  const tagFilters = filters
+    .map(({ key, label }) => {
       return `                <button
                   class="content-filter__button"
                   type="button"
                   data-project-filter="${escapeHtml(key)}"
                   aria-pressed="false"
                 >
-                  <span>${escapeHtml(category)}</span>
-                  <span class="content-filter__count" data-filter-count hidden>${categoryCounts.get(key) || 0}</span>
+                  <span>${escapeHtml(label)}</span>
+                  <span class="content-filter__count" data-filter-count hidden>${filterCounts.get(key) || 0}</span>
                 </button>`;
     })
     .join("\n");
@@ -1521,7 +1553,7 @@ ${playground.map(renderPlaygroundSheet).join("\n\n")}`
         >
           <div
             class="content-filter"
-            aria-label="Work categories"
+            aria-label="Project filters"
             data-project-filters
           >
             <span class="content-filter__symbol" aria-hidden="true">✦</span>
@@ -1536,7 +1568,7 @@ ${playground.map(renderPlaygroundSheet).join("\n\n")}`
                   <span>${escapeHtml(PROJECTS_PAGE.allWorkLabel)}</span>
                   <span class="content-filter__count" data-filter-count>${projectCount}</span>
                 </button>
-${categoryFilters}
+${tagFilters}
               </div>
 ${randomAction}
             </div>
@@ -1688,7 +1720,7 @@ ${header}
         >
           <header class="case-study-header">
             <div class="case-study-header__identity">
-              <span class="case-study-header__year">${escapeHtml(project.year ?? project.category)}</span>
+              <span class="case-study-header__year">${escapeHtml(project.year ?? project.primaryTag)}</span>
               <h2 class="case-study-header__title" id="case-study-title">
                 ${escapeHtml(project.title)}
               </h2>

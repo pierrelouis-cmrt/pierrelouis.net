@@ -2,7 +2,7 @@
 title: Animated Avatar
 order: 7
 description: Bringing life to a simple design element
-category: Web Design
+tags: [Web Design]
 year: "2025"
 summary: Bringing life to a simple design element with CSS animations.
 interactive:

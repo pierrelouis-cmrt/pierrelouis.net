@@ -2,7 +2,7 @@
 title: "Sweetgreen: Nicolandria"
 order: 10
 description: Photography
-category: Graphic Design
+tags: [Graphic Design]
 year: "2025"
 summary: An editorial campaign bringing cinematic character, warm light and saturated food styling into one playful visual world.
 note: The series moves between portraiture, tactile product detail and still-life photography while keeping every frame direct and recognisable.

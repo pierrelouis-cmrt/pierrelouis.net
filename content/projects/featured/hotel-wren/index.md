@@ -2,7 +2,7 @@
 title: Hotel Wren
 order: 20
 description: Web
-category: Web Design
+tags: [Web Design]
 year: "2025"
 summary: A digital direction translating the property's intimate interiors and coastal atmosphere into a quiet, image-led web experience.
 note: Restrained navigation, warm editorial photography and measured motion let the place lead the story.

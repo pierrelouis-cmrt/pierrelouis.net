@@ -11,20 +11,21 @@ const reducedMotionQuery = window.matchMedia(
   }
 
   const buttons = [...root.querySelectorAll("[data-project-filter]")];
-  const projects = [...document.querySelectorAll("[data-project-category]")];
+  const projects = [...document.querySelectorAll("[data-project-tags]")];
   const sections = [...document.querySelectorAll("[data-project-section]")];
   let activeFilter = "all";
 
   const update = () => {
     for (const project of projects) {
+      const tags = project.dataset.projectTags?.split(/\s+/) || [];
+
       project.hidden =
-        activeFilter !== "all" &&
-        project.dataset.projectCategory !== activeFilter;
+        activeFilter !== "all" && !tags.includes(activeFilter);
     }
 
     for (const section of sections) {
       section.hidden = !section.querySelector(
-        "[data-project-category]:not([hidden])",
+        "[data-project-tags]:not([hidden])",
       );
     }
 

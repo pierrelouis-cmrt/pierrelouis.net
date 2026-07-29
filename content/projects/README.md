@@ -37,12 +37,13 @@ from `media/`. Copy an image into both folders if it serves both purposes.
 ## Page settings
 
 The `PROJECTS_PAGE` object near the top of `scripts/build-projects.mjs` controls
-the page title and description, social metadata, hidden heading, filter labels
-and categories, intro copy, and Playground copy.
+the page title and description, social metadata, hidden headings, the “All
+Work” label, intro copy, and Playground copy.
 
-A project's `category` must match one of `PROJECTS_PAGE.categories`; spelling,
-case, accents, and punctuation are normalized for matching and filters.
-Category order there is also filter order on the page.
+Project filters are generated automatically from the `tags` in every Featured
+and Playground project. A project can appear under multiple filters, and the
+filter list is sorted alphabetically. The first tag is also the project's
+primary label in places that show one.
 
 ## Project template
 
@@ -53,7 +54,7 @@ Create `<collection>/<slug>/index.md`:
 title: My Project
 order: 10
 description: Web Design, Art Direction
-category: Web Design
+tags: [Web Design, Interaction]
 year: "2026"
 summary: A concise introduction used by the case study and page metadata.
 note: An optional supporting sentence shown below the case-study introduction.
@@ -86,8 +87,8 @@ Explain the work with normal Markdown.
 | `title` | Yes | Display title; must be unique. |
 | `order` | Yes | Numeric position within its collection; lower comes first and duplicates are rejected. Spaced values such as `10`, `20`, `30` make insertion easy. |
 | `description` | Yes | Short label shown on the Projects listing/card. |
-| `category` | Yes | Category filter; must exist in `PROJECTS_PAGE.categories` in the build script. |
-| `year` | Playground | Shown in the Playground sheet. Featured projects may omit it, in which case their case-study label falls back to `category`. |
+| `tags` | Yes | Non-empty list used to generate filters automatically. The first tag is the project's primary label. |
+| `year` | Playground | Shown in the Playground sheet. Featured projects may omit it, in which case their case-study label falls back to the first tag. |
 | `summary` | No | Case-study introduction and description metadata; falls back to `description`. |
 | `note` | No | Second case-study introduction paragraph; has no visible effect in Playground. |
 | `interactive` | Playground | Optional same-site iframe demo appended after the Markdown body. |
@@ -216,7 +217,7 @@ npm run build            # Build the complete production site
 npm run preview          # Serve the existing production build
 ```
 
-The build validates required metadata, category membership, unique
+The build validates required metadata, tags, unique
 slugs/titles/orders, paths, file types, file existence, alt text, image
 placement, modifiers, and carousel rules. Unreferenced project images produce a
 warning without failing the build.
