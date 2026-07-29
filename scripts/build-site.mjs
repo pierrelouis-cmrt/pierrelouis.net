@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildLists } from "./build-lists.mjs";
 import { buildPhotos } from "./build-photos.mjs";
+import { buildPosts } from "./build-posts.mjs";
 import { buildProjects } from "./build-projects.mjs";
 import { syncSharedComponents } from "./shared-components.mjs";
 
@@ -103,6 +104,7 @@ const assembleDist = async () => {
 const lists = await buildLists();
 const projects = await buildProjects();
 const photos = await buildPhotos();
+const posts = await buildPosts();
 const sharedComponents = await syncSharedComponents();
 const copiedPaths = await assembleDist();
 
@@ -123,6 +125,10 @@ console.log(
     `${photos.assets.generated} generated asset(s), ` +
     `${photos.assets.skipped} cached asset(s), ` +
     `${photos.assets.removed} stale item(s) removed.`,
+);
+console.log(
+  `Built posts: ${posts.posts} page(s), ${posts.removed} stale page(s) removed, ` +
+    `${posts.warnings.length} warning(s).`,
 );
 console.log(
   `Synced shared components: ${sharedComponents.length} file(s) updated.`,

@@ -1,0 +1,35 @@
+          <footer class="post-endmatter" aria-label="Article information">
+            <div class="post-endmatter__inner">
+              <section aria-labelledby="post-tags-title">
+                <h2 class="post-endmatter__label" id="post-tags-title">Tags</h2>
+                <ul class="post-tags">
+                  <li><span class="post-tags__tag">{{ date | dateYear }}</span></li>
+                  {% for tag in topicTags %}
+                  <li><span class="post-tags__tag">{{ tag | escape }}</span></li>
+                  {% endfor %}
+                  <li><span class="post-tags__tag">{{ type | typeLabel }}</span></li>
+                </ul>
+              </section>
+
+              <section class="post-author" aria-labelledby="post-author-title">
+                <h2 class="post-endmatter__label" id="post-author-title">Author</h2>
+                <p class="post-author__name">Pierre-Louis</p>
+              </section>
+
+              {% if footnotes %}
+              <section aria-labelledby="post-footnotes-title">
+                <h2 class="post-endmatter__label" id="post-footnotes-title">Footnotes</h2>
+{{ footnotes | safe }}
+              </section>
+              {% endif %}
+
+              {% if sources %}
+              <section aria-labelledby="post-sources-title">
+                <h2 class="post-endmatter__label" id="post-sources-title">Sources</h2>
+                <div class="post-sources">
+{{ sources | safe }}
+                </div>
+              </section>
+              {% endif %}
+            </div>
+          </footer>

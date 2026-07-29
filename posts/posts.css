@@ -323,6 +323,16 @@
   line-height: var(--line-height-compact);
 }
 
+.featured-article__media--math {
+  display: grid;
+  place-items: center;
+  background: var(--color-media-bg);
+  color: var(--color-caption);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 72px;
+  line-height: 1;
+}
+
 @media (min-width: 1101px) and (max-width: 1360px) {
   .post-row__secondary {
     grid-template-columns: minmax(0, 1fr);

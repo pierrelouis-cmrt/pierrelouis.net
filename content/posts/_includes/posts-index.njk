@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Posts - Pierre-Louis</title>
+    <meta name="description" content="Articles, notes and experiments from Pierre-Louis on design, code, science and reflection." />
+    <meta property="og:title" content="Posts - Pierre-Louis" />
+    <meta property="og:description" content="Articles, notes and experiments on design, code, science and reflection." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ siteUrl }}/posts/" />
+    <meta property="og:image" content="{{ siteUrl }}/assets/image_mobile_featured.gif" />
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="stylesheet" href="./posts.css" />
+    <script src="../script.js" defer></script>
+    <script src="./posts.js" defer></script>
+    <script src="../footer.js" defer></script>
+  </head>
+  <body>
+    <div class="site-shell posts-page">
+{{ postsSiteHeader | safe }}
+
+      <main>
+        <h1 class="sr-only">Posts</h1>
+        <section class="posts-intro page-intro" aria-label="Posts introduction">
+          <div class="content-filter" aria-label="Post filters" data-post-filters>
+            <span class="content-filter__symbol" aria-hidden="true">✱</span>
+            <div class="content-filter__content">
+              <div class="content-filter__options" aria-label="Post types">
+                {% for filter in [
+                  { value: "all", label: "All" },
+                  { value: "article", label: "Articles" },
+                  { value: "note", label: "Notes" },
+                  { value: "experiment", label: "Experiments" }
+                ] %}
+                <button
+                  class="content-filter__button{% if filter.value == 'all' %} is-active{% endif %}"
+                  type="button"
+                  data-post-filter="{{ filter.value }}"
+                  aria-pressed="{% if filter.value == 'all' %}true{% else %}false{% endif %}"
+                >
+                  <span>{{ filter.label }}</span>
+                  <span class="content-filter__count" data-filter-count{% if filter.value != 'all' %} hidden{% endif %}>0</span>
+                </button>
+                {% endfor %}
+              </div>
+              <label class="content-filter__search">
+                <span class="sr-only">Search posts</span>
+                <input class="content-filter__input" type="search" placeholder="Search..." autocomplete="off" spellcheck="false" data-post-search />
+              </label>
+              <p class="content-filter__empty" data-post-empty hidden>No posts found</p>
+            </div>
+          </div>
+          <p class="posts-intro__copy intro-copy">
+            My personal blog. On here you'll find some self reflection, some
+            coding or very scientific oriented content, etc. Articles are long,
+            Notes are shorter and Experiments are coding things!
+          </p>
+        </section>
+
+        <section class="posts-content" aria-label="Published posts">
+          <ol class="post-list">
+            {% for year in collections.publishedPosts | archiveGroups %}
+            {% set isFirstYear = loop.first %}
+            <li class="post-year-group" data-post-year-group>
+              <div class="post-year-group__layout">
+                <span class="post-row__year">{{ year.value }} /</span>
+                <ol class="post-year-group__months">
+                  {% for month in year.months %}
+                  {% set isFirstMonth = loop.first %}
+                  <li class="post-month-group" data-post-month-group>
+                    <div class="post-month-group__layout">
+                      <time class="post-row__month" datetime="{{ month.yearMonth }}">{{ month.label }}</time>
+                      <ol class="post-month-group__posts">
+                        {% for post in month.posts %}
+                        <li
+                          class="post-row {% if loop.first and isFirstYear and isFirstMonth %}post-row--year-start{% elif loop.first %}post-row--month-start{% else %}post-row--month-continuation{% endif %}"
+                          data-post-type="{{ post.data.type }}"
+                          data-post-search="{{ post | searchText | escape }}"
+                        >
+                          <div class="post-row__primary">
+                            {% if loop.first %}
+                            <time class="post-row__compact-date" datetime="{{ month.yearMonth }}">{% if isFirstYear and isFirstMonth %}{{ year.value }} / {% endif %}{{ month.label }}</time>
+                            {% endif %}
+                            <h2 class="post-row__title">{{ post.data.title | escape }}</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">{{ post.data.description | escape }}</p>
+                            <a class="post-row__link internal-link" href="./{{ post.data.slug }}/" aria-label="Read {{ post.data.title | escape }}">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
+                        {% endfor %}
+                      </ol>
+                    </div>
+                  </li>
+                  {% endfor %}
+                </ol>
+              </div>
+            </li>
+            {% endfor %}
+          </ol>
+
+          <aside class="featured-post" aria-label="Featured post">
+            <span class="featured-post__eyebrow">Featured Post</span>
+            <a class="featured-article" href="./{{ featuredPost.slug }}/">
+              <span class="featured-article__title">{{ featuredPost.title | escape }}</span>
+              <span class="featured-article__media featured-article__media--math" aria-hidden="true">π</span>
+              <span class="featured-article__cta">Read More ↗</span>
+            </a>
+          </aside>
+        </section>
+      </main>
+
+{{ postsSiteFooter | safe }}
+    </div>
+  </body>
+</html>

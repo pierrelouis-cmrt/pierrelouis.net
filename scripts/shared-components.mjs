@@ -186,13 +186,17 @@ export const renderSiteHeader = (config) => {
                 </h2>
                 <a
                   class="mobile-menu__latest-link"
-                  href="${root}projects/conways-reverse-game-of-life/"
+                  href="${root}projects/sweetgreen-nicolandria/"
                 >
                   <span class="mobile-menu__latest-title"
-                    >Reversing Conway's Game Of Life with Diffusion</span
+                    >Sweetgreen: Nicolandria</span
                   >
                   <span class="mobile-menu__latest-media" aria-hidden="true">
-                    <span class="mobile-menu__latest-image"></span>
+                    <img
+                      class="mobile-menu__latest-image"
+                      src="${root}assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                      alt=""
+                    />
                   </span>
                   <span class="mobile-menu__see-more">See More ↗</span>
                 </a>

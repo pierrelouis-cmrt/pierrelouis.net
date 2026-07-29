@@ -12,26 +12,27 @@ Personal portfolio built with semantic HTML, modern CSS, vanilla JavaScript, and
 
 ## Technical overview
 
-The site is a static, multi-page application served directly from the repository root. It intentionally has no front-end framework, bundler, or runtime dependencies: each route is an HTML document with page-specific CSS and JavaScript layered on top of shared site styles and behavior.
+The site is a static, multi-page application served directly from the repository root. It has no client-side framework or production runtime: each route is an HTML document with page-specific CSS and JavaScript layered on top of shared site styles and behavior. A small Node.js toolchain generates content at build time.
 
 | Layer | Implementation |
 | --- | --- |
-| Markup | Semantic, route-based HTML documents |
+| Markup | Semantic HTML; Eleventy compiles Obsidian Markdown posts |
 | Styling | Shared `base.css` plus page-level stylesheets |
 | Client behavior | Vanilla JavaScript with progressive enhancement |
-| Build tooling | Node.js ES modules using built-in APIs |
+| Build tooling | Node.js ES modules, Eleventy, Markdown-it, KaTeX, and Highlight.js |
 | Image processing | ImageMagick-generated WebP variants |
 | Development server | Custom Node HTTP server with Server-Sent Events live reload |
 
 ## Build system
 
-`npm run build` runs five build stages:
+`npm run build` runs six build stages:
 
 1. `scripts/build-lists.mjs` validates the dedicated HTML source for every Lists card and compiles each fragment into a project-style sheet.
 2. `scripts/build-projects.mjs` reads `content/projects/projects.yml`, validates project metadata and source images, generates resized WebP production assets, then regenerates the marked project-listing region.
 3. `scripts/build-photos.mjs` reads the collections in `content/photos/`, validates their metadata, generates optimized gallery assets, and writes the photo page and its searchable JSON data.
-4. `scripts/shared-components.mjs` renders the canonical header and footer into every configured HTML page, adjusting paths and active navigation state per route.
-5. The deployable site is assembled in the Git-ignored `dist/` directory.
+4. `scripts/build-posts.mjs` validates and compiles the mirrored Obsidian articles, build-time math and code rendering, post index, and local asset references.
+5. `scripts/shared-components.mjs` renders the canonical header and footer into every configured HTML page, adjusting paths and active navigation state per route.
+6. The deployable site is assembled in the Git-ignored `dist/` directory.
 
 The projects pipeline keeps original images in `content/projects/` and writes
 production-only WebP files to `assets/projects/`. Regular images are capped at
@@ -57,9 +58,10 @@ Requirements:
 - A recent version of [Node.js](https://nodejs.org/)
 - [ImageMagick](https://imagemagick.org/) available through the `magick` command when rebuilding image assets
 
-No package installation is currently required because the project has no npm dependencies.
+Install the pinned build dependencies once, then start development:
 
 ```bash
+npm install
 npm run dev
 ```
 
@@ -70,6 +72,9 @@ This performs an initial build, starts the site at `http://localhost:8000`, watc
 | `npm run dev` | Build, serve, watch, and live reload |
 | `npm run build` | Regenerate source outputs and assemble the production site in `dist/` |
 | `npm run build:lists` | Compile `lists/sheets/*.html` into the Lists page |
+| `npm run build:posts` | Validate and compile the local post source mirror |
+| `npm run sync:posts` | Safely mirror the Obsidian articles, build them, and run changed-page browser QA |
+| `npm run qa:posts` | Build and browser-test every generated post at desktop and mobile sizes |
 | `npm run preview` | Serve the existing `dist/` build on port 4173 |
 
 ## Repository structure
@@ -79,6 +84,7 @@ This performs an initial build, starts the site at `http://localhost:8000`, watc
 ├── assets/                 # Fonts, static media, and generated production images
 ├── content/projects/       # Project metadata and original source images
 ├── content/photos/         # Original photographs and collection.yml metadata
+├── content/posts/          # Mirrored Markdown, templates, migration data, and guide
 ├── scripts/                # Build pipeline, component sync, and local server
 ├── projects/               # Project case studies
 ├── posts/                  # Writing
@@ -96,8 +102,9 @@ This performs an initial build, starts the site at `http://localhost:8000`, watc
 - Edit shared navigation and footer markup in `scripts/shared-components.mjs`, then run the build; direct edits to generated copies will be overwritten.
 - Add project sources under `content/projects/` and update `content/projects/projects.yml`. The complete workflow is documented in [`content/projects/README.md`](./content/projects/README.md).
 - Add or update photography in `content/photos/`. The collection format is documented in [`content/photos/README.md`](./content/photos/README.md).
+- Write posts in the Obsidian vault, then run `npm run sync:posts`. The Markdown contract, components, migration rules, and full example are documented in [`content/posts/README.md`](./content/posts/README.md).
 - Edit list-sheet content in `lists/sheets/`. Each card has one HTML fragment and the complete format is documented in [`lists/sheets/README.md`](./lists/sheets/README.md).
-- Generated project and photo HTML, JSON, and WebP assets are committed alongside their sources so production hosting only needs to serve static files.
+- Generated project, photo, and post HTML and assets are committed alongside their sources so production hosting only needs to serve static files.
 - Clean URLs work through directory-level `index.html` files; the project does not require server-side routing.
 
 ## License

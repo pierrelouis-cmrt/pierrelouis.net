@@ -3,6 +3,7 @@ import { readFile, stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { renderPostHeaderLab } from "./post-header-lab.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -79,6 +80,8 @@ export const startSiteServer = async ({
   const siteRoot = path.resolve(root);
 
   const server = createServer(async (request, response) => {
+    const requestUrl = new URL(request.url, "http://localhost");
+
     if (dev && request.url === "/__dev/events") {
       response.writeHead(200, {
         "Cache-Control": "no-cache",
@@ -88,6 +91,24 @@ export const startSiteServer = async ({
       response.write("\n");
       clients.add(response);
       request.on("close", () => clients.delete(response));
+      return;
+    }
+
+    if (
+      dev &&
+      requestUrl.searchParams.get("header-lab") === "1" &&
+      /^\/posts\/[a-z0-9-]+\/$/.test(requestUrl.pathname)
+    ) {
+      response.writeHead(200, {
+        "Cache-Control": "no-store",
+        "Content-Type": "text/html; charset=utf-8",
+      });
+      response.end(
+        renderPostHeaderLab({ pathname: requestUrl.pathname }).replace(
+          "</body>",
+          `${DEV_RELOAD_SCRIPT}\n  </body>`,
+        ),
+      );
       return;
     }
 
@@ -111,7 +132,10 @@ export const startSiteServer = async ({
       const extension = path.extname(filePath).toLowerCase();
       const contentType = MIME_TYPES.get(extension) || "application/octet-stream";
 
-      if (dev && extension === ".html") {
+      const requestPath = getRequestPath(request.url);
+      const isIsolatedPostHeader = requestPath.startsWith("/posts/headers/");
+
+      if (dev && extension === ".html" && !isIsolatedPostHeader) {
         const html = await readFile(filePath, "utf8");
         response.writeHead(200, { "Content-Type": contentType });
         response.end(html.replace("</body>", `${DEV_RELOAD_SCRIPT}\n  </body>`));

@@ -1,3 +1,8 @@
+
+
+
+
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -7,78 +12,47 @@
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
     <title>Making things readable by design - Pierre-Louis</title>
-    <meta
-      name="description"
-      content="Why readable design is not only about color, but also contrast, rhythm and meaning."
-    />
-    <meta
-      property="og:title"
-      content="Making things readable by design - Pierre-Louis"
-    />
-    <meta
-      property="og:description"
-      content="Why readable design is not only about color, but also contrast, rhythm and meaning."
-    />
+    <meta name="description" content="Why readable design is not only about color, but also contrast and meaning." />
+    <meta property="og:title" content="Making things readable by design - Pierre-Louis" />
+    <meta property="og:description" content="Why readable design is not only about color, but also contrast and meaning." />
     <meta property="og:type" content="article" />
-    <meta
-      property="og:url"
-      content="https://pierrelouis.net/posts/making-things-readable-by-design/"
-    />
+    <meta property="og:url" content="https://pierrelouis.net/posts/making-things-readable-by-design/" />
     <meta
       property="og:image"
-      content="https://pierrelouis.net/assets/image_featured_3.webp"
+      content="https://pierrelouis.net/assets/image_mobile_featured.gif"
     />
-    <link
-      rel="icon"
-      type="image/png"
-      href="/favicon/favicon-96x96.png"
-      sizes="96x96"
-    />
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
     <link rel="shortcut icon" href="/favicon/favicon.ico" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/favicon/apple-touch-icon.png"
-    />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
     <link rel="stylesheet" href="../../base.css" />
-    <link
-      rel="stylesheet"
-      href="../../assets/vendor/katex/katex.min.css"
-    />
+    <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css" />
     <link rel="stylesheet" href="../post.css" />
+
     <script src="../../script.js" defer></script>
-    <script src="../../assets/vendor/katex/katex.min.js" defer></script>
-    <script
-      src="../../assets/vendor/katex/auto-render.min.js"
-      defer
-    ></script>
-    <script src="../../assets/vendor/katex/copy-tex.min.js" defer></script>
-    <script
-      src="../../assets/vendor/highlight/highlight.min.js"
-      defer
-    ></script>
     <script src="../post.js" defer></script>
+
     <script src="../../footer.js" defer></script>
   </head>
   <body>
-    <!--
-      Navbar theme: keep post-page--nav-light for light links over a dark
-      header, or remove it to use the site's default dark navigation.
-    -->
     <div
-      class="site-shell post-page post-page--backdrop post-page--nav-light"
+      class="site-shell post-page"
+      data-header-backdrop=""
+      data-header-nav="dark"
+      data-post-type="article"
+
     >
       <header class="site-header" aria-label="Primary navigation">
-        <a class="brand-mark post-back" href="../" aria-label="Back">
-          <span>Back</span>
+        <a class="brand-mark brand-mark--back" href="../" aria-label="Back to posts">
+          <span class="brand-mark__back-full">Back to posts</span>
+          <span class="brand-mark__back-short" aria-hidden="true">Back</span>
         </a>
 
         <nav class="primary-nav" aria-label="Main pages">
           <a class="primary-nav__link" href="../../projects/">Projects</a>
-          <a class="primary-nav__link" href="../">Posts</a>
+          <a class="primary-nav__link" href="../../posts/">Posts</a>
           <a class="primary-nav__link" href="../../photos/">Photos</a>
         </nav>
 
@@ -128,11 +102,12 @@
           >
             <div class="mobile-menu__bar">
               <a
-                class="mobile-menu__brand mobile-menu__brand--post-back"
+                class="mobile-menu__brand mobile-menu__brand--back"
                 href="../"
-                aria-label="Back"
+                aria-label="Back to posts"
               >
-                <span>Back</span>
+                <span class="mobile-menu__brand__back-full">Back to posts</span>
+                <span class="mobile-menu__brand__back-short" aria-hidden="true">Back</span>
               </a>
             </div>
 
@@ -145,10 +120,8 @@
                   Main Pages
                 </h2>
                 <nav class="mobile-menu__links" aria-label="Main pages">
-                  <a class="mobile-menu__link" href="../../projects/"
-                    >Projects</a
-                  >
-                  <a class="mobile-menu__link" href="../">Posts</a>
+                  <a class="mobile-menu__link" href="../../projects/">Projects</a>
+                  <a class="mobile-menu__link" href="../../posts/">Posts</a>
                   <a class="mobile-menu__link" href="../../photos/">Photos</a>
                 </nav>
               </section>
@@ -162,13 +135,17 @@
                 </h2>
                 <a
                   class="mobile-menu__latest-link"
-                  href="../../projects/conways-reverse-game-of-life/"
+                  href="../../projects/sweetgreen-nicolandria/"
                 >
                   <span class="mobile-menu__latest-title"
-                    >Reversing Conway's Game Of Life with Diffusion</span
+                    >Sweetgreen: Nicolandria</span
                   >
                   <span class="mobile-menu__latest-media" aria-hidden="true">
-                    <span class="mobile-menu__latest-image"></span>
+                    <img
+                      class="mobile-menu__latest-image"
+                      src="../../assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                      alt=""
+                    />
                   </span>
                   <span class="mobile-menu__see-more">See More ↗</span>
                 </a>
@@ -183,12 +160,8 @@
                 </h2>
                 <nav class="mobile-menu__links" aria-label="More about me">
                   <a class="mobile-menu__link" href="../../about/">Who I am</a>
-                  <a class="mobile-menu__link" href="../../now/"
-                    >What I'm doing</a
-                  >
-                  <a class="mobile-menu__link" href="../../someday/"
-                    >Where I'm going</a
-                  >
+                  <a class="mobile-menu__link" href="../../now/">What I'm doing</a>
+                  <a class="mobile-menu__link" href="../../someday/">Where I'm going</a>
                 </nav>
               </section>
 
@@ -201,9 +174,7 @@
                 </h2>
                 <nav class="mobile-menu__links" aria-label="More links">
                   <a class="mobile-menu__link" href="../../lists/">Catalogs</a>
-                  <a class="mobile-menu__link" href="../../links/"
-                    >Links &amp; Socials</a
-                  >
+                  <a class="mobile-menu__link" href="../../links/">Links &amp; Socials</a>
                 </nav>
               </section>
             </div>
@@ -220,67 +191,31 @@
 
       <main>
         <article>
-          <header class="post-hero post-hero--with-backdrop">
-            <iframe
-              class="post-hero__backdrop"
-              src="../headers/bidi-blue.html"
-              title="Decorative animated blue gradient"
-              aria-hidden="true"
-              role="presentation"
-              tabindex="-1"
-              loading="eager"
-              sandbox="allow-scripts"
-              data-post-hero-backdrop
-            ></iframe>
+          <header class="post-hero">
+
 
             <p class="post-hero__meta">
-              <time class="post-hero__date" datetime="2026-05-18"
-                >May 18, 2026</time
-              >
-              <span class="post-hero__tag">Design</span>
+              <time class="post-hero__date" datetime="2026-05-09">May 9, 2026</time>
+
               <span class="post-hero__tag">Article</span>
             </p>
 
             <h1 class="post-hero__title">Making things readable by design</h1>
+            <p class="post-hero__dek">Why readable design is not only about color, but also contrast and meaning.</p>
 
-            <p class="post-hero__dek">
-              Readability is not only a matter of type size. It is the quiet
-              agreement between contrast, rhythm, space and meaning.
-            </p>
 
-            <figure class="post-hero__media post-hero__figure">
-              <button
-                class="post-hero__frame post-lightbox__trigger"
-                type="button"
-                data-post-lightbox-item
-              >
-                <img
-                  class="post-hero__image"
-                  src="../../assets/image_featured_3.webp"
-                  width="1400"
-                  height="1736"
-                  alt="A laptop displaying an editorial interface in a sunlit room."
-                />
-              </button>
-              <figcaption class="post-caption">
-                <span>An interface should invite reading before asking for it.</span>
-                <span class="post-caption__index">Opening image / 01</span>
-              </figcaption>
-            </figure>
           </header>
 
           <div class="post-reading">
+
             <nav
               class="post-toc"
               aria-label="Table of contents"
               data-post-toc
+              data-toc-mode="auto"
               hidden
             >
-              <div
-                class="post-toc__desktop"
-                data-post-toc-desktop
-              ></div>
-
+              <div class="post-toc__desktop" data-post-toc-desktop></div>
               <div class="post-toc__mobile">
                 <button
                   class="post-toc__mobile-toggle"
@@ -289,347 +224,38 @@
                   aria-controls="post-toc-panel"
                   data-post-toc-toggle
                 >
-                  <span
-                    class="post-toc__current"
-                    data-post-toc-current
-                  ></span>
-                  <svg
-                    class="post-toc__chevron"
-                    width="10"
-                    height="16"
-                    viewBox="0 0 10 16"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M.21 5.352a.714.714 0 0 1 1.01 0L5 9.132l3.78-3.78a.714.714 0 0 1 1.01 1.01l-4.285 4.286a.714.714 0 0 1-1.01 0L.209 6.362a.714.714 0 0 1 0-1.01"
-                    />
+                  <span class="post-toc__current" data-post-toc-current></span>
+                  <svg class="post-toc__chevron" width="10" height="16" viewBox="0 0 10 16" aria-hidden="true">
+                    <path fill="currentColor" d="M.21 5.352a.714.714 0 0 1 1.01 0L5 9.132l3.78-3.78a.714.714 0 0 1 1.01 1.01l-4.285 4.286a.714.714 0 0 1-1.01 0L.209 6.362a.714.714 0 0 1 0-1.01" />
                   </svg>
                 </button>
-
                 <div
                   class="post-toc__mobile-panel"
                   id="post-toc-panel"
                   aria-hidden="true"
                   data-post-toc-panel
                 >
-                  <div
-                    class="post-toc__mobile-scroll"
-                    data-post-toc-mobile
-                  ></div>
+                  <div class="post-toc__mobile-scroll" data-post-toc-mobile></div>
                 </div>
               </div>
             </nav>
 
+
             <div class="post-body">
-            <p>
-              A page becomes readable before a single word is understood. The
-              eye notices relationships first: what is loud, what is quiet,
-              where one thought ends and another can begin. Good typography
-              turns those relationships into a path.<sup
-                class="post-footnote-ref"
-                id="footnote-ref-1"
-                ><a
-                  href="#footnote-1"
-                  role="doc-noteref"
-                  aria-label="Read footnote 1"
-                  >1</a
-                ></sup
-              >
-            </p>
-
-            <p>
-              That path should feel almost obvious. Not because the design is
-              neutral, but because every decision points in the same direction.
-              Type, image and empty space are all saying: start here, move at
-              this pace, pause when you need to.
-            </p>
-
-            <h2>Readability begins with hierarchy</h2>
-
-            <p>
-              Hierarchy is often reduced to making a title bigger. Scale helps,
-              but it is only one signal among many. Position, density, tone and
-              repetition can establish order with far more subtlety. A small
-              line of text placed exactly where it is expected can orient a
-              reader faster than an oversized label.
-            </p>
-
-            <p>
-              The useful question is not “is this heading large enough?” It is
-              “can someone understand the shape of this page without reading
-              it?” If the answer is yes, the hierarchy is already doing real
-              work.
-            </p>
-
-            <figure class="post-media">
-              <button
-                class="post-media__frame post-lightbox__trigger"
-                type="button"
-                data-post-lightbox-item
-              >
-                <img
-                  class="post-media__asset"
-                  src="../../assets/photos-full/2026-cadaques-spain/16.webp"
-                  width="3024"
-                  height="4032"
-                  loading="lazy"
-                  alt="Sunlight refracting through moving water in Cadaqués."
-                />
-              </button>
-              <figcaption class="post-caption">
-                <span
-                  >Contrast is a relationship, not an isolated value.<sup
-                    class="post-footnote-ref"
-                    id="footnote-ref-2"
-                    ><a
-                      href="#footnote-2"
-                      role="doc-noteref"
-                      aria-label="Read footnote 2"
-                      >2</a
-                    ></sup
-                  ></span
-                >
-                <span class="post-caption__index">Cadaqués / 2026</span>
-              </figcaption>
-            </figure>
-
-            <h3>Contrast gives structure a voice</h3>
-
-            <p>
-              Contrast decides what arrives first. Color is one way to create
-              it, but weight, width, movement and negative space can be just as
-              articulate. The strongest pages rarely use all of these at once.
-              They choose one or two and let consistency make them legible.
-            </p>
-
-            <blockquote>
-              Readability is the feeling that the page is meeting you halfway.
-            </blockquote>
-
-            <h4>Use fewer signals, more consistently</h4>
-
-            <p>
-              When every element competes, emphasis stops carrying meaning.
-              Repeating a restrained set of signals makes the exceptions
-              valuable: one italic phrase, one shift in scale, one image that
-              breaks the measure.
-            </p>
-
-            <p>
-              This is also why a coherent system can feel more expressive than
-              a collection of isolated ideas. Constraints let small changes
-              register. A reader does not have to relearn the page at every
-              section.
-            </p>
-
-            <section
-              class="post-gallery"
-              aria-label="Image gallery"
-              data-post-gallery
-            >
-              <div
-                class="post-gallery__viewport"
-                role="region"
-                aria-label="Image gallery"
-                tabindex="0"
-                data-gallery-viewport
-              >
-                <ol class="post-gallery__track">
-                  <li
-                    class="post-gallery__item post-gallery__item--portrait"
-                    data-gallery-item
-                  >
-                    <figure class="post-gallery__slide">
-                      <button
-                        class="post-gallery__image-wrap post-lightbox__trigger"
-                        type="button"
-                        data-post-lightbox-item
-                      >
-                        <img
-                          class="post-gallery__image"
-                          src="../../assets/photos-full/2025-stockholm-sweden/01.webp"
-                          width="3024"
-                          height="4032"
-                          loading="lazy"
-                          alt="Modernist glass architecture against a pale blue sky in Stockholm."
-                        />
-                      </button>
-                      <figcaption class="post-gallery__caption">
-                        Modern planes, Stockholm.<sup
-                          class="post-footnote-ref"
-                          id="footnote-ref-3"
-                          ><a
-                            href="#footnote-3"
-                            role="doc-noteref"
-                            aria-label="Read footnote 3"
-                            >3</a
-                          ></sup
-                        >
-                      </figcaption>
-                    </figure>
-                  </li>
-                  <li
-                    class="post-gallery__item post-gallery__item--landscape"
-                    data-gallery-item
-                  >
-                    <figure class="post-gallery__slide">
-                      <button
-                        class="post-gallery__image-wrap post-lightbox__trigger"
-                        type="button"
-                        data-post-lightbox-item
-                      >
-                        <img
-                          class="post-gallery__image"
-                          src="../../assets/photos-full/2025-stockholm-sweden/03.webp"
-                          width="4032"
-                          height="3024"
-                          loading="lazy"
-                          alt="The Stockholm skyline stacked in dense architectural layers."
-                        />
-                      </button>
-                      <figcaption class="post-gallery__caption">
-                        The city compressed into layers.
-                      </figcaption>
-                    </figure>
-                  </li>
-                  <li
-                    class="post-gallery__item post-gallery__item--portrait"
-                    data-gallery-item
-                  >
-                    <figure class="post-gallery__slide">
-                      <button
-                        class="post-gallery__image-wrap post-lightbox__trigger"
-                        type="button"
-                        data-post-lightbox-item
-                      >
-                        <img
-                          class="post-gallery__image"
-                          src="../../assets/photos-full/2025-stockholm-sweden/04.webp"
-                          width="3024"
-                          height="4032"
-                          loading="lazy"
-                          alt="A historic tower framed by trees in Stockholm."
-                        />
-                      </button>
-                      <figcaption class="post-gallery__caption">
-                        A vertical anchor among trees.
-                      </figcaption>
-                    </figure>
-                  </li>
-                  <li
-                    class="post-gallery__item post-gallery__item--landscape"
-                    data-gallery-item
-                  >
-                    <figure class="post-gallery__slide">
-                      <button
-                        class="post-gallery__image-wrap post-lightbox__trigger"
-                        type="button"
-                        data-post-lightbox-item
-                      >
-                        <img
-                          class="post-gallery__image"
-                          src="../../assets/photos-full/2025-aurland-norway/04.webp"
-                          width="4024"
-                          height="3016"
-                          loading="lazy"
-                          alt="Mountains reflected in the still water of a Norwegian fjord."
-                        />
-                      </button>
-                      <figcaption class="post-gallery__caption">
-                        Space released at the horizon.
-                      </figcaption>
-                    </figure>
-                  </li>
-                </ol>
-              </div>
-            </section>
-
-            <h2>Space is part of the sentence</h2>
-
-            <p>
-              Spacing is not the absence of design. It is how the design marks
-              time. Tight relationships are read together; wider gaps create a
-              change of thought. When those intervals repeat, the page acquires
-              a rhythm the reader can trust.
-            </p>
-
-            <p>
-              This matters most on long pages. A consistent measure reduces the
-              effort of returning to the next line, while deliberately larger
-              media moments reset attention. The text continues in one voice,
-              but the composition still breathes.
-            </p>
-
-            <figure class="post-media">
-              <button
-                class="post-media__frame post-media__frame--wide post-lightbox__trigger"
-                type="button"
-                data-post-lightbox-item
-              >
-                <img
-                  class="post-media__asset"
-                  src="../../assets/photos-full/2025-bergen-norway/04.webp"
-                  width="3024"
-                  height="4032"
-                  loading="lazy"
-                  alt="A weathered stone doorway with a wooden bench in Bergen."
-                />
-              </button>
-              <figcaption class="post-caption">
-                <span>A pause can hold as much information as a paragraph.</span>
-                <span class="post-caption__index">Bergen / 2025</span>
-              </figcaption>
-            </figure>
-
-            <h3>Design the transitions</h3>
-
-            <p>
-              The most fragile moment is often between two sections. A divider,
-              a change in scale or a generous pause can make that transition
-              feel intentional. Without one, even good individual pieces can
-              blur into a continuous surface.
-            </p>
-
-            <h5>One final principle</h5>
-
-            <p>
-              Make the important thing easy to find, the next thing easy to
-              follow, and everything else quiet enough to let those two
-              gestures work.
-            </p>
-
-            <h2>Rhythm can be made explicit</h2>
-
-            <p>
-              A useful rhythm is consistent without becoming mechanical. If
-              each interval grows by the same ratio, a small spacing scale can
-              carry a whole page. In compact form, write it as
-              \(s_n = s_0 r^n\), where \(r\) controls how quickly the page
-              opens up.
-            </p>
-
-            <div class="post-math" aria-label="Geometric spacing scale">
-              \[
-                s_n = s_0 r^n
-                \qquad
-                \text{with}\quad
-                s_0 = 10\text{px},\; r = \sqrt{2}
-              \]
+<p>When we think about design, color is something that comes up very naturally. Choosing the right colors can be challenging. Of course, they need to look aesthetic and cohesive. But there is another important factor to take into account: contrast.</p>
+<p>Contrast is part of a broader family in design: accessibility. For a design to be clearly readable by as many people as possible, colors that appear next to each other need to have enough contrast. Even for people without any visual disability, good contrast simply makes things more comfortable to read.</p>
+<hr>
+<p>Let’s start with black, the most common color for text. On a screen, the strongest possible contrast is black on white, with a contrast ratio of 21:1 (according to WCAG accessibility guidelines). But human vision is not just about “black vs. white”. What matters a lot is luminance: how bright a color appears to the eye.</p>
+<p>And that’s the interesting part. The human eye does not perceive all wavelengths with the same intensity. In daylight vision, our sensitivity peaks around yellow-green, roughly around 555 nm (visible light is approximately in the 400-800nm range). This does not mean yellow is magically the most readable color, but it’s a first answer to why yellow could be a great choice when needing something to feel very bright and easy to notice.</p>
+<p>This is also useful when thinking about color blindness. Most color-blind people have some form of red-green color vision deficiency, which can make reds, greens, oranges and browns harder to distinguish. Yellow is often still perceived as bright and noticeable, although it is not a universal solution (eg. tritanopia, where blue/yellow is the actual defficiency). The only thing to remember from this is quite straight-forward actually: never rely on color alone. Contrast is of course one way of dealing with this issue. But you can also use labels, icons, shapes, position and clear hierarchy.</p>
+<p>Finally, yellow/black also works well under glare, from a distance, in peripheral vision, or when you do not have much time to process what you are seeing. This explains why yellow and black are often used for warning signs, hazard markings, construction zones, caution tape, industrial labels, etc. This color combination is even included in safety standards (ISO 3864) for hazard marking.</p>
+<hr>
+<p>But why not make all important signs yellow? Why would a stop sign be red?</p>
+<p>The answer is, once again, quite simple: signs aren’t designed only for maximum contrast. They are designed for meaning.</p>
+<p>Red is strongly associated with stopping, danger, prohibition and urgency. It may not always give the best luminance contrast, especially compared with black on yellow or black on white, but you recognize it and understand it instantly.</p>
+<p>So the point is not that yellow/black is “better” than red. They are doing different jobs.
+And this is precisely what good design is. Choices you make are the results of many reasons and constraints. It’s always about making things in the right way, for the right reason, in the right context.</p>
             </div>
-
-            <p>
-              The same idea is easy to keep close to the implementation. The
-              inline expression <code>spacing(3)</code> stays quiet in the
-              sentence, while the block below keeps its hierarchy legible.
-            </p>
-
-            <!-- Add data-code-copy only to blocks that should expose copying. -->
-            <pre data-code-copy><code class="language-javascript">const spacing = (step, base = 10, ratio = Math.SQRT2) =&gt;
-  Math.round(base * ratio ** step);
-
-const rhythm = Array.from({ length: 6 }, (_, step) =&gt; spacing(step));</code></pre>
-          </div>
           </div>
 
           <footer class="post-endmatter" aria-label="Article information">
@@ -638,109 +264,22 @@ const rhythm = Array.from({ length: 6 }, (_, step) =&gt; spacing(step));</code><
                 <h2 class="post-endmatter__label" id="post-tags-title">Tags</h2>
                 <ul class="post-tags">
                   <li><span class="post-tags__tag">2026</span></li>
-                  <li><span class="post-tags__tag">Design</span></li>
-                  <li><span class="post-tags__tag">Writing</span></li>
+
+                  <li><span class="post-tags__tag">Article</span></li>
                 </ul>
               </section>
 
               <section class="post-author" aria-labelledby="post-author-title">
-                <h2 class="post-endmatter__label" id="post-author-title">
-                  Author
-                </h2>
+                <h2 class="post-endmatter__label" id="post-author-title">Author</h2>
                 <p class="post-author__name">Pierre-Louis</p>
               </section>
 
-              <section aria-labelledby="post-footnotes-title">
-                <h2 class="post-endmatter__label" id="post-footnotes-title">
-                  Footnotes
-                </h2>
-                <ol class="post-footnotes">
-                  <li
-                    class="post-footnotes__item"
-                    id="footnote-1"
-                    role="doc-endnote"
-                  >
-                    <p>
-                      The typographic measure used here follows the width of
-                      columns two and three in the site’s four-column
-                      <span class="post-footnote-tail"
-                        >system.
-                        <a
-                          class="post-footnote-backref"
-                          href="#footnote-ref-1"
-                          aria-label="Return to footnote 1 reference"
-                          >↩</a
-                        ></span
-                      >
-                    </p>
-                  </li>
-                  <li
-                    class="post-footnotes__item"
-                    id="footnote-2"
-                    role="doc-endnote"
-                  >
-                    <p>
-                      Images extend one fifth of a column beyond the text on
-                      each side, creating emphasis without abandoning the
-                      <span class="post-footnote-tail"
-                        >grid.
-                        <a
-                          class="post-footnote-backref"
-                          href="#footnote-ref-2"
-                          aria-label="Return to footnote 2 reference"
-                          >↩</a
-                        ></span
-                      >
-                    </p>
-                  </li>
-                  <li
-                    class="post-footnotes__item"
-                    id="footnote-3"
-                    role="doc-endnote"
-                  >
-                    <p>
-                      Gallery photographs are from Stockholm, Aurland and
-                      Bergen. Browse the complete series in
-                      <span class="post-footnote-tail"
-                        ><a href="../../photos/">Photos</a>.
-                        <a
-                          class="post-footnote-backref"
-                          href="#footnote-ref-3"
-                          aria-label="Return to footnote 3 reference"
-                          >↩</a
-                        ></span
-                      >
-                    </p>
-                  </li>
-                </ol>
-              </section>
 
-              <section aria-labelledby="post-sources-title">
-                <h2 class="post-endmatter__label" id="post-sources-title">
-                  Sources
-                </h2>
-                <ul class="post-sources">
-                  <li class="post-sources__item">
-                    <a
-                      class="external-link"
-                      href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html"
-                      rel="noreferrer"
-                      >WCAG 2.2 — Understanding minimum contrast</a
-                    >
-                  </li>
-                  <li class="post-sources__item">
-                    <a
-                      class="external-link"
-                      href="https://www.w3.org/WAI/tips/designing/"
-                      rel="noreferrer"
-                      >W3C Web Accessibility Initiative — Designing for web
-                      accessibility</a
-                    >
-                  </li>
-                </ul>
-              </section>
+
+
             </div>
           </footer>
+
         </article>
       </main>
 
@@ -762,9 +301,7 @@ const rhythm = Array.from({ length: 6 }, (_, step) =&gt; spacing(step));</code><
               data-email="contact@pierrelouis.net"
               >Copy Email</a
             >
-            <a class="site-footer__link" href="../../links/"
-              >Links &amp; Socials</a
-            >
+            <a class="site-footer__link" href="../../links/">Links &amp; Socials</a>
           </nav>
 
           <nav
@@ -809,38 +346,14 @@ const rhythm = Array.from({ length: 6 }, (_, step) =&gt; spacing(step));</code><
             data-post-lightbox-nav
             aria-label="Article image navigation"
           >
-            <button
-              class="post-lightbox__nav-button"
-              type="button"
-              data-post-lightbox-prev
-              aria-label="Previous image"
-            >
-              ←
-            </button>
-            <span
-              class="post-lightbox__counter"
-              data-post-lightbox-counter
-              aria-live="polite"
-            ></span>
-            <button
-              class="post-lightbox__nav-button"
-              type="button"
-              data-post-lightbox-next
-              aria-label="Next image"
-            >
-              →
-            </button>
+            <button class="post-lightbox__nav-button" type="button" data-post-lightbox-prev aria-label="Previous image">←</button>
+            <span class="post-lightbox__counter" data-post-lightbox-counter aria-live="polite"></span>
+            <button class="post-lightbox__nav-button" type="button" data-post-lightbox-next aria-label="Next image">→</button>
           </figcaption>
         </figure>
-        <button
-          class="post-lightbox__close"
-          type="button"
-          data-post-lightbox-close
-          aria-label="Close expanded image"
-        >
-          Close
-        </button>
+        <button class="post-lightbox__close" type="button" data-post-lightbox-close aria-label="Close expanded image">Close</button>
       </div>
     </div>
+
   </body>
 </html>

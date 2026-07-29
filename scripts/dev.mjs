@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildLists } from "./build-lists.mjs";
 import { buildPhotos } from "./build-photos.mjs";
+import { buildPosts } from "./build-posts.mjs";
 import { buildProjects } from "./build-projects.mjs";
 import { syncSharedComponents } from "./shared-components.mjs";
 import { startSiteServer } from "./site-server.mjs";
@@ -35,8 +36,20 @@ const shouldRebuildProjects = (filename) => {
   );
 };
 
+const shouldRebuildPosts = (filename) => {
+  return (
+    filename.startsWith("content/posts/") ||
+    filename.startsWith("posts/headers/") ||
+    filename.startsWith("posts/components/") ||
+    filename === "eleventy.config.mjs" ||
+    filename === "scripts/build-posts.mjs" ||
+    filename === "scripts/lib/post-markdown.mjs" ||
+    filename === "scripts/lib/posts.mjs"
+  );
+};
+
 const shouldSyncSharedComponents = (filename) => {
-  return filename.endsWith(".html") || filename === "scripts/shared-components.mjs";
+  return filename === "scripts/shared-components.mjs";
 };
 
 const shouldIgnore = (filename) => {
@@ -48,6 +61,9 @@ const shouldIgnore = (filename) => {
     filename.startsWith(".playwright") ||
     filename.startsWith("assets/projects/") ||
     filename.startsWith("assets/photos/") ||
+    filename.startsWith("posts/assets/") ||
+    filename === "posts/index.html" ||
+    /^posts\/(?!headers\/|components\/)[^/]+\/index\.html$/.test(filename) ||
     filename === "photos/index.html" ||
     filename === "photos/photos-data.json"
   );
@@ -69,6 +85,7 @@ const queue = (filename, reload) => {
       const rebuildPhotos = shouldRebuildPhotos(filename);
       const rebuildProjects = shouldRebuildProjects(filename);
       const rebuildLists = shouldRebuildLists(filename);
+      const rebuildPosts = shouldRebuildPosts(filename);
 
       if (rebuildLists) {
         const result = await buildLists();
@@ -100,10 +117,20 @@ const queue = (filename, reload) => {
         );
       }
 
+      if (rebuildPosts) {
+        const result = await buildPosts();
+        console.log(
+          `Rebuilt posts: ${result.posts} page(s), ` +
+            `${result.removed} stale page(s) removed, ` +
+            `${result.warnings.length} warning(s).`,
+        );
+      }
+
       if (
         rebuildLists ||
         rebuildPhotos ||
         rebuildProjects ||
+        rebuildPosts ||
         shouldSyncSharedComponents(filename)
       ) {
         const changed = await syncSharedComponents();
@@ -125,6 +152,7 @@ const queue = (filename, reload) => {
 const initialLists = await buildLists();
 const initialProjects = await buildProjects();
 const initialPhotos = await buildPhotos();
+const initialPosts = await buildPosts();
 await syncSharedComponents();
 const site = await startSiteServer({ dev: true, port: PORT });
 
@@ -146,6 +174,11 @@ console.log(
     `${initialPhotos.assets.generated} generated asset(s), ` +
     `${initialPhotos.assets.skipped} cached asset(s), ` +
     `${initialPhotos.assets.removed} stale item(s) removed.`,
+);
+console.log(
+  `Built posts: ${initialPosts.posts} page(s), ` +
+    `${initialPosts.removed} stale page(s) removed, ` +
+    `${initialPosts.warnings.length} warning(s).`,
 );
 console.log(`Dev server: http://${site.host}:${site.port}/`);
 

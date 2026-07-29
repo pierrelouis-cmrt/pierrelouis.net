@@ -1,0 +1,474 @@
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Interactive Pixel Grid - Pierre-Louis</title>
+    <meta name="description" content="A fun experiment with a pixel grid that responds to user interaction." />
+    <meta property="og:title" content="Interactive Pixel Grid - Pierre-Louis" />
+    <meta property="og:description" content="A fun experiment with a pixel grid that responds to user interaction." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://pierrelouis.net/posts/interactive-pixel-grid/" />
+    <meta
+      property="og:image"
+      content="https://pierrelouis.net/assets/image_mobile_featured.gif"
+    />
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css" />
+    <link rel="stylesheet" href="../post.css" />
+
+    <script src="../../script.js" defer></script>
+    <script src="../post.js" defer></script>
+
+    <script src="../../footer.js" defer></script>
+  </head>
+  <body>
+    <div
+      class="site-shell post-page"
+      data-header-backdrop=""
+      data-header-nav="dark"
+      data-post-type="experiment"
+
+    >
+      <header class="site-header" aria-label="Primary navigation">
+        <a class="brand-mark brand-mark--back" href="../" aria-label="Back to posts">
+          <span class="brand-mark__back-full">Back to posts</span>
+          <span class="brand-mark__back-short" aria-hidden="true">Back</span>
+        </a>
+
+        <nav class="primary-nav" aria-label="Main pages">
+          <a class="primary-nav__link" href="../../projects/">Projects</a>
+          <a class="primary-nav__link" href="../../posts/">Posts</a>
+          <a class="primary-nav__link" href="../../photos/">Photos</a>
+        </nav>
+
+        <div class="more-menu" data-more-menu>
+          <button
+            class="more-menu__toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="more-menu-panel"
+            data-more-menu-toggle
+          >
+            More ↓
+          </button>
+
+          <nav
+            class="more-menu__panel"
+            id="more-menu-panel"
+            aria-label="More pages"
+            data-more-menu-panel
+            hidden
+          >
+            <a class="more-menu__link" href="../../about/">About</a>
+            <a class="more-menu__link" href="../../now/">Now</a>
+            <a class="more-menu__link" href="../../someday/">Someday</a>
+            <a class="more-menu__link" href="../../lists/">Lists</a>
+          </nav>
+        </div>
+
+        <div class="mobile-menu" data-mobile-menu>
+          <button
+            class="mobile-menu__toggle"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-menu-panel"
+            data-mobile-menu-toggle
+          >
+            <span class="mobile-menu__toggle-line"></span>
+            <span class="mobile-menu__toggle-line"></span>
+          </button>
+
+          <div
+            class="mobile-menu__panel"
+            id="mobile-menu-panel"
+            data-mobile-menu-panel
+            hidden
+          >
+            <div class="mobile-menu__bar">
+              <a
+                class="mobile-menu__brand mobile-menu__brand--back"
+                href="../"
+                aria-label="Back to posts"
+              >
+                <span class="mobile-menu__brand__back-full">Back to posts</span>
+                <span class="mobile-menu__brand__back-short" aria-hidden="true">Back</span>
+              </a>
+            </div>
+
+            <div class="mobile-menu__layout">
+              <section
+                class="mobile-menu__section mobile-menu__section--main"
+                aria-labelledby="mobile-menu-main"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-main">
+                  Main Pages
+                </h2>
+                <nav class="mobile-menu__links" aria-label="Main pages">
+                  <a class="mobile-menu__link" href="../../projects/">Projects</a>
+                  <a class="mobile-menu__link" href="../../posts/">Posts</a>
+                  <a class="mobile-menu__link" href="../../photos/">Photos</a>
+                </nav>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--latest"
+                aria-labelledby="mobile-menu-latest"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-latest">
+                  Latest
+                </h2>
+                <a
+                  class="mobile-menu__latest-link"
+                  href="../../projects/sweetgreen-nicolandria/"
+                >
+                  <span class="mobile-menu__latest-title"
+                    >Sweetgreen: Nicolandria</span
+                  >
+                  <span class="mobile-menu__latest-media" aria-hidden="true">
+                    <img
+                      class="mobile-menu__latest-image"
+                      src="../../assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                      alt=""
+                    />
+                  </span>
+                  <span class="mobile-menu__see-more">See More ↗</span>
+                </a>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--about"
+                aria-labelledby="mobile-menu-about"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-about">
+                  More About Me
+                </h2>
+                <nav class="mobile-menu__links" aria-label="More about me">
+                  <a class="mobile-menu__link" href="../../about/">Who I am</a>
+                  <a class="mobile-menu__link" href="../../now/">What I'm doing</a>
+                  <a class="mobile-menu__link" href="../../someday/">Where I'm going</a>
+                </nav>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--links"
+                aria-labelledby="mobile-menu-links"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-links">
+                  More Links
+                </h2>
+                <nav class="mobile-menu__links" aria-label="More links">
+                  <a class="mobile-menu__link" href="../../lists/">Catalogs</a>
+                  <a class="mobile-menu__link" href="../../links/">Links &amp; Socials</a>
+                </nav>
+              </section>
+            </div>
+
+            <img
+              class="mobile-menu__watermark"
+              src="../../assets/image_mobile_watermark.png"
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <article>
+          <header class="post-hero">
+
+
+            <p class="post-hero__meta">
+              <time class="post-hero__date" datetime="2025-08-05">August 5, 2025</time>
+
+              <span class="post-hero__tag">Experiment</span>
+            </p>
+
+            <h1 class="post-hero__title">Interactive Pixel Grid</h1>
+            <p class="post-hero__dek">A fun experiment with a pixel grid that responds to user interaction.</p>
+
+
+          </header>
+
+          <div class="post-reading">
+
+            <nav
+              class="post-toc"
+              aria-label="Table of contents"
+              data-post-toc
+              data-toc-mode="auto"
+              hidden
+            >
+              <div class="post-toc__desktop" data-post-toc-desktop></div>
+              <div class="post-toc__mobile">
+                <button
+                  class="post-toc__mobile-toggle"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="post-toc-panel"
+                  data-post-toc-toggle
+                >
+                  <span class="post-toc__current" data-post-toc-current></span>
+                  <svg class="post-toc__chevron" width="10" height="16" viewBox="0 0 10 16" aria-hidden="true">
+                    <path fill="currentColor" d="M.21 5.352a.714.714 0 0 1 1.01 0L5 9.132l3.78-3.78a.714.714 0 0 1 1.01 1.01l-4.285 4.286a.714.714 0 0 1-1.01 0L.209 6.362a.714.714 0 0 1 0-1.01" />
+                  </svg>
+                </button>
+                <div
+                  class="post-toc__mobile-panel"
+                  id="post-toc-panel"
+                  aria-hidden="true"
+                  data-post-toc-panel
+                >
+                  <div class="post-toc__mobile-scroll" data-post-toc-mobile></div>
+                </div>
+              </div>
+            </nav>
+
+
+            <div class="post-body">
+<p>This little coding experiment started with <a href="https://codepen.io/artzub/pen/XJJooON" class="external-link" rel="noreferrer">Artem’s Pixel Loader pen on CodePen</a> as a base. I basically built on top of what he’d already done and took it in my own direction.</p>
+<h2 id="whats-this-all-about">What’s this all about?</h2>
+<p>It’s a full-screen canvas made of tiny squares; I’ll just call them “pixels” here. They react to your mouse. Click anywhere on the screen and the pixel grid starts to grow outward from that point, like it’s blooming, before it gently settles down.</p>
+<p>The hover effect isn’t just a static glow. Your cursor leaves behind a little <em>trail</em>, and the area it affects depends on your cursor’s direction and speed. Pixels nearby get brighter and slightly bigger. There’s even a touch of inertia, so the “blob” your cursor makes keeps moving for a moment after you stop. Think ripples on water slowly fading away.</p>
+<h2 id="making-it-smooth-and-fast">Making it smooth and fast</h2>
+<p>I wanted this to run nicely even on old laptops/cheap phones. The trick? The grid script always aims for around 10,000 pixels in total (or gets caped by a max gap I’ve set between two nearby pixels purely for looks). That’s dense enough to look fluid, but light enough for the effects to feel snappy.</p>
+<p>The hover effect is deliberately subtle: small radius, gentle size and brightness changes. Go too strong and it turns into a messy, noisy soup… In this case, performance constraints are actually a good thing here!</p>
+<p>As for colors, they’re not just random chaos of course. They’re generated randomly but carefully curated so they always look good, especially against the dark background.</p>
+<h2 id="for-the-tech-curious">For the tech-curious</h2>
+<p>Here’s a quick peek at two key parts of the build: the auto grid sizing and the color curation.</p>
+<h3 id="1-why-it-stays-10k-pixels-on-any-screen">1. Why it stays ~10k pixels on any screen</h3>
+<p>The main idea:</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>number of squares</mtext><mo>≈</mo><mfrac><mtext>screen area</mtext><mrow><mo stretchy="false">(</mo><mtext>gap</mtext><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">\text{number of squares} \approx \frac{\text{screen area}}{(\text{gap})^2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">number of squares</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.2154em;vertical-align:-0.52em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6954em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord text mtight"><span class="mord mtight">gap</span></span><span class="mclose mtight"><span class="mclose mtight">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7463em;"><span style="top:-2.786em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">screen area</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p>
+<p>We pick a “gap” size that makes this number roughly 10,000:</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>gap</mtext><mo>≈</mo><msqrt><mfrac><mrow><mtext>width</mtext><mo>×</mo><mtext>height</mtext></mrow><mn>10,000</mn></mfrac></msqrt></mrow><annotation encoding="application/x-tex">\text{gap} \approx \sqrt{\frac{\text{width} \times \text{height}}{10{,}000}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6776em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">gap</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.84em;vertical-align:-0.6294em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.2106em;"><span class="svg-align" style="top:-3.8em;"><span class="pstrut" style="height:3.8em;"></span><span class="mord" style="padding-left:1em;"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9322em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">10</span><span class="mord mtight"><span class="mpunct mtight">,</span></span><span class="mord mtight">000</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4461em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">width</span></span><span class="mbin mtight">×</span><span class="mord text mtight"><span class="mord mtight">height</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4811em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span style="top:-3.1706em;"><span class="pstrut" style="height:3.8em;"></span><span class="hide-tail" style="min-width:1.02em;height:1.88em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="1.88em" viewBox="0 0 400000 1944" preserveAspectRatio="xMinYMin slice"><path d="M983 90
+l0 -0
+c4,-6.7,10,-10,18,-10 H400000v40
+H1013.1s-83.4,268,-264.1,840c-180.7,572,-277,876.3,-289,913c-4.7,4.7,-12.7,7,-24,7
+s-12,0,-12,0c-1.3,-3.3,-3.7,-11.7,-7,-25c-35.3,-125.3,-106.7,-373.3,-214,-744
+c-10,12,-21,25,-33,39s-32,39,-32,39c-6,-5.3,-15,-14,-27,-26s25,-30,25,-30
+c26.7,-32.7,52,-63,76,-91s52,-60,52,-60s208,722,208,722
+c56,-175.3,126.3,-397.3,211,-666c84.7,-268.7,153.8,-488.2,207.5,-658.5
+c53.7,-170.3,84.5,-266.8,92.5,-289.5z
+M1001 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.6294em;"><span></span></span></span></span></span></span></span></span></p>
+<p>Bigger screens → bigger gaps → fewer rows and columns.
+Smaller screens → smaller gaps → more rows and columns.</p>
+<p>And here’s the little function that does exactly that:</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">computeAutoGap</span>(<span class="hljs-params">targetCount = <span class="hljs-number">10000</span>, min = <span class="hljs-number">5</span>, max = <span class="hljs-number">14</span></span>) {
+  <span class="hljs-keyword">const</span> area = <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerWidth</span> * <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerHeight</span>;
+  <span class="hljs-keyword">const</span> gap = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">sqrt</span>(area / targetCount));
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(min, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(max, gap)); <span class="hljs-comment">// clamp to safe values</span>
+}
+
+<span class="hljs-comment">// on resize:</span>
+gap = <span class="hljs-title function_">computeAutoGap</span>();
+<span class="hljs-title function_">initPixels</span>(); <span class="hljs-comment">// rebuild grid with the new gap</span></code></pre>
+<h3 id="2-how-the-colors-always-work">2. How the colors always work</h3>
+<p>Here’s the quick step by step process:</p>
+<ol>
+<li>
+<p>Pick a random <strong>base hue</strong> (0–360° on the color wheel).</p>
+</li>
+<li>
+<p>Pick one of 5 “relationships” at random:</p>
+<ul>
+<li><strong>Analogous</strong> (neighbors) → soft &amp; harmonious</li>
+<li><strong>Complementary</strong> (opposites) → bold &amp; punchy</li>
+<li><strong>Split-complementary</strong> (opposite ± a step) → balanced contrast</li>
+<li><strong>Triadic</strong> (even thirds) → lively &amp; playful</li>
+<li><strong>Monochrome</strong> (same hue, different lightness) → clean &amp; minimal</li>
+</ul>
+</li>
+<li>
+<p>Keep saturation &amp; lightness in sweet spots for dark backgrounds:</p>
+<ul>
+<li>Saturation: 70–90% → colors pop but don’t scream</li>
+<li>Lightness: 54–66% → bright enough on black, not neon</li>
+<li>Add tiny random tweaks so it doesn’t feel “computer perfect.”</li>
+</ul>
+</li>
+<li>
+<p>Convert to hex and apply them to the grid. Done.</p>
+</li>
+</ol>
+<p>And here’s the actual JavaScript:</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">randomLovelyPalette</span>(<span class="hljs-params"></span>) {
+  <span class="hljs-keyword">const</span> base = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">360</span>);
+  <span class="hljs-keyword">const</span> scheme = [<span class="hljs-string">&quot;analogous&quot;</span>, <span class="hljs-string">&quot;complement&quot;</span>, <span class="hljs-string">&quot;split&quot;</span>, <span class="hljs-string">&quot;triadic&quot;</span>, <span class="hljs-string">&quot;mono&quot;</span>][
+    (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">5</span>) | <span class="hljs-number">0</span>
+  ];
+
+  <span class="hljs-comment">// Choose 3 hues based on scheme</span>
+  <span class="hljs-keyword">let</span> H = [];
+  <span class="hljs-keyword">if</span> (scheme === <span class="hljs-string">&quot;analogous&quot;</span>) {
+    <span class="hljs-keyword">const</span> s = <span class="hljs-number">22</span> + <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">18</span>; <span class="hljs-comment">// 22–40°</span>
+    H = [base, base + s, base - s];
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (scheme === <span class="hljs-string">&quot;complement&quot;</span>) {
+    <span class="hljs-keyword">const</span> comp = (base + <span class="hljs-number">180</span>) % <span class="hljs-number">360</span>;
+    <span class="hljs-keyword">const</span> acc = base + (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() &lt; <span class="hljs-number">0.5</span> ? <span class="hljs-number">30</span> : -<span class="hljs-number">30</span>);
+    H = [base, comp, acc];
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (scheme === <span class="hljs-string">&quot;split&quot;</span>) {
+    H = [base, base + <span class="hljs-number">150</span>, base + <span class="hljs-number">210</span>];
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (scheme === <span class="hljs-string">&quot;triadic&quot;</span>) {
+    H = [base, base + <span class="hljs-number">120</span>, base + <span class="hljs-number">240</span>];
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// mono</span>
+    H = [base, base, base];
+  }
+
+  <span class="hljs-comment">// S/L tuned for dark bg + tiny jitter</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">S0</span> = <span class="hljs-number">72</span> + <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">20</span>; <span class="hljs-comment">// 72–92%</span>
+  <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">L0</span> = <span class="hljs-number">54</span> + <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">12</span>; <span class="hljs-comment">// 54–66%</span>
+
+  <span class="hljs-keyword">return</span> H.<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">h, i</span>) =&gt;</span>
+    <span class="hljs-title function_">hslToHex</span>(
+      ((h % <span class="hljs-number">360</span>) + <span class="hljs-number">360</span>) % <span class="hljs-number">360</span>,
+      <span class="hljs-title function_">clamp</span>(<span class="hljs-variable constant_">S0</span> + (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">12</span> - <span class="hljs-number">6</span>), <span class="hljs-number">60</span>, <span class="hljs-number">95</span>),
+      <span class="hljs-title function_">clamp</span>(
+        <span class="hljs-variable constant_">L0</span> + (scheme === <span class="hljs-string">&quot;mono&quot;</span> ? [-<span class="hljs-number">10</span>, <span class="hljs-number">0</span>, <span class="hljs-number">10</span>][i] : <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">12</span> - <span class="hljs-number">6</span>),
+        <span class="hljs-number">40</span>,
+        <span class="hljs-number">75</span>
+      )
+    )
+  );
+}
+
+<span class="hljs-comment">// helpers</span>
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">clamp</span>(<span class="hljs-params">v, a, b</span>) {
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(a, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(b, v));
+}
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">hslToHex</span>(<span class="hljs-params">h, s, l</span>) {
+  s /= <span class="hljs-number">100</span>;
+  l /= <span class="hljs-number">100</span>;
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">k</span> = (<span class="hljs-params">n</span>) =&gt; (n + h / <span class="hljs-number">30</span>) % <span class="hljs-number">12</span>,
+    a = s * <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(l, <span class="hljs-number">1</span> - l);
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">f</span> = (<span class="hljs-params">n</span>) =&gt;
+    l - a * <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(-<span class="hljs-number">1</span>, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(<span class="hljs-title function_">k</span>(n) - <span class="hljs-number">3</span>, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(<span class="hljs-number">9</span> - <span class="hljs-title function_">k</span>(n), <span class="hljs-number">1</span>)));
+  <span class="hljs-keyword">const</span> <span class="hljs-title function_">toHex</span> = (<span class="hljs-params">x</span>) =&gt;
+    <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(<span class="hljs-number">255</span> * x)
+      .<span class="hljs-title function_">toString</span>(<span class="hljs-number">16</span>)
+      .<span class="hljs-title function_">padStart</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;0&quot;</span>);
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`#<span class="hljs-subst">${toHex(f(<span class="hljs-number">0</span>))}</span><span class="hljs-subst">${toHex(f(<span class="hljs-number">8</span>))}</span><span class="hljs-subst">${toHex(f(<span class="hljs-number">4</span>))}</span>`</span>;
+}</code></pre>
+<h2 id="the-demo">The demo</h2>
+<aside class="post-embed-fallback" role="note">
+  <p><strong>Interactive demo unavailable.</strong> Its standalone files are not included in this post source mirror.</p>
+</aside>
+<p>Or open it in full-page mode <a href="" class="internal-link post-link-unavailable" aria-disabled="true" title="This linked file is not available in the published site.">here</a>.</p>
+            </div>
+          </div>
+
+          <footer class="post-endmatter" aria-label="Article information">
+            <div class="post-endmatter__inner">
+              <section aria-labelledby="post-tags-title">
+                <h2 class="post-endmatter__label" id="post-tags-title">Tags</h2>
+                <ul class="post-tags">
+                  <li><span class="post-tags__tag">2025</span></li>
+
+                  <li><span class="post-tags__tag">Experiment</span></li>
+                </ul>
+              </section>
+
+              <section class="post-author" aria-labelledby="post-author-title">
+                <h2 class="post-endmatter__label" id="post-author-title">Author</h2>
+                <p class="post-author__name">Pierre-Louis</p>
+              </section>
+
+
+
+
+            </div>
+          </footer>
+
+        </article>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer__content">
+          <div class="site-footer__location" aria-label="Location and weather">
+            <span>Lyon, France</span>
+            <span data-footer-weather>Weather loading...</span>
+          </div>
+
+          <nav
+            class="site-footer__group site-footer__group--contact"
+            aria-label="Contact links"
+          >
+            <a
+              class="site-footer__link"
+              href="mailto:contact@pierrelouis.net"
+              data-copy-email
+              data-email="contact@pierrelouis.net"
+              >Copy Email</a
+            >
+            <a class="site-footer__link" href="../../links/">Links &amp; Socials</a>
+          </nav>
+
+          <nav
+            class="site-footer__group site-footer__group--info"
+            aria-label="Site information"
+          >
+            <a class="site-footer__link" href="../../colophon/">Colophon</a>
+            <a class="site-footer__link" href="../../imprint/">Imprint</a>
+            <span class="site-footer__copyright-slot">
+              <span class="site-footer__copyright"
+                >©<span data-footer-year>2026</span></span
+              >
+            </span>
+          </nav>
+        </div>
+
+        <div class="watermark" aria-hidden="true">
+          <span class="watermark__name watermark__name--first"></span>
+          <span class="watermark__dash"></span>
+          <span class="watermark__name watermark__name--last"></span>
+        </div>
+      </footer>
+    </div>
+
+    <div class="post-lightbox" data-post-lightbox hidden>
+      <div
+        class="post-lightbox__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Expanded article image"
+      >
+        <button
+          class="post-lightbox__backdrop"
+          type="button"
+          data-post-lightbox-close
+          aria-label="Close expanded image"
+        ></button>
+        <figure class="post-lightbox__figure">
+          <img class="post-lightbox__image" data-post-lightbox-image alt="" />
+          <figcaption
+            class="post-lightbox__nav"
+            data-post-lightbox-nav
+            aria-label="Article image navigation"
+          >
+            <button class="post-lightbox__nav-button" type="button" data-post-lightbox-prev aria-label="Previous image">←</button>
+            <span class="post-lightbox__counter" data-post-lightbox-counter aria-live="polite"></span>
+            <button class="post-lightbox__nav-button" type="button" data-post-lightbox-next aria-label="Next image">→</button>
+          </figcaption>
+        </figure>
+        <button class="post-lightbox__close" type="button" data-post-lightbox-close aria-label="Close expanded image">Close</button>
+      </div>
+    </div>
+
+  </body>
+</html>

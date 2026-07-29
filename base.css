@@ -144,6 +144,7 @@ a {
 }
 
 .internal-link {
+  color: var(--color-ink);
   text-decoration-line: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
@@ -737,10 +738,8 @@ main {
 }
 
 .mobile-menu__latest-image {
-  background-image: url("./assets/image_mobile_featured.gif");
-  background-position: 50%;
-  background-repeat: no-repeat;
-  background-size: contain;
+  object-fit: cover;
+  object-position: center;
 }
 
 .featured-article__cta,

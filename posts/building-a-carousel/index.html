@@ -1,0 +1,372 @@
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Building a Carousel - Pierre-Louis</title>
+    <meta name="description" content="Tips &amp; tricks behind my custom carousel" />
+    <meta property="og:title" content="Building a Carousel - Pierre-Louis" />
+    <meta property="og:description" content="Tips &amp; tricks behind my custom carousel" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://pierrelouis.net/posts/building-a-carousel/" />
+    <meta
+      property="og:image"
+      content="https://pierrelouis.net/assets/image_mobile_featured.gif"
+    />
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css" />
+    <link rel="stylesheet" href="../post.css" />
+
+    <script src="../../script.js" defer></script>
+    <script src="../post.js" defer></script>
+
+    <script src="../../footer.js" defer></script>
+  </head>
+  <body>
+    <div
+      class="site-shell post-page"
+      data-header-backdrop=""
+      data-header-nav="dark"
+      data-post-type="experiment"
+
+    >
+      <header class="site-header" aria-label="Primary navigation">
+        <a class="brand-mark brand-mark--back" href="../" aria-label="Back to posts">
+          <span class="brand-mark__back-full">Back to posts</span>
+          <span class="brand-mark__back-short" aria-hidden="true">Back</span>
+        </a>
+
+        <nav class="primary-nav" aria-label="Main pages">
+          <a class="primary-nav__link" href="../../projects/">Projects</a>
+          <a class="primary-nav__link" href="../../posts/">Posts</a>
+          <a class="primary-nav__link" href="../../photos/">Photos</a>
+        </nav>
+
+        <div class="more-menu" data-more-menu>
+          <button
+            class="more-menu__toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="more-menu-panel"
+            data-more-menu-toggle
+          >
+            More ↓
+          </button>
+
+          <nav
+            class="more-menu__panel"
+            id="more-menu-panel"
+            aria-label="More pages"
+            data-more-menu-panel
+            hidden
+          >
+            <a class="more-menu__link" href="../../about/">About</a>
+            <a class="more-menu__link" href="../../now/">Now</a>
+            <a class="more-menu__link" href="../../someday/">Someday</a>
+            <a class="more-menu__link" href="../../lists/">Lists</a>
+          </nav>
+        </div>
+
+        <div class="mobile-menu" data-mobile-menu>
+          <button
+            class="mobile-menu__toggle"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-menu-panel"
+            data-mobile-menu-toggle
+          >
+            <span class="mobile-menu__toggle-line"></span>
+            <span class="mobile-menu__toggle-line"></span>
+          </button>
+
+          <div
+            class="mobile-menu__panel"
+            id="mobile-menu-panel"
+            data-mobile-menu-panel
+            hidden
+          >
+            <div class="mobile-menu__bar">
+              <a
+                class="mobile-menu__brand mobile-menu__brand--back"
+                href="../"
+                aria-label="Back to posts"
+              >
+                <span class="mobile-menu__brand__back-full">Back to posts</span>
+                <span class="mobile-menu__brand__back-short" aria-hidden="true">Back</span>
+              </a>
+            </div>
+
+            <div class="mobile-menu__layout">
+              <section
+                class="mobile-menu__section mobile-menu__section--main"
+                aria-labelledby="mobile-menu-main"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-main">
+                  Main Pages
+                </h2>
+                <nav class="mobile-menu__links" aria-label="Main pages">
+                  <a class="mobile-menu__link" href="../../projects/">Projects</a>
+                  <a class="mobile-menu__link" href="../../posts/">Posts</a>
+                  <a class="mobile-menu__link" href="../../photos/">Photos</a>
+                </nav>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--latest"
+                aria-labelledby="mobile-menu-latest"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-latest">
+                  Latest
+                </h2>
+                <a
+                  class="mobile-menu__latest-link"
+                  href="../../projects/sweetgreen-nicolandria/"
+                >
+                  <span class="mobile-menu__latest-title"
+                    >Sweetgreen: Nicolandria</span
+                  >
+                  <span class="mobile-menu__latest-media" aria-hidden="true">
+                    <img
+                      class="mobile-menu__latest-image"
+                      src="../../assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                      alt=""
+                    />
+                  </span>
+                  <span class="mobile-menu__see-more">See More ↗</span>
+                </a>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--about"
+                aria-labelledby="mobile-menu-about"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-about">
+                  More About Me
+                </h2>
+                <nav class="mobile-menu__links" aria-label="More about me">
+                  <a class="mobile-menu__link" href="../../about/">Who I am</a>
+                  <a class="mobile-menu__link" href="../../now/">What I'm doing</a>
+                  <a class="mobile-menu__link" href="../../someday/">Where I'm going</a>
+                </nav>
+              </section>
+
+              <section
+                class="mobile-menu__section mobile-menu__section--links"
+                aria-labelledby="mobile-menu-links"
+              >
+                <h2 class="mobile-menu__eyebrow" id="mobile-menu-links">
+                  More Links
+                </h2>
+                <nav class="mobile-menu__links" aria-label="More links">
+                  <a class="mobile-menu__link" href="../../lists/">Catalogs</a>
+                  <a class="mobile-menu__link" href="../../links/">Links &amp; Socials</a>
+                </nav>
+              </section>
+            </div>
+
+            <img
+              class="mobile-menu__watermark"
+              src="../../assets/image_mobile_watermark.png"
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <article>
+          <header class="post-hero">
+
+
+            <p class="post-hero__meta">
+              <time class="post-hero__date" datetime="2025-12-29">December 29, 2025</time>
+
+              <span class="post-hero__tag">Experiment</span>
+            </p>
+
+            <h1 class="post-hero__title">Building a Carousel</h1>
+            <p class="post-hero__dek">Tips &amp; tricks behind my custom carousel</p>
+
+
+          </header>
+
+          <div class="post-reading">
+
+            <nav
+              class="post-toc"
+              aria-label="Table of contents"
+              data-post-toc
+              data-toc-mode="auto"
+              hidden
+            >
+              <div class="post-toc__desktop" data-post-toc-desktop></div>
+              <div class="post-toc__mobile">
+                <button
+                  class="post-toc__mobile-toggle"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="post-toc-panel"
+                  data-post-toc-toggle
+                >
+                  <span class="post-toc__current" data-post-toc-current></span>
+                  <svg class="post-toc__chevron" width="10" height="16" viewBox="0 0 10 16" aria-hidden="true">
+                    <path fill="currentColor" d="M.21 5.352a.714.714 0 0 1 1.01 0L5 9.132l3.78-3.78a.714.714 0 0 1 1.01 1.01l-4.285 4.286a.714.714 0 0 1-1.01 0L.209 6.362a.714.714 0 0 1 0-1.01" />
+                  </svg>
+                </button>
+                <div
+                  class="post-toc__mobile-panel"
+                  id="post-toc-panel"
+                  aria-hidden="true"
+                  data-post-toc-panel
+                >
+                  <div class="post-toc__mobile-scroll" data-post-toc-mobile></div>
+                </div>
+              </div>
+            </nav>
+
+
+            <div class="post-body">
+<p>Swiper (the js library) does most of the work for carousels. Loop it, center it, add some breakpoints, and bam, it’s done! But the default pagination always felt static to me. A row of dots that just… sits there.</p>
+<p>So I built one that moves.</p>
+<h2 id="the-sliding-window">The Sliding Window</h2>
+<p>Instead of showing all dots at once, there’s a 120px viewport that only reveals a handful. When you’ve got many images in a carousel, showing all dots can be pretty overwhelming. While swiping, the entire dot container translates to keep the active one centered:</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> offset = viewportCenter - activeIndex * dotSpacing - <span class="hljs-number">4</span>;
+dotsContainer.<span class="hljs-property">style</span>.<span class="hljs-property">transform</span> = <span class="hljs-string">`translateX(<span class="hljs-subst">${offset}</span>px)`</span>;</code></pre>
+<p>That <code>-4</code> nudges things to account for the dot’s own width. Simple math, but it feels more interactive.</p>
+<h2 id="edge-fade">Edge Fade</h2>
+<p>Dots near the viewport edges get a <code>.edge</code> class: they shrink and fade out. It’s a small thing, but it sells the illusion that the dots extend infinitely in both directions.</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">if</span> (dotPosition &lt; fadeZone || dotPosition &gt; viewportWidth - fadeZone) {
+  dot.<span class="hljs-property">classList</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&quot;edge&quot;</span>);
+}</code></pre>
+<h2 id="the-full-bleed-trick">The Full-Bleed Trick</h2>
+<p>My carousel lived inside a centered 600px column, but I wanted it to bleed: go full-width and touch both edges of the screen. Setting a width of 100vw (100% of the viewport’s width) gives it the right size, but it still starts where the column starts, so it overflows on the right side instead of expanding evenly.</p>
+<p>The carousel breaks out of its container using the negative margin hack:</p>
+<aside class="post-embed-fallback" role="note">
+  <p><strong>Interactive demo unavailable.</strong> Its standalone files are not included in this post source mirror.</p>
+</aside>
+<p>Old school? Yes, definitely. But it still works, and is still very useful.</p>
+<h2 id="demo-of-the-carousel">Demo of the carousel</h2>
+<aside class="post-embed-fallback" role="note">
+  <p><strong>Interactive demo unavailable.</strong> Its standalone files are not included in this post source mirror.</p>
+</aside>
+<p><a href="" class="internal-link post-link-unavailable" aria-disabled="true" title="This linked file is not available in the published site.">Open fullscreen</a></p>
+<hr>
+<p>The whole thing is like 80 lines of JS. Sometimes the fun parts are the small details you add on top of a library, not the library itself. That’s what makes your creating more personnal and original.</p>
+            </div>
+          </div>
+
+          <footer class="post-endmatter" aria-label="Article information">
+            <div class="post-endmatter__inner">
+              <section aria-labelledby="post-tags-title">
+                <h2 class="post-endmatter__label" id="post-tags-title">Tags</h2>
+                <ul class="post-tags">
+                  <li><span class="post-tags__tag">2025</span></li>
+
+                  <li><span class="post-tags__tag">Experiment</span></li>
+                </ul>
+              </section>
+
+              <section class="post-author" aria-labelledby="post-author-title">
+                <h2 class="post-endmatter__label" id="post-author-title">Author</h2>
+                <p class="post-author__name">Pierre-Louis</p>
+              </section>
+
+
+
+
+            </div>
+          </footer>
+
+        </article>
+      </main>
+
+      <footer class="site-footer">
+        <div class="site-footer__content">
+          <div class="site-footer__location" aria-label="Location and weather">
+            <span>Lyon, France</span>
+            <span data-footer-weather>Weather loading...</span>
+          </div>
+
+          <nav
+            class="site-footer__group site-footer__group--contact"
+            aria-label="Contact links"
+          >
+            <a
+              class="site-footer__link"
+              href="mailto:contact@pierrelouis.net"
+              data-copy-email
+              data-email="contact@pierrelouis.net"
+              >Copy Email</a
+            >
+            <a class="site-footer__link" href="../../links/">Links &amp; Socials</a>
+          </nav>
+
+          <nav
+            class="site-footer__group site-footer__group--info"
+            aria-label="Site information"
+          >
+            <a class="site-footer__link" href="../../colophon/">Colophon</a>
+            <a class="site-footer__link" href="../../imprint/">Imprint</a>
+            <span class="site-footer__copyright-slot">
+              <span class="site-footer__copyright"
+                >©<span data-footer-year>2026</span></span
+              >
+            </span>
+          </nav>
+        </div>
+
+        <div class="watermark" aria-hidden="true">
+          <span class="watermark__name watermark__name--first"></span>
+          <span class="watermark__dash"></span>
+          <span class="watermark__name watermark__name--last"></span>
+        </div>
+      </footer>
+    </div>
+
+    <div class="post-lightbox" data-post-lightbox hidden>
+      <div
+        class="post-lightbox__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Expanded article image"
+      >
+        <button
+          class="post-lightbox__backdrop"
+          type="button"
+          data-post-lightbox-close
+          aria-label="Close expanded image"
+        ></button>
+        <figure class="post-lightbox__figure">
+          <img class="post-lightbox__image" data-post-lightbox-image alt="" />
+          <figcaption
+            class="post-lightbox__nav"
+            data-post-lightbox-nav
+            aria-label="Article image navigation"
+          >
+            <button class="post-lightbox__nav-button" type="button" data-post-lightbox-prev aria-label="Previous image">←</button>
+            <span class="post-lightbox__counter" data-post-lightbox-counter aria-live="polite"></span>
+            <button class="post-lightbox__nav-button" type="button" data-post-lightbox-next aria-label="Next image">→</button>
+          </figcaption>
+        </figure>
+        <button class="post-lightbox__close" type="button" data-post-lightbox-close aria-label="Close expanded image">Close</button>
+      </div>
+    </div>
+
+  </body>
+</html>

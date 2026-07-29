@@ -2,39 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Posts - Pierre-Louis</title>
-    <meta
-      name="description"
-      content="Articles, notes and experiments from Pierre-Louis on design, code, science and reflection."
-    />
+    <meta name="description" content="Articles, notes and experiments from Pierre-Louis on design, code, science and reflection." />
     <meta property="og:title" content="Posts - Pierre-Louis" />
-    <meta
-      property="og:description"
-      content="Articles, notes and experiments on design, code, science and reflection."
-    />
+    <meta property="og:description" content="Articles, notes and experiments on design, code, science and reflection." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://pierrelouis.net/posts/" />
-    <meta
-      property="og:image"
-      content="https://pierrelouis.net/assets/image_mobile_featured.gif"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      href="/favicon/favicon-96x96.png"
-      sizes="96x96"
-    />
+    <meta property="og:image" content="https://pierrelouis.net/assets/image_mobile_featured.gif" />
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
     <link rel="shortcut icon" href="/favicon/favicon.ico" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/favicon/apple-touch-icon.png"
-    />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
     <link rel="stylesheet" href="../base.css" />
@@ -136,13 +115,17 @@
                 </h2>
                 <a
                   class="mobile-menu__latest-link"
-                  href="../projects/conways-reverse-game-of-life/"
+                  href="../projects/sweetgreen-nicolandria/"
                 >
                   <span class="mobile-menu__latest-title"
-                    >Reversing Conway's Game Of Life with Diffusion</span
+                    >Sweetgreen: Nicolandria</span
                   >
                   <span class="mobile-menu__latest-media" aria-hidden="true">
-                    <span class="mobile-menu__latest-image"></span>
+                    <img
+                      class="mobile-menu__latest-image"
+                      src="../assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                      alt=""
+                    />
                   </span>
                   <span class="mobile-menu__see-more">See More ↗</span>
                 </a>
@@ -188,12 +171,12 @@
 
       <main>
         <h1 class="sr-only">Posts</h1>
-
         <section class="posts-intro page-intro" aria-label="Posts introduction">
           <div class="content-filter" aria-label="Post filters" data-post-filters>
             <span class="content-filter__symbol" aria-hidden="true">✱</span>
             <div class="content-filter__content">
               <div class="content-filter__options" aria-label="Post types">
+
                 <button
                   class="content-filter__button is-active"
                   type="button"
@@ -201,8 +184,9 @@
                   aria-pressed="true"
                 >
                   <span>All</span>
-                  <span class="content-filter__count" data-filter-count>6</span>
+                  <span class="content-filter__count" data-filter-count>0</span>
                 </button>
+
                 <button
                   class="content-filter__button"
                   type="button"
@@ -210,10 +194,9 @@
                   aria-pressed="false"
                 >
                   <span>Articles</span>
-                  <span class="content-filter__count" data-filter-count hidden
-                    >2</span
-                  >
+                  <span class="content-filter__count" data-filter-count hidden>0</span>
                 </button>
+
                 <button
                   class="content-filter__button"
                   type="button"
@@ -221,10 +204,9 @@
                   aria-pressed="false"
                 >
                   <span>Notes</span>
-                  <span class="content-filter__count" data-filter-count hidden
-                    >3</span
-                  >
+                  <span class="content-filter__count" data-filter-count hidden>0</span>
                 </button>
+
                 <button
                   class="content-filter__button"
                   type="button"
@@ -232,28 +214,17 @@
                   aria-pressed="false"
                 >
                   <span>Experiments</span>
-                  <span class="content-filter__count" data-filter-count hidden
-                    >1</span
-                  >
+                  <span class="content-filter__count" data-filter-count hidden>0</span>
                 </button>
+
               </div>
               <label class="content-filter__search">
                 <span class="sr-only">Search posts</span>
-                <input
-                  class="content-filter__input"
-                  type="search"
-                  placeholder="Search..."
-                  autocomplete="off"
-                  spellcheck="false"
-                  data-post-search
-                />
+                <input class="content-filter__input" type="search" placeholder="Search..." autocomplete="off" spellcheck="false" data-post-search />
               </label>
-              <p class="content-filter__empty" data-post-empty hidden>
-                No posts found
-              </p>
+              <p class="content-filter__empty" data-post-empty hidden>No posts found</p>
             </div>
           </div>
-
           <p class="posts-intro__copy intro-copy">
             My personal blog. On here you'll find some self reflection, some
             coding or very scientific oriented content, etc. Articles are long,
@@ -263,233 +234,435 @@
 
         <section class="posts-content" aria-label="Published posts">
           <ol class="post-list">
+
+
             <li class="post-year-group" data-post-year-group>
               <div class="post-year-group__layout">
                 <span class="post-row__year">2026 /</span>
                 <ol class="post-year-group__months">
+
+
                   <li class="post-month-group" data-post-month-group>
                     <div class="post-month-group__layout">
-                      <time class="post-row__month" datetime="2026-05"
-                        >May</time
-                      >
+                      <time class="post-row__month" datetime="2026-05">May</time>
                       <ol class="post-month-group__posts">
-            <li
-              class="post-row post-row--year-start"
-              data-post-type="article"
-              data-post-search="making things readable by design readable color contrast meaning"
-            >
-              <div class="post-row__primary">
-                <time class="post-row__compact-date" datetime="2026-05"
-                  >2026 / May</time
-                >
-                <h2 class="post-row__title">Making things readable by design</h2>
-              </div>
-              <div class="post-row__secondary">
-                <p class="post-row__summary">
-                  Why readable design is not only about color, but also contrast
-                  and meaning.
-                </p>
-                <a
-                  class="post-row__link internal-link"
-                  href="./making-things-readable-by-design/"
-                  aria-label="Read Making things readable by design"
-                  ><span class="post-row__link-label--full">Read More</span
-                  ><span class="post-row__link-label--compact">Read</span>
-                  <span aria-hidden="true">→</span></a
-                >
-              </div>
-            </li>
+
+                        <li
+                          class="post-row post-row--year-start"
+                          data-post-type="article"
+                          data-post-search="making things readable by design why readable design is not only about color, but also contrast and meaning. article article"
+                        >
+                          <div class="post-row__primary">
+
+                            <time class="post-row__compact-date" datetime="2026-05">2026 / May</time>
+
+                            <h2 class="post-row__title">Making things readable by design</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">Why readable design is not only about color, but also contrast and meaning.</p>
+                            <a class="post-row__link internal-link" href="./making-things-readable-by-design/" aria-label="Read Making things readable by design">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
 
                       </ol>
                     </div>
                   </li>
 
+
                   <li class="post-month-group" data-post-month-group>
                     <div class="post-month-group__layout">
-                      <time class="post-row__month" datetime="2026-04"
-                        >Apr</time
-                      >
+                      <time class="post-row__month" datetime="2026-04">Apr</time>
                       <ol class="post-month-group__posts">
 
-            <li
-              class="post-row post-row--month-start"
-              data-post-type="note"
-              data-post-search="writing follows its own rhythm ideas write"
-            >
-              <div class="post-row__primary">
-                <time class="post-row__compact-date" datetime="2026-04"
-                  >Apr</time
-                >
-                <h2 class="post-row__title">Writing Follows Its Own Rhythm</h2>
-              </div>
-              <div class="post-row__secondary">
-                <p class="post-row__summary">
-                  Why I stopped forcing myself to write — and learned to follow
-                  the rhythm of my own ideas.
-                </p>
-                <a
-                  class="post-row__link internal-link"
-                  href="./writing-follows-its-own-rhythm/"
-                  aria-label="Read Writing Follows Its Own Rhythm"
-                  ><span class="post-row__link-label--full">Read More</span
-                  ><span class="post-row__link-label--compact">Read</span>
-                  <span aria-hidden="true">→</span></a
-                >
-              </div>
-            </li>
+                        <li
+                          class="post-row post-row--month-start"
+                          data-post-type="note"
+                          data-post-search="writing follows its own rhythm why i stopped forcing myself to write — and learned to follow the rhythm of my own ideas. note note"
+                        >
+                          <div class="post-row__primary">
 
-            <li
-              class="post-row post-row--month-continuation"
-              data-post-type="article"
-              data-post-search="let it sit design time process"
-            >
-              <div class="post-row__primary">
-                <h2 class="post-row__title">Let It Sit</h2>
-              </div>
-              <div class="post-row__secondary">
-                <p class="post-row__summary">
-                  Why good design takes time, and what actually happens when you
-                  let things sit.
-                </p>
-                <a
-                  class="post-row__link internal-link"
-                  href="./let-it-sit/"
-                  aria-label="Read Let It Sit"
-                  ><span class="post-row__link-label--full">Read More</span
-                  ><span class="post-row__link-label--compact">Read</span>
-                  <span aria-hidden="true">→</span></a
-                >
-              </div>
-            </li>
+                            <time class="post-row__compact-date" datetime="2026-04">Apr</time>
+
+                            <h2 class="post-row__title">Writing Follows Its Own Rhythm</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">Why I stopped forcing myself to write — and learned to follow the rhythm of my own ideas.</p>
+                            <a class="post-row__link internal-link" href="./writing-follows-its-own-rhythm/" aria-label="Read Writing Follows Its Own Rhythm">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
+
+                        <li
+                          class="post-row post-row--month-continuation"
+                          data-post-type="note"
+                          data-post-search="let it sit why good design takes time, and what actually happens when you let things sit. note note"
+                        >
+                          <div class="post-row__primary">
+
+                            <h2 class="post-row__title">Let It Sit</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">Why good design takes time, and what actually happens when you let things sit.</p>
+                            <a class="post-row__link internal-link" href="./let-it-sit/" aria-label="Read Let It Sit">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
 
                       </ol>
                     </div>
                   </li>
 
+
                   <li class="post-month-group" data-post-month-group>
                     <div class="post-month-group__layout">
-                      <time class="post-row__month" datetime="2026-03"
-                        >Mar</time
-                      >
+                      <time class="post-row__month" datetime="2026-03">Mar</time>
                       <ol class="post-month-group__posts">
 
-            <li
-              class="post-row post-row--month-start"
-              data-post-type="note"
-              data-post-search="don't let ideas expire curiosity save expand"
-            >
-              <div class="post-row__primary">
-                <time class="post-row__compact-date" datetime="2026-03"
-                  >Mar</time
-                >
-                <h2 class="post-row__title">Don't let ideas expire</h2>
-              </div>
-              <div class="post-row__secondary">
-                <p class="post-row__summary">
-                  Your curiosity won't wait for you. Save your ideas quick,
-                  expand on them quicker.
-                </p>
-                <a
-                  class="post-row__link internal-link"
-                  href="./dont-let-ideas-expire/"
-                  aria-label="Read Don't let ideas expire"
-                  ><span class="post-row__link-label--full">Read More</span
-                  ><span class="post-row__link-label--compact">Read</span>
-                  <span aria-hidden="true">→</span></a
-                >
-              </div>
-            </li>
+                        <li
+                          class="post-row post-row--month-start"
+                          data-post-type="note"
+                          data-post-search="don&#39;t let ideas expire your curiosity won&#39;t wait for you. save your ideas quick, expand on them quicker. note note"
+                        >
+                          <div class="post-row__primary">
+
+                            <time class="post-row__compact-date" datetime="2026-03">Mar</time>
+
+                            <h2 class="post-row__title">Don&#39;t let ideas expire</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">Your curiosity won&#39;t wait for you. Save your ideas quick, expand on them quicker.</p>
+                            <a class="post-row__link internal-link" href="./dont-let-ideas-expire/" aria-label="Read Don&#39;t let ideas expire">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
 
                       </ol>
                     </div>
                   </li>
 
+
                   <li class="post-month-group" data-post-month-group>
                     <div class="post-month-group__layout">
-                      <time class="post-row__month" datetime="2026-02"
-                        >Feb</time
-                      >
+                      <time class="post-row__month" datetime="2026-02">Feb</time>
                       <ol class="post-month-group__posts">
 
-            <li
-              class="post-row post-row--month-start"
-              data-post-type="note"
-              data-post-search="croissance et objectivité subjectivité grandissant trivial french"
-            >
-              <div class="post-row__primary">
-                <time class="post-row__compact-date" datetime="2026-02"
-                  >Feb</time
-                >
-                <h2 class="post-row__title">Croissance et objectivité</h2>
-              </div>
-              <div class="post-row__secondary">
-                <p class="post-row__summary">
-                  Se détacher de la subjectivité en grandissant&nbsp;? Est-ce
-                  trivial&nbsp;?
-                </p>
-                <a
-                  class="post-row__link internal-link"
-                  href="./croissance-et-objectivite/"
-                  aria-label="Read Croissance et objectivité"
-                  ><span class="post-row__link-label--full">Read More</span
-                  ><span class="post-row__link-label--compact">Read</span>
-                  <span aria-hidden="true">→</span></a
-                >
-              </div>
-            </li>
+                        <li
+                          class="post-row post-row--month-start"
+                          data-post-type="article"
+                          data-post-search="[fr] croissance et objectivite se detacher de la subjectivite en grandissant ? est-ce trivial ? article article"
+                        >
+                          <div class="post-row__primary">
 
-            <li
-              class="post-row post-row--month-continuation"
-              data-post-type="experiment"
-              data-post-search="density vs quantity for our brain novel experiences routine time"
-            >
-              <div class="post-row__primary">
-                <h2 class="post-row__title">Density vs quantity for our brain</h2>
-              </div>
-              <div class="post-row__secondary">
-                <p class="post-row__summary">
-                  Novel, dense experiences fly by in the moment but expand in
-                  retrospect, while empty routine drags in the moment but feels
-                  short looking back.
-                </p>
-                <a
-                  class="post-row__link internal-link"
-                  href="./density-vs-quantity-for-our-brain/"
-                  aria-label="Read Density vs quantity for our brain"
-                  ><span class="post-row__link-label--full">Read More</span
-                  ><span class="post-row__link-label--compact">Read</span>
-                  <span aria-hidden="true">→</span></a
-                >
-              </div>
-            </li>
+                            <time class="post-row__compact-date" datetime="2026-02">Feb</time>
+
+                            <h2 class="post-row__title">[FR] Croissance et objectivité</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">Se détacher de la subjectivité en grandissant ? Est-ce trivial ?</p>
+                            <a class="post-row__link internal-link" href="./croissance-et-objectivite/" aria-label="Read [FR] Croissance et objectivité">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
+
+                        <li
+                          class="post-row post-row--month-continuation"
+                          data-post-type="note"
+                          data-post-search="density vs quantity for our brain novel, dense experiences fly by in the moment but expand in retrospect, while empty routine drags in the moment but feels short looking back note note"
+                        >
+                          <div class="post-row__primary">
+
+                            <h2 class="post-row__title">Density vs quantity for our brain</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">Novel, dense experiences fly by in the moment but expand in retrospect, while empty routine drags in the moment but feels short looking back</p>
+                            <a class="post-row__link internal-link" href="./density-vs-quantity-for-our-brain/" aria-label="Read Density vs quantity for our brain">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
+
+                        <li
+                          class="post-row post-row--month-continuation"
+                          data-post-type="article"
+                          data-post-search="lissajous curves: where mathematics meets music and light a 19th-century physicist pointed lasers at tuning forks and created one of the most useful patterns in engineering. turns out the same math connects musical harmony, graphic design, and the lidar in your car. a full explanation of the theory behind it, plus an interactive tool to make your own. article article"
+                        >
+                          <div class="post-row__primary">
+
+                            <h2 class="post-row__title">Lissajous Curves: Where Mathematics Meets Music and Light</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">A 19th-century physicist pointed lasers at tuning forks and created one of the most useful patterns in engineering. Turns out the same math connects musical harmony, graphic design, and the LIDAR in your car. A full explanation of the theory behind it, plus an interactive tool to make your own.</p>
+                            <a class="post-row__link internal-link" href="./lissajous-curves/" aria-label="Read Lissajous Curves: Where Mathematics Meets Music and Light">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
 
                       </ol>
                     </div>
                   </li>
+
+
+                  <li class="post-month-group" data-post-month-group>
+                    <div class="post-month-group__layout">
+                      <time class="post-row__month" datetime="2026-01">Jan</time>
+                      <ol class="post-month-group__posts">
+
+                        <li
+                          class="post-row post-row--month-start"
+                          data-post-type="note"
+                          data-post-search="how many tokens does humanity speak per year? how many tokens do the biggest ai labs process every year? how does that compare to humanity&#39;s spoken words? note note"
+                        >
+                          <div class="post-row__primary">
+
+                            <time class="post-row__compact-date" datetime="2026-01">Jan</time>
+
+                            <h2 class="post-row__title">How Many Tokens Does Humanity Speak Per Year?</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">How many tokens do the biggest AI labs process every year? How does that compare to humanity&#39;s spoken words?</p>
+                            <a class="post-row__link internal-link" href="./how-many-tokens-does-humanity-speak-per-year/" aria-label="Read How Many Tokens Does Humanity Speak Per Year?">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
+
+                      </ol>
+                    </div>
+                  </li>
+
                 </ol>
               </div>
             </li>
+
+
+            <li class="post-year-group" data-post-year-group>
+              <div class="post-year-group__layout">
+                <span class="post-row__year">2025 /</span>
+                <ol class="post-year-group__months">
+
+
+                  <li class="post-month-group" data-post-month-group>
+                    <div class="post-month-group__layout">
+                      <time class="post-row__month" datetime="2025-12">Dec</time>
+                      <ol class="post-month-group__posts">
+
+                        <li
+                          class="post-row post-row--month-start"
+                          data-post-type="experiment"
+                          data-post-search="building a carousel tips &amp; tricks behind my custom carousel experiment experiment"
+                        >
+                          <div class="post-row__primary">
+
+                            <time class="post-row__compact-date" datetime="2025-12">Dec</time>
+
+                            <h2 class="post-row__title">Building a Carousel</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">Tips &amp; tricks behind my custom carousel</p>
+                            <a class="post-row__link internal-link" href="./building-a-carousel/" aria-label="Read Building a Carousel">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
+
+                        <li
+                          class="post-row post-row--month-continuation"
+                          data-post-type="note"
+                          data-post-search="how marketing renames our world some words we regularly use have really fun origins, far from a simple etymology perspective note note"
+                        >
+                          <div class="post-row__primary">
+
+                            <h2 class="post-row__title">How Marketing Renames Our World</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">Some words we regularly use have really fun origins, far from a simple etymology perspective</p>
+                            <a class="post-row__link internal-link" href="./how-marketing-renames-our-world/" aria-label="Read How Marketing Renames Our World">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
+
+                        <li
+                          class="post-row post-row--month-continuation"
+                          data-post-type="note"
+                          data-post-search="motivation - a personal take a small self-reflection on what motivation is to me. note note"
+                        >
+                          <div class="post-row__primary">
+
+                            <h2 class="post-row__title">Motivation - A personal take</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">A small self-reflection on what motivation is to me.</p>
+                            <a class="post-row__link internal-link" href="./motivation-a-personal-take/" aria-label="Read Motivation - A personal take">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
+
+                        <li
+                          class="post-row post-row--month-continuation"
+                          data-post-type="article"
+                          data-post-search="was maths invented or discovered? an exploration of the philosophy of mathematics and its origins. article article"
+                        >
+                          <div class="post-row__primary">
+
+                            <h2 class="post-row__title">Was maths invented or discovered?</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">An exploration of the philosophy of mathematics and its origins.</p>
+                            <a class="post-row__link internal-link" href="./was-maths-invented-or-discovered/" aria-label="Read Was maths invented or discovered?">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
+
+                      </ol>
+                    </div>
+                  </li>
+
+
+                  <li class="post-month-group" data-post-month-group>
+                    <div class="post-month-group__layout">
+                      <time class="post-row__month" datetime="2025-11">Nov</time>
+                      <ol class="post-month-group__posts">
+
+                        <li
+                          class="post-row post-row--month-start"
+                          data-post-type="note"
+                          data-post-search="the art of stressing understanding stress: where it comes from and how to find balance in a hectic world. note note"
+                        >
+                          <div class="post-row__primary">
+
+                            <time class="post-row__compact-date" datetime="2025-11">Nov</time>
+
+                            <h2 class="post-row__title">The art of stressing</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">Understanding stress: where it comes from and how to find balance in a hectic world.</p>
+                            <a class="post-row__link internal-link" href="./the-art-of-stressing/" aria-label="Read The art of stressing">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
+
+                        <li
+                          class="post-row post-row--month-continuation"
+                          data-post-type="article"
+                          data-post-search="how china quietly caught up why everyone chooses china as their manufacturing hub? is china really on the verge of surpassing the us in ai? article article"
+                        >
+                          <div class="post-row__primary">
+
+                            <h2 class="post-row__title">How China Quietly Caught Up</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">Why everyone chooses China as their manufacturing hub? Is China really on the verge of surpassing the US in AI?</p>
+                            <a class="post-row__link internal-link" href="./how-china-quietly-caught-up/" aria-label="Read How China Quietly Caught Up">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
+
+                      </ol>
+                    </div>
+                  </li>
+
+
+                  <li class="post-month-group" data-post-month-group>
+                    <div class="post-month-group__layout">
+                      <time class="post-row__month" datetime="2025-08">Aug</time>
+                      <ol class="post-month-group__posts">
+
+                        <li
+                          class="post-row post-row--month-start"
+                          data-post-type="experiment"
+                          data-post-search="interactive pixel grid a fun experiment with a pixel grid that responds to user interaction. experiment experiment"
+                        >
+                          <div class="post-row__primary">
+
+                            <time class="post-row__compact-date" datetime="2025-08">Aug</time>
+
+                            <h2 class="post-row__title">Interactive Pixel Grid</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">A fun experiment with a pixel grid that responds to user interaction.</p>
+                            <a class="post-row__link internal-link" href="./interactive-pixel-grid/" aria-label="Read Interactive Pixel Grid">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
+
+                        <li
+                          class="post-row post-row--month-continuation"
+                          data-post-type="experiment"
+                          data-post-search="animated avatar bringing life to a simple design element with css animations. experiment experiment"
+                        >
+                          <div class="post-row__primary">
+
+                            <h2 class="post-row__title">Animated Avatar</h2>
+                          </div>
+                          <div class="post-row__secondary">
+                            <p class="post-row__summary">Bringing life to a simple design element with CSS animations.</p>
+                            <a class="post-row__link internal-link" href="./animated-avatar/" aria-label="Read Animated Avatar">
+                              <span class="post-row__link-label--full">Read More</span>
+                              <span class="post-row__link-label--compact">Read</span>
+                              <span aria-hidden="true">→</span>
+                            </a>
+                          </div>
+                        </li>
+
+                      </ol>
+                    </div>
+                  </li>
+
+                </ol>
+              </div>
+            </li>
+
           </ol>
 
           <aside class="featured-post" aria-label="Featured post">
             <span class="featured-post__eyebrow">Featured Post</span>
-            <a
-              class="featured-article"
-              href="../projects/conways-reverse-game-of-life/"
-            >
-              <span class="featured-article__title"
-                >Reversing Conway's Game Of Life with Diffusion</span
-              >
-              <span class="featured-article__media">
-                <img
-                  class="featured-article__image"
-                  src="../assets/image_mobile_featured.gif"
-                  width="250"
-                  height="180"
-                  alt="Animated cellular automata evolving across a white field."
-                />
-              </span>
-              <span class="featured-article__cta">See More ↗</span>
+            <a class="featured-article" href="./was-maths-invented-or-discovered/">
+              <span class="featured-article__title">Was maths invented or discovered?</span>
+              <span class="featured-article__media featured-article__media--math" aria-hidden="true">π</span>
+              <span class="featured-article__cta">Read More ↗</span>
             </a>
           </aside>
         </section>

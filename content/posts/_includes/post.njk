@@ -1,0 +1,151 @@
+{% set body = content | postBody %}
+{% set footnotes = content | postFootnotes %}
+{% set sources = content | postSources %}
+{% set topicTags = tags | postTags(type) %}
+{% set components = content | postComponents %}
+<!doctype html>
+<html lang="{{ lang | default('en') }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>{{ title | escape }} - Pierre-Louis</title>
+    <meta name="description" content="{{ description | escape }}" />
+    <meta property="og:title" content="{{ title | escape }} - Pierre-Louis" />
+    <meta property="og:description" content="{{ description | escape }}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="{{ siteUrl }}/posts/{{ slug }}/" />
+    <meta
+      property="og:image"
+      content="{% if heroImage %}{{ heroImage | postOgAsset(page.inputPath) }}{% else %}{{ siteUrl }}/assets/image_mobile_featured.gif{% endif %}"
+    />
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css" />
+    <link rel="stylesheet" href="../post.css" />
+    {% for component in components %}
+      {% if component.style %}<link rel="stylesheet" href="../components/{{ component.style }}" />{% endif %}
+    {% endfor %}
+    <script src="../../script.js" defer></script>
+    <script src="../post.js" defer></script>
+    {% for component in components %}
+      {% if component.script %}<script type="module" src="../components/{{ component.script }}"></script>{% endif %}
+    {% endfor %}
+    <script src="../../footer.js" defer></script>
+  </head>
+  <body>
+    <div
+      class="site-shell post-page{% if headerBackdrop %} post-page--backdrop{% endif %}{% if headerNav == 'light' %} post-page--nav-light{% endif %}"
+      data-header-backdrop="{{ headerBackdrop | escape }}"
+      data-header-nav="{{ headerNav | escape }}"
+      data-post-type="{{ type | escape }}"
+      {% if headerTagColor %}style="--post-hero-tag-color: {{ headerTagColor | escape }}"{% endif %}
+    >
+{{ postSiteHeader | safe }}
+
+      <main>
+        <article>
+          <header class="post-hero{% if headerBackdrop %} post-hero--with-backdrop{% endif %}">
+            {% if headerBackdrop %}
+            <iframe
+              class="post-hero__backdrop"
+              src="../headers/{{ headerBackdrop }}.html"
+              title="Decorative animated article header"
+              aria-hidden="true"
+              role="presentation"
+              tabindex="-1"
+              loading="eager"
+              sandbox="allow-scripts"
+              data-post-hero-backdrop
+            ></iframe>
+            {% endif %}
+
+            <p class="post-hero__meta">
+              <time class="post-hero__date" datetime="{{ date | dateIso }}">{{ date | dateLong(lang) }}</time>
+              {% for tag in topicTags %}<span class="post-hero__tag">{{ tag | escape }}</span>{% endfor %}
+              <span class="post-hero__tag">{{ type | typeLabel }}</span>
+            </p>
+
+            <h1 class="post-hero__title">{{ title | escape }}</h1>
+            <p class="post-hero__dek">{{ description | escape }}</p>
+
+            {% if heroImage %}
+            <figure class="post-hero__media post-hero__figure">
+              <button
+                class="post-hero__frame post-lightbox__trigger"
+                type="button"
+                data-post-lightbox-item
+              >
+                <img
+                  class="post-hero__image"
+                  src="{{ heroImage | postAsset(page.inputPath) }}"
+                  alt="{{ heroAlt | escape }}"
+                />
+              </button>
+              {% if heroCaption %}
+              <figcaption class="post-caption">
+                <span>{{ heroCaption | escape }}</span>
+                <span class="post-caption__index">Opening image / 01</span>
+              </figcaption>
+              {% endif %}
+            </figure>
+            {% endif %}
+          </header>
+
+          <div class="post-reading">
+            {% if toc != false %}
+            <nav
+              class="post-toc"
+              aria-label="Table of contents"
+              data-post-toc
+              data-toc-mode="{{ toc }}"
+              hidden
+            >
+              <div class="post-toc__desktop" data-post-toc-desktop></div>
+              <div class="post-toc__mobile">
+                <button
+                  class="post-toc__mobile-toggle"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="post-toc-panel"
+                  data-post-toc-toggle
+                >
+                  <span class="post-toc__current" data-post-toc-current></span>
+                  <svg class="post-toc__chevron" width="10" height="16" viewBox="0 0 10 16" aria-hidden="true">
+                    <path fill="currentColor" d="M.21 5.352a.714.714 0 0 1 1.01 0L5 9.132l3.78-3.78a.714.714 0 0 1 1.01 1.01l-4.285 4.286a.714.714 0 0 1-1.01 0L.209 6.362a.714.714 0 0 1 0-1.01" />
+                  </svg>
+                </button>
+                <div
+                  class="post-toc__mobile-panel"
+                  id="post-toc-panel"
+                  aria-hidden="true"
+                  data-post-toc-panel
+                >
+                  <div class="post-toc__mobile-scroll" data-post-toc-mobile></div>
+                </div>
+              </div>
+            </nav>
+            {% endif %}
+
+            <div class="post-body">
+{{ body | safe }}
+            </div>
+          </div>
+
+{% include "post-endmatter.njk" %}
+        </article>
+      </main>
+
+{{ postSiteFooter | safe }}
+    </div>
+
+{% include "post-lightbox.njk" %}
+  </body>
+</html>

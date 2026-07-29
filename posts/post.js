@@ -6,109 +6,31 @@
   }
 
   const postBody = document.querySelector(".post-body");
-  const postScriptUrl = document.currentScript?.src || window.location.href;
+  const headerBackdrop = document.querySelector(
+    "[data-post-hero-backdrop]",
+  );
   const reducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
-  const codeLanguageAliases = {
-    "c++": "cpp",
-    cs: "csharp",
-    html: "xml",
-    js: "javascript",
-    md: "markdown",
-    py: "python",
-    rb: "ruby",
-    sh: "bash",
-    shell: "bash",
-    tex: "latex",
-    ts: "typescript",
-    yml: "yaml",
-    zsh: "bash",
-  };
-  const languageLoads = new Map();
 
-  const renderPostMath = () => {
-    if (!postBody || typeof window.renderMathInElement !== "function") {
-      return;
-    }
-
-    window.renderMathInElement(postBody, {
-      delimiters: [
-        { left: "$$", right: "$$", display: true },
-        { left: "\\[", right: "\\]", display: true },
-        { left: "\\(", right: "\\)", display: false },
-        { left: "$", right: "$", display: false },
-      ],
-      ignoredTags: [
-        "script",
-        "noscript",
-        "style",
-        "textarea",
-        "pre",
-        "code",
-        "option",
-      ],
-      ignoredClasses: ["no-math", "post-code"],
-      macros: {
-        "\\R": "\\mathbb{R}",
-        "\\N": "\\mathbb{N}",
-        "\\Z": "\\mathbb{Z}",
-        "\\E": "\\mathbb{E}",
-        "\\P": "\\mathbb{P}",
-        "\\dif": "\\mathop{}\\!\\mathrm{d}",
-      },
-      output: "htmlAndMathml",
-      strict: "warn",
-      throwOnError: false,
-      trust: false,
+  if (headerBackdrop && window.parent !== window) {
+    window.addEventListener("message", (event) => {
+      if (
+        event.source === headerBackdrop.contentWindow &&
+        event.data?.type === "post-header:ready"
+      ) {
+        window.parent.postMessage(event.data, "*");
+      }
     });
-  };
+  }
 
   const getCodeLanguage = (code) => {
     const languageClass = [...code.classList].find((className) =>
       /^(?:lang|language)-/.test(className),
     );
-    const requested = languageClass?.replace(/^(?:lang|language)-/, "");
-
-    if (!requested) {
-      return null;
-    }
-
     return (
-      codeLanguageAliases[requested.toLowerCase()] || requested.toLowerCase()
+      languageClass?.replace(/^(?:lang|language)-/, "").toLowerCase() || null
     );
-  };
-
-  const loadCodeLanguage = (language) => {
-    if (
-      !language ||
-      !window.hljs ||
-      window.hljs.getLanguage(language) ||
-      !/^[a-z0-9-]+$/.test(language)
-    ) {
-      return Promise.resolve();
-    }
-
-    if (languageLoads.has(language)) {
-      return languageLoads.get(language);
-    }
-
-    const load = new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      const languageRoot = new URL(
-        "../assets/vendor/highlight/languages/",
-        postScriptUrl,
-      );
-
-      script.src = new URL(`${language}.min.js`, languageRoot).href;
-      script.async = true;
-      script.addEventListener("load", resolve, { once: true });
-      script.addEventListener("error", reject, { once: true });
-      document.head.append(script);
-    });
-
-    languageLoads.set(language, load);
-    return load;
   };
 
   const copyText = async (value) => {
@@ -210,23 +132,7 @@
         figure.append(copyButton);
       }
 
-      if (
-        !window.hljs ||
-        code.classList.contains("language-text") ||
-        code.classList.contains("language-plaintext")
-      ) {
-        return Promise.resolve();
-      }
-
-      return loadCodeLanguage(language)
-        .catch(() => undefined)
-        .then(() => {
-          if (language && !window.hljs.getLanguage(language)) {
-            code.classList.add("nohighlight");
-          }
-
-          window.hljs.highlightElement(code);
-        });
+      return Promise.resolve();
     });
   };
 
@@ -264,7 +170,9 @@
       (element) => element.tagName === "H2",
     );
 
-    if (headings.length < 2) {
+    const minimumHeadings = toc.dataset.tocMode === "true" ? 1 : 2;
+
+    if (headings.length < minimumHeadings) {
       return;
     }
 
@@ -441,9 +349,57 @@
     updateActive();
   };
 
-  renderPostMath();
+  const initFootnoteReturns = () => {
+    document.querySelectorAll(".post-footnote-backref").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const href = link.getAttribute("href") || "";
+        const target = href.startsWith("#")
+          ? document.getElementById(decodeURIComponent(href.slice(1)))
+          : null;
+
+        if (!target) {
+          return;
+        }
+
+        event.preventDefault();
+        window.history.pushState(null, "", href);
+
+        let fallbackTimer;
+        let highlightTimer;
+
+        const highlightReference = () => {
+          window.removeEventListener("scrollend", highlightReference);
+          window.clearTimeout(fallbackTimer);
+          target.classList.remove("is-return-highlighted");
+          void target.offsetWidth;
+          target.classList.add("is-return-highlighted");
+          window.clearTimeout(highlightTimer);
+          highlightTimer = window.setTimeout(() => {
+            target.classList.remove("is-return-highlighted");
+          }, 650);
+        };
+
+        if (reducedMotion) {
+          target.scrollIntoView({ block: "start" });
+          highlightReference();
+          return;
+        }
+
+        window.addEventListener("scrollend", highlightReference, {
+          once: true,
+        });
+        fallbackTimer = window.setTimeout(highlightReference, 2000);
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    });
+  };
+
   const codeHighlightJobs = enhanceCodeBlocks();
   initTableOfContents();
+  initFootnoteReturns();
   Promise.allSettled(codeHighlightJobs).then(() => {
     page.classList.add("has-code-highlighting");
   });
@@ -600,93 +556,4 @@
     }
   });
 
-  document.querySelectorAll("[data-post-gallery]").forEach((gallery) => {
-    const viewport = gallery.querySelector("[data-gallery-viewport]");
-
-    if (!viewport) {
-      return;
-    }
-
-    let dragStartX = 0;
-    let dragStartScroll = 0;
-    let didDrag = false;
-
-    viewport.addEventListener("keydown", (event) => {
-      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
-        return;
-      }
-
-      event.preventDefault();
-      const direction = event.key === "ArrowRight" ? 1 : -1;
-      viewport.scrollBy({
-        left: viewport.clientWidth * 0.75 * direction,
-        behavior: reducedMotion ? "auto" : "smooth",
-      });
-    });
-
-    viewport.addEventListener("pointerdown", (event) => {
-      if (event.pointerType !== "mouse" || event.button !== 0) {
-        return;
-      }
-
-      if (event.target.closest("a[href]")) {
-        return;
-      }
-
-      dragStartX = event.clientX;
-      dragStartScroll = viewport.scrollLeft;
-      didDrag = false;
-      viewport.classList.add("is-dragging");
-    });
-
-    viewport.addEventListener("pointermove", (event) => {
-      if (!viewport.classList.contains("is-dragging")) {
-        return;
-      }
-
-      const dragDistance = event.clientX - dragStartX;
-
-      if (Math.abs(dragDistance) > 4) {
-        didDrag = true;
-
-        if (!viewport.hasPointerCapture(event.pointerId)) {
-          viewport.setPointerCapture(event.pointerId);
-        }
-      }
-
-      viewport.scrollLeft = dragStartScroll - dragDistance;
-    });
-
-    const endDrag = (event) => {
-      if (!viewport.classList.contains("is-dragging")) {
-        return;
-      }
-
-      viewport.classList.remove("is-dragging");
-
-      if (viewport.hasPointerCapture(event.pointerId)) {
-        viewport.releasePointerCapture(event.pointerId);
-      }
-
-      window.setTimeout(() => {
-        didDrag = false;
-      }, 0);
-    };
-
-    viewport.addEventListener(
-      "click",
-      (event) => {
-        if (!didDrag) {
-          return;
-        }
-
-        event.preventDefault();
-        event.stopPropagation();
-      },
-      true,
-    );
-
-    viewport.addEventListener("pointerup", endDrag);
-    viewport.addEventListener("pointercancel", endDrag);
-  });
 })();
