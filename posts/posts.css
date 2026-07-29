@@ -9,6 +9,11 @@
   overflow: visible;
 }
 
+.posts-page em {
+  font-family: var(--font-family-display-italic);
+  font-style: italic;
+}
+
 .posts-page.has-post-reveal-motion .posts-intro > *,
 .posts-page.has-post-reveal-motion .post-row,
 .posts-page.has-post-reveal-motion .featured-post {

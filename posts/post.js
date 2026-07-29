@@ -228,6 +228,23 @@
       }
     };
 
+    const updateStickyState = () => {
+      if (window.innerWidth > 1100) {
+        toc.classList.remove("is-stuck");
+        return;
+      }
+
+      const stickyTop = Number.parseFloat(getComputedStyle(toc).top) || 0;
+      const hasReachedStickyTop =
+        toc.getBoundingClientRect().top <= stickyTop + 1;
+
+      toc.classList.toggle("is-stuck", hasReachedStickyTop);
+
+      if (!hasReachedStickyTop && toc.classList.contains("is-open")) {
+        closeToc();
+      }
+    };
+
     const setActive = (heading) => {
       if (!heading || heading.id === activeId) {
         return;
@@ -279,6 +296,8 @@
     };
 
     const handleScroll = () => {
+      updateStickyState();
+
       if (isTocScrolling) {
         window.clearTimeout(scrollSettleTimer);
         scrollSettleTimer = window.setTimeout(finishTocScroll, 140);
@@ -342,10 +361,12 @@
         closeToc();
       }
 
+      updateStickyState();
       requestActiveUpdate();
     });
 
     headings.forEach((heading) => heading.classList.add("post-toc__target"));
+    updateStickyState();
     updateActive();
   };
 

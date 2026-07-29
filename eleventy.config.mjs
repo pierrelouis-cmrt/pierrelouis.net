@@ -140,7 +140,7 @@ export default async function configureEleventy(eleventyConfig) {
     renderSiteHeader({
       back: {
         href: "../",
-        label: "Back to posts",
+        label: "Back",
         shortLabel: "Back",
       },
       root: "../../",

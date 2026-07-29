@@ -23,6 +23,11 @@
   overflow: clip;
 }
 
+.post-page em {
+  font-family: var(--font-family-display-italic);
+  font-style: italic;
+}
+
 .post-page--backdrop .site-header {
   background: transparent;
 }
@@ -233,7 +238,7 @@
 .post-hero__title {
   max-width: 14ch;
   margin: var(--space-xl) auto 0;
-  font-size: clamp(42px, 4.5vw, 64px);
+  font-size: clamp(36px, 3.7vw, 52px);
   font-weight: 420;
   line-height: 1;
   letter-spacing: -0.05em;
@@ -243,7 +248,7 @@
 
 .post-page[data-post-type="note"] .post-hero__title {
   max-width: 18ch;
-  font-size: clamp(36px, 3.7vw, 52px);
+  font-size: clamp(28px, 2.75vw, 40px);
   line-height: 1.04;
 }
 
@@ -1212,12 +1217,35 @@ body.has-post-lightbox-open {
   }
 
   .post-toc__mobile {
-    position: relative;
+    position: fixed;
+    top: var(--post-toc-sticky-top);
+    left: 0;
     display: block;
-    width: calc(100% + (var(--page-gutter) * 2));
-    margin-inline: calc(var(--page-gutter) * -1);
+    width: 100%;
+    margin-inline: 0;
     border-bottom: 1px solid var(--post-rule);
     background: var(--color-bg);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    visibility: hidden;
+    transition:
+      opacity var(--duration-fast) var(--ease-out),
+      top var(--duration-medium) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out),
+      visibility 0s linear var(--duration-fast);
+  }
+
+  .post-toc.is-stuck .post-toc__mobile {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    visibility: visible;
+    transition:
+      opacity var(--duration-fast) var(--ease-out),
+      top var(--duration-medium) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out),
+      visibility 0s;
   }
 
   .post-toc__mobile-toggle {
@@ -1367,13 +1395,13 @@ body.has-post-lightbox-open {
     max-width: none;
     margin-right: 0;
     margin-left: 0;
-    font-size: clamp(36px, 10.5vw, 46px);
+    font-size: clamp(32px, 9vw, 40px);
     line-height: 1;
     text-align: left;
   }
 
   .post-page[data-post-type="note"] .post-hero__title {
-    font-size: clamp(32px, 8.8vw, 40px);
+    font-size: clamp(26px, 7.2vw, 32px);
     line-height: 1.04;
   }
 
@@ -1444,6 +1472,7 @@ body.has-post-lightbox-open {
 
 @media (prefers-reduced-motion: reduce) {
   .post-toc,
+  .post-toc__mobile,
   .post-toc__chevron,
   .post-toc__mobile-panel {
     transition: none;

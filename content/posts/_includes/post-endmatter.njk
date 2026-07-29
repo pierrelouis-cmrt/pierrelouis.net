@@ -3,11 +3,9 @@
               <section aria-labelledby="post-tags-title">
                 <h2 class="post-endmatter__label" id="post-tags-title">Tags</h2>
                 <ul class="post-tags">
-                  <li><span class="post-tags__tag">{{ date | dateYear }}</span></li>
                   {% for tag in topicTags %}
                   <li><span class="post-tags__tag">{{ tag | escape }}</span></li>
                   {% endfor %}
-                  <li><span class="post-tags__tag">{{ type | typeLabel }}</span></li>
                 </ul>
               </section>
 
