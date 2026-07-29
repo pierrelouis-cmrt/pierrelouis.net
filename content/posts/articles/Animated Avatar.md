@@ -1,8 +1,15 @@
 ---
 title: "Animated Avatar"
 description: "Bringing life to a simple design element with CSS animations."
-tags: [experiment]
 date: 2025-08-01
+slug: animated-avatar
+type: experiment
+tags:
+  - animation
+  - css
+  - interaction
+lang: en
+toc: false
 ---
 
 I've always wanted to bring life to the most simple design element possible. Using only code.
@@ -13,4 +20,8 @@ I then played around for a bit, and created a dozen more animations with keyfram
 
 Here it is, in all its glory:
 
-<iframe src="code/avatar.html" class="article-embed avatar-embed" loading="lazy"></iframe>
+<pl-animated-avatar class="post-media">
+  <p class="post-component-fallback">The interactive animated avatar demo requires JavaScript.</p>
+</pl-animated-avatar>
+
+[Click here for fullscreen](/posts/components/apps/avatar.html).

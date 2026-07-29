@@ -1,8 +1,15 @@
 ---
 title: "Motivation - A personal take"
 description: "A small self-reflection on what motivation is to me."
-tags: [note]
 date: 2025-12-10
+slug: motivation-a-personal-take
+type: note
+tags:
+  - motivation
+  - self-reflection
+  - work
+lang: en
+toc: false
 ---
 
 I’m thinking a lot about motivation. I believe it’s something you can work on. Definitely.

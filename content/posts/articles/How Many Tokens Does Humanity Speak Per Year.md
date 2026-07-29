@@ -1,21 +1,27 @@
 ---
-title: How Many Tokens Does Humanity Speak Per Year?
-description: How many tokens do the biggest AI labs process every year? How does that compare to humanity's spoken words?
-tags:
-  - note
+title: "How Many Tokens Does Humanity Speak Per Year?"
+description: "How many tokens do the biggest AI labs process every year? How does that compare to humanity's spoken words?"
 date: 2026-01-10
+slug: how-many-tokens-does-humanity-speak-per-year
+type: note
+tags:
+  - artificial-intelligence
+  - language
+  - scale
+lang: en
+toc: auto
 ---
 As you may already know, AI companies love throwing around big numbers: billions of tokens per minute, trillions per month, etc. But how does that actually compare to *us*? How much does humanity speak?
 
 Let's find out.
 
-### First: what's a token?
+## First: what's a token?
 
 AI models don't read words like we do. They break text into smaller chunks called **tokens**: sometimes a full word, sometimes just a piece of one. Kinda like syllables. How text is split into tokens also depends on the model.
 
 The rough conversion: **1000 tokens ≈ 750 words**.
 
-### Estimating human speech (in tokens)
+## Estimating human speech (in tokens)
 
 The goal here is just to get an order of magnitude. Nothing precise, just coherent enough to get a rough idea.
 
@@ -31,7 +37,7 @@ That's **~60 quadrillion tokens per year**. Sixty million billion!
 
 ---
 
-### Now: how does AI compare?
+## Now: how does AI compare?
 
 Numbers from the biggest labs, late 2025:
 

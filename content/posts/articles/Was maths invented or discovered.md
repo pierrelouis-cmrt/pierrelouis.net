@@ -1,8 +1,15 @@
 ---
 title: "Was maths invented or discovered?"
 description: "An exploration of the philosophy of mathematics and its origins."
-tags: [article]
 date: 2025-12-01
+slug: was-maths-invented-or-discovered
+type: article
+tags:
+  - logic
+  - mathematics
+  - philosophy
+lang: en
+toc: false
 ---
 
 Was maths invented or discovered? The answer to this question is actually quite nuanced. Some will say it’s both, some will say neither.

@@ -31,8 +31,12 @@
     <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css" />
     <link rel="stylesheet" href="../post.css" />
 
+      <link rel="stylesheet" href="../components/article-demos.css" />
+
     <script src="../../script.js" defer></script>
     <script src="../post.js" defer></script>
+
+      <script type="module" src="../components/article-demos.js"></script>
 
     <script src="../../footer.js" defer></script>
   </head>
@@ -196,7 +200,7 @@
 
             <p class="post-hero__meta">
               <time class="post-hero__date" datetime="2025-12-29">December 29, 2025</time>
-
+              <span class="post-hero__tag">interaction</span><span class="post-hero__tag">interface-design</span><span class="post-hero__tag">javascript</span>
               <span class="post-hero__tag">Experiment</span>
             </p>
 
@@ -246,26 +250,27 @@
 <p>So I built one that moves.</p>
 <h2 id="the-sliding-window">The Sliding Window</h2>
 <p>Instead of showing all dots at once, there’s a 120px viewport that only reveals a handful. When you’ve got many images in a carousel, showing all dots can be pretty overwhelming. While swiping, the entire dot container translates to keep the active one centered:</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">const</span> offset = viewportCenter - activeIndex * dotSpacing - <span class="hljs-number">4</span>;
+<pre data-code-copy><code class="language-javascript"><span class="hljs-keyword">const</span> offset = viewportCenter - activeIndex * dotSpacing - <span class="hljs-number">4</span>;
 dotsContainer.<span class="hljs-property">style</span>.<span class="hljs-property">transform</span> = <span class="hljs-string">`translateX(<span class="hljs-subst">${offset}</span>px)`</span>;</code></pre>
 <p>That <code>-4</code> nudges things to account for the dot’s own width. Simple math, but it feels more interactive.</p>
 <h2 id="edge-fade">Edge Fade</h2>
 <p>Dots near the viewport edges get a <code>.edge</code> class: they shrink and fade out. It’s a small thing, but it sells the illusion that the dots extend infinitely in both directions.</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">if</span> (dotPosition &lt; fadeZone || dotPosition &gt; viewportWidth - fadeZone) {
+<pre data-code-copy><code class="language-javascript"><span class="hljs-keyword">if</span> (dotPosition &lt; fadeZone || dotPosition &gt; viewportWidth - fadeZone) {
   dot.<span class="hljs-property">classList</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&quot;edge&quot;</span>);
 }</code></pre>
 <h2 id="the-full-bleed-trick">The Full-Bleed Trick</h2>
 <p>My carousel lived inside a centered 600px column, but I wanted it to bleed: go full-width and touch both edges of the screen. Setting a width of 100vw (100% of the viewport’s width) gives it the right size, but it still starts where the column starts, so it overflows on the right side instead of expanding evenly.</p>
 <p>The carousel breaks out of its container using the negative margin hack:</p>
-<aside class="post-embed-fallback" role="note">
-  <p><strong>Interactive demo unavailable.</strong> Its standalone files are not included in this post source mirror.</p>
-</aside>
+<pl-full-bleed-demo class="post-media">
+  <p class="post-component-fallback">The full-bleed layout comparison requires JavaScript.</p>
+</pl-full-bleed-demo>
+<p><a href="/posts/components/apps/bleed-trick.html" class="internal-link">Click here for fullscreen</a>.</p>
 <p>Old school? Yes, definitely. But it still works, and is still very useful.</p>
 <h2 id="demo-of-the-carousel">Demo of the carousel</h2>
-<aside class="post-embed-fallback" role="note">
-  <p><strong>Interactive demo unavailable.</strong> Its standalone files are not included in this post source mirror.</p>
-</aside>
-<p><a href="" class="internal-link post-link-unavailable" aria-disabled="true" title="This linked file is not available in the published site.">Open fullscreen</a></p>
+<pl-carousel-demo class="post-media">
+  <p class="post-component-fallback">The interactive carousel demo requires JavaScript.</p>
+</pl-carousel-demo>
+<p><a href="/posts/components/apps/carousel.html" class="internal-link">Click here for fullscreen</a>.</p>
 <hr>
 <p>The whole thing is like 80 lines of JS. Sometimes the fun parts are the small details you add on top of a library, not the library itself. That’s what makes your creating more personnal and original.</p>
             </div>
@@ -277,6 +282,12 @@ dotsContainer.<span class="hljs-property">style</span>.<span class="hljs-propert
                 <h2 class="post-endmatter__label" id="post-tags-title">Tags</h2>
                 <ul class="post-tags">
                   <li><span class="post-tags__tag">2025</span></li>
+
+                  <li><span class="post-tags__tag">interaction</span></li>
+
+                  <li><span class="post-tags__tag">interface-design</span></li>
+
+                  <li><span class="post-tags__tag">javascript</span></li>
 
                   <li><span class="post-tags__tag">Experiment</span></li>
                 </ul>

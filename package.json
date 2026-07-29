@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "scripts": {
     "build": "node scripts/build-site.mjs",
     "build:lists": "node scripts/build-lists.mjs",

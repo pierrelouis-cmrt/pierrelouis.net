@@ -31,8 +31,12 @@
     <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css" />
     <link rel="stylesheet" href="../post.css" />
 
+      <link rel="stylesheet" href="../components/article-demos.css" />
+
     <script src="../../script.js" defer></script>
     <script src="../post.js" defer></script>
+
+      <script type="module" src="../components/article-demos.js"></script>
 
     <script src="../../footer.js" defer></script>
   </head>
@@ -196,7 +200,7 @@
 
             <p class="post-hero__meta">
               <time class="post-hero__date" datetime="2025-08-01">August 1, 2025</time>
-
+              <span class="post-hero__tag">animation</span><span class="post-hero__tag">css</span><span class="post-hero__tag">interaction</span>
               <span class="post-hero__tag">Experiment</span>
             </p>
 
@@ -208,47 +212,16 @@
 
           <div class="post-reading">
 
-            <nav
-              class="post-toc"
-              aria-label="Table of contents"
-              data-post-toc
-              data-toc-mode="auto"
-              hidden
-            >
-              <div class="post-toc__desktop" data-post-toc-desktop></div>
-              <div class="post-toc__mobile">
-                <button
-                  class="post-toc__mobile-toggle"
-                  type="button"
-                  aria-expanded="false"
-                  aria-controls="post-toc-panel"
-                  data-post-toc-toggle
-                >
-                  <span class="post-toc__current" data-post-toc-current></span>
-                  <svg class="post-toc__chevron" width="10" height="16" viewBox="0 0 10 16" aria-hidden="true">
-                    <path fill="currentColor" d="M.21 5.352a.714.714 0 0 1 1.01 0L5 9.132l3.78-3.78a.714.714 0 0 1 1.01 1.01l-4.285 4.286a.714.714 0 0 1-1.01 0L.209 6.362a.714.714 0 0 1 0-1.01" />
-                  </svg>
-                </button>
-                <div
-                  class="post-toc__mobile-panel"
-                  id="post-toc-panel"
-                  aria-hidden="true"
-                  data-post-toc-panel
-                >
-                  <div class="post-toc__mobile-scroll" data-post-toc-mobile></div>
-                </div>
-              </div>
-            </nav>
-
 
             <div class="post-body">
 <p>I’ve always wanted to bring life to the most simple design element possible. Using only code.</p>
 <p>When I stumbled upon Nicolas’ small avatar in the footer of his <a href="https://web.archive.org/web/20250516084155/https://slrncl.com/" class="external-link" rel="noreferrer">portfolio</a>, I knew it was exactly what I’d been looking for. It was simple, sleek and was already slightly animated. The subtle head and eye movements already made it alive.</p>
 <p>I then played around for a bit, and created a dozen more animations with keyframes in CSS. It’s incredible to see how much emotion you can give to a simple design element: 1 circle, 2 dots and a gradient.</p>
 <p>Here it is, in all its glory:</p>
-<aside class="post-embed-fallback" role="note">
-  <p><strong>Interactive demo unavailable.</strong> Its standalone files are not included in this post source mirror.</p>
-</aside>
+<pl-animated-avatar class="post-media">
+  <p class="post-component-fallback">The interactive animated avatar demo requires JavaScript.</p>
+</pl-animated-avatar>
+<p><a href="/posts/components/apps/avatar.html" class="internal-link">Click here for fullscreen</a>.</p>
             </div>
           </div>
 
@@ -258,6 +231,12 @@
                 <h2 class="post-endmatter__label" id="post-tags-title">Tags</h2>
                 <ul class="post-tags">
                   <li><span class="post-tags__tag">2025</span></li>
+
+                  <li><span class="post-tags__tag">animation</span></li>
+
+                  <li><span class="post-tags__tag">css</span></li>
+
+                  <li><span class="post-tags__tag">interaction</span></li>
 
                   <li><span class="post-tags__tag">Experiment</span></li>
                 </ul>

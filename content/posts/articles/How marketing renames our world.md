@@ -1,8 +1,15 @@
 ---
 title: "How Marketing Renames Our World"
 description: "Some words we regularly use have really fun origins, far from a simple etymology perspective"
-tags: [note]
 date: 2025-12-26
+slug: how-marketing-renames-our-world
+type: note
+tags:
+  - culture
+  - language
+  - marketing
+lang: en
+toc: false
 ---
 
 All the words we use every day have a story behind them; that’s etymology. But some words have surprisingly recent origins.
@@ -15,4 +22,4 @@ I wanted to find more of these words we assume have been around for centuries, b
 
 We could also talk about *escalator* (originally a trademark), *heroin* (a brand name in its early commercial life), or the more obvious and well-known Bluetooth; but I think you’ve got the idea.
 
-Our vocabulary is full of things that started as brands, inventions, or marketing tricks before becoming “just words” in our language. There’s even a name for that: **genericide**. 
+Our vocabulary is full of things that started as brands, inventions, or marketing tricks before becoming “just words” in our language. There’s even a name for that: **genericide**.

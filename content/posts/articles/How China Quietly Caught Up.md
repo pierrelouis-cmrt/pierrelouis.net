@@ -1,8 +1,15 @@
 ---
 title: "How China Quietly Caught Up"
 description: "Why everyone chooses China as their manufacturing hub? Is China really on the verge of surpassing the US in AI?"
-tags: [article]
 date: 2025-11-09
+slug: how-china-quietly-caught-up
+type: article
+tags:
+  - artificial-intelligence
+  - geopolitics
+  - manufacturing
+lang: en
+toc: false
 ---
 
 It’s wild that, in 2025, people still say that only low-quality products come out of China’s factories. Some people even believe that China lags behind the US!

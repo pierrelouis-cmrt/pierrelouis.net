@@ -1,8 +1,15 @@
 ---
 title: "Don't let ideas expire"
 description: "Your curiosity won't wait for you. Save your ideas quick, expand on them quicker."
-tags: [note]
 date: 2026-03-29
+slug: dont-let-ideas-expire
+type: note
+tags:
+  - creativity
+  - ideas
+  - writing
+lang: en
+toc: false
 ---
 
 Collecting ideas of articles and keeping them for later is maybe not really that effective. During the day, many ideas come to us, sometimes related to the current context, sometimes not at all. Those ideas spark curiosity in us. And thus comes the urge to write.

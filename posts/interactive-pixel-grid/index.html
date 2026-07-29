@@ -31,8 +31,12 @@
     <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css" />
     <link rel="stylesheet" href="../post.css" />
 
+      <link rel="stylesheet" href="../components/article-demos.css" />
+
     <script src="../../script.js" defer></script>
     <script src="../post.js" defer></script>
+
+      <script type="module" src="../components/article-demos.js"></script>
 
     <script src="../../footer.js" defer></script>
   </head>
@@ -196,7 +200,7 @@
 
             <p class="post-hero__meta">
               <time class="post-hero__date" datetime="2025-08-05">August 5, 2025</time>
-
+              <span class="post-hero__tag">canvas</span><span class="post-hero__tag">interaction</span><span class="post-hero__tag">javascript</span>
               <span class="post-hero__tag">Experiment</span>
             </p>
 
@@ -269,7 +273,7 @@ M1001 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
 <p>Bigger screens → bigger gaps → fewer rows and columns.
 Smaller screens → smaller gaps → more rows and columns.</p>
 <p>And here’s the little function that does exactly that:</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">computeAutoGap</span>(<span class="hljs-params">targetCount = <span class="hljs-number">10000</span>, min = <span class="hljs-number">5</span>, max = <span class="hljs-number">14</span></span>) {
+<pre data-code-copy><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">computeAutoGap</span>(<span class="hljs-params">targetCount = <span class="hljs-number">10000</span>, min = <span class="hljs-number">5</span>, max = <span class="hljs-number">14</span></span>) {
   <span class="hljs-keyword">const</span> area = <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerWidth</span> * <span class="hljs-variable language_">window</span>.<span class="hljs-property">innerHeight</span>;
   <span class="hljs-keyword">const</span> gap = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">round</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">sqrt</span>(area / targetCount));
   <span class="hljs-keyword">return</span> <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(min, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(max, gap)); <span class="hljs-comment">// clamp to safe values</span>
@@ -307,7 +311,7 @@ gap = <span class="hljs-title function_">computeAutoGap</span>();
 </li>
 </ol>
 <p>And here’s the actual JavaScript:</p>
-<pre><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">randomLovelyPalette</span>(<span class="hljs-params"></span>) {
+<pre data-code-copy><code class="language-javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">randomLovelyPalette</span>(<span class="hljs-params"></span>) {
   <span class="hljs-keyword">const</span> base = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">360</span>);
   <span class="hljs-keyword">const</span> scheme = [<span class="hljs-string">&quot;analogous&quot;</span>, <span class="hljs-string">&quot;complement&quot;</span>, <span class="hljs-string">&quot;split&quot;</span>, <span class="hljs-string">&quot;triadic&quot;</span>, <span class="hljs-string">&quot;mono&quot;</span>][
     (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">5</span>) | <span class="hljs-number">0</span>
@@ -366,10 +370,10 @@ gap = <span class="hljs-title function_">computeAutoGap</span>();
   <span class="hljs-keyword">return</span> <span class="hljs-string">`#<span class="hljs-subst">${toHex(f(<span class="hljs-number">0</span>))}</span><span class="hljs-subst">${toHex(f(<span class="hljs-number">8</span>))}</span><span class="hljs-subst">${toHex(f(<span class="hljs-number">4</span>))}</span>`</span>;
 }</code></pre>
 <h2 id="the-demo">The demo</h2>
-<aside class="post-embed-fallback" role="note">
-  <p><strong>Interactive demo unavailable.</strong> Its standalone files are not included in this post source mirror.</p>
-</aside>
-<p>Or open it in full-page mode <a href="" class="internal-link post-link-unavailable" aria-disabled="true" title="This linked file is not available in the published site.">here</a>.</p>
+<pl-pixel-grid class="post-media">
+  <p class="post-component-fallback">The interactive pixel grid requires JavaScript.</p>
+</pl-pixel-grid>
+<p><a href="/posts/components/apps/pixels.html" class="internal-link">Click here for fullscreen</a>.</p>
             </div>
           </div>
 
@@ -379,6 +383,12 @@ gap = <span class="hljs-title function_">computeAutoGap</span>();
                 <h2 class="post-endmatter__label" id="post-tags-title">Tags</h2>
                 <ul class="post-tags">
                   <li><span class="post-tags__tag">2025</span></li>
+
+                  <li><span class="post-tags__tag">canvas</span></li>
+
+                  <li><span class="post-tags__tag">interaction</span></li>
+
+                  <li><span class="post-tags__tag">javascript</span></li>
 
                   <li><span class="post-tags__tag">Experiment</span></li>
                 </ul>

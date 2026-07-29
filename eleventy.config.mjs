@@ -15,7 +15,7 @@ import {
   normalizePostTags,
   postDateIso,
 } from "./scripts/lib/posts.mjs";
-import { POST_COMPONENTS } from "./posts/components/registry.mjs";
+import { POST_COMPONENTS } from "./posts/components/registry.js";
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const SITE_URL = "https://pierrelouis.net";
@@ -260,8 +260,20 @@ export default async function configureEleventy(eleventyConfig) {
         (match) => match[1],
       ),
     );
+    const assets = new Set();
 
-    return [...tags].map((tag) => ({ tag, ...POST_COMPONENTS[tag] }));
+    return [...tags]
+      .map((tag) => ({ tag, ...POST_COMPONENTS[tag] }))
+      .filter((component) => {
+        const key = `${component.script || ""}\0${component.style || ""}`;
+
+        if (assets.has(key)) {
+          return false;
+        }
+
+        assets.add(key);
+        return true;
+      });
   });
   eleventyConfig.addFilter("searchText", (post) =>
     [

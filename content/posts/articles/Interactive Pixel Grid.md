@@ -1,8 +1,15 @@
 ---
 title: "Interactive Pixel Grid"
 description: "A fun experiment with a pixel grid that responds to user interaction."
-tags: [experiment]
 date: 2025-08-05
+slug: interactive-pixel-grid
+type: experiment
+tags:
+  - canvas
+  - interaction
+  - javascript
+lang: en
+toc: auto
 ---
 
 This little coding experiment started with [Artem's Pixel Loader pen on CodePen](https://codepen.io/artzub/pen/XJJooON) as a base. I basically built on top of what he’d already done and took it in my own direction.
@@ -40,7 +47,7 @@ Smaller screens → smaller gaps → more rows and columns.
 
 And here’s the little function that does exactly that:
 
-```js
+```javascript copy
 function computeAutoGap(targetCount = 10000, min = 5, max = 14) {
   const area = window.innerWidth * window.innerHeight;
   const gap = Math.round(Math.sqrt(area / targetCount));
@@ -75,7 +82,7 @@ Here’s the quick step by step process:
 
 And here’s the actual JavaScript:
 
-```js
+```javascript copy
 function randomLovelyPalette() {
   const base = Math.floor(Math.random() * 360);
   const scheme = ["analogous", "complement", "split", "triadic", "mono"][
@@ -138,6 +145,8 @@ function hslToHex(h, s, l) {
 
 ## The demo
 
-<iframe src="code/pixels.html" class="article-embed pixels-embed" loading="lazy"></iframe>
+<pl-pixel-grid class="post-media">
+  <p class="post-component-fallback">The interactive pixel grid requires JavaScript.</p>
+</pl-pixel-grid>
 
-Or open it in full-page mode [here](code/pixels.html).
+[Click here for fullscreen](/posts/components/apps/pixels.html).

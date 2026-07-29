@@ -1,9 +1,15 @@
 ---
 title: "[FR] Croissance et objectivité"
-description: Se détacher de la subjectivité en grandissant ? Est-ce trivial ?
-tags:
-  - article
+description: "Se détacher de la subjectivité en grandissant ? Est-ce trivial ?"
 date: 2026-02-28
+slug: croissance-et-objectivite
+type: article
+tags:
+  - philosophie
+  - psychologie
+  - réflexion
+lang: fr
+toc: false
 ---
 Se détacher de la subjectivité en grandissant ?
 
@@ -19,7 +25,7 @@ Que peut-on alors conclure?
 
 Certes, nos yeux se sont ouverts, on s'améliore via une autocritique très puissante de nous-mêmes. Cela nous force souvent à évoluer vers ce que l'on pense être une meilleure version de nous-mêmes.
 
-Mais d'un autre côté, Daniel Kahneman (*Système 1 / Système 2*) a montré que les adultes sont bourrés de biais cognitifs : confirmation, ancrage, effet de halo… L'effet Dunning-Kruger montre même que des adultes incompétents dans un domaine *surestiment* leur niveau. L'enfant, lui, peut paradoxalement voir certaines choses plus clairement. Il suffit de lire le conte *Les habits neufs de l'empereur* pour s'en rendre compte. C'est l'histoire d'un enfant qui dit la vérité que tous les adultes refusent de voir. 
+Mais d'un autre côté, Daniel Kahneman (*Système 1 / Système 2*) a montré que les adultes sont bourrés de biais cognitifs : confirmation, ancrage, effet de halo… L'effet Dunning-Kruger montre même que des adultes incompétents dans un domaine *surestiment* leur niveau. L'enfant, lui, peut paradoxalement voir certaines choses plus clairement. Il suffit de lire le conte *Les habits neufs de l'empereur* pour s'en rendre compte. C'est l'histoire d'un enfant qui dit la vérité que tous les adultes refusent de voir.
 
 Ainsi, malgré l'ouverture de notre esprit, et la prise de conscience de nous-mêmes durant notre croissance, l'objectivité reste difficile à atteindre.
 

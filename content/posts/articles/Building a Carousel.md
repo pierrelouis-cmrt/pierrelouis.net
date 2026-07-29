@@ -1,9 +1,15 @@
 ---
 title: Building a Carousel
-description: Tips & tricks behind my custom carousel
-tags:
-  - experiment
+description: "Tips & tricks behind my custom carousel"
 date: 2025-12-29
+slug: building-a-carousel
+type: experiment
+tags:
+  - interaction
+  - interface-design
+  - javascript
+lang: en
+toc: auto
 ---
 Swiper (the js library) does most of the work for carousels. Loop it, center it, add some breakpoints, and bam, it's done! But the default pagination always felt static to me. A row of dots that just... sits there.
 
@@ -13,7 +19,7 @@ So I built one that moves.
 
 Instead of showing all dots at once, there's a 120px viewport that only reveals a handful. When you've got many images in a carousel, showing all dots can be pretty overwhelming. While swiping, the entire dot container translates to keep the active one centered:
 
-```js
+```javascript copy
 const offset = viewportCenter - activeIndex * dotSpacing - 4;
 dotsContainer.style.transform = `translateX(${offset}px)`;
 ```
@@ -24,7 +30,7 @@ That `-4` nudges things to account for the dot's own width. Simple math, but it 
 
 Dots near the viewport edges get a `.edge` class: they shrink and fade out. It's a small thing, but it sells the illusion that the dots extend infinitely in both directions.
 
-```js
+```javascript copy
 if (dotPosition < fadeZone || dotPosition > viewportWidth - fadeZone) {
   dot.classList.add("edge");
 }
@@ -35,15 +41,22 @@ if (dotPosition < fadeZone || dotPosition > viewportWidth - fadeZone) {
 My carousel lived inside a centered 600px column, but I wanted it to bleed: go full-width and touch both edges of the screen. Setting a width of 100vw (100% of the viewport's width) gives it the right size, but it still starts where the column starts, so it overflows on the right side instead of expanding evenly.
 
 The carousel breaks out of its container using the negative margin hack:
-<iframe src="code/bleed-trick.html" class="article-embed bleed-embed" loading="lazy"></iframe>
+
+<pl-full-bleed-demo class="post-media">
+  <p class="post-component-fallback">The full-bleed layout comparison requires JavaScript.</p>
+</pl-full-bleed-demo>
+
+[Click here for fullscreen](/posts/components/apps/bleed-trick.html).
 
 Old school? Yes, definitely. But it still works, and is still very useful.
 
 ## Demo of the carousel
 
-<iframe src="code/now-carousel.html" class="article-embed carousel-embed" loading="lazy"></iframe>
+<pl-carousel-demo class="post-media">
+  <p class="post-component-fallback">The interactive carousel demo requires JavaScript.</p>
+</pl-carousel-demo>
 
-[Open fullscreen](code/now-carousel.html)
+[Click here for fullscreen](/posts/components/apps/carousel.html).
 
 ---
 

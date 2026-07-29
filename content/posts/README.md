@@ -65,7 +65,6 @@ content/posts/
 │   ├── post-lightbox.njk
 │   └── posts-index.njk
 ├── EXAMPLE_POST.md           # Complete authoring example (not published)
-├── legacy-posts.json         # Temporary migration adapter
 └── index.njk
 
 posts/
@@ -130,13 +129,10 @@ If `hero-image` is present, `hero-alt` is required. Local references are
 validated and path traversal is rejected. Remote images warn because published
 media should be kept with the article.
 
-### Legacy posts
-
-The current vault predates explicit `slug` and `type` properties.
-`legacy-posts.json` supplies stable migration values only for those known
-filenames. New files do not receive this exception and fail validation when
-required fields are missing. When an old post is next edited, add its `slug`
-and `type` to the vault frontmatter and remove its migration entry.
+The compiler does not infer identity from filenames or tags. Every post owns
+its permanent `slug` and explicit `type`, so renaming an Obsidian file cannot
+silently change its public URL or classification. Unknown frontmatter
+properties and type names repeated in `tags` fail validation.
 
 ## Markdown dialect
 
@@ -183,7 +179,7 @@ must be replaced by a link or a registered component.
 
 A standalone image followed immediately by a fully italic paragraph becomes a
 lightbox figure and caption. An image without that paragraph becomes an
-uncaptioned figure. Legacy image-plus-caption lines are recognized too.
+uncaptioned figure.
 
 ### Math
 
@@ -245,7 +241,7 @@ the article layout:
 ```
 
 Register its module and optional stylesheet in
-`posts/components/registry.mjs`. The build rejects unknown `pl-*` names and
+`posts/components/registry.js`. The build rejects unknown `pl-*` names and
 loads only the files used by each article.
 
 Use an iframe only for an independent application that owns its viewport,

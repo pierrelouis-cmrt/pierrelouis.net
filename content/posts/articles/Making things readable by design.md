@@ -1,8 +1,15 @@
 ---
 title: "Making things readable by design"
 description: "Why readable design is not only about color, but also contrast and meaning."
-tags: [article]
 date: 2026-05-09
+slug: making-things-readable-by-design
+type: article
+tags:
+  - accessibility
+  - color
+  - design
+lang: en
+toc: false
 ---
 
 When we think about design, color is something that comes up very naturally. Choosing the right colors can be challenging. Of course, they need to look aesthetic and cohesive. But there is another important factor to take into account: contrast.
@@ -29,5 +36,4 @@ Red is strongly associated with stopping, danger, prohibition and urgency. It ma
 
 So the point is not that yellow/black is “better” than red. They are doing different jobs.
 And this is precisely what good design is. Choices you make are the results of many reasons and constraints. It's always about making things in the right way, for the right reason, in the right context.
-
 

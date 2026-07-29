@@ -15,6 +15,7 @@ const MIME_TYPES = new Map([
   [".jpeg", "image/jpeg"],
   [".js", "text/javascript; charset=utf-8"],
   [".json", "application/json; charset=utf-8"],
+  [".mjs", "text/javascript; charset=utf-8"],
   [".png", "image/png"],
   [".svg", "image/svg+xml"],
   [".webp", "image/webp"],
@@ -133,9 +134,11 @@ export const startSiteServer = async ({
       const contentType = MIME_TYPES.get(extension) || "application/octet-stream";
 
       const requestPath = getRequestPath(request.url);
-      const isIsolatedPostHeader = requestPath.startsWith("/posts/headers/");
+      const isIsolatedPostDocument =
+        requestPath.startsWith("/posts/headers/") ||
+        requestPath.startsWith("/posts/components/apps/");
 
-      if (dev && extension === ".html" && !isIsolatedPostHeader) {
+      if (dev && extension === ".html" && !isIsolatedPostDocument) {
         const html = await readFile(filePath, "utf8");
         response.writeHead(200, { "Content-Type": contentType });
         response.end(html.replace("</body>", `${DEV_RELOAD_SCRIPT}\n  </body>`));

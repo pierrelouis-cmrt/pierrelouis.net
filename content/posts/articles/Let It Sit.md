@@ -1,8 +1,15 @@
 ---
 title: "Let It Sit"
 description: "Why good design takes time, and what actually happens when you let things sit."
-tags: [note]
 date: 2026-04-05
+slug: let-it-sit
+type: note
+tags:
+  - creativity
+  - design
+  - process
+lang: en
+toc: false
 ---
 Of course, design is "function" and very tied to user experience. But design is also art.
 And art takes its roots from creativity, new ideas. Of course discipline, technique and lived experiences also play a role in that. But let's focus on the pure creative process, figuring out stuff along the way and trusting the process.

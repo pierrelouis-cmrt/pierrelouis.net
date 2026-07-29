@@ -1,8 +1,15 @@
 ---
 title: "The art of stressing"
 description: "Understanding stress: where it comes from and how to find balance in a hectic world."
-tags: [note]
 date: 2025-11-15
+slug: the-art-of-stressing
+type: note
+tags:
+  - psychology
+  - stress
+  - wellbeing
+lang: en
+toc: false
 ---
 
 What even is stress?

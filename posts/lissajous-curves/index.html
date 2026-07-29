@@ -31,8 +31,12 @@
     <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css" />
     <link rel="stylesheet" href="../post.css" />
 
+      <link rel="stylesheet" href="../components/article-demos.css" />
+
     <script src="../../script.js" defer></script>
     <script src="../post.js" defer></script>
+
+      <script type="module" src="../components/article-demos.js"></script>
 
     <script src="../../footer.js" defer></script>
   </head>
@@ -196,7 +200,7 @@
 
             <p class="post-hero__meta">
               <time class="post-hero__date" datetime="2026-02-01">February 1, 2026</time>
-
+              <span class="post-hero__tag">interaction</span><span class="post-hero__tag">mathematics</span><span class="post-hero__tag">physics</span>
               <span class="post-hero__tag">Article</span>
             </p>
 
@@ -249,13 +253,13 @@
   <button class="post-media__frame post-lightbox__trigger" type="button" data-post-lightbox-item>
     <img class="post-media__asset" src="../assets/historical_experiment_photo.webp" loading="lazy" alt="Historical image" />
   </button>
-  <figcaption class="post-caption"><span><strong>Figure 1.</strong> Experiment of Lissajous. The light-figures produced by the compound vibrations of two tuning forks vibrating at different pitches. <em>Source: Privat-Deschanel A. and de Ochoa y Ronna E., Tratado elemental de física, Hachette, Paris (1872), pp. 696–697</em><sup class="post-footnote-ref" id="footnote-ref-1"><a href="#footnote-1" role="doc-noteref" aria-label="Read footnote 1">1</a></sup></span><span class="post-caption__index">Figure / 01</span></figcaption>
+  <figcaption class="post-caption"><span>Figure 1. Experiment of Lissajous. The light-figures produced by the compound vibrations of two tuning forks vibrating at different pitches. Source: Privat-Deschanel A. and de Ochoa y Ronna E., Tratado elemental de física, Hachette, Paris (1872), pp. 696–697 <sup class="post-footnote-ref" id="footnote-ref-1"><a href="#footnote-1" role="doc-noteref" aria-label="Read footnote 1">1</a></sup></span><span class="post-caption__index">Figure / 01</span></figcaption>
 </figure>
 <figure class="post-media">
   <button class="post-media__frame post-lightbox__trigger" type="button" data-post-lightbox-item>
     <img class="post-media__asset" src="../assets/experiment_diagram.webp" loading="lazy" alt="Experiment" />
   </button>
-  <figcaption class="post-caption"><span><strong>Figure 2.</strong> Modern recreation of Lissajous's experiment. Two tuning forks arranged at 90 degrees, each with a mirror on one tyne. A laser beam reflects off both mirrors in sequence; when the forks are struck, the beam traces a Lissajous pattern on the screen. <em>Source: UC Berkeley Physics Lecture Demonstrations</em><sup class="post-footnote-ref" id="footnote-ref-2"><a href="#footnote-2" role="doc-noteref" aria-label="Read footnote 2">2</a></sup></span><span class="post-caption__index">Figure / 02</span></figcaption>
+  <figcaption class="post-caption"><span>Figure 2. Modern recreation of Lissajous's experiment. Two tuning forks arranged at 90 degrees, each with a mirror on one tyne. A laser beam reflects off both mirrors in sequence; when the forks are struck, the beam traces a Lissajous pattern on the screen. Source: UC Berkeley Physics Lecture Demonstrations <sup class="post-footnote-ref" id="footnote-ref-2"><a href="#footnote-2" role="doc-noteref" aria-label="Read footnote 2">2</a></sup></span><span class="post-caption__index">Figure / 02</span></figcaption>
 </figure>
 <hr>
 <h2 id="the-mathematics">The Mathematics</h2>
@@ -327,7 +331,7 @@ Y = A_y \cos\left(2\pi n_y f_0 t + \dfrac{k\pi}{4n_x}\right)
   <button class="post-media__frame post-lightbox__trigger" type="button" data-post-lightbox-item>
     <img class="post-media__asset" src="../assets/curves_k.webp" loading="lazy" alt="Lissajous basic graphs for different frequency ratios" />
   </button>
-  <figcaption class="post-caption"><span><strong>Figure 3.</strong> Lissajous basic graphs for frequency ratios <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>x</mi></msub><mo>:</mo><msub><mi>n</mi><mi>y</mi></msub></mrow><annotation encoding="application/x-tex">n_x : n_y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> of 1:1, 2:1, 3:1, 3:2, 4:3, 5:3, and 5:4 (rows) with phase parameter <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span> from 0 to 7 (columns). When <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span> is constant, trajectory density increases with frequency. At constant frequency ratio, different <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span> values produce different trajectory densities. <em>Source: Wang et al., Microsystems &amp; Nanoengineering (2020)</em><sup class="post-footnote-ref" id="footnote-ref-3"><a href="#footnote-3" role="doc-noteref" aria-label="Read footnote 3">3</a></sup></span><span class="post-caption__index">Figure / 03</span></figcaption>
+  <figcaption class="post-caption"><span>Figure 3. Lissajous basic graphs for frequency ratios <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>x</mi></msub><mo>:</mo><msub><mi>n</mi><mi>y</mi></msub></mrow><annotation encoding="application/x-tex">n_x : n_y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> of 1:1, 2:1, 3:1, 3:2, 4:3, 5:3, and 5:4 (rows) with phase parameter <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span> from 0 to 7 (columns). When <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span> is constant, trajectory density increases with frequency. At constant frequency ratio, different <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span> values produce different trajectory densities. Source: Wang et al., Microsystems &amp; Nanoengineering (2020) <sup class="post-footnote-ref" id="footnote-ref-3"><a href="#footnote-3" role="doc-noteref" aria-label="Read footnote 3">3</a></sup></span><span class="post-caption__index">Figure / 03</span></figcaption>
 </figure>
 <h3 id="symmetry-properties">Symmetry Properties</h3>
 <p>The symmetry of a Lissajous figure depends on the parity of <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>x</mi></msub></mrow><annotation encoding="application/x-tex">n_x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>y</mi></msub></mrow><annotation encoding="application/x-tex">n_y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span>:</p>
@@ -385,7 +389,7 @@ Y = A_y \cos\left(2\pi n_y f_0 t + \dfrac{k\pi}{4n_x}\right)
 </ul>
 <h3 id="the-modern-way-code">The Modern Way: Code</h3>
 <p>A few lines in Python will generate infinite variations:</p>
-<pre><code class="language-python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<pre data-code-copy><code class="language-python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
 <span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt
 
 t = np.linspace(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">10000</span>)
@@ -412,9 +416,9 @@ plt.show()</code></pre>
 <p>More recently, Meta’s 2021 rebrand introduced a logo that is essentially an infinite loop: a Lissajous-like figure rotated, representing connection and infinity.</p>
 <figure class="post-media">
   <button class="post-media__frame post-lightbox__trigger" type="button" data-post-lightbox-item>
-    <img class="post-media__asset" src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" loading="lazy" alt="Meta Logo" />
+    <img class="post-media__asset" src="../assets/meta-logo.svg" loading="lazy" alt="Meta Logo" />
   </button>
-  <figcaption class="post-caption"><span><strong>Figure 4.</strong> Current Meta Logo <sup class="post-footnote-ref" id="footnote-ref-4"><a href="#footnote-4" role="doc-noteref" aria-label="Read footnote 4">4</a></sup></span><span class="post-caption__index">Figure / 04</span></figcaption>
+  <figcaption class="post-caption"><span>Figure 4. Current Meta Logo <sup class="post-footnote-ref" id="footnote-ref-4"><a href="#footnote-4" role="doc-noteref" aria-label="Read footnote 4">4</a></sup></span><span class="post-caption__index">Figure / 04</span></figcaption>
 </figure>
 <hr>
 <h2 id="beyond-two-dimensions">Beyond Two Dimensions</h2>
@@ -433,13 +437,10 @@ plt.show()</code></pre>
 <h2 id="living-curves">Living Curves</h2>
 <p>Maths tends to be pretty abstract. The more you study it, the less visual it becomes. Lissajous curves change that. They straight up ask to be <em>experienced</em>.</p>
 <p>Try the online generator I built and play with the parameters by yourself.</p>
-<div class="lissajous-embed-wrapper">
-	<a class="lissajous-embed-link post-link-unavailable"  aria-label="Open the Lissajous generator fullscreen" aria-disabled="true" title="This linked file is not available in the published site."></a>
-	<aside class="post-embed-fallback" role="note">
-  <p><strong>Interactive demo unavailable.</strong> Its standalone files are not included in this post source mirror.</p>
-</aside>
-</div>
-<p>Open in fullscreen by clicking <a href="" class="internal-link post-link-unavailable" aria-disabled="true" title="This linked file is not available in the published site.">here</a></p>
+<pl-lissajous-lab class="post-media">
+  <p class="post-component-fallback">The interactive Lissajous curve generator requires JavaScript.</p>
+</pl-lissajous-lab>
+<p><a href="/posts/components/apps/lissajous.html" class="internal-link">Click here for fullscreen</a>.</p>
             </div>
           </div>
 
@@ -449,6 +450,12 @@ plt.show()</code></pre>
                 <h2 class="post-endmatter__label" id="post-tags-title">Tags</h2>
                 <ul class="post-tags">
                   <li><span class="post-tags__tag">2026</span></li>
+
+                  <li><span class="post-tags__tag">interaction</span></li>
+
+                  <li><span class="post-tags__tag">mathematics</span></li>
+
+                  <li><span class="post-tags__tag">physics</span></li>
 
                   <li><span class="post-tags__tag">Article</span></li>
                 </ul>

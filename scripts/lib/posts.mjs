@@ -5,10 +5,7 @@ import { fileURLToPath } from "node:url";
 import * as csstree from "css-tree";
 import matter from "gray-matter";
 import hljs from "highlight.js";
-import { POST_COMPONENTS } from "../../posts/components/registry.mjs";
-import legacyPosts from "../../content/posts/legacy-posts.json" with {
-  type: "json",
-};
+import { POST_COMPONENTS } from "../../posts/components/registry.js";
 
 const ROOT = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -18,6 +15,7 @@ const ROOT = path.resolve(
 export const POSTS_ROOT = path.join(ROOT, "content/posts");
 export const POST_ARTICLES_DIR = path.join(POSTS_ROOT, "articles");
 export const POST_HEADERS_DIR = path.join(ROOT, "posts/headers");
+export const POST_COMPONENTS_DIR = path.join(ROOT, "posts/components");
 export const POST_TYPES = Object.freeze(["article", "note", "experiment"]);
 export const POST_LANGUAGE_ALIASES = Object.freeze({
   "c++": "cpp",
@@ -57,6 +55,29 @@ const REMOTE_PROTOCOL = /^(?:https?:)?\/\//i;
 const FRONTMATTER_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const HEADER_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const COMPONENT_TAG = /^pl-[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const POST_PROPERTY_NAMES = new Set([
+  "date",
+  "description",
+  "header-backdrop",
+  "header-nav",
+  "header-tag-color",
+  "hero-alt",
+  "hero-caption",
+  "hero-image",
+  "lang",
+  "slug",
+  "tags",
+  "title",
+  "toc",
+  "type",
+]);
+const COMPONENT_PROPERTY_NAMES = new Set([
+  "app",
+  "label",
+  "script",
+  "style",
+]);
 
 const toPosix = (value) => value.split(path.sep).join("/");
 
@@ -95,18 +116,11 @@ export const postDateIso = (value) => {
   return String(value || "").trim();
 };
 
-export const getLegacyPost = (inputPath) =>
-  legacyPosts[path.basename(inputPath)] || null;
-
-export const normalizePostData = (rawData, inputPath) => {
-  const legacy = getLegacyPost(inputPath) || {};
-  const data = { ...legacy, ...rawData };
+export const normalizePostData = (rawData) => {
+  const data = { ...rawData };
   const tags = normalizePostTags(data.tags);
-  const legacyType = tags
-    .map((tag) => tag.toLowerCase())
-    .find((tag) => POST_TYPES.includes(tag));
-  const type = String(data.type || legacy.type || legacyType || "").toLowerCase();
-  const slug = String(data.slug || legacy.slug || "").trim();
+  const type = String(data.type || "").toLowerCase();
+  const slug = String(data.slug || "").trim();
 
   return {
     ...data,
@@ -280,6 +294,79 @@ const validateComponents = (content, inputPath, errors) => {
   }
 };
 
+const validateComponentRegistry = (errors) => {
+  for (const [tag, component] of Object.entries(POST_COMPONENTS)) {
+    if (!COMPONENT_TAG.test(tag)) {
+      errors.push(
+        `posts/components/registry.js: invalid component tag \`${tag}\``,
+      );
+    }
+
+    if (!component || typeof component !== "object" || Array.isArray(component)) {
+      errors.push(
+        `posts/components/registry.js: \`${tag}\` must map to a component object`,
+      );
+      continue;
+    }
+
+    for (const property of Object.keys(component)) {
+      if (!COMPONENT_PROPERTY_NAMES.has(property)) {
+        errors.push(
+          `posts/components/registry.js: \`${tag}\` has unknown property \`${property}\``,
+        );
+      }
+    }
+
+    for (const [property, expectedExtension] of [
+      ["app", ".html"],
+      ["script", ".js"],
+      ["style", ".css"],
+    ]) {
+      const value = component[property];
+
+      if (value === undefined) {
+        continue;
+      }
+
+      if (typeof value !== "string" || !value.trim()) {
+        errors.push(
+          `posts/components/registry.js: \`${tag}.${property}\` must be a non-empty local path`,
+        );
+        continue;
+      }
+
+      const resolved = path.resolve(POST_COMPONENTS_DIR, value);
+      const relative = path.relative(POST_COMPONENTS_DIR, resolved);
+
+      if (
+        relative.startsWith("..") ||
+        path.isAbsolute(relative) ||
+        path.extname(value) !== expectedExtension
+      ) {
+        errors.push(
+          `posts/components/registry.js: \`${tag}.${property}\` must be a ${expectedExtension} file inside posts/components`,
+        );
+        continue;
+      }
+
+      if (!existsSync(resolved)) {
+        errors.push(
+          `posts/components/registry.js: \`${tag}.${property}\` references missing file \`${value}\``,
+        );
+      }
+    }
+
+    if (
+      component.app &&
+      (typeof component.label !== "string" || !component.label.trim())
+    ) {
+      errors.push(
+        `posts/components/registry.js: \`${tag}.label\` is required when \`app\` is set`,
+      );
+    }
+  }
+};
+
 const validatePost = async ({
   articlesDir,
   content,
@@ -289,7 +376,12 @@ const validatePost = async ({
   warnings,
 }) => {
   const errors = [];
-  const legacy = getLegacyPost(inputPath);
+
+  for (const property of Object.keys(rawData)) {
+    if (!POST_PROPERTY_NAMES.has(property)) {
+      errors.push(formatIssue(inputPath, property, "is not a supported property"));
+    }
+  }
 
   for (const property of ["title", "description", "date"]) {
     if (!String(data[property] || "").trim()) {
@@ -336,6 +428,20 @@ const validatePost = async ({
   if (![true, false, "auto"].includes(data.toc)) {
     errors.push(
       formatIssue(inputPath, "toc", "must be auto, true, or false"),
+    );
+  }
+
+  const repeatedTypeTags = data.tags.filter(
+    (tag) => tag.toLowerCase() === data.type,
+  );
+
+  if (repeatedTypeTags.length > 0) {
+    errors.push(
+      formatIssue(
+        inputPath,
+        "tags",
+        `must contain topics, not the post type \`${data.type}\``,
+      ),
     );
   }
 
@@ -436,18 +542,6 @@ const validatePost = async ({
     }
   }
 
-  if (legacy) {
-    const inherited = ["slug", "type"].filter(
-      (property) => !Object.hasOwn(rawData, property),
-    );
-
-    if (inherited.length > 0) {
-      warnings.push(
-        `${toPosix(path.relative(ROOT, inputPath))}: using legacy migration values for ${inherited.join(", ")}; add them to the vault frontmatter when this post is next edited`,
-      );
-    }
-  }
-
   return errors;
 };
 
@@ -476,10 +570,12 @@ export const loadPostManifest = async ({
   const errors = [];
   const seenSlugs = new Map();
 
+  validateComponentRegistry(errors);
+
   for (const inputPath of markdownFiles) {
     const source = await readFile(inputPath, "utf8");
     const parsed = matter(source);
-    const data = normalizePostData(parsed.data, inputPath);
+    const data = normalizePostData(parsed.data);
 
     errors.push(
       ...(await validatePost({
