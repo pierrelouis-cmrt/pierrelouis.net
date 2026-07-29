@@ -44,8 +44,22 @@
     <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
     <link rel="stylesheet" href="../../base.css" />
+    <link
+      rel="stylesheet"
+      href="../../assets/vendor/katex/katex.min.css"
+    />
     <link rel="stylesheet" href="../post.css" />
     <script src="../../script.js" defer></script>
+    <script src="../../assets/vendor/katex/katex.min.js" defer></script>
+    <script
+      src="../../assets/vendor/katex/auto-render.min.js"
+      defer
+    ></script>
+    <script src="../../assets/vendor/katex/copy-tex.min.js" defer></script>
+    <script
+      src="../../assets/vendor/highlight/highlight.min.js"
+      defer
+    ></script>
     <script src="../post.js" defer></script>
     <script src="../../footer.js" defer></script>
   </head>
@@ -255,7 +269,59 @@
             </figure>
           </header>
 
-          <div class="post-body">
+          <div class="post-reading">
+            <nav
+              class="post-toc"
+              aria-label="Table of contents"
+              data-post-toc
+              hidden
+            >
+              <div
+                class="post-toc__desktop"
+                data-post-toc-desktop
+              ></div>
+
+              <div class="post-toc__mobile">
+                <button
+                  class="post-toc__mobile-toggle"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="post-toc-panel"
+                  data-post-toc-toggle
+                >
+                  <span
+                    class="post-toc__current"
+                    data-post-toc-current
+                  ></span>
+                  <svg
+                    class="post-toc__chevron"
+                    width="10"
+                    height="16"
+                    viewBox="0 0 10 16"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M.21 5.352a.714.714 0 0 1 1.01 0L5 9.132l3.78-3.78a.714.714 0 0 1 1.01 1.01l-4.285 4.286a.714.714 0 0 1-1.01 0L.209 6.362a.714.714 0 0 1 0-1.01"
+                    />
+                  </svg>
+                </button>
+
+                <div
+                  class="post-toc__mobile-panel"
+                  id="post-toc-panel"
+                  aria-hidden="true"
+                  data-post-toc-panel
+                >
+                  <div
+                    class="post-toc__mobile-scroll"
+                    data-post-toc-mobile
+                  ></div>
+                </div>
+              </div>
+            </nav>
+
+            <div class="post-body">
             <p>
               A page becomes readable before a single word is understood. The
               eye notices relationships first: what is loud, what is quiet,
@@ -532,6 +598,38 @@
               follow, and everything else quiet enough to let those two
               gestures work.
             </p>
+
+            <h2>Rhythm can be made explicit</h2>
+
+            <p>
+              A useful rhythm is consistent without becoming mechanical. If
+              each interval grows by the same ratio, a small spacing scale can
+              carry a whole page. In compact form, write it as
+              \(s_n = s_0 r^n\), where \(r\) controls how quickly the page
+              opens up.
+            </p>
+
+            <div class="post-math" aria-label="Geometric spacing scale">
+              \[
+                s_n = s_0 r^n
+                \qquad
+                \text{with}\quad
+                s_0 = 10\text{px},\; r = \sqrt{2}
+              \]
+            </div>
+
+            <p>
+              The same idea is easy to keep close to the implementation. The
+              inline expression <code>spacing(3)</code> stays quiet in the
+              sentence, while the block below keeps its hierarchy legible.
+            </p>
+
+            <!-- Add data-code-copy only to blocks that should expose copying. -->
+            <pre data-code-copy><code class="language-javascript">const spacing = (step, base = 10, ratio = Math.SQRT2) =&gt;
+  Math.round(base * ratio ** step);
+
+const rhythm = Array.from({ length: 6 }, (_, step) =&gt; spacing(step));</code></pre>
+          </div>
           </div>
 
           <footer class="post-endmatter" aria-label="Article information">

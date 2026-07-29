@@ -5,9 +5,449 @@
     return;
   }
 
+  const postBody = document.querySelector(".post-body");
+  const postScriptUrl = document.currentScript?.src || window.location.href;
   const reducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
+  const codeLanguageAliases = {
+    "c++": "cpp",
+    cs: "csharp",
+    html: "xml",
+    js: "javascript",
+    md: "markdown",
+    py: "python",
+    rb: "ruby",
+    sh: "bash",
+    shell: "bash",
+    tex: "latex",
+    ts: "typescript",
+    yml: "yaml",
+    zsh: "bash",
+  };
+  const languageLoads = new Map();
+
+  const renderPostMath = () => {
+    if (!postBody || typeof window.renderMathInElement !== "function") {
+      return;
+    }
+
+    window.renderMathInElement(postBody, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "\\[", right: "\\]", display: true },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "$", right: "$", display: false },
+      ],
+      ignoredTags: [
+        "script",
+        "noscript",
+        "style",
+        "textarea",
+        "pre",
+        "code",
+        "option",
+      ],
+      ignoredClasses: ["no-math", "post-code"],
+      macros: {
+        "\\R": "\\mathbb{R}",
+        "\\N": "\\mathbb{N}",
+        "\\Z": "\\mathbb{Z}",
+        "\\E": "\\mathbb{E}",
+        "\\P": "\\mathbb{P}",
+        "\\dif": "\\mathop{}\\!\\mathrm{d}",
+      },
+      output: "htmlAndMathml",
+      strict: "warn",
+      throwOnError: false,
+      trust: false,
+    });
+  };
+
+  const getCodeLanguage = (code) => {
+    const languageClass = [...code.classList].find((className) =>
+      /^(?:lang|language)-/.test(className),
+    );
+    const requested = languageClass?.replace(/^(?:lang|language)-/, "");
+
+    if (!requested) {
+      return null;
+    }
+
+    return (
+      codeLanguageAliases[requested.toLowerCase()] || requested.toLowerCase()
+    );
+  };
+
+  const loadCodeLanguage = (language) => {
+    if (
+      !language ||
+      !window.hljs ||
+      window.hljs.getLanguage(language) ||
+      !/^[a-z0-9-]+$/.test(language)
+    ) {
+      return Promise.resolve();
+    }
+
+    if (languageLoads.has(language)) {
+      return languageLoads.get(language);
+    }
+
+    const load = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      const languageRoot = new URL(
+        "../assets/vendor/highlight/languages/",
+        postScriptUrl,
+      );
+
+      script.src = new URL(`${language}.min.js`, languageRoot).href;
+      script.async = true;
+      script.addEventListener("load", resolve, { once: true });
+      script.addEventListener("error", reject, { once: true });
+      document.head.append(script);
+    });
+
+    languageLoads.set(language, load);
+    return load;
+  };
+
+  const copyText = async (value) => {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+      return;
+    }
+
+    const textarea = document.createElement("textarea");
+    textarea.value = value;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.append(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    textarea.remove();
+  };
+
+  const enhanceCodeBlocks = () => {
+    if (!postBody) {
+      return [];
+    }
+
+    return [...postBody.querySelectorAll("pre > code")].map((code) => {
+      const pre = code.parentElement;
+      const source = code.textContent.replace(/\n$/, "");
+      const lines = source.split("\n");
+      const digits = Math.max(2, String(lines.length).length);
+      const language = getCodeLanguage(code);
+      const shouldCopy =
+        pre.hasAttribute("data-code-copy") ||
+        code.hasAttribute("data-code-copy");
+      const figure = document.createElement("figure");
+      const gutter = document.createElement("span");
+
+      figure.className = "post-code-block";
+      figure.style.setProperty(
+        "--post-code-gutter-width",
+        `${Math.max(54, 28 + digits * 8)}px`,
+      );
+      figure.setAttribute(
+        "aria-label",
+        language ? `${language} code example` : "Code example",
+      );
+
+      if (shouldCopy) {
+        figure.classList.add("has-copy-control");
+      }
+
+      pre.before(figure);
+      figure.append(pre);
+      pre.classList.add("post-code");
+      pre.tabIndex = 0;
+
+      gutter.className = "post-code__gutter";
+      gutter.setAttribute("aria-hidden", "true");
+      lines.forEach((_, index) => {
+        const line = document.createElement("span");
+        line.textContent = String(index + 1);
+        gutter.append(line);
+      });
+
+      figure.append(gutter);
+
+      if (shouldCopy) {
+        const copyButton = document.createElement("button");
+
+        copyButton.className = "post-code__copy";
+        copyButton.type = "button";
+        copyButton.setAttribute("aria-label", "Copy code to clipboard");
+        copyButton.innerHTML = `
+          <svg class="post-code__copy-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <g class="post-code__copy-squares" fill="none" stroke="currentColor" stroke-width="1.25">
+              <rect x="5.25" y="2.25" width="8.5" height="8.5" rx="1.4"></rect>
+              <path d="M10.75 10.75v1.5a1.5 1.5 0 0 1-1.5 1.5h-5.5a1.5 1.5 0 0 1-1.5-1.5v-5.5a1.5 1.5 0 0 1 1.5-1.5h1.5"></path>
+            </g>
+            <path class="post-code__copy-check" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m3.25 8.1 3.05 3.05 6.45-6.45"></path>
+          </svg>
+        `;
+
+        copyButton.addEventListener("click", async () => {
+          try {
+            await copyText(source);
+            copyButton.dataset.copied = "true";
+            copyButton.setAttribute("aria-label", "Code copied");
+            window.setTimeout(() => {
+              delete copyButton.dataset.copied;
+              copyButton.setAttribute(
+                "aria-label",
+                "Copy code to clipboard",
+              );
+            }, 1600);
+          } catch {
+            copyButton.setAttribute("aria-label", "Could not copy code");
+          }
+        });
+
+        figure.append(copyButton);
+      }
+
+      if (
+        !window.hljs ||
+        code.classList.contains("language-text") ||
+        code.classList.contains("language-plaintext")
+      ) {
+        return Promise.resolve();
+      }
+
+      return loadCodeLanguage(language)
+        .catch(() => undefined)
+        .then(() => {
+          if (language && !window.hljs.getLanguage(language)) {
+            code.classList.add("nohighlight");
+          }
+
+          window.hljs.highlightElement(code);
+        });
+    });
+  };
+
+  const createTocList = (headings) => {
+    const list = document.createElement("ol");
+    list.className = "post-toc__list";
+
+    headings.forEach((heading) => {
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+
+      link.className = "post-toc__link";
+      link.href = `#${heading.id}`;
+      link.textContent = heading.textContent.trim();
+      item.append(link);
+      list.append(item);
+    });
+
+    return list;
+  };
+
+  const initTableOfContents = () => {
+    const toc = document.querySelector("[data-post-toc]");
+    const desktop = toc?.querySelector("[data-post-toc-desktop]");
+    const mobile = toc?.querySelector("[data-post-toc-mobile]");
+    const toggle = toc?.querySelector("[data-post-toc-toggle]");
+    const current = toc?.querySelector("[data-post-toc-current]");
+    const panel = toc?.querySelector("[data-post-toc-panel]");
+
+    if (!postBody || !toc || !desktop || !mobile || !toggle || !current || !panel) {
+      return;
+    }
+
+    const headings = [...postBody.children].filter(
+      (element) => element.tagName === "H2",
+    );
+
+    if (headings.length < 2) {
+      return;
+    }
+
+    const usedIds = new Set(
+      [...document.querySelectorAll("[id]")]
+        .filter((element) => !headings.includes(element))
+        .map((element) => element.id),
+    );
+
+    headings.forEach((heading, index) => {
+      if (heading.id && !usedIds.has(heading.id)) {
+        usedIds.add(heading.id);
+        return;
+      }
+
+      const base =
+        heading.textContent
+          .trim()
+          .normalize("NFKD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "") || `section-${index + 1}`;
+      let id = base;
+      let suffix = 2;
+
+      while (usedIds.has(id)) {
+        id = `${base}-${suffix}`;
+        suffix += 1;
+      }
+
+      heading.id = id;
+      usedIds.add(id);
+    });
+
+    desktop.replaceChildren(createTocList(headings));
+    mobile.replaceChildren(createTocList(headings));
+    toc.hidden = false;
+
+    const links = [...toc.querySelectorAll(".post-toc__link")];
+    let activeId = "";
+    let isTicking = false;
+    let isTocScrolling = false;
+    let scrollSettleTimer;
+
+    const closeToc = ({ restoreFocus = false } = {}) => {
+      toc.classList.remove("is-open");
+      toggle.setAttribute("aria-expanded", "false");
+      panel.setAttribute("aria-hidden", "true");
+
+      if (restoreFocus) {
+        toggle.focus();
+      }
+    };
+
+    const setActive = (heading) => {
+      if (!heading || heading.id === activeId) {
+        return;
+      }
+
+      activeId = heading.id;
+      current.textContent = heading.textContent.trim();
+
+      links.forEach((link) => {
+        const isActive = link.getAttribute("href") === `#${heading.id}`;
+        link.setAttribute("aria-current", isActive ? "true" : "false");
+      });
+    };
+
+    const updateActive = () => {
+      if (isTocScrolling) {
+        isTicking = false;
+        return;
+      }
+
+      const tocTop = Number.parseFloat(getComputedStyle(toc).top) || 0;
+      const threshold =
+        tocTop + (window.innerWidth <= 1100 ? 56 : 16);
+      let active = headings[0];
+
+      headings.forEach((heading) => {
+        if (heading.getBoundingClientRect().top <= threshold) {
+          active = heading;
+        }
+      });
+
+      setActive(active);
+      isTicking = false;
+    };
+
+    const requestActiveUpdate = () => {
+      if (isTicking) {
+        return;
+      }
+
+      isTicking = true;
+      window.requestAnimationFrame(updateActive);
+    };
+
+    const finishTocScroll = () => {
+      isTocScrolling = false;
+      window.clearTimeout(scrollSettleTimer);
+      requestActiveUpdate();
+    };
+
+    const handleScroll = () => {
+      if (isTocScrolling) {
+        window.clearTimeout(scrollSettleTimer);
+        scrollSettleTimer = window.setTimeout(finishTocScroll, 140);
+      }
+
+      if (!isTocScrolling) {
+        requestActiveUpdate();
+      }
+    };
+
+    toggle.addEventListener("click", () => {
+      const willOpen = !toc.classList.contains("is-open");
+      toc.classList.toggle("is-open", willOpen);
+      toggle.setAttribute("aria-expanded", String(willOpen));
+      panel.setAttribute("aria-hidden", String(!willOpen));
+    });
+
+    links.forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const heading = headings.find(
+          (candidate) => link.getAttribute("href") === `#${candidate.id}`,
+        );
+
+        if (!heading) {
+          return;
+        }
+
+        event.preventDefault();
+        const tocTop = Number.parseFloat(getComputedStyle(toc).top) || 0;
+        const offset = tocTop + (window.innerWidth <= 1100 ? 56 : 16);
+        const targetY =
+          window.scrollY + heading.getBoundingClientRect().top - offset;
+
+        window.history.pushState(null, "", `#${heading.id}`);
+        isTocScrolling = !reducedMotion;
+        setActive(heading);
+        closeToc();
+        window.scrollTo({
+          top: targetY,
+          behavior: reducedMotion ? "auto" : "smooth",
+        });
+
+        if (isTocScrolling) {
+          window.clearTimeout(scrollSettleTimer);
+          scrollSettleTimer = window.setTimeout(finishTocScroll, 900);
+        } else {
+          requestActiveUpdate();
+        }
+      });
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && toc.classList.contains("is-open")) {
+        closeToc({ restoreFocus: true });
+      }
+    });
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 1100) {
+        closeToc();
+      }
+
+      requestActiveUpdate();
+    });
+
+    headings.forEach((heading) => heading.classList.add("post-toc__target"));
+    updateActive();
+  };
+
+  renderPostMath();
+  const codeHighlightJobs = enhanceCodeBlocks();
+  initTableOfContents();
+  Promise.allSettled(codeHighlightJobs).then(() => {
+    page.classList.add("has-code-highlighting");
+  });
+
   const revealItems = document.querySelectorAll(
     ".post-body > *, .post-endmatter__inner",
   );
