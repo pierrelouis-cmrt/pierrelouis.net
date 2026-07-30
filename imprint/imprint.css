@@ -2,8 +2,7 @@
   display: grid;
   grid-template-columns: var(--page-grid-columns);
   column-gap: var(--grid-gap);
-  height: 1050px;
-  min-height: 1050px;
+  min-height: 1250px;
   align-content: start;
   padding: var(--page-intro-padding-top) var(--page-gutter) 0;
 }
@@ -22,9 +21,10 @@
 .imprint-copy h2 {
   width: fit-content;
   margin-bottom: var(--space-md);
-  padding-bottom: 2px;
-  border-bottom: 1px solid currentColor;
   font-weight: var(--font-weight-regular);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 .imprint-copy address {
@@ -35,14 +35,15 @@
   margin-top: var(--space-xl);
 }
 
-.imprint-copy__email {
+.imprint-copy__email,
+.imprint-copy__phone {
   margin-top: var(--space-md) !important;
 }
 
 .imprint-landscape {
   position: relative;
   width: 100%;
-  aspect-ratio: 1470 / 491;
+  aspect-ratio: 5 / 2;
   margin: 96px 0 0;
   overflow: hidden;
   background: var(--color-media-bg);
