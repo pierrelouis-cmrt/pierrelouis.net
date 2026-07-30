@@ -22,6 +22,15 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Libre Baskerville";
+  src: url("./assets/fonts/LibreBaskerville-Italic-Variable.ttf")
+    format("truetype");
+  font-weight: 400 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   /* Colors */
   --color-bg: #ffffff;

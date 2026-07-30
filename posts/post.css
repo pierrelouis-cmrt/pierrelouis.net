@@ -24,8 +24,9 @@
 }
 
 .post-page em {
-  font-family: var(--font-family-display-italic);
+  font-family: "Libre Baskerville", Georgia, "Times New Roman", serif;
   font-style: italic;
+  font-size: 1.02em;
 }
 
 .post-page--backdrop .site-header {
