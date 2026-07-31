@@ -15,10 +15,10 @@
 
 .photos-page.has-photo-reveal-motion .photo-card {
   opacity: 0;
-  transform: translateY(4px);
+  transform: translateY(7px);
   transition:
-    opacity 280ms var(--ease-out),
-    transform 280ms var(--ease-out);
+    opacity 380ms var(--ease-out),
+    transform 380ms var(--ease-out);
 }
 
 .photos-page.has-photo-reveal-motion
@@ -40,7 +40,7 @@
 
 .photos-page.has-photo-reveal-motion .photo-card__image {
   opacity: 0;
-  transition: opacity 160ms var(--ease-out);
+  transition: opacity 200ms var(--ease-out);
 }
 
 .photos-page.has-photo-reveal-motion
