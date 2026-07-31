@@ -1171,10 +1171,10 @@ main {
       rotate(-45deg);
   }
 
-  .mobile-menu.is-open::after {
-    position: fixed;
+  body.has-mobile-menu-open::after {
+    position: absolute;
     z-index: 29;
-    top: 100svh;
+    top: calc(var(--mobile-menu-scroll-y, 0px) + 100svh);
     right: 0;
     left: 0;
     height: calc(100lvh - 100svh);

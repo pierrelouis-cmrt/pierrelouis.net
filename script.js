@@ -84,6 +84,10 @@ if (mobileMenu && mobileMenuToggle && mobileMenuPanel) {
   const openMobileMenu = () => {
     window.clearTimeout(mobileMenuCloseTimer);
     mobileMenuPanel.hidden = false;
+    document.body.style.setProperty(
+      "--mobile-menu-scroll-y",
+      `${window.visualViewport?.pageTop ?? window.scrollY}px`,
+    );
     document.body.classList.add("has-mobile-menu-open");
     siteHeader?.classList.remove("is-mobile-hidden");
     mobileMenuToggle.setAttribute("aria-expanded", "true");
@@ -97,6 +101,7 @@ if (mobileMenu && mobileMenuToggle && mobileMenuPanel) {
   const closeMobileMenu = ({ restoreFocus = false } = {}) => {
     mobileMenu.classList.remove("is-open");
     document.body.classList.remove("has-mobile-menu-open");
+    document.body.style.removeProperty("--mobile-menu-scroll-y");
     mobileMenuToggle.setAttribute("aria-expanded", "false");
     mobileMenuToggle.setAttribute("aria-label", LABELS.mobileMenuOpen);
 
