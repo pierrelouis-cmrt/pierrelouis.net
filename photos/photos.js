@@ -249,7 +249,11 @@
 
   const updateButton = (button, counts) => {
     const country = button.dataset.countryFilter;
-    const isActive = country === state.country;
+    // A direct album link is a narrower scope than any country filter. Keep
+    // every country button unselected so the controls describe what is
+    // actually being shown instead of incorrectly presenting the album as
+    // the unfiltered "All" view.
+    const isActive = !state.albumId && country === state.country;
     const count = button.querySelector("[data-filter-count]");
 
     button.classList.toggle("is-active", isActive);
