@@ -10,17 +10,10 @@
     return;
   }
 
-  const LYON = {
-    latitude: "45.7640",
-    longitude: "4.8357",
-    timeZone: "Europe/Paris",
-  };
-
-  const CACHE_KEY = "pierrelouis.footerWeather.lyon";
-  const CACHE_TTL = 30 * 60 * 1000;
-  const REQUEST_TIMEOUT = 4500;
-  const WEATHER_REFRESH_INTERVAL = 30 * 60 * 1000;
-
+  const API_PATH = "/api/weather.php";
+  const REQUEST_TIMEOUT_MS = 4_500;
+  const REFRESH_AFTER_MS = 30 * 60 * 1_000;
+  const RETRY_AFTER_MS = 5 * 60 * 1_000;
   const weatherCodeLabels = new Map([
     [0, "Clear"],
     [1, "Mainly clear"],
@@ -51,142 +44,177 @@
     [96, "Thunderstorm with hail"],
     [99, "Thunderstorm with hail"],
   ]);
-
   const timeFormatter = new Intl.DateTimeFormat("en-US", {
     hour: "numeric",
     minute: "2-digit",
-    timeZone: LYON.timeZone,
+    timeZone: "Europe/Paris",
   });
 
+  let clockTimer = 0;
   let currentWeather = null;
+  let inFlight = null;
+  let weatherActivated = false;
+  let weatherFetchedAt = 0;
+  let weatherRefreshTimer = 0;
 
-  const getApiUrl = () => {
-    const url = new URL("https://api.open-meteo.com/v1/forecast");
+  const renderWeather = () => {
+    if (!currentWeather) {
+      return;
+    }
 
-    url.search = new URLSearchParams({
-      latitude: LYON.latitude,
-      longitude: LYON.longitude,
-      current: "temperature_2m,weather_code",
-      timezone: LYON.timeZone,
-    }).toString();
-
-    return url.toString();
-  };
-
-  const renderWeather = (weather) => {
-    currentWeather = weather;
     weatherElement.textContent = `${timeFormatter.format(new Date())}, ${
-      weather.condition
-    } at ${weather.temperature}°C`;
+      currentWeather.condition
+    } at ${currentWeather.temperature}°C`;
+    weatherElement.title = currentWeather.stale
+      ? "Weather data may be out of date"
+      : "";
   };
 
   const scheduleClockUpdate = () => {
+    window.clearTimeout(clockTimer);
+
+    if (document.hidden || !currentWeather) {
+      return;
+    }
+
     const now = new Date();
-    const nextMinuteDelay =
-      60 * 1000 - (now.getSeconds() * 1000 + now.getMilliseconds());
+    const delay =
+      60 * 1_000 - (now.getSeconds() * 1_000 + now.getMilliseconds());
 
-    window.setTimeout(() => {
-      if (currentWeather) {
-        renderWeather(currentWeather);
-      }
-
+    clockTimer = window.setTimeout(() => {
+      renderWeather();
       scheduleClockUpdate();
-    }, nextMinuteDelay);
+    }, delay);
   };
 
-  const readCache = () => {
-    try {
-      const cached = JSON.parse(window.localStorage.getItem(CACHE_KEY));
+  const normalizeWeather = (payload) => {
+    const temperature = payload?.current?.temperature_2m;
+    const weatherCode = payload?.current?.weather_code;
 
-      if (
-        !cached ||
-        typeof cached.fetchedAt !== "number" ||
-        !cached.weather ||
-        typeof cached.weather.condition !== "string" ||
-        typeof cached.weather.temperature !== "number"
-      ) {
-        return null;
-      }
-
-      return cached;
-    } catch {
-      return null;
-    }
-  };
-
-  const writeCache = (weather) => {
-    try {
-      window.localStorage.setItem(
-        CACHE_KEY,
-        JSON.stringify({
-          fetchedAt: Date.now(),
-          weather,
-        }),
-      );
-    } catch {
-      // Local storage can be unavailable in private or restricted contexts.
-    }
-  };
-
-  const getCondition = (weatherCode) => {
-    return weatherCodeLabels.get(weatherCode) ?? "Weather";
-  };
-
-  const normalizeWeather = (current) => {
-    const temperature = Number(current?.temperature_2m);
-    const weatherCode = Number(current?.weather_code);
-
-    if (!Number.isFinite(temperature) || !Number.isFinite(weatherCode)) {
+    if (!Number.isFinite(temperature) || !Number.isInteger(weatherCode)) {
       throw new Error("Invalid weather payload");
     }
 
     return {
-      condition: getCondition(weatherCode),
+      condition: weatherCodeLabels.get(weatherCode) ?? "Weather",
       temperature: Math.round(temperature),
+      stale: payload.stale === true,
     };
   };
 
+  const scheduleWeatherRefresh = (delay) => {
+    window.clearTimeout(weatherRefreshTimer);
+
+    if (!weatherActivated || document.hidden) {
+      return;
+    }
+
+    weatherRefreshTimer = window.setTimeout(fetchWeather, delay);
+  };
+
   const fetchWeather = async () => {
-    const controller = new AbortController();
-    const timeoutId = window.setTimeout(() => {
-      controller.abort();
-    }, REQUEST_TIMEOUT);
+    if (inFlight) {
+      return inFlight;
+    }
 
-    try {
-      const response = await fetch(getApiUrl(), {
-        signal: controller.signal,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Weather request failed: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const weather = normalizeWeather(data.current);
-
-      writeCache(weather);
-      renderWeather(weather);
-    } catch {
+    if (navigator.onLine === false) {
       if (!currentWeather) {
         weatherElement.textContent = "Weather unavailable";
       }
-    } finally {
-      window.clearTimeout(timeoutId);
+      return;
     }
+
+    const controller = new AbortController();
+    const timeout = window.setTimeout(
+      () => controller.abort(),
+      REQUEST_TIMEOUT_MS,
+    );
+
+    inFlight = (async () => {
+      let retryDelay = 0;
+
+      try {
+        const response = await fetch(API_PATH, {
+          credentials: "same-origin",
+          headers: { Accept: "application/json" },
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Weather endpoint returned ${response.status}`);
+        }
+
+        currentWeather = normalizeWeather(await response.json());
+        weatherFetchedAt = Date.now();
+        renderWeather();
+        scheduleClockUpdate();
+      } catch {
+        retryDelay = RETRY_AFTER_MS;
+
+        if (!currentWeather) {
+          weatherElement.textContent = "Weather unavailable";
+          weatherElement.title = "";
+        }
+      } finally {
+        window.clearTimeout(timeout);
+        inFlight = null;
+        scheduleWeatherRefresh(retryDelay || REFRESH_AFTER_MS);
+      }
+    })();
+
+    return inFlight;
   };
 
-  const cachedWeather = readCache();
-  const hasFreshCache =
-    cachedWeather && Date.now() - cachedWeather.fetchedAt < CACHE_TTL;
+  const resumeWeather = () => {
+    if (!weatherActivated) {
+      return;
+    }
 
-  if (cachedWeather) {
-    renderWeather(cachedWeather.weather);
-  }
+    const elapsed = Date.now() - weatherFetchedAt;
 
-  if (!hasFreshCache) {
+    if (!weatherFetchedAt || elapsed >= REFRESH_AFTER_MS) {
+      fetchWeather();
+      return;
+    }
+
+    scheduleWeatherRefresh(REFRESH_AFTER_MS - elapsed);
+  };
+
+  const activateWeather = () => {
+    if (weatherActivated) {
+      return;
+    }
+
+    weatherActivated = true;
     fetchWeather();
+  };
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          activateWeather();
+        }
+      },
+      { rootMargin: "200px 0px" },
+    );
+
+    observer.observe(weatherElement.closest("footer") ?? weatherElement);
+  } else {
+    activateWeather();
   }
 
-  scheduleClockUpdate();
-  window.setInterval(fetchWeather, WEATHER_REFRESH_INTERVAL);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      window.clearTimeout(clockTimer);
+      window.clearTimeout(weatherRefreshTimer);
+      return;
+    }
+
+    renderWeather();
+    scheduleClockUpdate();
+    resumeWeather();
+  });
+  window.addEventListener("online", resumeWeather);
 })();

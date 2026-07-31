@@ -631,6 +631,14 @@ const renderPhotoFigure = (photo, index, collection) => {
     ? `
                 <span class="photo-card__favorite" aria-label="Favorite photo">★</span>`
     : "";
+  const noScriptFallback = `
+                  <noscript>
+                    <img
+                      class="photo-card__image"
+                      src="${escapeHtml(photo.src)}"
+                      alt=""
+                    />
+                  </noscript>`;
 
   return `              <figure
                 class="photo-card"
@@ -651,10 +659,11 @@ const renderPhotoFigure = (photo, index, collection) => {
                 >
                   <img
                     class="photo-card__image"
-                    src="${escapeHtml(photo.src)}"
+                    data-deferred-src="${escapeHtml(photo.src)}"
                     alt=""
                     loading="lazy"
-                  />
+                    decoding="async"
+                  />${noScriptFallback}
                 </button>${favoriteMarker}
                 <figcaption class="photo-card__index">${String(index + 1).padStart(2, "0")}</figcaption>
               </figure>`;

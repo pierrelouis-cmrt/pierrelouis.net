@@ -12,14 +12,14 @@ Personal portfolio built with semantic HTML, modern CSS, vanilla JavaScript, and
 
 ## Technical overview
 
-The site is a mostly static, multi-page application served directly from the repository root. It has no client-side framework: each route is an HTML document with page-specific CSS and JavaScript layered on top of shared site styles and behavior. A small Node.js toolchain generates content at build time, and one narrowly scoped PHP endpoint powers the live Last.fm display without exposing its API key.
+The site is a mostly static, multi-page application served directly from the repository root. It has no client-side framework: each route is an HTML document with page-specific CSS and JavaScript layered on top of shared site styles and behavior. A small Node.js toolchain generates content at build time, and narrowly scoped PHP endpoints power live Last.fm and weather displays with shared server-side caching.
 
 | Layer | Implementation |
 | --- | --- |
 | Markup | Semantic HTML; Eleventy compiles Obsidian Markdown posts |
 | Styling | Shared `base.css` plus page-level stylesheets |
 | Client behavior | Vanilla JavaScript with progressive enhancement |
-| Server integration | Minimal PHP Last.fm proxy with private filesystem caching |
+| Server integration | Minimal PHP Last.fm and weather proxies with filesystem caching |
 | Build tooling | Node.js ES modules, Eleventy, Markdown-it, KaTeX, and Highlight.js |
 | Image processing | ImageMagick-generated WebP variants |
 | Development server | Custom Node HTTP server with Server-Sent Events live reload |
@@ -77,10 +77,23 @@ This imports and builds the latest Obsidian posts, starts the site at `http://lo
 | `npm run qa:posts` | Build and browser-test every generated post at desktop and mobile sizes |
 | `npm run preview` | Serve the existing `dist/` build on port 4173 |
 
+## Runtime API endpoints
+
+The build copies `api/` into `dist/`, but copying a PHP file does not execute it. In production, the contents of `dist/` are deployed to Hostinger's `public_html`; Hostinger executes requests for `/api/*.php` with PHP. The local Node server intercepts the same URLs because it cannot execute PHP itself.
+
+The footer requests `/api/weather.php` only when it approaches the viewport. The production endpoint contacts Open-Meteo from Hostinger, so Open-Meteo sees the server's IP address rather than the visitor's. It validates and stores only the temperature and weather code in a private temporary JSON file. Responses are fresh for 15 minutes, may fall back to cached data for up to three hours during an upstream failure, and are written atomically so concurrent readers never see a partial file. A lock is intentionally omitted: for this site's traffic, an occasional duplicate refresh is cheaper and simpler than maintaining request-coalescing logic. Browsers may reuse a successful response for five minutes.
+
+Weather presentation stays in `footer.js`: it maps Open-Meteo codes to labels, renders the Lyon time, refreshes visible pages every 30 minutes, and retries failures after five minutes. The local `scripts/weather-proxy.mjs` is deliberately only a thin, uncached adapter to the browser contract. It does not duplicate the production filesystem cache or stale-fallback policy.
+
+The Last.fm endpoint has a stricter reason to exist: it keeps the API key out of the browser. Production reads the key, username, and cache path from `private/lastfm.php`, outside `public_html`, then returns only validated track data. Its 15-second server cache and six-hour stale fallback limit Last.fm traffic without exposing credentials. Local development uses `LASTFM_API_KEY` and optionally `LASTFM_USER` from the environment, `.env`, or `.env.local`.
+
+Both production endpoints require PHP with the cURL extension. The weather endpoint also needs write access to PHP's temporary directory; the Last.fm cache path is configured in its private file.
+
 ## Repository structure
 
 ```text
 .
+├── api/                    # Production PHP endpoints
 ├── assets/                 # Fonts, static media, and generated production images
 ├── content/projects/       # Project metadata and original source images
 ├── content/photos/         # Original photographs and collection.yml metadata
@@ -104,9 +117,10 @@ This imports and builds the latest Obsidian posts, starts the site at `http://lo
 - Add or update photography in `content/photos/`; edit page-level Photos settings in `scripts/build-photos.mjs`. The complete workflow is documented in [`content/photos/README.md`](./content/photos/README.md).
 - Write posts in the Obsidian vault. `npm run dev` imports changes as they happen, and `npm run build` imports the latest posts before assembling `dist/`. The Markdown contract, components, migration rules, and full example are documented in [`content/posts/README.md`](./content/posts/README.md).
 - Edit list-sheet content in `lists/sheets/`. Each card has one HTML fragment and the complete format is documented in [`lists/sheets/README.md`](./lists/sheets/README.md).
-- Generated project, photo, and post HTML and assets are committed alongside their sources; production serves those files plus the small Last.fm PHP endpoint.
+- Generated project, photo, and post HTML and assets are committed alongside their sources; production serves those files plus the small PHP API endpoints.
 - Clean URLs work through directory-level `index.html` files; the project does not require server-side routing.
 - The Now page's live Last.fm display uses a private-key PHP proxy on Hostinger and an equivalent local development proxy. Keep the production config at `private/lastfm.php`, outside `public_html`; never add a real API key to the repository or `dist/`.
+- Footer weather uses a same-origin PHP proxy with a shared 15-minute filesystem cache and a thin, uncached local development adapter. Keep weather labels and presentation logic in `footer.js` rather than duplicating them in the proxies.
 
 ## License
 

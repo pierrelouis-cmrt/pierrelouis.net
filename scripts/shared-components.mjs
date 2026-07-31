@@ -194,9 +194,18 @@ export const renderSiteHeader = (config) => {
                   <span class="mobile-menu__latest-media" aria-hidden="true">
                     <img
                       class="mobile-menu__latest-image"
-                      src="${root}assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                      data-deferred-src="${root}assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
                       alt=""
+                      loading="lazy"
+                      decoding="async"
                     />
+                    <noscript>
+                      <img
+                        class="mobile-menu__latest-image"
+                        src="${root}assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                        alt=""
+                      />
+                    </noscript>
                   </span>
                   <span class="mobile-menu__see-more">See More ↗</span>
                 </a>
@@ -232,10 +241,20 @@ export const renderSiteHeader = (config) => {
 
             <img
               class="mobile-menu__watermark"
-              src="${root}assets/image_mobile_watermark.png"
+              data-deferred-src="${root}assets/image_mobile_watermark.png"
               alt=""
               aria-hidden="true"
+              loading="lazy"
+              decoding="async"
             />
+            <noscript>
+              <img
+                class="mobile-menu__watermark"
+                src="${root}assets/image_mobile_watermark.png"
+                alt=""
+                aria-hidden="true"
+              />
+            </noscript>
           </div>
         </div>
       </header>`;

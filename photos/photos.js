@@ -52,7 +52,7 @@
       const card = image.closest(".photo-card");
       const markLoaded = () => card?.classList.add("is-image-loaded");
 
-      if (image.complete) {
+      if (image.complete && image.currentSrc) {
         markLoaded();
       } else {
         image.addEventListener("load", markLoaded, { once: true });

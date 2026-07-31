@@ -1189,7 +1189,7 @@ const generateProjectAssets = async (projects) => {
   return stats;
 };
 
-const renderFeaturedImage = (image) => {
+const renderFeaturedImage = (image, { priority = false } = {}) => {
   const itemClasses = [
     "featured-project__item",
     image.wide && "featured-project__item--wide",
@@ -1208,21 +1208,38 @@ const renderFeaturedImage = (image) => {
   ]
     .filter(Boolean)
     .join(" ");
+  const imageSource = priority
+    ? `src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + image.outputFile)}"`
+    : `data-deferred-src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + image.outputFile)}"`;
+  const loading = priority ? ' fetchpriority="high"' : ' loading="lazy"';
+  const noScriptFallback = priority
+    ? ""
+    : `
+                    <noscript>
+                      <img
+                        class="${imageClasses}"
+                        src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + image.outputFile)}"
+                        width="${image.width}"
+                        height="${image.height}"
+                        alt=""
+                      />
+                    </noscript>`;
 
   return `                <figure class="${itemClasses}">
                   <span class="${mediaClasses}">
                     <img
                       class="${imageClasses}"
-                      src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + image.outputFile)}"
+                      ${imageSource}
                       width="${image.width}"
                       height="${image.height}"
-                      alt="${escapeHtml(image.alt)}"
-                    />
+                      alt="${escapeHtml(image.alt)}"${loading}
+                      decoding="async"
+                    />${noScriptFallback}
                   </span>
                 </figure>`;
 };
 
-const renderFeaturedProject = (project) => {
+const renderFeaturedProject = (project, projectIndex) => {
   const footerId = `${project.slug}-carousel-footer`;
   const projectLabel = project.title.replace(/:\s.*$/, "");
 
@@ -1239,7 +1256,13 @@ const renderFeaturedProject = (project) => {
                 data-project-carousel-track
                 tabindex="-1"
               >
-${project.images.map(renderFeaturedImage).join("\n\n")}
+${project.images
+  .map((image, imageIndex) =>
+    renderFeaturedImage(image, {
+      priority: projectIndex === 0 && imageIndex === 0,
+    }),
+  )
+  .join("\n\n")}
               </div>
               <footer
                 class="featured-project__footer"

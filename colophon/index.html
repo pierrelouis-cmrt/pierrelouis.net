@@ -37,11 +37,6 @@
     />
     <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
-    <link
-      rel="preload"
-      as="image"
-      href="../assets/image_colophon_aurland.webp"
-    />
     <link rel="stylesheet" href="../base.css" />
     <link rel="stylesheet" href="./colophon.css" />
     <script src="../script.js" defer></script>
@@ -148,9 +143,18 @@
                   <span class="mobile-menu__latest-media" aria-hidden="true">
                     <img
                       class="mobile-menu__latest-image"
-                      src="../assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                      data-deferred-src="../assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
                       alt=""
+                      loading="lazy"
+                      decoding="async"
                     />
+                    <noscript>
+                      <img
+                        class="mobile-menu__latest-image"
+                        src="../assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                        alt=""
+                      />
+                    </noscript>
                   </span>
                   <span class="mobile-menu__see-more">See More ↗</span>
                 </a>
@@ -186,10 +190,20 @@
 
             <img
               class="mobile-menu__watermark"
-              src="../assets/image_mobile_watermark.png"
+              data-deferred-src="../assets/image_mobile_watermark.png"
               alt=""
               aria-hidden="true"
+              loading="lazy"
+              decoding="async"
             />
+            <noscript>
+              <img
+                class="mobile-menu__watermark"
+                src="../assets/image_mobile_watermark.png"
+                alt=""
+                aria-hidden="true"
+              />
+            </noscript>
           </div>
         </div>
       </header>
@@ -368,12 +382,22 @@
         <figure class="colophon-landscape">
           <img
             class="colophon-landscape__image"
-            src="../assets/image_colophon_aurland.webp"
+            data-deferred-src="../assets/image_colophon_aurland.webp"
             width="4032"
             height="1613"
+            loading="lazy"
             decoding="async"
             alt="A rocky Mediterranean headland covered in dry grasses and low shrubs beside the sea."
           />
+          <noscript>
+            <img
+              class="colophon-landscape__image"
+              src="../assets/image_colophon_aurland.webp"
+              width="4032"
+              height="1613"
+              alt=""
+            />
+          </noscript>
           <figcaption class="colophon-landscape__caption">
             Cadaquès, Spain<br />
             2025

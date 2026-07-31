@@ -386,7 +386,7 @@ const renderMedia = ({
 
   return `<figure class="post-media">
   <button class="post-media__frame post-lightbox__trigger" type="button" data-post-lightbox-item>
-    <img class="post-media__asset" src="${safeSrc}" loading="lazy" alt="${safeAlt}" />
+    <img class="post-media__asset" src="${safeSrc}" loading="lazy" decoding="async" alt="${safeAlt}" />
   </button>
   ${
     captionHtml

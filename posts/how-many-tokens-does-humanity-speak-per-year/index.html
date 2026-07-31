@@ -143,9 +143,18 @@
                   <span class="mobile-menu__latest-media" aria-hidden="true">
                     <img
                       class="mobile-menu__latest-image"
-                      src="../../assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                      data-deferred-src="../../assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
                       alt=""
+                      loading="lazy"
+                      decoding="async"
                     />
+                    <noscript>
+                      <img
+                        class="mobile-menu__latest-image"
+                        src="../../assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                        alt=""
+                      />
+                    </noscript>
                   </span>
                   <span class="mobile-menu__see-more">See More ↗</span>
                 </a>
@@ -181,10 +190,20 @@
 
             <img
               class="mobile-menu__watermark"
-              src="../../assets/image_mobile_watermark.png"
+              data-deferred-src="../../assets/image_mobile_watermark.png"
               alt=""
               aria-hidden="true"
+              loading="lazy"
+              decoding="async"
             />
+            <noscript>
+              <img
+                class="mobile-menu__watermark"
+                src="../../assets/image_mobile_watermark.png"
+                alt=""
+                aria-hidden="true"
+              />
+            </noscript>
           </div>
         </div>
       </header>
@@ -262,7 +281,7 @@
 <p><strong>Google (CEO earnings remarks from October 2025):</strong> over 1.3 quadrillion tokens/month → <strong>15.6 quadrillion tokens/year</strong> → ~26% of human speech.</p>
 <figure class="post-media">
   <button class="post-media__frame post-lightbox__trigger" type="button" data-post-lightbox-item>
-    <img class="post-media__asset" src="../assets/chart_tokens.webp" loading="lazy" alt="Tokens Processed/Spoken per Year" />
+    <img class="post-media__asset" src="../assets/chart_tokens.webp" loading="lazy" decoding="async" alt="Tokens Processed/Spoken per Year" />
   </button>
 
 </figure>

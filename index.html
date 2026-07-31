@@ -143,9 +143,18 @@
                   <span class="mobile-menu__latest-media" aria-hidden="true">
                     <img
                       class="mobile-menu__latest-image"
-                      src="./assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                      data-deferred-src="./assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
                       alt=""
+                      loading="lazy"
+                      decoding="async"
                     />
+                    <noscript>
+                      <img
+                        class="mobile-menu__latest-image"
+                        src="./assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                        alt=""
+                      />
+                    </noscript>
                   </span>
                   <span class="mobile-menu__see-more">See More ↗</span>
                 </a>
@@ -181,10 +190,20 @@
 
             <img
               class="mobile-menu__watermark"
-              src="./assets/image_mobile_watermark.png"
+              data-deferred-src="./assets/image_mobile_watermark.png"
               alt=""
               aria-hidden="true"
+              loading="lazy"
+              decoding="async"
             />
+            <noscript>
+              <img
+                class="mobile-menu__watermark"
+                src="./assets/image_mobile_watermark.png"
+                alt=""
+                aria-hidden="true"
+              />
+            </noscript>
           </div>
         </div>
       </header>
@@ -222,6 +241,8 @@
                       src="./assets/image_featured_1.webp"
                       width="1400"
                       height="1750"
+                      decoding="async"
+                      fetchpriority="high"
                       alt="Mobile view of the CapECL website."
                     />
                   </span>
@@ -246,6 +267,7 @@
                       src="./assets/image_featured_2.webp"
                       width="1400"
                       height="1750"
+                      decoding="async"
                       alt="Architectural photograph from Sweden."
                     />
                   </span>
@@ -273,6 +295,7 @@
                       src="./assets/image_featured_3.webp"
                       width="1400"
                       height="1750"
+                      decoding="async"
                       alt="Laptop displaying an article and diagram interface."
                     />
                   </span>
@@ -300,6 +323,7 @@
                       src="./assets/image_featured_4.webp"
                       width="1400"
                       height="1750"
+                      decoding="async"
                       alt="Large yellow graphic design poster in an outdoor setting."
                     />
                   </span>

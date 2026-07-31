@@ -6,6 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createLastfmProxy } from "./lastfm-proxy.mjs";
 import { renderPostHeaderLab } from "./post-header-lab.mjs";
+import { createWeatherProxy } from "./weather-proxy.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -103,12 +104,18 @@ export const startSiteServer = async ({
   const clients = new Set();
   const siteRoot = path.resolve(root);
   const lastfmProxy = createLastfmProxy({ root: ROOT });
+  const weatherProxy = createWeatherProxy();
 
   const server = createServer(async (request, response) => {
     const requestUrl = new URL(request.url, "http://localhost");
 
     if (requestUrl.pathname === "/api/lastfm.php") {
       await lastfmProxy(request, response);
+      return;
+    }
+
+    if (requestUrl.pathname === "/api/weather.php") {
+      await weatherProxy(request, response);
       return;
     }
 
