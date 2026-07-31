@@ -54,25 +54,36 @@ const setupDeferredImages = () => {
     return;
   }
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) {
-          continue;
-        }
+  const observeImages = (targets, rootMargin) => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) {
+            continue;
+          }
 
-        loadImage(entry.target);
-        observer.unobserve(entry.target);
-      }
-    },
-    {
-      // Stay about one gallery row ahead without using the browser's much
-      // larger native lazy-load window.
-      rootMargin: "500px 300px",
-    },
+          loadImage(entry.target);
+          observer.unobserve(entry.target);
+        }
+      },
+      { rootMargin },
+    );
+
+    targets.forEach((image) => observer.observe(image));
+  };
+
+  const galleryImages = images.filter((image) =>
+    image.classList.contains("photo-card__image"),
+  );
+  const otherImages = images.filter(
+    (image) => !image.classList.contains("photo-card__image"),
   );
 
-  images.forEach((image) => observer.observe(image));
+  // Photo rows are tall on narrow screens, so fetch them farther ahead than
+  // ordinary deferred media. This keeps the reveal imperceptible in a scroll
+  // without eagerly downloading the entire gallery.
+  observeImages(galleryImages, "1100px 300px");
+  observeImages(otherImages, "500px 300px");
 };
 
 setupDeferredImages();

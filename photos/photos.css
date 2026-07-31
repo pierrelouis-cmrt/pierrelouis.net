@@ -5,13 +5,20 @@
 }
 
 .photos-page.has-photo-reveal-motion .photos-intro > *,
-.photos-page.has-photo-reveal-motion .photo-album__header,
-.photos-page.has-photo-reveal-motion .photo-card {
+.photos-page.has-photo-reveal-motion .photo-album__header {
   opacity: 0;
   transform: translateY(8px);
   transition:
     opacity 520ms var(--ease-out),
     transform 520ms var(--ease-out);
+}
+
+.photos-page.has-photo-reveal-motion .photo-card {
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 280ms var(--ease-out),
+    transform 280ms var(--ease-out);
 }
 
 .photos-page.has-photo-reveal-motion
@@ -31,34 +38,15 @@
   transition-delay: 60ms;
 }
 
-.photos-page.has-photo-reveal-motion
-  .photo-card.is-reveal-visible:nth-child(4n + 2) {
-  transition-delay: 45ms;
-}
-
-.photos-page.has-photo-reveal-motion
-  .photo-card.is-reveal-visible:nth-child(4n + 3) {
-  transition-delay: 90ms;
-}
-
-.photos-page.has-photo-reveal-motion
-  .photo-card.is-reveal-visible:nth-child(4n + 4) {
-  transition-delay: 135ms;
-}
-
 .photos-page.has-photo-reveal-motion .photo-card__image {
   opacity: 0;
-  transform: scale(0.995);
-  transition:
-    opacity 480ms var(--ease-out),
-    transform 600ms var(--ease-out);
+  transition: opacity 160ms var(--ease-out);
 }
 
 .photos-page.has-photo-reveal-motion
   .photo-card.is-image-loaded
   .photo-card__image {
   opacity: 1;
-  transform: scale(1);
 }
 
 .photo-album {
@@ -342,15 +330,6 @@ body.has-photo-lightbox-open {
 }
 
 @media (max-width: 760px) {
-  .photos-page.has-photo-reveal-motion .photo-card.is-reveal-visible {
-    transition-delay: 0ms;
-  }
-
-  .photos-page.has-photo-reveal-motion
-    .photo-card.is-reveal-visible:nth-child(even) {
-    transition-delay: 45ms;
-  }
-
   .photo-albums {
     gap: var(--space-6xl);
   }
@@ -378,10 +357,6 @@ body.has-photo-lightbox-open {
 }
 
 @media (max-width: 460px) {
-  .photos-page.has-photo-reveal-motion .photo-card.is-reveal-visible {
-    transition-delay: 0ms;
-  }
-
   .photo-album__identity {
     grid-template-columns: max-content minmax(0, 1fr);
     column-gap: var(--space-lg);

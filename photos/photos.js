@@ -80,8 +80,10 @@
           }
         },
         {
-          rootMargin: "0px 0px -8% 0px",
-          threshold: 0.08,
+          // Start just below the viewport so the motion settles before the
+          // viewer reaches each row, even during a confident scroll.
+          rootMargin: "0px 0px 18% 0px",
+          threshold: 0.01,
         },
       );
 
