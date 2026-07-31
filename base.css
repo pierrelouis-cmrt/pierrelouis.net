@@ -50,6 +50,8 @@
   --font-size-micro: 12px;
   --font-size-small: 15px;
   --font-size-base: 16px;
+  --font-size-utility-mobile: 13px;
+  --line-height-utility-mobile: 22px;
   --line-height-solid: 1;
   --line-height-compact: 1.2;
   --line-height-copy: 1.45;
@@ -124,6 +126,8 @@
   --mobile-menu-icon-width: 13px;
   --mobile-menu-icon-height: 2px;
   --mobile-menu-icon-open-offset: 3.5px;
+  --touch-target-min: 44px;
+  --touch-target-compact: 36px;
 }
 
 *,
@@ -1057,6 +1061,17 @@ main {
     grid-column: 1;
   }
 
+  .availability,
+  .content-filter {
+    font-size: var(--font-size-utility-mobile);
+    line-height: var(--line-height-utility-mobile);
+  }
+
+  .availability__dot,
+  .content-filter__symbol {
+    height: var(--line-height-utility-mobile);
+  }
+
   .intro-copy {
     width: 100%;
     max-width: 520px;
@@ -1064,6 +1079,19 @@ main {
 
   .content-filter {
     grid-column: 1;
+  }
+
+  .content-filter__content {
+    row-gap: 4px;
+  }
+
+  .content-filter__button {
+    min-height: var(--line-height-utility-mobile);
+    align-items: center;
+  }
+
+  .content-filter__input {
+    min-height: var(--line-height-utility-mobile);
   }
 
   .site-header.is-mobile-hidden {
@@ -1190,7 +1218,9 @@ main {
     display: flex;
     min-height: 100svh;
     flex-direction: column;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     background: var(--color-bg);
     color: var(--color-ink);
     clip-path: inset(0 0 100% 0);
@@ -1251,9 +1281,9 @@ main {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: auto auto minmax(0, 1fr);
-    column-gap: var(--space-2xl);
-    row-gap: var(--space-5xl);
-    padding: 78px var(--page-gutter) 190px;
+    column-gap: 26px;
+    row-gap: var(--space-4xl);
+    padding: 60px var(--page-gutter) 150px;
   }
 
   .mobile-menu__section {
@@ -1287,7 +1317,7 @@ main {
   }
 
   .mobile-menu__eyebrow {
-    margin: 0 0 var(--space-lg);
+    margin: 0 0 var(--space-md);
     color: var(--color-subtle);
     font-size: var(--font-size-small);
     font-weight: var(--font-weight-regular);
@@ -1303,20 +1333,39 @@ main {
 
   .mobile-menu__link {
     color: var(--color-ink);
-    font-size: var(--font-size-base);
+    font-size: 17px;
     font-weight: var(--font-weight-regular);
     line-height: var(--line-height-compact);
     letter-spacing: var(--tracking-normal);
   }
 
   .mobile-menu__links {
-    margin-top: -8px;
+    margin-top: -6px;
   }
 
   .mobile-menu__link {
-    display: block;
+    display: flex;
+    min-height: var(--touch-target-compact);
     padding-block: 4px;
+    align-items: center;
     transition: opacity var(--duration-fast) var(--ease-out);
+  }
+
+  .mobile-menu__latest-link {
+    width: min(90%, 168px);
+  }
+
+  .mobile-menu__latest-title,
+  .mobile-menu__see-more {
+    font-size: 17px;
+  }
+
+  .mobile-menu__latest-title {
+    margin-bottom: var(--space-sm);
+  }
+
+  .mobile-menu__see-more {
+    margin-top: var(--space-sm);
   }
 
   .mobile-menu__credits-row {
@@ -1366,8 +1415,15 @@ main {
     --watermark-gap: clamp(18px, 5vw, 28px);
     margin-top: var(--space-6xl);
     padding-top: var(--space-2xl);
-    font-size: var(--font-size-micro);
-    letter-spacing: var(--tracking-normal);
+    font-size: var(--font-size-utility-mobile);
+    line-height: var(--line-height-utility-mobile);
+    letter-spacing: var(--tracking-label);
+  }
+
+  .site-footer__link {
+    display: flex;
+    min-height: var(--line-height-utility-mobile);
+    align-items: center;
   }
 
   .site-footer__content {
@@ -1381,6 +1437,30 @@ main {
 
   .site-footer__location {
     padding-right: 0;
+  }
+}
+
+@media (max-width: 760px) and (max-height: 720px) {
+  .mobile-menu__layout {
+    row-gap: var(--space-2xl);
+    padding-top: 36px;
+    padding-bottom: 120px;
+  }
+
+  .mobile-menu__latest-link {
+    width: min(82%, 140px);
+  }
+
+  .mobile-menu__latest-title {
+    margin-bottom: 8px;
+  }
+
+  .mobile-menu__see-more {
+    margin-top: 8px;
+  }
+
+  .mobile-menu__watermark {
+    transform: translateY(28px);
   }
 }
 

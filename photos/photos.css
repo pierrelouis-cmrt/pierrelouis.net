@@ -330,6 +330,26 @@ body.has-photo-lightbox-open {
 }
 
 @media (max-width: 760px) {
+  .photo-lightbox {
+    --photo-lightbox-controls-height: var(--touch-target-min);
+  }
+
+  .photo-lightbox__nav-button {
+    width: var(--touch-target-min);
+    height: var(--touch-target-min);
+  }
+
+  .photo-lightbox__close {
+    top: calc(env(safe-area-inset-top, 0px) + 8px);
+    right: 8px;
+    display: inline-flex;
+    min-width: var(--touch-target-min);
+    min-height: var(--touch-target-min);
+    padding: 0 var(--space-sm);
+    align-items: center;
+    justify-content: center;
+  }
+
   .photo-albums {
     gap: var(--space-6xl);
   }

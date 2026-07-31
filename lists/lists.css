@@ -580,6 +580,8 @@
 
   .list-sheet__handle {
     display: flex;
+    height: var(--touch-target-compact);
+    margin-bottom: calc(var(--touch-target-compact) * -1);
   }
 
   .list-sheet__close {

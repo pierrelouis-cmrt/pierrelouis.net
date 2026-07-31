@@ -60,17 +60,6 @@
   max-width: none;
 }
 
-.projects-intro .content-filter__options {
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  white-space: nowrap;
-  scrollbar-width: none;
-}
-
-.projects-intro .content-filter__options::-webkit-scrollbar {
-  display: none;
-}
-
 .projects-intro__random {
   width: fit-content;
 }
@@ -812,6 +801,8 @@
 
   .playground-sheet__handle {
     display: flex;
+    height: var(--touch-target-compact);
+    margin-bottom: calc(var(--touch-target-compact) * -1);
   }
 
   .playground-sheet__close {
