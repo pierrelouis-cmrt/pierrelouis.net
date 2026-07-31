@@ -1177,7 +1177,7 @@ main {
     top: calc(var(--mobile-menu-scroll-y, 0px) + 100svh);
     right: 0;
     left: 0;
-    height: calc(100lvh - 100svh);
+    height: calc(100dvh - 100svh);
     background: var(--color-bg);
     content: "";
     pointer-events: none;
