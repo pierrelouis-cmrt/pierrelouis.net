@@ -12,13 +12,14 @@ Personal portfolio built with semantic HTML, modern CSS, vanilla JavaScript, and
 
 ## Technical overview
 
-The site is a static, multi-page application served directly from the repository root. It has no client-side framework or production runtime: each route is an HTML document with page-specific CSS and JavaScript layered on top of shared site styles and behavior. A small Node.js toolchain generates content at build time.
+The site is a mostly static, multi-page application served directly from the repository root. It has no client-side framework: each route is an HTML document with page-specific CSS and JavaScript layered on top of shared site styles and behavior. A small Node.js toolchain generates content at build time, and one narrowly scoped PHP endpoint powers the live Last.fm display without exposing its API key.
 
 | Layer | Implementation |
 | --- | --- |
 | Markup | Semantic HTML; Eleventy compiles Obsidian Markdown posts |
 | Styling | Shared `base.css` plus page-level stylesheets |
 | Client behavior | Vanilla JavaScript with progressive enhancement |
+| Server integration | Minimal PHP Last.fm proxy with private filesystem caching |
 | Build tooling | Node.js ES modules, Eleventy, Markdown-it, KaTeX, and Highlight.js |
 | Image processing | ImageMagick-generated WebP variants |
 | Development server | Custom Node HTTP server with Server-Sent Events live reload |
@@ -103,8 +104,9 @@ This imports and builds the latest Obsidian posts, starts the site at `http://lo
 - Add or update photography in `content/photos/`; edit page-level Photos settings in `scripts/build-photos.mjs`. The complete workflow is documented in [`content/photos/README.md`](./content/photos/README.md).
 - Write posts in the Obsidian vault. `npm run dev` imports changes as they happen, and `npm run build` imports the latest posts before assembling `dist/`. The Markdown contract, components, migration rules, and full example are documented in [`content/posts/README.md`](./content/posts/README.md).
 - Edit list-sheet content in `lists/sheets/`. Each card has one HTML fragment and the complete format is documented in [`lists/sheets/README.md`](./lists/sheets/README.md).
-- Generated project, photo, and post HTML and assets are committed alongside their sources so production hosting only needs to serve static files.
+- Generated project, photo, and post HTML and assets are committed alongside their sources; production serves those files plus the small Last.fm PHP endpoint.
 - Clean URLs work through directory-level `index.html` files; the project does not require server-side routing.
+- The Now page's live Last.fm display uses a private-key PHP proxy on Hostinger and an equivalent local development proxy. Keep the production config at `private/lastfm.php`, outside `public_html`; never add a real API key to the repository or `dist/`.
 
 ## License
 

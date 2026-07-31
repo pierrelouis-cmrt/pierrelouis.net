@@ -5,6 +5,7 @@ import { startSiteServer } from "./site-server.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIST_DIR = path.join(ROOT, "dist");
+const HOST = process.env.HOST || "0.0.0.0";
 const PORT = Number(process.env.PORT || 4173);
 
 try {
@@ -21,8 +22,12 @@ try {
 
 const site = await startSiteServer({
   dev: false,
+  host: HOST,
   port: PORT,
   root: DIST_DIR,
 });
 
-console.log(`Preview server: http://${site.host}:${site.port}/`);
+console.log(`Preview server:\n  Local:   ${site.localUrl}`);
+for (const url of site.networkUrls) {
+  console.log(`  Network: ${url}`);
+}

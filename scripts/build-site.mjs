@@ -10,7 +10,7 @@ import { syncAndBuildPosts } from "./vault-posts.mjs";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIST_DIR = path.join(ROOT, "dist");
 const TEMP_DIST_DIR = path.join(ROOT, `.dist-tmp-${process.pid}`);
-const PUBLIC_DIRECTORIES = ["assets", "favicon"];
+const PUBLIC_DIRECTORIES = ["api", "assets", "favicon"];
 const NON_PAGE_DIRECTORIES = new Set([
   "content",
   "dist",

@@ -41,6 +41,7 @@
     <link rel="stylesheet" href="./now.css" />
     <script src="../script.js" defer></script>
     <script src="../footer.js" defer></script>
+    <script src="./now.js" defer></script>
   </head>
   <body>
     <div class="site-shell now-page">
@@ -268,26 +269,38 @@
               </span>
             </a>
 
-            <section class="listening" aria-labelledby="listening-title">
+            <section
+              class="listening"
+              aria-labelledby="listening-title"
+              aria-busy="true"
+              data-listening-widget
+              data-listening-state="loading"
+            >
               <h2 class="listening__title" id="listening-title">
                 <span class="listening__status" aria-hidden="true"></span>
-                <span>Currently listening to music:</span>
+                <span data-listening-label>Checking Last.fm…</span>
               </h2>
-              <div class="listening__track">
-                <span class="listening__artwork" aria-hidden="true">
-                  <img
-                    src="../assets/image_now_heat_waves.webp"
-                    width="160"
-                    height="160"
-                    alt=""
-                  />
+              <a
+                class="listening__track"
+                href="https://www.last.fm/user/pierrelouis-c"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-listening-link
+              >
+                <span
+                  class="listening__artwork"
+                  aria-hidden="true"
+                  data-listening-artwork
+                >
                   <span class="listening__spindle"></span>
                 </span>
-                <span class="listening__details">
-                  <span class="listening__song">Heat Waves</span>
-                  <span class="listening__artist">Glass Animals</span>
+                <span class="listening__details" aria-live="polite">
+                  <span class="listening__song" data-listening-song>
+                    <span class="sr-only">Loading latest Last.fm track</span>
+                  </span>
+                  <span class="listening__artist" data-listening-artist></span>
                 </span>
-              </div>
+              </a>
             </section>
           </div>
         </section>

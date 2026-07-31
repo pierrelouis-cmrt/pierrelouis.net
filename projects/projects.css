@@ -1,18 +1,13 @@
 .projects-page {
   --project-column-width: calc(
-    (
-        100vw - (var(--page-gutter) * 2) - (var(--grid-gap) * 3)
-      ) / 4
+    (100vw - (var(--page-gutter) * 2) - (var(--grid-gap) * 3)) / 4
   );
   --project-media-height: calc(var(--project-column-width) * 1.25);
   --playground-sheet-top: max(20px, env(safe-area-inset-top, 0px));
   --playground-sheet-ease: cubic-bezier(0.19, 1, 0.22, 1);
   --playground-sheet-open-duration: 650ms;
   --playground-sheet-close-duration: 420ms;
-  --playground-sheet-corner-guard: max(
-    48px,
-    env(safe-area-inset-bottom, 0px)
-  );
+  --playground-sheet-corner-guard: max(48px, env(safe-area-inset-bottom, 0px));
   background: var(--color-bg);
 }
 
@@ -21,10 +16,8 @@
   transform-origin: center top;
   filter: saturate(1) brightness(1);
   transition:
-    transform var(--playground-sheet-open-duration)
-      var(--playground-sheet-ease),
-    filter var(--playground-sheet-open-duration)
-      var(--playground-sheet-ease),
+    transform var(--playground-sheet-open-duration) var(--playground-sheet-ease),
+    filter var(--playground-sheet-open-duration) var(--playground-sheet-ease),
     border-radius var(--playground-sheet-open-duration)
       var(--playground-sheet-ease);
   will-change: transform, filter;
@@ -36,14 +29,11 @@
 
 .projects-page.has-playground-sheet-open,
 .projects-page.is-playground-sheet-closing {
-  background:
-    linear-gradient(
+  background: linear-gradient(
       to bottom,
       #2f2e2e 0,
-      #2f2e2e
-        calc(100dvh - var(--playground-sheet-corner-guard)),
-      #f8f8f7
-        calc(100dvh - var(--playground-sheet-corner-guard)),
+      #2f2e2e calc(100dvh - var(--playground-sheet-corner-guard)),
+      #f8f8f7 calc(100dvh - var(--playground-sheet-corner-guard)),
       #f8f8f7 100dvh
     )
     fixed no-repeat;
@@ -612,13 +602,10 @@
 .project-carousel {
   --project-carousel-image-height: clamp(400px, 42vw, 540px);
   --project-carousel-column-width: calc(
-    (
-        100vw - (var(--page-gutter) * 2) - (var(--grid-gap) * 3)
-      ) / 4
+    (100vw - (var(--page-gutter) * 2) - (var(--grid-gap) * 3)) / 4
   );
   --project-carousel-start-edge: calc(
-    var(--page-gutter) + var(--project-carousel-column-width) +
-      var(--grid-gap)
+    var(--page-gutter) + var(--project-carousel-column-width) + var(--grid-gap)
   );
 
   grid-column: 1 / -1;
@@ -690,17 +677,13 @@
 @media (max-width: 1100px) {
   .projects-page {
     --project-column-width: calc(
-      (
-          100vw - (var(--page-gutter) * 2) - var(--grid-gap)
-        ) / 2
+      (100vw - (var(--page-gutter) * 2) - var(--grid-gap)) / 2
     );
   }
 
   .project-carousel {
     --project-carousel-column-width: calc(
-      (
-          100vw - (var(--page-gutter) * 2) - var(--grid-gap)
-        ) / 2
+      (100vw - (var(--page-gutter) * 2) - var(--grid-gap)) / 2
     );
     --project-carousel-start-edge: calc(
       var(--page-gutter) + var(--project-carousel-column-width) +
@@ -772,7 +755,6 @@
     grid-row: 2;
     margin-top: var(--space-lg);
   }
-
 }
 
 @media (max-width: 760px) {
@@ -873,7 +855,6 @@
   .project-interactive__frame {
     height: var(--project-interactive-mobile-height, 750px);
   }
-
 }
 
 @media (pointer: coarse) {

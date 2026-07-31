@@ -13,6 +13,7 @@ import {
 } from "./vault-posts.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const HOST = process.env.HOST || "0.0.0.0";
 const PORT = Number(process.env.PORT || 8000);
 const VAULT_POSTS_CHANGE = "@vault/posts";
 
@@ -168,7 +169,7 @@ const initialProjects = await buildProjects();
 const initialPhotos = await buildPhotos();
 const initialPosts = await syncAndBuildPosts();
 await syncSharedComponents();
-const site = await startSiteServer({ dev: true, port: PORT });
+const site = await startSiteServer({ dev: true, host: HOST, port: PORT });
 
 console.log(
   `Built Lists: ${initialLists.sheets} sheet(s)${
@@ -199,7 +200,10 @@ if (initialPosts.source) {
     `Synced ${initialPosts.synced} post(s) from ${initialPosts.source}.`,
   );
 }
-console.log(`Dev server: http://${site.host}:${site.port}/`);
+console.log(`Dev server:\n  Local:   ${site.localUrl}`);
+for (const url of site.networkUrls) {
+  console.log(`  Network: ${url}`);
+}
 
 watch(ROOT, { recursive: true }, (eventType, rawFilename) => {
   if (!rawFilename) {

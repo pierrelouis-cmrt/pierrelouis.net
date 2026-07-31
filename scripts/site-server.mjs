@@ -1,8 +1,10 @@
 import { createReadStream } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
 import { createServer } from "node:http";
+import { networkInterfaces } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { createLastfmProxy } from "./lastfm-proxy.mjs";
 import { renderPostHeaderLab } from "./post-header-lab.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -20,6 +22,27 @@ const MIME_TYPES = new Map([
   [".svg", "image/svg+xml"],
   [".webp", "image/webp"],
 ]);
+
+const getNetworkUrls = (port) => {
+  const addresses = Object.entries(networkInterfaces())
+    .flatMap(([name, entries = []]) =>
+      entries.map((entry) => ({ ...entry, name })),
+    )
+    .filter(
+      ({ address, family, internal }) =>
+        !internal &&
+        (family === "IPv4" || family === 4) &&
+        !address.startsWith("169.254."),
+    )
+    .sort(({ name: a }, { name: b }) => {
+      const priority = (name) => (/^en\d+$/.test(name) ? 0 : 1);
+      return priority(a) - priority(b);
+    });
+
+  return [
+    ...new Set(addresses.map(({ address }) => `http://${address}:${port}/`)),
+  ];
+};
 
 const DEV_RELOAD_SCRIPT = `
 <script>
@@ -79,9 +102,15 @@ export const startSiteServer = async ({
 } = {}) => {
   const clients = new Set();
   const siteRoot = path.resolve(root);
+  const lastfmProxy = createLastfmProxy({ root: ROOT });
 
   const server = createServer(async (request, response) => {
     const requestUrl = new URL(request.url, "http://localhost");
+
+    if (requestUrl.pathname === "/api/lastfm.php") {
+      await lastfmProxy(request, response);
+      return;
+    }
 
     if (dev && request.url === "/__dev/events") {
       response.writeHead(200, {
@@ -170,6 +199,10 @@ export const startSiteServer = async ({
 
   return {
     host,
+    localUrl:
+      `http://${host === "0.0.0.0" ? "localhost" : host}:` +
+      `${currentPort}/`,
+    networkUrls: host === "0.0.0.0" ? getNetworkUrls(currentPort) : [],
     port: currentPort,
     server,
     reload() {

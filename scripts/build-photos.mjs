@@ -942,7 +942,10 @@ const renderPage = (collections) => {
 
         <section class="photos-intro page-intro" aria-label="${escapeHtml(PHOTOS_PAGE.introLabel)}">
           <div class="content-filter" aria-label="${escapeHtml(PHOTOS_PAGE.filtersLabel)}" data-photo-filters>
-            <span class="content-filter__symbol" aria-hidden="true">✤</span>
+            <span
+              class="content-filter__symbol content-filter__symbol--photos"
+              aria-hidden="true"
+            ></span>
             <div class="content-filter__content">
               <div class="content-filter__options" aria-label="${escapeHtml(PHOTOS_PAGE.countryFiltersLabel)}">
 ${renderCountryFilters(collections)}
