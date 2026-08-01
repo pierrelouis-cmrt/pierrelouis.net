@@ -246,6 +246,18 @@
   background: transparent;
 }
 
+@media (prefers-color-scheme: dark) {
+  .list-sheet::after {
+    position: absolute;
+    z-index: 2147483647;
+    inset: 0;
+    background: var(--color-dark-mode-tint);
+    content: "";
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+}
+
 .list-sheet.is-open {
   transform: translateY(0);
 }

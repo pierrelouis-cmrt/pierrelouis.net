@@ -41,6 +41,7 @@
   --color-media-bg: #f4f4f4;
   --color-external-link-bg: #ededed;
   --color-selection-bg: #d8d8d8;
+  --color-dark-mode-tint: rgb(255 194 64 / 0.14);
 
   /* Typography */
   --font-family-sans:
@@ -143,7 +144,7 @@
     position: fixed;
     z-index: 2147483647;
     inset: 0;
-    background: rgb(255 194 64 / 0.14);
+    background: var(--color-dark-mode-tint);
     content: "";
     mix-blend-mode: multiply;
     pointer-events: none;
