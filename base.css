@@ -516,8 +516,10 @@ main {
   content: ",";
 }
 
-.content-filter__button:hover {
-  opacity: var(--hover-opacity);
+@media (hover: hover) and (pointer: fine) {
+  .content-filter__button:hover {
+    opacity: var(--hover-opacity);
+  }
 }
 
 .content-filter__button:focus-visible {
@@ -640,12 +642,14 @@ main {
   transition: opacity var(--duration-fast) var(--ease-out);
 }
 
-.media-card:hover .media-card__image {
-  transform: scale(1.025);
-}
+@media (hover: hover) and (pointer: fine) {
+  .media-card:hover .media-card__image {
+    transform: scale(1.025);
+  }
 
-.media-card:hover .media-card__caption {
-  opacity: var(--hover-opacity);
+  .media-card:hover .media-card__caption {
+    opacity: var(--hover-opacity);
+  }
 }
 
 /* Shared project Markdown layout. */
