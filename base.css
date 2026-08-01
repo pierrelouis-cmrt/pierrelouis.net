@@ -133,6 +133,23 @@
   --touch-target-compact: 36px;
 }
 
+/* Warm the whole page on dark-system devices, like a gentle Night Shift layer. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light;
+  }
+
+  html::after {
+    position: fixed;
+    z-index: 2147483647;
+    inset: 0;
+    background: rgb(255 194 64 / 0.14);
+    content: "";
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+}
+
 *,
 *::before,
 *::after {
