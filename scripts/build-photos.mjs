@@ -810,7 +810,7 @@ const renderPage = (collections) => {
             aria-controls="more-menu-panel"
             data-more-menu-toggle
           >
-            More ↓
+            More <span aria-hidden="true">↓</span>
           </button>
 
           <nav
@@ -898,7 +898,7 @@ const renderPage = (collections) => {
                       alt=""
                     />
                   </span>
-                  <span class="mobile-menu__see-more">See More ↗</span>
+                  <span class="mobile-menu__see-more">See More <span aria-hidden="true">↗</span></span>
                 </a>
               </section>
 
@@ -992,9 +992,9 @@ ${albums}
           <figure class="photo-lightbox__figure">
             <img class="photo-lightbox__image" data-photo-lightbox-image alt="" />
             <figcaption class="photo-lightbox__nav" data-photo-lightbox-nav aria-label="${escapeHtml(PHOTOS_PAGE.lightboxNavigationLabel)}">
-              <button class="photo-lightbox__nav-button" type="button" data-photo-lightbox-prev aria-label="${escapeHtml(PHOTOS_PAGE.previousPhotoLabel)}">←</button>
+              <button class="photo-lightbox__nav-button" type="button" data-photo-lightbox-prev aria-label="${escapeHtml(PHOTOS_PAGE.previousPhotoLabel)}"><span aria-hidden="true">←</span></button>
               <span class="photo-lightbox__counter" data-photo-lightbox-counter aria-live="polite"></span>
-              <button class="photo-lightbox__nav-button" type="button" data-photo-lightbox-next aria-label="${escapeHtml(PHOTOS_PAGE.nextPhotoLabel)}">→</button>
+              <button class="photo-lightbox__nav-button" type="button" data-photo-lightbox-next aria-label="${escapeHtml(PHOTOS_PAGE.nextPhotoLabel)}"><span aria-hidden="true">→</span></button>
             </figcaption>
           </figure>
           <button class="photo-lightbox__close" type="button" data-photo-lightbox-close aria-label="${escapeHtml(PHOTOS_PAGE.closeLightboxLabel)}">${escapeHtml(PHOTOS_PAGE.closeLabel)}</button>

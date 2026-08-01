@@ -1267,7 +1267,7 @@ ${project.images
                     data-project-carousel-prev
                     disabled
                   >
-                    ←
+                    <span aria-hidden="true">←</span>
                   </button>
                   <span
                     class="featured-project__carousel-status"
@@ -1281,7 +1281,7 @@ ${project.images
                     aria-label="Show next ${escapeHtml(projectLabel)} image"
                     data-project-carousel-next
                   >
-                    →
+                    <span aria-hidden="true">→</span>
                   </button>
                 </div>
                 <a

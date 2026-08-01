@@ -64,7 +64,7 @@
             aria-controls="more-menu-panel"
             data-more-menu-toggle
           >
-            More ↓
+            More <span aria-hidden="true">↓</span>
           </button>
 
           <nav
@@ -156,7 +156,7 @@
                       />
                     </noscript>
                   </span>
-                  <span class="mobile-menu__see-more">See More ↗</span>
+                  <span class="mobile-menu__see-more">See More <span aria-hidden="true">↗</span></span>
                 </a>
               </section>
 
@@ -326,9 +326,9 @@
             data-post-lightbox-nav
             aria-label="Article image navigation"
           >
-            <button class="post-lightbox__nav-button" type="button" data-post-lightbox-prev aria-label="Previous image">←</button>
+            <button class="post-lightbox__nav-button" type="button" data-post-lightbox-prev aria-label="Previous image"><span aria-hidden="true">←</span></button>
             <span class="post-lightbox__counter" data-post-lightbox-counter aria-live="polite"></span>
-            <button class="post-lightbox__nav-button" type="button" data-post-lightbox-next aria-label="Next image">→</button>
+            <button class="post-lightbox__nav-button" type="button" data-post-lightbox-next aria-label="Next image"><span aria-hidden="true">→</span></button>
           </figcaption>
         </figure>
         <button class="post-lightbox__close" type="button" data-post-lightbox-close aria-label="Close expanded image">Close</button>

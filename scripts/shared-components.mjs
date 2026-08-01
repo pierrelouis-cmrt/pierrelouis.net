@@ -122,7 +122,7 @@ export const renderSiteHeader = (config) => {
             aria-controls="more-menu-panel"
             data-more-menu-toggle
           >
-            More ↓
+            More <span aria-hidden="true">↓</span>
           </button>
 
           <nav
@@ -207,7 +207,7 @@ export const renderSiteHeader = (config) => {
                       />
                     </noscript>
                   </span>
-                  <span class="mobile-menu__see-more">See More ↗</span>
+                  <span class="mobile-menu__see-more">See More <span aria-hidden="true">↗</span></span>
                 </a>
               </section>
 
