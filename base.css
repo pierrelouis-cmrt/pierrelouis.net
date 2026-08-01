@@ -40,6 +40,7 @@
   --color-subtle: #7f7f7f;
   --color-media-bg: #f4f4f4;
   --color-external-link-bg: #ededed;
+  --color-selection-bg: #d8d8d8;
 
   /* Typography */
   --font-family-sans:
@@ -136,6 +137,11 @@
   box-sizing: border-box;
 }
 
+::selection {
+  background: var(--color-selection-bg);
+  color: var(--color-ink);
+}
+
 html {
   min-height: 100%;
   background: var(--color-bg);
@@ -226,6 +232,42 @@ img {
   flex-direction: column;
   overflow: hidden;
   background: var(--color-bg);
+}
+
+/* Multi-stop white fade adapted from raphaelsalaja.com's article layout. */
+.site-shell.posts-page::before,
+.site-shell.post-page::before {
+  position: fixed;
+  z-index: 9;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 128px;
+  background: linear-gradient(
+    180deg,
+    #fff,
+    hsl(0 0% 100% / 0.738) 19%,
+    hsl(0 0% 100% / 0.541) 34%,
+    hsl(0 0% 100% / 0.382) 47%,
+    hsl(0 0% 100% / 0.278) 56.5%,
+    hsl(0 0% 100% / 0.194) 65%,
+    hsl(0 0% 100% / 0.126) 73%,
+    hsl(0 0% 100% / 0.075) 80.2%,
+    hsl(0 0% 100% / 0.042) 86.1%,
+    hsl(0 0% 100% / 0.021) 91%,
+    hsl(0 0% 100% / 0.008) 95.2%,
+    hsl(0 0% 100% / 0.002) 98.2%,
+    hsl(0 0% 100% / 0)
+  );
+  content: "";
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .site-shell.posts-page::before,
+  .site-shell.post-page::before {
+    content: none;
+  }
 }
 
 main {

@@ -1,5 +1,10 @@
 .lists-page {
   --list-sheet-top: max(20px, env(safe-area-inset-top, 0px));
+  --list-sheet-corner-radius: 24px;
+  --list-sheet-close-size: 48px;
+  --list-sheet-close-inset: var(--space-2xl);
+  --list-sheet-close-icon-width: 15px;
+  --list-sheet-close-bg: #ffffff;
   --list-sheet-ease: cubic-bezier(0.19, 1, 0.22, 1);
   --list-sheet-open-duration: 650ms;
   --list-sheet-close-duration: 420ms;
@@ -39,7 +44,8 @@
 }
 
 .lists-page.has-list-sheet-open .site-shell {
-  border-radius: 24px 24px 0 0;
+  border-radius: var(--list-sheet-corner-radius)
+    var(--list-sheet-corner-radius) 0 0;
   filter: saturate(0.4) brightness(0.7);
   transform: translateY(10px) scale(0.95);
 }
@@ -224,7 +230,8 @@
   inset: var(--list-sheet-top) 0 0;
   overflow: hidden;
   border: 0;
-  border-radius: 24px 24px 0 0;
+  border-radius: var(--list-sheet-corner-radius)
+    var(--list-sheet-corner-radius) 0 0;
   background: #f8f8f7;
   color: var(--color-ink);
   opacity: 1;
@@ -259,7 +266,8 @@
   overflow-x: clip;
   overflow-y: auto;
   overscroll-behavior: contain;
-  border-radius: 24px 24px 0 0;
+  border-radius: var(--list-sheet-corner-radius)
+    var(--list-sheet-corner-radius) 0 0;
   background: #f8f8f7;
   touch-action: pan-y;
 }
@@ -302,21 +310,25 @@
 .list-sheet__close {
   position: sticky;
   z-index: 3;
-  top: 16px;
-  right: 16px;
+  top: var(--list-sheet-close-inset);
+  right: var(--list-sheet-close-inset);
   float: right;
   display: grid;
-  width: 52px;
+  width: var(--list-sheet-close-size);
   aspect-ratio: 1;
-  margin: 16px 16px -68px 0;
+  margin: var(--list-sheet-close-inset) var(--list-sheet-close-inset)
+    calc(
+      (var(--list-sheet-close-inset) + var(--list-sheet-close-size)) * -1
+    )
+    0;
   padding: 0;
   place-items: center;
   appearance: none;
   border: 0;
   border-radius: 50%;
-  background: var(--color-external-link-bg);
-  box-shadow: 0 1px 8px rgb(0 0 0 / 0.035);
-  color: #000000;
+  background: var(--list-sheet-close-bg);
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.06);
+  color: var(--color-ink);
   cursor: pointer;
   transition:
     transform 800ms var(--list-sheet-ease),
@@ -327,7 +339,7 @@
 .list-sheet__close span::after {
   position: absolute;
   display: block;
-  width: var(--mobile-menu-icon-width);
+  width: var(--list-sheet-close-icon-width);
   height: var(--mobile-menu-icon-height);
   background: currentColor;
   content: "";
@@ -344,7 +356,7 @@
 .list-sheet__close:hover,
 .list-sheet__close:focus-visible,
 .list-sheet__close:active {
-  box-shadow: 0 5px 16px rgb(0 0 0 / 0.08);
+  box-shadow: 0 5px 16px rgb(0 0 0 / 0.1);
   transform: scale(0.95);
 }
 
