@@ -33,6 +33,7 @@ const ASSET_CACHE_VERSION = 1;
 const STILL_WEBP_QUALITY = 84;
 const ANIMATED_WEBP_QUALITY = 80;
 const PROJECTS_PAGE = {
+  browserTitle: "Projects - Pierre-Louis",
   title: "Projects — Pierre-Louis",
   description: "Selected projects and experiments by Pierre-Louis.",
   // Hidden H1 used for the page's accessible document outline.
@@ -1681,7 +1682,7 @@ const renderCaseStudyPage = (project, peers) => {
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
-    <title>${escapeHtml(project.title)} - Pierre-Louis</title>
+    <title>${escapeHtml(project.title)}</title>
     <meta
       name="description"
       content="${escapeHtml(project.summary)}"
@@ -1860,11 +1861,12 @@ const updateProjectPages = async (projects) => {
 };
 
 const updatePageMetadata = (source) => {
+  const browserTitle = escapeHtml(PROJECTS_PAGE.browserTitle);
   const title = escapeHtml(PROJECTS_PAGE.title);
   const description = escapeHtml(PROJECTS_PAGE.description);
 
   return source
-    .replace(/<title>[^<]*<\/title>/, `<title>${title}</title>`)
+    .replace(/<title>[^<]*<\/title>/, `<title>${browserTitle}</title>`)
     .replace(
       /(<meta\s+name="description"\s+content=")[^"]*("\s*\/>)/,
       `$1${description}$2`,
