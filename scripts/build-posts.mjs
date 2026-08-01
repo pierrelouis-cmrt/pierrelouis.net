@@ -10,6 +10,31 @@ const CONFIG_PATH = path.join(ROOT, "eleventy.config.mjs");
 const RESERVED_POST_DIRECTORIES = new Set(["components", "headers"]);
 const REMOTE_REFERENCE = /^(?:[a-z][a-z\d+.-]*:|\/\/)/i;
 
+const validateLocalImages = (html, outputPath, errors) => {
+  const references = [];
+
+  for (const match of html.matchAll(/<img\b[^>]*\bsrc="([^"]+)"[^>]*>/gi)) {
+    references.push(match[1]);
+  }
+
+  for (const match of html.matchAll(/<(?:img|source)\b[^>]*\bsrcset="([^"]+)"[^>]*>/gi)) {
+    references.push(
+      ...match[1]
+        .split(",")
+        .map((candidate) => candidate.trim().split(/\s+/, 1)[0])
+        .filter(Boolean),
+    );
+  }
+
+  for (const reference of references) {
+    if (REMOTE_REFERENCE.test(reference)) {
+      errors.push(
+        `${path.relative(ROOT, outputPath)} contains a remote image: ${reference}`,
+      );
+    }
+  }
+};
+
 const validateLocalReferences = async (html, outputPath, errors) => {
   const references = new Set(
     [...html.matchAll(/\b(?:href|src)="([^"]+)"/g)].map(
@@ -167,6 +192,7 @@ const validateGeneratedPages = async (manifest) => {
       );
     }
 
+    validateLocalImages(html, outputPath, errors);
     await validateLocalReferences(html, outputPath, errors);
   }
 

@@ -10,11 +10,16 @@
   content: "←";
 }
 
-.brand-mark--back:hover,
 .brand-mark--back:focus-visible,
-.mobile-menu__brand--back:hover,
 .mobile-menu__brand--back:focus-visible {
   opacity: var(--hover-opacity);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .brand-mark--back:hover,
+  .mobile-menu__brand--back:hover {
+    opacity: var(--hover-opacity);
+  }
 }
 
 .brand-mark__back-short,
@@ -131,9 +136,14 @@
   white-space: nowrap;
 }
 
-.case-study-related__all:hover,
 .case-study-related__all:focus-visible {
   text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .case-study-related__all:hover {
+    text-decoration: none;
+  }
 }
 
 .case-study-related__list {

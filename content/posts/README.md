@@ -179,6 +179,12 @@ A standalone image followed immediately by a fully italic paragraph becomes a
 lightbox figure and caption. An image without that paragraph becomes an
 uncaptioned figure.
 
+Article and hero images must be stored in the local `assets/` folder beside
+the Markdown sources and referenced with a relative path. Remote image URLs
+are rejected during validation, so download third-party images into the vault
+before publishing. Keep the original source and attribution in the caption or
+footnotes when required.
+
 ### Math
 
 Use Obsidian-compatible KaTeX notation:

@@ -180,9 +180,11 @@
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       }
 
-      .mode-btn:hover:not(.is-active) {
-        color: var(--text-color);
-        background: var(--accent-dim);
+      @media (hover: hover) and (pointer: fine) {
+        .mode-btn:hover:not(.is-active) {
+          color: var(--text-color);
+          background: var(--accent-dim);
+        }
       }
 
       .mode-btn.is-active {

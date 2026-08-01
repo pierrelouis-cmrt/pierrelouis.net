@@ -21,6 +21,8 @@ const reducedMotionQuery = window.matchMedia(
   }
 
   const sheets = new Map();
+  const root = document.documentElement;
+  const sheetBackgroundColor = "#f8f8f7";
   const triggersBySlug = new Map(
     triggers.map((trigger) => [trigger.dataset.listSheetOpen, trigger]),
   );
@@ -35,19 +37,28 @@ const reducedMotionQuery = window.matchMedia(
     'meta[name="theme-color"]',
   );
   const defaultThemeColor = existingThemeColor?.content ?? null;
+  const defaultRootBackgroundColor = root.style.backgroundColor;
   let themeColor = existingThemeColor;
 
   const setSheetThemeColor = () => {
+    root.style.backgroundColor = sheetBackgroundColor;
+
     if (!themeColor) {
       themeColor = document.createElement("meta");
       themeColor.name = "theme-color";
       document.head.append(themeColor);
     }
 
-    themeColor.content = "#f8f8f7";
+    themeColor.content = sheetBackgroundColor;
   };
 
   const restoreThemeColor = () => {
+    if (defaultRootBackgroundColor) {
+      root.style.backgroundColor = defaultRootBackgroundColor;
+    } else {
+      root.style.removeProperty("background-color");
+    }
+
     if (!themeColor) {
       return;
     }

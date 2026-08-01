@@ -62,10 +62,16 @@
     filter var(--duration-medium) var(--ease-out);
 }
 
-.links-gallery__item:hover img,
 .links-gallery__item:focus-visible img {
   filter: brightness(0.92);
   transform: scale(1.035);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .links-gallery__item:hover img {
+    filter: brightness(0.92);
+    transform: scale(1.035);
+  }
 }
 
 .links-gallery__item:focus-visible {
@@ -138,17 +144,26 @@
     opacity var(--duration-fast) var(--ease-out);
 }
 
-.contact-email:hover,
 .contact-email:focus-visible,
-.social-links a:hover,
 .social-links a:focus-visible {
   opacity: var(--hover-opacity);
 }
 
-.social-links a:hover,
 .social-links a:focus-visible {
   color: var(--social-color);
   opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .contact-email:hover,
+  .social-links a:hover {
+    opacity: var(--hover-opacity);
+  }
+
+  .social-links a:hover {
+    color: var(--social-color);
+    opacity: 1;
+  }
 }
 
 .social-links .social-link--github {

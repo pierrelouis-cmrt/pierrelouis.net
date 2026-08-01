@@ -304,8 +304,10 @@
   display: none;
 }
 
-.photo-lightbox__nav-button:hover {
-  opacity: var(--hover-opacity);
+@media (hover: hover) and (pointer: fine) {
+  .photo-lightbox__nav-button:hover {
+    opacity: var(--hover-opacity);
+  }
 }
 
 body.has-photo-lightbox-open {

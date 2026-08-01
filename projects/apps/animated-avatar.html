@@ -110,8 +110,10 @@
         transition: transform 0.2s ease;
       }
 
-      .zoom-slider::-webkit-slider-thumb:hover {
-        transform: scale(1.1);
+      @media (hover: hover) and (pointer: fine) {
+        .zoom-slider::-webkit-slider-thumb:hover {
+          transform: scale(1.1);
+        }
       }
 
       .zoom-slider::-moz-range-thumb {
@@ -157,15 +159,17 @@
         color: var(--text-primary);
       }
 
-      .button.secondary:hover {
-        border-color: var(--border-darker);
-        background: var(--bg-primary);
-        transform: translateY(-1px);
-      }
+      @media (hover: hover) and (pointer: fine) {
+        .button.secondary:hover {
+          border-color: var(--border-darker);
+          background: var(--bg-primary);
+          transform: translateY(-1px);
+        }
 
-      .button.secondary:active {
-        transform: translateY(0);
-        background: var(--border);
+        .button.secondary:active {
+          transform: translateY(0);
+          background: var(--border);
+        }
       }
 
       .button.secondary.active:not(.random-btn) {

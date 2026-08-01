@@ -205,6 +205,7 @@ const collectMarkdownReferences = (content) => {
   const standardImages = /!\[[^\]]*]\(\s*(?:<([^>]+)>|([^\s)]+))/g;
   const obsidianEmbeds = /!\[\[([^|\]#]+)(?:[|#][^\]]*)?]]/g;
   const htmlImages = /<img\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi;
+  const htmlImageSrcsets = /<(?:img|source)\b[^>]*\bsrcset=["']([^"']+)["'][^>]*>/gi;
   const htmlIframes = /<iframe\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi;
   let match;
 
@@ -220,6 +221,16 @@ const collectMarkdownReferences = (content) => {
 
   while ((match = htmlImages.exec(content))) {
     references.push({ kind: "image", reference: match[1] });
+  }
+
+  while ((match = htmlImageSrcsets.exec(content))) {
+    for (const candidate of match[1].split(",")) {
+      const reference = candidate.trim().split(/\s+/, 1)[0];
+
+      if (reference) {
+        references.push({ kind: "image", reference });
+      }
+    }
   }
 
   while ((match = htmlIframes.exec(content))) {
@@ -509,8 +520,8 @@ const validatePost = async ({
   for (const { kind, reference } of references) {
     if (REMOTE_PROTOCOL.test(reference)) {
       if (kind === "image" || kind === "hero-image") {
-        warnings.push(
-          `${toPosix(path.relative(ROOT, inputPath))}: remote image \`${reference}\` should be downloaded into the vault`,
+        errors.push(
+          `${toPosix(path.relative(ROOT, inputPath))}: remote image \`${reference}\` is not allowed; download it into the article's local assets folder`,
         );
       }
       continue;

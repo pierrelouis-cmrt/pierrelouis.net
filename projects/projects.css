@@ -12,7 +12,6 @@
   --playground-sheet-ease: cubic-bezier(0.19, 1, 0.22, 1);
   --playground-sheet-open-duration: 650ms;
   --playground-sheet-close-duration: 420ms;
-  --playground-sheet-corner-guard: max(48px, env(safe-area-inset-bottom, 0px));
   background: var(--color-bg);
 }
 
@@ -34,14 +33,12 @@
 
 .projects-page.has-playground-sheet-open,
 .projects-page.is-playground-sheet-closing {
-  background: linear-gradient(
-      to bottom,
-      #2f2e2e 0,
-      #2f2e2e calc(100dvh - var(--playground-sheet-corner-guard)),
-      #f8f8f7 calc(100dvh - var(--playground-sheet-corner-guard)),
-      #f8f8f7 100dvh
-    )
-    fixed no-repeat;
+  background: #f8f8f7;
+}
+
+.projects-page.has-playground-sheet-open .site-shell,
+.projects-page.is-playground-sheet-closing .site-shell {
+  box-shadow: 0 0 0 100vmax #2f2e2e;
 }
 
 .projects-page.has-playground-sheet-open .site-shell {
@@ -189,14 +186,22 @@
   pointer-events: none;
 }
 
-.featured-project__case-link.internal-link:hover,
 .featured-project__case-link.internal-link:focus-visible {
   text-decoration-line: none;
 }
 
-.featured-project__case-link:hover::after,
 .featured-project__case-link:focus-visible::after {
   opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .featured-project__case-link.internal-link:hover {
+    text-decoration-line: none;
+  }
+
+  .featured-project__case-link:hover::after {
+    opacity: 1;
+  }
 }
 
 .featured-project__case-label--short {
@@ -240,8 +245,10 @@
   transition: opacity var(--duration-fast) var(--ease-out);
 }
 
-.featured-project__carousel-button:hover {
-  opacity: var(--hover-opacity);
+@media (hover: hover) and (pointer: fine) {
+  .featured-project__carousel-button:hover {
+    opacity: var(--hover-opacity);
+  }
 }
 
 .featured-project__carousel-button:focus-visible {
@@ -441,8 +448,10 @@
   touch-action: none;
 }
 
-.playground-sheet__handle:active {
-  cursor: grabbing;
+@media (hover: hover) and (pointer: fine) {
+  .playground-sheet__handle:active {
+    cursor: grabbing;
+  }
 }
 
 .playground-sheet__handle::before {
@@ -519,11 +528,17 @@
   transform: rotate(90deg);
 }
 
-.playground-sheet__close:hover,
-.playground-sheet__close:focus-visible,
-.playground-sheet__close:active {
+.playground-sheet__close:focus-visible {
   box-shadow: 0 5px 16px rgb(0 0 0 / 0.1);
   transform: scale(0.95);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .playground-sheet__close:hover,
+  .playground-sheet__close:active {
+    box-shadow: 0 5px 16px rgb(0 0 0 / 0.1);
+    transform: scale(0.95);
+  }
 }
 
 .playground-sheet__close:focus-visible {
@@ -732,8 +747,10 @@
     cursor: grab;
   }
 
-  .featured-project__track:active {
-    cursor: grabbing;
+  @media (hover: hover) and (pointer: fine) {
+    .featured-project__track:active {
+      cursor: grabbing;
+    }
   }
 
   .featured-project__track::-webkit-scrollbar {

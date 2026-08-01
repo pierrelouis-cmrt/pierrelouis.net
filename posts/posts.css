@@ -281,14 +281,22 @@
   pointer-events: none;
 }
 
-.post-row__link.internal-link:hover,
 .post-row__link.internal-link:focus-visible {
   text-decoration-line: none;
 }
 
-.post-row__link:hover::after,
 .post-row__link:focus-visible::after {
   opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .post-row__link.internal-link:hover {
+    text-decoration-line: none;
+  }
+
+  .post-row__link:hover::after {
+    opacity: 1;
+  }
 }
 
 .post-row__link-label--compact {

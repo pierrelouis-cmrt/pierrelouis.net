@@ -41,8 +41,10 @@
         cursor: grab;
       }
 
-      .swiper:active {
-        cursor: grabbing;
+      @media (hover: hover) and (pointer: fine) {
+        .swiper:active {
+          cursor: grabbing;
+        }
       }
 
       .swiper-slide {

@@ -179,10 +179,16 @@ a {
   transition: color var(--duration-fast) var(--ease-out);
 }
 
-.internal-link:hover,
 .internal-link:focus-visible {
   color: var(--color-subtle);
   text-decoration-line: underline;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .internal-link:hover {
+    color: var(--color-subtle);
+    text-decoration-line: underline;
+  }
 }
 
 .internal-link:focus-visible {
@@ -200,10 +206,16 @@ a {
     color var(--duration-fast) var(--ease-out);
 }
 
-.external-link:hover,
 .external-link:focus-visible {
   background: var(--color-ink);
   color: var(--color-bg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .external-link:hover {
+    background: var(--color-ink);
+    color: var(--color-bg);
+  }
 }
 
 .external-link:focus-visible {
@@ -235,7 +247,6 @@ img {
 }
 
 /* Multi-stop white fade adapted from raphaelsalaja.com's article layout. */
-.site-shell.posts-page::before,
 .site-shell.post-page::before {
   position: fixed;
   z-index: 9;
@@ -264,7 +275,6 @@ img {
 }
 
 @media (max-width: 640px) {
-  .site-shell.posts-page::before,
   .site-shell.post-page::before {
     content: none;
   }
@@ -367,11 +377,13 @@ main {
   text-align: right;
 }
 
-.primary-nav__link:hover,
-.more-menu__toggle:hover,
-.more-menu__link:hover,
-.site-footer__link:hover {
-  opacity: var(--hover-opacity);
+@media (hover: hover) and (pointer: fine) {
+  .primary-nav__link:hover,
+  .more-menu__toggle:hover,
+  .more-menu__link:hover,
+  .site-footer__link:hover {
+    opacity: var(--hover-opacity);
+  }
 }
 
 .more-menu__panel {
@@ -817,11 +829,16 @@ main {
   margin-top: var(--space-lg);
 }
 
-.featured-article:hover,
 .featured-article:focus-visible,
-.mobile-menu__latest-link:hover,
 .mobile-menu__latest-link:focus-visible {
   opacity: var(--hover-opacity);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .featured-article:hover,
+  .mobile-menu__latest-link:hover {
+    opacity: var(--hover-opacity);
+  }
 }
 
 .featured-article:focus-visible,
@@ -1258,6 +1275,8 @@ main {
   }
 
   .mobile-menu__panel {
+    --mobile-menu-watermark-width: min(100vw, 64svh);
+    --mobile-menu-watermark-height: min(34.38vw, 22svh);
     position: fixed;
     z-index: 30;
     inset: 0;
@@ -1324,6 +1343,8 @@ main {
   }
 
   .mobile-menu__layout {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: auto auto minmax(0, 1fr);
@@ -1438,12 +1459,13 @@ main {
 
   .mobile-menu__watermark {
     position: absolute;
-    right: 0;
+    right: auto;
     bottom: 0;
     left: 0;
     display: block;
-    width: 100vw;
+    width: var(--mobile-menu-watermark-width);
     max-width: none;
+    aspect-ratio: 1434 / 493;
     height: auto;
     object-fit: contain;
     object-position: left bottom;
@@ -1452,9 +1474,11 @@ main {
     user-select: none;
   }
 
-  .mobile-menu__primary-link:hover,
-  .mobile-menu__link:hover {
-    opacity: var(--hover-opacity);
+  @media (hover: hover) and (pointer: fine) {
+    .mobile-menu__primary-link:hover,
+    .mobile-menu__link:hover {
+      opacity: var(--hover-opacity);
+    }
   }
 
   .site-footer {
@@ -1487,12 +1511,6 @@ main {
 }
 
 @media (max-width: 760px) and (max-height: 720px) {
-  .mobile-menu__layout {
-    row-gap: var(--space-2xl);
-    padding-top: 36px;
-    padding-bottom: 120px;
-  }
-
   .mobile-menu__latest-link {
     width: min(82%, 140px);
   }
@@ -1504,9 +1522,53 @@ main {
   .mobile-menu__see-more {
     margin-top: 8px;
   }
+}
 
-  .mobile-menu__watermark {
-    transform: translateY(28px);
+@media (max-width: 760px) and (max-height: 720px) and (orientation: portrait) {
+  .mobile-menu__layout {
+    row-gap: clamp(12px, 3svh, 24px);
+    padding-top: clamp(24px, 5.4svh, 36px);
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 760px) and (max-height: 600px) and (orientation: portrait) {
+  .mobile-menu__layout {
+    row-gap: 8px;
+    padding-top: 18px;
+  }
+}
+
+@media (max-width: 760px) and (orientation: landscape) {
+  .mobile-menu__layout {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: auto;
+    column-gap: clamp(12px, 3vw, 26px);
+    row-gap: 0;
+    padding-top: clamp(6px, 2svh, 12px);
+    padding-bottom: calc(
+      var(--mobile-menu-watermark-height) + clamp(2px, 1svh, 6px)
+    );
+  }
+
+  .mobile-menu__section--main {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .mobile-menu__section--about {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .mobile-menu__section--links {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .mobile-menu__section--latest {
+    grid-column: 4;
+    grid-row: 1;
   }
 }
 

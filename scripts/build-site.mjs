@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { buildLists } from "./build-lists.mjs";
 import { buildPhotos } from "./build-photos.mjs";
 import { buildProjects } from "./build-projects.mjs";
+import { hashStaticAssets } from "./hash-static-assets.mjs";
 import { syncSharedComponents } from "./shared-components.mjs";
 import { syncAndBuildPosts } from "./vault-posts.mjs";
 
@@ -107,6 +108,7 @@ const photos = await buildPhotos();
 const posts = await syncAndBuildPosts();
 const sharedComponents = await syncSharedComponents();
 const copiedPaths = await assembleDist();
+const hashedAssets = await hashStaticAssets(DIST_DIR);
 
 console.log(
   `Built Lists page: ${lists.sheets} sheet(s)${
@@ -137,3 +139,4 @@ console.log(
   `Synced shared components: ${sharedComponents.length} file(s) updated.`,
 );
 console.log(`Built dist/: ${copiedPaths} public path(s) copied.`);
+console.log(`Hashed production assets: ${hashedAssets.size} CSS/JS file(s).`);

@@ -8,10 +8,6 @@
   --list-sheet-ease: cubic-bezier(0.19, 1, 0.22, 1);
   --list-sheet-open-duration: 650ms;
   --list-sheet-close-duration: 420ms;
-  --list-sheet-corner-guard: max(
-    48px,
-    env(safe-area-inset-bottom, 0px)
-  );
   background: var(--color-bg);
 }
 
@@ -32,15 +28,12 @@
 
 .lists-page.has-list-sheet-open,
 .lists-page.is-list-sheet-closing {
-  background:
-    linear-gradient(
-      to bottom,
-      #2f2e2e 0,
-      #2f2e2e calc(100dvh - var(--list-sheet-corner-guard)),
-      #f8f8f7 calc(100dvh - var(--list-sheet-corner-guard)),
-      #f8f8f7 100dvh
-    )
-    fixed no-repeat;
+  background: #f8f8f7;
+}
+
+.lists-page.has-list-sheet-open .site-shell,
+.lists-page.is-list-sheet-closing .site-shell {
+  box-shadow: 0 0 0 100vmax #2f2e2e;
 }
 
 .lists-page.has-list-sheet-open .site-shell {
@@ -84,6 +77,12 @@
 .list-card:focus-visible {
   outline: 1px solid var(--color-ink);
   outline-offset: 5px;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .list-card:focus-visible {
+    outline: 0;
+  }
 }
 
 .list-card__media {
@@ -293,8 +292,10 @@
   touch-action: none;
 }
 
-.list-sheet__handle:active {
-  cursor: grabbing;
+@media (hover: hover) and (pointer: fine) {
+  .list-sheet__handle:active {
+    cursor: grabbing;
+  }
 }
 
 .list-sheet__handle::before {
@@ -367,11 +368,17 @@
   transform: rotate(90deg);
 }
 
-.list-sheet__close:hover,
-.list-sheet__close:focus-visible,
-.list-sheet__close:active {
+.list-sheet__close:focus-visible {
   box-shadow: 0 5px 16px rgb(0 0 0 / 0.1);
   transform: scale(0.95);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .list-sheet__close:hover,
+  .list-sheet__close:active {
+    box-shadow: 0 5px 16px rgb(0 0 0 / 0.1);
+    transform: scale(0.95);
+  }
 }
 
 .list-sheet__close:focus-visible {
