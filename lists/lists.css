@@ -472,6 +472,30 @@
   background: var(--color-media-bg);
 }
 
+.list-sheet__entry-list {
+  display: block;
+  margin: 0;
+  padding-left: 1.25em;
+  list-style: disc;
+}
+
+.list-sheet__entry-list > li {
+  min-width: 0;
+  padding: 0;
+  color: var(--color-caption);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-copy);
+  overflow-wrap: anywhere;
+}
+
+.list-sheet__entry-list > li + li {
+  margin-top: var(--space-md);
+}
+
+.list-sheet__content > .list-sheet__entry-list {
+  grid-column: 2 / span 2;
+}
+
 /* Re-composed wide-tablet canvas: preserve the desktop scatter without scaling it. */
 @media (max-width: 1100px) {
   .lists-canvas {
@@ -533,6 +557,9 @@
     margin-top: var(--space-lg);
   }
 
+  .list-sheet__content > .list-sheet__entry-list {
+    grid-column: 2;
+  }
 }
 
 /* Narrow tablets use a second composition before the mobile stack takes over. */
@@ -650,6 +677,10 @@
 
   .list-sheet-cover__art {
     width: min(88%, 512px);
+  }
+
+  .list-sheet__content > .list-sheet__entry-list {
+    grid-column: 1;
   }
 }
 

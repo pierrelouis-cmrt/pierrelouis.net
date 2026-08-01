@@ -66,7 +66,7 @@
             aria-controls="more-menu-panel"
             data-more-menu-toggle
           >
-            More ↓
+            More <span aria-hidden="true">↓</span>
           </button>
 
           <nav
@@ -158,7 +158,7 @@
                       />
                     </noscript>
                   </span>
-                  <span class="mobile-menu__see-more">See More ↗</span>
+                  <span class="mobile-menu__see-more">See More <span aria-hidden="true">↗</span></span>
                 </a>
               </section>
 
@@ -432,20 +432,21 @@
                 </div>
               </header>
 
-              <div class="project-content list-sheet__body">
-                <figure
-                  class="project-content__media project-content__media--contained list-sheet-cover"
-                  data-list-sheet-cover
-                ></figure>
-
-                <div class="project-content__text project-content__text--titled">
-                  <h3>About this list</h3>
-                  <p>
-                    A collection of things I enjoy, from everyday objects and small details
-                    to ideas worth remembering.
-                  </p>
-                </div>
-              </div>
+              <ul class="list-sheet__entry-list" aria-label="Things I like">
+                <li data-list-entry>Modern art</li>
+                <li data-list-entry>Minimalism</li>
+                <li data-list-entry>Mid Century Modern</li>
+                <li data-list-entry>Retro Futurism</li>
+                <li data-list-entry>Brutalism</li>
+                <li data-list-entry>Nicely engineered products</li>
+                <li data-list-entry>Yellow</li>
+                <li data-list-entry>Pop and electronic music</li>
+                <li data-list-entry>Rain</li>
+                <li data-list-entry>The smell of freshly cut grass</li>
+                <li data-list-entry>Sugar</li>
+                <li data-list-entry>Stats</li>
+                <li data-list-entry>Tech</li>
+              </ul>
             </div>
           </div>
         </dialog>
@@ -499,20 +500,17 @@
                 </div>
               </header>
 
-              <div class="project-content list-sheet__body">
-                <figure
-                  class="project-content__media project-content__media--contained list-sheet-cover"
-                  data-list-sheet-cover
-                ></figure>
-
-                <div class="project-content__text project-content__text--titled">
-                  <h3>About this list</h3>
-                  <p>
-                    A record of the habits, objects and small points of friction I would
-                    rather do without.
-                  </p>
-                </div>
-              </div>
+              <ul class="list-sheet__entry-list" aria-label="Things I dislike">
+                <li data-list-entry>Heat</li>
+                <li data-list-entry>Spicy Food</li>
+                <li data-list-entry>Bad design</li>
+                <li data-list-entry>Geography</li>
+                <li data-list-entry>Ignorance</li>
+                <li data-list-entry>Spiders</li>
+                <li data-list-entry>Spicy food (again)</li>
+                <li data-list-entry>Alcohol</li>
+                <li data-list-entry>Coffee</li>
+              </ul>
             </div>
           </div>
         </dialog>
