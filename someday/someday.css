@@ -94,6 +94,8 @@
   padding-top: 6px;
   color: var(--color-subtle);
   font-size: var(--font-size-small);
+  line-height: var(--line-height-description);
+  letter-spacing: var(--tracking-description);
 }
 
 .someday-stories {

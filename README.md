@@ -124,4 +124,9 @@ Both production endpoints require PHP with the cURL extension. The weather endpo
 
 ## License
 
-The source code is available under the [MIT License](./LICENSE). Unless otherwise stated, the portfolio's writing, photography, and other personal content remain © Pierre-Louis Camaret.
+The source code is available under the [MIT License](./LICENSE).
+
+The MIT License does not cover the site’s visual design, personal writing,
+articles, photography, project case-study content, personal media, or third-party
+assets unless explicitly stated. Those materials remain subject to their
+respective copyright and license terms.

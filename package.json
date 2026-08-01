@@ -1,5 +1,6 @@
 {
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "build": "node scripts/build-site.mjs",
     "build:lists": "node scripts/build-lists.mjs",

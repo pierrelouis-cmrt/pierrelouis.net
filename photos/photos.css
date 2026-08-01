@@ -96,8 +96,8 @@
   width: min(100%, 290px);
   color: var(--color-subtle);
   font-size: 14px;
-  line-height: 1.43;
-  letter-spacing: var(--tracking-normal);
+  line-height: var(--line-height-description);
+  letter-spacing: var(--tracking-description);
 }
 
 .photo-grid {

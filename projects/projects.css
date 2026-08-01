@@ -158,7 +158,8 @@
   padding-top: 6px;
   color: var(--color-subtle);
   font-size: var(--font-size-small);
-  line-height: var(--line-height-solid);
+  line-height: var(--line-height-description);
+  letter-spacing: var(--tracking-description);
 }
 
 .featured-project__case-link {
@@ -295,7 +296,8 @@
   width: min(100%, 320px);
   color: var(--color-subtle);
   font-size: 14px;
-  line-height: 1.43;
+  line-height: var(--line-height-description);
+  letter-spacing: var(--tracking-description);
 }
 
 .playground-grid {
@@ -371,7 +373,8 @@
   padding-top: 6px;
   color: var(--color-subtle);
   font-size: var(--font-size-small);
-  line-height: var(--line-height-solid);
+  line-height: var(--line-height-description);
+  letter-spacing: var(--tracking-description);
 }
 
 .playground-sheet {

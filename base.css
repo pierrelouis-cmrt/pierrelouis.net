@@ -55,9 +55,11 @@
   --line-height-utility-mobile: 22px;
   --line-height-solid: 1;
   --line-height-compact: 1.2;
+  --line-height-description: 1.15;
   --line-height-copy: 1.45;
   --line-height-label: 1.65;
   --tracking-normal: 0;
+  --tracking-description: var(--tracking-normal);
   --tracking-label: 0.6px;
 
   /* Layout */
@@ -617,6 +619,7 @@ main {
 .split-title {
   grid-column: 1 / span 2;
   display: flex;
+  align-self: start;
   align-items: center;
   gap: var(--space-md);
   margin: 0;

@@ -255,7 +255,8 @@
 .post-row__summary {
   color: var(--color-subtle);
   font-size: 14px;
-  line-height: 1.43;
+  line-height: var(--line-height-description);
+  letter-spacing: var(--tracking-description);
 }
 
 .post-row__link {
