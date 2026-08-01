@@ -409,11 +409,13 @@
 }
 
 .playground-sheet__surface {
+  position: relative;
   width: 100%;
   height: 100%;
   overflow-x: clip;
   overflow-y: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior-x: none;
+  overscroll-behavior-y: auto;
   border-radius: var(--playground-sheet-corner-radius)
     var(--playground-sheet-corner-radius) 0 0;
   background: #f8f8f7;
@@ -421,19 +423,20 @@
 }
 
 .playground-sheet__handle {
-  position: sticky;
+  position: absolute;
   z-index: 3;
   top: 0;
+  left: 0;
   display: none;
   width: 100%;
-  height: 28px;
-  margin-bottom: -28px;
-  padding: 0;
-  align-items: center;
+  height: 72px;
+  margin: 0;
+  padding: 15px 0 0;
+  align-items: flex-start;
   justify-content: center;
   appearance: none;
   border: 0;
-  background: color-mix(in srgb, #f8f8f7 94%, transparent);
+  background: transparent;
   cursor: grab;
   touch-action: none;
 }
@@ -442,12 +445,23 @@
   cursor: grabbing;
 }
 
+.playground-sheet__handle::before {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 36px;
+  background: color-mix(in srgb, #f8f8f7 90%, transparent);
+  content: "";
+  pointer-events: none;
+}
+
 .playground-sheet__handle:focus-visible {
   outline: 1px solid var(--color-ink);
   outline-offset: -5px;
 }
 
 .playground-sheet__handle-bar {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 42px;
   height: 5px;
@@ -605,7 +619,7 @@
 .project-interactive__frame {
   display: block;
   width: 100%;
-  height: var(--project-interactive-height, 600px);
+  height: 600px;
   border: 0;
   background: #f8f8f7;
 }
@@ -823,8 +837,6 @@
 
   .playground-sheet__handle {
     display: flex;
-    height: var(--touch-target-compact);
-    margin-bottom: calc(var(--touch-target-compact) * -1);
   }
 
   .playground-sheet__close {
@@ -865,9 +877,6 @@
     --project-carousel-start-edge: var(--page-gutter);
   }
 
-  .project-interactive__frame {
-    height: var(--project-interactive-mobile-height, 750px);
-  }
 }
 
 @media (pointer: coarse) {

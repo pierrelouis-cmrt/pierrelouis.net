@@ -217,24 +217,7 @@ const normalizeInteractiveDemo = async ({
     throw error;
   }
 
-  const height = interactive.height ?? 600;
-  const mobileHeight = interactive.mobileHeight ?? height;
-
-  for (const [field, value] of [
-    ["interactive.height", height],
-    ["interactive.mobileHeight", mobileHeight],
-  ]) {
-    if (!Number.isFinite(value) || value < 240 || value > 1200) {
-      throw projectError(
-        projectKey,
-        `"${field}" must be a number between 240 and 1200`,
-      );
-    }
-  }
-
   return {
-    height,
-    mobileHeight,
     src,
     title: requireProjectText(
       interactive.title,
@@ -1442,13 +1425,12 @@ const renderProjectInteractive = (project) => {
     return "";
   }
 
-  const { height, mobileHeight, src, title } = project.interactive;
+  const { src, title } = project.interactive;
 
   return `
 
                 <figure
                   class="project-interactive"
-                  style="--project-interactive-height: ${height}px; --project-interactive-mobile-height: ${mobileHeight}px"
                 >
                   <iframe
                     class="project-interactive__frame"
@@ -1458,6 +1440,7 @@ const renderProjectInteractive = (project) => {
                     referrerpolicy="no-referrer"
                     sandbox="allow-scripts allow-same-origin allow-downloads"
                     allow="fullscreen"
+                    scrolling="no"
                   ></iframe>
                 </figure>`;
 };

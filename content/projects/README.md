@@ -200,13 +200,12 @@ body:
 interactive:
   src: /path/to/demo.html
   title: Accessible title for the embedded demo
-  height: 600
-  mobileHeight: 750
 ```
 
 `src` must begin with `/` and resolve to an existing public file in the site.
-Heights are pixels, must be between `240` and `1200`, and default to `600`.
-Links or other supporting controls should be authored explicitly in Markdown.
+The iframe automatically expands to its same-site document height so the page
+or sheet remains the only vertical scroller. Links or other supporting controls
+should be authored explicitly in Markdown.
 
 ## Build, validation, and generated files
 

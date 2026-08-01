@@ -8,8 +8,6 @@ summary: Bringing life to a simple design element with CSS animations.
 interactive:
   src: /projects/apps/animated-avatar.html
   title: Interactive animated avatar states
-  height: 600
-  mobileHeight: 750
 listing:
   image: listing/cover.png
   alt: The animated avatar's round head and eyes.

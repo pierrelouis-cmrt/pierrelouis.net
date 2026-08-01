@@ -273,6 +273,85 @@ document.querySelectorAll("[data-project-gallery]").forEach((gallery) => {
   viewport.addEventListener("pointercancel", endDrag);
 });
 
+const interactiveFrameSync = new WeakMap();
+
+document.querySelectorAll(".project-interactive__frame").forEach((frame) => {
+  let resizeObserver = null;
+  let syncFrame = 0;
+
+  const syncHeight = () => {
+    syncFrame = 0;
+
+    try {
+      const frameDocument = frame.contentDocument;
+      const frameBody = frameDocument?.body;
+      const frameRoot = frameDocument?.documentElement;
+
+      if (!frameBody || !frameRoot) {
+        return;
+      }
+
+      const contentHeight = Math.ceil(
+        Math.max(
+          frameBody.offsetHeight,
+          frameBody.scrollHeight,
+          frameRoot.offsetHeight,
+          frameRoot.scrollHeight,
+        ),
+      );
+
+      if (contentHeight > 0 && frame.offsetHeight !== contentHeight) {
+        frame.style.height = `${contentHeight}px`;
+      }
+    } catch {
+      // Interactive project sources are validated as same-site at build time.
+    }
+  };
+
+  const requestHeightSync = () => {
+    window.cancelAnimationFrame(syncFrame);
+    syncFrame = window.requestAnimationFrame(syncHeight);
+  };
+
+  const observeContent = () => {
+    resizeObserver?.disconnect();
+
+    try {
+      const frameDocument = frame.contentDocument;
+
+      if (!frameDocument?.documentElement || !frameDocument.body) {
+        return;
+      }
+
+      resizeObserver = new ResizeObserver(requestHeightSync);
+      resizeObserver.observe(frameDocument.documentElement);
+      resizeObserver.observe(frameDocument.body);
+      requestHeightSync();
+    } catch {
+      // Leave the CSS fallback height in place if access is unavailable.
+    }
+  };
+
+  interactiveFrameSync.set(frame, requestHeightSync);
+  frame.addEventListener("load", observeContent);
+
+  if (frame.contentDocument?.readyState === "complete") {
+    observeContent();
+  }
+});
+
+const resizeProjectInteractiveFrames = (root = document) => {
+  root.querySelectorAll(".project-interactive__frame").forEach((frame) => {
+    interactiveFrameSync.get(frame)?.();
+  });
+};
+
+window.addEventListener(
+  "resize",
+  () => resizeProjectInteractiveFrames(),
+  { passive: true },
+);
+
 (() => {
   const page = document.body;
   const stage = document.querySelector(".site-shell");
@@ -298,6 +377,35 @@ document.querySelectorAll("[data-project-gallery]").forEach((gallery) => {
   let isClosing = false;
   let pendingCloseDragY = null;
   let pendingSlug = null;
+  const existingThemeColor = document.querySelector(
+    'meta[name="theme-color"]',
+  );
+  const defaultThemeColor = existingThemeColor?.content ?? null;
+  let themeColor = existingThemeColor;
+
+  const setSheetThemeColor = () => {
+    if (!themeColor) {
+      themeColor = document.createElement("meta");
+      themeColor.name = "theme-color";
+      document.head.append(themeColor);
+    }
+
+    themeColor.content = "#f8f8f7";
+  };
+
+  const restoreThemeColor = () => {
+    if (!themeColor) {
+      return;
+    }
+
+    if (defaultThemeColor === null) {
+      themeColor.remove();
+      themeColor = null;
+      return;
+    }
+
+    themeColor.content = defaultThemeColor;
+  };
 
   sheetElements.forEach((sheet) => {
     sheets.set(sheet.dataset.playgroundSheet, sheet);
@@ -366,6 +474,7 @@ document.querySelectorAll("[data-project-gallery]").forEach((gallery) => {
     closeDialog(sheet);
     sheet.classList.remove("is-open", "is-closing", "is-dragging");
     sheet.style.removeProperty("transform");
+    sheet.style.removeProperty("transition-duration");
     page.classList.remove(
       "has-playground-sheet-open",
       "is-playground-sheet-closing",
@@ -379,6 +488,10 @@ document.querySelectorAll("[data-project-gallery]").forEach((gallery) => {
     activeTrigger = null;
     isClosing = false;
     pendingCloseDragY = null;
+
+    if (!pendingSlug) {
+      restoreThemeColor();
+    }
 
     if (restoreFocus && triggerToRestore?.isConnected) {
       triggerToRestore.focus({ preventScroll: true });
@@ -491,6 +604,7 @@ document.querySelectorAll("[data-project-gallery]").forEach((gallery) => {
       top: 0,
       behavior: "auto",
     });
+    setSheetThemeColor();
     showDialog(sheet);
     page.classList.add("has-playground-sheet-open");
 
@@ -505,6 +619,7 @@ document.querySelectorAll("[data-project-gallery]").forEach((gallery) => {
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
         sheet.classList.add("is-open");
+        resizeProjectInteractiveFrames(sheet);
         sheet.focus({ preventScroll: true });
       });
     });
@@ -539,15 +654,39 @@ document.querySelectorAll("[data-project-gallery]").forEach((gallery) => {
       return;
     }
 
+    // Keep the grab area outside the scrolling surface so iOS rubber-band
+    // overscroll cannot pull the handle away from the sheet edge.
+    sheet.prepend(handle);
+
     let dragStartY = 0;
-    let dragStartTime = 0;
     let dragY = 0;
     let dragging = false;
     let suppressHandleClick = false;
+    let dragSamples = [];
+
+    const recordDragSample = (clientY) => {
+      const now = performance.now();
+      dragSamples.push({ time: now, y: clientY });
+      dragSamples = dragSamples.filter((sample) => now - sample.time <= 100);
+    };
+
+    const recentVelocity = () => {
+      if (dragSamples.length < 2) {
+        return 0;
+      }
+
+      const first = dragSamples[0];
+    const last = dragSamples[dragSamples.length - 1];
+      return (last.y - first.y) / Math.max(last.time - first.time, 1);
+    };
 
     const finishDrag = (event) => {
       if (!dragging) {
         return;
+      }
+
+      if (Number.isFinite(event.clientY)) {
+        recordDragSample(event.clientY);
       }
 
       dragging = false;
@@ -556,15 +695,20 @@ document.querySelectorAll("[data-project-gallery]").forEach((gallery) => {
         handle.releasePointerCapture(event.pointerId);
       }
 
-      const elapsed = Math.max(performance.now() - dragStartTime, 1);
-      const velocity = dragY / elapsed;
+      const velocity = Math.max(recentVelocity(), 0);
       const shouldClose =
-        dragY > sheet.clientHeight * 0.18 || velocity > 0.7;
+        dragY > Math.min(sheet.clientHeight * 0.14, 120) ||
+        (dragY > 18 && velocity > 0.45);
 
       page.classList.remove("is-playground-sheet-dragging");
       sheet.classList.remove("is-dragging");
 
       if (shouldClose) {
+        const remainingDistance = Math.max(sheet.clientHeight - dragY, 0);
+        const momentumDuration = remainingDistance / Math.max(velocity, 0.8);
+        sheet.style.transitionDuration = `${Math.round(
+          Math.min(closeDuration, Math.max(180, momentumDuration)),
+        )}ms`;
         requestClose({ dragY });
         return;
       }
@@ -595,9 +739,10 @@ document.querySelectorAll("[data-project-gallery]").forEach((gallery) => {
 
       dragging = true;
       dragStartY = event.clientY;
-      dragStartTime = performance.now();
       dragY = 0;
       suppressHandleClick = false;
+      dragSamples = [];
+      recordDragSample(event.clientY);
       handle.setPointerCapture?.(event.pointerId);
       page.classList.add("is-playground-sheet-dragging");
       sheet.classList.add("is-dragging");
@@ -609,6 +754,7 @@ document.querySelectorAll("[data-project-gallery]").forEach((gallery) => {
       }
 
       dragY = Math.max(event.clientY - dragStartY, 0);
+      recordDragSample(event.clientY);
       suppressHandleClick ||= dragY > 6;
       const progress = 1 - Math.min(dragY / sheet.clientHeight, 1);
       sheet.style.transform = `translateY(${dragY}px)`;

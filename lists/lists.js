@@ -31,6 +31,35 @@ const reducedMotionQuery = window.matchMedia(
   let isClosing = false;
   let pendingCloseDragY = null;
   let pendingSlug = null;
+  const existingThemeColor = document.querySelector(
+    'meta[name="theme-color"]',
+  );
+  const defaultThemeColor = existingThemeColor?.content ?? null;
+  let themeColor = existingThemeColor;
+
+  const setSheetThemeColor = () => {
+    if (!themeColor) {
+      themeColor = document.createElement("meta");
+      themeColor.name = "theme-color";
+      document.head.append(themeColor);
+    }
+
+    themeColor.content = "#f8f8f7";
+  };
+
+  const restoreThemeColor = () => {
+    if (!themeColor) {
+      return;
+    }
+
+    if (defaultThemeColor === null) {
+      themeColor.remove();
+      themeColor = null;
+      return;
+    }
+
+    themeColor.content = defaultThemeColor;
+  };
 
   const dispatchLifecycle = (sheet, name, detail = {}) => {
     sheet.dispatchEvent(
@@ -155,6 +184,7 @@ const reducedMotionQuery = window.matchMedia(
     closeDialog(sheet);
     sheet.classList.remove("is-open", "is-closing", "is-dragging");
     sheet.style.removeProperty("transform");
+    sheet.style.removeProperty("transition-duration");
     page.classList.remove(
       "has-list-sheet-open",
       "is-list-sheet-closing",
@@ -169,6 +199,10 @@ const reducedMotionQuery = window.matchMedia(
     activeTrigger = null;
     isClosing = false;
     pendingCloseDragY = null;
+
+    if (!pendingSlug) {
+      restoreThemeColor();
+    }
 
     if (restoreFocus && triggerToRestore?.isConnected) {
       triggerToRestore.focus({ preventScroll: true });
@@ -283,6 +317,7 @@ const reducedMotionQuery = window.matchMedia(
     });
     dispatchLifecycle(sheet, "before-open", { trigger: activeTrigger });
     syncEntryCount(sheet);
+    setSheetThemeColor();
     showDialog(sheet);
     page.classList.add("has-list-sheet-open");
 
@@ -326,15 +361,39 @@ const reducedMotionQuery = window.matchMedia(
       return;
     }
 
+    // Keep the grab area outside the scrolling surface so iOS rubber-band
+    // overscroll cannot pull the handle away from the sheet edge.
+    sheet.prepend(handle);
+
     let dragStartY = 0;
-    let dragStartTime = 0;
     let dragY = 0;
     let dragging = false;
     let suppressHandleClick = false;
+    let dragSamples = [];
+
+    const recordDragSample = (clientY) => {
+      const now = performance.now();
+      dragSamples.push({ time: now, y: clientY });
+      dragSamples = dragSamples.filter((sample) => now - sample.time <= 100);
+    };
+
+    const recentVelocity = () => {
+      if (dragSamples.length < 2) {
+        return 0;
+      }
+
+      const first = dragSamples[0];
+    const last = dragSamples[dragSamples.length - 1];
+      return (last.y - first.y) / Math.max(last.time - first.time, 1);
+    };
 
     const finishDrag = (event) => {
       if (!dragging) {
         return;
+      }
+
+      if (Number.isFinite(event.clientY)) {
+        recordDragSample(event.clientY);
       }
 
       dragging = false;
@@ -343,15 +402,20 @@ const reducedMotionQuery = window.matchMedia(
         handle.releasePointerCapture(event.pointerId);
       }
 
-      const elapsed = Math.max(performance.now() - dragStartTime, 1);
-      const velocity = dragY / elapsed;
+      const velocity = Math.max(recentVelocity(), 0);
       const shouldClose =
-        dragY > sheet.clientHeight * 0.18 || velocity > 0.7;
+        dragY > Math.min(sheet.clientHeight * 0.14, 120) ||
+        (dragY > 18 && velocity > 0.45);
 
       page.classList.remove("is-list-sheet-dragging");
       sheet.classList.remove("is-dragging");
 
       if (shouldClose) {
+        const remainingDistance = Math.max(sheet.clientHeight - dragY, 0);
+        const momentumDuration = remainingDistance / Math.max(velocity, 0.8);
+        sheet.style.transitionDuration = `${Math.round(
+          Math.min(closeDuration, Math.max(180, momentumDuration)),
+        )}ms`;
         requestClose({ dragY });
         return;
       }
@@ -382,9 +446,10 @@ const reducedMotionQuery = window.matchMedia(
 
       dragging = true;
       dragStartY = event.clientY;
-      dragStartTime = performance.now();
       dragY = 0;
       suppressHandleClick = false;
+      dragSamples = [];
+      recordDragSample(event.clientY);
       handle.setPointerCapture?.(event.pointerId);
       page.classList.add("is-list-sheet-dragging");
       sheet.classList.add("is-dragging");
@@ -396,6 +461,7 @@ const reducedMotionQuery = window.matchMedia(
       }
 
       dragY = Math.max(event.clientY - dragStartY, 0);
+      recordDragSample(event.clientY);
       suppressHandleClick ||= dragY > 6;
       const progress = 1 - Math.min(dragY / sheet.clientHeight, 1);
       sheet.style.transform = `translateY(${dragY}px)`;
