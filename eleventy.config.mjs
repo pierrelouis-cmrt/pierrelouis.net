@@ -14,6 +14,7 @@ import {
   loadPostManifest,
   normalizePostTags,
   postDateIso,
+  resolvePostAssetPath,
 } from "./scripts/lib/posts.mjs";
 import { POST_COMPONENTS } from "./posts/components/registry.js";
 
@@ -50,7 +51,11 @@ const postAssetUrl = (reference, inputPath) => {
     return value;
   }
 
-  const absolute = path.resolve(path.dirname(inputPath), value);
+  const absolute = resolvePostAssetPath(
+    value,
+    path.resolve(inputPath),
+    POST_ARTICLES_DIR,
+  );
   const relative = path.relative(POST_ARTICLES_DIR, absolute);
   return `../${relative.split(path.sep).join("/")}`;
 };

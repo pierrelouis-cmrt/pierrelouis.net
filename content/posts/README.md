@@ -16,7 +16,7 @@ galleries, plus explicitly registered article-scale components.
 The default vault source is:
 
 ```text
-/Users/pierrelouis/Documents/Obsidian/Main Vault/Writing/Final Versions
+/Users/pierrelouis/Documents/Obsidian/Main Vault/Portfolio/Posts
 ```
 
 Start the development server:
@@ -28,6 +28,8 @@ npm run dev
 The development and production builds automatically:
 
 1. copies that folder into `content/posts/articles/`, excluding `.DS_Store`;
+   attachments in its `assets/` subfolder are available to posts that use the
+   Obsidian-style bare filename reference;
 2. validates the candidate mirror before replacing the current mirror;
 3. keeps the previous mirror as a rollback until the remaining steps pass;
 4. replaces only the repository mirror, never the vault;

@@ -1,0 +1,15 @@
+- Modern art
+- Minimalism
+- Mid Century Modern
+- Retro Futurism
+- Brutalism
+- Nicely engineered products
+- Yellow
+- Pop and electronic music
+- Rain
+- The smell of freshly cut grass
+- Sugar
+- Stats
+- Tech
+- Comic books
+- Sci-fi

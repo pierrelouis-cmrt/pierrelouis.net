@@ -66,13 +66,13 @@ npm install
 npm run dev
 ```
 
-This imports and builds the latest Obsidian posts, starts the site at `http://localhost:8000`, watches both the repository and the Obsidian post folder, and reloads connected pages through Server-Sent Events. Set `PORT` to override the default port.
+This imports and builds the latest Obsidian posts and lists, starts the site at `http://localhost:8000`, watches the repository plus both Obsidian source folders, and reloads connected pages through Server-Sent Events. Set `PORT` to override the default port.
 
 | Command | Purpose |
 | --- | --- |
 | `npm run dev` | Build, serve, watch, and live reload |
 | `npm run build` | Regenerate source outputs and assemble the production site in `dist/` |
-| `npm run build:lists` | Compile `lists/sheets/*.html` into the Lists page |
+| `npm run build:lists` | Sync Obsidian `Portfolio/Lists` and compile the Lists page |
 | `npm run build:posts` | Validate and compile the local post source mirror |
 | `npm run qa:posts` | Build and browser-test every generated post at desktop and mobile sizes |
 | `npm run preview` | Serve the existing `dist/` build on port 4173 |
@@ -95,6 +95,7 @@ Both production endpoints require PHP with the cURL extension. The weather endpo
 .
 ├── api/                    # Production PHP endpoints
 ├── assets/                 # Fonts, static media, and generated production images
+├── content/lists/          # Build mirror of Obsidian Portfolio/Lists
 ├── content/projects/       # Project metadata and original source images
 ├── content/photos/         # Original photographs and collection.yml metadata
 ├── content/posts/          # Mirrored Markdown, templates, migration data, and guide
@@ -102,7 +103,7 @@ Both production endpoints require PHP with the cURL extension. The weather endpo
 ├── projects/               # Project case studies
 ├── posts/                  # Writing
 ├── photos/                 # Generated gallery page, data, styles, and behavior
-├── lists/sheets/           # Hand-authored HTML, CSS, and JS for list sheets
+├── lists/sheets/           # Sheet layouts, Markdown slots, custom HTML/CSS/JS
 ├── about/, now/, ...       # Other route directories
 ├── base.css                # Shared visual system and layout primitives
 ├── script.js               # Shared navigation and interaction behavior
@@ -116,7 +117,9 @@ Both production endpoints require PHP with the cURL extension. The weather endpo
 - Add project sources under `content/projects/` and edit page-level Projects settings in `scripts/build-projects.mjs`. The complete workflow is documented in [`content/projects/README.md`](./content/projects/README.md).
 - Add or update photography in `content/photos/`; edit page-level Photos settings in `scripts/build-photos.mjs`. The complete workflow is documented in [`content/photos/README.md`](./content/photos/README.md).
 - Write posts in the Obsidian vault. `npm run dev` imports changes as they happen, and `npm run build` imports the latest posts before assembling `dist/`. The Markdown contract, components, migration rules, and full example are documented in [`content/posts/README.md`](./content/posts/README.md).
-- Edit list-sheet content in `lists/sheets/`. Each card has one HTML fragment and the complete format is documented in [`lists/sheets/README.md`](./lists/sheets/README.md).
+- Edit list content in Obsidian `Portfolio/Lists/` and sheet composition in
+  `lists/sheets/`. Markdown slots and custom components are documented in
+  [`lists/sheets/README.md`](./lists/sheets/README.md).
 - Generated project, photo, and post HTML and assets are committed alongside their sources; production serves those files plus the small PHP API endpoints.
 - Clean URLs work through directory-level `index.html` files; the project does not require server-side routing.
 - The Now page's live Last.fm display uses a private-key PHP proxy on Hostinger and an equivalent local development proxy. Keep the production config at `private/lastfm.php`, outside `public_html`; never add a real API key to the repository or `dist/`.

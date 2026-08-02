@@ -1,0 +1,10 @@
+- France (where I live)
+- Spain
+- Germany
+- Netherlands
+- Italy (2x)
+- Norway
+- Denmark
+- Sweden
+- UK
+- Ireland

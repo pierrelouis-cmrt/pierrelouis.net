@@ -45,7 +45,7 @@ Numbers from the biggest labs, late 2025:
 
 **Google (CEO earnings remarks from October 2025):** over 1.3 quadrillion tokens/month → **15.6 quadrillion tokens/year** → ~26% of human speech.
 
-![Tokens Processed/Spoken per Year](assets/chart_tokens.webp)
+![Tokens Processed/Spoken per Year](chart_tokens.webp)
 
 ---
 

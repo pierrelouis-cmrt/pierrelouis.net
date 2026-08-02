@@ -3,7 +3,7 @@
   "license": "MIT",
   "scripts": {
     "build": "node scripts/build-site.mjs",
-    "build:lists": "node scripts/build-lists.mjs",
+    "build:lists": "node scripts/vault-lists.mjs",
     "build:posts": "node scripts/build-posts.mjs",
     "build:projects": "node scripts/build-projects.mjs",
     "dev": "node scripts/dev.mjs",
@@ -11,6 +11,7 @@
     "qa:lastfm": "node scripts/qa-lastfm-widget.mjs",
     "qa:posts": "node scripts/qa-posts.mjs",
     "test:lastfm": "node --test tests/lastfm-proxy.test.mjs",
+    "test:lists": "node --test tests/list-markdown.test.mjs",
     "test:weather": "node --test tests/weather-proxy.test.mjs"
   },
   "dependencies": {

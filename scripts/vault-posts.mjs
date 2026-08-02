@@ -16,7 +16,7 @@ import {
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DEFAULT_VAULT_POSTS = path.resolve(
-  "/Users/pierrelouis/Documents/Obsidian/Main Vault/Writing/Final Versions",
+  "/Users/pierrelouis/Documents/Obsidian/Main Vault/Portfolio/Posts",
 );
 const SOURCE_DIR = path.resolve(
   process.env.OBSIDIAN_POSTS_DIR || DEFAULT_VAULT_POSTS,

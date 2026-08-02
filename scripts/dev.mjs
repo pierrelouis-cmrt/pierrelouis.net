@@ -8,6 +8,10 @@ import { buildProjects } from "./build-projects.mjs";
 import { syncSharedComponents } from "./shared-components.mjs";
 import { startSiteServer } from "./site-server.mjs";
 import {
+  syncAndBuildLists,
+  VAULT_LISTS_DIR,
+} from "./vault-lists.mjs";
+import {
   syncAndBuildPosts,
   VAULT_POSTS_DIR,
 } from "./vault-posts.mjs";
@@ -15,13 +19,19 @@ import {
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const HOST = process.env.HOST || "0.0.0.0";
 const PORT = Number(process.env.PORT || 8000);
+const VAULT_LISTS_CHANGE = "@vault/lists";
 const VAULT_POSTS_CHANGE = "@vault/posts";
 
 const shouldRebuildLists = (filename) => {
   return (
+    filename === VAULT_LISTS_CHANGE ||
+    filename === "content/lists" ||
+    filename.startsWith("content/lists/") ||
     filename.startsWith("lists/sheets/") ||
     filename === "lists/index.html" ||
-    filename === "scripts/build-lists.mjs"
+    filename === "scripts/build-lists.mjs" ||
+    filename === "scripts/lib/list-markdown.mjs" ||
+    filename === "scripts/vault-lists.mjs"
   );
 };
 
@@ -67,6 +77,8 @@ const shouldIgnore = (filename) => {
     filename.startsWith("node_modules/") ||
     filename.startsWith(".playwright") ||
     filename.startsWith("content/.articles-backup-") ||
+    filename.startsWith("content/.lists-backup-") ||
+    filename.startsWith("content/.lists-sync-") ||
     filename.startsWith("content/posts/.articles-sync-") ||
     filename === "content/posts/articles" ||
     filename.startsWith("content/posts/articles/") ||
@@ -99,11 +111,14 @@ const queue = (filename, reload) => {
       const rebuildLists = shouldRebuildLists(filename);
       const rebuildPosts = shouldRebuildPosts(filename);
       const syncVaultPosts = filename === VAULT_POSTS_CHANGE;
+      const syncVaultLists = filename === VAULT_LISTS_CHANGE;
 
       if (rebuildLists) {
-        const result = await buildLists();
+        const result = syncVaultLists
+          ? await syncAndBuildLists()
+          : await buildLists();
         console.log(
-          `Rebuilt Lists: ${result.sheets} sheet(s)${
+          `${syncVaultLists ? "Synced and rebuilt" : "Rebuilt"} Lists: ${result.sheets} sheet(s), ${result.sources} Markdown source(s)${
             result.changed ? "" : " (unchanged)"
           }.`,
         );
@@ -164,7 +179,7 @@ const queue = (filename, reload) => {
   }, 120);
 };
 
-const initialLists = await buildLists();
+const initialLists = await syncAndBuildLists();
 const initialProjects = await buildProjects();
 const initialPhotos = await buildPhotos();
 const initialPosts = await syncAndBuildPosts();
@@ -172,10 +187,15 @@ await syncSharedComponents();
 const site = await startSiteServer({ dev: true, host: HOST, port: PORT });
 
 console.log(
-  `Built Lists: ${initialLists.sheets} sheet(s)${
+  `Built Lists: ${initialLists.sheets} sheet(s), ${initialLists.sources} Markdown source(s)${
     initialLists.changed ? "" : " (unchanged)"
   }.`,
 );
+if (initialLists.source) {
+  console.log(
+    `Synced ${initialLists.synced} list source(s) from ${initialLists.source}.`,
+  );
+}
 console.log(
   `Built projects: ${initialProjects.featured} featured, ` +
     `${initialProjects.playground} playground (${initialProjects.total} total), ` +
@@ -229,4 +249,16 @@ if (initialPosts.source) {
   });
 
   console.log(`Watching Obsidian posts: ${VAULT_POSTS_DIR}`);
+}
+
+if (initialLists.source) {
+  watch(VAULT_LISTS_DIR, { recursive: true }, (eventType, rawFilename) => {
+    if (rawFilename && path.basename(rawFilename) === ".DS_Store") {
+      return;
+    }
+
+    queue(VAULT_LISTS_CHANGE, site.reload);
+  });
+
+  console.log(`Watching Obsidian lists: ${VAULT_LISTS_DIR}`);
 }

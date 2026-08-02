@@ -29,4 +29,6 @@ assets/projects/.build-cache.json
 output/playwright/posts-qa/
 .playwright-cli/
 content/.articles-backup-*/
+content/.lists-backup-*/
+content/.lists-sync-*/
 content/posts/.articles-sync-*/

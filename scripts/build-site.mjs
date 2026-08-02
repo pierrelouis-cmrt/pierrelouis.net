@@ -1,11 +1,11 @@
 import { cp, mkdir, readdir, rename, rm, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildLists } from "./build-lists.mjs";
 import { buildPhotos } from "./build-photos.mjs";
 import { buildProjects } from "./build-projects.mjs";
 import { hashStaticAssets } from "./hash-static-assets.mjs";
 import { syncSharedComponents } from "./shared-components.mjs";
+import { syncAndBuildLists } from "./vault-lists.mjs";
 import { syncAndBuildPosts } from "./vault-posts.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -102,7 +102,7 @@ const assembleDist = async () => {
   return publicPaths.length;
 };
 
-const lists = await buildLists();
+const lists = await syncAndBuildLists();
 const projects = await buildProjects();
 const photos = await buildPhotos();
 const posts = await syncAndBuildPosts();
@@ -111,10 +111,13 @@ const copiedPaths = await assembleDist();
 const hashedAssets = await hashStaticAssets(DIST_DIR);
 
 console.log(
-  `Built Lists page: ${lists.sheets} sheet(s)${
+  `Built Lists page: ${lists.sheets} sheet(s), ${lists.sources} Markdown source(s)${
     lists.changed ? "" : " (unchanged)"
   }.`,
 );
+if (lists.source) {
+  console.log(`Synced ${lists.synced} list source(s) from ${lists.source}.`);
+}
 console.log(
   `Built projects page: ${projects.featured} featured, ` +
     `${projects.playground} playground (${projects.total} total), ` +

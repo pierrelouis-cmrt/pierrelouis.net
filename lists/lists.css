@@ -480,6 +480,26 @@
   align-self: start;
 }
 
+.list-sheet__markdown {
+  grid-column: 2 / span 2;
+  min-width: 0;
+  color: var(--color-caption);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-copy);
+}
+
+.list-sheet__markdown > :first-child {
+  margin-top: 0;
+}
+
+.list-sheet__markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.list-sheet__markdown > * + * {
+  margin-top: var(--space-xl);
+}
+
 .list-sheet .project-content__text--titled {
   row-gap: var(--space-xl);
 }
@@ -520,6 +540,155 @@
 
 .list-sheet__content > .list-sheet__entry-list {
   grid-column: 2 / span 2;
+}
+
+/* Uses: a quiet, vertical inventory with clear category resets. */
+.list-sheet-content--tech-and-gear .list-sheet__markdown > h2 {
+  margin: 0;
+  padding-bottom: var(--space-2xs);
+  border-bottom: 1px solid rgb(28 28 28 / 0.22);
+  color: var(--color-ink);
+  font-family: var(--font-family-display-italic);
+  font-size: calc(var(--font-size-base) + 2px);
+  font-style: italic;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-copy);
+}
+
+.list-sheet-content--tech-and-gear
+  .list-sheet__markdown
+  > h2:not(:first-child) {
+  margin-top: var(--space-6xl);
+}
+
+.list-sheet-content--tech-and-gear .list-sheet__entry-list {
+  margin-top: var(--space-xl);
+}
+
+/* Bookmarks: a narrow, chronological reading journal based on thu-le.com/links. */
+.list-sheet-content--articles-and-videos {
+  display: block;
+  padding-top: 164px;
+}
+
+.list-sheet-content--articles-and-videos .list-sheet__markdown {
+  width: min(100%, 560px);
+  margin-inline: auto;
+}
+
+.list-sheet-content--articles-and-videos .list-sheet__intro {
+  min-height: 0;
+}
+
+.list-sheet-content--articles-and-videos .list-sheet__title {
+  margin: 0 0 4px;
+  color: var(--color-ink);
+  font-family: var(--font-family-sans);
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.25;
+  width: min(100%, 560px);
+  justify-self: center;
+}
+
+.list-sheet-content--articles-and-videos .list-sheet__description {
+  width: min(100%, 560px);
+  margin: 0;
+  justify-self: center;
+  color: var(--color-subtle);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-copy);
+}
+
+.list-sheet-content--articles-and-videos .list-sheet__markdown {
+  margin-top: 104px;
+  color: var(--color-caption);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-copy);
+}
+
+.list-sheet-content--articles-and-videos .list-sheet__markdown > h2 {
+  margin: var(--space-7xl) 0 0;
+  color: var(--color-subtle);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-copy);
+  letter-spacing: var(--tracking-normal);
+  text-transform: none;
+}
+
+.list-sheet-content--articles-and-videos
+  .list-sheet__markdown
+  > h2:first-child {
+  margin-top: 0;
+}
+
+.list-sheet-content--articles-and-videos .list-sheet__entry-list {
+  margin: var(--space-5xl) 0 0;
+  padding: 0;
+  border: 0;
+  list-style: none;
+}
+
+.list-sheet-content--articles-and-videos .list-sheet__entry-list > li {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--color-caption);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-copy);
+}
+
+.list-sheet-content--articles-and-videos
+  .list-sheet__entry-list
+  > li
+  + li {
+  margin-top: var(--space-5xl);
+}
+
+.list-sheet-content--articles-and-videos
+  .list-sheet__entry-list
+  > li
+  > p {
+  margin: 0;
+}
+
+.list-sheet-content--articles-and-videos
+  .list-sheet__entry-list
+  > li
+  > p:first-child {
+  color: var(--color-ink);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.375;
+}
+
+.list-sheet-content--articles-and-videos
+  .list-sheet__entry-list
+  > li
+  > p:first-child
+  > :is(br, em) {
+  display: none;
+}
+
+.list-sheet-content--articles-and-videos
+  .list-sheet__entry-list
+  > li
+  > blockquote {
+  margin: var(--space-sm) 0 0;
+  padding: 0;
+  border: 0;
+  color: var(--color-caption);
+}
+
+.list-sheet-content--articles-and-videos
+  .list-sheet__entry-list
+  > li
+  > blockquote
+  p {
+  margin: 0;
 }
 
 /* Re-composed wide-tablet canvas: preserve the desktop scatter without scaling it. */
@@ -593,6 +762,10 @@
   }
 
   .list-sheet__content > .list-sheet__entry-list {
+    grid-column: 2;
+  }
+
+  .list-sheet__markdown {
     grid-column: 2;
   }
 }
@@ -687,6 +860,14 @@
     padding-bottom: var(--space-7xl);
   }
 
+  .list-sheet-content--articles-and-videos {
+    padding: 130px 16px var(--space-7xl);
+  }
+
+  .list-sheet-content--articles-and-videos .list-sheet__markdown {
+    margin-top: 96px;
+  }
+
   .list-sheet__intro {
     row-gap: var(--space-2xl);
     min-height: 0;
@@ -717,6 +898,14 @@
 
   .list-sheet__content > .list-sheet__entry-list {
     grid-column: 1;
+  }
+
+  .list-sheet__markdown {
+    grid-column: 1;
+  }
+
+  .list-sheet-content--articles-and-videos .list-sheet__markdown {
+    grid-column: 1 / -1;
   }
 
   .list-sheet .project-content__text--titled

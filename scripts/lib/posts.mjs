@@ -164,6 +164,14 @@ const stripReferenceDecorations = (rawReference) => {
   return cutAt === undefined ? reference : reference.slice(0, cutAt);
 };
 
+const decodeReference = (reference) => {
+  try {
+    return decodeURIComponent(reference);
+  } catch {
+    return reference;
+  }
+};
+
 const resolveLocalReference = (reference, inputPath, articlesDir) => {
   const clean = stripReferenceDecorations(reference);
 
@@ -171,13 +179,7 @@ const resolveLocalReference = (reference, inputPath, articlesDir) => {
     return null;
   }
 
-  let decoded;
-
-  try {
-    decoded = decodeURIComponent(clean);
-  } catch {
-    decoded = clean;
-  }
+  const decoded = decodeReference(clean);
 
   if (decoded.startsWith("/")) {
     const resolved = path.resolve(ROOT, decoded.slice(1));
@@ -198,6 +200,33 @@ const resolveLocalReference = (reference, inputPath, articlesDir) => {
   }
 
   return resolved;
+};
+
+const resolvePostAssetReference = (reference, inputPath, articlesDir) => {
+  const resolved = resolveLocalReference(reference, inputPath, articlesDir);
+
+  if (!resolved || existsSync(resolved)) {
+    return resolved;
+  }
+
+  const decoded = decodeReference(stripReferenceDecorations(reference));
+
+  if (!decoded || path.dirname(decoded) !== ".") {
+    return resolved;
+  }
+
+  const attachment = path.resolve(articlesDir, "assets", decoded);
+  const relative = path.relative(articlesDir, attachment);
+
+  if (
+    relative.startsWith("..") ||
+    path.isAbsolute(relative) ||
+    !existsSync(attachment)
+  ) {
+    return resolved;
+  }
+
+  return attachment;
 };
 
 const collectMarkdownReferences = (content) => {
@@ -530,7 +559,7 @@ const validatePost = async ({
     let resolved;
 
     try {
-      resolved = resolveLocalReference(reference, inputPath, articlesDir);
+      resolved = resolvePostAssetReference(reference, inputPath, articlesDir);
     } catch (error) {
       errors.push(
         `${toPosix(path.relative(ROOT, inputPath))}: \`${reference}\` ${error.message}`,
@@ -654,7 +683,7 @@ export const resolvePostAssetPath = (
   reference,
   inputPath,
   articlesDir = POST_ARTICLES_DIR,
-) => resolveLocalReference(reference, inputPath, articlesDir);
+) => resolvePostAssetReference(reference, inputPath, articlesDir);
 
 export const isRemotePostAsset = (reference) =>
   REMOTE_PROTOCOL.test(String(reference || ""));

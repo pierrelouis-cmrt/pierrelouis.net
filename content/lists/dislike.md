@@ -1,0 +1,9 @@
+- Heat
+- Spicy Food
+- Bad design
+- Geography
+- Ignorance
+- Spiders
+- Spicy food (again)
+- Alcohol
+- Coffee

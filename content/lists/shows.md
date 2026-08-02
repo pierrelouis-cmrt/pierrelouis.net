@@ -1,0 +1,14 @@
+- Young Royals
+- Heartstopper
+- The Queen's Gambit (2 times)
+- Chernobyl (3 times)
+- SKAM (original version & belgian "wtfock" version)
+- The Summer I Turned Pretty
+- Sex Education
+- La Casa de Papel (2 times)
+- Squid Game
+- Suits (almost finished)
+- We Crashed
+- Off campus
+- High potential (season 3 not out)
+- Maxton Hall (season 3 not out)

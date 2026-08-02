@@ -1,13 +1,17 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { renderListMarkdown } from "./lib/list-markdown.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PAGE_FILE = path.join(ROOT, "lists", "index.html");
 const SHEETS_DIR = path.join(ROOT, "lists", "sheets");
+export const LISTS_CONTENT_DIR = path.join(ROOT, "content", "lists");
 const GENERATED_START = "        <!-- list-sheets:generated:start -->";
 const GENERATED_END = "        <!-- list-sheets:generated:end -->";
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const MARKDOWN_SLOT_PATTERN =
+  /^([\t ]*)<!--\s*list-sheet-markdown:\s*([\s\S]*?)-->/gm;
 
 const isDirectRun = () =>
   process.argv[1] &&
@@ -130,6 +134,87 @@ const validateFragment = (slug, source) => {
   };
 };
 
+const markdownSourcePath = (contentDir, reference, slug) => {
+  const normalized = String(reference || "").trim();
+
+  if (
+    !normalized ||
+    path.isAbsolute(normalized) ||
+    path.extname(normalized).toLowerCase() !== ".md"
+  ) {
+    throw new Error(
+      `Invalid Markdown source "${normalized}" in lists/sheets/${slug}.html`,
+    );
+  }
+
+  const resolved = path.resolve(contentDir, normalized);
+  const relative = path.relative(contentDir, resolved);
+
+  if (relative.startsWith("..") || path.isAbsolute(relative)) {
+    throw new Error(
+      `Markdown source "${normalized}" escapes the list content directory`,
+    );
+  }
+
+  return { normalized, resolved };
+};
+
+const renderMarkdownSlots = async (slug, source, contentDir) => {
+  const matches = [...source.matchAll(MARKDOWN_SLOT_PATTERN)];
+
+  if (matches.length === 0) {
+    return { source, sources: [] };
+  }
+
+  const rendered = new Map();
+
+  for (const match of matches) {
+    const { normalized, resolved } = markdownSourcePath(
+      contentDir,
+      match[2],
+      slug,
+    );
+
+    if (rendered.has(normalized)) {
+      continue;
+    }
+
+    let markdownSource;
+
+    try {
+      markdownSource = await readFile(resolved, "utf8");
+    } catch (error) {
+      if (error.code === "ENOENT") {
+        throw new Error(
+          `Missing content/lists/${normalized} for lists/sheets/${slug}.html`,
+        );
+      }
+
+      throw error;
+    }
+
+    rendered.set(normalized, renderListMarkdown(markdownSource));
+  }
+
+  return {
+    source: source.replace(
+      MARKDOWN_SLOT_PATTERN,
+      (match, indentation, reference) => {
+        const normalized = String(reference).trim();
+        const html = rendered.get(normalized);
+        const body = html
+          ? `\n${indentFragment(html, indentation.length + 2)}\n${indentation}`
+          : "";
+
+        return `${indentation}<div class="list-sheet__markdown" data-list-sheet-markdown-source="${escapeHtml(
+          normalized,
+        )}">${body}</div>`;
+      },
+    ),
+    sources: [...rendered.keys()],
+  };
+};
+
 const renderSheet = (slug, fragment) => {
   const describedBy = fragment.descriptionId
     ? `\n          aria-describedby="${escapeHtml(fragment.descriptionId)}"`
@@ -167,7 +252,10 @@ ${indentFragment(fragment.source, 12)}
         </dialog>`;
 };
 
-export const buildLists = async () => {
+export const buildLists = async ({
+  contentDir = LISTS_CONTENT_DIR,
+  write = true,
+} = {}) => {
   const pageSource = await readFile(PAGE_FILE, "utf8");
   const bounds = generatedBounds(pageSource);
   const slugs = triggerSlugs(bounds.authorSource);
@@ -185,7 +273,7 @@ export const buildLists = async () => {
     );
   }
 
-  const sheets = await Promise.all(
+  const renderedSheets = await Promise.all(
     slugs.map(async (slug) => {
       const file = path.join(SHEETS_DIR, `${slug}.html`);
       let source;
@@ -202,27 +290,35 @@ export const buildLists = async () => {
         throw error;
       }
 
-      return renderSheet(slug, validateFragment(slug, source));
+      const hydrated = await renderMarkdownSlots(slug, source, contentDir);
+
+      return {
+        html: renderSheet(slug, validateFragment(slug, hydrated.source)),
+        sources: hydrated.sources,
+      };
     }),
   );
+  const sheets = renderedSheets.map((sheet) => sheet.html);
+  const sources = new Set(renderedSheets.flatMap((sheet) => sheet.sources));
 
   const output = `${bounds.before}\n${sheets.join("\n\n")}\n${bounds.after}`;
   const changed = output !== pageSource;
 
-  if (changed) {
+  if (changed && write) {
     await writeFile(PAGE_FILE, output);
   }
 
   return {
     changed,
     sheets: sheets.length,
+    sources: sources.size,
   };
 };
 
 if (isDirectRun()) {
   const result = await buildLists();
   console.log(
-    `Built Lists page: ${result.sheets} sheet(s)${
+    `Built Lists page: ${result.sheets} sheet(s), ${result.sources} Markdown source(s)${
       result.changed ? "" : " (unchanged)"
     }.`,
   );

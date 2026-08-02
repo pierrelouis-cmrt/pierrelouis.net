@@ -1,19 +1,44 @@
 # List sheets
 
-Each Lists card owns one HTML fragment in this directory:
+The Lists page is built from two deliberately separate layers:
 
-| Card slug | Source file |
-| --- | --- |
-| `things-i-like` | `things-i-like.html` |
-| `things-i-dislike` | `things-i-dislike.html` |
-| `tv-shows` | `tv-shows.html` |
-| `articles-and-videos` | `articles-and-videos.html` |
-| `places-ive-been` | `places-ive-been.html` |
-| `tech-and-gear` | `tech-and-gear.html` |
+- `content/lists/` is a build mirror of the Obsidian folder
+  `Portfolio/Lists/`.
+- `lists/sheets/*.html` controls each sheet's title, description, layout, and
+  optional custom components.
 
-`npm run build:lists` wraps these fragments in the shared sheet chrome and
-injects them between the generated markers in `lists/index.html`. Edit the
-source fragments, never the generated dialogs.
+`npm run build:lists` refreshes the mirror when the vault is available, renders
+the Markdown slots, wraps every fragment in the shared dialog chrome, and
+injects the result between the generated markers in `lists/index.html`.
+
+The default vault source can be overridden with `OBSIDIAN_LISTS_DIR`. When the
+default vault is unavailable (for example in CI), the committed
+`content/lists/` mirror is used. An explicitly configured missing source is an
+error.
+
+## Markdown slots
+
+Place a source marker anywhere inside a sheet fragment:
+
+```html
+<!-- list-sheet-markdown: shows.md -->
+```
+
+The builder replaces it with the rendered body of `content/lists/shows.md`.
+Markdown paragraphs, headings, links, lists, and inline HTML are preserved.
+Top-level bullet items receive `data-list-entry`, so the existing sheet counter
+continues to work automatically.
+
+The marker is only a slot. Custom HTML can appear before or after it, which
+makes compositions such as a map followed by a country list possible:
+
+```html
+<div class="visited-places-map"><!-- custom map component --></div>
+<!-- list-sheet-markdown: places.md -->
+```
+
+A sheet does not need a Markdown slot at all. `tech-and-gear.html` currently
+demonstrates a fully custom fragment.
 
 ## Fragment contract
 
@@ -24,8 +49,8 @@ source fragments, never the generated dialogs.
 - A description with ID `list-sheet-description-<slug>` is optional.
 - Do not include `<html>`, `<body>` or `<dialog>`; the builder owns the shell.
 - Everything else is intentionally unrestricted.
-- Put media in `/assets/lists/<slug>/`; the raw authoring fragments themselves
-  are intentionally excluded from the production `dist/` directory.
+- Put media in `/assets/lists/<slug>/`; raw authoring fragments are excluded
+  from production `dist/`.
 
 ## Listing visual and entry count
 
@@ -33,8 +58,8 @@ The empty element marked `data-list-sheet-cover` is filled with an exact clone
 of that card's listing visual. This keeps image cards, the TV collage and the
 Places checkerboard in sync without duplicating their markup.
 
-The metadata count updates automatically. Mark each real list item with
-`data-list-entry`:
+The metadata count updates automatically. Markdown top-level bullet items are
+marked during the build. For custom markup, add `data-list-entry` yourself:
 
 ```html
 <article data-list-entry>
@@ -43,43 +68,9 @@ The metadata count updates automatically. Mark each real list item with
 </article>
 ```
 
-Adding, removing or dynamically inserting entries updates `0 entries`,
-`1 entry`, and plural counts without sheet-specific JavaScript.
+## Custom CSS and JavaScript
 
-## Custom CSS
-
-Put a `<style>` element directly in the fragment. Scope every selector to the
-generated sheet ID so it cannot leak:
-
-```html
-<style>
-  #list-sheet-things-i-like .my-custom-layout {
-    display: grid;
-  }
-</style>
-```
-
-## Custom JavaScript
-
-Put a regular `<script>` directly in the fragment. It is preserved in the
-generated page and runs in place, so `document.currentScript.closest()` finds
-its sheet:
-
-```html
-<script>
-  (() => {
-    const sheet = document.currentScript.closest("[data-list-sheet]");
-
-    sheet.addEventListener("list-sheet:open", () => {
-      // Set up or refresh this sheet.
-    });
-
-    sheet.addEventListener("list-sheet:close", () => {
-      // Pause or clean up this sheet.
-    });
-  })();
-</script>
-```
-
-Available lifecycle events are `list-sheet:before-open`, `list-sheet:open`,
-`list-sheet:before-close` and `list-sheet:close`.
+Custom `<style>` and `<script>` elements can live directly in a fragment. Scope
+CSS to the generated sheet ID. Scripts can listen for
+`list-sheet:before-open`, `list-sheet:open`, `list-sheet:before-close`, and
+`list-sheet:close` lifecycle events.
