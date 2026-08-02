@@ -479,7 +479,8 @@ const installLinks = (md) => {
 
     if (isRemotePostAsset(href)) {
       token.attrJoin("class", "external-link");
-      token.attrSet("rel", "noreferrer");
+      token.attrSet("target", "_blank");
+      token.attrSet("rel", "noopener noreferrer");
     } else {
       token.attrJoin("class", "internal-link");
 

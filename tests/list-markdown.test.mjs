@@ -32,7 +32,10 @@ test("uses the shared external-link class for web links only", () => {
 - [Internal](/about/)
 `);
 
-  assert.match(html, /href="https:\/\/example\.com" class="external-link"/);
+  assert.match(
+    html,
+    /href="https:\/\/example\.com" class="external-link" target="_blank" rel="noopener noreferrer"/,
+  );
   assert.match(html, /href="\/about\/"/);
   assert.doesNotMatch(html, /href="\/about\/" class="external-link"/);
 });

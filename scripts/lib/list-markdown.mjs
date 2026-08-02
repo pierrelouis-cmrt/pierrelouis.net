@@ -27,6 +27,8 @@ markdown.core.ruler.after("inline", "list-sheet-entries", (state) => {
         const href = child.attrGet("href");
         if (/^(?:https?:)?\/\//i.test(href ?? "")) {
           child.attrJoin("class", "external-link");
+          child.attrSet("target", "_blank");
+          child.attrSet("rel", "noopener noreferrer");
         }
       }
     }

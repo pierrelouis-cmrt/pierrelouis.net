@@ -29,6 +29,68 @@ const MOBILE_HEADER = {
   directionThreshold: 12,
 };
 
+const EXTERNAL_PROTOCOLS = new Set(["http:", "https:"]);
+
+const configureExternalLink = (link) => {
+  const href = link.getAttribute("href");
+
+  if (!href) {
+    return;
+  }
+
+  try {
+    const url = new URL(href, document.baseURI);
+
+    if (
+      !EXTERNAL_PROTOCOLS.has(url.protocol) ||
+      url.origin === window.location.origin
+    ) {
+      return;
+    }
+
+    link.target = "_blank";
+    link.relList.add("noopener", "noreferrer");
+  } catch {
+    // Ignore malformed URLs and leave them unchanged.
+  }
+};
+
+const setupExternalLinks = () => {
+  document.querySelectorAll("a[href]").forEach(configureExternalLink);
+
+  if (!document.body || !("MutationObserver" in window)) {
+    return;
+  }
+
+  new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.type === "attributes") {
+        configureExternalLink(mutation.target);
+        continue;
+      }
+
+      for (const node of mutation.addedNodes) {
+        if (node.nodeType !== Node.ELEMENT_NODE) {
+          continue;
+        }
+
+        if (node.matches("a[href]")) {
+          configureExternalLink(node);
+        }
+
+        node.querySelectorAll("a[href]").forEach(configureExternalLink);
+      }
+    }
+  }).observe(document.body, {
+    attributes: true,
+    attributeFilter: ["href"],
+    childList: true,
+    subtree: true,
+  });
+};
+
+setupExternalLinks();
+
 const copyEmailLink = document.querySelector(SELECTORS.copyEmail);
 const moreMenu = document.querySelector(SELECTORS.moreMenu);
 const moreMenuToggle = document.querySelector(SELECTORS.moreMenuToggle);

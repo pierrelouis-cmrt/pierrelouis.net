@@ -85,7 +85,7 @@ PROJECT_MARKDOWN_RENDERER.link = function renderProjectMarkdownLink(token) {
 
   const external = REMOTE_REFERENCE.test(token.href);
   const attributes = external
-    ? 'class="external-link" rel="noreferrer"'
+    ? 'class="external-link" target="_blank" rel="noopener noreferrer"'
     : 'class="internal-link"';
 
   return html.replace("<a ", `<a ${attributes} `);
