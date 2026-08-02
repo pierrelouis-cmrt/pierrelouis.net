@@ -102,6 +102,10 @@ if (moreMenu && moreMenuToggle && moreMenuPanel) {
   };
 
   const closeMenu = () => {
+    if (!moreMenu.classList.contains("is-open")) {
+      return;
+    }
+
     moreMenu.classList.remove("is-open");
     moreMenuToggle.setAttribute("aria-expanded", "false");
     moreMenuToggle.textContent = moreMenuOpenLabel;
@@ -112,6 +116,17 @@ if (moreMenu && moreMenuToggle && moreMenuPanel) {
     }, TIMING.moreMenuCloseDelay);
   };
 
+  const dismissMenuOnPageClick = (event) => {
+    if (
+      !moreMenu.classList.contains("is-open") ||
+      moreMenuToggle.contains(event.target)
+    ) {
+      return;
+    }
+
+    closeMenu();
+  };
+
   moreMenuToggle.addEventListener("click", () => {
     if (moreMenu.classList.contains("is-open")) {
       closeMenu();
@@ -119,6 +134,9 @@ if (moreMenu && moreMenuToggle && moreMenuPanel) {
       openMenu();
     }
   });
+
+  document.addEventListener("click", dismissMenuOnPageClick, true);
+  window.addEventListener("scroll", closeMenu, { passive: true });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && moreMenu.classList.contains("is-open")) {
