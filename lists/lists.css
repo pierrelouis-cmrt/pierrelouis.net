@@ -521,7 +521,7 @@
 .list-sheet__entry-list {
   display: block;
   margin: 0;
-  padding-left: 1.25em;
+  padding-left: 0;
   list-style: disc;
 }
 
@@ -565,6 +565,21 @@
   margin-top: var(--space-xl);
 }
 
+.visited-map .world-map__countries path {
+  fill: var(--color-selection-bg);
+  stroke: var(--color-media-bg);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.visited-map .world-map__countries path.is-visited {
+  fill: var(--color-ink);
+}
+
+.visited-map.project-content__media--contained .project-content__image {
+  max-width: 100%;
+}
+
 /* Bookmarks: a narrow, chronological reading journal based on thu-le.com/links. */
 .list-sheet-content--articles-and-videos {
   display: block;
@@ -594,6 +609,7 @@
 
 .list-sheet-content--articles-and-videos .list-sheet__description {
   width: min(100%, 560px);
+  max-width: 560px;
   margin: 0;
   justify-self: center;
   color: var(--color-subtle);
@@ -768,6 +784,14 @@
   .list-sheet__markdown {
     grid-column: 2;
   }
+
+  .list-sheet-content--articles-and-videos .list-sheet__title,
+  .list-sheet-content--articles-and-videos .list-sheet__description,
+  .list-sheet-content--articles-and-videos .list-sheet__meta {
+    grid-column: 1 / -1;
+    width: min(100%, 560px);
+    justify-self: center;
+  }
 }
 
 /* Narrow tablets use a second composition before the mobile stack takes over. */
@@ -861,7 +885,7 @@
   }
 
   .list-sheet-content--articles-and-videos {
-    padding: 130px 16px var(--space-7xl);
+    padding: 130px var(--page-gutter) var(--space-7xl);
   }
 
   .list-sheet-content--articles-and-videos .list-sheet__markdown {

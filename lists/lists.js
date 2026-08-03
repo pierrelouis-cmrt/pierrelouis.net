@@ -2,6 +2,108 @@ const reducedMotionQuery = window.matchMedia(
   "(prefers-reduced-motion: reduce)",
 );
 
+const normalizeCountryName = (value) =>
+  String(value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\([^)]*\)/g, "")
+    .replace(/\b\d+x\b/gi, "")
+    .replace(/&/g, " and ")
+    .replace(/[’']/g, "")
+    .replace(/[^a-z0-9]+/gi, " ")
+    .trim()
+    .toLowerCase();
+
+const formatMapArea = (value) =>
+  `${new Intl.NumberFormat("en", {
+    maximumFractionDigits: 1,
+    minimumFractionDigits: 1,
+    notation: "compact",
+  }).format(value)} km²`;
+
+const formatMapPercentage = (ratio) =>
+  `${new Intl.NumberFormat("en", {
+    maximumFractionDigits: ratio < 0.1 ? 1 : 0,
+    minimumFractionDigits: ratio < 0.1 ? 1 : 0,
+  }).format(ratio * 100)}%`;
+
+const hydrateVisitedMap = async (sheet) => {
+  const component = sheet.querySelector("[data-visited-map]");
+
+  if (!component || component.dataset.mapHydrated === "true") {
+    return;
+  }
+
+  component.dataset.mapHydrated = "true";
+
+  try {
+    const response = await fetch("../assets/lists/world-map.svg");
+
+    if (!response.ok) {
+      throw new Error(`Map request failed with ${response.status}`);
+    }
+
+    const documentFragment = new DOMParser().parseFromString(
+      await response.text(),
+      "image/svg+xml",
+    );
+    const map = documentFragment.documentElement;
+
+    if (map.nodeName.toLowerCase() !== "svg") {
+      throw new Error("The world map asset is not an SVG");
+    }
+
+    const paths = Array.from(map.querySelectorAll("[data-country-code]"));
+    const codeByName = new Map(
+      paths.map((path) => [
+        normalizeCountryName(path.dataset.countryName),
+        path.dataset.countryCode,
+      ]),
+    );
+    codeByName.set("uk", "GB");
+
+    const visitedCodes = new Set();
+    sheet.querySelectorAll("[data-list-entry]").forEach((entry) => {
+      const normalizedName = normalizeCountryName(entry.textContent);
+      const code = codeByName.get(normalizedName);
+
+      if (code) {
+        visitedCodes.add(code);
+      }
+    });
+
+    let visitedArea = 0;
+
+    paths.forEach((path) => {
+      if (!visitedCodes.has(path.dataset.countryCode)) {
+        return;
+      }
+
+      const countryArea = Number(path.dataset.countryArea) || 0;
+      visitedArea += countryArea;
+      path.classList.add("is-visited");
+    });
+
+    const totalCountries = Number(component.dataset.totalCountries) || 195;
+    const totalLandArea =
+      Number(component.dataset.totalLandArea) || 148_940_000;
+    const countryRatio = visitedCodes.size / totalCountries;
+    const areaRatio = visitedArea / totalLandArea;
+    sheet.querySelector("[data-country-status]").textContent =
+      `${visitedCodes.size} of ${totalCountries} — ${formatMapPercentage(countryRatio)}`;
+    sheet.querySelector("[data-area-status]").textContent =
+      `${formatMapArea(visitedArea)} of ${formatMapArea(totalLandArea)} — ${formatMapPercentage(areaRatio)}`;
+
+    map.classList.add("project-content__image", "world-map");
+    component.replaceChildren(map);
+    component.setAttribute("aria-busy", "false");
+  } catch (error) {
+    component.setAttribute("aria-busy", "false");
+    component.textContent = "The map could not be drawn.";
+    console.error(error);
+  }
+};
+
 (() => {
   const page = document.body;
   const stage = document.querySelector(".site-shell");
@@ -128,6 +230,9 @@ const reducedMotionQuery = window.matchMedia(
       attributes: true,
       childList: true,
       subtree: true,
+    });
+    sheet.addEventListener("list-sheet:before-open", () => {
+      void hydrateVisitedMap(sheet);
     });
     sheets.set(slug, sheet);
     document.body.append(sheet);
