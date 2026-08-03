@@ -2,6 +2,7 @@ const carouselQuery = window.matchMedia("(max-width: 1100px)");
 const reducedMotionQuery = window.matchMedia(
   "(prefers-reduced-motion: reduce)",
 );
+const hoverQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
 
 (() => {
   const root = document.querySelector("[data-project-filters]");
@@ -352,6 +353,137 @@ window.addEventListener(
   { passive: true },
 );
 
+const projectMediaHoverPause = new WeakMap();
+
+const pauseProjectMedia = (media) => {
+  const state = projectMediaHoverPause.get(media);
+
+  if (
+    !state ||
+    state.canvas ||
+    !hoverQuery.matches ||
+    !state.image.isConnected ||
+    !state.image.complete ||
+    !state.image.naturalWidth ||
+    !state.image.naturalHeight
+  ) {
+    return;
+  }
+
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+
+  if (!context) {
+    return;
+  }
+
+  canvas.className = state.image.className;
+  canvas.width = state.image.naturalWidth;
+  canvas.height = state.image.naturalHeight;
+  canvas.setAttribute("role", "img");
+
+  if (state.image.alt) {
+    canvas.setAttribute("aria-label", state.image.alt);
+  }
+
+  try {
+    context.drawImage(state.image, 0, 0, canvas.width, canvas.height);
+  } catch {
+    return;
+  }
+
+  state.image.replaceWith(canvas);
+  state.canvas = canvas;
+  media.dataset.projectMediaPaused = "true";
+};
+
+const resumeProjectMedia = (media) => {
+  const state = projectMediaHoverPause.get(media);
+
+  if (!state) {
+    return;
+  }
+
+  if (state.loadListener) {
+    state.image.removeEventListener("load", state.loadListener);
+    state.loadListener = null;
+  }
+
+  if (!state.canvas) {
+    return;
+  }
+
+  const image = state.image.cloneNode(true);
+  image.src = state.source;
+  state.canvas.replaceWith(image);
+  state.image = image;
+  state.canvas = null;
+  delete media.dataset.projectMediaPaused;
+};
+
+const resumeProjectMediaWithin = (root) => {
+  root
+    .querySelectorAll("[data-project-media-pause-on-hover]")
+    .forEach((media) => {
+      const state = projectMediaHoverPause.get(media);
+
+      if (state) {
+        state.pointerInside = false;
+      }
+
+      resumeProjectMedia(media);
+    });
+};
+
+document
+  .querySelectorAll("[data-project-media-pause-on-hover]")
+  .forEach((media) => {
+    const image = media.querySelector(".project-content__image");
+
+    if (!image) {
+      return;
+    }
+
+    const state = {
+      canvas: null,
+      image,
+      loadListener: null,
+      pointerInside: false,
+      source: image.currentSrc || image.src,
+    };
+
+    projectMediaHoverPause.set(media, state);
+
+    const pauseWhenReady = () => {
+      state.loadListener = null;
+
+      if (state.pointerInside) {
+        pauseProjectMedia(media);
+      }
+    };
+
+    media.addEventListener("pointerenter", () => {
+      if (!hoverQuery.matches) {
+        return;
+      }
+
+      state.pointerInside = true;
+
+      if (state.image.complete && state.image.naturalWidth) {
+        pauseProjectMedia(media);
+        return;
+      }
+
+      state.loadListener = pauseWhenReady;
+      state.image.addEventListener("load", pauseWhenReady, { once: true });
+    });
+
+    media.addEventListener("pointerleave", () => {
+      state.pointerInside = false;
+      resumeProjectMedia(media);
+    });
+  });
+
 (() => {
   const page = document.body;
   const stage = document.querySelector(".site-shell");
@@ -482,6 +614,7 @@ window.addEventListener(
   };
 
   const finalizeClose = (sheet, { restoreFocus = true } = {}) => {
+    resumeProjectMediaWithin(sheet);
     closeDialog(sheet);
     sheet.classList.remove("is-open", "is-closing", "is-dragging");
     sheet.style.removeProperty("transform");
@@ -611,6 +744,7 @@ window.addEventListener(
     activeSlug = slug;
     activeTrigger = trigger;
     isClosing = false;
+    resumeProjectMediaWithin(sheet);
     sheet.querySelector(".playground-sheet__surface")?.scrollTo({
       top: 0,
       behavior: "auto",

@@ -253,6 +253,20 @@ const parseProjectDocument = (source, projectKey) => {
   };
 };
 
+const normalizePairImages = (frontMatter, projectKey) => {
+  const pairImages = frontMatter.pairImages;
+
+  if (pairImages === undefined) {
+    return true;
+  }
+
+  if (typeof pairImages !== "boolean") {
+    throw projectError(projectKey, '"pairImages" must be a boolean');
+  }
+
+  return pairImages;
+};
+
 const normalizeProjectSourcePath = (
   value,
   projectKey,
@@ -327,6 +341,7 @@ const loadProjectImage = async ({
 
   return {
     alt: requireProjectText(alt, projectKey, `${field}.alt`),
+    animated: path.extname(file).toLowerCase() === ".gif",
     file,
     outputFile: `${projectKey}/${file.slice(0, -path.posix.extname(file).length)}.webp`,
     projectDirectory,
@@ -355,10 +370,15 @@ const standaloneMarkdownImage = (token) => {
   if (modifier.type === "text") {
     const modifierName = modifier.text.trim().match(/^\{([a-z-]+)\}$/)?.[1];
 
+    if (modifierName === "natural") {
+      return { image, layout: "normal", natural: true };
+    }
+
     if (
       modifierName === "wide" ||
       modifierName === "contained" ||
-      modifierName === "carousel"
+      modifierName === "carousel" ||
+      modifierName === "stacked"
     ) {
       return { image, layout: modifierName };
     }
@@ -367,7 +387,7 @@ const standaloneMarkdownImage = (token) => {
       return {
         error:
           `unknown image modifier "{${modifierName}}"; use {wide}, ` +
-          "{contained}, {carousel}, or no modifier",
+          "{contained}, {carousel}, {natural}, {stacked}, or no modifier",
         image,
       };
     }
@@ -421,6 +441,7 @@ const tokenContainsImage = (token) => {
 const loadMarkdownContent = async ({
   collection,
   markdown,
+  pairImages,
   projectDirectory,
   projectKey,
 }) => {
@@ -452,6 +473,11 @@ const loadMarkdownContent = async ({
           );
         }
 
+        const natural =
+          standalone.layout === "stacked" ||
+          standalone.natural ||
+          (!pairImages && standalone.layout === "normal");
+
         const image = await loadProjectImage({
           allowedDirectory: "media",
           alt: standalone.image.text,
@@ -460,10 +486,10 @@ const loadMarkdownContent = async ({
           projectDirectory,
           projectKey,
           resizeMode:
-            standalone.layout === "contained" ||
-            standalone.layout === "carousel"
-              ? "contain"
-              : "cover",
+            standalone.layout === "wide" ||
+            (standalone.layout === "normal" && !natural)
+              ? "cover"
+              : "contain",
           renderBoxes:
             standalone.layout === "wide"
               ? WIDE_RENDER_BOXES
@@ -472,6 +498,7 @@ const loadMarkdownContent = async ({
                 ? BODY_RENDER_BOXES
                 : REGULAR_RENDER_BOXES,
           contained: standalone.layout === "contained",
+          natural,
           wide: standalone.layout === "wide",
         });
 
@@ -489,7 +516,7 @@ const loadMarkdownContent = async ({
     if (tokenContainsImage(token)) {
       throw projectError(
         projectKey,
-        "Markdown images must be alone on their line; optional modifiers are {wide}, {contained}, and {carousel}",
+        "Markdown images must be alone on their line; optional modifiers are {wide}, {contained}, {carousel}, {natural}, and {stacked}",
       );
     }
 
@@ -542,6 +569,16 @@ const loadMarkdownContent = async ({
     index = index - carouselBlocks.length;
   }
 
+  if (!pairImages) {
+    for (const block of blocks) {
+      if (block.type === "image" && block.layout === "normal") {
+        block.stacked = true;
+      }
+    }
+
+    return { blocks, images };
+  }
+
   for (let index = 0; index < blocks.length; index += 1) {
     if (blocks[index].type !== "image" || blocks[index].layout !== "normal") {
       continue;
@@ -560,6 +597,13 @@ const loadMarkdownContent = async ({
 
     if (run.length % 2 === 1) {
       run.at(-1).isolated = true;
+    }
+
+    for (let pairIndex = 0; pairIndex < run.length - 1; pairIndex += 2) {
+      for (const block of run.slice(pairIndex, pairIndex + 2)) {
+        block.image.natural = true;
+        block.image.resizeMode = "contain";
+      }
     }
 
     index -= 1;
@@ -702,6 +746,7 @@ const loadProject = async (entry, collection) => {
   const content = await loadMarkdownContent({
     collection,
     markdown,
+    pairImages: normalizePairImages(frontMatter, projectKey),
     projectDirectory,
     projectKey,
   });
@@ -1400,23 +1445,35 @@ ${block.images
         "project-content__media",
         block.image.wide && "project-content__media--wide",
         block.image.contained && "project-content__media--contained",
+        block.image.natural && "project-content__media--natural",
         block.isolated && "project-content__media--isolated",
+        (block.stacked || block.layout === "stacked") &&
+          "project-content__media--stacked",
       ]
         .filter(Boolean)
         .join(" ");
+      const pauseOnHover = block.image.file === "media/portfolio-pages.gif";
       const loading = priority
         ? ' fetchpriority="high"'
         : ' loading="lazy" decoding="async"';
+      const pauseTargetStart = pauseOnHover
+        ? '                  <span class="project-content__pause-target" data-project-media-pause-on-hover>\n'
+        : "";
+      const pauseTargetEnd = pauseOnHover
+        ? "                  </span>\n"
+        : "";
 
-      return `                <figure class="${classes}">
-                  <img
+      return `                <figure
+                  class="${classes}"
+                >
+${pauseTargetStart}                  <img
                     class="project-content__image"
                     src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + block.image.outputFile)}"
                     width="${block.image.width}"
                     height="${block.image.height}"
                     alt="${escapeHtml(block.image.alt)}"${loading}
                   />
-                </figure>`;
+${pauseTargetEnd}                </figure>`;
     })
     .join("\n\n");
 };
