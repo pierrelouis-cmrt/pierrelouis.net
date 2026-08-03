@@ -374,6 +374,10 @@ const standaloneMarkdownImage = (token) => {
       return { image, layout: "normal", natural: true };
     }
 
+    if (modifierName === "carousel-contained") {
+      return { carouselContained: true, image, layout: "carousel" };
+    }
+
     if (
       modifierName === "wide" ||
       modifierName === "contained" ||
@@ -387,7 +391,8 @@ const standaloneMarkdownImage = (token) => {
       return {
         error:
           `unknown image modifier "{${modifierName}}"; use {wide}, ` +
-          "{contained}, {carousel}, {natural}, {stacked}, or no modifier",
+          "{contained}, {carousel}, {carousel-contained}, {natural}, " +
+          "{stacked}, or no modifier",
         image,
       };
     }
@@ -475,8 +480,7 @@ const loadMarkdownContent = async ({
 
         const natural =
           standalone.layout === "stacked" ||
-          standalone.natural ||
-          (!pairImages && standalone.layout === "normal");
+          standalone.natural;
 
         const image = await loadProjectImage({
           allowedDirectory: "media",
@@ -497,6 +501,7 @@ const loadMarkdownContent = async ({
                   standalone.layout === "carousel"
                 ? BODY_RENDER_BOXES
                 : REGULAR_RENDER_BOXES,
+          carouselContained: standalone.carouselContained,
           contained: standalone.layout === "contained",
           natural,
           wide: standalone.layout === "wide",
@@ -516,7 +521,7 @@ const loadMarkdownContent = async ({
     if (tokenContainsImage(token)) {
       throw projectError(
         projectKey,
-        "Markdown images must be alone on their line; optional modifiers are {wide}, {contained}, {carousel}, {natural}, and {stacked}",
+        "Markdown images must be alone on their line; optional modifiers are {wide}, {contained}, {carousel}, {carousel-contained}, {natural}, and {stacked}",
       );
     }
 
@@ -572,7 +577,7 @@ const loadMarkdownContent = async ({
   if (!pairImages) {
     for (const block of blocks) {
       if (block.type === "image" && block.layout === "normal") {
-        block.stacked = true;
+        block.isolated = true;
       }
     }
 
@@ -1414,10 +1419,17 @@ ${block.html.trim()}
                     <ol class="project-carousel__track">
 ${block.images
   .map((image) => {
+    const imageWrapClasses = [
+      "project-carousel__image-wrap",
+      image.carouselContained && "project-carousel__image-wrap--contained",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
     return `                      <li class="project-carousel__item">
                         <figure class="project-carousel__slide">
                           <span
-                            class="project-carousel__image-wrap"
+                            class="${imageWrapClasses}"
                             style="--project-carousel-ratio: ${image.width} / ${image.height}"
                           >
                             <img

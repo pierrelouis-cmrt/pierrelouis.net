@@ -91,7 +91,7 @@ Explain the work with normal Markdown.
 | `year` | Playground | Shown in the Playground sheet. Featured projects may omit it, in which case their case-study label falls back to the first tag. |
 | `summary` | No | Case-study introduction and description metadata; falls back to `description`. |
 | `note` | No | Second case-study introduction paragraph; has no visible effect in Playground. |
-| `pairImages` | No | Defaults to `true`; set to `false` to stack all normal body images instead of pairing consecutive images. |
+| `pairImages` | No | Defaults to `true`; set to `false` to keep every normal body image as a centered one-column image instead of pairing consecutive images. |
 | `interactive` | Playground | Optional same-site iframe demo appended after the Markdown body. |
 | `listing` | Yes | One or more images from this project's `listing/` folder. |
 
@@ -177,16 +177,19 @@ Every Markdown image must:
 | `![Overview](media/overview.webp){wide}` | Full-width 16:9 crop. |
 | `![Artwork](media/artwork.webp){contained}` | Full-width gray presentation area with the complete image centered and uncropped. |
 | `![Slide](media/slide.webp){carousel}` | Uncropped slide in an edge-running Playground carousel. |
+| `![Slide](media/slide.webp){carousel-contained}` | Uncropped slide inset inside a gray presentation field in a Playground carousel. |
 | `![Detail](media/detail.webp){natural}` | Keeps an individual image's aspect ratio while remaining eligible for automatic pairing. |
 | `![Detail](media/detail.webp){stacked}` | Full-width natural-aspect-ratio image that opts out of automatic pairing. |
 
 Automatic pairing is enabled unless a project sets `pairImages: false` in its
-front matter. Paired images keep their aspect ratios automatically. Use
-`{natural}` for an individual image that should keep its aspect ratio, or use
-`{stacked}` when only one image should opt out of pairing.
+front matter. When pairing is disabled, each normal image uses the same
+centered one-column treatment as the last image in an odd run. Paired images
+keep their aspect ratios automatically. Use `{natural}` for an individual image
+that should keep its aspect ratio, or use `{stacked}` when only one image should
+opt out of pairing.
 
 A carousel is Playground-only and needs at least two consecutive images, all
-marked `{carousel}`:
+marked `{carousel}` or `{carousel-contained}`:
 
 ```md
 ![First experiment](media/01.webp){carousel}
@@ -195,10 +198,11 @@ marked `{carousel}`:
 ```
 
 Text or a differently modified image ends the carousel group; blank lines
-between carousel images do not. Carousel captions are not visible, but alt text
-remains available to assistive technology. On mobile, normal pairs become a
-single column; contained and isolated images remain size-limited, while
-`{stacked}` images remain full-width and natural.
+between carousel images do not. Use `{carousel-contained}` for white or visually
+edge-less slides that need separation from the sheet. Carousel captions are not
+visible, but alt text remains available to assistive technology. On mobile,
+normal pairs become a single column; contained and isolated images remain
+size-limited, while `{stacked}` images remain full-width and natural.
 
 ### Interactive demos
 

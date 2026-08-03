@@ -1,6 +1,6 @@
 ---
 title: Animated Avatar
-order: 7
+order: 3
 description: Bringing life to a simple design element
 tags: [Web Design]
 year: "2025"

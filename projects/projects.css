@@ -566,6 +566,15 @@
   align-self: start;
 }
 
+.playground-sheet .project-content__media--isolated {
+  aspect-ratio: auto;
+}
+
+.playground-sheet .project-content__media--isolated .project-content__image {
+  height: auto;
+  object-fit: contain;
+}
+
 .playground-sheet__intro {
   display: grid;
   grid-template-columns: var(--page-grid-columns);
@@ -650,6 +659,7 @@
   --project-carousel-start-edge: calc(
     var(--page-gutter) + var(--project-carousel-column-width) + var(--grid-gap)
   );
+  --project-carousel-scrollbar-inset: var(--project-carousel-start-edge);
 
   grid-column: 1 / -1;
   min-width: 0;
@@ -664,13 +674,23 @@
   width: 100%;
   overflow-x: auto;
   overscroll-behavior-inline: contain;
-  scrollbar-width: none;
+  scrollbar-color: var(--color-subtle) transparent;
+  scrollbar-width: thin;
   touch-action: pan-x pan-y;
   cursor: grab;
 }
 
 .project-carousel__viewport::-webkit-scrollbar {
-  display: none;
+  height: 2px;
+}
+
+.project-carousel__viewport::-webkit-scrollbar-track {
+  margin-inline: var(--project-carousel-scrollbar-inset);
+  background: transparent;
+}
+
+.project-carousel__viewport::-webkit-scrollbar-thumb {
+  background: var(--color-subtle);
 }
 
 .project-carousel__viewport.is-dragging {
@@ -709,12 +729,22 @@
   aspect-ratio: var(--project-carousel-ratio);
 }
 
+.project-carousel__image-wrap--contained {
+  box-sizing: border-box;
+  padding: clamp(16px, 2.5vw, 40px);
+  background: var(--color-media-bg);
+}
+
 .project-carousel__image {
   display: block;
   width: 100%;
   max-width: none;
   height: 100%;
   object-fit: cover;
+}
+
+.project-carousel__image-wrap--contained .project-carousel__image {
+  object-fit: contain;
 }
 
 @media (max-width: 1100px) {
@@ -732,6 +762,7 @@
       var(--page-gutter) + var(--project-carousel-column-width) +
         var(--grid-gap)
     );
+    --project-carousel-scrollbar-inset: var(--page-gutter);
   }
 
   .featured-project__track {

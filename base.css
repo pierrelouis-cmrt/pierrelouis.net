@@ -736,6 +736,10 @@ main {
   aspect-ratio: auto;
 }
 
+:is(.list-sheet, .playground-sheet) .project-content__media--contained {
+  background: var(--color-media-bg);
+}
+
 .project-content__pause-target {
   display: block;
   width: fit-content;
