@@ -190,9 +190,58 @@ document.querySelectorAll("[data-project-carousel]").forEach((carousel) => {
 
 document.querySelectorAll("[data-project-gallery]").forEach((gallery) => {
   const viewport = gallery.querySelector("[data-project-gallery-viewport]");
+  const scrollbar = gallery.querySelector("[data-project-gallery-scrollbar]");
 
   if (!viewport) {
     return;
+  }
+
+  let metricsFrame = 0;
+
+  const updateScrollbarMetrics = () => {
+    metricsFrame = 0;
+
+    if (!scrollbar || viewport.clientWidth <= 0) {
+      return;
+    }
+
+    const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+    const visibleRatio = Math.min(1, viewport.clientWidth / viewport.scrollWidth);
+
+    scrollbar.max = `${maxScroll}`;
+    scrollbar.value = `${viewport.scrollLeft}`;
+    scrollbar.style.setProperty(
+      "--project-carousel-scrollbar-thumb-width",
+      `${scrollbar.clientWidth * visibleRatio}px`,
+    );
+  };
+
+  const requestScrollbarMetrics = () => {
+    window.cancelAnimationFrame(metricsFrame);
+    metricsFrame = window.requestAnimationFrame(updateScrollbarMetrics);
+  };
+
+  if (scrollbar) {
+    viewport.addEventListener("scroll", requestScrollbarMetrics, {
+      passive: true,
+    });
+    scrollbar.addEventListener("input", () => {
+      viewport.scrollLeft = Number(scrollbar.value);
+    });
+
+    if (typeof ResizeObserver === "function") {
+      const scrollbarResizeObserver = new ResizeObserver(
+        requestScrollbarMetrics,
+      );
+      scrollbarResizeObserver.observe(viewport);
+      scrollbarResizeObserver.observe(scrollbar);
+      scrollbarResizeObserver.observe(viewport.firstElementChild ?? viewport);
+    }
+
+    window.addEventListener("resize", requestScrollbarMetrics, {
+      passive: true,
+    });
+    requestScrollbarMetrics();
   }
 
   let dragStartX = 0;

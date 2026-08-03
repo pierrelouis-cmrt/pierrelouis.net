@@ -11,8 +11,11 @@ listing:
 
 ![ODG website interface shown in light and dark modes](media/home.png){contained}
 
-![Diagram page](media/diagram.png)
+The goal with this website was to create a comprehensive, interactive website for scientific content. It's focused on two main questions, both of them having their own dedicated article pages and diagrams which you can see in the carousel below.
 
-![Graph page](media/graph.png)
+![Article page](media/article.png){carousel}
+![Diagram page](media/diagram.png){carousel}
+![Graph page](media/graph.png){carousel}
 
-![Article page](media/article.png)
+The source code for this website is available on [GitHub](https://github.com/pierrelouis-cmrt/odg-capecl2a). <br> 
+The live site is available at [odg.pierrelouis.net](https://odg.pierrelouis.net).

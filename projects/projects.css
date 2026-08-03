@@ -579,7 +579,7 @@
   display: grid;
   grid-template-columns: var(--page-grid-columns);
   column-gap: var(--grid-gap);
-  align-items: end;
+  align-items: start;
   min-height: 116px;
 }
 
@@ -664,7 +664,7 @@
   grid-column: 1 / -1;
   min-width: 0;
   width: 100vw;
-  margin-top: calc(var(--space-7xl) - var(--grid-gap));
+  margin-top: 0;
   margin-right: calc(var(--page-gutter) * -1);
   margin-bottom: calc(var(--space-7xl) - var(--grid-gap));
   margin-left: calc(var(--page-gutter) * -1);
@@ -674,23 +674,71 @@
   width: 100%;
   overflow-x: auto;
   overscroll-behavior-inline: contain;
-  scrollbar-color: var(--color-subtle) transparent;
-  scrollbar-width: thin;
+  scrollbar-width: none;
   touch-action: pan-x pan-y;
   cursor: grab;
 }
 
 .project-carousel__viewport::-webkit-scrollbar {
-  height: 2px;
+  display: none;
 }
 
-.project-carousel__viewport::-webkit-scrollbar-track {
-  margin-inline: var(--project-carousel-scrollbar-inset);
+.project-carousel__scrollbar {
+  --project-carousel-scrollbar-thumb-width: 20%;
+
+  display: block;
+  width: calc(100% - (var(--project-carousel-scrollbar-inset) * 2));
+  height: 2px;
+  margin: var(--space-lg) var(--project-carousel-scrollbar-inset) 0;
+  padding: 0;
+  border: 0;
+  appearance: none;
+  background: transparent;
+  cursor: grab;
+}
+
+.project-carousel__scrollbar::-webkit-slider-runnable-track {
+  height: 2px;
   background: transparent;
 }
 
-.project-carousel__viewport::-webkit-scrollbar-thumb {
+.project-carousel__scrollbar::-webkit-slider-thumb {
+  width: var(--project-carousel-scrollbar-thumb-width);
+  height: 2px;
+  border: 0;
+  appearance: none;
   background: var(--color-subtle);
+  cursor: grab;
+}
+
+.project-carousel__scrollbar::-moz-range-track {
+  height: 2px;
+  background: transparent;
+}
+
+.project-carousel__scrollbar::-moz-range-progress {
+  background: transparent;
+}
+
+.project-carousel__scrollbar::-moz-range-thumb {
+  width: var(--project-carousel-scrollbar-thumb-width);
+  height: 2px;
+  border: 0;
+  border-radius: 0;
+  background: var(--color-subtle);
+  cursor: grab;
+}
+
+.project-carousel__scrollbar:active {
+  cursor: grabbing;
+}
+
+.project-carousel__scrollbar:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+
+.project-carousel__scrollbar:active::-moz-range-thumb {
+  cursor: grabbing;
 }
 
 .project-carousel__viewport.is-dragging {

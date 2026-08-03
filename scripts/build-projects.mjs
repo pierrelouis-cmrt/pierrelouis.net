@@ -1448,6 +1448,17 @@ ${block.images
   .join("\n")}
                     </ol>
                   </div>
+                  <input
+                    class="project-carousel__scrollbar"
+                    type="range"
+                    min="0"
+                    max="0"
+                    step="any"
+                    value="0"
+                    aria-hidden="true"
+                    tabindex="-1"
+                    data-project-gallery-scrollbar
+                  />
                 </section>`;
       }
 

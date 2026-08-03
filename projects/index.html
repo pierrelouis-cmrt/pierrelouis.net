@@ -855,41 +855,96 @@
                   />
                 </figure>
 
-                <figure
-                  class="project-content__media project-content__media--natural"
-                >
-                  <img
-                    class="project-content__image"
-                    src="/assets/projects/playground/odg/media/diagram.webp"
-                    width="1440"
-                    height="898"
-                    alt="Diagram page" loading="lazy" decoding="async"
-                  />
-                </figure>
+                <div class="project-content__text">
+<p>The goal with this website was to create a comprehensive, interactive website for scientific content. It&#39;s focused on two main questions, both of them having their own dedicated article pages and diagrams which you can see in the carousel below.</p>
+                </div>
 
-                <figure
-                  class="project-content__media project-content__media--natural"
+                <section
+                  class="project-carousel"
+                  aria-label="ODG image gallery"
+                  data-project-gallery
                 >
-                  <img
-                    class="project-content__image"
-                    src="/assets/projects/playground/odg/media/graph.webp"
-                    width="1440"
-                    height="898"
-                    alt="Graph page" loading="lazy" decoding="async"
+                  <div
+                    class="project-carousel__viewport"
+                    role="region"
+                    aria-label="ODG image gallery"
+                    tabindex="0"
+                    data-project-gallery-viewport
+                  >
+                    <ol class="project-carousel__track">
+                      <li class="project-carousel__item">
+                        <figure class="project-carousel__slide">
+                          <span
+                            class="project-carousel__image-wrap"
+                            style="--project-carousel-ratio: 2048 / 1278"
+                          >
+                            <img
+                              class="project-carousel__image"
+                              src="/assets/projects/playground/odg/media/article.webp"
+                              width="2048"
+                              height="1278"
+                              loading="lazy"
+                              decoding="async"
+                              alt="Article page"
+                            />
+                          </span>
+                        </figure>
+                      </li>
+                      <li class="project-carousel__item">
+                        <figure class="project-carousel__slide">
+                          <span
+                            class="project-carousel__image-wrap"
+                            style="--project-carousel-ratio: 2048 / 1278"
+                          >
+                            <img
+                              class="project-carousel__image"
+                              src="/assets/projects/playground/odg/media/diagram.webp"
+                              width="2048"
+                              height="1278"
+                              loading="lazy"
+                              decoding="async"
+                              alt="Diagram page"
+                            />
+                          </span>
+                        </figure>
+                      </li>
+                      <li class="project-carousel__item">
+                        <figure class="project-carousel__slide">
+                          <span
+                            class="project-carousel__image-wrap"
+                            style="--project-carousel-ratio: 2048 / 1278"
+                          >
+                            <img
+                              class="project-carousel__image"
+                              src="/assets/projects/playground/odg/media/graph.webp"
+                              width="2048"
+                              height="1278"
+                              loading="lazy"
+                              decoding="async"
+                              alt="Graph page"
+                            />
+                          </span>
+                        </figure>
+                      </li>
+                    </ol>
+                  </div>
+                  <input
+                    class="project-carousel__scrollbar"
+                    type="range"
+                    min="0"
+                    max="0"
+                    step="any"
+                    value="0"
+                    aria-hidden="true"
+                    tabindex="-1"
+                    data-project-gallery-scrollbar
                   />
-                </figure>
+                </section>
 
-                <figure
-                  class="project-content__media project-content__media--isolated"
-                >
-                  <img
-                    class="project-content__image"
-                    src="/assets/projects/playground/odg/media/article.webp"
-                    width="2886"
-                    height="1800"
-                    alt="Article page" loading="lazy" decoding="async"
-                  />
-                </figure>
+                <div class="project-content__text">
+<p>The source code for this website is available on <a class="external-link" target="_blank" rel="noopener noreferrer" href="https://github.com/pierrelouis-cmrt/odg-capecl2a">GitHub</a>. <br> 
+The live site is available at <a class="external-link" target="_blank" rel="noopener noreferrer" href="https://odg.pierrelouis.net">odg.pierrelouis.net</a>.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -1153,16 +1208,17 @@
                       </li>
                     </ol>
                   </div>
-                  <div
+                  <input
                     class="project-carousel__scrollbar"
+                    type="range"
+                    min="0"
+                    max="0"
+                    step="any"
+                    value="0"
                     aria-hidden="true"
+                    tabindex="-1"
                     data-project-gallery-scrollbar
-                  >
-                    <span
-                      class="project-carousel__scrollbar-spacer"
-                      data-project-gallery-scrollbar-spacer
-                    ></span>
-                  </div>
+                  />
                 </section>
               </div>
             </div>
