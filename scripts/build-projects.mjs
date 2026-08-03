@@ -1437,6 +1437,7 @@ ${block.images
                               src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + image.outputFile)}"
                               width="${image.width}"
                               height="${image.height}"
+                              draggable="false"
                               loading="lazy"
                               decoding="async"
                               alt="${escapeHtml(image.alt)}"
