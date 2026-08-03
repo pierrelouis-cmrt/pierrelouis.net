@@ -2,7 +2,7 @@
 title: Personal Brand Identity
 order: 4
 description: The process of creating my personal brand identity.
-tags: [Brand Identity]
+tags: [Branding]
 year: "2026"
 pairImages: false
 listing:
