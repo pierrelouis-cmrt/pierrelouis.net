@@ -45,7 +45,9 @@ files.
 The photo pipeline maintains two WebP variants for each source image:
 
 - `assets/photos/` contains gallery thumbnails capped at 1040 px on their longest edge.
-- `assets/photos-full/` contains higher-quality, source-sized images loaded by the lightbox.
+- `assets/photos-full/` contains higher-quality images capped at 2560 px on
+  their longest edge for sharp lightbox rendering without shipping
+  camera-resolution pixels that cannot fit the viewport.
 
 Local build caches under `assets/projects/` and `assets/photos/` track source
 signatures and processing options, so unchanged images are skipped. The cache
@@ -70,6 +72,7 @@ This imports and builds the latest Obsidian posts and lists, starts the site at 
 
 | Command | Purpose |
 | --- | --- |
+| `npm test` | Run the complete Node.js test suite |
 | `npm run dev` | Build, serve, watch, and live reload |
 | `npm run build` | Regenerate source outputs and assemble the production site in `dist/` |
 | `npm run build:lists` | Sync Obsidian `Portfolio/Lists` and compile the Lists page |

@@ -1476,28 +1476,21 @@ ${block.images
       ]
         .filter(Boolean)
         .join(" ");
-      const pauseOnHover = block.image.file === "media/portfolio-pages.gif";
       const loading = priority
         ? ' fetchpriority="high"'
         : ' loading="lazy" decoding="async"';
-      const pauseTargetStart = pauseOnHover
-        ? '                  <span class="project-content__pause-target" data-project-media-pause-on-hover>\n'
-        : "";
-      const pauseTargetEnd = pauseOnHover
-        ? "                  </span>\n"
-        : "";
 
       return `                <figure
                   class="${classes}"
                 >
-${pauseTargetStart}                  <img
+                  <img
                     class="project-content__image"
                     src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + block.image.outputFile)}"
                     width="${block.image.width}"
                     height="${block.image.height}"
                     alt="${escapeHtml(block.image.alt)}"${loading}
                   />
-${pauseTargetEnd}                </figure>`;
+                </figure>`;
     })
     .join("\n\n");
 };
@@ -1520,7 +1513,6 @@ const renderProjectInteractive = (project) => {
                     title="${escapeHtml(title)}"
                     loading="lazy"
                     referrerpolicy="no-referrer"
-                    sandbox="allow-scripts allow-same-origin allow-downloads"
                     allow="fullscreen"
                     scrolling="no"
                   ></iframe>

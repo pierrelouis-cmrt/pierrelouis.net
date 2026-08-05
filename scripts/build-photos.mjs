@@ -1,5 +1,6 @@
 import { mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { applySharedComponents } from "./shared-components.mjs";
@@ -17,9 +18,14 @@ const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
 // on standard high-density screens without downloading the original image.
 const THUMBNAIL_MAX_EDGE = 1040;
 const THUMBNAIL_WEBP_QUALITY = 82;
-// This variant loads only after a click, so it preserves source dimensions for
-// the lightbox while remaining significantly smaller than the source PNGs.
-const FULL_WEBP_QUALITY = 86;
+// The lightbox is constrained by the viewport. A 2560px edge remains sharp on
+// high-density laptop displays and 4K screens without shipping camera-sized
+// pixels that cannot be displayed.
+export const PHOTO_FULL_MAX_EDGE = 2560;
+const FULL_WEBP_QUALITY = 84;
+// ImageMagick is itself multithreaded and source photos can be large, so a small
+// worker pool improves cold builds without multiplying peak memory usage.
+const IMAGE_BUILD_CONCURRENCY = Math.min(2, os.availableParallelism());
 const ASSET_VARIANTS = {
   thumbnail: {
     directory: ASSETS_DIR,
@@ -31,6 +37,7 @@ const ASSET_VARIANTS = {
   full: {
     directory: FULL_ASSETS_DIR,
     options: {
+      maxEdge: PHOTO_FULL_MAX_EDGE,
       quality: FULL_WEBP_QUALITY,
     },
   },
@@ -389,6 +396,8 @@ const generateFullImage = (source, target) =>
   runImageMagick([
     source,
     "-auto-orient",
+    "-resize",
+    `${PHOTO_FULL_MAX_EDGE}x${PHOTO_FULL_MAX_EDGE}>`,
     "-strip",
     "-quality",
     String(FULL_WEBP_QUALITY),
@@ -494,10 +503,36 @@ const pruneAssetCache = (cache, expectedCacheKeys) => {
   return removed;
 };
 
+const runWithConcurrency = async (items, limit, worker) => {
+  let failure = null;
+  let nextIndex = 0;
+  const workerCount = Math.min(limit, items.length);
+
+  await Promise.all(
+    Array.from({ length: workerCount }, async () => {
+      while (!failure && nextIndex < items.length) {
+        const item = items[nextIndex];
+        nextIndex += 1;
+
+        try {
+          await worker(item);
+        } catch (error) {
+          failure ||= error;
+        }
+      }
+    }),
+  );
+
+  if (failure) {
+    throw failure;
+  }
+};
+
 const generateCollectionAssets = async (collections) => {
   const cache = await readAssetCache();
   const expectedFilesByCollection = new Map();
   const expectedCacheKeys = new Set();
+  const jobs = [];
   const stats = {
     generated: 0,
     skipped: 0,
@@ -518,7 +553,6 @@ const generateCollectionAssets = async (collections) => {
       const filename = getWebpFilename(photo.file);
       const thumbnail = path.join(thumbnailDir, filename);
       const full = path.join(fullDir, filename);
-      const sourceSignature = await getSourceSignature(source);
 
       expectedFilesByCollection.get(collection.id).add(filename);
 
@@ -526,31 +560,37 @@ const generateCollectionAssets = async (collections) => {
         expectedCacheKeys.add(getAssetCacheKey(variantName, collection.id, filename));
       }
 
-      await generateAssetVariant({
-        cache,
-        collection,
-        filename,
-        source,
-        sourceSignature,
-        stats,
-        target: thumbnail,
-        variantName: "thumbnail",
-      });
-      await generateAssetVariant({
-        cache,
-        collection,
-        filename,
-        source,
-        sourceSignature,
-        stats,
-        target: full,
-        variantName: "full",
-      });
+      jobs.push({ collection, filename, full, source, thumbnail });
 
       photo.src = `../assets/photos/${collection.id}/${filename}`;
       photo.fullSrc = `../assets/photos-full/${collection.id}/${filename}`;
     }
   }
+
+  await runWithConcurrency(jobs, IMAGE_BUILD_CONCURRENCY, async (job) => {
+    const sourceSignature = await getSourceSignature(job.source);
+
+    await generateAssetVariant({
+      cache,
+      collection: job.collection,
+      filename: job.filename,
+      source: job.source,
+      sourceSignature,
+      stats,
+      target: job.thumbnail,
+      variantName: "thumbnail",
+    });
+    await generateAssetVariant({
+      cache,
+      collection: job.collection,
+      filename: job.filename,
+      source: job.source,
+      sourceSignature,
+      stats,
+      target: job.full,
+      variantName: "full",
+    });
+  });
 
   stats.removed += await removeStaleGeneratedAssets(ASSETS_DIR, expectedFilesByCollection);
   stats.removed += await removeStaleGeneratedAssets(FULL_ASSETS_DIR, expectedFilesByCollection);
