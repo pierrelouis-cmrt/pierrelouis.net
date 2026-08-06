@@ -167,6 +167,8 @@ html {
   background: var(--color-bg);
   font-family: var(--font-family-sans);
   color: var(--color-ink);
+  scrollbar-width: thin;
+  scrollbar-color: gray transparent;
   font-synthesis: none;
   text-rendering: geometricPrecision;
   -webkit-text-size-adjust: 100%;
