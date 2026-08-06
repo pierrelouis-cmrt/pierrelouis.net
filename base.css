@@ -567,6 +567,10 @@ main {
   font-variation-settings: "wght" var(--font-weight-italic);
 }
 
+.content-filter__count {
+  font-variant-numeric: tabular-nums;
+}
+
 .content-filter__count::before {
   content: " (";
 }

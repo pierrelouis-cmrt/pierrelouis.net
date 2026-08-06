@@ -460,6 +460,7 @@
   font-size: var(--font-size-micro);
   line-height: var(--line-height-label);
   letter-spacing: var(--tracking-label);
+  font-variant-numeric: tabular-nums;
   text-align: left;
   text-transform: uppercase;
 }

@@ -226,6 +226,7 @@
   font-size: var(--font-size-micro);
   line-height: var(--font-size-base);
   letter-spacing: var(--tracking-label);
+  font-variant-numeric: tabular-nums;
   text-align: center;
   text-transform: uppercase;
 }
