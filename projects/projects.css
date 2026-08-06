@@ -665,7 +665,8 @@
 }
 
 .project-carousel {
-  --project-carousel-image-height: clamp(400px, 42vw, 540px);
+  --project-carousel-image-width: clamp(641px, 67.3vw, 865px);
+  --project-carousel-next-peek: clamp(36px, 5vw, 72px);
   --project-carousel-column-width: calc(
     (100vw - (var(--page-gutter) * 2) - (var(--grid-gap) * 3)) / 4
   );
@@ -673,6 +674,10 @@
     var(--page-gutter) + var(--project-carousel-column-width) + var(--grid-gap)
   );
   --project-carousel-scrollbar-inset: var(--project-carousel-start-edge);
+  --project-carousel-slide-max-width: calc(
+    100vw - var(--project-carousel-start-edge) - var(--grid-gap) -
+      var(--project-carousel-next-peek)
+  );
 
   grid-column: 1 / -1;
   min-width: 0;
@@ -784,8 +789,11 @@
 
 .project-carousel__image-wrap {
   display: block;
-  width: auto;
-  height: var(--project-carousel-image-height);
+  width: min(
+    var(--project-carousel-image-width),
+    var(--project-carousel-slide-max-width)
+  );
+  height: auto;
   overflow: hidden;
   aspect-ratio: var(--project-carousel-ratio);
 }
@@ -896,6 +904,60 @@
   }
 }
 
+/* Keep mid-size sheets focused even while the surrounding site uses two columns. */
+@media (min-width: 761px) and (max-width: 1100px) {
+  .playground-sheet__content {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: 12.5vw;
+  }
+
+  .playground-sheet__intro {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-sm);
+  }
+
+  .playground-sheet__title,
+  .playground-sheet__description,
+  .playground-sheet__meta {
+    grid-column: 1;
+    grid-row: auto;
+    justify-self: start;
+    text-align: left;
+  }
+
+  .playground-sheet__description {
+    width: min(100%, 520px);
+  }
+
+  .playground-sheet__meta {
+    margin-top: var(--space-md);
+  }
+
+  .playground-sheet .project-content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .playground-sheet .project-content__text {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .playground-sheet .project-content__text > *,
+  .playground-sheet
+    .project-content__text--titled
+    > :is(h1, h2, h3, h4, h5, h6) {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .project-carousel {
+    --project-carousel-start-edge: 12.5vw;
+    --project-carousel-scrollbar-inset: 12.5vw;
+
+    margin-right: -12.5vw;
+    margin-left: -12.5vw;
+  }
+}
+
 @media (max-width: 760px) {
   .projects-page {
     --project-column-width: calc(100vw - (var(--page-gutter) * 2));
@@ -987,7 +1049,7 @@
   }
 
   .project-carousel {
-    --project-carousel-image-height: min(56svh, 440px);
+    --project-carousel-image-width: min(89.74svh, 705px);
     --project-carousel-start-edge: var(--page-gutter);
   }
 

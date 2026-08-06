@@ -795,6 +795,57 @@
   }
 }
 
+/* Match the project sheets with a centered mono-column layout on two-column screens. */
+@media (min-width: 761px) and (max-width: 1100px) {
+  .list-sheet__content {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: 12.5vw;
+  }
+
+  .list-sheet__intro {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .list-sheet__title,
+  .list-sheet__description,
+  .list-sheet__meta,
+  .list-sheet__content > .list-sheet__entry-list,
+  .list-sheet__markdown,
+  .list-sheet-content--articles-and-videos .list-sheet__title,
+  .list-sheet-content--articles-and-videos .list-sheet__description,
+  .list-sheet-content--articles-and-videos .list-sheet__meta,
+  .list-sheet-content--articles-and-videos .list-sheet__markdown {
+    grid-column: 1;
+  }
+
+  .list-sheet__title,
+  .list-sheet__description,
+  .list-sheet__meta {
+    justify-self: start;
+    text-align: left;
+  }
+
+  .list-sheet__meta {
+    grid-row: auto;
+  }
+
+  .list-sheet .project-content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .list-sheet .project-content__text {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .list-sheet .project-content__text > *,
+  .list-sheet
+    .project-content__text--titled
+    > :is(h1, h2, h3, h4, h5, h6) {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
 /* Narrow tablets use a second composition before the mobile stack takes over. */
 @media (max-width: 900px) and (min-width: 761px) {
   .lists-canvas {
