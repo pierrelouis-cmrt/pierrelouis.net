@@ -1,9 +1,9 @@
-## April 2026
+## August 2026
 
-- [Graphic design trends in 2026](https://reallygooddesigns.com/graphic-design-trends-2026/)  
-  *Reading · Iveta Pavlova*
+- [Quality software deserves your hard‑earned cash](https://stephango.com/quality-software)  
+  *Reading · Steph Ango*
 
-  > These predictions feel surprisingly plausible. Even a quick scan offers plenty of visual inspiration; now to see how many actually happen.
+  > Easily one of the best article I read this year. In addition to it being really well written, it's super thoughtful and very relatable. Extremely worth 2 minutes of your time.
 
 ## March 2026
 
@@ -38,6 +38,11 @@
   *Reading · Tesla*
 
   > Tesla's data reports significantly fewer accidents with FSD engaged. Whatever the caveats, vehicle safety is one domain where AI's potential impact is concrete.
+  
+  - [Graphic design trends in 2026](https://reallygooddesigns.com/graphic-design-trends-2026/)  
+  *Reading · Iveta Pavlova*
+
+  > These predictions feel surprisingly plausible. Even a quick scan offers plenty of visual inspiration; now to see how many actually happen.
 
 ## January 2026
 

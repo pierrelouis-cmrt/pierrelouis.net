@@ -18,4 +18,5 @@ The goal with this website was to create a comprehensive, interactive website fo
 ![Graph page](media/graph.png){carousel}
 
 The source code for this website is available on [GitHub](https://github.com/pierrelouis-cmrt/odg-capecl2a). <br> 
-The live site is available at [odg.pierrelouis.net](https://odg.pierrelouis.net).
+The live site is available at [odg.pierrelouis.net](https://odg.pierrelouis.net). <br>
+Main inspiration for the home page design: [Heat Bureau](https://www.heatbureau.com/services)
