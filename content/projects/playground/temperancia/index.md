@@ -1,7 +1,7 @@
 ---
 title: Temperancia Brand Identity
 order: 1
-description: Creating a simple typographic logo for Temperancia with a minimalist business card.
+description: Creating a minimalist logo and business card for Temperancia.
 tags: [Branding]
 year: "2026"
 pairImages: false
@@ -11,7 +11,5 @@ listing:
 ---
 
 ![Temperancia logo](<media/logo.png>){contained}
-
-![Temperancia logo on an illustration](<media/illustration.png>)
 
 ![Business card design](media/card.png)
