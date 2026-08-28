@@ -15,7 +15,7 @@
   opacity: var(--hover-opacity);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .brand-mark--back:hover,
   .mobile-menu__brand--back:hover {
     opacity: var(--hover-opacity);
@@ -141,7 +141,7 @@
   text-decoration: none;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .case-study-related__all:hover {
     text-decoration: none;
   }

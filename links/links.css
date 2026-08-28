@@ -67,7 +67,7 @@
   transform: scale(1.035);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .links-gallery__item:hover img {
     filter: brightness(0.92);
     transform: scale(1.035);
@@ -154,7 +154,7 @@
   opacity: 1;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .contact-email:hover,
   .social-links a:hover {
     opacity: var(--hover-opacity);

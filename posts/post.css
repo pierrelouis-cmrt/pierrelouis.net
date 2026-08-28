@@ -59,7 +59,7 @@
   opacity: 1;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .post-page--nav-light .site-header > .post-back:hover,
   .post-page--nav-light .site-header > .brand-mark--back:hover,
   .post-page--nav-light .primary-nav__link:hover,
@@ -94,7 +94,7 @@
   opacity: var(--hover-opacity);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .post-back:hover,
   .mobile-menu__brand--post-back:hover,
   .brand-mark--back:hover,
@@ -174,7 +174,7 @@
   color: var(--color-ink);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .post-toc__link:hover {
     color: var(--color-ink);
   }
@@ -764,7 +764,7 @@
   color: var(--color-ink);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .post-code__copy:hover {
     background: var(--color-external-link-bg);
     color: var(--color-ink);
@@ -961,7 +961,7 @@
   text-decoration: none;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .post-endmatter a:hover {
     text-decoration: none;
   }
@@ -976,7 +976,7 @@
   text-decoration: none;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .post-footnotes__item a:hover {
     text-decoration: none;
   }
@@ -1182,7 +1182,7 @@
   transition: opacity var(--duration-fast) var(--ease-out);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .post-lightbox__nav-button:hover {
     opacity: var(--hover-opacity);
   }

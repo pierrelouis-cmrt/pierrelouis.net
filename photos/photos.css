@@ -305,7 +305,7 @@
   display: none;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .photo-lightbox__nav-button:hover {
     opacity: var(--hover-opacity);
   }

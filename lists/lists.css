@@ -79,7 +79,7 @@
   outline-offset: 5px;
 }
 
-@media (hover: none) and (pointer: coarse) {
+@media (any-hover: none) and (any-pointer: coarse) {
   .list-card:focus-visible {
     outline: 0;
   }
@@ -134,7 +134,7 @@
   letter-spacing: var(--tracking-normal);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .list-card:hover .list-card__caption-text {
     text-decoration: underline;
     text-decoration-thickness: 1px;
@@ -304,7 +304,7 @@
   touch-action: none;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .list-sheet__handle:active {
     cursor: grabbing;
   }
@@ -385,7 +385,7 @@
   transform: scale(0.95);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .list-sheet__close:hover,
   .list-sheet__close:active {
     box-shadow: 0 5px 16px rgb(0 0 0 / 0.1);

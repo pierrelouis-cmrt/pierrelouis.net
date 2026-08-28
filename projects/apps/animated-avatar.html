@@ -110,7 +110,7 @@
         transition: transform 0.2s ease;
       }
 
-      @media (hover: hover) and (pointer: fine) {
+      @media (any-hover: hover) and (any-pointer: fine) {
         .zoom-slider::-webkit-slider-thumb:hover {
           transform: scale(1.1);
         }
@@ -159,7 +159,7 @@
         color: var(--text-primary);
       }
 
-      @media (hover: hover) and (pointer: fine) {
+      @media (any-hover: hover) and (any-pointer: fine) {
         .button.secondary:hover {
           border-color: var(--border-darker);
           background: var(--bg-primary);

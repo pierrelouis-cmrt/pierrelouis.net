@@ -206,7 +206,7 @@ a {
   text-decoration-line: underline;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .internal-link:hover {
     color: var(--color-subtle);
     text-decoration-line: underline;
@@ -233,7 +233,7 @@ a {
   color: var(--color-bg);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .external-link:hover {
     background: var(--color-ink);
     color: var(--color-bg);
@@ -399,7 +399,7 @@ main {
   text-align: right;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .primary-nav__link:hover,
   .more-menu__toggle:hover,
   .more-menu__link:hover,
@@ -550,7 +550,7 @@ main {
   content: ",";
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .content-filter__button:hover {
     opacity: var(--hover-opacity);
   }
@@ -681,7 +681,7 @@ main {
   transition: opacity var(--duration-fast) var(--ease-out);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .media-card:hover .media-card__image {
     transform: scale(1.025);
   }
@@ -885,7 +885,7 @@ main {
   opacity: var(--hover-opacity);
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .featured-article:hover,
   .mobile-menu__latest-link:hover {
     opacity: var(--hover-opacity);
@@ -1525,7 +1525,7 @@ main {
     user-select: none;
   }
 
-  @media (hover: hover) and (pointer: fine) {
+  @media (any-hover: hover) and (any-pointer: fine) {
     .mobile-menu__primary-link:hover,
     .mobile-menu__link:hover {
       opacity: var(--hover-opacity);

@@ -290,7 +290,7 @@
   opacity: 1;
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) and (any-pointer: fine) {
   .post-row__link.internal-link:hover {
     text-decoration-line: none;
   }
