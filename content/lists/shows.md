@@ -10,5 +10,6 @@
 - Suits (almost finished, I gave up..)
 - We Crashed
 - Off campus
-- High potential (season 3 not out yet)
-- Maxton Hall (season 3 not out yet)
+- High potential (Season 3 not yet released)
+- Maxton Hall (Season 3 not yet released)
+- For All Mankind (Season 6 not yet released)
