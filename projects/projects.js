@@ -630,10 +630,7 @@ window.addEventListener(
       }
     });
 
-    closeTimer = window.setTimeout(
-      finish,
-      reducedMotionQuery.matches ? 30 : closeDuration + 120,
-    );
+    closeTimer = window.setTimeout(finish, closeDuration + 120);
   };
 
   const requestClose = ({ dragY = null } = {}) => {
@@ -809,10 +806,7 @@ window.addEventListener(
       };
 
       sheet.addEventListener("transitionend", clearSnapStyles, { once: true });
-      window.setTimeout(
-        clearSnapStyles,
-        reducedMotionQuery.matches ? 30 : closeDuration + 120,
-      );
+      window.setTimeout(clearSnapStyles, closeDuration + 120);
     };
 
     handle.addEventListener("pointerdown", (event) => {

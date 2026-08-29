@@ -1102,10 +1102,34 @@
 
   .projects-page .site-shell {
     filter: none;
+    transition-duration:
+      var(--playground-sheet-open-duration),
+      var(--playground-sheet-open-duration),
+      var(--playground-sheet-open-duration) !important;
+  }
+
+  .projects-page.is-playground-sheet-closing .site-shell {
+    transition-duration:
+      var(--playground-sheet-close-duration),
+      var(--playground-sheet-close-duration),
+      var(--playground-sheet-close-duration) !important;
+  }
+
+  .projects-page.is-playground-sheet-dragging .site-shell {
+    transition: none !important;
   }
 
   .playground-sheet {
     scroll-behavior: auto;
+    transition-duration: var(--playground-sheet-open-duration) !important;
+  }
+
+  .playground-sheet.is-closing {
+    transition-duration: var(--playground-sheet-close-duration) !important;
+  }
+
+  .playground-sheet.is-dragging {
+    transition: none !important;
   }
 
   .project-carousel__viewport {

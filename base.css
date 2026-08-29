@@ -1671,4 +1671,17 @@ main {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
+
+  /* Keep navigation state changes spatially legible. */
+  .more-menu__panel {
+    transition-duration: var(--duration-fast), var(--duration-panel) !important;
+  }
+
+  .mobile-menu__toggle-line {
+    transition-duration: var(--duration-medium), var(--duration-fast) !important;
+  }
+
+  .mobile-menu__panel {
+    transition-duration: var(--duration-menu), var(--duration-panel) !important;
+  }
 }

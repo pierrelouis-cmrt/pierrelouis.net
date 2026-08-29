@@ -981,9 +981,33 @@
 
   .lists-page .site-shell {
     filter: none;
+    transition-duration:
+      var(--list-sheet-open-duration),
+      var(--list-sheet-open-duration),
+      var(--list-sheet-open-duration) !important;
+  }
+
+  .lists-page.is-list-sheet-closing .site-shell {
+    transition-duration:
+      var(--list-sheet-close-duration),
+      var(--list-sheet-close-duration),
+      var(--list-sheet-close-duration) !important;
+  }
+
+  .lists-page.is-list-sheet-dragging .site-shell {
+    transition: none !important;
   }
 
   .list-sheet {
     scroll-behavior: auto;
+    transition-duration: var(--list-sheet-open-duration) !important;
+  }
+
+  .list-sheet.is-closing {
+    transition-duration: var(--list-sheet-close-duration) !important;
+  }
+
+  .list-sheet.is-dragging {
+    transition: none !important;
   }
 }

@@ -45,11 +45,11 @@ const replaceAssetReferences = (contents, sourcePath, assets) => {
       originalPath,
       originalRelativePath,
     } = reference;
-    updated = updated
-      .replaceAll(`/${originalPath}`, `/${hashedPath}`)
-      .replaceAll(originalRelativePath, hashedRelativePath);
+    updated = updated.replaceAll(`/${originalPath}`, `/${hashedPath}`);
 
-    if (!originalRelativePath.startsWith(".")) {
+    if (originalRelativePath.startsWith(".")) {
+      updated = updated.replaceAll(originalRelativePath, hashedRelativePath);
+    } else {
       updated = updated.replaceAll(
         `./${originalRelativePath}`,
         `./${hashedRelativePath}`,
@@ -72,17 +72,52 @@ export const hashStaticAssets = async (directory) => {
       continue;
     }
 
-    const contents = await readFile(file);
-    const hash = createHash("sha256").update(contents).digest("hex").slice(0, 10);
+    const contents = await readFile(file, "utf8");
     const originalPath = toPosixPath(path.relative(directory, file));
+
+    assetContents.set(originalPath, contents);
+  }
+
+  const hashedPathFor = (originalPath, contents) => {
+    const hash = createHash("sha256")
+      .update(contents)
+      .digest("hex")
+      .slice(0, 10);
     const parsedPath = path.posix.parse(originalPath);
-    const hashedPath = path.posix.join(
+
+    return path.posix.join(
       parsedPath.dir,
       `${parsedPath.name}-${hash}${parsedPath.ext}`,
     );
+  };
 
-    assetContents.set(originalPath, contents.toString("utf8"));
-    assets.set(originalPath, hashedPath);
+  for (const [originalPath, contents] of assetContents) {
+    assets.set(originalPath, hashedPathFor(originalPath, contents));
+  }
+
+  // A module's final bytes can include another asset's hashed filename. Resolve
+  // those dependency hashes before writing anything so every filename matches
+  // the exact content shipped to dist/.
+  for (let pass = 0; pass <= assets.size; pass += 1) {
+    let changed = false;
+
+    for (const [originalPath, contents] of assetContents) {
+      const updated = replaceAssetReferences(contents, originalPath, assets);
+      const hashedPath = hashedPathFor(originalPath, updated);
+
+      if (assets.get(originalPath) !== hashedPath) {
+        assets.set(originalPath, hashedPath);
+        changed = true;
+      }
+    }
+
+    if (!changed) {
+      break;
+    }
+
+    if (pass === assets.size) {
+      throw new Error("Could not resolve circular CSS/JS asset references");
+    }
   }
 
   for (const file of files) {

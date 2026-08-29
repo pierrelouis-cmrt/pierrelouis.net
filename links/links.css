@@ -42,8 +42,9 @@
 
 .links-gallery__item {
   display: block;
-  width: calc((100vw - (var(--grid-gap) * 7)) / 8);
-  flex: 0 0 calc((100vw - (var(--grid-gap) * 7)) / 8);
+  width: auto;
+  aspect-ratio: 4 / 5;
+  flex: 0 0 auto;
   min-width: 0;
   height: 225px;
   overflow: hidden;
@@ -222,11 +223,6 @@
 }
 
 @media (max-width: 1100px) {
-  .links-gallery__item {
-    width: calc((100vw - (var(--grid-gap) * 3)) / 4);
-    flex-basis: calc((100vw - (var(--grid-gap) * 3)) / 4);
-  }
-
   .links-panels {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -274,9 +270,7 @@
   }
 
   .links-gallery__item {
-    width: min(44vw, 176px);
     height: var(--carousel-tile-height);
-    flex-basis: min(44vw, 176px);
   }
 
   .links-panels {
