@@ -1,2 +1,0 @@
-[   58602ms] [ERROR] Access to fetch at 'https://api.fontshare.com/v2/css?f[]=sora@400,500,600&display=swap' from origin 'http://127.0.0.1:8000' has been blocked by CORS policy: The 'Access-Control-Allow-Origin' header has a value 'https://api.fontshare.com' that is not equal to the supplied origin. Have the server send the header with a valid value. @ http://127.0.0.1:8000/lists/:0
-[   58602ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://api.fontshare.com/v2/css?f[]=sora@400,500,600&display=swap:0

@@ -5,7 +5,7 @@ description: A scientific content oriented website with articles, diagrams and i
 tags: [Web Design]
 year: "2026"
 listing:
-  image: listing/cover.png
+  image: listing/cover.webp
   alt: ODG website cover image.
 ---
 

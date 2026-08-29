@@ -6,7 +6,7 @@ tags: [Branding]
 year: "2026"
 pairImages: false
 listing:
-  image: listing/cover.png
+  image: listing/cover.webp
   alt: Temperancia logo
 ---
 
