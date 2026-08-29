@@ -58,6 +58,75 @@ function find_artwork(mixed $images): string
     return '';
 }
 
+function find_artwork_in_html(string $html): string
+{
+    preg_match_all('/<meta\b[^>]*>/i', $html, $tags);
+
+    foreach ($tags[0] ?? [] as $tag) {
+        preg_match_all(
+            '/([:\w-]+)\s*=\s*(["\'])(.*?)\2/is',
+            $tag,
+            $matches,
+            PREG_SET_ORDER,
+        );
+        $attributes = [];
+
+        foreach ($matches as $match) {
+            $attributes[strtolower($match[1])] = $match[3];
+        }
+
+        $key = strtolower((string) ($attributes['property'] ?? $attributes['name'] ?? ''));
+        $candidate = trim(html_entity_decode(
+            (string) ($attributes['content'] ?? ''),
+            ENT_QUOTES | ENT_HTML5,
+            'UTF-8',
+        ));
+
+        if (
+            in_array($key, ['og:image', 'twitter:image'], true) &&
+            (
+                is_allowed_url($candidate, 'lastfm.freetls.fastly.net') ||
+                is_allowed_url($candidate, 'lastfm-img.freetls.fastly.net') ||
+                is_allowed_url($candidate, 'lastfm-img2.akamaized.net')
+            )
+        ) {
+            return $candidate;
+        }
+    }
+
+    return '';
+}
+
+function fetch_track_artwork(string $trackUrl): string
+{
+    if (!is_allowed_url($trackUrl, 'last.fm')) {
+        return '';
+    }
+
+    $handle = curl_init($trackUrl);
+
+    if ($handle === false) {
+        return '';
+    }
+
+    curl_setopt_array($handle, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 4,
+        CURLOPT_TIMEOUT => REQUEST_TIMEOUT_SECONDS,
+        CURLOPT_FOLLOWLOCATION => false,
+        CURLOPT_HTTPHEADER => ['Accept: text/html'],
+        CURLOPT_USERAGENT => 'pierrelouis.net-lastfm-proxy/2.0',
+    ]);
+
+    $body = curl_exec($handle);
+    $status = (int) curl_getinfo($handle, CURLINFO_HTTP_CODE);
+    curl_close($handle);
+
+    return is_string($body) && $status === 200
+        ? find_artwork_in_html($body)
+        : '';
+}
+
 function normalize_lastfm_response(array $data, int $fetchedAt): array
 {
     $tracks = $data['recenttracks']['track'] ?? [];
@@ -260,6 +329,20 @@ try {
             fetch_lastfm($apiKey, $username),
             $fetchedAt,
         );
+
+        if (is_array($payload['track'] ?? null) && $payload['track']['image'] === '') {
+            $previousTrack = $cache['payload']['track'] ?? null;
+            $canReuseArtwork =
+                is_array($previousTrack) &&
+                ($previousTrack['name'] ?? '') === $payload['track']['name'] &&
+                ($previousTrack['artist'] ?? '') === $payload['track']['artist'] &&
+                ($previousTrack['image'] ?? '') !== '';
+
+            $payload['track']['image'] = $canReuseArtwork
+                ? $previousTrack['image']
+                : fetch_track_artwork($payload['track']['url']);
+        }
+
         write_cache($cacheFile, [
             'fetchedAt' => $fetchedAt,
             'payload' => $payload,

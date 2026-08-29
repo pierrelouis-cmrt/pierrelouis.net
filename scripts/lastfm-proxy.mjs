@@ -89,6 +89,36 @@ const getArtwork = (images) => {
   return "";
 };
 
+const getArtworkFromHtml = (html) => {
+  if (typeof html !== "string") {
+    return "";
+  }
+
+  for (const [tag] of html.matchAll(/<meta\b[^>]*>/gi)) {
+    const attributes = {};
+
+    for (const match of tag.matchAll(/([:\w-]+)\s*=\s*(["'])(.*?)\2/gis)) {
+      attributes[match[1].toLowerCase()] = match[3];
+    }
+
+    const key = (attributes.property || attributes.name || "").toLowerCase();
+    const candidate = (attributes.content || "")
+      .replaceAll("&amp;", "&")
+      .trim();
+
+    if (
+      ["og:image", "twitter:image"].includes(key) &&
+      (isAllowedUrl(candidate, "lastfm.freetls.fastly.net") ||
+        isAllowedUrl(candidate, "lastfm-img.freetls.fastly.net") ||
+        isAllowedUrl(candidate, "lastfm-img2.akamaized.net"))
+    ) {
+      return candidate;
+    }
+  }
+
+  return "";
+};
+
 export const normalizeLastfmResponse = (data, fetchedAt = Date.now()) => {
   const tracks = data?.recenttracks?.track;
   const track = Array.isArray(tracks) ? tracks[0] : null;
@@ -208,6 +238,35 @@ export const createLastfmProxy = ({
 
       const fetchedAt = now();
       const payload = normalizeLastfmResponse(data, fetchedAt);
+
+      if (payload.track && !payload.track.image) {
+        const previousTrack = cache?.payload?.track;
+        const canReuseArtwork =
+          previousTrack?.name === payload.track.name &&
+          previousTrack?.artist === payload.track.artist &&
+          previousTrack?.image;
+
+        if (canReuseArtwork) {
+          payload.track.image = previousTrack.image;
+        } else if (payload.track.url) {
+          try {
+            const artworkPage = await fetchImpl(payload.track.url, {
+              headers: {
+                Accept: "text/html",
+                "User-Agent": "pierrelouis.net-local-dev/1.0",
+              },
+              signal: controller.signal,
+            });
+
+            if (artworkPage.ok) {
+              payload.track.image = getArtworkFromHtml(await artworkPage.text());
+            }
+          } catch {
+            // Artwork is optional; keep the scrobble available if its page fails.
+          }
+        }
+      }
+
       cache = { fetchedAt, payload };
       return payload;
     } finally {

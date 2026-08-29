@@ -68,6 +68,65 @@ test("normalizes a Last.fm response into the public contract", () => {
   });
 });
 
+test("recovers missing artwork from the validated Last.fm track page", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "lastfm-artwork-test-"));
+  const recentTracksWithoutArtwork = structuredClone(upstreamPayload);
+  recentTracksWithoutArtwork.recenttracks.track[0].image = [];
+  let clock = 1_785_499_200_000;
+  let apiRequests = 0;
+  let pageRequests = 0;
+
+  try {
+    await writeFile(
+      path.join(root, ".env.local"),
+      "LASTFM_API_KEY=server-only-test-key\nLASTFM_USER=pierrelouis-c\n",
+    );
+
+    const proxy = createLastfmProxy({
+      root,
+      now: () => clock,
+      async fetchImpl(url) {
+        if (url instanceof URL && url.hostname === "ws.audioscrobbler.com") {
+          apiRequests += 1;
+          return new Response(JSON.stringify(recentTracksWithoutArtwork), {
+            headers: { "Content-Type": "application/json" },
+            status: 200,
+          });
+        }
+
+        pageRequests += 1;
+        assert.equal(
+          url,
+          "https://www.last.fm/music/Glass+Animals/_/Heat+Waves",
+        );
+        return new Response(
+          '<meta property="og:image" content="https://lastfm-img.freetls.fastly.net/i/u/ar0/recovered-cover.jpg">',
+          { headers: { "Content-Type": "text/html" }, status: 200 },
+        );
+      },
+    });
+
+    const first = createResponse();
+    await proxy({ method: "GET" }, first.response);
+    assert.equal(
+      JSON.parse(first.result.body).track.image,
+      "https://lastfm-img.freetls.fastly.net/i/u/ar0/recovered-cover.jpg",
+    );
+
+    clock += 16_000;
+    const refreshed = createResponse();
+    await proxy({ method: "GET" }, refreshed.response);
+    assert.equal(
+      JSON.parse(refreshed.result.body).track.image,
+      "https://lastfm-img.freetls.fastly.net/i/u/ar0/recovered-cover.jpg",
+    );
+    assert.equal(apiRequests, 2);
+    assert.equal(pageRequests, 1);
+  } finally {
+    await rm(root, { force: true, recursive: true });
+  }
+});
+
 test("local proxy keeps the key server-side, caches, and degrades to stale data", async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), "lastfm-proxy-test-"));
   let clock = 1_785_499_200_000;
