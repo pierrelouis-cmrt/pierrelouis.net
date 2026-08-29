@@ -1099,6 +1099,7 @@ const getAssetOptions = (job, sourceDimensions) => {
 
   return {
     animated,
+    ...(animated ? { frameLayout: "coalesced" } : {}),
     quality: animated ? ANIMATED_WEBP_QUALITY : STILL_WEBP_QUALITY,
     resizeWidth: getResizeWidth(job, sourceDimensions),
   };
@@ -1151,10 +1152,9 @@ const generateProjectImage = async (job, outputPath, options) => {
       job.sourcePath,
       "-coalesce",
       ...sharedArgs,
+      "+repage",
       "-loop",
       "0",
-      "-layers",
-      "Optimize",
       outputPath,
     ]);
     return;
