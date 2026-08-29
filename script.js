@@ -100,23 +100,38 @@ const mobileMenuToggle = document.querySelector(SELECTORS.mobileMenuToggle);
 const mobileMenuPanel = document.querySelector(SELECTORS.mobileMenuPanel);
 const siteHeader = document.querySelector(SELECTORS.siteHeader);
 
-const setupDeferredImages = () => {
-  const images = [...document.querySelectorAll("img[data-deferred-src]")];
-  const loadImage = (image) => {
-    if (!image.dataset.deferredSrc) {
+const setupDeferredMedia = () => {
+  const media = [
+    ...document.querySelectorAll(
+      "img[data-deferred-src], video[data-deferred-src]",
+    ),
+  ];
+  const loadMedia = (item) => {
+    if (!item.dataset.deferredSrc) {
       return;
     }
 
-    image.src = image.dataset.deferredSrc;
-    image.removeAttribute("data-deferred-src");
+    item
+      .closest("picture")
+      ?.querySelectorAll("source[data-deferred-srcset]")
+      .forEach((source) => {
+        source.srcset = source.dataset.deferredSrcset;
+        source.removeAttribute("data-deferred-srcset");
+      });
+    item.src = item.dataset.deferredSrc;
+    item.removeAttribute("data-deferred-src");
+
+    if (item instanceof HTMLVideoElement) {
+      item.load();
+    }
   };
 
   if (!("IntersectionObserver" in window)) {
-    images.forEach(loadImage);
+    media.forEach(loadMedia);
     return;
   }
 
-  const observeImages = (targets, rootMargin) => {
+  const observeMedia = (targets, rootMargin) => {
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -124,7 +139,7 @@ const setupDeferredImages = () => {
             continue;
           }
 
-          loadImage(entry.target);
+          loadMedia(entry.target);
           observer.unobserve(entry.target);
         }
       },
@@ -134,21 +149,21 @@ const setupDeferredImages = () => {
     targets.forEach((image) => observer.observe(image));
   };
 
-  const galleryImages = images.filter((image) =>
-    image.classList.contains("photo-card__image"),
+  const galleryImages = media.filter((item) =>
+    item.classList.contains("photo-card__image"),
   );
-  const otherImages = images.filter(
-    (image) => !image.classList.contains("photo-card__image"),
+  const otherMedia = media.filter(
+    (item) => !item.classList.contains("photo-card__image"),
   );
 
   // Photo rows are tall on narrow screens, so fetch them farther ahead than
   // ordinary deferred media. This keeps the reveal imperceptible in a scroll
   // without eagerly downloading the entire gallery.
-  observeImages(galleryImages, "1100px 300px");
-  observeImages(otherImages, "500px 300px");
+  observeMedia(galleryImages, "1100px 300px");
+  observeMedia(otherMedia, "500px 300px");
 };
 
-setupDeferredImages();
+setupDeferredMedia();
 
 if (moreMenu && moreMenuToggle && moreMenuPanel) {
   const moreMenuOpenLabel =

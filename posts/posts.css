@@ -250,6 +250,7 @@
 
 .post-row__title {
   grid-column: 3;
+  text-wrap: balance;
 }
 
 .post-row__summary {
@@ -257,6 +258,7 @@
   font-size: 14px;
   line-height: var(--line-height-description);
   letter-spacing: var(--tracking-description);
+  text-wrap: pretty;
 }
 
 .post-row__link {
@@ -341,10 +343,10 @@
   display: grid;
   place-items: center;
   background: var(--color-media-bg);
-  color: var(--color-caption);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 72px;
-  line-height: 1;
+}
+
+.featured-article__image--math {
+  object-position: center;
 }
 
 @media (min-width: 1101px) and (max-width: 1360px) {

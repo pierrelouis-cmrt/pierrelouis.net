@@ -87,6 +87,10 @@
   letter-spacing: var(--tracking-normal);
 }
 
+.photo-album__title {
+  text-wrap: balance;
+}
+
 .photo-album__year {
   white-space: nowrap;
 }
@@ -98,6 +102,7 @@
   font-size: 14px;
   line-height: var(--line-height-description);
   letter-spacing: var(--tracking-description);
+  text-wrap: pretty;
 }
 
 .photo-grid {

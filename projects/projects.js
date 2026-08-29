@@ -3,6 +3,29 @@ const reducedMotionQuery = window.matchMedia(
   "(prefers-reduced-motion: reduce)",
 );
 
+const syncFeaturedVideoMotion = () => {
+  document.querySelectorAll(".featured-project__video").forEach((video) => {
+    video.autoplay = !reducedMotionQuery.matches;
+
+    if (reducedMotionQuery.matches) {
+      video.pause();
+      return;
+    }
+
+    if (video.currentSrc || video.src) {
+      video.play().catch(() => {});
+    }
+  });
+};
+
+syncFeaturedVideoMotion();
+
+if (typeof reducedMotionQuery.addEventListener === "function") {
+  reducedMotionQuery.addEventListener("change", syncFeaturedVideoMotion);
+} else {
+  reducedMotionQuery.addListener(syncFeaturedVideoMotion);
+}
+
 (() => {
   const root = document.querySelector("[data-project-filters]");
 

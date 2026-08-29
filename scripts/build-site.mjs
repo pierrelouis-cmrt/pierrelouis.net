@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildPhotos } from "./build-photos.mjs";
 import { buildProjects } from "./build-projects.mjs";
+import { buildLinks } from "./build-links.mjs";
 import { hashStaticAssets } from "./hash-static-assets.mjs";
 import { syncSharedComponents } from "./shared-components.mjs";
 import { syncAndBuildLists } from "./vault-lists.mjs";
@@ -105,6 +106,7 @@ const assembleDist = async () => {
 const lists = await syncAndBuildLists();
 const projects = await buildProjects();
 const photos = await buildPhotos();
+const links = await buildLinks();
 const posts = await syncAndBuildPosts();
 const sharedComponents = await syncSharedComponents();
 const copiedPaths = await assembleDist();
@@ -130,6 +132,10 @@ console.log(
     `${photos.assets.generated} generated asset(s), ` +
     `${photos.assets.skipped} cached asset(s), ` +
     `${photos.assets.removed} stale item(s) removed.`,
+);
+console.log(
+  `Built Links carousel: ${links.projects} project, ` +
+    `${links.photos} favorite photo image(s) (${links.total} total).`,
 );
 console.log(
   `Built posts: ${posts.posts} page(s), ${posts.removed} stale page(s) removed, ` +

@@ -926,15 +926,15 @@ const renderPage = (collections) => {
                 </h2>
                 <a
                   class="mobile-menu__latest-link"
-                  href="../projects/sweetgreen-nicolandria/"
+                  href="../projects/capecl/"
                 >
                   <span class="mobile-menu__latest-title"
-                    >Sweetgreen: Nicolandria</span
+                    >CapECL</span
                   >
                   <span class="mobile-menu__latest-media" aria-hidden="true">
                     <img
                       class="mobile-menu__latest-image"
-                      src="../assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                      src="../assets/projects/featured/capecl/listing/1.webp"
                       alt=""
                     />
                   </span>

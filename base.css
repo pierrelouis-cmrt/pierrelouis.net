@@ -482,6 +482,7 @@ main {
   font-size: var(--font-size-base);
   line-height: var(--line-height-copy);
   letter-spacing: var(--tracking-normal);
+  text-wrap: pretty;
 }
 
 /* Shared compact filters used by index pages such as Photos and Posts. */
@@ -652,6 +653,7 @@ main {
   font-weight: 500;
   line-height: 1.67;
   letter-spacing: var(--tracking-label);
+  text-wrap: balance;
 }
 
 .split-title__dot {
@@ -669,6 +671,7 @@ main {
   font-size: var(--font-size-base);
   line-height: var(--line-height-copy);
   letter-spacing: -0.3px;
+  text-wrap: pretty;
 }
 
 .media-card__image {
@@ -782,6 +785,14 @@ main {
   overflow-wrap: anywhere;
 }
 
+.project-content__text :is(p, li, blockquote) {
+  text-wrap: pretty;
+}
+
+.project-content__text :is(h1, h2, h3, h4, h5, h6) {
+  text-wrap: balance;
+}
+
 .project-content__text > * {
   grid-column: 2 / span 2;
   width: 100%;
@@ -871,8 +882,12 @@ main {
 }
 
 .mobile-menu__latest-image {
-  object-fit: cover;
-  object-position: center;
+  height: auto;
+  object-fit: contain;
+}
+
+.mobile-menu__latest-media {
+  aspect-ratio: auto;
 }
 
 .featured-article__cta,

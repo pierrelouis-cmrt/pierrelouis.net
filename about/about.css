@@ -80,9 +80,16 @@
   content: "• ";
 }
 
+.about-guide__copy p,
+.about-story__lead,
 .values__item p,
 .about-story__column p,
 .about-story__personal p {
+  text-wrap: pretty;
+}
+
+.values__title,
+.values__item h3 {
   text-wrap: balance;
 }
 

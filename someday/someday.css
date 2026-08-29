@@ -113,6 +113,11 @@
 
 .someday-story p {
   margin: 1lh 0 0;
+  text-wrap: pretty;
+}
+
+.bucket-list__title,
+.someday-story h2 {
   text-wrap: balance;
 }
 

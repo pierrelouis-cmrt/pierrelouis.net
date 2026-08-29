@@ -4,6 +4,12 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
+const MOBILE_MENU_FEATURED_PROJECT = {
+  title: "CapECL",
+  href: "projects/capecl/",
+  image: "assets/mobile-menu/capecl.webp",
+};
+
 const PAGE_CONFIGS = [
   { file: "index.html", root: "./", active: "home" },
   { file: "page-template.html", root: "./", active: null },
@@ -104,6 +110,7 @@ const renderHeaderBrand = ({ root, back }, className) => {
 
 export const renderSiteHeader = (config) => {
   const { root, active } = config;
+  const featuredProject = MOBILE_MENU_FEATURED_PROJECT;
 
   return `      <header class="site-header" aria-label="Primary navigation">
         ${renderHeaderBrand(config, "brand-mark")}
@@ -186,15 +193,15 @@ export const renderSiteHeader = (config) => {
                 </h2>
                 <a
                   class="mobile-menu__latest-link"
-                  href="${root}projects/sweetgreen-nicolandria/"
+                  href="${root}${featuredProject.href}"
                 >
                   <span class="mobile-menu__latest-title"
-                    >Sweetgreen: Nicolandria</span
+                    >${featuredProject.title}</span
                   >
                   <span class="mobile-menu__latest-media" aria-hidden="true">
                     <img
                       class="mobile-menu__latest-image"
-                      data-deferred-src="${root}assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                      data-deferred-src="${root}${featuredProject.image}"
                       alt=""
                       loading="lazy"
                       decoding="async"
@@ -202,7 +209,7 @@ export const renderSiteHeader = (config) => {
                     <noscript>
                       <img
                         class="mobile-menu__latest-image"
-                        src="${root}assets/projects/featured/sweetgreen-nicolandria/listing/03.webp"
+                        src="${root}${featuredProject.image}"
                         alt=""
                       />
                     </noscript>

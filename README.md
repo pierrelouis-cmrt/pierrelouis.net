@@ -29,18 +29,18 @@ The site is a mostly static, multi-page application served directly from the rep
 `npm run build` runs six build stages:
 
 1. `scripts/build-lists.mjs` validates the dedicated HTML source for every Lists card and compiles each fragment into a project-style sheet.
-2. `scripts/build-projects.mjs` owns the Projects page settings, validates project metadata and source images, generates resized WebP production assets, then regenerates the marked project-listing region.
+2. `scripts/build-projects.mjs` owns the Projects page settings, validates project metadata and source media, generates resized WebP production assets, copies Featured-listing WebM files, then regenerates the marked project-listing region.
 3. `scripts/build-photos.mjs` owns the Photos page settings, reads and validates the collections in `content/photos/`, generates optimized gallery assets, and writes the photo page and its searchable JSON data.
 4. The post pipeline imports the latest Obsidian articles into the repository mirror, then `scripts/build-posts.mjs` validates and compiles them with build-time math and code rendering, the post index, and local asset references.
 5. `scripts/shared-components.mjs` renders the canonical header and footer into every configured HTML page, adjusting paths and active navigation state per route.
 6. The deployable site is assembled in the Git-ignored `dist/` directory.
 
-The projects pipeline keeps original images in `content/projects/` and writes
-production-only WebP files to `assets/projects/`. Regular images are capped at
-approximately twice their largest responsive render size. The resize calculation
-accounts for whether CSS contains or crops each image, preserves aspect ratios,
-and never upscales smaller sources. Animated GIF sources become animated WebP
-files.
+The projects pipeline keeps original media in `content/projects/` and writes
+production-only assets to `assets/projects/`. Regular images become WebP and are
+capped at approximately twice their largest responsive render size. The resize
+calculation accounts for whether CSS contains or crops each image, preserves
+aspect ratios, and never upscales smaller sources. Animated GIF sources become
+animated WebP files. Featured-listing WebM videos are copied through unchanged.
 
 The photo pipeline maintains two WebP variants for each source image:
 

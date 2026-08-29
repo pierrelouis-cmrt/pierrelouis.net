@@ -116,6 +116,7 @@
   font-size: var(--font-size-base);
   font-weight: 600;
   line-height: var(--line-height-compact);
+  text-wrap: balance;
 }
 
 .status-list {
@@ -135,6 +136,7 @@
   font-weight: 500;
   line-height: var(--line-height-solid);
   letter-spacing: -1.28px;
+  text-wrap: balance;
 }
 
 .contact-email,

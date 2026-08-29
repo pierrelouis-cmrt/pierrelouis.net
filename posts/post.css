@@ -334,6 +334,7 @@
   color: var(--color-subtle);
   font-size: calc(var(--font-size-micro) - 1px);
   line-height: var(--line-height-copy);
+  text-wrap: pretty;
 }
 
 .post-caption__index {
@@ -371,6 +372,7 @@
   font-size: var(--post-copy-size);
   line-height: var(--post-copy-leading);
   letter-spacing: var(--tracking-normal);
+  text-wrap: pretty;
 }
 
 .post-body p {
@@ -896,7 +898,6 @@
 .post-endmatter::before {
   grid-column: 1 / -1;
   grid-row: 1;
-  border-radius: 4px;
   background: var(--post-panel);
   content: "";
 }

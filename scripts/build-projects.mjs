@@ -1,5 +1,6 @@
 import { spawn } from "node:child_process";
 import {
+  copyFile,
   mkdir,
   readdir,
   readFile,
@@ -26,9 +27,11 @@ const CASE_STUDY_MARKER = "<!-- case-study:generated -->";
 const GENERATED_START = "        <!-- projects:generated:start -->";
 const GENERATED_END = "        <!-- projects:generated:end -->";
 const IMAGE_EXTENSIONS = new Set([".gif", ".jpeg", ".jpg", ".png", ".webp"]);
+const LISTING_MEDIA_EXTENSIONS = new Set([...IMAGE_EXTENSIONS, ".webm"]);
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const PROJECT_COLLECTIONS = ["featured", "playground"];
 const PUBLIC_PROJECT_ASSET_ROOT = "/assets/projects/";
+const PROJECT_CAROUSEL_MAX_VIEWPORT_HEIGHT = 80;
 const ASSET_CACHE_VERSION = 1;
 const STILL_WEBP_QUALITY = 84;
 const ANIMATED_WEBP_QUALITY = 80;
@@ -52,8 +55,9 @@ const PROJECTS_PAGE = {
 // 1100px breakpoints. Cover images may retain extra pixels on one axis so
 // browser cropping stays sharp without baking a crop into the source asset.
 const REGULAR_RENDER_BOXES = [{ width: 1440, height: 1800 }];
+const DESKTOP_WIDE_RENDER_BOXES = [{ width: 2048, height: 1300 }];
 const WIDE_RENDER_BOXES = [
-  { width: 2048, height: 1300 },
+  ...DESKTOP_WIDE_RENDER_BOXES,
   { width: 1440, height: 1800 },
 ];
 const BODY_RENDER_BOXES = [{ width: 2048, height: 2048 }];
@@ -272,6 +276,7 @@ const normalizeProjectSourcePath = (
   projectKey,
   field,
   requiredDirectory,
+  allowedExtensions = IMAGE_EXTENSIONS,
 ) => {
   const relativePath = requireProjectText(value, projectKey, field).replaceAll(
     "\\",
@@ -289,10 +294,14 @@ const normalizeProjectSourcePath = (
     );
   }
 
-  if (!IMAGE_EXTENSIONS.has(extension)) {
+  if (!allowedExtensions.has(extension)) {
+    const acceptedFormats = allowedExtensions.has(".webm")
+      ? "GIF, JPEG, PNG, WebP, or WebM"
+      : "GIF, JPEG, PNG, or WebP";
+
     throw projectError(
       projectKey,
-      `"${field}" must use GIF, JPEG, PNG, or WebP (received "${relativePath}")`,
+      `"${field}" must use ${acceptedFormats} (received "${relativePath}")`,
     );
   }
 
@@ -309,8 +318,11 @@ const normalizeProjectSourcePath = (
 const loadProjectImage = async ({
   allowedDirectory,
   alt,
+  altField,
+  allowedExtensions = IMAGE_EXTENSIONS,
   field,
   file: rawFile,
+  fileField,
   projectDirectory,
   projectKey,
   resizeMode,
@@ -320,10 +332,13 @@ const loadProjectImage = async ({
   const file = normalizeProjectSourcePath(
     rawFile,
     projectKey,
-    `${field}.file`,
+    fileField ?? `${field}.file`,
     allowedDirectory,
+    allowedExtensions,
   );
   const sourcePath = path.join(projectDirectory, ...file.split("/"));
+  const extension = path.extname(file).toLowerCase();
+  const mediaType = extension === ".webm" ? "video" : "image";
 
   try {
     const fileStat = await stat(sourcePath);
@@ -333,17 +348,24 @@ const loadProjectImage = async ({
     }
   } catch (error) {
     if (error.code === "ENOENT" || error.message === "not a file") {
-      throw projectError(projectKey, `"${field}.file" does not exist: ${file}`);
+      throw projectError(
+        projectKey,
+        `"${fileField ?? `${field}.file`}" does not exist: ${file}`,
+      );
     }
 
     throw error;
   }
 
   return {
-    alt: requireProjectText(alt, projectKey, `${field}.alt`),
-    animated: path.extname(file).toLowerCase() === ".gif",
+    alt: requireProjectText(alt, projectKey, altField ?? `${field}.alt`),
+    animated: extension === ".gif",
     file,
-    outputFile: `${projectKey}/${file.slice(0, -path.posix.extname(file).length)}.webp`,
+    mediaType,
+    outputFile:
+      mediaType === "video"
+        ? `${projectKey}/${file}`
+        : `${projectKey}/${file.slice(0, -path.posix.extname(file).length)}.webp`,
     projectDirectory,
     resizeMode,
     renderBoxes,
@@ -469,13 +491,6 @@ const loadMarkdownContent = async ({
       for (const standalone of standaloneImages) {
         if (standalone.error) {
           throw projectError(projectKey, standalone.error);
-        }
-
-        if (standalone.layout === "carousel" && collection !== "playground") {
-          throw projectError(
-            projectKey,
-            '"{carousel}" is only available in Playground projects',
-          );
         }
 
         const natural =
@@ -634,7 +649,7 @@ const listProjectMedia = async (directory, prefix = "") => {
       continue;
     }
 
-    if (IMAGE_EXTENSIONS.has(path.extname(entry.name).toLowerCase())) {
+    if (LISTING_MEDIA_EXTENSIONS.has(path.extname(entry.name).toLowerCase())) {
       files.push(relativePath);
     }
   }
@@ -666,6 +681,7 @@ const normalizeListingImages = async ({
         file: listing.image,
         framed: listing.framed,
         main: listing.main,
+        mobileFile: listing.mobileFile,
         wide: listing.wide,
       },
     ];
@@ -682,23 +698,62 @@ const normalizeListingImages = async ({
   for (let index = 0; index < rawImages.length; index += 1) {
     const rawImage = rawImages[index];
     const wide = Boolean(rawImage?.wide);
+    const hasMobileImage = rawImage?.mobileFile !== undefined;
+    const field = `listing.images[${index}]`;
+    const image = await loadProjectImage({
+      allowedDirectory: "listing",
+      allowedExtensions:
+        collection === "featured"
+          ? LISTING_MEDIA_EXTENSIONS
+          : IMAGE_EXTENSIONS,
+      alt: rawImage?.alt,
+      dark: Boolean(rawImage?.dark),
+      field,
+      file: rawImage?.file,
+      framed: Boolean(rawImage?.framed),
+      main: Boolean(rawImage?.main),
+      projectDirectory,
+      projectKey,
+      resizeMode: collection === "featured" ? "cover" : "contain",
+      renderBoxes:
+        wide && hasMobileImage
+          ? DESKTOP_WIDE_RENDER_BOXES
+          : wide
+            ? WIDE_RENDER_BOXES
+            : REGULAR_RENDER_BOXES,
+      wide,
+    });
 
-    images.push(
-      await loadProjectImage({
+    if (hasMobileImage) {
+      if (collection !== "featured") {
+        throw projectError(
+          projectKey,
+          `"${field}.mobileFile" is only available in Featured projects`,
+        );
+      }
+
+      if (image.mediaType !== "image") {
+        throw projectError(
+          projectKey,
+          `"${field}.mobileFile" requires "${field}.file" to be an image`,
+        );
+      }
+
+      image.mobileImage = await loadProjectImage({
         allowedDirectory: "listing",
-        alt: rawImage?.alt,
-        dark: Boolean(rawImage?.dark),
-        field: `listing.images[${index}]`,
-        file: rawImage?.file,
-        framed: Boolean(rawImage?.framed),
-        main: Boolean(rawImage?.main),
+        alt: rawImage.alt,
+        altField: `${field}.alt`,
+        field,
+        file: rawImage.mobileFile,
+        fileField: `${field}.mobileFile`,
         projectDirectory,
         projectKey,
-        resizeMode: collection === "featured" ? "cover" : "contain",
-        renderBoxes: wide ? WIDE_RENDER_BOXES : REGULAR_RENDER_BOXES,
-        wide,
-      }),
-    );
+        resizeMode: "cover",
+        renderBoxes: REGULAR_RENDER_BOXES,
+      });
+    }
+
+    images.push(image);
   }
 
   const explicitMainImages = images.filter((image) => image.main);
@@ -711,6 +766,17 @@ const normalizeListingImages = async ({
   }
 
   (explicitMainImages[0] ?? images[0]).main = true;
+
+  if (
+    collection === "featured" &&
+    !images.some((image) => image.mediaType === "image")
+  ) {
+    throw projectError(
+      projectKey,
+      '"listing.images" needs at least one still image for social and related-project previews',
+    );
+  }
+
   return images;
 };
 
@@ -761,7 +827,12 @@ const loadProject = async (entry, collection) => {
     projectKey,
   });
   const referencedMedia = new Set(
-    [...images, ...content.images].map((image) => image.file),
+    [
+      ...images.flatMap((image) =>
+        image.mobileImage ? [image, image.mobileImage] : [image],
+      ),
+      ...content.images,
+    ].map((image) => image.file),
   );
   const unusedMedia = (await listProjectMedia(projectDirectory)).filter(
     (file) => !referencedMedia.has(file),
@@ -1020,6 +1091,10 @@ const getResizeWidth = (job, sourceDimensions) => {
 };
 
 const getAssetOptions = (job, sourceDimensions) => {
+  if (job.mediaType === "video") {
+    return { passthrough: true };
+  }
+
   const animated = path.extname(job.sourcePath).toLowerCase() === ".gif";
 
   return {
@@ -1053,6 +1128,11 @@ const outputIsCurrent = async (outputPath, entry, source, options) => {
 
 const generateProjectImage = async (job, outputPath, options) => {
   await mkdir(path.dirname(outputPath), { recursive: true });
+
+  if (options.passthrough) {
+    await copyFile(job.sourcePath, outputPath);
+    return;
+  }
 
   const sharedArgs = [
     "-resize",
@@ -1090,7 +1170,9 @@ const generateProjectImage = async (job, outputPath, options) => {
 
 const getImageReferences = (projects) => [
   ...[...projects.featured, ...projects.playground].flatMap((project) => [
-    ...project.images,
+    ...project.images.flatMap((image) =>
+      image.mobileImage ? [image, image.mobileImage] : [image],
+    ),
     ...project.contentImages,
   ]),
 ];
@@ -1115,6 +1197,7 @@ const collectAssetJobs = (projects) => {
 
     jobs.set(image.outputFile, {
       file: image.file,
+      mediaType: image.mediaType,
       sourcePath: image.sourcePath,
       outputFile: image.outputFile,
       references: [image],
@@ -1178,15 +1261,19 @@ const generateProjectAssets = async (projects) => {
   for (const [cacheKey, job] of jobs) {
     const outputPath = path.join(ASSETS_DIR, ...job.outputFile.split("/"));
     const source = await getSourceSignature(job.sourcePath);
-    const sourceDimensions = await getImageDimensions(job.sourcePath);
+    const sourceDimensions =
+      job.mediaType === "video"
+        ? null
+        : await getImageDimensions(job.sourcePath);
     const options = getAssetOptions(job, sourceDimensions);
 
     if (await outputIsCurrent(outputPath, cache[cacheKey], source, options)) {
       stats.skipped += 1;
     } else {
+      const outputExtension = path.extname(outputPath);
       const temporaryOutput = path.join(
         path.dirname(outputPath),
-        `.${path.basename(outputPath, ".webp")}.tmp-${process.pid}.webp`,
+        `.${path.basename(outputPath, outputExtension)}.tmp-${process.pid}${outputExtension}`,
       );
 
       try {
@@ -1199,9 +1286,11 @@ const generateProjectAssets = async (projects) => {
       stats.generated += 1;
     }
 
-    const dimensions = await getImageDimensions(outputPath);
-    for (const reference of job.references) {
-      Object.assign(reference, dimensions);
+    if (job.mediaType === "image") {
+      const dimensions = await getImageDimensions(outputPath);
+      for (const reference of job.references) {
+        Object.assign(reference, dimensions);
+      }
     }
 
     cache[cacheKey] = {
@@ -1223,52 +1312,134 @@ const generateProjectAssets = async (projects) => {
   return stats;
 };
 
-const renderFeaturedImage = (image, { priority = false } = {}) => {
+const renderFeaturedMedia = (media, { priority = false } = {}) => {
   const itemClasses = [
     "featured-project__item",
-    image.wide && "featured-project__item--wide",
+    media.wide && "featured-project__item--wide",
   ]
     .filter(Boolean)
     .join(" ");
   const mediaClasses = [
     "featured-project__media",
-    image.dark && "featured-project__media--dark",
+    media.dark && "featured-project__media--dark",
   ]
     .filter(Boolean)
     .join(" ");
-  const imageClasses = [
-    "featured-project__image",
-    image.framed && "featured-project__image--framed",
+  const assetClasses = [
+    media.mediaType === "video"
+      ? "featured-project__video"
+      : "featured-project__image",
+    media.framed &&
+      (media.mediaType === "video"
+        ? "featured-project__video--framed"
+        : "featured-project__image--framed"),
   ]
     .filter(Boolean)
     .join(" ");
-  const imageSource = priority
-    ? `src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + image.outputFile)}"`
-    : `data-deferred-src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + image.outputFile)}"`;
+  const assetUrl = escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + media.outputFile);
+  const assetSource = priority
+    ? `src="${assetUrl}"`
+    : `data-deferred-src="${assetUrl}"`;
+
+  if (media.mediaType === "video") {
+    const preload = priority ? "auto" : "none";
+    const noScriptFallback = priority
+      ? ""
+      : `
+                    <noscript>
+                      <video
+                        class="${assetClasses}"
+                        src="${assetUrl}"
+                        role="img"
+                        aria-label="${escapeHtml(media.alt)}"
+                        autoplay
+                        loop
+                        muted
+                        playsinline
+                      ></video>
+                    </noscript>`;
+
+    return `                <figure class="${itemClasses}">
+                  <span class="${mediaClasses}">
+                    <video
+                      class="${assetClasses}"
+                      ${assetSource}
+                      role="img"
+                      aria-label="${escapeHtml(media.alt)}"
+                      autoplay
+                      loop
+                      muted
+                      playsinline
+                      preload="${preload}"
+                    ></video>${noScriptFallback}
+                  </span>
+                </figure>`;
+  }
+
   const loading = priority ? ' fetchpriority="high"' : ' loading="lazy"';
+  const mobileImage = media.mobileImage;
+  const mobileAssetUrl = mobileImage
+    ? escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + mobileImage.outputFile)
+    : null;
+  const mobileSource = mobileImage
+    ? priority
+      ? `srcset="${mobileAssetUrl}"`
+      : `data-deferred-srcset="${mobileAssetUrl}"`
+    : null;
+  const imageMarkup = `                    <img
+                      class="${assetClasses}"
+                      ${assetSource}
+                      width="${media.width}"
+                      height="${media.height}"
+                      alt="${escapeHtml(media.alt)}"${loading}
+                      decoding="async"
+                    />`;
+  const mediaMarkup = mobileImage
+    ? `                    <picture class="featured-project__picture">
+                      <source
+                        media="(max-width: 760px)"
+                        ${mobileSource}
+                        width="${mobileImage.width}"
+                        height="${mobileImage.height}"
+                      />
+${imageMarkup}
+                    </picture>`
+    : imageMarkup;
   const noScriptFallback = priority
     ? ""
-    : `
+    : mobileImage
+      ? `
+                    <noscript>
+                      <picture class="featured-project__picture">
+                        <source
+                          media="(max-width: 760px)"
+                          srcset="${mobileAssetUrl}"
+                          width="${mobileImage.width}"
+                          height="${mobileImage.height}"
+                        />
+                        <img
+                          class="${assetClasses}"
+                          src="${assetUrl}"
+                          width="${media.width}"
+                          height="${media.height}"
+                          alt=""
+                        />
+                      </picture>
+                    </noscript>`
+      : `
                     <noscript>
                       <img
-                        class="${imageClasses}"
-                        src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + image.outputFile)}"
-                        width="${image.width}"
-                        height="${image.height}"
+                        class="${assetClasses}"
+                        src="${assetUrl}"
+                        width="${media.width}"
+                        height="${media.height}"
                         alt=""
                       />
                     </noscript>`;
 
   return `                <figure class="${itemClasses}">
                   <span class="${mediaClasses}">
-                    <img
-                      class="${imageClasses}"
-                      ${imageSource}
-                      width="${image.width}"
-                      height="${image.height}"
-                      alt="${escapeHtml(image.alt)}"${loading}
-                      decoding="async"
-                    />${noScriptFallback}
+${mediaMarkup}${noScriptFallback}
                   </span>
                 </figure>`;
 };
@@ -1292,7 +1463,7 @@ const renderFeaturedProject = (project, projectIndex) => {
               >
 ${project.images
   .map((image, imageIndex) =>
-    renderFeaturedImage(image, {
+    renderFeaturedMedia(image, {
       priority: projectIndex === 0 && imageIndex === 0,
     }),
   )
@@ -1348,9 +1519,13 @@ ${project.images
             </li>`;
 };
 
+const getProjectPreviewImage = (project) =>
+  project.images.find(
+    (media) => media.main && media.mediaType === "image",
+  ) ?? project.images.find((media) => media.mediaType === "image");
+
 const renderPlaygroundProject = (project) => {
-  const preview =
-    project.images.find((image) => image.main) ?? project.images[0];
+  const preview = getProjectPreviewImage(project);
 
   return `            <li
               class="playground-card media-card"
@@ -1425,12 +1600,18 @@ ${block.images
     ]
       .filter(Boolean)
       .join(" ");
+    const heightCappedWidth = Number(
+      (
+        (PROJECT_CAROUSEL_MAX_VIEWPORT_HEIGHT * image.width) /
+        image.height
+      ).toFixed(4),
+    );
 
     return `                      <li class="project-carousel__item">
                         <figure class="project-carousel__slide">
                           <span
                             class="${imageWrapClasses}"
-                            style="--project-carousel-ratio: ${image.width} / ${image.height}"
+                            style="--project-carousel-ratio: ${image.width} / ${image.height}; --project-carousel-height-capped-width: ${heightCappedWidth}svh"
                           >
                             <img
                               class="project-carousel__image"
@@ -1680,7 +1861,7 @@ ${playgroundContent}`;
 };
 
 const renderRelatedProject = (project) => {
-  const preview = project.images.find((image) => image.main);
+  const preview = getProjectPreviewImage(project);
 
   return `            <li class="case-study-related__item">
               <a
@@ -1723,8 +1904,7 @@ const getRelatedProjects = (featured, currentSlug, limit = 2) => {
 };
 
 const renderCaseStudyPage = (project, peers) => {
-  const preview =
-    project.images.find((image) => image.main) ?? project.images[0];
+  const preview = getProjectPreviewImage(project);
   const relatedProjects = getRelatedProjects(peers, project.slug);
   const pageUrl = `https://pierrelouis.net/projects/${project.slug}/`;
   const imageUrl = `https://pierrelouis.net/assets/projects/${preview.outputFile}`;
@@ -1784,8 +1964,10 @@ const renderCaseStudyPage = (project, peers) => {
     <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
     <link rel="stylesheet" href="../../base.css" />
+    <link rel="stylesheet" href="../projects.css" />
     <link rel="stylesheet" href="../case-study.css" />
     <script src="../../script.js" defer></script>
+    <script src="../projects.js" defer></script>
     <script src="../case-study.js" defer></script>
     <script src="../../footer.js" defer></script>
   </head>
@@ -1967,9 +2149,7 @@ const updatePage = async (projects) => {
 
   const before = source.slice(0, startIndex + GENERATED_START.length);
   const after = source.slice(endIndex);
-  const preview =
-    projects.featured[0].images.find((image) => image.main) ??
-    projects.featured[0].images[0];
+  const preview = getProjectPreviewImage(projects.featured[0]);
   const ogImageTag = `<meta
       property="og:image"
       content="https://pierrelouis.net/assets/projects/${escapeHtml(preview.outputFile)}"

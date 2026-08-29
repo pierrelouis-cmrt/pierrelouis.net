@@ -2,6 +2,7 @@ import { watch } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildLists } from "./build-lists.mjs";
+import { buildLinks } from "./build-links.mjs";
 import { buildPhotos } from "./build-photos.mjs";
 import { buildPosts } from "./build-posts.mjs";
 import { buildProjects } from "./build-projects.mjs";
@@ -65,6 +66,9 @@ const shouldRebuildPosts = (filename) => {
   );
 };
 
+const shouldRebuildLinks = (filename) =>
+  filename === "scripts/build-links.mjs";
+
 const shouldSyncSharedComponents = (filename) => {
   return filename === "scripts/shared-components.mjs";
 };
@@ -110,6 +114,7 @@ const queue = (filename, reload) => {
       const rebuildProjects = shouldRebuildProjects(filename);
       const rebuildLists = shouldRebuildLists(filename);
       const rebuildPosts = shouldRebuildPosts(filename);
+      const rebuildLinks = shouldRebuildLinks(filename);
       const syncVaultPosts = filename === VAULT_POSTS_CHANGE;
       const syncVaultLists = filename === VAULT_LISTS_CHANGE;
 
@@ -142,6 +147,14 @@ const queue = (filename, reload) => {
             `${result.assets.generated} generated, ${result.assets.skipped} cached, ` +
             `${result.assets.removed} stale asset(s) removed, ` +
             `${result.caseStudies.total} project page(s).`,
+        );
+      }
+
+      if (rebuildPhotos || rebuildProjects || rebuildLinks) {
+        const result = await buildLinks();
+        console.log(
+          `Rebuilt Links carousel: ${result.projects} project, ` +
+            `${result.photos} favorite photo image(s) (${result.total} total).`,
         );
       }
 
@@ -182,6 +195,7 @@ const queue = (filename, reload) => {
 const initialLists = await syncAndBuildLists();
 const initialProjects = await buildProjects();
 const initialPhotos = await buildPhotos();
+const initialLinks = await buildLinks();
 const initialPosts = await syncAndBuildPosts();
 await syncSharedComponents();
 const site = await startSiteServer({ dev: true, host: HOST, port: PORT });
@@ -209,6 +223,10 @@ console.log(
     `${initialPhotos.assets.generated} generated asset(s), ` +
     `${initialPhotos.assets.skipped} cached asset(s), ` +
     `${initialPhotos.assets.removed} stale item(s) removed.`,
+);
+console.log(
+  `Built Links carousel: ${initialLinks.projects} project, ` +
+    `${initialLinks.photos} favorite photo image(s) (${initialLinks.total} total).`,
 );
 console.log(
   `Built posts: ${initialPosts.posts} page(s), ` +

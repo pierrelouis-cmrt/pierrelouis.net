@@ -109,7 +109,14 @@
   background: var(--color-ink);
 }
 
-.featured-project__image {
+.featured-project__picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.featured-project__image,
+.featured-project__video {
   display: block;
   width: 100%;
   height: 100%;
@@ -117,7 +124,8 @@
   transition: transform var(--duration-image) var(--ease-out);
 }
 
-.featured-project__image--framed {
+.featured-project__image--framed,
+.featured-project__video--framed {
   position: relative;
   top: -34.5%;
   width: 88%;
@@ -290,6 +298,7 @@
   color: #000000;
   font-size: var(--font-size-base);
   line-height: 1.375;
+  text-wrap: balance;
 }
 
 .playground__description {
@@ -299,6 +308,7 @@
   font-size: 14px;
   line-height: var(--line-height-description);
   letter-spacing: var(--tracking-description);
+  text-wrap: pretty;
 }
 
 .playground-grid {
@@ -368,6 +378,7 @@
   color: var(--color-caption);
   font-size: var(--font-size-base);
   line-height: var(--line-height-solid);
+  text-wrap: balance;
 }
 
 .playground-card__description {
@@ -376,6 +387,7 @@
   font-size: var(--font-size-small);
   line-height: var(--line-height-description);
   letter-spacing: var(--tracking-description);
+  text-wrap: pretty;
 }
 
 .playground-sheet {
@@ -613,6 +625,7 @@
   font-weight: var(--font-weight-italic);
   line-height: var(--line-height-copy);
   text-align: center;
+  text-wrap: balance;
 }
 
 .playground-sheet__description {
@@ -621,6 +634,7 @@
   color: var(--color-caption);
   font-size: var(--font-size-base);
   line-height: var(--line-height-copy);
+  text-wrap: pretty;
 }
 
 .playground-sheet__meta {
@@ -791,7 +805,8 @@
   display: block;
   width: min(
     var(--project-carousel-image-width),
-    var(--project-carousel-slide-max-width)
+    var(--project-carousel-slide-max-width),
+    var(--project-carousel-height-capped-width)
   );
   height: auto;
   overflow: hidden;
@@ -1080,7 +1095,8 @@
     scroll-behavior: auto;
   }
 
-  .featured-project__image {
+  .featured-project__image,
+  .featured-project__video {
     transition: none;
   }
 

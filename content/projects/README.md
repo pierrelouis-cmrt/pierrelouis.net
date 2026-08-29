@@ -64,6 +64,7 @@ listing:
       alt: Homepage of the My Project website.
       main: true
     - file: listing/02.webp
+      mobileFile: listing/02-mobile.webp
       alt: Mobile detail from the My Project website.
       wide: true
 ---
@@ -110,10 +111,13 @@ listing:
       alt: Clear description of the first image.
       main: true
     - file: listing/02.gif
+      mobileFile: listing/02-mobile.webp
       alt: Animated website presentation.
       wide: true
       dark: true
       framed: true
+    - file: listing/03.webm
+      alt: Looping animation of the final identity system.
 ```
 
 Playground projects normally use the shorter single-image form:
@@ -126,14 +130,18 @@ listing:
 
 | Option | Default | Effect |
 | --- | --- | --- |
-| `file` / `image` | — | Required path inside `listing/`; GIF, JPEG, PNG, and WebP are accepted. |
+| `file` / `image` | — | Required path inside `listing/`; GIF, JPEG, PNG, WebP, and WebM are accepted for Featured projects. Playground listings accept still images and GIFs. |
+| `mobileFile` | — | Optional mobile crop for a Featured listing image. At widths up to 760px it replaces `file`; without it, the main image keeps using the automatic 4:5 crop. |
 | `alt` | — | Required accessible description. Describe the image, not its filename. |
-| `main` | First image | Selects the social, related-project, or Playground-card preview. At most one may be `true`. |
+| `main` | First image | Selects the social, related-project, or Playground-card preview. At most one may be `true`; image-only previews fall back to the first still when this is a WebM. |
 | `wide` | `false` | Makes a featured-listing image span both columns. |
 | `dark` | `false` | Gives a featured-listing image the dark media treatment. |
 | `framed` | `false` | Adds the inset framed treatment to a featured-listing image. |
 
 `wide`, `dark`, and `framed` are presentation controls for featured listings.
+A WebM listing is copied through unchanged and displayed muted, inline,
+autoplaying, and looping. Keep at least one still image in every Featured
+project for social metadata and related-project previews.
 A Playground card displays only its selected `main` image even if the long
 `images` form is used.
 
@@ -176,8 +184,8 @@ Every Markdown image must:
 | `![Detail](media/detail.webp)` | Consecutive normal images pair into two columns by default and keep their aspect ratios; the last image in an odd run is centered at one-column width with the normal 4:5 crop. |
 | `![Overview](media/overview.webp){wide}` | Full-width 16:9 crop. |
 | `![Artwork](media/artwork.webp){contained}` | Full-width gray presentation area with the complete image centered and uncropped. |
-| `![Slide](media/slide.webp){carousel}` | Uncropped slide in an edge-running Playground carousel. |
-| `![Slide](media/slide.webp){carousel-contained}` | Uncropped slide inset inside a gray presentation field in a Playground carousel. |
+| `![Slide](media/slide.webp){carousel}` | Uncropped slide in an edge-running project carousel. |
+| `![Slide](media/slide.webp){carousel-contained}` | Uncropped slide inset inside a gray presentation field in a project carousel. |
 | `![Detail](media/detail.webp){natural}` | Keeps an individual image's aspect ratio while remaining eligible for automatic pairing. |
 | `![Detail](media/detail.webp){stacked}` | Full-width natural-aspect-ratio image that opts out of automatic pairing. |
 
@@ -188,8 +196,8 @@ keep their aspect ratios automatically. Use `{natural}` for an individual image
 that should keep its aspect ratio, or use `{stacked}` when only one image should
 opt out of pairing.
 
-A carousel is Playground-only and needs at least two consecutive images, all
-marked `{carousel}` or `{carousel-contained}`:
+A carousel works in Featured and Playground projects and needs at least two
+consecutive images, all marked `{carousel}` or `{carousel-contained}`:
 
 ```md
 ![First experiment](media/01.webp){carousel}
@@ -235,6 +243,7 @@ placement, modifiers, and carousel rules. Unreferenced project images produce a
 warning without failing the build.
 
 Referenced images are optimized to WebP in `assets/projects/`; animated GIFs
-remain animated. The build also regenerates `projects/index.html`, standalone
+remain animated, while Featured-listing WebM files are copied through. The build
+also regenerates `projects/index.html`, standalone
 featured case studies, and their related-project links. Treat those as outputs:
 make content changes here, then rebuild.
