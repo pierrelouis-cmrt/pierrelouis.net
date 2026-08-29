@@ -20,7 +20,7 @@ const upstreamPayload = {
           {
             size: "large",
             "#text":
-              "https://lastfm.freetls.fastly.net/i/u/174s/album-cover.jpg",
+              "https://lastfm-img.freetls.fastly.net/i/u/174s/album-cover.jpg",
           },
         ],
         name: "Heat Waves",
@@ -59,7 +59,7 @@ test("normalizes a Last.fm response into the public contract", () => {
       artist: "Glass Animals",
       album: "Dreamland",
       url: "https://www.last.fm/music/Glass+Animals/_/Heat+Waves",
-      image: "https://lastfm.freetls.fastly.net/i/u/174s/album-cover.jpg",
+      image: "https://lastfm-img.freetls.fastly.net/i/u/174s/album-cover.jpg",
       nowPlaying: true,
       playedAt: "2026-07-31T12:00:00.000Z",
     },

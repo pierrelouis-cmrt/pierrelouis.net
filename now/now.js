@@ -89,6 +89,7 @@
         url.protocol === "https:" &&
         [
           "lastfm.freetls.fastly.net",
+          "lastfm-img.freetls.fastly.net",
           "lastfm-img2.akamaized.net",
         ].includes(url.hostname)
       );

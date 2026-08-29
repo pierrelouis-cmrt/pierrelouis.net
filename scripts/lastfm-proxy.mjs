@@ -79,6 +79,7 @@ const getArtwork = (images) => {
       candidate &&
       !candidate.includes(PLACEHOLDER_IMAGE_HASH) &&
       (isAllowedUrl(candidate, "lastfm.freetls.fastly.net") ||
+        isAllowedUrl(candidate, "lastfm-img.freetls.fastly.net") ||
         isAllowedUrl(candidate, "lastfm-img2.akamaized.net"))
     ) {
       return candidate;

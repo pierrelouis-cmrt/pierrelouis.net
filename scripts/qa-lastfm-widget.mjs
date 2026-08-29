@@ -10,7 +10,8 @@ const OUTPUT_DIR = process.env.QA_OUTPUT_DIR || path.join(os.tmpdir(), "pierrelo
 const track = {
   album: "Dreamland",
   artist: "Glass Animals",
-  image: "",
+  image:
+    "https://lastfm-img.freetls.fastly.net/i/u/174s/album-cover.jpg",
   name: "Heat Waves",
   nowPlaying: true,
   playedAt: null,
@@ -69,6 +70,17 @@ const checkState = async ({ name, payload, responseStatus = 200, state, viewport
   const page = await browser.newPage({ viewport });
   const consoleErrors = [];
 
+  await page.route("https://lastfm-img.freetls.fastly.net/**", (route) =>
+    route.fulfill({
+      body: Buffer.from(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+        "base64",
+      ),
+      contentType: "image/png",
+      status: 200,
+    }),
+  );
+
   page.on("console", (message) => {
     if (message.type() === "error") {
       consoleErrors.push(message.text());
@@ -86,14 +98,22 @@ const checkState = async ({ name, payload, responseStatus = 200, state, viewport
   await page.goto(`${BASE_URL}/now/`, { waitUntil: "networkidle" });
   await page.locator(`[data-listening-state="${state}"]`).waitFor();
 
-  const result = await page.locator("[data-listening-widget]").evaluate((widget) => ({
-    ariaBusy: widget.getAttribute("aria-busy"),
-    documentWidth: document.documentElement.scrollWidth,
-    label: widget.querySelector("[data-listening-label]")?.textContent?.trim(),
-    song: widget.querySelector("[data-listening-song]")?.textContent?.trim(),
-    state: widget.getAttribute("data-listening-state"),
-    viewportWidth: document.documentElement.clientWidth,
-  }));
+  const result = await page.locator("[data-listening-widget]").evaluate((widget) => {
+    const artwork = widget.querySelector("[data-listening-artwork] img");
+
+    return {
+      ariaBusy: widget.getAttribute("aria-busy"),
+      artworkLoaded:
+        artwork instanceof HTMLImageElement &&
+        artwork.complete &&
+        artwork.naturalWidth > 0,
+      documentWidth: document.documentElement.scrollWidth,
+      label: widget.querySelector("[data-listening-label]")?.textContent?.trim(),
+      song: widget.querySelector("[data-listening-song]")?.textContent?.trim(),
+      state: widget.getAttribute("data-listening-state"),
+      viewportWidth: document.documentElement.clientWidth,
+    };
+  });
 
   assert.equal(result.state, state);
   assert.equal(result.ariaBusy, "false");
@@ -101,6 +121,7 @@ const checkState = async ({ name, payload, responseStatus = 200, state, viewport
   assert.ok(result.song);
   assert.ok(result.documentWidth <= result.viewportWidth);
   if (responseStatus < 400) {
+    assert.equal(result.artworkLoaded, true);
     assert.deepEqual(consoleErrors, []);
   } else {
     assert.ok(

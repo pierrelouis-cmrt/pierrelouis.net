@@ -47,6 +47,7 @@ function find_artwork(mixed $images): string
             !str_contains($candidate, PLACEHOLDER_IMAGE_HASH) &&
             (
                 is_allowed_url($candidate, 'lastfm.freetls.fastly.net') ||
+                is_allowed_url($candidate, 'lastfm-img.freetls.fastly.net') ||
                 is_allowed_url($candidate, 'lastfm-img2.akamaized.net')
             )
         ) {
