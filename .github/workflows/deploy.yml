@@ -17,12 +17,17 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    env:
-      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
-
     steps:
-      - name: Check out source
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Check out deployable files
+        shell: bash
+        run: |
+          git clone --filter=blob:none --sparse --no-checkout --depth=1 \
+            --branch "${GITHUB_REF_NAME}" \
+            "https://github.com/${GITHUB_REPOSITORY}.git" .
+          git sparse-checkout set \
+            .github about api assets colophon favicon imprint links lists \
+            now photos posts projects scripts someday tests
+          git checkout --detach "${GITHUB_SHA}"
 
       - name: Set up Node.js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -30,30 +35,14 @@ jobs:
           node-version: 24
           cache: npm
 
-      - name: Install ImageMagick
-        shell: bash
-        run: |
-          if ! command -v magick >/dev/null 2>&1; then
-            sudo apt-get update
-            sudo apt-get install --yes --no-install-recommends imagemagick
-          fi
-
-          # Ubuntu may package ImageMagick 6 as `convert`; the build expects the
-          # ImageMagick 7-compatible `magick` command name.
-          if ! command -v magick >/dev/null 2>&1; then
-            sudo ln -s "$(command -v convert)" /usr/local/bin/magick
-          fi
-
-          magick -version
-
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --omit=dev
 
       - name: Test
         run: npm test
 
-      - name: Build production site
-        run: npm run build
+      - name: Assemble production site
+        run: npm run build:deploy
 
       - name: Verify build output
         shell: bash
@@ -61,11 +50,11 @@ jobs:
           test -s dist/index.html
           touch dist/.nojekyll
 
-      - name: Publish gh-pages branch
+      - name: Publish dist branch
         uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
+          publish_branch: dist
           publish_dir: ./dist
           force_orphan: true
           full_commit_message: Deploy ${{ github.sha }}

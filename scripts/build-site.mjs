@@ -10,6 +10,7 @@ import { syncAndBuildLists } from "./vault-lists.mjs";
 import { syncAndBuildPosts } from "./vault-posts.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const ASSEMBLE_ONLY = process.argv.includes("--assemble-only");
 const DIST_DIR = path.join(ROOT, "dist");
 const TEMP_DIST_DIR = path.join(ROOT, `.dist-tmp-${process.pid}`);
 const PUBLIC_DIRECTORIES = ["api", "assets", "favicon"];
@@ -103,49 +104,53 @@ const assembleDist = async () => {
   return publicPaths.length;
 };
 
-const lists = await syncAndBuildLists();
-const projects = await buildProjects();
-const photos = await buildPhotos();
-const links = await buildLinks();
-const posts = await syncAndBuildPosts();
-const sharedComponents = await syncSharedComponents();
+if (!ASSEMBLE_ONLY) {
+  const lists = await syncAndBuildLists();
+  const projects = await buildProjects();
+  const photos = await buildPhotos();
+  const links = await buildLinks();
+  const posts = await syncAndBuildPosts();
+  const sharedComponents = await syncSharedComponents();
+
+  console.log(
+    `Built Lists page: ${lists.sheets} sheet(s), ${lists.sources} Markdown source(s)${
+      lists.changed ? "" : " (unchanged)"
+    }.`,
+  );
+  if (lists.source) {
+    console.log(`Synced ${lists.synced} list source(s) from ${lists.source}.`);
+  }
+  console.log(
+    `Built projects page: ${projects.featured} featured, ` +
+      `${projects.playground} playground (${projects.total} total), ` +
+      `${projects.assets.generated} generated, ${projects.assets.skipped} cached, ` +
+      `${projects.assets.removed} stale asset(s) removed, ` +
+      `${projects.caseStudies.total} project page(s).`,
+  );
+  console.log(
+    `Built photos page: ${photos.collections} collection(s), ${photos.photos} photo(s), ` +
+      `${photos.assets.generated} generated asset(s), ` +
+      `${photos.assets.skipped} cached asset(s), ` +
+      `${photos.assets.removed} stale item(s) removed.`,
+  );
+  console.log(
+    `Built Links carousel: ${links.projects} project, ` +
+      `${links.photos} favorite photo image(s) (${links.total} total).`,
+  );
+  console.log(
+    `Built posts: ${posts.posts} page(s), ${posts.removed} stale page(s) removed, ` +
+      `${posts.warnings.length} warning(s).`,
+  );
+  if (posts.source) {
+    console.log(`Synced ${posts.synced} post(s) from ${posts.source}.`);
+  }
+  console.log(
+    `Synced shared components: ${sharedComponents.length} file(s) updated.`,
+  );
+}
+
 const copiedPaths = await assembleDist();
 const hashedAssets = await hashStaticAssets(DIST_DIR);
 
-console.log(
-  `Built Lists page: ${lists.sheets} sheet(s), ${lists.sources} Markdown source(s)${
-    lists.changed ? "" : " (unchanged)"
-  }.`,
-);
-if (lists.source) {
-  console.log(`Synced ${lists.synced} list source(s) from ${lists.source}.`);
-}
-console.log(
-  `Built projects page: ${projects.featured} featured, ` +
-    `${projects.playground} playground (${projects.total} total), ` +
-    `${projects.assets.generated} generated, ${projects.assets.skipped} cached, ` +
-    `${projects.assets.removed} stale asset(s) removed, ` +
-    `${projects.caseStudies.total} project page(s).`,
-);
-console.log(
-  `Built photos page: ${photos.collections} collection(s), ${photos.photos} photo(s), ` +
-    `${photos.assets.generated} generated asset(s), ` +
-    `${photos.assets.skipped} cached asset(s), ` +
-    `${photos.assets.removed} stale item(s) removed.`,
-);
-console.log(
-  `Built Links carousel: ${links.projects} project, ` +
-    `${links.photos} favorite photo image(s) (${links.total} total).`,
-);
-console.log(
-  `Built posts: ${posts.posts} page(s), ${posts.removed} stale page(s) removed, ` +
-    `${posts.warnings.length} warning(s).`,
-);
-if (posts.source) {
-  console.log(`Synced ${posts.synced} post(s) from ${posts.source}.`);
-}
-console.log(
-  `Synced shared components: ${sharedComponents.length} file(s) updated.`,
-);
 console.log(`Built dist/: ${copiedPaths} public path(s) copied.`);
 console.log(`Hashed production assets: ${hashedAssets.size} CSS/JS file(s).`);
