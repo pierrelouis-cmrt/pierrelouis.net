@@ -125,6 +125,7 @@ Both production endpoints require PHP with the cURL extension. The weather endpo
   [`lists/sheets/README.md`](./lists/sheets/README.md).
 - Generated project, photo, and post HTML and assets are committed alongside their sources; production serves those files plus the small PHP API endpoints.
 - Clean URLs work through directory-level `index.html` files; the project does not require server-side routing.
+- The root `.htaccess` supplies media MIME types that Hostinger does not infer reliably, including `video/webm` for Firefox playback. Keep it in `PUBLIC_ROOT_FILES` so it is copied into `dist/`.
 - The Now page's live Last.fm display uses a private-key PHP proxy on Hostinger and an equivalent local development proxy. Keep the production config at `private/lastfm.php`, outside `public_html`; never add a real API key to the repository or `dist/`.
 - Footer weather uses a same-origin PHP proxy with a shared 15-minute filesystem cache and a thin, uncached local development adapter. Keep weather labels and presentation logic in `footer.js` rather than duplicating them in the proxies.
 

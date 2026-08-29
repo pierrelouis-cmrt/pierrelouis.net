@@ -48,6 +48,8 @@ jobs:
         shell: bash
         run: |
           test -s dist/index.html
+          test -s dist/.htaccess
+          grep -Eq 'AddType[[:space:]]+video/webm[[:space:]]+\.webm' dist/.htaccess
           touch dist/.nojekyll
 
       - name: Publish dist branch

@@ -23,6 +23,7 @@ const NON_PAGE_DIRECTORIES = new Set([
   "src",
 ]);
 const PUBLIC_ROOT_FILES = [
+  ".htaccess",
   "base.css",
   "favicon.ico",
   "footer.js",

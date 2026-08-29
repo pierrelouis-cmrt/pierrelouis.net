@@ -1,0 +1,5 @@
+Options -Indexes
+
+<IfModule mod_mime.c>
+  AddType video/webm .webm
+</IfModule>
