@@ -814,8 +814,10 @@
 }
 
 .project-carousel__image-wrap--contained {
+  --project-carousel-contained-padding: clamp(16px, 2.5vw, 40px);
+
   box-sizing: border-box;
-  padding: clamp(16px, 2.5vw, 40px);
+  padding: var(--project-carousel-contained-padding);
   background: var(--color-media-bg);
 }
 
@@ -1068,6 +1070,11 @@
     --project-carousel-start-edge: var(--page-gutter);
   }
 
+  .project-carousel__image-wrap--contained {
+    padding-block:
+      calc(var(--project-carousel-contained-padding) - 4px)
+      calc(var(--project-carousel-contained-padding) + 4px);
+  }
 }
 
 @media (pointer: coarse) {

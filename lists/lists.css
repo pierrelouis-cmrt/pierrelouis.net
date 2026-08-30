@@ -950,6 +950,10 @@
     grid-column: 1;
   }
 
+  .list-sheet__entry-list {
+    padding-inline-start: 1em;
+  }
+
   .list-sheet__markdown {
     grid-column: 1;
   }
