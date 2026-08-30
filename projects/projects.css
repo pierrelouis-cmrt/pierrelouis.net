@@ -724,22 +724,30 @@
   margin: var(--space-lg) var(--project-carousel-scrollbar-inset) 0;
   padding: 0;
   border: 0;
+  -webkit-appearance: none;
   appearance: none;
   background: transparent;
+  box-shadow: none;
   cursor: grab;
 }
 
 .project-carousel__scrollbar::-webkit-slider-runnable-track {
   height: 2px;
+  border: 0;
+  border-radius: 0;
   background: transparent;
+  box-shadow: none;
 }
 
 .project-carousel__scrollbar::-webkit-slider-thumb {
   width: var(--project-carousel-scrollbar-thumb-width);
   height: 2px;
   border: 0;
+  border-radius: 0;
+  -webkit-appearance: none;
   appearance: none;
   background: var(--color-subtle);
+  box-shadow: none;
   cursor: grab;
 }
 
