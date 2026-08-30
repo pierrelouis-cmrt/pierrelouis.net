@@ -816,6 +816,8 @@
 .project-carousel__image-wrap--contained {
   --project-carousel-contained-padding: clamp(16px, 2.5vw, 40px);
 
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
   box-sizing: border-box;
   padding: var(--project-carousel-contained-padding);
   background: var(--color-media-bg);
@@ -832,7 +834,13 @@
 }
 
 .project-carousel__image-wrap--contained .project-carousel__image {
+  place-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  width: auto;
+  height: auto;
   object-fit: contain;
+  object-position: center;
 }
 
 @media (max-width: 1100px) {
@@ -1068,12 +1076,6 @@
   .project-carousel {
     --project-carousel-image-width: min(89.74svh, 705px);
     --project-carousel-start-edge: var(--page-gutter);
-  }
-
-  .project-carousel__image-wrap--contained {
-    padding-block:
-      calc(var(--project-carousel-contained-padding) - 4px)
-      calc(var(--project-carousel-contained-padding) + 4px);
   }
 }
 
