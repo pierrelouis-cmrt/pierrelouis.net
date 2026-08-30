@@ -1,0 +1,1984 @@
+<!doctype html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Lissajous Lab</title>
+    <script src="./vendor/tweakpane.min-32693d7d43.js"></script>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg-color: #0b0f14;
+        --bg-pattern: #18202b;
+        --accent: #f0c75e;
+        --accent-dim: rgba(240, 199, 94, 0.15);
+        --text-color: #e2e8f0;
+        --text-muted: rgba(226, 232, 240, 0.5);
+        --panel-bg: rgba(11, 15, 20, 0.85);
+        --panel-border: rgba(148, 163, 184, 0.3);
+        --stage-bg: transparent;
+        --hud-color: rgba(226, 232, 240, 0.55);
+        --preview-size: 400px;
+      }
+
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg-color: #f7f8fb;
+          --bg-pattern: #dbe1eb;
+          --accent: #e4b54b;
+          --accent-dim: rgba(228, 181, 75, 0.18);
+          --text-color: #1f2937;
+          --text-muted: rgba(31, 41, 55, 0.5);
+          --panel-bg: rgba(255, 255, 255, 0.9);
+          --panel-border: rgba(148, 163, 184, 0.5);
+          --stage-bg: transparent;
+          --hud-color: rgba(31, 41, 55, 0.72);
+        }
+      }
+
+      :root.light {
+        --bg-color: #f7f8fb;
+        --bg-pattern: #dbe1eb;
+        --accent: #e4b54b;
+        --accent-dim: rgba(228, 181, 75, 0.18);
+        --text-color: #1f2937;
+        --text-muted: rgba(31, 41, 55, 0.5);
+        --panel-bg: rgba(255, 255, 255, 0.9);
+        --panel-border: rgba(148, 163, 184, 0.5);
+        --stage-bg: transparent;
+        --hud-color: rgba(31, 41, 55, 0.72);
+        --tp-base-background-color: rgba(255, 255, 255, 0.94);
+        --tp-base-shadow-color: rgba(31, 41, 55, 0.16);
+        --tp-button-background-color: rgba(31, 41, 55, 0.12);
+        --tp-button-background-color-active: rgba(31, 41, 55, 0.28);
+        --tp-button-background-color-focus: rgba(31, 41, 55, 0.22);
+        --tp-button-background-color-hover: rgba(31, 41, 55, 0.18);
+        --tp-button-foreground-color: #1f2937;
+        --tp-container-background-color: rgba(31, 41, 55, 0.06);
+        --tp-container-background-color-active: rgba(31, 41, 55, 0.16);
+        --tp-container-background-color-focus: rgba(31, 41, 55, 0.12);
+        --tp-container-background-color-hover: rgba(31, 41, 55, 0.1);
+        --tp-container-foreground-color: #1f2937;
+        --tp-groove-foreground-color: rgba(31, 41, 55, 0.12);
+        --tp-input-background-color: rgba(31, 41, 55, 0.08);
+        --tp-input-background-color-active: rgba(31, 41, 55, 0.2);
+        --tp-input-background-color-focus: rgba(31, 41, 55, 0.16);
+        --tp-input-background-color-hover: rgba(31, 41, 55, 0.12);
+        --tp-input-foreground-color: #1f2937;
+        --tp-label-foreground-color: rgba(31, 41, 55, 0.72);
+        --tp-monitor-background-color: rgba(31, 41, 55, 0.08);
+        --tp-monitor-foreground-color: rgba(31, 41, 55, 0.72);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        transition: background-color 0.3s ease;
+      }
+
+      /* Background Grid */
+      .canvas-bg {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.04) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.04) 1px,
+            transparent 1px
+          );
+        background-size: 28px 28px;
+        z-index: 0;
+      }
+
+      /* Centered Canvas Container */
+      .canvas-wrapper {
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+        border-radius: 4px;
+        transition: transform 0.2s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: min(var(--preview-size), 90vmin);
+        aspect-ratio: 1 / 1;
+      }
+
+      .mode-stage {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+
+      .mode-view {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.35s ease;
+      }
+
+      body[data-mode="2d"] #mode2d,
+      body[data-mode="3d"] #mode3d {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      /* Mode Navigation - Refined */
+      .mode-nav {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 160;
+        display: inline-flex;
+        gap: 2px;
+        padding: 3px;
+        background: var(--panel-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--panel-border);
+        border-radius: 10px;
+      }
+
+      .mode-btn {
+        position: relative;
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        padding: 8px 14px;
+        border-radius: 7px;
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+
+      @media (any-hover: hover) and (any-pointer: fine) {
+        .mode-btn:hover:not(.is-active) {
+          color: var(--text-color);
+          background: var(--accent-dim);
+        }
+      }
+
+      .mode-btn.is-active {
+        background: var(--accent);
+        color: #0b0f14;
+        font-weight: 600;
+      }
+
+      .mode-btn:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      /* 3D Knot Stage - Simplified */
+      .knot-stage {
+        position: relative;
+        width: min(78vmin, 740px);
+        aspect-ratio: 1 / 1;
+        display: grid;
+        place-items: center;
+        border-radius: 4px;
+        background: transparent;
+        overflow: hidden;
+      }
+
+      #knotCanvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+        position: relative;
+        z-index: 1;
+        touch-action: none;
+        border-radius: 4px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+      }
+
+      /* HUD - Fixed to bottom left */
+      .knot-hud {
+        position: fixed;
+        left: 16px;
+        bottom: 16px;
+        z-index: 100;
+        font-size: 10px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--hud-color);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-family: "SF Mono", "Fira Code", "Roboto Mono", monospace;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      body[data-mode="3d"] .knot-hud {
+        opacity: 1;
+      }
+
+      .knot-hud-hint {
+        opacity: 0.6;
+        font-size: 9px;
+      }
+
+      .knot-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 10px;
+      }
+
+      .knot-legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        opacity: 0.8;
+      }
+
+      .legend-dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--legend-color);
+      }
+
+      #preview {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Tweakpane Positioning */
+      .tp-dfwv {
+        position: fixed !important;
+        top: 10px;
+        right: 10px;
+        left: auto;
+        width: 300px !important;
+        max-width: 90vw;
+        z-index: 9999 !important;
+        max-height: calc(100vh - 20px);
+        overflow-y: auto;
+        box-shadow:
+          0 16px 40px rgba(0, 0, 0, 0.35),
+          0 1px 0 rgba(255, 255, 255, 0.04);
+        border-radius: 6px;
+        transform: none;
+      }
+
+      .tp-dfwv,
+      .tp-dfwv button,
+      .tp-dfwv [role="button"],
+      .tp-dfwv input,
+      .tp-dfwv select,
+      .tp-dfwv a {
+        touch-action: manipulation;
+      }
+
+      .tp-dfwv::-webkit-scrollbar {
+        width: 6px;
+      }
+      .tp-dfwv::-webkit-scrollbar-thumb {
+        background: rgba(31, 41, 55, 0.25);
+        border-radius: 3px;
+      }
+
+      @media (max-width: 600px) {
+        body {
+          padding-bottom: 24px;
+        }
+
+        .mode-nav {
+          left: 50%;
+          top: auto;
+          bottom: max(18px, env(safe-area-inset-bottom));
+          transform: translateX(-50%);
+        }
+
+        .knot-hud {
+          left: 50%;
+          bottom: max(70px, calc(env(safe-area-inset-bottom) + 56px));
+          transform: translateX(-50%);
+          align-items: center;
+          text-align: center;
+        }
+
+        .tp-dfwv {
+          top: 12px;
+          top: max(12px, env(safe-area-inset-top));
+          left: 50%;
+          right: auto;
+          bottom: auto;
+          width: 90vw !important;
+          border-radius: 10px;
+          max-height: calc(100vh - 24px);
+          max-height: calc(
+            100svh - 24px - env(safe-area-inset-top) -
+              env(safe-area-inset-bottom)
+          );
+          max-height: calc(
+            100dvh - 24px - env(safe-area-inset-top) -
+              env(safe-area-inset-bottom)
+          );
+          transform: translateX(-50%);
+        }
+        .canvas-wrapper {
+          transform: none;
+        }
+
+        .knot-stage {
+          width: min(88vmin, 520px);
+        }
+      }
+    </style>
+  </head>
+  <body data-mode="2d">
+    <div class="canvas-bg"></div>
+
+    <nav class="mode-nav" aria-label="Mode switcher">
+      <button
+        class="mode-btn is-active"
+        type="button"
+        data-mode="2d"
+        aria-pressed="true"
+      >
+        2D
+      </button>
+      <button
+        class="mode-btn"
+        type="button"
+        data-mode="3d"
+        aria-pressed="false"
+      >
+        3D
+      </button>
+    </nav>
+
+    <!-- HUD moved outside mode views for fixed positioning -->
+    <div class="knot-hud">
+      <div class="knot-legend">
+        <span style="--legend-color: #7dd3fc">
+          <i class="legend-dot"></i> XY
+        </span>
+        <span style="--legend-color: #fca5a5">
+          <i class="legend-dot"></i> XZ
+        </span>
+        <span style="--legend-color: #c4b5fd">
+          <i class="legend-dot"></i> YZ
+        </span>
+        <span style="--legend-color: #f0c75e">
+          <i class="legend-dot"></i> Knot
+        </span>
+      </div>
+      <div class="knot-hud-hint">
+        Drag to rotate · Scroll to zoom · R to reset
+      </div>
+    </div>
+
+    <main class="mode-stage">
+      <section id="mode2d" class="mode-view" aria-label="2D mode">
+        <div class="canvas-wrapper">
+          <svg id="preview" width="400" height="400"></svg>
+        </div>
+      </section>
+
+      <section id="mode3d" class="mode-view" aria-label="3D mode">
+        <div class="knot-stage">
+          <canvas id="knotCanvas"></canvas>
+        </div>
+      </section>
+    </main>
+
+    <div id="pane2d"></div>
+    <div id="pane3d"></div>
+
+    <canvas id="renderCanvas" style="display: none"></canvas>
+
+    <script>
+      /* =========================================
+         1. COMPLETE GIF ENCODER (LZW)
+         Included fully so no external deps needed
+         ========================================= */
+      class GIFEncoder {
+        constructor(width, height) {
+          this.width = width;
+          this.height = height;
+          this.frames = [];
+          this.delay = 100;
+        }
+        setDelay(ms) {
+          this.delay = ms;
+        }
+        addFrame(ctx) {
+          const data = ctx.getImageData(0, 0, this.width, this.height).data;
+          this.frames.push(this.quantize(data));
+        }
+        quantize(data) {
+          const palette = new Uint8Array(256 * 3);
+          const colors = new Map();
+          for (let i = 0; i < data.length; i += 4) {
+            if (data[i + 3] === 0) continue;
+            const key = (data[i] << 16) | (data[i + 1] << 8) | data[i + 2];
+            colors.set(key, (colors.get(key) || 0) + 1);
+          }
+          const sorted = [...colors.entries()]
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 255);
+
+          const transparentIdx = 0;
+
+          let pIdx = 1;
+          sorted.forEach(([c]) => {
+            palette[pIdx * 3] = (c >> 16) & 255;
+            palette[pIdx * 3 + 1] = (c >> 8) & 255;
+            palette[pIdx * 3 + 2] = c & 255;
+            pIdx++;
+          });
+
+          const indexed = new Uint8Array(this.width * this.height);
+          for (let i = 0; i < data.length; i += 4) {
+            if (data[i + 3] < 128) {
+              indexed[i / 4] = transparentIdx;
+              continue;
+            }
+            let minD = Infinity,
+              idx = 1;
+            const r = data[i],
+              g = data[i + 1],
+              b = data[i + 2];
+            for (let j = 1; j < pIdx; j++) {
+              const dr = palette[j * 3] - r;
+              const dg = palette[j * 3 + 1] - g;
+              const db = palette[j * 3 + 2] - b;
+              const dist = dr * dr + dg * dg + db * db;
+              if (dist < minD) {
+                minD = dist;
+                idx = j;
+              }
+            }
+            indexed[i / 4] = idx;
+          }
+          return { indexed, palette };
+        }
+        finish() {
+          const bytes = [];
+          const write = (...b) => bytes.push(...b);
+          const writeStr = (s) =>
+            [...s].forEach((c) => bytes.push(c.charCodeAt(0)));
+
+          writeStr("GIF89a");
+          write(this.width & 255, this.width >> 8);
+          write(this.height & 255, this.height >> 8);
+          write(0xf7, 0, 0);
+
+          if (this.frames.length > 0) {
+            for (let i = 0; i < 256 * 3; i++)
+              write(this.frames[0].palette[i] || 0);
+          } else {
+            for (let i = 0; i < 256 * 3; i++) write(0);
+          }
+
+          write(0x21, 0xff, 0x0b);
+          writeStr("NETSCAPE2.0");
+          write(0x03, 0x01, 0x00, 0x00, 0x00);
+
+          for (const frame of this.frames) {
+            write(0x21, 0xf9, 0x04);
+            write(0x09);
+            write((this.delay / 10) & 255, (this.delay / 10) >> 8);
+            write(0x00);
+            write(0x00);
+
+            write(0x2c, 0, 0, 0, 0);
+            write(this.width & 255, this.width >> 8);
+            write(this.height & 255, this.height >> 8);
+            write(0x00);
+
+            const lzw = this.lzwEncode(frame.indexed, 8);
+            write(8);
+            for (let i = 0; i < lzw.length; i += 255) {
+              const chunk = lzw.slice(i, i + 255);
+              write(chunk.length, ...chunk);
+            }
+            write(0x00);
+          }
+          write(0x3b);
+          return new Uint8Array(bytes);
+        }
+        lzwEncode(data, minCodeSize) {
+          const clearCode = 1 << minCodeSize;
+          const eoiCode = clearCode + 1;
+          let codeSize = minCodeSize + 1;
+          let nextCode = eoiCode + 1;
+          const table = new Map();
+          const output = [];
+          let bits = 0,
+            buf = 0;
+          const emit = (code) => {
+            buf |= code << bits;
+            bits += codeSize;
+            while (bits >= 8) {
+              output.push(buf & 255);
+              buf >>= 8;
+              bits -= 8;
+            }
+          };
+          emit(clearCode);
+          let prefix = data[0];
+          for (let i = 1; i < data.length; i++) {
+            const suffix = data[i];
+            const key = (prefix << 12) | suffix;
+            if (table.has(key)) {
+              prefix = table.get(key);
+            } else {
+              emit(prefix);
+              if (nextCode < 4096) {
+                table.set(key, nextCode++);
+                if (nextCode > 1 << codeSize && codeSize < 12) codeSize++;
+              }
+              prefix = suffix;
+            }
+          }
+          emit(prefix);
+          emit(eoiCode);
+          if (bits > 0) output.push(buf);
+          return output;
+        }
+      }
+
+      /* =========================================
+         2. APP STATE & LOGIC
+
+         Mathematical notation (from article):
+         - nx, ny: frequency ratio components (coprime integers)
+         - φ (phi): phase offset in degrees
+         - A: amplitude (controlled via scale %)
+
+         Parametric equations:
+         X = A·sin(nx·t + φ)
+         Y = A·sin(ny·t)
+         ========================================= */
+
+      const PARAMS = {
+        preset: "none",
+        nx: 3, // frequency ratio component (X axis)
+        ny: 4, // frequency ratio component (Y axis)
+        phi: 0, // phase offset φ in degrees
+        rotation: 0,
+        scale: 85, // amplitude as percentage
+        resolution: 500,
+
+        strokeColor: "#f0c75e",
+        strokeWidth: 2,
+        strokeOpacity: 100,
+        useGradient: false,
+        strokeColor2: "#ec4899",
+        lineCap: "round",
+        lineJoin: "round",
+        dash: "solid",
+
+        useFill: false,
+        fillColor: "#f0c75e",
+        fillOpacity: 15,
+
+        useBg: false,
+        bgColor: "#08080c",
+
+        width: 400,
+        height: 400,
+        linkDims: true,
+        animSpeed: 1,
+
+        pngScale: 2,
+        gifDuration: 2,
+        gifFps: 24,
+        webmDuration: 3,
+      };
+
+      // Presets with nx:ny ratios (musical intervals noted in article)
+      const PRESETS = {
+        classic: { nx: 3, ny: 2, phi: 90 }, // Perfect fifth (2:3)
+        fish: { nx: 3, ny: 4, phi: 0 }, // Perfect fourth (3:4)
+        knot: { nx: 5, ny: 4, phi: 90 }, // Major third (4:5)
+        shield: { nx: 3, ny: 5, phi: 45 },
+        wing: { nx: 7, ny: 6, phi: 0 },
+        grid: { nx: 10, ny: 9, phi: 0 },
+      };
+
+      let isAnimating = false;
+      let animId = null;
+      let currentPhi = 0; // current phase during animation
+
+      function update() {
+        const svg = document.getElementById("preview");
+        const {
+          width,
+          height,
+          nx,
+          ny,
+          rotation,
+          scale,
+          resolution,
+          strokeWidth,
+        } = PARAMS;
+
+        const previewSize = Math.min(width, height);
+        document.documentElement.style.setProperty(
+          "--preview-size",
+          `${previewSize}px`,
+        );
+
+        svg.setAttribute("width", width);
+        svg.setAttribute("height", height);
+        svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+
+        const cx = width / 2;
+        const cy = height / 2;
+        const maxRadius = Math.min(width, height) / 2 - strokeWidth - 2;
+        const amp = maxRadius * (scale / 100); // Amplitude A
+
+        const activePhi = isAnimating ? currentPhi : PARAMS.phi;
+        const phiRad = (activePhi * Math.PI) / 180; // φ in radians
+        const rotRad = (rotation * Math.PI) / 180;
+
+        // Parametric equations: X = A·sin(nx·t + φ), Y = A·sin(ny·t)
+        let d = "M";
+        for (let i = 0; i <= resolution; i++) {
+          const t = (i / resolution) * Math.PI * 2;
+          const x = amp * Math.sin(nx * t + phiRad);
+          const y = amp * Math.sin(ny * t);
+          const rx = x * Math.cos(rotRad) - y * Math.sin(rotRad);
+          const ry = x * Math.sin(rotRad) + y * Math.cos(rotRad);
+          d += `${(cx + rx).toFixed(2)},${(cy + ry).toFixed(2)} `;
+        }
+        d += PARAMS.useFill ? "Z" : "";
+
+        let defs = "";
+        let strokeAttr = PARAMS.strokeColor;
+        if (PARAMS.useGradient) {
+          defs = `<defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="${PARAMS.strokeColor}"/>
+              <stop offset="100%" stop-color="${PARAMS.strokeColor2}"/>
+            </linearGradient>
+          </defs>`;
+          strokeAttr = "url(#grad)";
+        }
+
+        let bgRect = "";
+        if (PARAMS.useBg) {
+          bgRect = `<rect width="100%" height="100%" fill="${PARAMS.bgColor}"/>`;
+        }
+
+        const dashMap = {
+          solid: "",
+          dashed: "10,10",
+          dotted: "2,5",
+          long: "20,5",
+        };
+
+        const content = `
+          ${defs}
+          ${bgRect}
+          <path d="${d}"
+            fill="${PARAMS.useFill ? PARAMS.fillColor : "none"}"
+            fill-opacity="${PARAMS.useFill ? PARAMS.fillOpacity / 100 : 0}"
+            stroke="${strokeAttr}"
+            stroke-width="${strokeWidth}"
+            stroke-opacity="${PARAMS.strokeOpacity / 100}"
+            stroke-linecap="${PARAMS.lineCap}"
+            stroke-linejoin="${PARAMS.lineJoin}"
+            stroke-dasharray="${dashMap[PARAMS.dash]}"
+          />
+        `;
+        svg.innerHTML = content;
+      }
+
+      function animLoop() {
+        if (!isAnimating) return;
+        currentPhi = (currentPhi + PARAMS.animSpeed) % 360;
+        update();
+        animId = requestAnimationFrame(animLoop);
+      }
+
+      function togglePlay() {
+        isAnimating = !isAnimating;
+        if (isAnimating) {
+          currentPhi = PARAMS.phi;
+          playBtn.title = "Pause Animation";
+          animLoop();
+        } else {
+          cancelAnimationFrame(animId);
+          playBtn.title = "Play Animation";
+          PARAMS.phi = Math.round(currentPhi);
+          pane.refresh();
+        }
+      }
+
+      /* =========================================
+         3. RASTER RENDERER (Canvas 2D)
+         ========================================= */
+      function renderToCanvas(ctx, phiVal, w, h) {
+        if (PARAMS.useBg) {
+          ctx.fillStyle = PARAMS.bgColor;
+          ctx.fillRect(0, 0, w, h);
+        } else {
+          ctx.clearRect(0, 0, w, h);
+        }
+
+        const { nx, ny, rotation, scale, resolution, strokeWidth } = PARAMS;
+
+        const cx = w / 2;
+        const cy = h / 2;
+        const ratio = w / PARAMS.width;
+        const actualStroke = strokeWidth * ratio;
+        const maxRadius = Math.min(w, h) / 2 - actualStroke - 2 * ratio;
+        const amp = maxRadius * (scale / 100);
+
+        const phiRad = (phiVal * Math.PI) / 180;
+        const rotRad = (rotation * Math.PI) / 180;
+
+        ctx.beginPath();
+        for (let i = 0; i <= resolution; i++) {
+          const t = (i / resolution) * Math.PI * 2;
+          const x = amp * Math.sin(nx * t + phiRad);
+          const y = amp * Math.sin(ny * t);
+          const rx = x * Math.cos(rotRad) - y * Math.sin(rotRad);
+          const ry = x * Math.sin(rotRad) + y * Math.cos(rotRad);
+          if (i === 0) ctx.moveTo(cx + rx, cy + ry);
+          else ctx.lineTo(cx + rx, cy + ry);
+        }
+
+        if (PARAMS.useFill) {
+          ctx.fillStyle = PARAMS.fillColor;
+          ctx.globalAlpha = PARAMS.fillOpacity / 100;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+
+        if (PARAMS.useGradient) {
+          const grad = ctx.createLinearGradient(0, 0, w, h);
+          grad.addColorStop(0, PARAMS.strokeColor);
+          grad.addColorStop(1, PARAMS.strokeColor2);
+          ctx.strokeStyle = grad;
+        } else {
+          ctx.strokeStyle = PARAMS.strokeColor;
+        }
+
+        const dashMap = {
+          solid: [],
+          dashed: [10 * ratio, 10 * ratio],
+          dotted: [2 * ratio, 5 * ratio],
+          long: [20 * ratio, 5 * ratio],
+        };
+        ctx.setLineDash(dashMap[PARAMS.dash]);
+        ctx.lineCap = PARAMS.lineCap;
+        ctx.lineJoin = PARAMS.lineJoin;
+        ctx.lineWidth = actualStroke;
+        ctx.globalAlpha = PARAMS.strokeOpacity / 100;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+
+      /* =========================================
+         4. TWEAKPANE SETUP
+         ========================================= */
+      const isCompactPane = window.matchMedia("(max-width: 600px)").matches;
+      const pane = new Tweakpane.Pane({
+        title: "Lissajous Lab",
+      });
+      pane.element.classList.add("pane-2d");
+      pane.hidden = false;
+      pane.expanded = !isCompactPane;
+
+      const tabs = pane.addTab({
+        pages: [
+          { title: "Shape" },
+          { title: "Style" },
+          { title: "Canvas" },
+          { title: "Export" },
+        ],
+      });
+
+      const [tabShape, tabStyle, tabCanvas, tabExport] = tabs.pages;
+
+      tabShape
+        .addInput(PARAMS, "preset", {
+          options: {
+            Custom: "none",
+            "Classic (3:2)": "classic",
+            "Goldfish (3:4)": "fish",
+            "Knot (5:4)": "knot",
+            "Shield (3:5)": "shield",
+            "Wing (7:6)": "wing",
+            "Net (10:9)": "grid",
+          },
+        })
+        .on("change", (ev) => {
+          if (ev.value !== "none") {
+            const p = PRESETS[ev.value];
+            PARAMS.nx = p.nx;
+            PARAMS.ny = p.ny;
+            PARAMS.phi = p.phi;
+            pane.refresh();
+            if (!isAnimating) update();
+          }
+        });
+      tabShape.addSeparator();
+      tabShape
+        .addInput(PARAMS, "nx", {
+          min: 1,
+          max: 20,
+          step: 1,
+          label: "nₓ (Freq X)",
+        })
+        .on("change", update);
+      tabShape
+        .addInput(PARAMS, "ny", {
+          min: 1,
+          max: 20,
+          step: 1,
+          label: "nᵧ (Freq Y)",
+        })
+        .on("change", update);
+      tabShape
+        .addInput(PARAMS, "phi", { min: 0, max: 360, label: "φ (Phase)°" })
+        .on("change", (ev) => {
+          if (!isAnimating) {
+            currentPhi = ev.value;
+            update();
+          }
+        });
+      tabShape
+        .addInput(PARAMS, "rotation", { min: 0, max: 360, label: "Rotation°" })
+        .on("change", update);
+      tabShape
+        .addInput(PARAMS, "scale", {
+          min: 10,
+          max: 100,
+          label: "A (Amplitude) %",
+        })
+        .on("change", update);
+      tabShape
+        .addInput(PARAMS, "resolution", {
+          min: 100,
+          max: 2000,
+          step: 50,
+          label: "Points",
+        })
+        .on("change", update);
+
+      const btnRand = tabShape.addButton({ title: "Randomize Shape" });
+      btnRand.on("click", () => {
+        PARAMS.nx = Math.ceil(Math.random() * 10);
+        PARAMS.ny = Math.ceil(Math.random() * 10);
+        PARAMS.phi = Math.floor(Math.random() * 360);
+        PARAMS.preset = "none";
+        pane.refresh();
+        update();
+      });
+
+      const fStroke = tabStyle.addFolder({ title: "Stroke" });
+      fStroke
+        .addInput(PARAMS, "strokeColor", { label: "Color" })
+        .on("change", update);
+      fStroke
+        .addInput(PARAMS, "strokeWidth", { min: 0.5, max: 20, label: "Width" })
+        .on("change", update);
+      fStroke
+        .addInput(PARAMS, "strokeOpacity", {
+          min: 0,
+          max: 100,
+          label: "Opacity",
+        })
+        .on("change", update);
+
+      const iGrad = fStroke.addInput(PARAMS, "useGradient", {
+        label: "Gradient",
+      });
+      const iGradCol = fStroke.addInput(PARAMS, "strokeColor2", {
+        label: "End Color",
+      });
+      iGradCol.hidden = !PARAMS.useGradient;
+      iGrad.on("change", (ev) => {
+        iGradCol.hidden = !ev.value;
+        update();
+      });
+      iGradCol.on("change", update);
+
+      const fProps = tabStyle.addFolder({
+        title: "Properties",
+        expanded: false,
+      });
+      fProps
+        .addInput(PARAMS, "lineCap", {
+          options: { Round: "round", Butt: "butt", Square: "square" },
+          label: "Cap",
+        })
+        .on("change", update);
+      fProps
+        .addInput(PARAMS, "lineJoin", {
+          options: { Round: "round", Miter: "miter", Bevel: "bevel" },
+          label: "Join",
+        })
+        .on("change", update);
+      fProps
+        .addInput(PARAMS, "dash", {
+          options: {
+            Solid: "solid",
+            Dashed: "dashed",
+            Dotted: "dotted",
+            Long: "long",
+          },
+          label: "Pattern",
+        })
+        .on("change", update);
+
+      const fFill = tabStyle.addFolder({ title: "Fill" });
+      const iFill = fFill.addInput(PARAMS, "useFill", { label: "Enable" });
+      const iFillCol = fFill.addInput(PARAMS, "fillColor", { label: "Color" });
+      const iFillOp = fFill.addInput(PARAMS, "fillOpacity", {
+        min: 0,
+        max: 100,
+        label: "Opacity",
+      });
+      iFillCol.hidden = !PARAMS.useFill;
+      iFillOp.hidden = !PARAMS.useFill;
+      iFill.on("change", (ev) => {
+        iFillCol.hidden = !ev.value;
+        iFillOp.hidden = !ev.value;
+        update();
+      });
+      iFillCol.on("change", update);
+      iFillOp.on("change", update);
+
+      const fBg = tabStyle.addFolder({ title: "Background" });
+      const iBg = fBg.addInput(PARAMS, "useBg", { label: "Fill BG" });
+      const iBgCol = fBg.addInput(PARAMS, "bgColor", { label: "Color" });
+      iBgCol.hidden = !PARAMS.useBg;
+      iBg.on("change", (ev) => {
+        iBgCol.hidden = !ev.value;
+        update();
+      });
+      iBgCol.on("change", update);
+
+      tabCanvas
+        .addInput(PARAMS, "width", { min: 50, max: 2000, step: 10 })
+        .on("change", (ev) => {
+          if (PARAMS.linkDims) {
+            PARAMS.height = ev.value;
+            pane.refresh();
+          }
+          update();
+        });
+      tabCanvas
+        .addInput(PARAMS, "height", { min: 50, max: 2000, step: 10 })
+        .on("change", update);
+      tabCanvas.addInput(PARAMS, "linkDims", { label: "Link Dims" });
+      tabCanvas.addSeparator();
+      const btnReset = tabCanvas.addButton({ title: "Reset Defaults" });
+      btnReset.on("click", () => {
+        PARAMS.nx = 3;
+        PARAMS.ny = 4;
+        PARAMS.phi = 0;
+        PARAMS.scale = 85;
+        PARAMS.strokeColor = "#f0c75e";
+        PARAMS.bgColor = "#08080c";
+        pane.refresh();
+        update();
+      });
+
+      function tempTitle(btn, msg, orig) {
+        btn.title = msg;
+        setTimeout(() => {
+          btn.title = orig;
+        }, 2000);
+      }
+      function getSVGString() {
+        const svg = document.getElementById("preview").cloneNode(true);
+        svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        return new XMLSerializer().serializeToString(svg);
+      }
+
+      const fVec = tabExport.addFolder({ title: "SVG (Vector)" });
+      const btnSvgD = fVec.addButton({ title: "Download SVG" });
+      btnSvgD.on("click", () => {
+        const blob = new Blob([getSVGString()], { type: "image/svg+xml" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "lissajous.svg";
+        a.click();
+        URL.revokeObjectURL(url);
+        tempTitle(btnSvgD, "Downloaded!", "Download SVG");
+      });
+      const btnSvgC = fVec.addButton({ title: "Copy SVG Code" });
+      btnSvgC.on("click", async () => {
+        await navigator.clipboard.writeText(getSVGString());
+        tempTitle(btnSvgC, "Copied!", "Copy SVG Code");
+      });
+
+      const fBit = tabExport.addFolder({ title: "PNG (Bitmap)" });
+      fBit.addInput(PARAMS, "pngScale", {
+        options: { "1x": 1, "2x": 2, "4x": 4 },
+        label: "Scale",
+      });
+      const btnPngD = fBit.addButton({ title: "Download PNG" });
+      btnPngD.on("click", async () => {
+        const scale = PARAMS.pngScale;
+        const cvs = document.createElement("canvas");
+        cvs.width = PARAMS.width * scale;
+        cvs.height = PARAMS.height * scale;
+        renderToCanvas(
+          cvs.getContext("2d"),
+          isAnimating ? currentPhi : PARAMS.phi,
+          cvs.width,
+          cvs.height,
+        );
+
+        cvs.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `lissajous-${scale}x.png`;
+          a.click();
+          URL.revokeObjectURL(url);
+          tempTitle(btnPngD, "Downloaded!", "Download PNG");
+        });
+      });
+
+      const fAni = tabExport.addFolder({ title: "Animation" });
+      fAni.addInput(PARAMS, "gifDuration", {
+        min: 0.5,
+        max: 10,
+        label: "Duration(s)",
+      });
+      fAni.addInput(PARAMS, "gifFps", {
+        options: { 15: 15, 24: 24, 30: 30 },
+        label: "FPS",
+      });
+
+      const btnGif = fAni.addButton({ title: "Render GIF" });
+      btnGif.on("click", async () => {
+        if (btnGif.title !== "Render GIF") return;
+        const origTitle = "Render GIF";
+        const totalFrames = PARAMS.gifDuration * PARAMS.gifFps;
+        const cvs = document.getElementById("renderCanvas");
+        cvs.width = PARAMS.width;
+        cvs.height = PARAMS.height;
+        const ctx = cvs.getContext("2d", { willReadFrequently: true });
+
+        const encoder = new GIFEncoder(cvs.width, cvs.height);
+        encoder.setDelay(1000 / PARAMS.gifFps);
+
+        const startPhi = PARAMS.phi;
+
+        for (let i = 0; i < totalFrames; i++) {
+          btnGif.title = `Rendering ${Math.round((i / totalFrames) * 100)}%`;
+          await new Promise((r) => setTimeout(r, 0));
+
+          const p = (startPhi + (i / totalFrames) * 360) % 360;
+          renderToCanvas(ctx, p, cvs.width, cvs.height);
+          encoder.addFrame(ctx);
+        }
+
+        btnGif.title = "Encoding...";
+        await new Promise((r) => setTimeout(r, 50));
+
+        const gifData = encoder.finish();
+        const blob = new Blob([gifData], { type: "image/gif" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "lissajous.gif";
+        a.click();
+        URL.revokeObjectURL(url);
+
+        tempTitle(btnGif, "Done!", origTitle);
+      });
+
+      fAni.addSeparator();
+      fAni.addInput(PARAMS, "webmDuration", {
+        min: 1,
+        max: 20,
+        label: "WebM Len(s)",
+      });
+      const btnWebm = fAni.addButton({ title: "Record WebM" });
+      btnWebm.on("click", () => {
+        if (btnWebm.title !== "Record WebM") return;
+
+        const cvs = document.getElementById("renderCanvas");
+        cvs.width = PARAMS.width;
+        cvs.height = PARAMS.height;
+        const ctx = cvs.getContext("2d");
+        const stream = cvs.captureStream(30);
+        const recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
+        const chunks = [];
+
+        recorder.ondataavailable = (e) => chunks.push(e.data);
+        recorder.onstop = () => {
+          const blob = new Blob(chunks, { type: "video/webm" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "lissajous.webm";
+          a.click();
+          tempTitle(btnWebm, "Saved!", "Record WebM");
+        };
+
+        recorder.start();
+        const startPhi = PARAMS.phi;
+        const duration = PARAMS.webmDuration * 1000;
+        const startT = performance.now();
+
+        function recLoop() {
+          const elapsed = performance.now() - startT;
+          if (elapsed >= duration) {
+            recorder.stop();
+            return;
+          }
+          const prog = elapsed / duration;
+          btnWebm.title = `Rec: ${Math.round(prog * 100)}%`;
+
+          const p = (startPhi + prog * 360) % 360;
+          renderToCanvas(ctx, p, cvs.width, cvs.height);
+          requestAnimationFrame(recLoop);
+        }
+        recLoop();
+      });
+
+      pane.addSeparator();
+      pane.addInput(PARAMS, "animSpeed", { min: 0.1, max: 5, label: "Speed" });
+      const playBtn = pane.addButton({ title: "Play Animation" });
+      playBtn.on("click", togglePlay);
+
+      /* =========================================
+         5. 3D KNOT MODE
+
+         Each face has its own Lissajous curve with:
+         - nx, ny: frequency ratio for that plane
+         - φ (phi): phase offset
+         ========================================= */
+      const knotCanvas = document.getElementById("knotCanvas");
+      const knotCtx = knotCanvas.getContext("2d");
+      const knotStage = document.querySelector(".knot-stage");
+      const modeButtons = Array.from(document.querySelectorAll(".mode-btn"));
+      const pane3d = new Tweakpane.Pane({
+        title: "Knot Composer",
+      });
+      pane3d.element.classList.add("pane-3d");
+      pane3d.hidden = true;
+      pane3d.expanded = !isCompactPane;
+
+      const KNOT_PARAMS = {
+        resolution: 720,
+        radius: 0.78,
+        knotBlend: 0.5,
+        knotWidth: 2.2,
+        knotOpacity: 0.85,
+        knotGlow: 0.2,
+        knotColor: "#f0c75e",
+
+        curveWidth: 1.1,
+        planeOpacity: 0.22,
+
+        showKnot: true,
+        showXY: true,
+        showXZ: true,
+        showYZ: true,
+
+        // XY face parameters
+        xyNx: 3,
+        xyNy: 2,
+        xyPhi: 0,
+        xyRotation: 0,
+        xyScale: 1,
+        xyColor: "#7dd3fc",
+
+        // XZ face parameters
+        xzNx: 4,
+        xzNy: 3,
+        xzPhi: 90,
+        xzRotation: 0,
+        xzScale: 1,
+        xzColor: "#fca5a5",
+
+        // YZ face parameters
+        yzNx: 5,
+        yzNy: 4,
+        yzPhi: 45,
+        yzRotation: 0,
+        yzScale: 1,
+        yzColor: "#c4b5fd",
+
+        perspective: 1.35,
+      };
+
+      const knotView = {
+        rotX: 0.55,
+        rotY: -0.6,
+        rotZ: 0,
+      };
+
+      const knotState = {
+        active: false,
+        dragging: false,
+        lastX: 0,
+        lastY: 0,
+        size: 0,
+        dpr: window.devicePixelRatio || 1,
+      };
+
+      function toRad(deg) {
+        return (deg * Math.PI) / 180;
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+
+      function hexToRgb(hex) {
+        const cleaned = hex.replace("#", "");
+        const full =
+          cleaned.length === 3
+            ? cleaned
+                .split("")
+                .map((c) => c + c)
+                .join("")
+            : cleaned;
+        const num = parseInt(full, 16);
+        return {
+          r: (num >> 16) & 255,
+          g: (num >> 8) & 255,
+          b: num & 255,
+        };
+      }
+
+      function rgba(hex, alpha) {
+        const { r, g, b } = hexToRgb(hex);
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+      }
+
+      function getViewCache() {
+        return {
+          cosX: Math.cos(knotView.rotX),
+          sinX: Math.sin(knotView.rotX),
+          cosY: Math.cos(knotView.rotY),
+          sinY: Math.sin(knotView.rotY),
+          cosZ: Math.cos(knotView.rotZ),
+          sinZ: Math.sin(knotView.rotZ),
+        };
+      }
+
+      function applyView(point, view) {
+        let { x, y, z } = point;
+
+        let y1 = y * view.cosX - z * view.sinX;
+        let z1 = y * view.sinX + z * view.cosX;
+        y = y1;
+        z = z1;
+
+        let x1 = x * view.cosY + z * view.sinY;
+        z1 = -x * view.sinY + z * view.cosY;
+        x = x1;
+        z = z1;
+
+        x1 = x * view.cosZ - y * view.sinZ;
+        y1 = x * view.sinZ + y * view.cosZ;
+
+        return { x: x1, y: y1, z };
+      }
+
+      function projectPoint(point, cx, cy, fov) {
+        const scale = fov / (fov + point.z);
+        return {
+          x: cx + point.x * scale,
+          y: cy + point.y * scale,
+          depth: point.z,
+        };
+      }
+
+      function buildCurvePoints(
+        plane,
+        cfg,
+        base,
+        resolution,
+        offset = { x: 0, y: 0, z: 0 },
+      ) {
+        const points = [];
+        const phi = toRad(cfg.phi); // phase φ
+        const rotation = toRad(cfg.rotation);
+        const cosR = Math.cos(rotation);
+        const sinR = Math.sin(rotation);
+
+        for (let i = 0; i <= resolution; i++) {
+          const t = (i / resolution) * Math.PI * 2;
+          // Parametric: a = sin(nx·t + φ), b = sin(ny·t)
+          const a = Math.sin(cfg.nx * t + phi) * base * cfg.scale;
+          const b = Math.sin(cfg.ny * t) * base * cfg.scale;
+
+          if (plane === "xy") {
+            const x = a * cosR - b * sinR;
+            const y = a * sinR + b * cosR;
+            points.push({ x: x + offset.x, y: y + offset.y, z: offset.z });
+          } else if (plane === "xz") {
+            const x = a * cosR - b * sinR;
+            const z = a * sinR + b * cosR;
+            points.push({ x: x + offset.x, y: offset.y, z: z + offset.z });
+          } else {
+            const y = a * cosR - b * sinR;
+            const z = a * sinR + b * cosR;
+            points.push({ x: offset.x, y: y + offset.y, z: z + offset.z });
+          }
+        }
+
+        return points;
+      }
+
+      function buildKnotPoints(xy, xz, yz) {
+        const blend = KNOT_PARAMS.knotBlend;
+        const points = [];
+        const count = Math.min(xy.length, xz.length, yz.length);
+        for (let i = 0; i < count; i++) {
+          const pxy = xy[i];
+          const pxz = xz[i];
+          const pyz = yz[i];
+          points.push({
+            x: lerp(pxy.x, pxz.x, blend),
+            y: lerp(pxy.y, pyz.y, blend),
+            z: lerp(pxz.z, pyz.z, blend),
+          });
+        }
+        return points;
+      }
+
+      function drawLine3D(p1, p2, color, width, view, cx, cy, fov) {
+        const a = projectPoint(applyView(p1, view), cx, cy, fov);
+        const b = projectPoint(applyView(p2, view), cx, cy, fov);
+        knotCtx.strokeStyle = color;
+        knotCtx.lineWidth = width;
+        knotCtx.beginPath();
+        knotCtx.moveTo(a.x, a.y);
+        knotCtx.lineTo(b.x, b.y);
+        knotCtx.stroke();
+      }
+
+      function drawCube(half, view, cx, cy, fov) {
+        if (KNOT_PARAMS.planeOpacity <= 0) return;
+        const color = `rgba(148, 163, 184, ${KNOT_PARAMS.planeOpacity})`;
+        const corners = [
+          { x: -half, y: -half, z: -half },
+          { x: half, y: -half, z: -half },
+          { x: half, y: half, z: -half },
+          { x: -half, y: half, z: -half },
+          { x: -half, y: -half, z: half },
+          { x: half, y: -half, z: half },
+          { x: half, y: half, z: half },
+          { x: -half, y: half, z: half },
+        ];
+        const edges = [
+          [0, 1],
+          [1, 2],
+          [2, 3],
+          [3, 0],
+          [4, 5],
+          [5, 6],
+          [6, 7],
+          [7, 4],
+          [0, 4],
+          [1, 5],
+          [2, 6],
+          [3, 7],
+        ];
+        edges.forEach(([a, b]) => {
+          drawLine3D(corners[a], corners[b], color, 1, view, cx, cy, fov);
+        });
+      }
+
+      function drawCurve(points, color, width, view, cx, cy, fov, alpha) {
+        knotCtx.strokeStyle = rgba(color, alpha);
+        knotCtx.lineWidth = width;
+        knotCtx.beginPath();
+        points.forEach((point, index) => {
+          const projected = projectPoint(applyView(point, view), cx, cy, fov);
+          if (index === 0) knotCtx.moveTo(projected.x, projected.y);
+          else knotCtx.lineTo(projected.x, projected.y);
+        });
+        knotCtx.stroke();
+      }
+
+      function drawKnot(points, base, view, cx, cy, fov) {
+        const rgb = hexToRgb(KNOT_PARAMS.knotColor);
+        const drawPass = (widthScale, alphaScale, lighten) => {
+          if (lighten) {
+            knotCtx.globalCompositeOperation = "lighter";
+          }
+          for (let i = 1; i < points.length; i++) {
+            const p0 = applyView(points[i - 1], view);
+            const p1 = applyView(points[i], view);
+            const depth =
+              clamp((p0.z + p1.z) / (2 * base * 1.2), -1, 1) * 0.5 + 0.5;
+            const width = KNOT_PARAMS.knotWidth * widthScale * (0.6 + depth);
+            const alpha =
+              KNOT_PARAMS.knotOpacity * alphaScale * (0.35 + depth * 0.65);
+
+            const a = projectPoint(p0, cx, cy, fov);
+            const b = projectPoint(p1, cx, cy, fov);
+            knotCtx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+            knotCtx.lineWidth = width;
+            knotCtx.beginPath();
+            knotCtx.moveTo(a.x, a.y);
+            knotCtx.lineTo(b.x, b.y);
+            knotCtx.stroke();
+          }
+          knotCtx.globalCompositeOperation = "source-over";
+        };
+
+        if (KNOT_PARAMS.knotGlow > 0.05) {
+          drawPass(1.8 + KNOT_PARAMS.knotGlow, 0.18, true);
+        }
+        drawPass(1, 1, false);
+      }
+
+      function drawKnotScene() {
+        if (!knotState.size) return;
+        const size = knotState.size;
+        const curveAmp = size * 0.26 * KNOT_PARAMS.radius;
+        const cubeHalf = curveAmp * 1.15;
+        const cx = size / 2;
+        const cy = size / 2;
+        const fov = size * KNOT_PARAMS.perspective;
+        const view = getViewCache();
+
+        knotCtx.setTransform(knotState.dpr, 0, 0, knotState.dpr, 0, 0);
+        knotCtx.lineJoin = "round";
+        knotCtx.lineCap = "round";
+        knotCtx.clearRect(0, 0, size, size);
+
+        // Use CSS background color
+        const computedStyle = getComputedStyle(document.documentElement);
+        const bgColor =
+          computedStyle.getPropertyValue("--bg-color").trim() || "#0b0f14";
+        knotCtx.fillStyle = bgColor;
+        knotCtx.fillRect(0, 0, size, size);
+
+        const faceOffset = {
+          xy: { x: 0, y: 0, z: cubeHalf },
+          xz: { x: 0, y: cubeHalf, z: 0 },
+          yz: { x: cubeHalf, y: 0, z: 0 },
+        };
+
+        const xyCore = buildCurvePoints(
+          "xy",
+          {
+            nx: KNOT_PARAMS.xyNx,
+            ny: KNOT_PARAMS.xyNy,
+            phi: KNOT_PARAMS.xyPhi,
+            rotation: KNOT_PARAMS.xyRotation,
+            scale: KNOT_PARAMS.xyScale,
+          },
+          curveAmp,
+          KNOT_PARAMS.resolution,
+        );
+
+        const xzCore = buildCurvePoints(
+          "xz",
+          {
+            nx: KNOT_PARAMS.xzNx,
+            ny: KNOT_PARAMS.xzNy,
+            phi: KNOT_PARAMS.xzPhi,
+            rotation: KNOT_PARAMS.xzRotation,
+            scale: KNOT_PARAMS.xzScale,
+          },
+          curveAmp,
+          KNOT_PARAMS.resolution,
+        );
+
+        const yzCore = buildCurvePoints(
+          "yz",
+          {
+            nx: KNOT_PARAMS.yzNx,
+            ny: KNOT_PARAMS.yzNy,
+            phi: KNOT_PARAMS.yzPhi,
+            rotation: KNOT_PARAMS.yzRotation,
+            scale: KNOT_PARAMS.yzScale,
+          },
+          curveAmp,
+          KNOT_PARAMS.resolution,
+        );
+
+        const xy = buildCurvePoints(
+          "xy",
+          {
+            nx: KNOT_PARAMS.xyNx,
+            ny: KNOT_PARAMS.xyNy,
+            phi: KNOT_PARAMS.xyPhi,
+            rotation: KNOT_PARAMS.xyRotation,
+            scale: KNOT_PARAMS.xyScale,
+          },
+          curveAmp,
+          KNOT_PARAMS.resolution,
+          faceOffset.xy,
+        );
+
+        const xz = buildCurvePoints(
+          "xz",
+          {
+            nx: KNOT_PARAMS.xzNx,
+            ny: KNOT_PARAMS.xzNy,
+            phi: KNOT_PARAMS.xzPhi,
+            rotation: KNOT_PARAMS.xzRotation,
+            scale: KNOT_PARAMS.xzScale,
+          },
+          curveAmp,
+          KNOT_PARAMS.resolution,
+          faceOffset.xz,
+        );
+
+        const yz = buildCurvePoints(
+          "yz",
+          {
+            nx: KNOT_PARAMS.yzNx,
+            ny: KNOT_PARAMS.yzNy,
+            phi: KNOT_PARAMS.yzPhi,
+            rotation: KNOT_PARAMS.yzRotation,
+            scale: KNOT_PARAMS.yzScale,
+          },
+          curveAmp,
+          KNOT_PARAMS.resolution,
+          faceOffset.yz,
+        );
+
+        if (KNOT_PARAMS.showXY || KNOT_PARAMS.showXZ || KNOT_PARAMS.showYZ) {
+          drawCube(cubeHalf, view, cx, cy, fov);
+        }
+
+        if (KNOT_PARAMS.showXY) {
+          drawCurve(
+            xy,
+            KNOT_PARAMS.xyColor,
+            KNOT_PARAMS.curveWidth,
+            view,
+            cx,
+            cy,
+            fov,
+            0.75,
+          );
+        }
+
+        if (KNOT_PARAMS.showXZ) {
+          drawCurve(
+            xz,
+            KNOT_PARAMS.xzColor,
+            KNOT_PARAMS.curveWidth,
+            view,
+            cx,
+            cy,
+            fov,
+            0.75,
+          );
+        }
+
+        if (KNOT_PARAMS.showYZ) {
+          drawCurve(
+            yz,
+            KNOT_PARAMS.yzColor,
+            KNOT_PARAMS.curveWidth,
+            view,
+            cx,
+            cy,
+            fov,
+            0.75,
+          );
+        }
+
+        if (KNOT_PARAMS.showKnot) {
+          const knot = buildKnotPoints(xyCore, xzCore, yzCore);
+          drawKnot(knot, curveAmp, view, cx, cy, fov);
+        }
+      }
+
+      function resizeKnotCanvas() {
+        const rect = knotStage.getBoundingClientRect();
+        const size = Math.min(rect.width, rect.height);
+        if (!size) return;
+        knotState.size = size;
+        knotState.dpr = window.devicePixelRatio || 1;
+        knotCanvas.width = size * knotState.dpr;
+        knotCanvas.height = size * knotState.dpr;
+        knotCanvas.style.width = `${size}px`;
+        knotCanvas.style.height = `${size}px`;
+      }
+
+      function resetKnotView() {
+        knotView.rotX = 0.55;
+        knotView.rotY = -0.6;
+        knotView.rotZ = 0;
+        drawKnotScene();
+      }
+
+      function setupKnotPanel() {
+        const tabs3d = pane3d.addTab({
+          pages: [{ title: "Curves" }, { title: "Knot" }, { title: "View" }],
+        });
+
+        const [tabCurves, tabKnot, tabView] = tabs3d.pages;
+
+        // XY Face controls
+        const fXY = tabCurves.addFolder({ title: "XY Face (Blue)" });
+        fXY
+          .addInput(KNOT_PARAMS, "xyNx", {
+            min: 1,
+            max: 12,
+            step: 1,
+            label: "nₓ (Freq X)",
+          })
+          .on("change", drawKnotScene);
+        fXY
+          .addInput(KNOT_PARAMS, "xyNy", {
+            min: 1,
+            max: 12,
+            step: 1,
+            label: "nᵧ (Freq Y)",
+          })
+          .on("change", drawKnotScene);
+        fXY
+          .addInput(KNOT_PARAMS, "xyPhi", {
+            min: 0,
+            max: 360,
+            label: "φ (Phase)°",
+          })
+          .on("change", drawKnotScene);
+        fXY
+          .addInput(KNOT_PARAMS, "xyRotation", {
+            min: 0,
+            max: 360,
+            label: "Rotation°",
+          })
+          .on("change", drawKnotScene);
+        fXY
+          .addInput(KNOT_PARAMS, "xyScale", {
+            min: 0.5,
+            max: 1.4,
+            label: "A (Scale)",
+          })
+          .on("change", drawKnotScene);
+        fXY
+          .addInput(KNOT_PARAMS, "xyColor", { label: "Color" })
+          .on("change", drawKnotScene);
+
+        // XZ Face controls
+        const fXZ = tabCurves.addFolder({ title: "XZ Face (Red)" });
+        fXZ
+          .addInput(KNOT_PARAMS, "xzNx", {
+            min: 1,
+            max: 12,
+            step: 1,
+            label: "nₓ (Freq X)",
+          })
+          .on("change", drawKnotScene);
+        fXZ
+          .addInput(KNOT_PARAMS, "xzNy", {
+            min: 1,
+            max: 12,
+            step: 1,
+            label: "nᵧ (Freq Z)",
+          })
+          .on("change", drawKnotScene);
+        fXZ
+          .addInput(KNOT_PARAMS, "xzPhi", {
+            min: 0,
+            max: 360,
+            label: "φ (Phase)°",
+          })
+          .on("change", drawKnotScene);
+        fXZ
+          .addInput(KNOT_PARAMS, "xzRotation", {
+            min: 0,
+            max: 360,
+            label: "Rotation°",
+          })
+          .on("change", drawKnotScene);
+        fXZ
+          .addInput(KNOT_PARAMS, "xzScale", {
+            min: 0.5,
+            max: 1.4,
+            label: "A (Scale)",
+          })
+          .on("change", drawKnotScene);
+        fXZ
+          .addInput(KNOT_PARAMS, "xzColor", { label: "Color" })
+          .on("change", drawKnotScene);
+
+        // YZ Face controls
+        const fYZ = tabCurves.addFolder({ title: "YZ Face (Purple)" });
+        fYZ
+          .addInput(KNOT_PARAMS, "yzNx", {
+            min: 1,
+            max: 12,
+            step: 1,
+            label: "nₓ (Freq Y)",
+          })
+          .on("change", drawKnotScene);
+        fYZ
+          .addInput(KNOT_PARAMS, "yzNy", {
+            min: 1,
+            max: 12,
+            step: 1,
+            label: "nᵧ (Freq Z)",
+          })
+          .on("change", drawKnotScene);
+        fYZ
+          .addInput(KNOT_PARAMS, "yzPhi", {
+            min: 0,
+            max: 360,
+            label: "φ (Phase)°",
+          })
+          .on("change", drawKnotScene);
+        fYZ
+          .addInput(KNOT_PARAMS, "yzRotation", {
+            min: 0,
+            max: 360,
+            label: "Rotation°",
+          })
+          .on("change", drawKnotScene);
+        fYZ
+          .addInput(KNOT_PARAMS, "yzScale", {
+            min: 0.5,
+            max: 1.4,
+            label: "A (Scale)",
+          })
+          .on("change", drawKnotScene);
+        fYZ
+          .addInput(KNOT_PARAMS, "yzColor", { label: "Color" })
+          .on("change", drawKnotScene);
+
+        // Knot controls
+        const fKnot = tabKnot.addFolder({ title: "Knot Appearance" });
+        fKnot
+          .addInput(KNOT_PARAMS, "knotBlend", {
+            min: 0,
+            max: 1,
+            label: "Blend",
+          })
+          .on("change", drawKnotScene);
+        fKnot
+          .addInput(KNOT_PARAMS, "knotWidth", {
+            min: 0.5,
+            max: 6,
+            label: "Width",
+          })
+          .on("change", drawKnotScene);
+        fKnot
+          .addInput(KNOT_PARAMS, "knotOpacity", {
+            min: 0.1,
+            max: 1,
+            label: "Opacity",
+          })
+          .on("change", drawKnotScene);
+        fKnot
+          .addInput(KNOT_PARAMS, "knotGlow", {
+            min: 0,
+            max: 1,
+            label: "Glow",
+          })
+          .on("change", drawKnotScene);
+        fKnot
+          .addInput(KNOT_PARAMS, "knotColor", { label: "Color" })
+          .on("change", drawKnotScene);
+
+        // Scene controls
+        const fScene = tabView.addFolder({ title: "Scene" });
+        fScene
+          .addInput(KNOT_PARAMS, "radius", {
+            min: 0.5,
+            max: 1.1,
+            label: "Size",
+          })
+          .on("change", drawKnotScene);
+        fScene
+          .addInput(KNOT_PARAMS, "perspective", {
+            min: 0.9,
+            max: 2.2,
+            label: "Perspective",
+          })
+          .on("change", drawKnotScene);
+        fScene
+          .addInput(KNOT_PARAMS, "resolution", {
+            min: 200,
+            max: 1400,
+            step: 50,
+            label: "Points",
+          })
+          .on("change", drawKnotScene);
+        fScene
+          .addInput(KNOT_PARAMS, "curveWidth", {
+            min: 0.5,
+            max: 4,
+            label: "Curve Width",
+          })
+          .on("change", drawKnotScene);
+        fScene
+          .addInput(KNOT_PARAMS, "planeOpacity", {
+            min: 0,
+            max: 0.6,
+            label: "Cube Opacity",
+          })
+          .on("change", drawKnotScene);
+
+        // Visibility controls
+        const fVis = tabView.addFolder({ title: "Visibility" });
+        fVis
+          .addInput(KNOT_PARAMS, "showKnot", { label: "Show Knot" })
+          .on("change", drawKnotScene);
+        fVis
+          .addInput(KNOT_PARAMS, "showXY", { label: "Show XY Face" })
+          .on("change", drawKnotScene);
+        fVis
+          .addInput(KNOT_PARAMS, "showXZ", { label: "Show XZ Face" })
+          .on("change", drawKnotScene);
+        fVis
+          .addInput(KNOT_PARAMS, "showYZ", { label: "Show YZ Face" })
+          .on("change", drawKnotScene);
+
+        const resetBtn = tabView.addButton({ title: "Reset Camera" });
+        resetBtn.on("click", () => {
+          resetKnotView();
+          pane3d.refresh();
+        });
+      }
+
+      function setupKnotInteractions() {
+        knotCanvas.addEventListener("pointerdown", (event) => {
+          knotState.dragging = true;
+          knotState.lastX = event.clientX;
+          knotState.lastY = event.clientY;
+          knotCanvas.setPointerCapture(event.pointerId);
+        });
+
+        knotCanvas.addEventListener("pointermove", (event) => {
+          if (!knotState.dragging) return;
+          const dx = event.clientX - knotState.lastX;
+          const dy = event.clientY - knotState.lastY;
+          knotState.lastX = event.clientX;
+          knotState.lastY = event.clientY;
+          knotView.rotY -= dx * 0.005;
+          knotView.rotX += dy * 0.005;
+          drawKnotScene();
+        });
+
+        const endDrag = (event) => {
+          if (!knotState.dragging) return;
+          knotState.dragging = false;
+          if (knotCanvas.hasPointerCapture(event.pointerId)) {
+            knotCanvas.releasePointerCapture(event.pointerId);
+          }
+        };
+
+        knotCanvas.addEventListener("pointerup", endDrag);
+        knotCanvas.addEventListener("pointerleave", endDrag);
+        knotCanvas.addEventListener("pointercancel", endDrag);
+
+        knotCanvas.addEventListener(
+          "wheel",
+          (event) => {
+            event.preventDefault();
+            const delta = event.deltaY > 0 ? -0.05 : 0.05;
+            KNOT_PARAMS.radius = clamp(KNOT_PARAMS.radius + delta, 0.45, 1.2);
+            pane3d.refresh();
+            drawKnotScene();
+          },
+          { passive: false },
+        );
+
+        document.addEventListener("keydown", (event) => {
+          if (!knotState.active) return;
+          if (event.key.toLowerCase() === "r") {
+            resetKnotView();
+          }
+        });
+
+        if ("ResizeObserver" in window) {
+          const observer = new ResizeObserver(() => {
+            resizeKnotCanvas();
+            drawKnotScene();
+          });
+          observer.observe(knotStage);
+        } else {
+          window.addEventListener("resize", () => {
+            resizeKnotCanvas();
+            drawKnotScene();
+          });
+        }
+      }
+
+      function setMode(mode) {
+        document.body.dataset.mode = mode;
+        modeButtons.forEach((btn) => {
+          const isActive = btn.dataset.mode === mode;
+          btn.classList.toggle("is-active", isActive);
+          btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+        });
+
+        knotState.active = mode === "3d";
+        pane.hidden = knotState.active;
+        pane3d.hidden = !knotState.active;
+        pane.element.style.display = knotState.active ? "none" : "block";
+        pane3d.element.style.display = knotState.active ? "block" : "none";
+        if (knotState.active) {
+          pane3d.refresh();
+          resizeKnotCanvas();
+          drawKnotScene();
+        } else {
+          pane.refresh();
+        }
+      }
+
+      function initKnotMode() {
+        setupKnotPanel();
+        setupKnotInteractions();
+        modeButtons.forEach((btn) => {
+          btn.addEventListener("click", () => setMode(btn.dataset.mode));
+        });
+      }
+
+      // Init
+      update();
+      initKnotMode();
+      setMode("2d");
+    </script>
+  </body>
+</html>

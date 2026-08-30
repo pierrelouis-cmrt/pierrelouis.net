@@ -1,0 +1,2804 @@
+<!doctype html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Avatar Emotion Playground</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --font-primary:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
+        --text-primary: hsl(0, 0%, 25%);
+        --text-secondary: hsl(0, 0%, 50%);
+        --bg-primary: hsl(0, 0%, 100%);
+        --bg-secondary: hsl(0, 0%, 98%);
+        --border: hsl(0, 0%, 91%);
+        --border-darker: hsl(0, 0%, 85%);
+        --active-color: hsl(0, 0%, 30%);
+        --font-size-small: 12px;
+        --font-size-regular: 14px;
+        --radius-regular: 8px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        outline: 0 !important;
+      }
+
+      body {
+        line-height: 1.6;
+        padding: 0;
+        margin: 0;
+        font-family: var(--font-primary);
+        font-size: var(--font-size-regular);
+        background: transparent;
+        color: var(--text-primary);
+      }
+
+      .avatar-container {
+        text-align: center;
+        padding: 40px;
+      }
+
+      .avatar-stage {
+        height: 144px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .avatar {
+        display: inline-block;
+        margin: 20px;
+        --display-scale: 0.75;
+        transform: scale(var(--display-scale));
+        transform-origin: center center;
+        will-change: transform, box-shadow;
+        backface-visibility: hidden;
+        perspective: 1000px;
+      }
+
+      .controls {
+        margin-top: 30px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .zoom-control {
+        margin-bottom: 30px;
+      }
+
+      .zoom-control label,
+      .section-label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: var(--font-size-small);
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .section-label {
+        margin-bottom: 16px;
+      }
+
+      .zoom-slider {
+        width: 200px;
+        height: 2px;
+        border-radius: 1px;
+        background: var(--border-darker);
+        border: none;
+        cursor: pointer;
+        -webkit-appearance: none;
+        appearance: none;
+        transition: background 0.2s ease;
+      }
+
+      .zoom-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--active-color);
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      @media (any-hover: hover) and (any-pointer: fine) {
+        .zoom-slider::-webkit-slider-thumb:hover {
+          transform: scale(1.1);
+        }
+      }
+
+      .zoom-slider::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--active-color);
+        cursor: pointer;
+        border: none;
+        transition: transform 0.2s ease;
+      }
+
+      .animation-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .button-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        max-width: 800px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        border-radius: var(--radius-regular);
+        font-family: var(--font-primary);
+        font-weight: 400;
+        transition: all 0.15s ease;
+        user-select: none;
+      }
+
+      .button.secondary {
+        border: 1px solid var(--border);
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+      }
+
+      @media (any-hover: hover) and (any-pointer: fine) {
+        .button.secondary:hover {
+          border-color: var(--border-darker);
+          background: var(--bg-primary);
+          transform: translateY(-1px);
+        }
+
+        .button.secondary:active {
+          transform: translateY(0);
+          background: var(--border);
+        }
+      }
+
+      .button.secondary.active:not(.random-btn) {
+        background: var(--active-color);
+        color: var(--bg-primary);
+        border-color: var(--active-color);
+      }
+
+      .button.small {
+        padding: 6px 12px;
+        font-size: var(--font-size-small);
+      }
+
+      .shuffle-icon {
+        flex-shrink: 0;
+      }
+
+      /* Returned character design, emotions, and keyframes */
+      /*
+AVATAR / EMOTION EDIT SPEC
+==========================
+
+This is NOT a website and does not need to run.
+Edit only the information below, then send this whole file back.
+It contains only what is needed to update the complete site:
+
+1. the little guy's design
+2. the emotion list
+3. each emotion's CSS / keyframes
+
+You can also write plain-English notes directly beside the code.
+
+--------------------------------------------------------------------
+CHANGELOG (this revision)
+--------------------------------------------------------------------
+- Design: glossy 3D head fill, glossy pupils, smooth tint transitions.
+- Default idle: real personality (glances, true blink, breathing).
+- Every emotion is now a multi-beat SEQUENCE, not a single loop gesture.
+- New anatomy tricks discovered (no DOM changes needed!):
+  * Blush     -> radial-gradient layers on .avatar background
+  * Tears     -> box-shadow droplet under the eye, animates welling
+                 up then FALLING (see .crying)
+  * Sweat     -> same trick, droplet at temple (see .nervous)
+  * Anger     -> elliptical pupils + rotate = slanted angry eyes,
+                 plus red fume in border/shadow/background
+  * Halo/glow -> outer box-shadow layer (zen, love, starstruck)
+  * Spinner   -> both eyes orbit 180deg apart = loading dots
+- 35 emotions total. Simple ones perfected, weird ones added:
+  sneeze, groove, mindblown, glitch, smug, curious, zen...
+- RULE for head keyframes: ALWAYS start transforms with
+  scale(var(--display-scale)) so the site's zoom keeps working.
+- Eye placement cheat sheet (keeps the pair centered like default):
+  size  8px -> top 42, left 42 & 74
+  size 12px -> top 40, left 40 & 72   (default)
+  size 14px -> top 39, left 39 & 71
+  size 16px -> top 38, left 38 & 70
+  size 18px -> top 37, left 37 & 69
+  size 20px -> top 36, left 36 & 68
+====================================================================
+*/
+
+      /* ====================================================================
+   1. LITTLE GUY DESIGN
+   ==================================================================== */
+
+      :root {
+        /* Overall head */
+        --avatar-size: 104px;
+        /* soft sphere shading: bright top-left, settling bottom-right.
+     instantly makes him feel lit and alive instead of flat */
+        --head-fill: radial-gradient(
+          circle at 34% 28%,
+          #ffffff 0%,
+          #f3f3f3 68%,
+          #e9e9e9 100%
+        );
+        --head-outline: #808080;
+        --head-outline-width: 4px;
+        --head-radius: 50%;
+        --head-shadow: inset 10px -10px 16px #808080;
+
+        /* Eyes */
+        --eye-color: #808080;
+        /* glossy pupil: lighter chip top-left like a catchlight */
+        --eye-fill: radial-gradient(
+          circle at 35% 30%,
+          #a3a3a3 0%,
+          #767676 55%,
+          #5f5f5f 100%
+        );
+        --eye-size: 12px;
+        --eye-top: 40px;
+        --eye-left: 40px;
+        --eye-gap: 32px;
+
+        /* shared cosmetics */
+        --blush: rgba(255, 158, 170, 0.6); /* cheek circles            */
+        --tear: rgba(150, 170, 200, 0.95); /* tears & nervous sweat    */
+        --rage: #c25b54; /* angry fume accents       */
+        --gold: rgba(255, 205, 110, 0.55); /* starstruck sparkle halo  */
+      }
+
+      .avatar {
+        width: var(--avatar-size);
+        height: var(--avatar-size);
+        position: relative;
+        border-radius: var(--head-radius);
+        background: var(--head-fill);
+        border: var(--head-outline-width) solid var(--head-outline);
+        box-shadow: var(--head-shadow);
+        /* lets blushes / tints / rages fade in and out gracefully
+     when the site swaps emotion classes */
+        transition:
+          background 0.6s ease,
+          border-color 0.45s ease;
+      }
+
+      .avatar::before,
+      .avatar::after {
+        content: "";
+        position: absolute;
+        top: var(--eye-top);
+        width: var(--eye-size);
+        height: var(--eye-size);
+        border-radius: 50%;
+        background: var(--eye-fill);
+        will-change: transform;
+      }
+
+      .avatar::before {
+        left: var(--eye-left);
+      }
+      .avatar::after {
+        left: calc(var(--eye-left) + var(--eye-gap));
+      }
+
+      /* ====================================================================
+   2. EMOTION LIST
+   Add, remove, rename, or reorder entries.
+   The id should match the CSS class: id "sleepy" = .avatar.sleepy
+   ==================================================================== */
+
+      /* ====================================================================
+   3. EMOTION APPEARANCE + KEYFRAMES
+   Edit eye size, eye position, timing, movement, head movement, etc.
+   Stage directions included. He takes his craft seriously.
+   ==================================================================== */
+
+      /* ------------------------------------------------------------------
+   DEFAULT — the alive idle.
+   Wanders a glance right, then left, ONE honest blink, looks down
+   at his shoes, comes back. Head light slowly orbits. He breathes.
+------------------------------------------------------------------ */
+      @keyframes head-rotation {
+        0%,
+        30%,
+        65%,
+        100% {
+          box-shadow: inset 10px -10px 16px var(--head-outline);
+        }
+        20% {
+          box-shadow: inset 18px -10px 16px var(--head-outline);
+        }
+        55% {
+          box-shadow: inset 18px 6px 16px var(--head-outline);
+        }
+        82% {
+          box-shadow: inset 4px -14px 16px var(--head-outline);
+        }
+      }
+
+      @keyframes eye-movement {
+        0%,
+        100% {
+          transform: translate(0, 0) scaleY(1);
+        }
+        8%,
+        16% {
+          transform: translate(6px, -1px) scaleY(1);
+        } /* casual glance right */
+        24% {
+          transform: translate(0, 0) scaleY(1);
+        }
+        38%,
+        46% {
+          transform: translate(-6px, 1px) scaleY(1);
+        } /* drift left */
+        54% {
+          transform: translate(0, 0) scaleY(1);
+        }
+        57%,
+        59% {
+          transform: translate(0, 1px) scaleY(0.08);
+        } /* one honest blink */
+        62% {
+          transform: translate(0, 0) scaleY(1);
+        }
+        78%,
+        84% {
+          transform: translate(0, 4px) scaleY(1);
+        } /* ponder shoelaces */
+        92% {
+          transform: translate(0, 0) scaleY(1);
+        }
+      }
+
+      @keyframes idle-breathe {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(0);
+        }
+        50% {
+          transform: scale(var(--display-scale)) translateY(-2px);
+        }
+      }
+
+      .avatar.default::before,
+      .avatar.default::after {
+        animation: eye-movement 9s infinite ease-in-out;
+      }
+      .avatar.default {
+        animation:
+          head-rotation 8s infinite ease,
+          idle-breathe 5s infinite ease-in-out;
+      }
+
+      /* ------------------------------------------------------------------
+   BLINK — the perfected simple one.
+   Quick close, soft reopen... and every loop, a shy DOUBLE blink,
+   like something got in his eye. Lids dip 1px as they meet.
+------------------------------------------------------------------ */
+      .avatar.blink::before,
+      .avatar.blink::after {
+        animation: simple-blink 4.2s infinite ease-in-out;
+      }
+
+      @keyframes simple-blink {
+        0%,
+        40%,
+        48%,
+        76%,
+        83%,
+        90%,
+        100% {
+          transform: translateY(0) scaleY(1);
+        }
+        42%,
+        45% {
+          transform: translateY(1px) scaleY(0.06);
+        } /* blink */
+        78%,
+        80% {
+          transform: translateY(1px) scaleY(0.06);
+        } /* double-blink: one... */
+        85%,
+        87% {
+          transform: translateY(1px) scaleY(0.06);
+        } /* ...two */
+      }
+
+      /* ------------------------------------------------------------------
+   WINK — big theatrical wink, held long enough to be a conspiracy.
+   The other eye joins with a sympathy squint. Head tips in, then
+   bounces back like "you saw that, right?"
+------------------------------------------------------------------ */
+      .avatar.wink::before {
+        animation: wink-left 3.6s infinite ease-in-out;
+      }
+      .avatar.wink::after {
+        animation: wink-right 3.6s infinite ease-in-out;
+      }
+      .avatar.wink {
+        animation:
+          head-rotation 8s infinite ease,
+          wink-head 3.6s infinite ease-in-out;
+      }
+
+      @keyframes wink-left {
+        0%,
+        22%,
+        62%,
+        100% {
+          transform: scaleY(1);
+        }
+        27%,
+        55% {
+          transform: translateY(1px) scaleY(0.06);
+        } /* hold the wink */
+        59% {
+          transform: scaleY(0.45);
+        } /* lazy reopen */
+      }
+      @keyframes wink-right {
+        0%,
+        22%,
+        62%,
+        100% {
+          transform: scaleY(1);
+        }
+        30%,
+        52% {
+          transform: scaleY(0.55);
+        } /* sympathy squint */
+      }
+      @keyframes wink-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+        25% {
+          transform: scale(var(--display-scale)) rotate(-3deg) translateY(1px);
+        }
+        55% {
+          transform: scale(var(--display-scale)) rotate(-4deg) translateY(1px);
+        }
+        70% {
+          transform: scale(var(--display-scale)) rotate(1deg) translateY(-1px);
+        }
+        82% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   HAPPY — bouncy squint-arcs. Every few beats he opens wide with
+   delight ("yay!") then goes right back to giggling.
+------------------------------------------------------------------ */
+      .avatar.happy::before,
+      .avatar.happy::after {
+        animation: happy-eyes 4.2s infinite ease-in-out;
+      }
+      .avatar.happy {
+        animation:
+          head-rotation 8s infinite ease,
+          happy-bounce 1.05s infinite ease-in-out;
+      }
+
+      @keyframes happy-eyes {
+        0%,
+        100% {
+          transform: translateY(2px) scale(1.1, 0.3);
+        }
+        10% {
+          transform: translateY(-2px) scale(1.15, 0.22);
+        }
+        20% {
+          transform: translateY(2px) scale(1.1, 0.3);
+        }
+        30% {
+          transform: translateY(-2px) scale(1.15, 0.22);
+        }
+        40% {
+          transform: translateY(2px) scale(1.1, 0.3);
+        }
+        55%,
+        70% {
+          transform: translateY(0) scale(1.15, 1.05);
+        } /* delighted "YAY" */
+        80% {
+          transform: translateY(2px) scale(1.1, 0.3);
+        }
+        90% {
+          transform: translateY(-2px) scale(1.15, 0.22);
+        }
+      }
+      @keyframes happy-bounce {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+        25% {
+          transform: scale(var(--display-scale)) translateY(-3px) rotate(2deg);
+        }
+        50% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+        75% {
+          transform: scale(var(--display-scale)) translateY(-3px) rotate(-2deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   LAUGHING — eyes squeezed to slits, whole head rocking.
+   He heard the joke 10 seconds ago and it's getting WORSE.
+------------------------------------------------------------------ */
+      .avatar.laughing::before,
+      .avatar.laughing::after {
+        animation: laugh-squeeze 0.5s infinite ease-in-out;
+      }
+      .avatar.laughing {
+        animation:
+          head-rotation 8s infinite ease,
+          laugh-rock 0.55s infinite ease-in-out;
+      }
+
+      @keyframes laugh-squeeze {
+        0%,
+        100% {
+          transform: translateY(2px) scale(1.2, 0.1);
+        }
+        50% {
+          transform: translateY(0) scale(1.25, 0.16);
+        }
+      }
+      @keyframes laugh-rock {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(-4deg) translateY(1px);
+        }
+        50% {
+          transform: scale(var(--display-scale)) rotate(4deg) translateY(-2px);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   IN LOVE — blush cheeks, dreamy half-lids, floating like a balloon.
+   The shadow literally heartbeats: lub-dub... lub-dub...
+------------------------------------------------------------------ */
+      .avatar.love {
+        background:
+          radial-gradient(
+            circle at 26% 68%,
+            var(--blush) 0 8px,
+            rgba(255, 158, 170, 0) 9px
+          ),
+          radial-gradient(
+            circle at 76% 68%,
+            var(--blush) 0 8px,
+            rgba(255, 158, 170, 0) 9px
+          ),
+          var(--head-fill);
+        animation:
+          head-rotation 8s infinite ease,
+          love-float 5s infinite ease-in-out,
+          love-beat 2.2s infinite ease-out;
+      }
+      .avatar.love::before,
+      .avatar.love::after {
+        animation: love-eyes 4.5s infinite ease-in-out;
+      }
+
+      @keyframes love-eyes {
+        0%,
+        100% {
+          transform: translateY(1px) scale(1.05, 0.7);
+        }
+        42%,
+        52% {
+          transform: translateY(2px) scale(1.05, 0.12);
+        } /* slow adoring blink */
+        70% {
+          transform: translateY(-1px) scale(1.05, 0.85);
+        } /* gaze drifts up */
+        85% {
+          transform: translateY(1px) scale(1.05, 0.7);
+        }
+      }
+      @keyframes love-float {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+        25% {
+          transform: scale(var(--display-scale)) translateY(-4px) rotate(2deg);
+        }
+        50% {
+          transform: scale(var(--display-scale)) translateY(-2px) rotate(0deg);
+        }
+        75% {
+          transform: scale(var(--display-scale)) translateY(-4px) rotate(-2deg);
+        }
+      }
+      @keyframes love-beat {
+        0%,
+        48%,
+        100% {
+          box-shadow:
+            inset 10px -10px 16px var(--head-outline),
+            0 0 0 rgba(255, 158, 170, 0);
+        }
+        12% {
+          box-shadow:
+            inset 10px -10px 16px var(--head-outline),
+            0 0 16px rgba(255, 158, 170, 0.45);
+        } /* lub */
+        22% {
+          box-shadow:
+            inset 10px -10px 16px var(--head-outline),
+            0 0 5px rgba(255, 158, 170, 0.18);
+        }
+        32% {
+          box-shadow:
+            inset 10px -10px 16px var(--head-outline),
+            0 0 22px rgba(255, 158, 170, 0.5);
+        } /* dub */
+      }
+
+      /* ------------------------------------------------------------------
+   SHY — heavy blush. Looks up for ONE second, panics, looks away,
+   squeezes eyes shut ("I can't look!"), then peeks back anyway.
+------------------------------------------------------------------ */
+      .avatar.shy {
+        background:
+          radial-gradient(
+            circle at 24% 68%,
+            rgba(255, 158, 170, 0.7) 0 9px,
+            rgba(255, 158, 170, 0) 10px
+          ),
+          radial-gradient(
+            circle at 78% 68%,
+            rgba(255, 158, 170, 0.7) 0 9px,
+            rgba(255, 158, 170, 0) 10px
+          ),
+          linear-gradient(rgba(255, 170, 180, 0.12), rgba(255, 170, 180, 0.12)),
+          var(--head-fill);
+        animation:
+          head-rotation 8s infinite ease,
+          shy-fidget 6s infinite ease-in-out;
+      }
+      .avatar.shy::before {
+        animation: shy-eyes 6s infinite ease-in-out;
+      }
+      .avatar.shy::after {
+        animation: shy-eyes 6s infinite ease-in-out 0.15s;
+      }
+
+      @keyframes shy-eyes {
+        0%,
+        100% {
+          transform: translate(-4px, 4px) scaleY(0.8);
+        }
+        15% {
+          transform: translate(0, -1px) scaleY(1);
+        } /* brave glance up */
+        25% {
+          transform: translate(-5px, 5px) scaleY(0.7);
+        } /* ABORT. away! */
+        50%,
+        57% {
+          transform: translate(-4px, 5px) scaleY(0.08);
+        } /* flustered squeeze */
+        70% {
+          transform: translate(-4px, 4px) scaleY(0.85);
+        }
+        85% {
+          transform: translate(-2px, 2px) scaleY(0.9);
+        } /* ...peeking back */
+      }
+      @keyframes shy-fidget {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+        20% {
+          transform: scale(var(--display-scale)) rotate(-2deg) translateY(0);
+        }
+        40% {
+          transform: scale(var(--display-scale)) rotate(2deg) translateY(1px);
+        }
+        60% {
+          transform: scale(var(--display-scale)) rotate(-1deg) translateY(0);
+        }
+        80% {
+          transform: scale(var(--display-scale)) rotate(1deg) translateY(-1px);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   SAD — gaze sinks, head sinks with it. One heavy blink.
+   A tiny two-wiggle sniffle near the end. Cool blue-grey wash.
+------------------------------------------------------------------ */
+      .avatar.sad {
+        background:
+          linear-gradient(rgba(140, 160, 200, 0.14), rgba(140, 160, 200, 0.14)),
+          var(--head-fill);
+        animation:
+          head-rotation 8s infinite ease,
+          sad-head 7s infinite ease-in-out;
+      }
+      .avatar.sad::before,
+      .avatar.sad::after {
+        animation: sad-eyes 7s infinite ease-in-out;
+      }
+
+      @keyframes sad-eyes {
+        0%,
+        100% {
+          transform: translate(0, 4px) scaleY(0.72);
+        }
+        30% {
+          transform: translate(-3px, 5px) scaleY(0.68);
+        }
+        55%,
+        61% {
+          transform: translate(0, 4px) scaleY(0.1);
+        } /* heavy blink */
+        75% {
+          transform: translate(2px, 5px) scaleY(0.7);
+        }
+      }
+      @keyframes sad-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(2px) rotate(0deg);
+        }
+        45% {
+          transform: scale(var(--display-scale)) translateY(5px) rotate(-1.5deg);
+        } /* sinking */
+        70% {
+          transform: scale(var(--display-scale)) translateY(4px) rotate(0deg);
+        }
+        72% {
+          transform: scale(var(--display-scale)) translateY(4px) rotate(1deg);
+        } /* sniff- */
+        74% {
+          transform: scale(var(--display-scale)) translateY(4px) rotate(-1deg);
+        } /* -fle */
+        76% {
+          transform: scale(var(--display-scale)) translateY(4px) rotate(0deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   CRYING — the showpiece. Eyes squeeze and tremble with the sobs...
+   and TEARS: a box-shadow droplet wells up under each eye, then
+   slides down and fades. Left tear, then right tear, forever.
+------------------------------------------------------------------ */
+      .avatar.crying {
+        background:
+          linear-gradient(rgba(140, 160, 200, 0.18), rgba(140, 160, 200, 0.18)),
+          var(--head-fill);
+        animation:
+          head-rotation 8s infinite ease,
+          cry-sob 2.4s infinite ease-in-out;
+      }
+      .avatar.crying::before {
+        animation:
+          cry-eyes 2.4s infinite ease-in-out,
+          tear-left 4.8s infinite ease-in;
+      }
+      .avatar.crying::after {
+        animation:
+          cry-eyes 2.4s infinite ease-in-out,
+          tear-right 4.8s infinite ease-in 2.4s;
+      }
+
+      @keyframes cry-eyes {
+        0%,
+        100% {
+          transform: translate(0, 3px) scale(1.05, 0.14);
+        }
+        15% {
+          transform: translate(1px, 3px) scale(1.05, 0.1);
+        }
+        30% {
+          transform: translate(-1px, 4px) scale(1.05, 0.12);
+        }
+        45% {
+          transform: translate(0, 4px) scale(1.1, 0.26);
+        } /* sob gasp */
+        60% {
+          transform: translate(1px, 3px) scale(1.05, 0.1);
+        }
+        75% {
+          transform: translate(-1px, 3px) scale(1.05, 0.14);
+        }
+      }
+      /* a tear is born, wells up, FALLS, fades. box-shadow is the tear. */
+      @keyframes tear-left {
+        0%,
+        10% {
+          box-shadow: 0 6px 0 -3px rgba(150, 170, 200, 0);
+        }
+        30% {
+          box-shadow: 0 8px 0 -3px var(--tear);
+        } /* welling up */
+        45%,
+        100% {
+          box-shadow: 0 20px 0 -4px rgba(150, 170, 200, 0);
+        } /* down the cheek */
+      }
+      @keyframes tear-right {
+        0%,
+        10% {
+          box-shadow: 0 6px 0 -3px rgba(150, 170, 200, 0);
+        }
+        30% {
+          box-shadow: 0 8px 0 -3px var(--tear);
+        }
+        45%,
+        100% {
+          box-shadow: 0 20px 0 -4px rgba(150, 170, 200, 0);
+        }
+      }
+      @keyframes cry-sob {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+        20% {
+          transform: scale(var(--display-scale)) translateY(2px) rotate(-1deg);
+        }
+        40% {
+          transform: scale(var(--display-scale)) translateY(-1px) rotate(1deg);
+        }
+        45% {
+          transform: scale(var(--display-scale)) translateY(3px) rotate(0deg);
+        } /* the heave */
+        60% {
+          transform: scale(var(--display-scale)) translateY(1px) rotate(-1deg);
+        }
+        80% {
+          transform: scale(var(--display-scale)) translateY(2px) rotate(1deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   ANGRY — TECHNIQUE: squash the pupils into ellipses, then ROTATE
+   them -> slanted furious eyes. Trembling. Border and shadow fume
+   red, heat rises across the forehead. He is THIS close.
+------------------------------------------------------------------ */
+      .avatar.angry {
+        background:
+          radial-gradient(
+            circle at 50% -10%,
+            rgba(214, 90, 72, 0.35) 0 45px,
+            rgba(214, 90, 72, 0) 60px
+          ),
+          var(--head-fill);
+        animation:
+          angry-shake 0.36s infinite ease-in-out,
+          angry-fume 3s infinite ease-in-out;
+      }
+      .avatar.angry::before {
+        animation: angry-left 0.8s infinite ease-in-out;
+      }
+      .avatar.angry::after {
+        animation: angry-right 0.8s infinite ease-in-out;
+      }
+
+      @keyframes angry-left {
+        0%,
+        100% {
+          transform: scale(1.3, 0.3) rotate(12deg) translate(0, 2px);
+        }
+        50% {
+          transform: scale(1.35, 0.24) rotate(14deg) translate(1px, 3px);
+        }
+      }
+      @keyframes angry-right {
+        0%,
+        100% {
+          transform: scale(1.3, 0.3) rotate(-12deg) translate(0, 2px);
+        }
+        50% {
+          transform: scale(1.35, 0.24) rotate(-14deg) translate(-1px, 3px);
+        }
+      }
+      @keyframes angry-shake {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translate(0, 0) rotate(0deg);
+        }
+        25% {
+          transform: scale(var(--display-scale)) translate(1px, 0)
+            rotate(0.5deg);
+        }
+        75% {
+          transform: scale(var(--display-scale)) translate(-1px, 0)
+            rotate(-0.5deg);
+        }
+      }
+      @keyframes angry-fume {
+        0%,
+        100% {
+          box-shadow: inset 12px -12px 18px var(--head-outline);
+          border-color: var(--head-outline);
+        }
+        50% {
+          box-shadow: inset 16px -16px 24px var(--rage);
+          border-color: var(--rage);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   SCARED — wide eyes vibrating, constant shiver... and once per
+   loop, a FLINCH: he ducks small, then slowly un-ducks. Pale wash.
+------------------------------------------------------------------ */
+      .avatar.scared {
+        background:
+          linear-gradient(rgba(200, 210, 230, 0.16), rgba(200, 210, 230, 0.16)),
+          var(--head-fill);
+        animation:
+          head-rotation 8s infinite ease,
+          scared-head 5s infinite ease-in-out;
+      }
+      .avatar.scared::before,
+      .avatar.scared::after {
+        width: 16px;
+        height: 16px;
+        top: 38px;
+        animation: scared-tremble 0.22s infinite ease-in-out;
+      }
+      .avatar.scared::before {
+        left: 38px;
+      }
+      .avatar.scared::after {
+        left: 70px;
+      }
+
+      @keyframes scared-tremble {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1.1);
+        }
+        25% {
+          transform: translate(1px, -1px) scale(1.1);
+        }
+        50% {
+          transform: translate(-1px, 1px) scale(1.1);
+        }
+        75% {
+          transform: translate(1px, 1px) scale(1.1);
+        }
+      }
+      @keyframes scared-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+        10% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0.8deg);
+        }
+        20% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(-0.8deg);
+        }
+        30% {
+          transform: scale(var(--display-scale)) translateY(0.5px)
+            rotate(0.8deg);
+        }
+        40% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(-0.8deg);
+        }
+        50% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0.5deg);
+        }
+        60% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(-0.5deg);
+        }
+        70% {
+          transform: scale(calc(var(--display-scale) * 0.95)) translateY(3px)
+            rotate(-2deg);
+        } /* FLINCH */
+        78% {
+          transform: scale(calc(var(--display-scale) * 0.96)) translateY(2px)
+            rotate(1deg);
+        }
+        88% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   NERVOUS — eyes ping-pong around the room, one guilty blink...
+   and a SWEAT DROP (box-shadow bead) swells at his temple and
+   slides off. Left eye leads, right eye is always 0.1s behind.
+------------------------------------------------------------------ */
+      .avatar.nervous::before {
+        animation: nervous-dart 2.2s infinite ease-in-out;
+      }
+      .avatar.nervous::after {
+        animation:
+          nervous-dart 2.2s infinite ease-in-out 0.1s,
+          nervous-sweat 2.2s infinite ease-in;
+      }
+      .avatar.nervous {
+        animation:
+          head-rotation 8s infinite ease,
+          nervous-fidget 1.1s infinite ease-in-out;
+      }
+
+      @keyframes nervous-dart {
+        0%,
+        100% {
+          transform: translate(0, 0) scaleY(1);
+        }
+        12% {
+          transform: translate(5px, -1px) scaleY(1);
+        }
+        22% {
+          transform: translate(5px, 0) scaleY(1);
+        }
+        32% {
+          transform: translate(-5px, 0) scaleY(1);
+        }
+        42% {
+          transform: translate(-5px, 1px) scaleY(1);
+        }
+        50% {
+          transform: translate(0, 0) scaleY(1);
+        }
+        54%,
+        58% {
+          transform: translate(0, 0) scaleY(0.08);
+        } /* guilty blink */
+        72% {
+          transform: translate(3px, -2px) scaleY(1);
+        }
+        86% {
+          transform: translate(-3px, 2px) scaleY(1);
+        }
+      }
+      @keyframes nervous-sweat {
+        0%,
+        45% {
+          box-shadow: 10px -4px 0 -4px rgba(150, 170, 200, 0);
+        }
+        55% {
+          box-shadow: 12px -2px 0 -4px var(--tear);
+        } /* bead forms */
+        80%,
+        100% {
+          box-shadow: 13px 10px 0 -4px rgba(150, 170, 200, 0);
+        } /* slides off */
+      }
+      @keyframes nervous-fidget {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(0deg);
+        }
+        25% {
+          transform: scale(var(--display-scale)) rotate(1.5deg);
+        }
+        75% {
+          transform: scale(var(--display-scale)) rotate(-1.5deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   SUSPICIOUS — hard side-eye. Holds it. Squints HARDER.
+   Quick check the other way. Blinks without ever trusting you.
+------------------------------------------------------------------ */
+      .avatar.suspicious::before,
+      .avatar.suspicious::after {
+        animation: susp-eyes 5.5s infinite ease-in-out;
+      }
+      .avatar.suspicious {
+        animation:
+          head-rotation 8s infinite ease,
+          susp-head 5.5s infinite ease-in-out;
+      }
+
+      @keyframes susp-eyes {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1.12, 0.55);
+        }
+        15%,
+        40% {
+          transform: translate(-7px, 0) scale(1.12, 0.45);
+        } /* the side-eye */
+        48% {
+          transform: translate(-7px, 0) scale(1.15, 0.28);
+        } /* squint HARDER */
+        56% {
+          transform: translate(6px, 0) scale(1.12, 0.5);
+        } /* quick check right */
+        64% {
+          transform: translate(0, 0) scale(1.12, 0.55);
+        }
+        72%,
+        75% {
+          transform: translate(0, 0) scale(1.12, 0.06);
+        } /* untrusting blink */
+        82% {
+          transform: translate(0, 0) scale(1.12, 0.55);
+        }
+      }
+      @keyframes susp-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+        20%,
+        45% {
+          transform: scale(var(--display-scale)) rotate(-2.5deg) translateY(1px);
+        } /* leans into it */
+        60% {
+          transform: scale(var(--display-scale)) rotate(1deg) translateY(0);
+        }
+        80% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   CONFUSED — full head tilt. One eye wide and searching, the other
+   squinting in disbelief. They blink at DIFFERENT times. Rude.
+------------------------------------------------------------------ */
+      .avatar.confused::before {
+        animation: conf-left 6.5s infinite ease-in-out;
+      }
+      .avatar.confused::after {
+        animation: conf-right 6.5s infinite ease-in-out;
+      }
+      .avatar.confused {
+        animation:
+          head-rotation 8s infinite ease,
+          conf-head 6.5s infinite ease-in-out;
+      }
+
+      @keyframes conf-left {
+        0%,
+        100% {
+          transform: translate(0, 0) scaleY(1);
+        }
+        35%,
+        60% {
+          transform: translate(-2px, -3px) scaleY(1.15);
+        }
+        68%,
+        72% {
+          transform: translate(-2px, -3px) scaleY(0.1);
+        }
+        80% {
+          transform: translate(0, 0) scaleY(1);
+        }
+      }
+      @keyframes conf-right {
+        0%,
+        100% {
+          transform: translate(0, 1px) scaleY(0.55);
+        }
+        35% {
+          transform: translate(2px, 2px) scaleY(0.4);
+        }
+        55% {
+          transform: translate(2px, 1px) scaleY(0.6);
+        }
+        75% {
+          transform: translate(0, 1px) scaleY(0.55);
+        }
+      }
+      @keyframes conf-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+        25%,
+        55% {
+          transform: scale(var(--display-scale)) rotate(8deg) translateY(1px);
+        }
+        62% {
+          transform: scale(var(--display-scale)) rotate(6deg) translateY(1px);
+        }
+        70% {
+          transform: scale(var(--display-scale)) rotate(9deg) translateY(1px);
+        }
+        78% {
+          transform: scale(var(--display-scale)) rotate(7deg) translateY(1px);
+        }
+        88% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   SURPRISED — the pop, the recoil, the held tremble... then one
+   little blink as his brain reboots. Classic, but with timing.
+------------------------------------------------------------------ */
+      .avatar.surprised::before,
+      .avatar.surprised::after {
+        width: 18px;
+        height: 18px;
+        top: 37px;
+        animation: surp-eyes 3.2s infinite ease-out;
+      }
+      .avatar.surprised::before {
+        left: 37px;
+      }
+      .avatar.surprised::after {
+        left: 69px;
+      }
+      .avatar.surprised {
+        animation:
+          head-rotation 8s infinite ease,
+          surp-head 3.2s infinite ease-out;
+      }
+
+      @keyframes surp-eyes {
+        0% {
+          transform: scale(0.65);
+        }
+        6% {
+          transform: scale(1.28);
+        } /* POP */
+        12% {
+          transform: scale(1.02);
+        }
+        50%,
+        54% {
+          transform: scale(1.03);
+        } /* held, vibrating slightly */
+        70%,
+        74% {
+          transform: scale(1, 0.08);
+        } /* reboot blink */
+        82%,
+        100% {
+          transform: scale(1);
+        }
+      }
+      @keyframes surp-head {
+        0% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+        6% {
+          transform: scale(calc(var(--display-scale) * 0.95)) translateY(-3px)
+            rotate(-1deg);
+        } /* recoil! */
+        14% {
+          transform: scale(calc(var(--display-scale) * 1.03)) translateY(1px)
+            rotate(0deg);
+        }
+        22%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   THINKING — drifts up and right, squints at the idea, pokes it
+   mentally... then AHA: eyes flash wide, one firm nod.
+------------------------------------------------------------------ */
+      .avatar.thinking::before {
+        animation: think-eyes 6s infinite ease-in-out;
+      }
+      .avatar.thinking::after {
+        animation: think-eyes 6s infinite ease-in-out 0.4s;
+      }
+      .avatar.thinking {
+        animation:
+          head-rotation 8s infinite ease,
+          think-head 6s infinite ease-in-out;
+      }
+
+      @keyframes think-eyes {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        15%,
+        30% {
+          transform: translate(4px, -6px) scale(1);
+        }
+        38% {
+          transform: translate(4px, -6px) scale(1, 0.55);
+        } /* pondering squint */
+        46% {
+          transform: translate(5px, -5px) scale(1);
+        }
+        54% {
+          transform: translate(1px, -6px) scale(1, 0.8);
+        }
+        62% {
+          transform: translate(0, -2px) scale(1);
+        }
+        68% {
+          transform: translate(0, -2px) scale(1.3);
+        } /* AHA */
+        76% {
+          transform: translate(0, -1px) scale(1.1);
+        }
+        84% {
+          transform: translate(0, 0) scale(1);
+        }
+      }
+      @keyframes think-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+        20%,
+        50% {
+          transform: scale(var(--display-scale)) rotate(3deg) translateY(-1px);
+        }
+        68% {
+          transform: scale(var(--display-scale)) rotate(-1deg) translateY(0);
+        }
+        74% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(1.5px);
+        } /* nod */
+        80% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   CURIOUS — the puppy. Big eyes, big tilt one way... blink... big
+   tilt the other way. He has never seen anything before, ever.
+------------------------------------------------------------------ */
+      .avatar.curious::before,
+      .avatar.curious::after {
+        width: 14px;
+        height: 14px;
+        top: 39px;
+        animation: cur-eyes 5s infinite ease-in-out;
+      }
+      .avatar.curious::before {
+        left: 39px;
+      }
+      .avatar.curious::after {
+        left: 71px;
+      }
+      .avatar.curious {
+        animation:
+          head-rotation 8s infinite ease,
+          cur-head 5s infinite ease-in-out;
+      }
+
+      @keyframes cur-eyes {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1.15);
+        }
+        15%,
+        38% {
+          transform: translate(5px, -1px) scale(1.2);
+        }
+        47% {
+          transform: translate(0, 0) scale(1.15, 0.1);
+        } /* blink mid-swing */
+        53% {
+          transform: translate(0, 0) scale(1.15);
+        }
+        60%,
+        83% {
+          transform: translate(-5px, -1px) scale(1.2);
+        }
+      }
+      @keyframes cur-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+        15%,
+        38% {
+          transform: scale(var(--display-scale)) rotate(9deg) translateY(-1px);
+        }
+        50% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+        60%,
+        83% {
+          transform: scale(var(--display-scale)) rotate(-9deg) translateY(-1px);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   EXCITED — cannot. sit. still. Hopping, sparkling, looking at
+   everything at once. Eyes flash big on every bounce.
+------------------------------------------------------------------ */
+      .avatar.excited::before,
+      .avatar.excited::after {
+        width: 14px;
+        height: 14px;
+        top: 39px;
+        animation: excite-eyes 1s infinite ease-in-out;
+      }
+      .avatar.excited::before {
+        left: 39px;
+      }
+      .avatar.excited::after {
+        left: 71px;
+      }
+      .avatar.excited {
+        animation:
+          head-rotation 8s infinite ease,
+          excite-hop 0.8s infinite ease-in-out;
+      }
+
+      @keyframes excite-eyes {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1.1);
+        }
+        20% {
+          transform: translate(2px, -2px) scale(1.35);
+        }
+        40% {
+          transform: translate(-2px, 0) scale(1.1);
+        }
+        60% {
+          transform: translate(1px, -3px) scale(1.3);
+        }
+        80% {
+          transform: translate(0, 0) scale(1.15);
+        }
+      }
+      @keyframes excite-hop {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+        30% {
+          transform: scale(var(--display-scale)) translateY(-4px) rotate(2deg);
+        }
+        55% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+        75% {
+          transform: scale(var(--display-scale)) translateY(-2px) rotate(-2deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   BORED — lids at half mast. Gaze slides around the room like a
+   screensaver. One blink so slow it qualifies as a nap. The head
+   sags... and catches itself. sigh.
+------------------------------------------------------------------ */
+      .avatar.bored::before,
+      .avatar.bored::after {
+        animation: bored-eyes 7s infinite ease-in-out;
+      }
+      .avatar.bored {
+        animation:
+          head-rotation 8s infinite ease,
+          bored-head 7s infinite ease-in-out;
+      }
+
+      @keyframes bored-eyes {
+        0%,
+        100% {
+          transform: translate(0, 2px) scaleY(0.55);
+        }
+        25% {
+          transform: translate(3px, 3px) scaleY(0.5);
+        }
+        45% {
+          transform: translate(-2px, 4px) scaleY(0.45);
+        }
+        65%,
+        77% {
+          transform: translate(0, 4px) scaleY(0.07);
+        } /* the looooong blink */
+        86% {
+          transform: translate(0, 2px) scaleY(0.6);
+        }
+      }
+      @keyframes bored-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+        40% {
+          transform: scale(var(--display-scale)) translateY(3px) rotate(-2.5deg);
+        }
+        65% {
+          transform: scale(var(--display-scale)) translateY(4px) rotate(-3deg);
+        } /* full sag */
+        80% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0.5deg);
+        } /* catches itself */
+        90% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   SLEEPY — a full nod-off story arc: drowsy... droopy... OUT...
+   JERK AWAKE ("I wasn't sleeping!")... drowsy again. Loop forever.
+------------------------------------------------------------------ */
+      .avatar.sleepy::before,
+      .avatar.sleepy::after {
+        animation: sleepy-eyes 7.5s infinite ease-in-out;
+      }
+      .avatar.sleepy {
+        animation:
+          head-rotation 8s infinite ease,
+          sleepy-nod 7.5s infinite ease-in-out;
+      }
+
+      @keyframes sleepy-eyes {
+        0% {
+          transform: translate(0, 1px) scaleY(0.8);
+        }
+        15% {
+          transform: translate(0, 3px) scaleY(0.55);
+        }
+        30%,
+        50% {
+          transform: translate(0, 5px) scaleY(0.06);
+        } /* out cold */
+        58% {
+          transform: translate(0, 0) scaleY(1.15);
+        } /* JERK AWAKE */
+        68% {
+          transform: translate(0, 1px) scaleY(0.75);
+        }
+        85% {
+          transform: translate(0, 2px) scaleY(0.6);
+        }
+        100% {
+          transform: translate(0, 1px) scaleY(0.8);
+        }
+      }
+      @keyframes sleepy-nod {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+        20% {
+          transform: scale(var(--display-scale)) translateY(2px) rotate(-2deg);
+        }
+        35%,
+        50% {
+          transform: scale(var(--display-scale)) translateY(6px) rotate(-5deg);
+        } /* the dip */
+        58% {
+          transform: scale(var(--display-scale)) translateY(-2px) rotate(1deg);
+        } /* snap up! */
+        66% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   SNEEZE — the greatest 6.5 seconds of his life.
+   ah... ahh... (rearing back, wobbling) ...CHOO!! (snap forward,
+   crushed eyes) ...then one dazed, watery blink of recovery.
+------------------------------------------------------------------ */
+      .avatar.sneeze::before,
+      .avatar.sneeze::after {
+        animation: sneeze-eyes 6.5s infinite ease-in-out;
+      }
+      .avatar.sneeze {
+        animation:
+          head-rotation 8s infinite ease,
+          sneeze-head 6.5s infinite ease-in-out;
+      }
+
+      @keyframes sneeze-eyes {
+        0% {
+          transform: translate(0, 0) scaleY(1);
+        }
+        12% {
+          transform: translate(0, 1px) scaleY(0.6);
+        }
+        22%,
+        32% {
+          transform: translate(0, 2px) scaleY(0.12);
+        } /* pre-sneeze squeeze */
+        40%,
+        55% {
+          transform: translate(0, 4px) scale(1.2, 0.08);
+        } /* CHOO. maximum crush */
+        68% {
+          transform: translate(0, 0) scale(1.1, 1.05);
+        } /* dazed and wide */
+        78%,
+        81% {
+          transform: translate(0, 0) scaleY(0.15);
+        } /* recovery blink */
+        90%,
+        100% {
+          transform: translate(0, 0) scaleY(1);
+        }
+      }
+      @keyframes sneeze-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+        12% {
+          transform: scale(var(--display-scale)) translateY(-2px) rotate(3deg);
+        } /* ah */
+        22% {
+          transform: scale(var(--display-scale)) translateY(-4px) rotate(5deg);
+        } /* ahh */
+        28% {
+          transform: scale(var(--display-scale)) translateY(-4px) rotate(4deg);
+        } /* (wobble) */
+        34% {
+          transform: scale(var(--display-scale)) translateY(-4px) rotate(6deg);
+        } /* AHH— */
+        42% {
+          transform: scale(var(--display-scale)) translateY(6px) rotate(-6deg);
+        } /* CHOO!! */
+        52% {
+          transform: scale(var(--display-scale)) translateY(4px) rotate(-3deg);
+        }
+        66% {
+          transform: scale(var(--display-scale)) translateY(1px) rotate(0deg);
+        }
+        80% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(0deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   DIZZY — both eyes spiraling, half a loop apart, radius growing.
+   The wobble says he regrets that third merry-go-round.
+------------------------------------------------------------------ */
+      .avatar.dizzy::before {
+        animation: dizzy-spiral 2s infinite linear;
+      }
+      .avatar.dizzy::after {
+        animation: dizzy-spiral 2s infinite linear -1s;
+      }
+      .avatar.dizzy {
+        animation:
+          head-rotation 8s infinite ease,
+          dizzy-wobble 3s infinite ease-in-out;
+      }
+
+      @keyframes dizzy-spiral {
+        0% {
+          transform: translate(0, 0);
+        }
+        15% {
+          transform: translate(3px, -2px);
+        }
+        30% {
+          transform: translate(5px, 0);
+        }
+        45% {
+          transform: translate(3px, 4px);
+        }
+        60% {
+          transform: translate(0, 6px);
+        }
+        75% {
+          transform: translate(-4px, 3px);
+        }
+        88% {
+          transform: translate(-5px, -2px);
+        }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
+      @keyframes dizzy-wobble {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(0deg);
+        }
+        25% {
+          transform: scale(calc(var(--display-scale) * 0.99)) rotate(2deg);
+        }
+        50% {
+          transform: scale(var(--display-scale)) rotate(0deg);
+        }
+        75% {
+          transform: scale(calc(var(--display-scale) * 0.99)) rotate(-2deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   FOCUSED — pupils shrink to pinpoints. He LEANS IN. Locks on.
+   Micro-corrects twice. Blinks once, reluctantly, like it hurt.
+------------------------------------------------------------------ */
+      .avatar.focused::before,
+      .avatar.focused::after {
+        width: 8px;
+        height: 8px;
+        top: 42px;
+        animation: focus-eyes 5s infinite ease-in-out;
+      }
+      .avatar.focused::before {
+        left: 42px;
+      }
+      .avatar.focused::after {
+        left: 74px;
+      }
+      .avatar.focused {
+        animation:
+          focus-lean 5s infinite ease-in-out,
+          focus-shadow 5s infinite ease-in-out;
+      }
+
+      @keyframes focus-eyes {
+        0%,
+        100% {
+          transform: translate(0, 0) scaleY(1);
+        }
+        18%,
+        70% {
+          transform: translate(3px, 1px) scaleY(1);
+        } /* locked */
+        74% {
+          transform: translate(2px, 1px) scaleY(1);
+        } /* micro-correct */
+        80% {
+          transform: translate(3px, 1px) scaleY(1);
+        }
+        88%,
+        91% {
+          transform: translate(3px, 1px) scaleY(0.1);
+        } /* one pained blink */
+        95% {
+          transform: translate(0, 0) scaleY(1);
+        }
+      }
+      @keyframes focus-lean {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(0);
+        }
+        35%,
+        70% {
+          transform: scale(calc(var(--display-scale) * 1.05)) translateY(-1px);
+        }
+      }
+      @keyframes focus-shadow {
+        0%,
+        100% {
+          box-shadow: inset 10px -10px 16px var(--head-outline);
+        }
+        35%,
+        70% {
+          box-shadow: inset 14px -14px 22px var(--head-outline);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   SCANNING — he's READING. Three fixations across the line, a fast
+   carriage return, next line lower. Little head tilts follow along.
+------------------------------------------------------------------ */
+      .avatar.scanning::before,
+      .avatar.scanning::after {
+        animation: scan-eyes 4.5s infinite ease-in-out;
+      }
+      .avatar.scanning {
+        animation:
+          head-rotation 8s infinite ease,
+          scan-head 4.5s infinite ease-in-out;
+      }
+
+      @keyframes scan-eyes {
+        0%,
+        6% {
+          transform: translate(-7px, -4px);
+        } /* line 1: word... */
+        14%,
+        20% {
+          transform: translate(-2px, -4px);
+        } /* word... */
+        28%,
+        34% {
+          transform: translate(3px, -4px);
+        } /* word... */
+        42%,
+        48% {
+          transform: translate(7px, -4px);
+        } /* word. */
+        52% {
+          transform: translate(-7px, 0);
+        } /* carriage return! */
+        60%,
+        66% {
+          transform: translate(-2px, 0);
+        } /* line 2... */
+        74%,
+        80% {
+          transform: translate(3px, 0);
+        }
+        86% {
+          transform: translate(7px, 0);
+        }
+        90% {
+          transform: translate(-7px, 4px);
+        } /* line 3 begins... */
+        94%,
+        100% {
+          transform: translate(-2px, 4px);
+        }
+      }
+      @keyframes scan-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(0deg);
+        }
+        25% {
+          transform: scale(var(--display-scale)) rotate(1deg);
+        }
+        50% {
+          transform: scale(var(--display-scale)) rotate(-1deg);
+        }
+        75% {
+          transform: scale(var(--display-scale)) rotate(1deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   ZEN — eyes closed. Four-second breath in, four-second breath out.
+   A soft grey halo swells on the exhale. Once per loop he peeks
+   at the world, decides it's fine, closes again.
+------------------------------------------------------------------ */
+      .avatar.zen::before,
+      .avatar.zen::after {
+        animation: zen-eyes 8s infinite ease-in-out;
+      }
+      .avatar.zen {
+        animation:
+          zen-breath 4s infinite ease-in-out,
+          zen-glow 4s infinite ease-in-out;
+      }
+
+      @keyframes zen-eyes {
+        0%,
+        76%,
+        100% {
+          transform: translate(0, 2px) scale(1.15, 0.1);
+        }
+        84% {
+          transform: translate(0, 1px) scale(1.15, 0.55);
+        } /* half-peek */
+        92% {
+          transform: translate(0, 2px) scale(1.15, 0.1);
+        }
+      }
+      @keyframes zen-breath {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(0);
+        }
+        50% {
+          transform: scale(calc(var(--display-scale) * 1.03)) translateY(-1px);
+        }
+      }
+      @keyframes zen-glow {
+        0%,
+        100% {
+          box-shadow:
+            inset 10px -10px 16px var(--head-outline),
+            0 0 3px rgba(128, 128, 128, 0.12);
+        }
+        50% {
+          box-shadow:
+            inset 10px -10px 16px var(--head-outline),
+            0 0 22px rgba(128, 128, 128, 0.38);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   STARSTRUCK — huge shimmering eyes locked slightly upward, slow
+   awed sway, and a warm gold halo that pulses. He just met his hero.
+------------------------------------------------------------------ */
+      .avatar.starstruck::before,
+      .avatar.starstruck::after {
+        width: 18px;
+        height: 18px;
+        top: 37px;
+        animation: star-shimmer 0.9s infinite ease-in-out;
+      }
+      .avatar.starstruck::before {
+        left: 37px;
+      }
+      .avatar.starstruck::after {
+        left: 69px;
+        animation-delay: 0.15s;
+      }
+      .avatar.starstruck {
+        animation:
+          star-sway 4.5s infinite ease-in-out,
+          star-glow 2.5s infinite ease-in-out;
+      }
+
+      @keyframes star-shimmer {
+        0%,
+        100% {
+          transform: translateY(-3px) scale(1);
+        }
+        50% {
+          transform: translateY(-3px) scale(1.14);
+        }
+      }
+      @keyframes star-sway {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+        25% {
+          transform: scale(var(--display-scale)) rotate(2deg) translateY(-1px);
+        }
+        75% {
+          transform: scale(var(--display-scale)) rotate(-2deg) translateY(0);
+        }
+      }
+      @keyframes star-glow {
+        0%,
+        100% {
+          box-shadow:
+            inset 10px -10px 16px var(--head-outline),
+            0 0 6px rgba(255, 205, 110, 0.25);
+        }
+        50% {
+          box-shadow:
+            inset 10px -10px 16px var(--head-outline),
+            0 0 22px var(--gold);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   SMUG — half-lidded, looking down at you. NOTE the light flips to
+   come from BELOW (inset positive Y) — he's literally looking down
+   his nose. One slow, superior nod. Insufferable. Perfect.
+------------------------------------------------------------------ */
+      .avatar.smug::before,
+      .avatar.smug::after {
+        animation: smug-eyes 6s infinite ease-in-out;
+      }
+      .avatar.smug {
+        animation:
+          smug-head 6s infinite ease-in-out,
+          smug-light 6s infinite ease-in-out;
+      }
+
+      @keyframes smug-eyes {
+        0%,
+        100% {
+          transform: translate(0, 1px) scale(1.05, 0.45);
+        }
+        30% {
+          transform: translate(3px, 2px) scale(1.05, 0.4);
+        } /* down the nose */
+        55%,
+        60% {
+          transform: translate(3px, 2px) scale(1.05, 0.06);
+        } /* superior blink */
+        75% {
+          transform: translate(0, 1px) scale(1.05, 0.5);
+        }
+      }
+      @keyframes smug-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(-1px) rotate(-2deg);
+        }
+        40% {
+          transform: scale(var(--display-scale)) translateY(-2px) rotate(-2deg);
+        }
+        52% {
+          transform: scale(var(--display-scale)) translateY(1px) rotate(-1deg);
+        } /* the nod */
+        62% {
+          transform: scale(var(--display-scale)) translateY(-1px) rotate(-2deg);
+        }
+      }
+      @keyframes smug-light {
+        0%,
+        100% {
+          box-shadow: inset 10px 12px 16px var(--head-outline);
+        }
+        50% {
+          box-shadow: inset 12px 14px 18px var(--head-outline);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   LISTENING — soft tilt, eyes a touch bigger and up at the speaker.
+   "uh-huh... uh-huh" — two little nods per loop, one fond blink.
+------------------------------------------------------------------ */
+      .avatar.listening::before,
+      .avatar.listening::after {
+        animation: listen-eyes 4.5s infinite ease-in-out;
+      }
+      .avatar.listening {
+        animation:
+          head-rotation 8s infinite ease,
+          listen-head 4.5s infinite ease-in-out;
+      }
+
+      @keyframes listen-eyes {
+        0%,
+        100% {
+          transform: translate(1px, -2px) scale(1.08);
+        }
+        45%,
+        50% {
+          transform: translate(1px, -2px) scale(1.08, 0.12);
+        } /* fond blink */
+        70% {
+          transform: translate(2px, -2px) scale(1.08);
+        }
+      }
+      @keyframes listen-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(5deg) translateY(0);
+        }
+        18% {
+          transform: scale(var(--display-scale)) rotate(5deg) translateY(1.5px);
+        } /* uh-huh */
+        26% {
+          transform: scale(var(--display-scale)) rotate(5deg) translateY(0);
+        }
+        34% {
+          transform: scale(var(--display-scale)) rotate(5deg) translateY(1.5px);
+        } /* uh-huh */
+        42% {
+          transform: scale(var(--display-scale)) rotate(5deg) translateY(0);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   MISCHIEVOUS — sly squint. Checks left. Checks right. THE IDEA
+   arrives (eyes pop) followed by a tiny "hehe" double-bounce.
+------------------------------------------------------------------ */
+      .avatar.mischievous::before,
+      .avatar.mischievous::after {
+        animation: misch-eyes 5s infinite ease-in-out;
+      }
+      .avatar.mischievous {
+        animation:
+          head-rotation 8s infinite ease,
+          misch-head 5s infinite ease-in-out;
+      }
+
+      @keyframes misch-eyes {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1.05, 0.6);
+        }
+        18%,
+        28% {
+          transform: translate(-6px, 0) scale(1.05, 0.55);
+        }
+        42%,
+        52% {
+          transform: translate(6px, 0) scale(1.05, 0.55);
+        }
+        66% {
+          transform: translate(0, -1px) scale(1.1, 0.8);
+        } /* THE IDEA */
+        76% {
+          transform: translate(0, 0) scale(1.1, 0.45);
+        } /* sly grin-squint */
+        88% {
+          transform: translate(0, 0) scale(1.05, 0.6);
+        }
+      }
+      @keyframes misch-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+        30% {
+          transform: scale(var(--display-scale)) rotate(-3deg) translateY(0);
+        }
+        55% {
+          transform: scale(var(--display-scale)) rotate(3deg) translateY(0);
+        }
+        66% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(-1px);
+        }
+        72% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(1px);
+        } /* he */
+        78% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(-1px);
+        } /* he */
+        84% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   EYE ROLL — the full theatrical arc: up and over, head tipping
+   back with it, landing in a deflated "ugh" sag. One reset blink.
+------------------------------------------------------------------ */
+      .avatar.eyeroll::before,
+      .avatar.eyeroll::after {
+        animation: roll-eyes 3.5s infinite ease-in-out;
+      }
+      .avatar.eyeroll {
+        animation:
+          head-rotation 8s infinite ease,
+          roll-head 3.5s infinite ease-in-out;
+      }
+
+      @keyframes roll-eyes {
+        0%,
+        100% {
+          transform: translate(0, 0) scaleY(1);
+        }
+        12% {
+          transform: translate(-5px, -4px) scaleY(1);
+        }
+        24% {
+          transform: translate(0, -8px) scaleY(1);
+        } /* top of the roll */
+        36% {
+          transform: translate(5px, -4px) scaleY(1);
+        }
+        48% {
+          transform: translate(0, 1px) scaleY(0.85);
+        }
+        58% {
+          transform: translate(0, 2px) scaleY(0.6);
+        } /* the "ugh" */
+        72% {
+          transform: translate(0, 0) scaleY(1);
+        }
+        80%,
+        83% {
+          transform: translate(0, 0) scaleY(0.15);
+        }
+        90% {
+          transform: translate(0, 0) scaleY(1);
+        }
+      }
+      @keyframes roll-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+        20% {
+          transform: scale(var(--display-scale)) rotate(-3deg) translateY(-1px);
+        }
+        40% {
+          transform: scale(var(--display-scale)) rotate(3deg) translateY(0);
+        }
+        55% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(2px);
+        } /* sigh */
+        75% {
+          transform: scale(var(--display-scale)) rotate(0deg) translateY(0);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   GROOVING — eyes closed, pure vibe. Head bounces side to side on
+   the beat. Once every bar he cracks one eye open: still grooving.
+------------------------------------------------------------------ */
+      .avatar.groove::before,
+      .avatar.groove::after {
+        animation: groove-eyes 2.4s infinite ease-in-out;
+      }
+      .avatar.groove {
+        animation:
+          head-rotation 8s infinite ease,
+          groove-bob 0.6s infinite ease-in-out;
+      }
+
+      @keyframes groove-eyes {
+        0%,
+        80%,
+        100% {
+          transform: translate(0, 2px) scale(1.1, 0.14);
+        }
+        88% {
+          transform: translate(0, 1px) scale(1.1, 0.9);
+        } /* vibe check */
+        94% {
+          transform: translate(0, 2px) scale(1.1, 0.14);
+        }
+      }
+      @keyframes groove-bob {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) translateY(0) rotate(-3deg);
+        }
+        50% {
+          transform: scale(var(--display-scale)) translateY(1px) rotate(3deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   MIND BLOWN — eyes inflate slowly, SLOWLY... head swells... tiny
+   "no no no" shakes of disbelief... snap back. Reboot blink.
+------------------------------------------------------------------ */
+      .avatar.mindblown::before,
+      .avatar.mindblown::after {
+        width: 14px;
+        height: 14px;
+        top: 39px;
+        animation: mb-eyes 5s infinite ease-in-out;
+      }
+      .avatar.mindblown::before {
+        left: 39px;
+      }
+      .avatar.mindblown::after {
+        left: 71px;
+      }
+      .avatar.mindblown {
+        animation:
+          head-rotation 8s infinite ease,
+          mb-head 5s infinite ease-in-out;
+      }
+
+      @keyframes mb-eyes {
+        0% {
+          transform: translate(0, 0) scale(1);
+        }
+        30% {
+          transform: translate(0, -1px) scale(1.55);
+        } /* slow inflate */
+        55% {
+          transform: translate(0, -1px) scale(1.5);
+        }
+        57% {
+          transform: translate(0.5px, -1px) scale(1.5);
+        } /* disbelief tremble */
+        59% {
+          transform: translate(-0.5px, -1px) scale(1.5);
+        }
+        61% {
+          transform: translate(0.5px, -1px) scale(1.5);
+        }
+        70% {
+          transform: translate(0, -1px) scale(1.45);
+        }
+        80% {
+          transform: translate(0, 0) scale(1);
+        } /* snap back */
+        88%,
+        91% {
+          transform: translate(0, 0) scale(1, 0.2);
+        } /* reboot blink */
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+      }
+      @keyframes mb-head {
+        0%,
+        100% {
+          transform: scale(var(--display-scale)) rotate(0deg);
+        }
+        30% {
+          transform: scale(calc(var(--display-scale) * 1.04)) rotate(0deg);
+        }
+        52% {
+          transform: scale(calc(var(--display-scale) * 1.04)) rotate(1.5deg);
+        } /* no— */
+        56% {
+          transform: scale(calc(var(--display-scale) * 1.04)) rotate(-1.5deg);
+        } /* no— */
+        60% {
+          transform: scale(calc(var(--display-scale) * 1.04)) rotate(1.5deg);
+        } /* no— */
+        64% {
+          transform: scale(calc(var(--display-scale) * 1.04)) rotate(-1deg);
+        }
+        72% {
+          transform: scale(calc(var(--display-scale) * 1.02)) rotate(0deg);
+        }
+        80% {
+          transform: scale(var(--display-scale)) rotate(0deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   PROCESSING — his eyes ARE the loading spinner: both orbit the
+   same circle, 180 degrees apart, while the head stays eerily
+   still and the shadow pulses like a heartbeat monitor. beep boop.
+------------------------------------------------------------------ */
+      .avatar.processing::before {
+        animation: orbit 1.1s infinite linear;
+      }
+      .avatar.processing::after {
+        animation: orbit 1.1s infinite linear -0.55s;
+      }
+      .avatar.processing {
+        animation:
+          proc-pulse 1.1s infinite ease-in-out,
+          proc-scale 1.1s infinite ease-in-out;
+      }
+
+      @keyframes orbit {
+        0% {
+          transform: translate(0, -4px);
+        }
+        25% {
+          transform: translate(4px, 0);
+        }
+        50% {
+          transform: translate(0, 4px);
+        }
+        75% {
+          transform: translate(-4px, 0);
+        }
+        100% {
+          transform: translate(0, -4px);
+        }
+      }
+      @keyframes proc-pulse {
+        0%,
+        100% {
+          box-shadow: inset 10px -10px 16px var(--head-outline);
+        }
+        50% {
+          box-shadow: inset 16px -16px 22px var(--head-outline);
+        }
+      }
+      @keyframes proc-scale {
+        0%,
+        100% {
+          transform: scale(var(--display-scale));
+        }
+        50% {
+          transform: scale(calc(var(--display-scale) * 1.015));
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   GLITCH — something is WRONG. Eyes teleport, flip, flatten, swap
+   shapes mid-frame (steps(1) = hard cuts, no smooth cheating).
+   Head snaps in sympathy. He'll be fine. Probably.
+------------------------------------------------------------------ */
+      .avatar.glitch::before {
+        animation: glitch-left 1.9s infinite steps(1, start);
+      }
+      .avatar.glitch::after {
+        animation: glitch-right 1.9s infinite steps(1, start) 0.35s;
+      }
+      .avatar.glitch {
+        animation: glitch-head 1.9s infinite steps(1, start);
+      }
+
+      @keyframes glitch-left {
+        0% {
+          transform: translate(0, 0) scale(1);
+        }
+        18% {
+          transform: translate(-6px, 3px) scale(1, 0.3);
+        }
+        34% {
+          transform: translate(4px, -5px) scale(1.4);
+        }
+        52% {
+          transform: translate(0, 0) scale(0.55);
+        }
+        68% {
+          transform: translate(7px, 6px) scale(1.2, 0.8);
+        }
+        84% {
+          transform: translate(-3px, -2px) scale(1);
+        }
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+      }
+      @keyframes glitch-right {
+        0% {
+          transform: translate(0, 0) scale(1);
+        }
+        22% {
+          transform: translate(5px, 4px) scale(0.4, 1.3);
+        }
+        40% {
+          transform: translate(-5px, 0) scale(1);
+        }
+        58% {
+          transform: translate(2px, -6px) scale(1.3, 0.5);
+        }
+        76% {
+          transform: translate(0, 3px) scale(1);
+        }
+        92% {
+          transform: translate(-4px, -4px) scale(1.2);
+        }
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+      }
+      @keyframes glitch-head {
+        0% {
+          transform: scale(var(--display-scale)) translate(0, 0) rotate(0deg);
+        }
+        20% {
+          transform: scale(var(--display-scale)) translate(-2px, 1px)
+            rotate(-1deg);
+        }
+        42% {
+          transform: scale(var(--display-scale)) translate(2px, -1px)
+            rotate(1deg);
+        }
+        66% {
+          transform: scale(var(--display-scale)) translate(-1px, -2px)
+            rotate(0deg);
+        }
+        85% {
+          transform: scale(var(--display-scale)) translate(1px, 2px)
+            rotate(2deg);
+        }
+        100% {
+          transform: scale(var(--display-scale)) translate(0, 0) rotate(0deg);
+        }
+      }
+
+      /* ------------------------------------------------------------------
+   INTENSE — the slow walk toward the camera. Narrowed eyes bore in,
+   the whole head LEANS closer over 4 seconds, shadow hardening...
+   one hard blink that somehow makes it MORE intimidating.
+------------------------------------------------------------------ */
+      .avatar.intense::before,
+      .avatar.intense::after {
+        animation: intense-stare 4s infinite ease-in-out;
+      }
+      .avatar.intense {
+        animation:
+          intense-head 4s infinite ease-in-out,
+          intense-shadow 4s infinite ease-in-out;
+      }
+
+      @keyframes intense-stare {
+        0%,
+        100% {
+          transform: translate(0, 1px) scale(1.22, 0.5);
+        }
+        30% {
+          transform: translate(0, 0) scale(1.25, 0.46);
+        }
+        55% {
+          transform: translate(0, 1px) scale(1.28, 0.44);
+        } /* boring in */
+        82%,
+        85% {
+          transform: translate(0, 1px) scale(1.22, 0.06);
+        } /* THE hard blink */
+        92% {
+          transform: translate(0, 1px) scale(1.22, 0.5);
+        }
+      }
+      @keyframes intense-head {
+        0% {
+          transform: scale(var(--display-scale)) translate(0, 0);
+        }
+        55% {
+          transform: scale(calc(var(--display-scale) * 1.06)) translate(0, -1px);
+        }
+        70% {
+          transform: scale(calc(var(--display-scale) * 1.06))
+            translate(0.5px, -1px);
+        }
+        73% {
+          transform: scale(calc(var(--display-scale) * 1.06))
+            translate(-0.5px, -1px);
+        }
+        76% {
+          transform: scale(calc(var(--display-scale) * 1.06)) translate(0, -1px);
+        }
+        100% {
+          transform: scale(var(--display-scale)) translate(0, 0);
+        }
+      }
+      @keyframes intense-shadow {
+        0%,
+        100% {
+          box-shadow: inset 10px -10px 16px var(--head-outline);
+        }
+        55% {
+          box-shadow: inset 18px -18px 26px var(--head-outline);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="avatar-container">
+      <div class="avatar-stage">
+        <div
+          class="avatar default"
+          id="avatar"
+          aria-label="Animated avatar"
+        ></div>
+      </div>
+
+      <div class="controls">
+        <div class="zoom-control">
+          <label for="zoom-slider">Size</label>
+          <input
+            type="range"
+            id="zoom-slider"
+            min="0.5"
+            max="3"
+            step="0.1"
+            value="3"
+            class="zoom-slider"
+          />
+        </div>
+
+        <div class="animation-controls">
+          <label class="section-label">States</label>
+
+          <button
+            class="button small secondary random-btn"
+            id="random-button"
+            type="button"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="shuffle-icon"
+              aria-hidden="true"
+            >
+              <path d="m18 14 4 4-4 4" />
+              <path d="m18 2 4 4-4 4" />
+              <path
+                d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"
+              />
+              <path d="M2 6h1.972a4 4 0 0 1 3.6 2.2" />
+              <path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" />
+            </svg>
+            Random
+          </button>
+
+          <div class="button-grid" id="button-grid"></div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const EMOTIONS = [
+        {
+          id: "default",
+          label: "Default",
+        },
+        {
+          id: "blink",
+          label: "Blink",
+        },
+        {
+          id: "wink",
+          label: "Wink",
+        },
+        {
+          id: "happy",
+          label: "Happy",
+        },
+        {
+          id: "laughing",
+          label: "Laughing",
+        },
+        {
+          id: "love",
+          label: "In Love",
+        },
+        {
+          id: "shy",
+          label: "Shy",
+        },
+        {
+          id: "sad",
+          label: "Sad",
+        },
+        {
+          id: "crying",
+          label: "Crying",
+        },
+        {
+          id: "angry",
+          label: "Angry",
+        },
+        {
+          id: "scared",
+          label: "Scared",
+        },
+        {
+          id: "nervous",
+          label: "Nervous",
+        },
+        {
+          id: "suspicious",
+          label: "Suspicious",
+        },
+        {
+          id: "confused",
+          label: "Confused",
+        },
+        {
+          id: "surprised",
+          label: "Surprised",
+        },
+        {
+          id: "thinking",
+          label: "Thinking",
+        },
+        {
+          id: "curious",
+          label: "Curious",
+        },
+        {
+          id: "excited",
+          label: "Excited",
+        },
+        {
+          id: "bored",
+          label: "Bored",
+        },
+        {
+          id: "sleepy",
+          label: "Sleepy",
+        },
+        {
+          id: "sneeze",
+          label: "Sneeze",
+        },
+        {
+          id: "dizzy",
+          label: "Dizzy",
+        },
+        {
+          id: "focused",
+          label: "Focused",
+        },
+        {
+          id: "scanning",
+          label: "Scanning",
+        },
+        {
+          id: "zen",
+          label: "Zen",
+        },
+        {
+          id: "starstruck",
+          label: "Starstruck",
+        },
+        {
+          id: "smug",
+          label: "Smug",
+        },
+        {
+          id: "listening",
+          label: "Listening",
+        },
+        {
+          id: "mischievous",
+          label: "Mischievous",
+        },
+        {
+          id: "eyeroll",
+          label: "Eye Roll",
+        },
+        {
+          id: "groove",
+          label: "Grooving",
+        },
+        {
+          id: "mindblown",
+          label: "Mind Blown",
+        },
+        {
+          id: "processing",
+          label: "Processing",
+        },
+        {
+          id: "glitch",
+          label: "Glitch",
+        },
+        {
+          id: "intense",
+          label: "Intense",
+        },
+      ];
+
+      const avatar = document.getElementById("avatar");
+      const buttonGrid = document.getElementById("button-grid");
+      const zoomSlider = document.getElementById("zoom-slider");
+      const randomButton = document.getElementById("random-button");
+
+      function setAnimation(emotionId) {
+        avatar.className = `avatar ${emotionId}`;
+
+        buttonGrid.querySelectorAll(".button").forEach((button) => {
+          button.classList.toggle(
+            "active",
+            button.dataset.emotion === emotionId,
+          );
+        });
+      }
+
+      function buildEmotionButtons() {
+        EMOTIONS.forEach((emotion) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "button small secondary";
+          button.dataset.emotion = emotion.id;
+          button.textContent = emotion.label;
+          button.addEventListener("click", () => setAnimation(emotion.id));
+          buttonGrid.appendChild(button);
+        });
+      }
+
+      function randomAnimation() {
+        const buttons = [...buttonGrid.querySelectorAll(".button")];
+        let shuffleCount = 0;
+        const maxShuffles = 12;
+        let currentInterval = 40;
+
+        const shuffle = () => {
+          buttons.forEach((button) => button.classList.remove("active"));
+
+          const previewButton =
+            buttons[Math.floor(Math.random() * buttons.length)];
+          previewButton.classList.add("active");
+
+          shuffleCount += 1;
+
+          if (shuffleCount >= maxShuffles) {
+            const emotion =
+              EMOTIONS[Math.floor(Math.random() * EMOTIONS.length)];
+            setAnimation(emotion.id);
+            return;
+          }
+
+          currentInterval *= 1.3;
+          window.setTimeout(shuffle, currentInterval);
+        };
+
+        shuffle();
+      }
+
+      zoomSlider.addEventListener("input", (event) => {
+        const displayScale = 0.25 * Number(event.target.value);
+        avatar.style.setProperty("--display-scale", displayScale);
+      });
+
+      randomButton.addEventListener("click", randomAnimation);
+
+      buildEmotionButtons();
+      setAnimation("default");
+    </script>
+  </body>
+</html>
