@@ -4,9 +4,10 @@
 {% set topicTags = tags | postTags(type) %}
 {% set components = content | postComponents %}
 <!doctype html>
-<html lang="{{ lang | default('en') }}">
+<html lang="{{ lang | default('en') }}" class="notranslate" translate="no">
   <head>
     <meta charset="utf-8" />
+    <meta name="google" content="notranslate" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"

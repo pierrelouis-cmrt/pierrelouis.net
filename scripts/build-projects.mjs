@@ -1928,9 +1928,10 @@ const renderCaseStudyPage = (project, peers) => {
     : "";
 
   return `<!doctype html>
-<html lang="en">
+<html lang="en" class="notranslate" translate="no">
   <head>
     <meta charset="utf-8" />
+    <meta name="google" content="notranslate" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
