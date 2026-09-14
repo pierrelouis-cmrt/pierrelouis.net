@@ -19,4 +19,4 @@ listing:
 ![Old portfolio project detail page](media/img5.png){carousel-contained}
 ![Old portfolio About page](media/img6.png){carousel-contained}
 
-Full site available [here](https://old.pierrelouis.net/). Source code [here](https://github.com/pierrelouis-cmrt/pierrelouis.net-v1).
+Full site available on [old.pierrelouis.net](https://old.pierrelouis.net/). Source code on [GitHub](https://github.com/pierrelouis-cmrt/pierrelouis.net-v1).
