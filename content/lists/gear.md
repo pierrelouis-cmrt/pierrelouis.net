@@ -13,7 +13,7 @@
 
 ## Apps
 
-- [Visual Studio Code](https://code.visualstudio.com/)
+- [Zed](https://zed.dev/)
 - [Apple Music](https://www.apple.com/fr/apple-music/)
 - [Obsidian](https://obsidian.md/)
 - [Zen Browser](https://zen-browser.app/)
@@ -25,6 +25,8 @@
 - [Figma](https://www.figma.com/)
 - [Paper](https://www.paper.design/)
 - [Raindrop.io](https://raindrop.io/)
+- [Pearcleaner](https://pearcleaner.com/)
+- [Codex](https://openai.com/codex/)
 
 ## Hardware
 
