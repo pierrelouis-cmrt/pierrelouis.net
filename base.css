@@ -1000,12 +1000,12 @@ main {
 
 .watermark__name--first {
   width: calc(var(--watermark-height) * var(--watermark-first-ratio));
-  background-image: url("./assets/image_watermark_first.png");
+  background-image: url("./assets/image_watermark_first.webp");
 }
 
 .watermark__name--last {
   width: calc(var(--watermark-height) * var(--watermark-last-ratio));
-  background-image: url("./assets/image_watermark_last.png");
+  background-image: url("./assets/image_watermark_last.webp");
 }
 
 .watermark__dash {

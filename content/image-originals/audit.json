@@ -1,0 +1,517 @@
+{
+  "viewportWidth": 1920,
+  "quality": 80,
+  "records": [
+    {
+      "path": "assets/mobile-menu/capecl.webp",
+      "original": [
+        508,
+        252
+      ],
+      "target": [
+        336,
+        167
+      ],
+      "status": "resize",
+      "reason": "Mobile menu thumbnail: maximum width 168 CSS px.",
+      "originalSha256": "9c8e0f8ac109ee73585df71672cc4340fcb29ac6fdb76578a031ed2eba5a5a2d",
+      "output": "assets/mobile-menu/capecl.webp",
+      "actual": [
+        336,
+        167
+      ],
+      "originalBytes": 2466,
+      "outputBytes": 2424
+    },
+    {
+      "path": "assets/image_mobile_watermark.png",
+      "original": [
+        1434,
+        493
+      ],
+      "target": [
+        1520,
+        523
+      ],
+      "status": "unchanged: below target",
+      "reason": "Mobile menu: maximum width 760 CSS px (height-dependent).",
+      "originalSha256": "66198cec9586ddcd943f01a3dc4d43cfaddb964dbe817aec6d8f5b6ce0e8fbe3"
+    },
+    {
+      "path": "assets/image_about_portrait.webp",
+      "original": [
+        2205,
+        752
+      ],
+      "target": [
+        3840,
+        1310
+      ],
+      "status": "unchanged: below target",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "52c9630167d3163d68618a18a00d59a9152204f4a5303671b644969de70c1bf6"
+    },
+    {
+      "path": "assets/image_colophon_aurland.webp",
+      "original": [
+        4032,
+        1613
+      ],
+      "target": [
+        3840,
+        1536
+      ],
+      "status": "resize",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "6261f1dd8d5341a625e1f0629cd7cbd43ffffae4d99cf6f94e5ea7ffec0f43d5",
+      "output": "assets/image_colophon_aurland.webp",
+      "actual": [
+        3840,
+        1536
+      ],
+      "originalBytes": 773812,
+      "outputBytes": 570400
+    },
+    {
+      "path": "assets/image_imprint_aurland.webp",
+      "original": [
+        3802,
+        1521
+      ],
+      "target": [
+        3840,
+        1536
+      ],
+      "status": "unchanged: below target",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "00e086a436524f7fc3932a567836791fb10d8d68c6db0f8c785d6bb3ecfd7160"
+    },
+    {
+      "path": "assets/image_featured_1.webp",
+      "original": [
+        1581,
+        1976
+      ],
+      "target": [
+        1441,
+        1801
+      ],
+      "status": "resize",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "6e5cfd86d6687f2aafebb846c207325537036b6e8f7462acbf49ba88738e8b30",
+      "output": "assets/image_featured_1.webp",
+      "actual": [
+        1441,
+        1801
+      ],
+      "originalBytes": 339206,
+      "outputBytes": 287586
+    },
+    {
+      "path": "assets/image_featured_2.webp",
+      "original": [
+        1400,
+        1750
+      ],
+      "target": [
+        1440,
+        1800
+      ],
+      "status": "unchanged: below target",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "dcb0be764c55073875bb06f692b321a5c0106895fef4248854f221e2c527c9a6"
+    },
+    {
+      "path": "assets/image_featured_3.webp",
+      "original": [
+        1440,
+        1800
+      ],
+      "target": [
+        1440,
+        1800
+      ],
+      "status": "unchanged: already at target",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "2ac43bab7d6d464e7c086f18402407e64ae5c6c59840027363ceb4da32135683"
+    },
+    {
+      "path": "assets/image_featured_4.webp",
+      "original": [
+        1400,
+        1736
+      ],
+      "target": [
+        1452,
+        1800
+      ],
+      "status": "unchanged: below target",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "7458bd4fc3f755d00cb567d01b490d707b26ac5d1816d83f923b4afb7ad3b4d0"
+    },
+    {
+      "path": "assets/lists/things-i-like.webp",
+      "original": [
+        768,
+        768
+      ],
+      "target": [
+        560,
+        560
+      ],
+      "status": "resize",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "0894776784e66c6e2c451df589129ad3464709a60149572254d04e4aaf02ebc0",
+      "output": "assets/lists/things-i-like.webp",
+      "actual": [
+        560,
+        560
+      ],
+      "originalBytes": 128094,
+      "outputBytes": 80338
+    },
+    {
+      "path": "assets/lists/things-i-dislike.webp",
+      "original": [
+        768,
+        768
+      ],
+      "target": [
+        560,
+        560
+      ],
+      "status": "resize",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "0418992beb9781f576ac5c7bd15944075f4191dcd61b75e8c83c8304121d9257",
+      "output": "assets/lists/things-i-dislike.webp",
+      "actual": [
+        560,
+        560
+      ],
+      "originalBytes": 111558,
+      "outputBytes": 77786
+    },
+    {
+      "path": "assets/lists/tv-shows.webp",
+      "original": [
+        768,
+        768
+      ],
+      "target": [
+        560,
+        560
+      ],
+      "status": "resize",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "a7837c1637ef798b1d7b555d73f37aa03c0aa5db47390afa0a567e47f8880347",
+      "output": "assets/lists/tv-shows.webp",
+      "actual": [
+        560,
+        560
+      ],
+      "originalBytes": 90490,
+      "outputBytes": 62754
+    },
+    {
+      "path": "assets/lists/articles-and-videos.webp",
+      "original": [
+        768,
+        768
+      ],
+      "target": [
+        560,
+        560
+      ],
+      "status": "resize",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "4d45d4964e9fec480498855b3805bb3f4b8a0b37793d0d6b62cf28fb0993779e",
+      "output": "assets/lists/articles-and-videos.webp",
+      "actual": [
+        560,
+        560
+      ],
+      "originalBytes": 15526,
+      "outputBytes": 11230
+    },
+    {
+      "path": "assets/lists/places-ive-been.webp",
+      "original": [
+        768,
+        768
+      ],
+      "target": [
+        560,
+        560
+      ],
+      "status": "resize",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "c864a6730a313b9da188cb9de80c82954e251707a53f9e7ccd45a7bc5f345fd6",
+      "output": "assets/lists/places-ive-been.webp",
+      "actual": [
+        560,
+        560
+      ],
+      "originalBytes": 85436,
+      "outputBytes": 48682
+    },
+    {
+      "path": "assets/lists/tech-and-gear.webp",
+      "original": [
+        768,
+        768
+      ],
+      "target": [
+        560,
+        560
+      ],
+      "status": "resize",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "8424048cd41d28cf0f99cb24e70793f06030c87c718e1decf05a7c59215eadc0",
+      "output": "assets/lists/tech-and-gear.webp",
+      "actual": [
+        560,
+        560
+      ],
+      "originalBytes": 55200,
+      "outputBytes": 34056
+    },
+    {
+      "path": "posts/components/apps/assets/carousel/animal1.webp",
+      "original": [
+        1000,
+        1333
+      ],
+      "target": [
+        1062,
+        1416
+      ],
+      "status": "unchanged: below target",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "4ede56504e085ea690c738ec5ed28eff24c71a1aeda0147191b58463e4671d9d"
+    },
+    {
+      "path": "posts/components/apps/assets/carousel/animal2.webp",
+      "original": [
+        1000,
+        1333
+      ],
+      "target": [
+        1062,
+        1416
+      ],
+      "status": "unchanged: below target",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "0350e1d0f6e29997152117f781bea95b256294361e55910b950f5b27432e715e"
+    },
+    {
+      "path": "posts/components/apps/assets/carousel/landscape1.webp",
+      "original": [
+        1333,
+        1000
+      ],
+      "target": [
+        1067,
+        800
+      ],
+      "status": "resize",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "144cbb305dd742af89be2c90875e8f5d1c2ad66554a5303c310f98b7ddd02540",
+      "output": "posts/components/apps/assets/carousel/landscape1.webp",
+      "actual": [
+        1067,
+        800
+      ],
+      "originalBytes": 437348,
+      "outputBytes": 178998
+    },
+    {
+      "path": "posts/components/apps/assets/carousel/landscape2.webp",
+      "original": [
+        1333,
+        1000
+      ],
+      "target": [
+        1067,
+        800
+      ],
+      "status": "resize",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "b8f2ce1e59fe74dc5b68841b6d2d99a0b1cb0801af13dae04a35b344b2caa5f2",
+      "output": "posts/components/apps/assets/carousel/landscape2.webp",
+      "actual": [
+        1067,
+        800
+      ],
+      "originalBytes": 522658,
+      "outputBytes": 242352
+    },
+    {
+      "path": "posts/components/apps/assets/carousel/animal4.webp",
+      "original": [
+        1000,
+        1333
+      ],
+      "target": [
+        1062,
+        1416
+      ],
+      "status": "unchanged: below target",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "be7c057dc01e1836604574151168d8e93c82dd1724e5d264ffdb92be6e5db4a8"
+    },
+    {
+      "path": "posts/components/apps/assets/carousel/architecture1.webp",
+      "original": [
+        1000,
+        1333
+      ],
+      "target": [
+        1062,
+        1416
+      ],
+      "status": "unchanged: below target",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "bbd8bd8de6b06bb79627c7d48cf8b834b2510bfcf8cb1e90d192319eefe8813c"
+    },
+    {
+      "path": "posts/components/apps/assets/carousel/architecture2.webp",
+      "original": [
+        1000,
+        1333
+      ],
+      "target": [
+        1062,
+        1416
+      ],
+      "status": "unchanged: below target",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "c072b1e638e07587e39f22f73b4ac02ef8ab1dc72306d235cfef439a0499fe36"
+    },
+    {
+      "path": "posts/components/apps/assets/carousel/architecture3.webp",
+      "original": [
+        1000,
+        1333
+      ],
+      "target": [
+        1062,
+        1416
+      ],
+      "status": "unchanged: below target",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "3c8715ddcc2c96add7800244a0bc48ffd4d6bd2b84a89de37473c2619bf0581c"
+    },
+    {
+      "path": "posts/components/apps/assets/carousel/architecture4.webp",
+      "original": [
+        1000,
+        1333
+      ],
+      "target": [
+        1062,
+        1416
+      ],
+      "status": "unchanged: below target",
+      "reason": "Largest rendered image across responsive breakpoints up to 1920 CSS px; cover/contain scaling preserves source ratio.",
+      "originalSha256": "d9c59de09927a80c723e0e9e54c2ae3e95c74051d1de17c032ae6a5e56c01688"
+    },
+    {
+      "path": "posts/assets/chart_tokens.webp",
+      "original": [
+        2371,
+        1471
+      ],
+      "target": [
+        3584,
+        2224
+      ],
+      "status": "unchanged: below target",
+      "reason": "Article lightbox: at most 1792 CSS px wide; native size also limits display.",
+      "originalSha256": "4a9ba7c5b60b7404306f48767b3247d23daa205a649ea9f6a578bd0de8d982c0"
+    },
+    {
+      "path": "posts/assets/historical_experiment_photo.webp",
+      "original": [
+        850,
+        308
+      ],
+      "target": [
+        1700,
+        616
+      ],
+      "status": "unchanged: below target",
+      "reason": "Article lightbox: at most 1792 CSS px wide; native size also limits display.",
+      "originalSha256": "d48916ff3481673d2eb10e5caa00ad53cebc1d97a22cfcaf8a700233145bac68"
+    },
+    {
+      "path": "posts/assets/experiment_diagram.webp",
+      "original": [
+        640,
+        516
+      ],
+      "target": [
+        1280,
+        1032
+      ],
+      "status": "unchanged: below target",
+      "reason": "Article lightbox: at most 1792 CSS px wide; native size also limits display.",
+      "originalSha256": "b1a7625bf78c5c7c528edb03801e481d60e335c897c73c614d89a0e42905b281"
+    },
+    {
+      "path": "posts/assets/curves_k.webp",
+      "original": [
+        892,
+        742
+      ],
+      "target": [
+        1784,
+        1484
+      ],
+      "status": "unchanged: below target",
+      "reason": "Article lightbox: at most 1792 CSS px wide; native size also limits display.",
+      "originalSha256": "d2f89176f20dc76c9605bfe006e68df554b307b98be1923748674956cd6149ec"
+    },
+    {
+      "path": "assets/image_watermark_first.png",
+      "original": [
+        1433,
+        280
+      ],
+      "target": [
+        830,
+        162
+      ],
+      "status": "convert",
+      "reason": "Footer: watermark height capped at 81 CSS px; background-size: contain.",
+      "originalSha256": "429ccf82730e54d7dd2b012dec751033114150d81045e838a666a0b46981c995",
+      "output": "assets/image_watermark_first.webp",
+      "actual": [
+        830,
+        162
+      ],
+      "originalBytes": 6747,
+      "outputBytes": 2712
+    },
+    {
+      "path": "assets/image_watermark_last.png",
+      "original": [
+        942,
+        280
+      ],
+      "target": [
+        545,
+        162
+      ],
+      "status": "convert",
+      "reason": "Footer: watermark height capped at 81 CSS px; background-size: contain.",
+      "originalSha256": "2a275de412ae5da74dbc539a9a003baa8b9692ebfa3afcb7f1ea319e5a874204",
+      "output": "assets/image_watermark_last.webp",
+      "actual": [
+        545,
+        162
+      ],
+      "originalBytes": 5303,
+      "outputBytes": 2138
+    }
+  ]
+}
