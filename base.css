@@ -37,7 +37,7 @@
   --color-ink: #1c1c1c;
   --color-muted: #686868;
   --color-caption: #474747;
-  --color-subtle: #7f7f7f;
+  --color-subtle: #757575; /* Previously #7F7F7F but change for contrast */
   --color-media-bg: #f4f4f4;
   --color-external-link-bg: #ededed;
   --color-selection-bg: #d8d8d8;
@@ -957,7 +957,23 @@ main {
 }
 
 .site-footer__link {
+  position: relative;
   transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+/* Extend hit areas without changing layout or overlapping adjacent rows. */
+.site-footer__link::before {
+  content: "";
+  position: absolute;
+  inset: 0 -12px;
+}
+
+.site-footer__link:first-of-type::before {
+  top: -8px;
+}
+
+.site-footer__link:last-of-type::before {
+  bottom: -8px;
 }
 
 .site-footer__copyright-slot {
@@ -1678,7 +1694,8 @@ main {
   }
 
   .mobile-menu__toggle-line {
-    transition-duration: var(--duration-medium), var(--duration-fast) !important;
+    transition-duration:
+      var(--duration-medium), var(--duration-fast) !important;
   }
 
   .mobile-menu__panel {
