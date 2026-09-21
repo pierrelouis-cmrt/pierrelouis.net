@@ -1,3 +1,13 @@
+// Keep local development and previews out of the site's analytics.
+if (["pierrelouis.net", "www.pierrelouis.net"].includes(window.location.hostname)) {
+  const analytics = document.createElement("script");
+  analytics.defer = true;
+  // Resolve separately so asset hashing doesn't rewrite the remote script URL.
+  analytics.src = new URL("script.js", "https://cloud.umami.is/").href;
+  analytics.dataset.websiteId = "51538055-0cc5-4a88-8f4f-8d3b77f708b4";
+  document.head.appendChild(analytics);
+}
+
 const SELECTORS = {
   copyEmail: "[data-copy-email]",
   moreMenu: "[data-more-menu]",
