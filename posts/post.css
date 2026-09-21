@@ -372,7 +372,7 @@
   font-size: var(--post-copy-size);
   line-height: var(--post-copy-leading);
   letter-spacing: var(--tracking-normal);
-  text-wrap: pretty;
+  text-wrap: wrap;
 }
 
 .post-body p {
