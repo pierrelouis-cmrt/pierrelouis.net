@@ -10,7 +10,7 @@
   const emptyState = root.querySelector("[data-photo-empty]");
   const albums = [...document.querySelectorAll(".photo-album")];
   const lightbox = document.querySelector("[data-photo-lightbox]");
-  const lightboxImage = lightbox?.querySelector("[data-photo-lightbox-image]");
+  let lightboxImage = lightbox?.querySelector("[data-photo-lightbox-image]");
   const lightboxCounter = lightbox?.querySelector("[data-photo-lightbox-counter]");
   const lightboxNav = lightbox?.querySelector("[data-photo-lightbox-nav]");
   const lightboxPrev = lightbox?.querySelector("[data-photo-lightbox-prev]");
@@ -21,6 +21,39 @@
   let lastFocusedElement = null;
   let lightboxItems = [];
   let lightboxIndex = -1;
+  let lightboxRequest = 0;
+  const fullImages = new Map();
+
+  const loadFullImage = (trigger, priority = "low") => {
+    const src = trigger.dataset.fullSrc;
+    let entry = fullImages.get(src);
+    if (!entry) {
+      const image = new Image();
+      image.className = lightboxImage.className;
+      image.dataset.photoLightboxImage = "";
+      image.alt = trigger.dataset.alt || "";
+      image.fetchPriority = priority;
+      image.src = src;
+      entry = { image, ready: false };
+      entry.promise = image.decode().then(() => {
+        entry.ready = true;
+        return true;
+      }).catch(() => {
+        if (fullImages.get(src) === entry) fullImages.delete(src);
+        return false;
+      });
+      fullImages.set(src, entry);
+    }
+    if (priority === "high") entry.image.fetchPriority = "high";
+    return entry;
+  };
+
+  const displayLightboxImage = (image) => {
+    if (image !== lightboxImage) {
+      lightboxImage.replaceWith(image);
+      lightboxImage = image;
+    }
+  };
 
   const state = {
     albumId: "",
@@ -337,8 +370,28 @@
     lightboxIndex = (index + lightboxItems.length) % lightboxItems.length;
 
     const trigger = lightboxItems[lightboxIndex];
-    lightboxImage.src = trigger.dataset.fullSrc || "";
-    lightboxImage.alt = trigger.dataset.alt || "";
+    const request = ++lightboxRequest;
+    const full = loadFullImage(trigger, "high");
+    if (full.ready) {
+      displayLightboxImage(full.image);
+    } else {
+      // A fresh element cannot retain the previous photo while loading.
+      const thumbnail = trigger.querySelector(".photo-card__image");
+      const preview = new Image();
+      preview.className = lightboxImage.className;
+      preview.dataset.photoLightboxImage = "";
+      preview.alt = trigger.dataset.alt || "";
+      if (thumbnail) {
+        preview.src = thumbnail.currentSrc || thumbnail.getAttribute("src") ||
+          thumbnail.dataset.deferredSrc;
+      }
+      displayLightboxImage(preview);
+      full.promise.then((loaded) => {
+        if (loaded && request === lightboxRequest) {
+          displayLightboxImage(full.image);
+        }
+      });
+    }
 
     if (lightboxCounter) {
       const digits = Math.max(2, String(lightboxItems.length).length);
@@ -374,6 +427,8 @@
     }
 
     lightbox.hidden = true;
+    ++lightboxRequest;
+    fullImages.clear();
     document.body.classList.remove("has-photo-lightbox-open");
 
     if (lightboxImage) {
@@ -401,6 +456,10 @@
     lastFocusedElement = trigger;
     lightboxItems = getLightboxItems(trigger);
     setLightboxImage(lightboxItems.indexOf(trigger));
+    // Start with the next photos, and only fetch this album once it is opened.
+    for (let offset = 1; offset < lightboxItems.length; offset += 1) {
+      loadFullImage(lightboxItems[(lightboxIndex + offset) % lightboxItems.length]);
+    }
 
     if (lightboxNav) {
       lightboxNav.hidden = false;
