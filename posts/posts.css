@@ -498,8 +498,8 @@
   }
 }
 
-/* Keep the feature usable when there is no room for the illustrated card. */
-@media (max-width: 1100px), (max-height: 600px) {
+/* Keep the desktop feature compact on short viewports. */
+@media (min-width: 1101px) and (max-height: 600px) {
   .featured-post__eyebrow {
     margin-bottom: var(--space-sm);
   }
@@ -517,37 +517,10 @@
   }
 }
 
+/* The archive uses the feature's column below this breakpoint. */
 @media (max-width: 1100px) {
-  .posts-page {
-    padding-bottom: calc(140px + env(safe-area-inset-bottom));
-  }
-
   .featured-post {
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    max-width: none;
-    padding: var(--space-lg) max(var(--page-gutter), env(safe-area-inset-right))
-      max(var(--space-lg), env(safe-area-inset-bottom))
-      max(var(--page-gutter), env(safe-area-inset-left));
-    border-top: 1px solid var(--color-external-link-bg);
-  }
-
-  .featured-post .featured-article {
-    width: 100%;
-    flex-direction: row;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-lg);
-  }
-
-  .featured-post .featured-article__title {
-    max-width: none;
-  }
-
-  .featured-post .featured-article__cta {
-    flex-shrink: 0;
-    margin-top: 0;
+    display: none;
   }
 }
 
