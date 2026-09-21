@@ -32,7 +32,7 @@
 
     const intro = page.querySelector(".posts-intro");
     const revealTargets = [
-      ...page.querySelectorAll(".post-row, .featured-post"),
+      ...page.querySelectorAll(".post-row"),
     ];
     const revealTarget = (target, delay = 0) => {
       target.style.setProperty("--post-reveal-delay", `${delay}ms`);
