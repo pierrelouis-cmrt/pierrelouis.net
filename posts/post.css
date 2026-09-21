@@ -1053,7 +1053,7 @@
 .post-lightbox {
   --post-lightbox-padding: clamp(20px, 4vw, 64px);
   --post-lightbox-controls-gap: var(--space-md);
-  --post-lightbox-controls-height: 44px;
+  --post-lightbox-controls-height: 56px;
   --post-lightbox-controls-space: calc(
     var(--post-lightbox-controls-height) + var(--post-lightbox-controls-gap)
   );
@@ -1169,6 +1169,11 @@
 
 .post-lightbox__nav-button {
   display: inline-flex;
+  /* Keep the full target available on tablets, touch laptops, and phones. */
+  flex: 0 0 var(--post-lightbox-controls-height);
+  width: var(--post-lightbox-controls-height);
+  height: var(--post-lightbox-controls-height);
+  touch-action: manipulation;
   align-items: center;
   justify-content: center;
   padding: 0;
@@ -1388,15 +1393,6 @@ body.has-post-lightbox-open {
 @media (max-width: 760px) {
   .post-page {
     --post-media-overhang: 0px;
-  }
-
-  .post-lightbox {
-    --post-lightbox-controls-height: var(--touch-target-min);
-  }
-
-  .post-lightbox__nav-button {
-    width: var(--touch-target-min);
-    height: var(--touch-target-min);
   }
 
   .post-lightbox__close {

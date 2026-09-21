@@ -173,7 +173,7 @@
 .photo-lightbox {
   --photo-lightbox-padding: clamp(20px, 4vw, 64px);
   --photo-lightbox-controls-gap: var(--space-md);
-  --photo-lightbox-controls-height: 44px;
+  --photo-lightbox-controls-height: 56px;
   --photo-lightbox-controls-space: calc(
     var(--photo-lightbox-controls-height) + var(--photo-lightbox-controls-gap)
   );
@@ -292,6 +292,11 @@
 
 .photo-lightbox__nav-button {
   display: inline-flex;
+  /* Keep the full target available on tablets, touch laptops, and phones. */
+  flex: 0 0 var(--photo-lightbox-controls-height);
+  width: var(--photo-lightbox-controls-height);
+  height: var(--photo-lightbox-controls-height);
+  touch-action: manipulation;
   align-items: center;
   justify-content: center;
   padding: 0;
@@ -338,15 +343,6 @@ body.has-photo-lightbox-open {
 }
 
 @media (max-width: 760px) {
-  .photo-lightbox {
-    --photo-lightbox-controls-height: var(--touch-target-min);
-  }
-
-  .photo-lightbox__nav-button {
-    width: var(--touch-target-min);
-    height: var(--touch-target-min);
-  }
-
   .photo-lightbox__close {
     top: calc(env(safe-area-inset-top, 0px) + 8px);
     right: 8px;
