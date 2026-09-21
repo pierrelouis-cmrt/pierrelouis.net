@@ -1,3 +1,19 @@
+// Use the computed canvas color as the single source for browser chrome too.
+// CSS paints the safe areas before this deferred script runs.
+const syncBrowserTheme = () => {
+  let themeColor = document.querySelector('meta[name="theme-color"]');
+  if (!themeColor) {
+    themeColor = document.createElement("meta");
+    themeColor.name = "theme-color";
+    document.head.appendChild(themeColor);
+  }
+  themeColor.content = getComputedStyle(document.documentElement).backgroundColor;
+};
+
+syncBrowserTheme();
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncBrowserTheme);
+window.addEventListener("pageshow", syncBrowserTheme);
+
 // Keep local development and previews out of the site's analytics.
 if (["pierrelouis.net", "www.pierrelouis.net"].includes(window.location.hostname)) {
   const analytics = document.createElement("script");

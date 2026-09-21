@@ -7,8 +7,8 @@
   --post-math-inline-scale: 1.2em;
   --post-math-display-scale: 1.25em;
   --post-rule: color-mix(in srgb, var(--color-subtle) 28%, var(--color-bg));
-  --post-panel: #f5f5f3;
-  --post-code-panel: #f8f8f8;
+  --post-panel: var(--color-panel-bg);
+  --post-code-panel: var(--color-code-bg);
   --post-toc-height: 40px;
   --post-column-width: calc(
     (100vw - (var(--page-gutter) * 2) - (var(--grid-gap) * 3)) / 4

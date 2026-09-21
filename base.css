@@ -32,6 +32,9 @@
 }
 
 :root {
+  /* A warm light theme follows system dark mode; native controls stay light. */
+  color-scheme: light;
+
   /* Colors */
   --color-bg: #ffffff;
   --color-ink: #1c1c1c;
@@ -41,7 +44,10 @@
   --color-media-bg: #f4f4f4;
   --color-external-link-bg: #ededed;
   --color-selection-bg: #d8d8d8;
-  --color-dark-mode-tint: rgb(255 194 64 / 0.14);
+  --color-sheet-bg: #f8f8f7;
+  --color-panel-bg: #f5f5f3;
+  --color-code-bg: #f8f8f8;
+  --visual-warmth: sepia(0) saturate(1);
 
   /* Typography */
   --font-family-sans:
@@ -134,21 +140,32 @@
   --touch-target-compact: 36px;
 }
 
-/* Warm the whole page on dark-system devices, like a gentle Night Shift layer. */
+/* Change the canvas itself so safe areas and overscroll share the theme. */
 @media (prefers-color-scheme: dark) {
   :root {
-    color-scheme: light;
+    --color-bg: #fff6e4;
+    --color-ink: #211d16;
+    --color-muted: #696153;
+    --color-caption: #4b4438;
+    --color-subtle: #766c5b;
+    --color-media-bg: #f2e8d6;
+    --color-external-link-bg: #ede2cf;
+    --color-selection-bg: #dfcba5;
+    --color-sheet-bg: #f8eedc;
+    --color-panel-bg: #f3e9d7;
+    --color-code-bg: #f6ecda;
+    --visual-warmth: sepia(0.14) saturate(0.95);
   }
+}
 
-  html::after {
-    position: fixed;
-    z-index: 2147483647;
-    inset: 0;
-    background: var(--color-dark-mode-tint);
-    content: "";
-    mix-blend-mode: multiply;
-    pointer-events: none;
-  }
+/* Filter media once, including iframe contents, without tinting page surfaces.
+   Keep this shared token in component filters so hover effects retain warmth. */
+:where(img, video, canvas, iframe, svg, object, embed):not(
+  :where(svg, object) :where(img, video, canvas, iframe, svg, object, embed)
+),
+.content-filter__symbol,
+.watermark__name {
+  filter: var(--visual-warmth);
 }
 
 *,
@@ -278,19 +295,19 @@ img {
   height: 128px;
   background: linear-gradient(
     180deg,
-    #fff,
-    hsl(0 0% 100% / 0.738) 19%,
-    hsl(0 0% 100% / 0.541) 34%,
-    hsl(0 0% 100% / 0.382) 47%,
-    hsl(0 0% 100% / 0.278) 56.5%,
-    hsl(0 0% 100% / 0.194) 65%,
-    hsl(0 0% 100% / 0.126) 73%,
-    hsl(0 0% 100% / 0.075) 80.2%,
-    hsl(0 0% 100% / 0.042) 86.1%,
-    hsl(0 0% 100% / 0.021) 91%,
-    hsl(0 0% 100% / 0.008) 95.2%,
-    hsl(0 0% 100% / 0.002) 98.2%,
-    hsl(0 0% 100% / 0)
+    var(--color-bg),
+    color-mix(in srgb, var(--color-bg) 73.8%, transparent) 19%,
+    color-mix(in srgb, var(--color-bg) 54.1%, transparent) 34%,
+    color-mix(in srgb, var(--color-bg) 38.2%, transparent) 47%,
+    color-mix(in srgb, var(--color-bg) 27.8%, transparent) 56.5%,
+    color-mix(in srgb, var(--color-bg) 19.4%, transparent) 65%,
+    color-mix(in srgb, var(--color-bg) 12.6%, transparent) 73%,
+    color-mix(in srgb, var(--color-bg) 7.5%, transparent) 80.2%,
+    color-mix(in srgb, var(--color-bg) 4.2%, transparent) 86.1%,
+    color-mix(in srgb, var(--color-bg) 2.1%, transparent) 91%,
+    color-mix(in srgb, var(--color-bg) 0.8%, transparent) 95.2%,
+    color-mix(in srgb, var(--color-bg) 0.2%, transparent) 98.2%,
+    color-mix(in srgb, var(--color-bg) 0%, transparent)
   );
   content: "";
   pointer-events: none;

@@ -11,7 +11,7 @@
   inset: var(--header-height) 0 0 50%;
   background: linear-gradient(
     to right,
-    rgb(255 255 255 / 0),
+    color-mix(in srgb, var(--color-bg) 0%, transparent),
     var(--color-bg)
   );
   content: "";
@@ -64,13 +64,13 @@
 }
 
 .links-gallery__item:focus-visible img {
-  filter: brightness(0.92);
+  filter: var(--visual-warmth) brightness(0.92);
   transform: scale(1.035);
 }
 
 @media (any-hover: hover) and (any-pointer: fine) {
   .links-gallery__item:hover img {
-    filter: brightness(0.92);
+    filter: var(--visual-warmth) brightness(0.92);
     transform: scale(1.035);
   }
 }

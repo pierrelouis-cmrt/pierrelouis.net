@@ -4,7 +4,7 @@
   --list-sheet-close-size: 48px;
   --list-sheet-close-inset: var(--space-2xl);
   --list-sheet-close-icon-width: 15px;
-  --list-sheet-close-bg: #ffffff;
+  --list-sheet-close-bg: var(--color-bg);
   --list-sheet-ease: cubic-bezier(0.19, 1, 0.22, 1);
   --list-sheet-open-duration: 650ms;
   --list-sheet-close-duration: 420ms;
@@ -28,7 +28,7 @@
 
 .lists-page.has-list-sheet-open,
 .lists-page.is-list-sheet-closing {
-  background: #f8f8f7;
+  background: var(--color-sheet-bg);
 }
 
 .lists-page.has-list-sheet-open .site-shell,
@@ -194,7 +194,11 @@
   border: 0;
   border-radius: var(--list-sheet-corner-radius)
     var(--list-sheet-corner-radius) 0 0;
-  background: #f8f8f7;
+  background: var(--color-sheet-bg);
+  /* Clip composited scrolling content and overlays at the animated sheet edge. */
+  clip-path: inset(
+    0 round var(--list-sheet-corner-radius) var(--list-sheet-corner-radius) 0 0
+  );
   color: var(--color-ink);
   opacity: 1;
   outline: 0;
@@ -244,7 +248,7 @@
   overscroll-behavior-y: auto;
   border-radius: var(--list-sheet-corner-radius)
     var(--list-sheet-corner-radius) 0 0;
-  background: #f8f8f7;
+  background: var(--color-sheet-bg);
   touch-action: pan-y;
 }
 
@@ -277,7 +281,7 @@
   position: absolute;
   inset: 0 0 auto;
   height: 36px;
-  background: color-mix(in srgb, #f8f8f7 90%, transparent);
+  background: color-mix(in srgb, var(--color-sheet-bg) 90%, transparent);
   content: "";
   pointer-events: none;
 }
