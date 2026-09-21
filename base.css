@@ -453,6 +453,19 @@ main {
   visibility: visible;
 }
 
+/* A little extra tap room without loosening the compact menu. */
+@media (min-width: 761px) and (any-pointer: coarse) {
+  .more-menu__panel {
+    gap: 0;
+  }
+
+  .more-menu__link {
+    min-width: 96px;
+    /* Include the former 3px gap in the hit area without moving the labels. */
+    padding-block: 3px 8px;
+  }
+}
+
 .mobile-menu {
   display: none;
 }
