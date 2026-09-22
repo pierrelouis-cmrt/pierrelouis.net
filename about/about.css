@@ -94,7 +94,7 @@
 }
 
 .about-story {
-  --about-story-gap: 25px;
+  --about-story-gap: var(--space-xl);
 
   grid-column: 3 / span 2;
   min-width: 0;
