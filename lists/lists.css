@@ -499,7 +499,7 @@
 .list-sheet__entry-list {
   display: block;
   margin: 0;
-  padding-left: 0;
+  padding-inline-start: 1em;
   list-style: disc;
 }
 
@@ -952,10 +952,6 @@
 
   .list-sheet__content > .list-sheet__entry-list {
     grid-column: 1;
-  }
-
-  .list-sheet__entry-list {
-    padding-inline-start: 1em;
   }
 
   .list-sheet__markdown {
