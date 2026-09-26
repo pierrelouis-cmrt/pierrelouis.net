@@ -501,6 +501,37 @@
   }
 }
 
+@media (max-width: 450px) {
+  /* Stack the month under the year so the rail only needs to fit "2026". */
+  .post-list {
+    --post-date-rail-width: 44px;
+    --post-month-slot-width: 44px;
+  }
+
+  .post-row__year {
+    width: var(--post-date-rail-width);
+    overflow: hidden;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  /* Slides under the pinned year when its month group scrolls away. */
+  .post-row__month {
+    z-index: 4;
+    top: calc(var(--posts-date-sticky-top) + 1lh);
+    margin-left: 0;
+    text-align: left;
+  }
+
+  .post-month-group__layout:has(.post-row--year-start) > .post-row__month {
+    margin-top: 1lh;
+  }
+
+  .site-header.is-mobile-hidden ~ main .post-row__month {
+    top: 1lh;
+  }
+}
+
 /* Keep the desktop feature compact on short viewports. */
 @media (min-width: 1101px) and (max-height: 600px) {
   .featured-post__eyebrow {
