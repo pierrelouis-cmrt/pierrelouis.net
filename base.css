@@ -49,9 +49,10 @@
   --color-code-bg: #f8f8f8;
   --color-skeleton: #ececec;
   --color-skeleton-highlight: #fafafa;
-  --visual-warmth: sepia(0) saturate(1);
+  /* Identity here; matches the dark chain so filters interpolate smoothly. */
+  --visual-warmth: brightness(1) sepia(0) saturate(1);
   /* Flattens an image to the skeleton tone; develop animations start here. */
-  --skeleton-develop: contrast(0) brightness(1.85) sepia(0);
+  --skeleton-develop: contrast(0) brightness(1.85) var(--visual-warmth);
 
   /* Typography */
   --font-family-sans:
@@ -145,24 +146,26 @@
   --touch-target-compact: 36px;
 }
 
-/* Change the canvas itself so safe areas and overscroll share the theme. */
+/* Night Shift, applied per element rather than as a page overlay, so content
+   under translucent browser chrome and in the safe areas is warmed too.
+   Every color is its light value multiplied by the tint #fff4de, and
+   --visual-warmth is a filter fitted to that same multiply for media. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #fff6e4;
-    --color-ink: #211d16;
-    --color-muted: #696153;
-    --color-caption: #4b4438;
-    --color-subtle: #766c5b;
-    --color-media-bg: #f2e8d6;
-    --color-external-link-bg: #ede2cf;
-    --color-selection-bg: #dfcba5;
-    --color-sheet-bg: #f8eedc;
-    --color-panel-bg: #f3e9d7;
-    --color-code-bg: #f6ecda;
-    --color-skeleton: #ebe0cc;
-    --color-skeleton-highlight: #fbf4e8;
-    --visual-warmth: sepia(0.14) saturate(0.95);
-    --skeleton-develop: contrast(0) brightness(1.64) sepia(0.36);
+    --color-bg: #fff4de;
+    --color-ink: #1c1b18;
+    --color-muted: #68645b;
+    --color-caption: #47443e;
+    --color-subtle: #757066;
+    --color-media-bg: #f4e9d4;
+    --color-external-link-bg: #ede3ce;
+    --color-selection-bg: #d8cfbc;
+    --color-sheet-bg: #f8edd7;
+    --color-panel-bg: #f5ead4;
+    --color-code-bg: #f8edd8;
+    --color-skeleton: #ece2cd;
+    --color-skeleton-highlight: #faefda;
+    --visual-warmth: brightness(0.916) sepia(0.226) saturate(1.29);
   }
 }
 
