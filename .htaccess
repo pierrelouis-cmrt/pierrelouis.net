@@ -1,0 +1,11 @@
+Options -Indexes
+
+# Keep the site in its authored language. Browser translation remains a user-side
+# feature, but this reinforces the opt-out declared in each HTML document.
+<IfModule mod_headers.c>
+  Header always set X-Robots-Tag "notranslate"
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType video/webm .webm
+</IfModule>
