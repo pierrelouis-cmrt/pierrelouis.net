@@ -38,17 +38,6 @@
   transition-delay: 60ms;
 }
 
-.photos-page.has-photo-reveal-motion .photo-card__image {
-  opacity: 0;
-  transition: opacity 200ms var(--ease-out);
-}
-
-.photos-page.has-photo-reveal-motion
-  .photo-card.is-image-loaded
-  .photo-card__image {
-  opacity: 1;
-}
-
 .photo-album {
   display: grid;
   gap: var(--grid-gap);
@@ -132,12 +121,14 @@
   cursor: zoom-in;
 }
 
+/* Size the image box to the photo itself within the square tile, so its
+   loading skeleton traces the exact frame the photo will fill. */
 .photo-card__image {
   position: absolute;
   inset: 0;
   display: block;
-  width: 100%;
-  height: 100%;
+  width: calc(100% * min(1, var(--media-ratio, 1)));
+  height: calc(100% * min(1, 1 / var(--media-ratio, 1)));
   margin: auto;
   object-fit: contain;
   object-position: center;

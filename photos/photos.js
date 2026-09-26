@@ -81,18 +81,6 @@
 
     page.classList.add("has-photo-reveal-motion");
 
-    for (const image of page.querySelectorAll(".photo-card__image")) {
-      const card = image.closest(".photo-card");
-      const markLoaded = () => card?.classList.add("is-image-loaded");
-
-      if (image.complete && image.currentSrc) {
-        markLoaded();
-      } else {
-        image.addEventListener("load", markLoaded, { once: true });
-        image.addEventListener("error", markLoaded, { once: true });
-      }
-    }
-
     const startReveal = () => {
       intro?.classList.add("is-reveal-visible");
 

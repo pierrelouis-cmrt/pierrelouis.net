@@ -47,7 +47,11 @@
   --color-sheet-bg: #f8f8f7;
   --color-panel-bg: #f5f5f3;
   --color-code-bg: #f8f8f8;
+  --color-skeleton: #ececec;
+  --color-skeleton-highlight: #fafafa;
   --visual-warmth: sepia(0) saturate(1);
+  /* Flattens an image to the skeleton tone; develop animations start here. */
+  --skeleton-develop: contrast(0) brightness(1.85) sepia(0);
 
   /* Typography */
   --font-family-sans:
@@ -117,6 +121,7 @@
   --duration-medium: 260ms;
   --duration-menu: 420ms;
   --duration-image: 600ms;
+  --duration-skeleton: 2400ms;
   --mobile-header-motion-duration: var(--duration-medium);
   --mobile-header-motion-easing: var(--ease-out);
   --hover-opacity: 0.62;
@@ -154,7 +159,10 @@
     --color-sheet-bg: #f8eedc;
     --color-panel-bg: #f3e9d7;
     --color-code-bg: #f6ecda;
+    --color-skeleton: #ebe0cc;
+    --color-skeleton-highlight: #fbf4e8;
     --visual-warmth: sepia(0.14) saturate(0.95);
+    --skeleton-develop: contrast(0) brightness(1.64) sepia(0.36);
   }
 }
 
@@ -704,6 +712,54 @@ main {
   text-wrap: pretty;
 }
 
+/* Image skeletons. script.js marks images that are still loading; the
+   skeleton paints as the image's own background, so it always fills exactly
+   the box reserved for the image. A thin specular line glints across it, then
+   the decoded image develops out of the same flat tone. */
+img[data-skeleton="loading"] {
+  background-color: var(--color-skeleton);
+  background-image:
+    linear-gradient(
+      115deg,
+      transparent 49.2%,
+      var(--color-skeleton-highlight) 50%,
+      transparent 50.8%
+    ),
+    linear-gradient(
+      115deg,
+      transparent 43%,
+      color-mix(in srgb, var(--color-skeleton-highlight) 45%, transparent) 50%,
+      transparent 57%
+    );
+  background-position: 100% 0;
+  background-repeat: no-repeat;
+  background-size: 400% 100%;
+  /* The skeleton tokens are already themed; warming them again drifts them
+     off the tone the develop animation starts from. */
+  filter: none;
+  animation: skeleton-glint var(--duration-skeleton)
+    cubic-bezier(0.45, 0, 0.2, 1) var(--skeleton-phase, 0ms) infinite;
+}
+
+img[data-skeleton="done"] {
+  animation: skeleton-develop var(--duration-image) var(--ease-out);
+}
+
+@keyframes skeleton-glint {
+  62%,
+  to {
+    background-position: 0 0;
+  }
+}
+
+/* The implicit end state is each image's own filter, which keeps the warmth
+   token and any component filter intact once the image has developed. */
+@keyframes skeleton-develop {
+  from {
+    filter: var(--visual-warmth) var(--skeleton-develop);
+  }
+}
+
 .media-card__image {
   transition: transform var(--duration-image) var(--ease-out);
 }
@@ -796,11 +852,15 @@ main {
   object-fit: contain;
 }
 
+/* Resolve the contained size from the image ratio rather than waiting for its
+   intrinsic size, so the box is reserved before the file arrives. */
 .project-content__media--contained .project-content__image {
   width: auto;
+  width: min(78%, 1000px, calc(min(66svh, 700px) * var(--media-ratio)));
   max-width: min(78%, 1000px);
   height: auto;
   max-height: min(66svh, 700px);
+  aspect-ratio: var(--media-ratio, auto);
   object-fit: contain;
 }
 

@@ -320,6 +320,16 @@
   object-fit: contain;
 }
 
+/* Built raster media carry their ratio, so the box matches the image before
+   it loads. Tall images narrow at the height cap instead of letterboxing. */
+.post-media__asset {
+  width: min(
+    100%,
+    calc(var(--post-media-max-height) * var(--media-ratio, 1000))
+  );
+  aspect-ratio: var(--media-ratio, auto);
+}
+
 .post-hero__image {
   object-position: center;
 }

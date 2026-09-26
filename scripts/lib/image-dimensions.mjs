@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -63,12 +64,28 @@ const readWebpDimensions = (buffer) => {
   return null;
 };
 
+const readSvgDimensions = (buffer) => {
+  const root = buffer.toString("utf8").match(/<svg\b[^>]*>/i)?.[0] || "";
+  const attribute = (name) =>
+    root.match(new RegExp(`\\s${name}\\s*=\\s*["']([^"']+)["']`, "i"))?.[1];
+  const length = (value) =>
+    /^\s*[\d.]+\s*(?:px)?\s*$/.test(value || "") ? parseFloat(value) : 0;
+  const width = length(attribute("width"));
+  const height = length(attribute("height"));
+
+  if (width && height) {
+    return { width, height };
+  }
+
+  const viewBox = (attribute("viewBox") || "").trim().split(/[\s,]+/).map(Number);
+  return viewBox.length === 4 ? { width: viewBox[2], height: viewBox[3] } : null;
+};
+
 /**
  * Read intrinsic dimensions without introducing an image-processing dependency.
  * Supported project formats intentionally match the formats accepted by the site.
  */
-export const getImageDimensions = async (filePath) => {
-  const buffer = await readFile(filePath);
+const readImageDimensions = (buffer, filePath) => {
   const extension = path.extname(filePath).toLowerCase();
   let dimensions = null;
 
@@ -94,13 +111,22 @@ export const getImageDimensions = async (filePath) => {
     buffer.toString("ascii", 8, 12) === "WEBP"
   ) {
     dimensions = readWebpDimensions(buffer);
+  } else if (extension === ".svg") {
+    dimensions = readSvgDimensions(buffer);
   }
 
   if (!dimensions?.width || !dimensions?.height) {
     throw new Error(
-      `Could not read dimensions for ${filePath}. Use PNG, GIF, JPEG, or WebP.`,
+      `Could not read dimensions for ${filePath}. Use PNG, GIF, JPEG, WebP, or an SVG with a size or viewBox.`,
     );
   }
 
   return dimensions;
 };
+
+export const getImageDimensions = async (filePath) =>
+  readImageDimensions(await readFile(filePath), filePath);
+
+/** Synchronous variant for render hooks that cannot await, such as Markdown. */
+export const getImageDimensionsSync = (filePath) =>
+  readImageDimensions(readFileSync(filePath), filePath);

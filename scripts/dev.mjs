@@ -40,6 +40,7 @@ const shouldRebuildPhotos = (filename) => {
   return (
     filename.startsWith("content/photos/") ||
     filename === "scripts/build-photos.mjs" ||
+    filename === "scripts/lib/image-dimensions.mjs" ||
     filename === "scripts/lib/yaml.mjs"
   );
 };

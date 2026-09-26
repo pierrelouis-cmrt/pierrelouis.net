@@ -126,6 +126,56 @@ const mobileMenuToggle = document.querySelector(SELECTORS.mobileMenuToggle);
 const mobileMenuPanel = document.querySelector(SELECTORS.mobileMenuPanel);
 const siteHeader = document.querySelector(SELECTORS.siteHeader);
 
+// Mark images that are still loading so CSS paints their skeleton. All glints
+// share one clock, delayed by page position, so on a grid the highlight
+// travels diagonally from tile to tile instead of flickering independently.
+const setupImageSkeletons = () => {
+  const period = 2400; // Matches --duration-skeleton.
+  const delayPerPixel = 0.8;
+  const now = performance.now();
+
+  for (const image of document.images) {
+    const isDeferred = "deferredSrc" in image.dataset;
+    const source = image.dataset.deferredSrc || image.getAttribute("src") || "";
+
+    if (
+      (!isDeferred && image.complete) ||
+      "noSkeleton" in image.dataset ||
+      /\.svg(?:[?#]|$)/i.test(source)
+    ) {
+      continue;
+    }
+
+    const { left, top } = image.getBoundingClientRect();
+    const lag = (left + top + window.scrollY) * delayPerPixel;
+    const phase = (((now - lag) % period) + period) % period;
+
+    image.style.setProperty("--skeleton-phase", `${-Math.round(phase)}ms`);
+    image.dataset.skeleton = "loading";
+    image.addEventListener(
+      "load",
+      () => {
+        // Swap only once pixels are ready, so no blank frame separates the
+        // skeleton from the developing image.
+        image
+          .decode()
+          .catch(() => {})
+          .then(() => {
+            image.dataset.skeleton = "done";
+          });
+      },
+      { once: true },
+    );
+    image.addEventListener(
+      "error",
+      () => image.removeAttribute("data-skeleton"),
+      { once: true },
+    );
+  }
+};
+
+setupImageSkeletons();
+
 const setupDeferredMedia = () => {
   const media = [
     ...document.querySelectorAll(

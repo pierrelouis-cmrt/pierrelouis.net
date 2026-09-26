@@ -4,6 +4,7 @@ import hljs from "highlight.js";
 import katex from "katex";
 import MarkdownIt from "markdown-it";
 import footnote from "markdown-it-footnote";
+import { getImageDimensionsSync } from "./image-dimensions.mjs";
 import {
   POST_ARTICLES_DIR,
   isPostImage,
@@ -85,6 +86,49 @@ const publicAssetUrl = (reference, env) => {
   );
   const relative = path.relative(POST_ARTICLES_DIR, absolute);
   return `../${relative.split(path.sep).join("/")}`;
+};
+
+const SIZED_EXTENSIONS = new Set([
+  ".gif",
+  ".jpeg",
+  ".jpg",
+  ".png",
+  ".svg",
+  ".webp",
+]);
+
+// Reserve each local image's exact box before it loads. Remote assets keep
+// their natural sizing.
+const mediaSizeAttributes = (reference, env) => {
+  const value = String(reference || "").trim();
+  const inputPath = env?.page?.inputPath;
+
+  if (
+    !value ||
+    !inputPath ||
+    isRemotePostAsset(value) ||
+    value.startsWith("/")
+  ) {
+    return "";
+  }
+
+  const absolute = resolvePostAssetPath(
+    value,
+    path.resolve(inputPath),
+    POST_ARTICLES_DIR,
+  );
+
+  if (
+    !absolute ||
+    !existsSync(absolute) ||
+    !SIZED_EXTENSIONS.has(path.extname(absolute).toLowerCase())
+  ) {
+    return "";
+  }
+
+  const { width, height } = getImageDimensionsSync(absolute);
+  const ratio = Number((width / height).toFixed(4));
+  return ` width="${width}" height="${height}" style="--media-ratio: ${ratio}"`;
 };
 
 const resolveWikiLink = (rawTarget, rawLabel, env, manifest) => {
@@ -386,7 +430,7 @@ const renderMedia = ({
 
   return `<figure class="post-media">
   <button class="post-media__frame post-lightbox__trigger" type="button" data-post-lightbox-item>
-    <img class="post-media__asset" src="${safeSrc}" loading="lazy" decoding="async" alt="${safeAlt}" />
+    <img class="post-media__asset" src="${safeSrc}"${mediaSizeAttributes(src, env)} loading="lazy" decoding="async" alt="${safeAlt}" />
   </button>
   ${
     captionHtml

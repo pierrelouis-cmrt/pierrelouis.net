@@ -1669,6 +1669,7 @@ ${block.images
                     src="${escapeHtml(PUBLIC_PROJECT_ASSET_ROOT + block.image.outputFile)}"
                     width="${block.image.width}"
                     height="${block.image.height}"
+                    style="--media-ratio: ${Number((block.image.width / block.image.height).toFixed(4))}"
                     alt="${escapeHtml(block.image.alt)}"${loading}
                   />
                 </figure>`;

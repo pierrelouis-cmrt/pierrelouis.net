@@ -8,6 +8,8 @@ const MOBILE_MENU_FEATURED_PROJECT = {
   title: "CapECL",
   href: "projects/capecl/",
   image: "assets/mobile-menu/capecl.webp",
+  width: 336,
+  height: 167,
 };
 
 const PAGE_CONFIGS = [
@@ -202,6 +204,8 @@ export const renderSiteHeader = (config) => {
                     <img
                       class="mobile-menu__latest-image"
                       data-deferred-src="${root}${featuredProject.image}"
+                      width="${featuredProject.width}"
+                      height="${featuredProject.height}"
                       alt=""
                       loading="lazy"
                       decoding="async"
@@ -210,6 +214,8 @@ export const renderSiteHeader = (config) => {
                       <img
                         class="mobile-menu__latest-image"
                         src="${root}${featuredProject.image}"
+                        width="${featuredProject.width}"
+                        height="${featuredProject.height}"
                         alt=""
                       />
                     </noscript>
@@ -249,6 +255,7 @@ export const renderSiteHeader = (config) => {
             <img
               class="mobile-menu__watermark"
               data-deferred-src="${root}assets/image_mobile_watermark.png"
+              data-no-skeleton
               alt=""
               aria-hidden="true"
               loading="lazy"

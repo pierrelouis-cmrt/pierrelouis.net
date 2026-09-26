@@ -10,6 +10,7 @@
 - Suits (almost finished, I gave up..)
 - We Crashed
 - Off campus
-- High potential (Season 3 not yet released)
-- Maxton Hall (Season 3 not yet released)
-- For All Mankind (Season 6 not yet released)
+- High potential
+- Maxton Hall
+- For All Mankind
+- Matlock

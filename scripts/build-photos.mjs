@@ -4,6 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { applySharedComponents } from "./shared-components.mjs";
+import { getImageDimensions } from "./lib/image-dimensions.mjs";
 import { parseYaml } from "./lib/yaml.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -560,7 +561,7 @@ const generateCollectionAssets = async (collections) => {
         expectedCacheKeys.add(getAssetCacheKey(variantName, collection.id, filename));
       }
 
-      jobs.push({ collection, filename, full, source, thumbnail });
+      jobs.push({ collection, filename, full, photo, source, thumbnail });
 
       photo.src = `../assets/photos/${collection.id}/${filename}`;
       photo.fullSrc = `../assets/photos-full/${collection.id}/${filename}`;
@@ -580,6 +581,10 @@ const generateCollectionAssets = async (collections) => {
       target: job.thumbnail,
       variantName: "thumbnail",
     });
+    // The page reserves each photo's exact box before its deferred load.
+    const { width, height } = await getImageDimensions(job.thumbnail);
+    job.photo.width = width;
+    job.photo.height = height;
     await generateAssetVariant({
       cache,
       collection: job.collection,
@@ -700,6 +705,9 @@ const renderPhotoFigure = (photo, index, collection) => {
                   <img
                     class="photo-card__image"
                     data-deferred-src="${escapeHtml(photo.src)}"
+                    width="${photo.width}"
+                    height="${photo.height}"
+                    style="--media-ratio: ${Number((photo.width / photo.height).toFixed(4))}"
                     alt=""
                     loading="lazy"
                     decoding="async"
