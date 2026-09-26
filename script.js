@@ -53,6 +53,7 @@ const MOBILE_HEADER = {
   mediaQuery: "(max-width: 760px)",
   hideAfterY: 90,
   directionThreshold: 12,
+  showThreshold: 36,
 };
 
 const EXTERNAL_PROTOCOLS = new Set(["http:", "https:"]);
@@ -405,7 +406,7 @@ if (siteHeader) {
 
     if (
       scrollDirection === "up" &&
-      directionDistance > MOBILE_HEADER.directionThreshold
+      directionDistance > MOBILE_HEADER.showThreshold
     ) {
       showMobileHeader();
     }

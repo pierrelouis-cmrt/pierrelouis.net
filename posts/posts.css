@@ -442,14 +442,17 @@
     --posts-date-sticky-top: var(--mobile-header-height);
   }
 
-  .posts-page:has(.site-header.is-mobile-hidden) {
-    --posts-date-sticky-top: 0px;
-  }
-
   .post-row__year,
   .post-row__month {
     transition: top var(--mobile-header-motion-duration)
       var(--mobile-header-motion-easing);
+  }
+
+  /* Target the rails directly so hiding the header doesn't restyle the page. */
+  .site-header.is-mobile-hidden ~ main :is(.post-row__year, .post-row__month) {
+    top: 0;
+    transition-duration: 300ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .post-row {
