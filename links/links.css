@@ -275,7 +275,7 @@
 
   .links-panels {
     --links-mobile-title-size: clamp(15px, 4.4vw, 17px);
-    --links-mobile-content-size: clamp(17px, 5.2vw, 22px);
+    --links-mobile-content-size: clamp(20px, 6vw, 26px);
 
     display: flex;
     margin-top: var(--space-7xl);
@@ -287,7 +287,8 @@
     width: 100%;
     height: auto;
     min-height: 350px;
-    padding: var(--space-5xl) var(--space-xl);
+    padding: var(--space-6xl) var(--space-3xl);
+    container-type: inline-size;
   }
 
   .links-panel--contact {
@@ -301,7 +302,7 @@
   }
 
   .status-list {
-    gap: var(--space-lg);
+    gap: var(--space-xl);
   }
 
   .status-list p,
@@ -312,12 +313,20 @@
     letter-spacing: -0.03em;
   }
 
+  /* Stays on one line: shrinks with the panel before it can overflow. */
   .contact-email {
+    font-size: min(var(--links-mobile-content-size), 7.6cqi);
     white-space: nowrap;
   }
 
   .social-links {
     gap: clamp(16px, 7vw, 30px);
+  }
+}
+
+@media (max-width: 360px) {
+  .links-panel {
+    padding-inline: var(--space-xl);
   }
 }
 
