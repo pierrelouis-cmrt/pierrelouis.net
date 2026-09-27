@@ -134,6 +134,26 @@ const hydrateVisitedMap = async (sheet) => {
   let activeTrigger = null;
   let isClosing = false;
   let pendingCloseDragY = null;
+  // Programmatic focus restoration matches :focus-visible, so remember whether
+  // the user is on a pointer (tap/click) or the keyboard to decide on a ring.
+  let isPointerModality = true;
+
+  document.addEventListener(
+    "pointerdown",
+    () => {
+      isPointerModality = true;
+    },
+    true,
+  );
+  document.addEventListener(
+    "keydown",
+    (event) => {
+      if (!event.metaKey && !event.ctrlKey && !event.altKey) {
+        isPointerModality = false;
+      }
+    },
+    true,
+  );
   let pendingSlug = null;
   const existingThemeColor = document.querySelector(
     'meta[name="theme-color"]',
@@ -321,7 +341,19 @@ const hydrateVisitedMap = async (sheet) => {
     }
 
     if (restoreFocus && triggerToRestore?.isConnected) {
-      triggerToRestore.focus({ preventScroll: true });
+      if (isPointerModality) {
+        triggerToRestore.dataset.pointerFocus = "";
+        triggerToRestore.addEventListener(
+          "blur",
+          () => delete triggerToRestore.dataset.pointerFocus,
+          { once: true },
+        );
+      }
+
+      triggerToRestore.focus({
+        preventScroll: true,
+        focusVisible: !isPointerModality,
+      });
     }
 
     if (pendingSlug) {

@@ -79,10 +79,9 @@
   outline-offset: 5px;
 }
 
-@media (any-hover: none) and (any-pointer: coarse) {
-  .list-card:focus-visible {
-    outline: 0;
-  }
+/* Focus returned to a card after a tap/click-closed sheet stays ringless. */
+.list-card[data-pointer-focus]:focus-visible {
+  outline: 0;
 }
 
 .list-card__media {
