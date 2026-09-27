@@ -309,11 +309,17 @@
   display: none;
 }
 
+/* Starts in the viewport's bottom-left corner (offset set by posts.js),
+   scrolls with the archive, then sticks to the top. Sharing the list's
+   grid row gives the sticky element the full archive height to travel. */
 .featured-post {
-  position: fixed;
+  position: sticky;
   z-index: 4;
-  bottom: max(var(--page-gutter), env(safe-area-inset-bottom));
-  left: max(var(--page-gutter), env(safe-area-inset-left));
+  top: max(var(--page-gutter), env(safe-area-inset-top));
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+  margin-top: var(--featured-post-offset, 0px);
   display: block;
   width: 200px;
   max-width: calc(100% - 2 * var(--page-gutter));

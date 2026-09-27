@@ -1,4 +1,31 @@
 (() => {
+  const featured = document.querySelector(".featured-post");
+
+  if (!featured) {
+    return;
+  }
+
+  // Push the feature down so it first rests in the viewport's bottom corner;
+  // CSS stickiness then takes over once it scrolls up to the top.
+  const place = () => {
+    const containerTop =
+      featured.parentElement.getBoundingClientRect().top + window.scrollY;
+    const gutter = parseFloat(getComputedStyle(featured).top) || 0;
+    const offset =
+      window.innerHeight - gutter - featured.offsetHeight - containerTop;
+
+    featured.style.setProperty(
+      "--featured-post-offset",
+      `${Math.max(0, offset)}px`,
+    );
+  };
+
+  place();
+  window.addEventListener("resize", place);
+  new ResizeObserver(place).observe(featured);
+})();
+
+(() => {
   const root = document.querySelector("[data-post-filters]");
 
   if (!root) {
