@@ -806,6 +806,7 @@ const renderPage = (collections) => {
       content="${escapeHtml(PHOTOS_PAGE.description)}"
     />
     <meta property="og:type" content="website" />
+    <link rel="canonical" href="${escapeHtml(PHOTOS_PAGE.url)}" />
     <meta property="og:url" content="${escapeHtml(PHOTOS_PAGE.url)}" />
     <meta
       property="og:image"

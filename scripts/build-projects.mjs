@@ -1948,6 +1948,7 @@ const renderCaseStudyPage = (project, peers) => {
       content="${escapeHtml(project.summary)}"
     />
     <meta property="og:type" content="article" />
+    <link rel="canonical" href="${escapeHtml(pageUrl)}" />
     <meta property="og:url" content="${escapeHtml(pageUrl)}" />
     <meta property="og:image" content="${escapeHtml(imageUrl)}" />
     <link
