@@ -1,17 +1,13 @@
 .about-portrait {
-  height: min(416px, 28.3vw);
   margin: 0;
-  overflow: hidden;
   background: var(--color-media-bg);
 }
 
 .about-portrait__image {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
   max-width: none;
-  object-fit: cover;
-  object-position: center;
 }
 
 .about-content {
@@ -224,10 +220,6 @@
     align-self: start;
   }
 
-  .about-portrait {
-    height: clamp(280px, 31vw, 340px);
-  }
-
   .about-content {
     min-height: 0;
   }
@@ -255,10 +247,6 @@
   .about-guide,
   .about-story {
     grid-column: 1;
-  }
-
-  .about-portrait {
-    height: clamp(188px, 48vw, 260px);
   }
 
   .about-content {
