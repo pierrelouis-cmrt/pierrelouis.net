@@ -14,3 +14,4 @@
 - Maxton Hall
 - For All Mankind
 - Matlock
+- American Horror Story: Coven
