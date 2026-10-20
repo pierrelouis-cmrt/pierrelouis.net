@@ -5,49 +5,66 @@
   --list-sheet-close-inset: var(--space-2xl);
   --list-sheet-close-icon-width: 15px;
   --list-sheet-close-bg: var(--color-bg);
-  --list-sheet-ease: cubic-bezier(0.19, 1, 0.22, 1);
-  --list-sheet-open-duration: 650ms;
-  --list-sheet-close-duration: 420ms;
+  --list-sheet-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --list-sheet-open-duration: 500ms;
+  --list-sheet-close-duration: 400ms;
   background: var(--color-bg);
 }
 
-.lists-page .site-shell {
-  transform: translateY(0) scale(1);
-  transform-origin: center top;
-  filter: saturate(1) brightness(1);
-  transition:
-    transform var(--list-sheet-open-duration) var(--list-sheet-ease),
-    filter var(--list-sheet-open-duration) var(--list-sheet-ease),
-    border-radius var(--list-sheet-open-duration) var(--list-sheet-ease);
-  will-change: transform, filter;
-}
-
-.lists-page.has-list-sheet-open {
+/* Sheet motion runs in two phases so no frame of it repaints the page.
+   `is-list-sheet-active` lands a couple of frames before anything moves: it
+   promotes the shell, pins the header and paints the frame and corners up
+   front. `has-list-sheet-open` then only changes the shell's transform and the
+   scrim's opacity, which the compositor animates on its own. The transform
+   also makes the shell the containing block for the fixed mobile header, so
+   it only applies while a sheet is active; dropping back to idle snaps. */
+.lists-page.is-list-sheet-active {
   overflow: hidden;
-}
-
-.lists-page.has-list-sheet-open,
-.lists-page.is-list-sheet-closing {
   background: var(--color-sheet-bg);
 }
 
-.lists-page.has-list-sheet-open .site-shell,
-.lists-page.is-list-sheet-closing .site-shell {
-  box-shadow: 0 0 0 100vmax #2f2e2e;
+.lists-page.is-list-sheet-active .site-shell {
+  border-radius: var(--list-sheet-corner-radius) var(--list-sheet-corner-radius) 0 0;
+  box-shadow: 0 0 0 100vmax var(--sheet-frame-color);
+  transform: translateY(0) scale(1);
+  /* Shrink toward the top of the viewport rather than the top of the
+     document, so a scrolled page settles in place instead of drifting up. */
+  transform-origin: 50% var(--sheet-stage-scroll-y, 0px);
+  transition: transform var(--list-sheet-open-duration) var(--list-sheet-ease);
+  will-change: transform;
 }
 
 .lists-page.has-list-sheet-open .site-shell {
-  border-radius: var(--list-sheet-corner-radius)
-    var(--list-sheet-corner-radius) 0 0;
-  filter: saturate(0.4) brightness(0.7);
   transform: translateY(10px) scale(0.95);
 }
 
-.lists-page.is-list-sheet-closing .site-shell {
+/* Dims the page with an opacity fade instead of a filter on the whole shell,
+   which would re-render every layer of the page on each frame. */
+.lists-page .sheet-scrim {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: none;
+  background: var(--sheet-scrim-color);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--list-sheet-open-duration) var(--list-sheet-ease);
+  will-change: opacity;
+}
+
+.lists-page.is-list-sheet-active .sheet-scrim {
+  display: block;
+}
+
+.lists-page.has-list-sheet-open .sheet-scrim {
+  opacity: 1;
+}
+
+.lists-page.is-list-sheet-closing :is(.site-shell, .sheet-scrim) {
   transition-duration: var(--list-sheet-close-duration);
 }
 
-.lists-page.is-list-sheet-dragging .site-shell {
+.lists-page.is-list-sheet-dragging :is(.site-shell, .sheet-scrim) {
   transition: none;
 }
 
@@ -201,7 +218,7 @@
   color: var(--color-ink);
   opacity: 1;
   outline: 0;
-  touch-action: pan-y;
+  touch-action: pan-y pinch-zoom;
   transform: translateY(100vh);
   transform-origin: center top;
   transition: transform var(--list-sheet-open-duration) var(--list-sheet-ease);
@@ -236,7 +253,7 @@
   border-radius: var(--list-sheet-corner-radius)
     var(--list-sheet-corner-radius) 0 0;
   background: var(--color-sheet-bg);
-  touch-action: pan-y;
+  touch-action: pan-y pinch-zoom;
 }
 
 .list-sheet__handle {
@@ -285,7 +302,7 @@
   width: 42px;
   height: 5px;
   border-radius: 999px;
-  background: #cccccc;
+  background: color-mix(in srgb, var(--color-ink) 22.5%, var(--color-bg));
 }
 
 .list-sheet__close {
@@ -859,6 +876,12 @@
 }
 
 @media (max-width: 760px) {
+  /* While the shell is transformed, pin the header to where it sat on screen
+     so it shrinks with the page instead of jumping to the document top. */
+  .lists-page.is-list-sheet-active .site-header {
+    top: var(--sheet-stage-scroll-y, 0px);
+  }
+
   .lists-canvas {
     display: flex;
     height: auto;
@@ -970,22 +993,15 @@
     transition: none;
   }
 
-  .lists-page .site-shell {
-    filter: none;
-    transition-duration:
-      var(--list-sheet-open-duration),
-      var(--list-sheet-open-duration),
-      var(--list-sheet-open-duration) !important;
+  .lists-page :is(.site-shell, .sheet-scrim) {
+    transition-duration: var(--list-sheet-open-duration) !important;
   }
 
-  .lists-page.is-list-sheet-closing .site-shell {
-    transition-duration:
-      var(--list-sheet-close-duration),
-      var(--list-sheet-close-duration),
-      var(--list-sheet-close-duration) !important;
+  .lists-page.is-list-sheet-closing :is(.site-shell, .sheet-scrim) {
+    transition-duration: var(--list-sheet-close-duration) !important;
   }
 
-  .lists-page.is-list-sheet-dragging .site-shell {
+  .lists-page.is-list-sheet-dragging :is(.site-shell, .sheet-scrim) {
     transition: none !important;
   }
 

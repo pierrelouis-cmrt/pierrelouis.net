@@ -135,7 +135,7 @@
 
 .animated-signature {
   position: relative;
-  color: #3d3d3d;
+  color: color-mix(in srgb, var(--color-ink) 85%, var(--color-bg));
 }
 
 .animated-signature__mark {

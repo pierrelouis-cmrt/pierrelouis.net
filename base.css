@@ -53,6 +53,11 @@
   --visual-warmth: brightness(1) sepia(0) saturate(1);
   /* Flattens an image to the skeleton tone; develop animations start here. */
   --skeleton-develop: contrast(0) brightness(1.85) var(--visual-warmth);
+  /* Behind an open sheet: the scrim dims the page to ~70% brightness, and the
+     frame around the shrunken page lands near ink once the scrim covers it.
+     Mixed from tokens so both warm with the night palette. */
+  --sheet-scrim-color: color-mix(in srgb, var(--color-ink) 34%, transparent);
+  --sheet-frame-color: color-mix(in srgb, var(--color-ink) 97%, var(--color-bg));
 
   /* Typography */
   --font-family-sans:
@@ -123,7 +128,7 @@
   --duration-menu: 420ms;
   --duration-image: 600ms;
   --duration-skeleton: 2400ms;
-  --mobile-header-motion-duration: 380ms;
+  --mobile-header-motion-duration: 240ms;
   --mobile-header-motion-easing: var(--ease-out);
   --hover-opacity: 0.62;
   --watermark-opacity: 0.05;
@@ -149,7 +154,10 @@
 /* Night Shift, applied per element rather than as a page overlay, so content
    under translucent browser chrome and in the safe areas is warmed too.
    Every color is its light value multiplied by the tint #fff4de, and
-   --visual-warmth is a filter fitted to that same multiply for media. */
+   --visual-warmth is a filter fitted to that same multiply for media.
+   One-off greys elsewhere are mixed from ink and canvas instead of written as
+   literals: the multiply is linear, so the mix of two tinted colors is the
+   tinted grey, and they warm without needing a token of their own. */
 @media (prefers-color-scheme: dark) {
   :root {
     --color-bg: #fff4de;
@@ -198,7 +206,8 @@ html {
   font-family: var(--font-family-sans);
   color: var(--color-ink);
   scrollbar-width: thin;
-  scrollbar-color: gray transparent;
+  scrollbar-color: color-mix(in srgb, var(--color-ink) 56%, var(--color-bg))
+    transparent;
   font-synthesis: none;
   text-rendering: geometricPrecision;
   -webkit-text-size-adjust: 100%;
@@ -1330,11 +1339,11 @@ img[data-skeleton="done"] {
     min-height: var(--line-height-utility-mobile);
   }
 
-  /* Exit with a gentle symmetric curve; re-enter with a softer ease-out.
+  /* Exit quickly; re-enter a little more slowly with a responsive ease-out.
      Scoped to the header (not :root) so toggling it stays a cheap restyle. */
   .site-header.is-mobile-hidden {
-    --mobile-header-motion-duration: 300ms;
-    --mobile-header-motion-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --mobile-header-motion-duration: 160ms;
+    --mobile-header-motion-easing: cubic-bezier(0.4, 0, 1, 1);
     pointer-events: none;
     transform: translate3d(0, -100%, 0);
   }

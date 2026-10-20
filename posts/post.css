@@ -215,8 +215,8 @@
     #606af5 0%,
     #8b9ffc 22%,
     #c1cbfd 36%,
-    #f8fbff 50%,
-    #ffffff 64%
+    color-mix(in srgb, #c1cbfd 12%, var(--color-bg)) 50%,
+    var(--color-bg) 64%
   );
   pointer-events: none;
 }
@@ -1135,7 +1135,7 @@
 }
 
 .post-lightbox__counter {
-  color: #ffffff;
+  color: var(--color-bg);
   font-size: var(--font-size-base);
   line-height: var(--line-height-solid);
   letter-spacing: var(--tracking-normal);
@@ -1150,7 +1150,7 @@
   padding: 0 0 var(--space-2xs);
   border: 0;
   background: transparent;
-  color: #ffffff;
+  color: var(--color-bg);
   font: inherit;
   font-size: var(--font-size-base);
   line-height: var(--line-height-solid);
@@ -1166,7 +1166,7 @@
   justify-content: center;
   gap: 2ch;
   height: var(--post-lightbox-controls-height);
-  color: #ffffff;
+  color: var(--color-bg);
   font-size: var(--font-size-base);
   line-height: var(--line-height-solid);
   transform: translateX(-50%);

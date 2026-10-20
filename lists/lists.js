@@ -27,6 +27,89 @@ const formatMapPercentage = (ratio) =>
     minimumFractionDigits: ratio < 0.1 ? 1 : 0,
   }).format(ratio * 100)}%`;
 
+// Fetching, parsing and measuring the 170 KB map is kept apart from inserting
+// it, so the work can happen while the page is idle instead of mid-animation.
+const visitedMaps = new WeakMap();
+
+const loadVisitedMap = (sheet) => {
+  const component = sheet.querySelector("[data-visited-map]");
+
+  if (!component) {
+    return null;
+  }
+
+  if (!visitedMaps.has(component)) {
+    const pending = (async () => {
+      const response = await fetch("../assets/lists/world-map.svg");
+
+      if (!response.ok) {
+        throw new Error(`Map request failed with ${response.status}`);
+      }
+
+      const documentFragment = new DOMParser().parseFromString(
+        await response.text(),
+        "image/svg+xml",
+      );
+      const map = documentFragment.documentElement;
+
+      if (map.nodeName.toLowerCase() !== "svg") {
+        throw new Error("The world map asset is not an SVG");
+      }
+
+      const paths = Array.from(map.querySelectorAll("[data-country-code]"));
+      const codeByName = new Map(
+        paths.map((path) => [
+          normalizeCountryName(path.dataset.countryName),
+          path.dataset.countryCode,
+        ]),
+      );
+      codeByName.set("uk", "GB");
+
+      const visitedCodes = new Set();
+      sheet.querySelectorAll("[data-list-entry]").forEach((entry) => {
+        const normalizedName = normalizeCountryName(entry.textContent);
+        const code = codeByName.get(normalizedName);
+
+        if (code) {
+          visitedCodes.add(code);
+        }
+      });
+
+      let visitedArea = 0;
+
+      paths.forEach((path) => {
+        if (!visitedCodes.has(path.dataset.countryCode)) {
+          return;
+        }
+
+        const countryArea = Number(path.dataset.countryArea) || 0;
+        visitedArea += countryArea;
+        path.classList.add("is-visited");
+      });
+
+      const totalCountries = Number(component.dataset.totalCountries) || 195;
+      const totalLandArea =
+        Number(component.dataset.totalLandArea) || 148_940_000;
+      const countryRatio = visitedCodes.size / totalCountries;
+      const areaRatio = visitedArea / totalLandArea;
+
+      map.classList.add("project-content__image", "world-map");
+
+      return {
+        map,
+        countryStatus: `${visitedCodes.size} of ${totalCountries} — ${formatMapPercentage(countryRatio)}`,
+        areaStatus: `${formatMapArea(visitedArea)} of ${formatMapArea(totalLandArea)} — ${formatMapPercentage(areaRatio)}`,
+      };
+    })();
+
+    // Mark handled here; hydrateVisitedMap reports failures.
+    pending.catch(() => {});
+    visitedMaps.set(component, pending);
+  }
+
+  return visitedMaps.get(component);
+};
+
 const hydrateVisitedMap = async (sheet) => {
   const component = sheet.querySelector("[data-visited-map]");
 
@@ -37,64 +120,18 @@ const hydrateVisitedMap = async (sheet) => {
   component.dataset.mapHydrated = "true";
 
   try {
-    const response = await fetch("../assets/lists/world-map.svg");
+    const { map, countryStatus, areaStatus } = await loadVisitedMap(sheet);
 
-    if (!response.ok) {
-      throw new Error(`Map request failed with ${response.status}`);
-    }
-
-    const documentFragment = new DOMParser().parseFromString(
-      await response.text(),
-      "image/svg+xml",
+    // A preloaded map lands before the sheet starts moving. A late one waits
+    // for the slide to finish so its layout and paint cannot stall it.
+    await Promise.all(
+      (sheet.getAnimations?.() ?? []).map((animation) =>
+        animation.finished.catch(() => {}),
+      ),
     );
-    const map = documentFragment.documentElement;
 
-    if (map.nodeName.toLowerCase() !== "svg") {
-      throw new Error("The world map asset is not an SVG");
-    }
-
-    const paths = Array.from(map.querySelectorAll("[data-country-code]"));
-    const codeByName = new Map(
-      paths.map((path) => [
-        normalizeCountryName(path.dataset.countryName),
-        path.dataset.countryCode,
-      ]),
-    );
-    codeByName.set("uk", "GB");
-
-    const visitedCodes = new Set();
-    sheet.querySelectorAll("[data-list-entry]").forEach((entry) => {
-      const normalizedName = normalizeCountryName(entry.textContent);
-      const code = codeByName.get(normalizedName);
-
-      if (code) {
-        visitedCodes.add(code);
-      }
-    });
-
-    let visitedArea = 0;
-
-    paths.forEach((path) => {
-      if (!visitedCodes.has(path.dataset.countryCode)) {
-        return;
-      }
-
-      const countryArea = Number(path.dataset.countryArea) || 0;
-      visitedArea += countryArea;
-      path.classList.add("is-visited");
-    });
-
-    const totalCountries = Number(component.dataset.totalCountries) || 195;
-    const totalLandArea =
-      Number(component.dataset.totalLandArea) || 148_940_000;
-    const countryRatio = visitedCodes.size / totalCountries;
-    const areaRatio = visitedArea / totalLandArea;
-    sheet.querySelector("[data-country-status]").textContent =
-      `${visitedCodes.size} of ${totalCountries} — ${formatMapPercentage(countryRatio)}`;
-    sheet.querySelector("[data-area-status]").textContent =
-      `${formatMapArea(visitedArea)} of ${formatMapArea(totalLandArea)} — ${formatMapPercentage(areaRatio)}`;
-
-    map.classList.add("project-content__image", "world-map");
+    sheet.querySelector("[data-country-status]").textContent = countryStatus;
+    sheet.querySelector("[data-area-status]").textContent = areaStatus;
     component.replaceChildren(map);
     component.setAttribute("aria-busy", "false");
   } catch (error) {
@@ -124,11 +161,10 @@ const hydrateVisitedMap = async (sheet) => {
 
   const sheets = new Map();
   const root = document.documentElement;
-  const sheetBackgroundColor = "#f8f8f7";
   const triggersBySlug = new Map(
     triggers.map((trigger) => [trigger.dataset.listSheetOpen, trigger]),
   );
-  const closeDuration = 420;
+  const closeDuration = 400;
   let activeSheet = null;
   let activeSlug = null;
   let activeTrigger = null;
@@ -163,7 +199,7 @@ const hydrateVisitedMap = async (sheet) => {
   let themeColor = existingThemeColor;
 
   const setSheetThemeColor = () => {
-    root.style.backgroundColor = sheetBackgroundColor;
+    root.style.backgroundColor = "var(--color-sheet-bg)";
 
     if (!themeColor) {
       themeColor = document.createElement("meta");
@@ -171,7 +207,8 @@ const hydrateVisitedMap = async (sheet) => {
       document.head.append(themeColor);
     }
 
-    themeColor.content = sheetBackgroundColor;
+    // Browser chrome needs a resolved color, so read back the themed canvas.
+    themeColor.content = getComputedStyle(root).backgroundColor;
   };
 
   const restoreThemeColor = () => {
@@ -191,7 +228,9 @@ const hydrateVisitedMap = async (sheet) => {
       return;
     }
 
-    themeColor.content = defaultThemeColor;
+    // Follow the live canvas like script.js does: the color captured at load
+    // may belong to the other appearance by now.
+    themeColor.content = getComputedStyle(root).backgroundColor;
   };
 
   const dispatchLifecycle = (sheet, name, detail = {}) => {
@@ -296,24 +335,26 @@ const hydrateVisitedMap = async (sheet) => {
     sheet.removeAttribute("open");
   };
 
+  // Dims the page behind the sheet (see the `.sheet-scrim` rules in the CSS).
+  const scrim = document.createElement("div");
+  scrim.className = "sheet-scrim";
+  scrim.setAttribute("aria-hidden", "true");
+  document.body.append(scrim);
+
   const clearStageDragStyles = () => {
     stage.style.removeProperty("transform");
-    stage.style.removeProperty("filter");
-    stage.style.removeProperty("border-radius");
+    scrim.style.removeProperty("opacity");
   };
 
+  // Only compositor-friendly properties change here, so dragging the sheet
+  // never repaints the page underneath it.
   const setStageProgress = (progress) => {
     const clampedProgress = Math.min(Math.max(progress, 0), 1);
     const scale = 1 - clampedProgress * 0.05;
     const translate = clampedProgress * 10;
-    const saturation = 1 - clampedProgress * 0.6;
-    const brightness = 1 - clampedProgress * 0.3;
-    const radius = clampedProgress * 24;
 
     stage.style.transform = `translateY(${translate}px) scale(${scale})`;
-    stage.style.filter =
-      `saturate(${saturation}) brightness(${brightness})`;
-    stage.style.borderRadius = `${radius}px ${radius}px 0 0`;
+    scrim.style.opacity = String(clampedProgress);
   };
 
   const finalizeClose = (sheet, { restoreFocus = true } = {}) => {
@@ -322,6 +363,7 @@ const hydrateVisitedMap = async (sheet) => {
     sheet.style.removeProperty("transform");
     sheet.style.removeProperty("transition-duration");
     page.classList.remove(
+      "is-list-sheet-active",
       "has-list-sheet-open",
       "is-list-sheet-closing",
       "is-list-sheet-dragging",
@@ -464,7 +506,10 @@ const hydrateVisitedMap = async (sheet) => {
     syncEntryCount(sheet);
     setSheetThemeColor();
     showDialog(sheet);
-    page.classList.add("has-list-sheet-open");
+    stage.style.setProperty("--sheet-stage-scroll-y", `${window.scrollY}px`);
+    // Phase one: promote layers and paint the sheet, frame and corners while
+    // nothing moves yet, so the first animated frame has no work left to do.
+    page.classList.add("is-list-sheet-active");
 
     if (updateHistory) {
       window.history.pushState(
@@ -474,8 +519,15 @@ const hydrateVisitedMap = async (sheet) => {
       );
     }
 
+    // Phase two, once phase one has been rendered: start the sheet and the
+    // page behind it in the same frame so they move as one.
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
+        if (activeSheet !== sheet || isClosing) {
+          return;
+        }
+
+        page.classList.add("has-list-sheet-open");
         sheet.classList.add("is-open");
         sheet.focus({ preventScroll: true });
         dispatchLifecycle(sheet, "open", { trigger: activeTrigger });
@@ -656,4 +708,15 @@ const hydrateVisitedMap = async (sheet) => {
   if (initialSlug) {
     openSheet(initialSlug, { updateHistory: false });
   }
+
+  // Prepare the map once the page has settled, so opening its sheet only has
+  // to insert it.
+  const whenIdle =
+    window.requestIdleCallback ?? ((callback) => window.setTimeout(callback, 1500));
+
+  window.addEventListener(
+    "load",
+    () => whenIdle(() => sheets.forEach((sheet) => loadVisitedMap(sheet))),
+    { once: true },
+  );
 })();

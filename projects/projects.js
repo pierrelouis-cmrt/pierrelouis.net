@@ -443,8 +443,7 @@ window.addEventListener(
 
   const sheets = new Map();
   const root = document.documentElement;
-  const sheetBackgroundColor = "#f8f8f7";
-  const closeDuration = 420;
+  const closeDuration = 400;
   let activeSheet = null;
   let activeSlug = null;
   let activeTrigger = null;
@@ -459,7 +458,7 @@ window.addEventListener(
   let themeColor = existingThemeColor;
 
   const setSheetThemeColor = () => {
-    root.style.backgroundColor = sheetBackgroundColor;
+    root.style.backgroundColor = "var(--color-sheet-bg)";
 
     if (!themeColor) {
       themeColor = document.createElement("meta");
@@ -467,7 +466,8 @@ window.addEventListener(
       document.head.append(themeColor);
     }
 
-    themeColor.content = sheetBackgroundColor;
+    // Browser chrome needs a resolved color, so read back the themed canvas.
+    themeColor.content = getComputedStyle(root).backgroundColor;
   };
 
   const restoreThemeColor = () => {
@@ -487,13 +487,30 @@ window.addEventListener(
       return;
     }
 
-    themeColor.content = defaultThemeColor;
+    // Follow the live canvas like script.js does: the color captured at load
+    // may belong to the other appearance by now.
+    themeColor.content = getComputedStyle(root).backgroundColor;
   };
 
   sheetElements.forEach((sheet) => {
     sheets.set(sheet.dataset.playgroundSheet, sheet);
     document.body.append(sheet);
   });
+
+  // Sheet media is lazy and the dialog starts hidden, so nothing loads until
+  // the sheet opens, which is exactly while it slides in. Start fetching and
+  // decoding as soon as a card is pressed, hovered or focused instead.
+  const warmSheet = (sheet) => {
+    if (!sheet || sheet.dataset.warmed === "true") {
+      return;
+    }
+
+    sheet.dataset.warmed = "true";
+    sheet.querySelectorAll('[loading="lazy"]').forEach((media) => {
+      media.loading = "eager";
+      media.decode?.().catch(() => {});
+    });
+  };
 
   const sheetSlugFromUrl = () => {
     const slug = new URL(window.location.href).searchParams.get("sheet");
@@ -533,24 +550,26 @@ window.addEventListener(
     sheet.removeAttribute("open");
   };
 
+  // Dims the page behind the sheet (see the `.sheet-scrim` rules in the CSS).
+  const scrim = document.createElement("div");
+  scrim.className = "sheet-scrim";
+  scrim.setAttribute("aria-hidden", "true");
+  document.body.append(scrim);
+
   const clearStageDragStyles = () => {
     stage.style.removeProperty("transform");
-    stage.style.removeProperty("filter");
-    stage.style.removeProperty("border-radius");
+    scrim.style.removeProperty("opacity");
   };
 
+  // Only compositor-friendly properties change here, so dragging the sheet
+  // never repaints the page underneath it.
   const setStageProgress = (progress) => {
     const clampedProgress = Math.min(Math.max(progress, 0), 1);
     const scale = 1 - clampedProgress * 0.05;
     const translate = clampedProgress * 10;
-    const saturation = 1 - clampedProgress * 0.6;
-    const brightness = 1 - clampedProgress * 0.3;
 
     stage.style.transform = `translateY(${translate}px) scale(${scale})`;
-    stage.style.filter =
-      `saturate(${saturation}) brightness(${brightness})`;
-    const radius = clampedProgress * 24;
-    stage.style.borderRadius = `${radius}px ${radius}px 0 0`;
+    scrim.style.opacity = String(clampedProgress);
   };
 
   const finalizeClose = (sheet, { restoreFocus = true } = {}) => {
@@ -559,6 +578,7 @@ window.addEventListener(
     sheet.style.removeProperty("transform");
     sheet.style.removeProperty("transition-duration");
     page.classList.remove(
+      "is-playground-sheet-active",
       "has-playground-sheet-open",
       "is-playground-sheet-closing",
       "is-playground-sheet-dragging",
@@ -684,9 +704,14 @@ window.addEventListener(
       top: 0,
       behavior: "auto",
     });
+    warmSheet(sheet);
     setSheetThemeColor();
     showDialog(sheet);
-    page.classList.add("has-playground-sheet-open");
+    resizeProjectInteractiveFrames(sheet);
+    stage.style.setProperty("--sheet-stage-scroll-y", `${window.scrollY}px`);
+    // Phase one: promote layers and paint the sheet, frame and corners while
+    // nothing moves yet, so the first animated frame has no work left to do.
+    page.classList.add("is-playground-sheet-active");
 
     if (updateHistory) {
       window.history.pushState(
@@ -696,16 +721,27 @@ window.addEventListener(
       );
     }
 
+    // Phase two, once phase one has been rendered: start the sheet and the
+    // page behind it in the same frame so they move as one.
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
+        if (activeSheet !== sheet || isClosing) {
+          return;
+        }
+
+        page.classList.add("has-playground-sheet-open");
         sheet.classList.add("is-open");
-        resizeProjectInteractiveFrames(sheet);
         sheet.focus({ preventScroll: true });
       });
     });
   };
 
   triggers.forEach((trigger) => {
+    const warm = () => warmSheet(sheets.get(trigger.dataset.playgroundSheetOpen));
+
+    trigger.addEventListener("pointerdown", warm, { passive: true });
+    trigger.addEventListener("pointerenter", warm, { passive: true });
+    trigger.addEventListener("focus", warm);
     trigger.addEventListener("click", () => {
       openSheet(trigger.dataset.playgroundSheetOpen, { trigger });
     });

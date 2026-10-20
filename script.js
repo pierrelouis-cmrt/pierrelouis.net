@@ -53,7 +53,8 @@ const MOBILE_HEADER = {
   mediaQuery: "(max-width: 760px)",
   hideAfterY: 90,
   directionThreshold: 12,
-  showThreshold: 36,
+  // Reveal on a small deliberate reversal, without reacting to scroll jitter.
+  showThreshold: 8,
 };
 
 const EXTERNAL_PROTOCOLS = new Set(["http:", "https:"]);

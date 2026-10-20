@@ -239,7 +239,7 @@
 }
 
 .photo-lightbox__counter {
-  color: #ffffff;
+  color: var(--color-bg);
   font-size: var(--font-size-base);
   line-height: var(--line-height-solid);
   letter-spacing: var(--tracking-normal);
@@ -254,7 +254,7 @@
   padding: 0 0 var(--space-2xs);
   border: 0;
   background: transparent;
-  color: #ffffff;
+  color: var(--color-bg);
   font: inherit;
   font-size: var(--font-size-base);
   line-height: var(--line-height-solid);
@@ -270,7 +270,7 @@
   justify-content: center;
   gap: 2ch;
   height: var(--photo-lightbox-controls-height);
-  color: #ffffff;
+  color: var(--color-bg);
   font-size: var(--font-size-base);
   line-height: var(--line-height-solid);
   transform: translateX(-50%);
