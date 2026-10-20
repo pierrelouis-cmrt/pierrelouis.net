@@ -357,19 +357,15 @@ document.querySelectorAll(".project-interactive__frame").forEach((frame) => {
     try {
       const frameDocument = frame.contentDocument;
       const frameBody = frameDocument?.body;
-      const frameRoot = frameDocument?.documentElement;
 
-      if (!frameBody || !frameRoot) {
+      if (!frameBody) {
         return;
       }
 
+      // The document root is at least as tall as the iframe viewport. Including
+      // it would preserve stale empty space after the content wraps less.
       const contentHeight = Math.ceil(
-        Math.max(
-          frameBody.offsetHeight,
-          frameBody.scrollHeight,
-          frameRoot.offsetHeight,
-          frameRoot.scrollHeight,
-        ),
+        Math.max(frameBody.offsetHeight, frameBody.scrollHeight),
       );
 
       if (contentHeight > 0 && frame.offsetHeight !== contentHeight) {
