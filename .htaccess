@@ -1,0 +1,23 @@
+Options -Indexes
+
+# Serve each page from a single URL so search engines don't index duplicates:
+# www → bare domain, and explicit /index.html → its directory.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteCond %{HTTP_HOST} ^www\.pierrelouis\.net$ [NC]
+  RewriteRule ^ https://pierrelouis.net%{REQUEST_URI} [R=301,L]
+
+  RewriteCond %{THE_REQUEST} \s/((?:[^?\s]*/)?)index\.html[?\s] [NC]
+  RewriteRule ^ https://pierrelouis.net/%1 [R=301,L]
+</IfModule>
+
+# Keep the site in its authored language. Browser translation remains a user-side
+# feature, but this reinforces the opt-out declared in each HTML document.
+<IfModule mod_headers.c>
+  Header always set X-Robots-Tag "notranslate"
+</IfModule>
+
+<IfModule mod_mime.c>
+  AddType video/webm .webm
+</IfModule>
