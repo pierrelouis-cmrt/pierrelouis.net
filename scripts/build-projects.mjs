@@ -1342,36 +1342,42 @@ const renderFeaturedMedia = (media, { priority = false } = {}) => {
     : `data-deferred-src="${assetUrl}"`;
 
   if (media.mediaType === "video") {
-    const preload = priority ? "auto" : "none";
-    const noScriptFallback = priority
-      ? ""
-      : `
-                    <noscript>
-                      <video
-                        class="${assetClasses}"
-                        src="${assetUrl}"
-                        role="img"
-                        aria-label="${escapeHtml(media.alt)}"
-                        autoplay
-                        loop
-                        muted
-                        playsinline
-                      ></video>
-                    </noscript>`;
+    // Press to play: the first frame shows as a still until the visitor
+    // starts it. "#t=0.001" makes iOS Safari paint that frame.
+    const videoUrl = `${assetUrl}#t=0.001`;
+    const videoSource = priority
+      ? `src="${videoUrl}"`
+      : `data-deferred-src="${videoUrl}"`;
 
     return `                <figure class="${itemClasses}">
                   <span class="${mediaClasses}">
                     <video
                       class="${assetClasses}"
-                      ${assetSource}
-                      role="img"
+                      ${videoSource}
                       aria-label="${escapeHtml(media.alt)}"
-                      autoplay
                       loop
                       muted
                       playsinline
-                      preload="${preload}"
-                    ></video>${noScriptFallback}
+                      preload="metadata"
+                    ></video>
+                    <button
+                      class="featured-project__play"
+                      type="button"
+                      aria-label="Play animation"
+                      data-video-toggle
+                    ></button>
+                    <noscript>
+                      <video
+                        class="${assetClasses}"
+                        src="${videoUrl}"
+                        aria-label="${escapeHtml(media.alt)}"
+                        controls
+                        loop
+                        muted
+                        playsinline
+                        preload="metadata"
+                      ></video>
+                    </noscript>
                   </span>
                 </figure>`;
   }

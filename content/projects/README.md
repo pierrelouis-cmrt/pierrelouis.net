@@ -139,8 +139,8 @@ listing:
 | `framed` | `false` | Adds the inset framed treatment to a featured-listing image. |
 
 `wide`, `dark`, and `framed` are presentation controls for featured listings.
-A WebM listing is copied through unchanged and displayed muted, inline,
-autoplaying, and looping. Keep at least one still image in every Featured
+A WebM listing is copied through unchanged and displayed muted, inline, and
+looping. It is press to play: the first frame shows until a visitor clicks it. Keep at least one still image in every Featured
 project for social metadata and related-project previews.
 A Playground card displays only its selected `main` image even if the long
 `images` form is used.

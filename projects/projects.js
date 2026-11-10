@@ -3,28 +3,33 @@ const reducedMotionQuery = window.matchMedia(
   "(prefers-reduced-motion: reduce)",
 );
 
-const syncFeaturedVideoMotion = () => {
-  document.querySelectorAll(".featured-project__video").forEach((video) => {
-    video.autoplay = !reducedMotionQuery.matches;
+// Featured videos are press to play: the first frame stays until clicked.
+document.querySelectorAll("[data-video-toggle]").forEach((button) => {
+  const video = button.parentElement.querySelector("video");
 
-    if (reducedMotionQuery.matches) {
-      video.pause();
-      return;
-    }
+  if (!video) {
+    return;
+  }
 
-    if (video.currentSrc || video.src) {
+  const sync = () => {
+    const isPlaying = !video.paused;
+    button.classList.toggle("is-playing", isPlaying);
+    button.setAttribute(
+      "aria-label",
+      isPlaying ? "Pause animation" : "Play animation",
+    );
+  };
+
+  button.addEventListener("click", () => {
+    if (video.paused) {
       video.play().catch(() => {});
+    } else {
+      video.pause();
     }
   });
-};
-
-syncFeaturedVideoMotion();
-
-if (typeof reducedMotionQuery.addEventListener === "function") {
-  reducedMotionQuery.addEventListener("change", syncFeaturedVideoMotion);
-} else {
-  reducedMotionQuery.addListener(syncFeaturedVideoMotion);
-}
+  video.addEventListener("play", sync);
+  video.addEventListener("pause", sync);
+});
 
 (() => {
   const root = document.querySelector("[data-project-filters]");
