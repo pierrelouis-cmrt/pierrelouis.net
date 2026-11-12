@@ -1,3 +1,10 @@
+## November 2026
+
+- [18 writing tips from Phoebe Waller-Bridge](https://www.instagram.com/p/Dfh2brsFqP1/)
+  *Reading · mymind on ig*
+
+> Extremely good writing advice, extremely well curated, and displayed on extremely well designed cards. Honestly worth taking a quick look.
+
 ## August 2026
 
 - [Quality software deserves your hard‑earned cash](https://stephango.com/quality-software)  
