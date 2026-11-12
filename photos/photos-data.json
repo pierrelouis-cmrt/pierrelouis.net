@@ -1,0 +1,3587 @@
+[
+  {
+    "id": "2025-copenhagen-denmark",
+    "year": 2025,
+    "startYear": 2025,
+    "endYear": 2025,
+    "dateLabel": "2025",
+    "order": 1,
+    "place": "Copenhagen",
+    "country": "Denmark",
+    "description": "Church spires, historic streets, and botanical interiors.",
+    "tags": [],
+    "photos": [
+      {
+        "id": "2025-copenhagen-denmark-01",
+        "index": 1,
+        "collectionId": "2025-copenhagen-denmark",
+        "place": "Copenhagen",
+        "country": "Denmark",
+        "file": "01.png",
+        "sourceIndex": 1,
+        "favorite": true,
+        "src": "../assets/photos/2025-copenhagen-denmark/01.webp",
+        "fullSrc": "../assets/photos-full/2025-copenhagen-denmark/01.webp",
+        "alt": "Ornate church spire glowing in the late-afternoon light against a pale blue Copenhagen sky",
+        "themes": [
+          "church architecture",
+          "historic spire",
+          "bell tower",
+          "architectural detail"
+        ],
+        "colors": [
+          "pale blue",
+          "warm gold",
+          "dark brown",
+          "charcoal"
+        ],
+        "vibe": [
+          "serene",
+          "golden",
+          "stately",
+          "luminous"
+        ]
+      },
+      {
+        "id": "2025-copenhagen-denmark-02",
+        "index": 2,
+        "collectionId": "2025-copenhagen-denmark",
+        "place": "Copenhagen",
+        "country": "Denmark",
+        "file": "02.png",
+        "sourceIndex": 2,
+        "favorite": false,
+        "src": "../assets/photos/2025-copenhagen-denmark/02.webp",
+        "fullSrc": "../assets/photos-full/2025-copenhagen-denmark/02.webp",
+        "alt": "Cream-coloured historic corner building with Brønnum café seating at street level in Copenhagen",
+        "themes": [
+          "historic architecture",
+          "café culture",
+          "street scene",
+          "ornate facade"
+        ],
+        "colors": [
+          "cream",
+          "beige",
+          "black",
+          "muted green",
+          "warm orange"
+        ],
+        "vibe": [
+          "elegant",
+          "leisurely",
+          "urban",
+          "welcoming"
+        ]
+      },
+      {
+        "id": "2025-copenhagen-denmark-03",
+        "index": 3,
+        "collectionId": "2025-copenhagen-denmark",
+        "place": "Copenhagen",
+        "country": "Denmark",
+        "file": "05.png",
+        "sourceIndex": 3,
+        "favorite": false,
+        "src": "../assets/photos/2025-copenhagen-denmark/05.webp",
+        "fullSrc": "../assets/photos-full/2025-copenhagen-denmark/05.webp",
+        "alt": "White sculpture rising from a lily pond among dense tropical plants in a Copenhagen greenhouse",
+        "themes": [
+          "botanical garden",
+          "classical sculpture",
+          "tropical greenhouse",
+          "lily pond"
+        ],
+        "colors": [
+          "deep green",
+          "white",
+          "dark grey",
+          "soft brown"
+        ],
+        "vibe": [
+          "lush",
+          "contemplative",
+          "secluded",
+          "dreamlike"
+        ]
+      },
+      {
+        "id": "2025-copenhagen-denmark-04",
+        "index": 4,
+        "collectionId": "2025-copenhagen-denmark",
+        "place": "Copenhagen",
+        "country": "Denmark",
+        "file": "06.png",
+        "sourceIndex": 4,
+        "favorite": false,
+        "src": "../assets/photos/2025-copenhagen-denmark/06.webp",
+        "fullSrc": "../assets/photos-full/2025-copenhagen-denmark/06.webp",
+        "alt": "Palm-filled glass atrium with white columns and a yellow-brick interior courtyard in Copenhagen",
+        "themes": [
+          "palm house",
+          "greenhouse architecture",
+          "botanical garden",
+          "indoor garden"
+        ],
+        "colors": [
+          "leaf green",
+          "warm yellow",
+          "white",
+          "muted brown"
+        ],
+        "vibe": [
+          "tranquil",
+          "verdant",
+          "grand",
+          "sheltered"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2025-malmo-sweden",
+    "year": 2025,
+    "startYear": 2025,
+    "endYear": 2025,
+    "dateLabel": "2025",
+    "order": 2,
+    "place": "Malmö",
+    "country": "Sweden",
+    "description": "Turning Torso geometry, historic facades, and tropical wildlife.",
+    "tags": [],
+    "photos": [
+      {
+        "id": "2025-malmo-sweden-02",
+        "index": 1,
+        "collectionId": "2025-malmo-sweden",
+        "place": "Malmö",
+        "country": "Sweden",
+        "file": "02.png",
+        "sourceIndex": 2,
+        "favorite": true,
+        "src": "../assets/photos/2025-malmo-sweden/02.webp",
+        "fullSrc": "../assets/photos-full/2025-malmo-sweden/02.webp",
+        "alt": "Close-up of a bright green snake coiled among dark tropical foliage",
+        "themes": [
+          "green tree python",
+          "reptile",
+          "tropical wildlife",
+          "animal portrait"
+        ],
+        "colors": [
+          "vivid green",
+          "teal",
+          "black",
+          "deep olive"
+        ],
+        "vibe": [
+          "intense",
+          "mysterious",
+          "tactile",
+          "tropical"
+        ]
+      },
+      {
+        "id": "2025-malmo-sweden-03",
+        "index": 2,
+        "collectionId": "2025-malmo-sweden",
+        "place": "Malmö",
+        "country": "Sweden",
+        "file": "03.png",
+        "sourceIndex": 3,
+        "favorite": true,
+        "src": "../assets/photos/2025-malmo-sweden/03.webp",
+        "fullSrc": "../assets/photos-full/2025-malmo-sweden/03.webp",
+        "alt": "The Turning Torso tower seen close-up from below, with its white structural ribs against the sky",
+        "themes": [
+          "modern architecture",
+          "skyscraper",
+          "Turning Torso",
+          "geometric detail"
+        ],
+        "colors": [
+          "white",
+          "pale blue",
+          "slate grey",
+          "soft teal"
+        ],
+        "vibe": [
+          "futuristic",
+          "airy",
+          "graphic",
+          "monumental"
+        ]
+      },
+      {
+        "id": "2025-malmo-sweden-01",
+        "index": 3,
+        "collectionId": "2025-malmo-sweden",
+        "place": "Malmö",
+        "country": "Sweden",
+        "file": "01.png",
+        "sourceIndex": 1,
+        "favorite": false,
+        "src": "../assets/photos/2025-malmo-sweden/01.webp",
+        "fullSrc": "../assets/photos-full/2025-malmo-sweden/01.webp",
+        "alt": "Sunlit row of ornate white and brick apartment facades beneath a clear blue Malmö sky",
+        "themes": [
+          "historic architecture",
+          "ornate facade",
+          "architectural detail",
+          "European architecture"
+        ],
+        "colors": [
+          "white",
+          "charcoal",
+          "black",
+          "deep blue"
+        ],
+        "vibe": [
+          "crisp",
+          "sunlit",
+          "elegant",
+          "grand"
+        ]
+      },
+      {
+        "id": "2025-malmo-sweden-04",
+        "index": 4,
+        "collectionId": "2025-malmo-sweden",
+        "place": "Malmö",
+        "country": "Sweden",
+        "file": "04.png",
+        "sourceIndex": 4,
+        "favorite": false,
+        "src": "../assets/photos/2025-malmo-sweden/04.webp",
+        "fullSrc": "../assets/photos-full/2025-malmo-sweden/04.webp",
+        "alt": "The Turning Torso tower rising dramatically from a low angle into a clear blue Malmö sky",
+        "themes": [
+          "modern architecture",
+          "skyscraper",
+          "Turning Torso",
+          "upward perspective"
+        ],
+        "colors": [
+          "bright blue",
+          "white",
+          "silver grey",
+          "teal"
+        ],
+        "vibe": [
+          "bold",
+          "futuristic",
+          "soaring",
+          "clean"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2025-stockholm-sweden",
+    "year": 2025,
+    "startYear": 2025,
+    "endYear": 2025,
+    "dateLabel": "2025",
+    "order": 3,
+    "place": "Stockholm",
+    "country": "Sweden",
+    "description": "Waterfront views, historic facades, museums, and street details.",
+    "tags": [],
+    "photos": [
+      {
+        "id": "2025-stockholm-sweden-01",
+        "index": 1,
+        "collectionId": "2025-stockholm-sweden",
+        "place": "Stockholm",
+        "country": "Sweden",
+        "file": "01.png",
+        "sourceIndex": 1,
+        "favorite": true,
+        "src": "../assets/photos/2025-stockholm-sweden/01.webp",
+        "fullSrc": "../assets/photos-full/2025-stockholm-sweden/01.webp",
+        "alt": "Close view of a curved modern glass facade reflecting soft clouds in Stockholm",
+        "themes": [
+          "modern architecture",
+          "glass facade",
+          "urban detail",
+          "geometry"
+        ],
+        "colors": [
+          "pale blue",
+          "white",
+          "silver grey",
+          "soft beige"
+        ],
+        "vibe": [
+          "minimal",
+          "airy",
+          "calm",
+          "contemporary"
+        ]
+      },
+      {
+        "id": "2025-stockholm-sweden-07",
+        "index": 2,
+        "collectionId": "2025-stockholm-sweden",
+        "place": "Stockholm",
+        "country": "Sweden",
+        "file": "07.png",
+        "sourceIndex": 7,
+        "favorite": true,
+        "src": "../assets/photos/2025-stockholm-sweden/07.webp",
+        "fullSrc": "../assets/photos-full/2025-stockholm-sweden/07.webp",
+        "alt": "Vintage silver American car parked beneath trees on a Stockholm street",
+        "themes": [
+          "classic car",
+          "street scene",
+          "automotive detail",
+          "urban life"
+        ],
+        "colors": [
+          "silver",
+          "black",
+          "dusty blue",
+          "warm beige",
+          "leaf green"
+        ],
+        "vibe": [
+          "nostalgic",
+          "cinematic",
+          "relaxed",
+          "summery"
+        ]
+      },
+      {
+        "id": "2025-stockholm-sweden-10",
+        "index": 3,
+        "collectionId": "2025-stockholm-sweden",
+        "place": "Stockholm",
+        "country": "Sweden",
+        "file": "10.png",
+        "sourceIndex": 10,
+        "favorite": true,
+        "src": "../assets/photos/2025-stockholm-sweden/10.webp",
+        "fullSrc": "../assets/photos-full/2025-stockholm-sweden/10.webp",
+        "alt": "Narrow Stockholm street lined with ochre, red and green historic facades",
+        "themes": [
+          "old town",
+          "historic architecture",
+          "street scene",
+          "colourful facades"
+        ],
+        "colors": [
+          "ochre yellow",
+          "brick red",
+          "olive green",
+          "charcoal",
+          "cream"
+        ],
+        "vibe": [
+          "warm",
+          "intimate",
+          "European",
+          "timeless"
+        ]
+      },
+      {
+        "id": "2025-stockholm-sweden-02",
+        "index": 4,
+        "collectionId": "2025-stockholm-sweden",
+        "place": "Stockholm",
+        "country": "Sweden",
+        "file": "02.png",
+        "sourceIndex": 2,
+        "favorite": false,
+        "src": "../assets/photos/2025-stockholm-sweden/02.webp",
+        "fullSrc": "../assets/photos-full/2025-stockholm-sweden/02.webp",
+        "alt": "Colourful waterfront buildings and a church tower across rippling water in Stockholm",
+        "themes": [
+          "waterfront",
+          "cityscape",
+          "historic architecture",
+          "harbour"
+        ],
+        "colors": [
+          "blue",
+          "ochre yellow",
+          "brick red",
+          "cream",
+          "dark green"
+        ],
+        "vibe": [
+          "scenic",
+          "summery",
+          "lively",
+          "postcard-like"
+        ]
+      },
+      {
+        "id": "2025-stockholm-sweden-03",
+        "index": 5,
+        "collectionId": "2025-stockholm-sweden",
+        "place": "Stockholm",
+        "country": "Sweden",
+        "file": "03.png",
+        "sourceIndex": 3,
+        "favorite": false,
+        "src": "../assets/photos/2025-stockholm-sweden/03.webp",
+        "fullSrc": "../assets/photos-full/2025-stockholm-sweden/03.webp",
+        "alt": "Layered Stockholm skyline with historic buildings, a church spire and trees above the waterfront",
+        "themes": [
+          "cityscape",
+          "historic architecture",
+          "waterfront",
+          "skyline"
+        ],
+        "colors": [
+          "slate blue",
+          "warm yellow",
+          "beige",
+          "dark green",
+          "grey"
+        ],
+        "vibe": [
+          "atmospheric",
+          "urban",
+          "calm",
+          "layered"
+        ]
+      },
+      {
+        "id": "2025-stockholm-sweden-04",
+        "index": 6,
+        "collectionId": "2025-stockholm-sweden",
+        "place": "Stockholm",
+        "country": "Sweden",
+        "file": "04.png",
+        "sourceIndex": 4,
+        "favorite": false,
+        "src": "../assets/photos/2025-stockholm-sweden/04.webp",
+        "fullSrc": "../assets/photos-full/2025-stockholm-sweden/04.webp",
+        "alt": "Ornate dark church tower framed by leafy trees and a pale blue Stockholm sky",
+        "themes": [
+          "church architecture",
+          "historic landmark",
+          "skyline",
+          "urban nature"
+        ],
+        "colors": [
+          "pale blue",
+          "dark green",
+          "charcoal",
+          "muted brown"
+        ],
+        "vibe": [
+          "stately",
+          "peaceful",
+          "classic",
+          "sunlit"
+        ]
+      },
+      {
+        "id": "2025-stockholm-sweden-05",
+        "index": 7,
+        "collectionId": "2025-stockholm-sweden",
+        "place": "Stockholm",
+        "country": "Sweden",
+        "file": "05.png",
+        "sourceIndex": 5,
+        "favorite": false,
+        "src": "../assets/photos/2025-stockholm-sweden/05.webp",
+        "fullSrc": "../assets/photos-full/2025-stockholm-sweden/05.webp",
+        "alt": "Sunlit tower and ornate facade of Stockholm's Nordic Museum against a clear blue sky",
+        "themes": [
+          "museum architecture",
+          "Nordic Museum",
+          "historic landmark",
+          "ornate tower"
+        ],
+        "colors": [
+          "bright blue",
+          "warm beige",
+          "dark brown",
+          "copper green"
+        ],
+        "vibe": [
+          "grand",
+          "crisp",
+          "sunlit",
+          "monumental"
+        ]
+      },
+      {
+        "id": "2025-stockholm-sweden-06",
+        "index": 8,
+        "collectionId": "2025-stockholm-sweden",
+        "place": "Stockholm",
+        "country": "Sweden",
+        "file": "06.png",
+        "sourceIndex": 6,
+        "favorite": false,
+        "src": "../assets/photos/2025-stockholm-sweden/06.webp",
+        "fullSrc": "../assets/photos-full/2025-stockholm-sweden/06.webp",
+        "alt": "Stone facade of the Nordic Museum with its gilded name and a green roof spire",
+        "themes": [
+          "Nordic Museum",
+          "museum architecture",
+          "historic facade",
+          "cultural heritage"
+        ],
+        "colors": [
+          "warm brown",
+          "gold",
+          "dark grey",
+          "copper green",
+          "pale blue"
+        ],
+        "vibe": [
+          "scholarly",
+          "grand",
+          "historic",
+          "dignified"
+        ]
+      },
+      {
+        "id": "2025-stockholm-sweden-08",
+        "index": 9,
+        "collectionId": "2025-stockholm-sweden",
+        "place": "Stockholm",
+        "country": "Sweden",
+        "file": "08.png",
+        "sourceIndex": 8,
+        "favorite": false,
+        "src": "../assets/photos/2025-stockholm-sweden/08.webp",
+        "fullSrc": "../assets/photos-full/2025-stockholm-sweden/08.webp",
+        "alt": "Dark chocolate-covered pastry with a pale filling displayed on a white plate",
+        "themes": [
+          "food",
+          "pastry",
+          "dessert",
+          "café detail"
+        ],
+        "colors": [
+          "dark brown",
+          "cream",
+          "white",
+          "warm grey"
+        ],
+        "vibe": [
+          "indulgent",
+          "tactile",
+          "intimate",
+          "playful"
+        ]
+      },
+      {
+        "id": "2025-stockholm-sweden-09",
+        "index": 10,
+        "collectionId": "2025-stockholm-sweden",
+        "place": "Stockholm",
+        "country": "Sweden",
+        "file": "09.png",
+        "sourceIndex": 9,
+        "favorite": false,
+        "src": "../assets/photos/2025-stockholm-sweden/09.webp",
+        "fullSrc": "../assets/photos-full/2025-stockholm-sweden/09.webp",
+        "alt": "Red-brick historic corner building with a rounded turret beneath drifting clouds in Stockholm",
+        "themes": [
+          "historic architecture",
+          "brick facade",
+          "street corner",
+          "city detail"
+        ],
+        "colors": [
+          "brick red",
+          "charcoal",
+          "pale blue",
+          "white",
+          "muted beige"
+        ],
+        "vibe": [
+          "romantic",
+          "classic",
+          "textured",
+          "bright"
+        ]
+      },
+      {
+        "id": "2025-stockholm-sweden-11",
+        "index": 11,
+        "collectionId": "2025-stockholm-sweden",
+        "place": "Stockholm",
+        "country": "Sweden",
+        "file": "11.png",
+        "sourceIndex": 11,
+        "favorite": false,
+        "src": "../assets/photos/2025-stockholm-sweden/11.webp",
+        "fullSrc": "../assets/photos-full/2025-stockholm-sweden/11.webp",
+        "alt": "Sunlit cream stone facade with tall windows, carved details and black balconies in Stockholm",
+        "themes": [
+          "historic architecture",
+          "ornate facade",
+          "street detail",
+          "urban elegance"
+        ],
+        "colors": [
+          "cream",
+          "white",
+          "black",
+          "pale blue",
+          "warm grey"
+        ],
+        "vibe": [
+          "elegant",
+          "refined",
+          "bright",
+          "stately"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2025-oslo-norway",
+    "year": 2025,
+    "startYear": 2025,
+    "endYear": 2025,
+    "dateLabel": "2025",
+    "order": 4,
+    "place": "Oslo",
+    "country": "Norway",
+    "description": "Modern geometry, historic facades, and quiet interiors.",
+    "tags": [],
+    "photos": [
+      {
+        "id": "2025-oslo-norway-01",
+        "index": 1,
+        "collectionId": "2025-oslo-norway",
+        "place": "Oslo",
+        "country": "Norway",
+        "file": "01.png",
+        "sourceIndex": 1,
+        "favorite": true,
+        "src": "../assets/photos/2025-oslo-norway/01.webp",
+        "fullSrc": "../assets/photos-full/2025-oslo-norway/01.webp",
+        "alt": "Red-brick apartment balconies against a blue Oslo sky",
+        "themes": [
+          "contemporary architecture",
+          "apartment building",
+          "urban geometry"
+        ],
+        "colors": [
+          "terracotta",
+          "blue",
+          "black",
+          "white"
+        ],
+        "vibe": [
+          "sunny",
+          "graphic",
+          "modern"
+        ]
+      },
+      {
+        "id": "2025-oslo-norway-02",
+        "index": 2,
+        "collectionId": "2025-oslo-norway",
+        "place": "Oslo",
+        "country": "Norway",
+        "file": "02.png",
+        "sourceIndex": 2,
+        "favorite": false,
+        "src": "../assets/photos/2025-oslo-norway/02.webp",
+        "fullSrc": "../assets/photos-full/2025-oslo-norway/02.webp",
+        "alt": "Angular red-brick apartments viewed from below in Oslo",
+        "themes": [
+          "contemporary architecture",
+          "apartment building",
+          "upward perspective"
+        ],
+        "colors": [
+          "terracotta",
+          "deep blue",
+          "charcoal",
+          "black"
+        ],
+        "vibe": [
+          "bold",
+          "geometric",
+          "sunlit"
+        ]
+      },
+      {
+        "id": "2025-oslo-norway-03",
+        "index": 3,
+        "collectionId": "2025-oslo-norway",
+        "place": "Oslo",
+        "country": "Norway",
+        "file": "03.png",
+        "sourceIndex": 3,
+        "favorite": false,
+        "src": "../assets/photos/2025-oslo-norway/03.webp",
+        "fullSrc": "../assets/photos-full/2025-oslo-norway/03.webp",
+        "alt": "White ribbed modern building facade under a clear blue sky",
+        "themes": [
+          "modern architecture",
+          "facade detail",
+          "geometric pattern"
+        ],
+        "colors": [
+          "white",
+          "pale grey",
+          "blue",
+          "shadow"
+        ],
+        "vibe": [
+          "minimal",
+          "crisp",
+          "monumental"
+        ]
+      },
+      {
+        "id": "2025-oslo-norway-04",
+        "index": 4,
+        "collectionId": "2025-oslo-norway",
+        "place": "Oslo",
+        "country": "Norway",
+        "file": "04.png",
+        "sourceIndex": 4,
+        "favorite": false,
+        "src": "../assets/photos/2025-oslo-norway/04.webp",
+        "fullSrc": "../assets/photos-full/2025-oslo-norway/04.webp",
+        "alt": "Reflective glass buildings and a lone person on a broad Oslo plaza",
+        "themes": [
+          "modern architecture",
+          "public plaza",
+          "glass facade"
+        ],
+        "colors": [
+          "blue",
+          "silver",
+          "grey",
+          "black"
+        ],
+        "vibe": [
+          "quiet",
+          "spacious",
+          "contemporary"
+        ]
+      },
+      {
+        "id": "2025-oslo-norway-05",
+        "index": 5,
+        "collectionId": "2025-oslo-norway",
+        "place": "Oslo",
+        "country": "Norway",
+        "file": "05.png",
+        "sourceIndex": 5,
+        "favorite": false,
+        "src": "../assets/photos/2025-oslo-norway/05.webp",
+        "fullSrc": "../assets/photos-full/2025-oslo-norway/05.webp",
+        "alt": "Warmly lit hotel bed with green cushions at night",
+        "themes": [
+          "hotel interior",
+          "bedroom",
+          "travel stay"
+        ],
+        "colors": [
+          "olive green",
+          "cream",
+          "brown",
+          "black"
+        ],
+        "vibe": [
+          "cozy",
+          "intimate",
+          "restful"
+        ]
+      },
+      {
+        "id": "2025-oslo-norway-06",
+        "index": 6,
+        "collectionId": "2025-oslo-norway",
+        "place": "Oslo",
+        "country": "Norway",
+        "file": "06.png",
+        "sourceIndex": 6,
+        "favorite": false,
+        "src": "../assets/photos/2025-oslo-norway/06.webp",
+        "fullSrc": "../assets/photos-full/2025-oslo-norway/06.webp",
+        "alt": "Ornate pale building with dark mansard roofs in Oslo",
+        "themes": [
+          "historic architecture",
+          "city facade",
+          "roofline"
+        ],
+        "colors": [
+          "white",
+          "slate blue",
+          "blue",
+          "grey"
+        ],
+        "vibe": [
+          "elegant",
+          "sunny",
+          "European"
+        ]
+      },
+      {
+        "id": "2025-oslo-norway-07",
+        "index": 7,
+        "collectionId": "2025-oslo-norway",
+        "place": "Oslo",
+        "country": "Norway",
+        "file": "07.png",
+        "sourceIndex": 7,
+        "favorite": false,
+        "src": "../assets/photos/2025-oslo-norway/07.webp",
+        "fullSrc": "../assets/photos-full/2025-oslo-norway/07.webp",
+        "alt": "Cobblestone passage through a stone arch looking toward Oslofjord",
+        "themes": [
+          "historic fortification",
+          "stone arch",
+          "fjord view"
+        ],
+        "colors": [
+          "charcoal",
+          "grey",
+          "blue",
+          "green"
+        ],
+        "vibe": [
+          "quiet",
+          "textured",
+          "exploratory"
+        ]
+      },
+      {
+        "id": "2025-oslo-norway-08",
+        "index": 8,
+        "collectionId": "2025-oslo-norway",
+        "place": "Oslo",
+        "country": "Norway",
+        "file": "08.png",
+        "sourceIndex": 8,
+        "favorite": false,
+        "src": "../assets/photos/2025-oslo-norway/08.webp",
+        "fullSrc": "../assets/photos-full/2025-oslo-norway/08.webp",
+        "alt": "Yellow historic facade with arched windows and wrought-iron balconies",
+        "themes": [
+          "historic architecture",
+          "ornate facade",
+          "city detail"
+        ],
+        "colors": [
+          "ochre yellow",
+          "cream",
+          "blue",
+          "black"
+        ],
+        "vibe": [
+          "ornate",
+          "bright",
+          "stately"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2025-aurland-norway",
+    "year": 2025,
+    "startYear": 2025,
+    "endYear": 2025,
+    "dateLabel": "2025",
+    "order": 5,
+    "place": "Aurland",
+    "country": "Norway",
+    "description": "Fjords, waterfalls, cliffs, and mountain reflections.",
+    "tags": [],
+    "photos": [
+      {
+        "id": "2025-aurland-norway-01",
+        "index": 1,
+        "collectionId": "2025-aurland-norway",
+        "place": "Aurland",
+        "country": "Norway",
+        "file": "01.png",
+        "sourceIndex": 1,
+        "favorite": true,
+        "src": "../assets/photos/2025-aurland-norway/01.webp",
+        "fullSrc": "../assets/photos-full/2025-aurland-norway/01.webp",
+        "alt": "Mountain lake and green valley beneath scattered clouds near Aurland",
+        "themes": [
+          "mountain lake",
+          "rocky shoreline",
+          "alpine landscape"
+        ],
+        "colors": [
+          "blue",
+          "green",
+          "white",
+          "slate grey"
+        ],
+        "vibe": [
+          "open",
+          "peaceful",
+          "fresh"
+        ]
+      },
+      {
+        "id": "2025-aurland-norway-04",
+        "index": 2,
+        "collectionId": "2025-aurland-norway",
+        "place": "Aurland",
+        "country": "Norway",
+        "file": "04.png",
+        "sourceIndex": 4,
+        "favorite": true,
+        "src": "../assets/photos/2025-aurland-norway/04.webp",
+        "fullSrc": "../assets/photos-full/2025-aurland-norway/04.webp",
+        "alt": "Steep green mountains reflected in calm Aurlandsfjord water",
+        "themes": [
+          "fjord landscape",
+          "mountain reflection",
+          "calm water"
+        ],
+        "colors": [
+          "deep blue",
+          "forest green",
+          "stone grey",
+          "white"
+        ],
+        "vibe": [
+          "serene",
+          "grand",
+          "clear"
+        ]
+      },
+      {
+        "id": "2025-aurland-norway-02",
+        "index": 3,
+        "collectionId": "2025-aurland-norway",
+        "place": "Aurland",
+        "country": "Norway",
+        "file": "02.png",
+        "sourceIndex": 2,
+        "favorite": false,
+        "src": "../assets/photos/2025-aurland-norway/02.webp",
+        "fullSrc": "../assets/photos-full/2025-aurland-norway/02.webp",
+        "alt": "White waterfall rushing down dark rock in the Aurland mountains",
+        "themes": [
+          "waterfall",
+          "mountain landscape",
+          "rocky terrain"
+        ],
+        "colors": [
+          "white",
+          "charcoal",
+          "green",
+          "blue"
+        ],
+        "vibe": [
+          "powerful",
+          "wild",
+          "refreshing"
+        ]
+      },
+      {
+        "id": "2025-aurland-norway-03",
+        "index": 4,
+        "collectionId": "2025-aurland-norway",
+        "place": "Aurland",
+        "country": "Norway",
+        "file": "03.png",
+        "sourceIndex": 3,
+        "favorite": false,
+        "src": "../assets/photos/2025-aurland-norway/03.webp",
+        "fullSrc": "../assets/photos-full/2025-aurland-norway/03.webp",
+        "alt": "Sheer fjord cliffs framed by a shadowed rock wall",
+        "themes": [
+          "fjord landscape",
+          "dramatic cliffs",
+          "boat journey"
+        ],
+        "colors": [
+          "blue",
+          "charcoal",
+          "stone grey",
+          "green"
+        ],
+        "vibe": [
+          "dramatic",
+          "remote",
+          "cinematic"
+        ]
+      },
+      {
+        "id": "2025-aurland-norway-05",
+        "index": 5,
+        "collectionId": "2025-aurland-norway",
+        "place": "Aurland",
+        "country": "Norway",
+        "file": "05.png",
+        "sourceIndex": 5,
+        "favorite": false,
+        "src": "../assets/photos/2025-aurland-norway/05.webp",
+        "fullSrc": "../assets/photos-full/2025-aurland-norway/05.webp",
+        "alt": "Narrow fjord between towering cliffs seen from the water",
+        "themes": [
+          "fjord landscape",
+          "dramatic cliffs",
+          "boat journey"
+        ],
+        "colors": [
+          "blue",
+          "green",
+          "grey",
+          "white"
+        ],
+        "vibe": [
+          "quiet",
+          "vast",
+          "adventurous"
+        ]
+      },
+      {
+        "id": "2025-aurland-norway-06",
+        "index": 6,
+        "collectionId": "2025-aurland-norway",
+        "place": "Aurland",
+        "country": "Norway",
+        "file": "06.png",
+        "sourceIndex": 6,
+        "favorite": false,
+        "src": "../assets/photos/2025-aurland-norway/06.webp",
+        "fullSrc": "../assets/photos-full/2025-aurland-norway/06.webp",
+        "alt": "Sunlit rock face and green vegetation above the fjord",
+        "themes": [
+          "mountain landscape",
+          "cliff detail",
+          "fjord shore"
+        ],
+        "colors": [
+          "stone grey",
+          "forest green",
+          "blue",
+          "white"
+        ],
+        "vibe": [
+          "rugged",
+          "sunlit",
+          "expansive"
+        ]
+      },
+      {
+        "id": "2025-aurland-norway-07",
+        "index": 7,
+        "collectionId": "2025-aurland-norway",
+        "place": "Aurland",
+        "country": "Norway",
+        "file": "07.png",
+        "sourceIndex": 7,
+        "favorite": false,
+        "src": "../assets/photos/2025-aurland-norway/07.webp",
+        "fullSrc": "../assets/photos-full/2025-aurland-norway/07.webp",
+        "alt": "Green mountains rising sharply above a calm Norwegian fjord",
+        "themes": [
+          "fjord landscape",
+          "mountain peaks",
+          "boat journey"
+        ],
+        "colors": [
+          "forest green",
+          "blue",
+          "stone grey",
+          "white"
+        ],
+        "vibe": [
+          "majestic",
+          "tranquil",
+          "immersive"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2025-bergen-norway",
+    "year": 2025,
+    "startYear": 2025,
+    "endYear": 2025,
+    "dateLabel": "2025",
+    "order": 6,
+    "place": "Bergen",
+    "country": "Norway",
+    "description": "Bryggen waterfronts, historic courtyards, and mossy woodland.",
+    "tags": [],
+    "photos": [
+      {
+        "id": "2025-bergen-norway-05",
+        "index": 1,
+        "collectionId": "2025-bergen-norway",
+        "place": "Bergen",
+        "country": "Norway",
+        "file": "05.png",
+        "sourceIndex": 5,
+        "favorite": true,
+        "src": "../assets/photos/2025-bergen-norway/05.webp",
+        "fullSrc": "../assets/photos-full/2025-bergen-norway/05.webp",
+        "alt": "Sun-dappled path through dense mossy woodland in Bergen",
+        "themes": [
+          "forest",
+          "woodland path",
+          "mossy ground"
+        ],
+        "colors": [
+          "forest green",
+          "brown",
+          "shadow",
+          "gold"
+        ],
+        "vibe": [
+          "peaceful",
+          "earthy",
+          "secluded"
+        ]
+      },
+      {
+        "id": "2025-bergen-norway-01",
+        "index": 2,
+        "collectionId": "2025-bergen-norway",
+        "place": "Bergen",
+        "country": "Norway",
+        "file": "01.png",
+        "sourceIndex": 1,
+        "favorite": false,
+        "src": "../assets/photos/2025-bergen-norway/01.webp",
+        "fullSrc": "../assets/photos-full/2025-bergen-norway/01.webp",
+        "alt": "Colorful waterfront houses below a green Bergen hillside",
+        "themes": [
+          "harbour city",
+          "hillside homes",
+          "waterfront architecture"
+        ],
+        "colors": [
+          "green",
+          "red",
+          "white",
+          "blue"
+        ],
+        "vibe": [
+          "lively",
+          "picturesque",
+          "summery"
+        ]
+      },
+      {
+        "id": "2025-bergen-norway-02",
+        "index": 3,
+        "collectionId": "2025-bergen-norway",
+        "place": "Bergen",
+        "country": "Norway",
+        "file": "02.png",
+        "sourceIndex": 2,
+        "favorite": false,
+        "src": "../assets/photos/2025-bergen-norway/02.webp",
+        "fullSrc": "../assets/photos-full/2025-bergen-norway/02.webp",
+        "alt": "Bryggen's colorful wooden waterfront buildings across Bergen harbour",
+        "themes": [
+          "Bryggen",
+          "historic waterfront",
+          "harbour city"
+        ],
+        "colors": [
+          "red",
+          "ochre yellow",
+          "white",
+          "blue"
+        ],
+        "vibe": [
+          "iconic",
+          "lively",
+          "scenic"
+        ]
+      },
+      {
+        "id": "2025-bergen-norway-03",
+        "index": 4,
+        "collectionId": "2025-bergen-norway",
+        "place": "Bergen",
+        "country": "Norway",
+        "file": "03.png",
+        "sourceIndex": 3,
+        "favorite": false,
+        "src": "../assets/photos/2025-bergen-norway/03.webp",
+        "fullSrc": "../assets/photos-full/2025-bergen-norway/03.webp",
+        "alt": "Red wooden upper room above a whitewashed historic Bergen building",
+        "themes": [
+          "historic architecture",
+          "wooden house",
+          "courtyard detail"
+        ],
+        "colors": [
+          "rust red",
+          "white",
+          "brown",
+          "green"
+        ],
+        "vibe": [
+          "rustic",
+          "quiet",
+          "storybook"
+        ]
+      },
+      {
+        "id": "2025-bergen-norway-04",
+        "index": 5,
+        "collectionId": "2025-bergen-norway",
+        "place": "Bergen",
+        "country": "Norway",
+        "file": "04.png",
+        "sourceIndex": 4,
+        "favorite": false,
+        "src": "../assets/photos/2025-bergen-norway/04.webp",
+        "fullSrc": "../assets/photos-full/2025-bergen-norway/04.webp",
+        "alt": "Arched wooden door and bench against a whitewashed historic wall",
+        "themes": [
+          "historic architecture",
+          "doorway detail",
+          "courtyard"
+        ],
+        "colors": [
+          "white",
+          "warm brown",
+          "green",
+          "grey"
+        ],
+        "vibe": [
+          "quiet",
+          "weathered",
+          "welcoming"
+        ]
+      },
+      {
+        "id": "2025-bergen-norway-06",
+        "index": 6,
+        "collectionId": "2025-bergen-norway",
+        "place": "Bergen",
+        "country": "Norway",
+        "file": "06.png",
+        "sourceIndex": 6,
+        "favorite": false,
+        "src": "../assets/photos/2025-bergen-norway/06.webp",
+        "fullSrc": "../assets/photos-full/2025-bergen-norway/06.webp",
+        "alt": "KODE museum facade and rounded tower beneath dramatic clouds",
+        "themes": [
+          "museum architecture",
+          "functionalist architecture",
+          "cylindrical tower"
+        ],
+        "colors": [
+          "white",
+          "blue grey",
+          "green",
+          "black"
+        ],
+        "vibe": [
+          "dramatic",
+          "refined",
+          "urban"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2026-cadaques-spain",
+    "year": 2026,
+    "startYear": 2026,
+    "endYear": 2026,
+    "dateLabel": "2026",
+    "order": 7,
+    "place": "Cadaqués",
+    "country": "Spain",
+    "description": "Mediterranean coves, whitewashed lanes, and Dalí's surrealist geometry.",
+    "tags": [
+      "Cadaqués",
+      "Empuriabrava",
+      "Figueres",
+      "Roses",
+      "Costa Brava",
+      "Mediterranean"
+    ],
+    "photos": [
+      {
+        "id": "2026-cadaques-spain-01",
+        "index": 1,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "01.png",
+        "sourceIndex": 1,
+        "favorite": true,
+        "src": "../assets/photos/2026-cadaques-spain/01.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/01.webp",
+        "alt": "Rocky islets and umbrella pines shimmering beyond the Cadaqués bay",
+        "themes": [
+          "Mediterranean coast",
+          "rocky islets",
+          "pine trees",
+          "bay"
+        ],
+        "colors": [
+          "silver blue",
+          "deep green",
+          "charcoal",
+          "white"
+        ],
+        "vibe": [
+          "luminous",
+          "coastal",
+          "peaceful",
+          "summery"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-02",
+        "index": 2,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "02.png",
+        "sourceIndex": 2,
+        "favorite": true,
+        "src": "../assets/photos/2026-cadaques-spain/02.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/02.webp",
+        "alt": "Whitewashed Cadaqués terrace descending toward the blue sea",
+        "themes": [
+          "whitewashed architecture",
+          "terrace",
+          "sea view",
+          "Mediterranean"
+        ],
+        "colors": [
+          "white",
+          "blue",
+          "green",
+          "ochre"
+        ],
+        "vibe": [
+          "bright",
+          "intimate",
+          "coastal",
+          "serene"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-08",
+        "index": 3,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "08.png",
+        "sourceIndex": 8,
+        "favorite": true,
+        "src": "../assets/photos/2026-cadaques-spain/08.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/08.webp",
+        "alt": "Dry grasses and low shrubs above the deep-blue Costa Brava sea",
+        "themes": [
+          "coastal landscape",
+          "scrubland",
+          "sea",
+          "headland"
+        ],
+        "colors": [
+          "straw",
+          "olive green",
+          "deep blue",
+          "mauve"
+        ],
+        "vibe": [
+          "wild",
+          "breezy",
+          "quiet",
+          "expansive"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-03",
+        "index": 4,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "03.png",
+        "sourceIndex": 3,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/03.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/03.webp",
+        "alt": "Sculptural white wall and olive tree casting shadows in Cadaqués",
+        "themes": [
+          "whitewashed architecture",
+          "olive tree",
+          "shadows",
+          "courtyard"
+        ],
+        "colors": [
+          "white",
+          "olive green",
+          "charcoal",
+          "beige"
+        ],
+        "vibe": [
+          "graphic",
+          "sunlit",
+          "quiet",
+          "organic"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-04",
+        "index": 5,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "04.png",
+        "sourceIndex": 4,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/04.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/04.webp",
+        "alt": "Wide hazy view across the green plains toward Roses and the Mediterranean",
+        "themes": [
+          "landscape",
+          "coastal plain",
+          "panorama",
+          "Mediterranean"
+        ],
+        "colors": [
+          "sage green",
+          "pale blue",
+          "grey",
+          "cream"
+        ],
+        "vibe": [
+          "expansive",
+          "hazy",
+          "soft",
+          "contemplative"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-05",
+        "index": 6,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "05.png",
+        "sourceIndex": 5,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/05.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/05.webp",
+        "alt": "Glass dome and surrealist figure on the Dalí Theatre-Museum in Figueres",
+        "themes": [
+          "Dalí Theatre-Museum",
+          "surrealism",
+          "architecture",
+          "sculpture"
+        ],
+        "colors": [
+          "brick",
+          "blue",
+          "yellow",
+          "black"
+        ],
+        "vibe": [
+          "surreal",
+          "playful",
+          "monumental",
+          "curious"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-06",
+        "index": 7,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "06.png",
+        "sourceIndex": 6,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/06.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/06.webp",
+        "alt": "Geodesic glass dome rising above the Dalí Theatre-Museum courtyard",
+        "themes": [
+          "Dalí Theatre-Museum",
+          "glass dome",
+          "courtyard",
+          "architecture"
+        ],
+        "colors": [
+          "blue",
+          "stone",
+          "black",
+          "amber"
+        ],
+        "vibe": [
+          "geometric",
+          "dramatic",
+          "airy",
+          "surreal"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-07",
+        "index": 8,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "07.png",
+        "sourceIndex": 7,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/07.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/07.webp",
+        "alt": "Curved dark gallery lined with framed works at the Dalí Theatre-Museum",
+        "themes": [
+          "museum interior",
+          "gallery",
+          "art",
+          "curved architecture"
+        ],
+        "colors": [
+          "black",
+          "terracotta",
+          "cream",
+          "soft gold"
+        ],
+        "vibe": [
+          "moody",
+          "rhythmic",
+          "theatrical",
+          "contemplative"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-09",
+        "index": 9,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "09.png",
+        "sourceIndex": 9,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/09.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/09.webp",
+        "alt": "Olive-dotted hillside and a small stone chapel beneath the summer sky",
+        "themes": [
+          "rural landscape",
+          "olive trees",
+          "chapel",
+          "hillside"
+        ],
+        "colors": [
+          "ochre",
+          "olive green",
+          "stone",
+          "pale blue"
+        ],
+        "vibe": [
+          "rustic",
+          "dry",
+          "peaceful",
+          "timeless"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-10",
+        "index": 10,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "10.png",
+        "sourceIndex": 10,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/10.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/10.webp",
+        "alt": "Rocky Cap de Creus headland curving into a calm pale-blue sea",
+        "themes": [
+          "Cap de Creus",
+          "headland",
+          "sea",
+          "coastal landscape"
+        ],
+        "colors": [
+          "slate blue",
+          "olive green",
+          "beige",
+          "grey"
+        ],
+        "vibe": [
+          "remote",
+          "calm",
+          "hazy",
+          "expansive"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-11",
+        "index": 11,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "11.png",
+        "sourceIndex": 11,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/11.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/11.webp",
+        "alt": "Sunlight breaking into bright patterns across shallow Mediterranean water",
+        "themes": [
+          "water",
+          "reflections",
+          "sunlight",
+          "abstract nature"
+        ],
+        "colors": [
+          "silver",
+          "olive",
+          "charcoal",
+          "gold"
+        ],
+        "vibe": [
+          "shimmering",
+          "tactile",
+          "hypnotic",
+          "fluid"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-12",
+        "index": 12,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "12.png",
+        "sourceIndex": 12,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/12.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/12.webp",
+        "alt": "Cadaqués harbour and white waterfront framed by dark pine branches",
+        "themes": [
+          "Cadaqués",
+          "harbour",
+          "boats",
+          "pine trees"
+        ],
+        "colors": [
+          "silver blue",
+          "white",
+          "deep green",
+          "grey"
+        ],
+        "vibe": [
+          "picturesque",
+          "sheltered",
+          "coastal",
+          "calm"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-13",
+        "index": 13,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "13.png",
+        "sourceIndex": 13,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/13.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/13.webp",
+        "alt": "Sunbeams breaking through storm clouds above the Cadaqués waterfront",
+        "themes": [
+          "Cadaqués",
+          "waterfront",
+          "dramatic sky",
+          "sea"
+        ],
+        "colors": [
+          "charcoal",
+          "silver",
+          "white",
+          "deep green"
+        ],
+        "vibe": [
+          "dramatic",
+          "atmospheric",
+          "luminous",
+          "still"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-14",
+        "index": 14,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "14.png",
+        "sourceIndex": 14,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/14.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/14.webp",
+        "alt": "Orange sun setting behind the mountains across a Mediterranean bay",
+        "themes": [
+          "sunset",
+          "mountains",
+          "bay",
+          "palm tree"
+        ],
+        "colors": [
+          "orange",
+          "gold",
+          "charcoal",
+          "deep blue"
+        ],
+        "vibe": [
+          "warm",
+          "cinematic",
+          "tranquil",
+          "glowing"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-15",
+        "index": 15,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "15.png",
+        "sourceIndex": 15,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/15.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/15.webp",
+        "alt": "Single white sailboat crossing the blue horizon beyond Roses beach",
+        "themes": [
+          "sailboat",
+          "sea",
+          "beach",
+          "horizon"
+        ],
+        "colors": [
+          "blue",
+          "sand",
+          "white",
+          "green"
+        ],
+        "vibe": [
+          "minimal",
+          "breezy",
+          "bright",
+          "leisurely"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-16",
+        "index": 16,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "16.png",
+        "sourceIndex": 16,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/16.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/16.webp",
+        "alt": "Golden reflections rippling across clear shallow water",
+        "themes": [
+          "water",
+          "reflections",
+          "sunlight",
+          "abstract nature"
+        ],
+        "colors": [
+          "gold",
+          "blue",
+          "charcoal",
+          "amber"
+        ],
+        "vibe": [
+          "sparkling",
+          "abstract",
+          "warm",
+          "fluid"
+        ]
+      },
+      {
+        "id": "2026-cadaques-spain-17",
+        "index": 17,
+        "collectionId": "2026-cadaques-spain",
+        "place": "Cadaqués",
+        "country": "Spain",
+        "file": "17.png",
+        "sourceIndex": 17,
+        "favorite": false,
+        "src": "../assets/photos/2026-cadaques-spain/17.webp",
+        "fullSrc": "../assets/photos-full/2026-cadaques-spain/17.webp",
+        "alt": "Quiet Roses beach and pale Mediterranean horizon framed by palm trees",
+        "themes": [
+          "Roses",
+          "beach",
+          "palm trees",
+          "sea"
+        ],
+        "colors": [
+          "pale blue",
+          "sand",
+          "green",
+          "white"
+        ],
+        "vibe": [
+          "soft",
+          "open",
+          "quiet",
+          "coastal"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2026-la-rochelle-france",
+    "year": 2026,
+    "startYear": 2026,
+    "endYear": 2026,
+    "dateLabel": "2026",
+    "order": 8,
+    "place": "La Rochelle",
+    "country": "France",
+    "description": "Fishing huts, sea horizons, and coastal sunsets.",
+    "tags": [],
+    "photos": [
+      {
+        "id": "2026-la-rochelle-france-04",
+        "index": 1,
+        "collectionId": "2026-la-rochelle-france",
+        "place": "La Rochelle",
+        "country": "France",
+        "file": "04.png",
+        "sourceIndex": 4,
+        "favorite": true,
+        "src": "../assets/photos/2026-la-rochelle-france/04.webp",
+        "fullSrc": "../assets/photos-full/2026-la-rochelle-france/04.webp",
+        "alt": "Wooden fishing hut on stilts above calm water",
+        "themes": [
+          "coast",
+          "fishing hut",
+          "water",
+          "shoreline"
+        ],
+        "colors": [
+          "grey",
+          "blue",
+          "brown",
+          "green"
+        ],
+        "vibe": [
+          "peaceful",
+          "rustic",
+          "muted",
+          "contemplative"
+        ]
+      },
+      {
+        "id": "2026-la-rochelle-france-05",
+        "index": 2,
+        "collectionId": "2026-la-rochelle-france",
+        "place": "La Rochelle",
+        "country": "France",
+        "file": "05.png",
+        "sourceIndex": 5,
+        "favorite": true,
+        "src": "../assets/photos/2026-la-rochelle-france/05.webp",
+        "fullSrc": "../assets/photos-full/2026-la-rochelle-france/05.webp",
+        "alt": "Fishing hut on stilts reflected in the sea at dusk",
+        "themes": [
+          "coast",
+          "fishing hut",
+          "reflection",
+          "sunset"
+        ],
+        "colors": [
+          "blue",
+          "mauve",
+          "brown",
+          "peach"
+        ],
+        "vibe": [
+          "serene",
+          "atmospheric",
+          "coastal",
+          "delicate"
+        ]
+      },
+      {
+        "id": "2026-la-rochelle-france-01",
+        "index": 3,
+        "collectionId": "2026-la-rochelle-france",
+        "place": "La Rochelle",
+        "country": "France",
+        "file": "01.png",
+        "sourceIndex": 1,
+        "favorite": false,
+        "src": "../assets/photos/2026-la-rochelle-france/01.webp",
+        "fullSrc": "../assets/photos-full/2026-la-rochelle-france/01.webp",
+        "alt": "Young tree growing behind a pointed seaside fence",
+        "themes": [
+          "coast",
+          "nature",
+          "fence",
+          "horizon"
+        ],
+        "colors": [
+          "sky blue",
+          "green",
+          "black",
+          "white"
+        ],
+        "vibe": [
+          "fresh",
+          "quiet",
+          "graphic",
+          "breezy"
+        ]
+      },
+      {
+        "id": "2026-la-rochelle-france-02",
+        "index": 4,
+        "collectionId": "2026-la-rochelle-france",
+        "place": "La Rochelle",
+        "country": "France",
+        "file": "02.png",
+        "sourceIndex": 2,
+        "favorite": false,
+        "src": "../assets/photos/2026-la-rochelle-france/02.webp",
+        "fullSrc": "../assets/photos-full/2026-la-rochelle-france/02.webp",
+        "alt": "Silhouette facing the ocean at a red-orange sunset",
+        "themes": [
+          "coast",
+          "sunset",
+          "silhouette",
+          "sea"
+        ],
+        "colors": [
+          "orange",
+          "coral",
+          "blue",
+          "black"
+        ],
+        "vibe": [
+          "contemplative",
+          "cinematic",
+          "warm",
+          "still"
+        ]
+      },
+      {
+        "id": "2026-la-rochelle-france-03",
+        "index": 5,
+        "collectionId": "2026-la-rochelle-france",
+        "place": "La Rochelle",
+        "country": "France",
+        "file": "03.png",
+        "sourceIndex": 3,
+        "favorite": false,
+        "src": "../assets/photos/2026-la-rochelle-france/03.webp",
+        "fullSrc": "../assets/photos-full/2026-la-rochelle-france/03.webp",
+        "alt": "Modern waterfront building glowing after dusk",
+        "themes": [
+          "architecture",
+          "waterfront",
+          "night",
+          "windows"
+        ],
+        "colors": [
+          "navy",
+          "black",
+          "warm white",
+          "blue"
+        ],
+        "vibe": [
+          "moody",
+          "modern",
+          "quiet",
+          "luminous"
+        ]
+      },
+      {
+        "id": "2026-la-rochelle-france-06",
+        "index": 6,
+        "collectionId": "2026-la-rochelle-france",
+        "place": "La Rochelle",
+        "country": "France",
+        "file": "06.png",
+        "sourceIndex": 6,
+        "favorite": false,
+        "src": "../assets/photos/2026-la-rochelle-france/06.webp",
+        "fullSrc": "../assets/photos-full/2026-la-rochelle-france/06.webp",
+        "alt": "Low sun shimmering on the sea behind a dark fence",
+        "themes": [
+          "coast",
+          "sunset",
+          "sea",
+          "silhouette"
+        ],
+        "colors": [
+          "gold",
+          "black",
+          "grey",
+          "amber"
+        ],
+        "vibe": [
+          "dramatic",
+          "quiet",
+          "nostalgic",
+          "glowing"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2023-2026-paris-france",
+    "year": 2026,
+    "startYear": 2023,
+    "endYear": 2026,
+    "dateLabel": "2023-2026",
+    "order": 9,
+    "place": "Paris",
+    "country": "France",
+    "description": "Monumental architecture, ornate facades, and luminous interiors.",
+    "tags": [],
+    "photos": [
+      {
+        "id": "2023-2026-paris-france-01",
+        "index": 1,
+        "collectionId": "2023-2026-paris-france",
+        "place": "Paris",
+        "country": "France",
+        "file": "01.png",
+        "sourceIndex": 1,
+        "favorite": true,
+        "src": "../assets/photos/2023-2026-paris-france/01.webp",
+        "fullSrc": "../assets/photos-full/2023-2026-paris-france/01.webp",
+        "alt": "Curving golden corridor lined with black columns",
+        "themes": [
+          "architecture",
+          "interior",
+          "repetition",
+          "light"
+        ],
+        "colors": [
+          "gold",
+          "amber",
+          "black",
+          "beige"
+        ],
+        "vibe": [
+          "cinematic",
+          "warm",
+          "immersive",
+          "dramatic"
+        ]
+      },
+      {
+        "id": "2023-2026-paris-france-09",
+        "index": 2,
+        "collectionId": "2023-2026-paris-france",
+        "place": "Paris",
+        "country": "France",
+        "file": "09.png",
+        "sourceIndex": 9,
+        "favorite": true,
+        "src": "../assets/photos/2023-2026-paris-france/09.webp",
+        "fullSrc": "../assets/photos-full/2023-2026-paris-france/09.webp",
+        "alt": "Wooden motorboat passing beneath the steel arches of a Paris bridge",
+        "themes": [
+          "Seine",
+          "bridge",
+          "boat",
+          "steel architecture"
+        ],
+        "colors": [
+          "charcoal",
+          "brown",
+          "blue",
+          "stone"
+        ],
+        "vibe": [
+          "cinematic",
+          "leisurely",
+          "urban",
+          "graphic"
+        ]
+      },
+      {
+        "id": "2023-2026-paris-france-02",
+        "index": 3,
+        "collectionId": "2023-2026-paris-france",
+        "place": "Paris",
+        "country": "France",
+        "file": "02.png",
+        "sourceIndex": 2,
+        "favorite": false,
+        "src": "../assets/photos/2023-2026-paris-france/02.webp",
+        "fullSrc": "../assets/photos-full/2023-2026-paris-france/02.webp",
+        "alt": "Yellow colonnade reflected in a glossy floor",
+        "themes": [
+          "architecture",
+          "interior",
+          "reflection",
+          "geometry"
+        ],
+        "colors": [
+          "yellow",
+          "gold",
+          "black",
+          "grey"
+        ],
+        "vibe": [
+          "graphic",
+          "luminous",
+          "futuristic",
+          "quiet"
+        ]
+      },
+      {
+        "id": "2023-2026-paris-france-03",
+        "index": 4,
+        "collectionId": "2023-2026-paris-france",
+        "place": "Paris",
+        "country": "France",
+        "file": "03.png",
+        "sourceIndex": 3,
+        "favorite": false,
+        "src": "../assets/photos/2023-2026-paris-france/03.webp",
+        "fullSrc": "../assets/photos-full/2023-2026-paris-france/03.webp",
+        "alt": "Ornate stone bell tower against a pale blue sky",
+        "themes": [
+          "architecture",
+          "heritage",
+          "church",
+          "facade"
+        ],
+        "colors": [
+          "cream",
+          "stone",
+          "blue",
+          "white"
+        ],
+        "vibe": [
+          "classical",
+          "airy",
+          "dignified",
+          "calm"
+        ]
+      },
+      {
+        "id": "2023-2026-paris-france-04",
+        "index": 5,
+        "collectionId": "2023-2026-paris-france",
+        "place": "Paris",
+        "country": "France",
+        "file": "04.png",
+        "sourceIndex": 4,
+        "favorite": false,
+        "src": "../assets/photos/2023-2026-paris-france/04.webp",
+        "fullSrc": "../assets/photos-full/2023-2026-paris-france/04.webp",
+        "alt": "Dark glass office tower rising into a blue sky",
+        "themes": [
+          "architecture",
+          "skyscraper",
+          "city",
+          "modernism"
+        ],
+        "colors": [
+          "navy",
+          "charcoal",
+          "blue",
+          "silver"
+        ],
+        "vibe": [
+          "minimal",
+          "urban",
+          "imposing",
+          "crisp"
+        ]
+      },
+      {
+        "id": "2023-2026-paris-france-05",
+        "index": 6,
+        "collectionId": "2023-2026-paris-france",
+        "place": "Paris",
+        "country": "France",
+        "file": "05.png",
+        "sourceIndex": 5,
+        "favorite": false,
+        "src": "../assets/photos/2023-2026-paris-france/05.webp",
+        "fullSrc": "../assets/photos-full/2023-2026-paris-france/05.webp",
+        "alt": "Ornate white corner building beneath textured clouds",
+        "themes": [
+          "architecture",
+          "facade",
+          "heritage",
+          "city"
+        ],
+        "colors": [
+          "white",
+          "cream",
+          "blue",
+          "grey"
+        ],
+        "vibe": [
+          "elegant",
+          "bright",
+          "romantic",
+          "lively"
+        ]
+      },
+      {
+        "id": "2023-2026-paris-france-06",
+        "index": 7,
+        "collectionId": "2023-2026-paris-france",
+        "place": "Paris",
+        "country": "France",
+        "file": "06.png",
+        "sourceIndex": 6,
+        "favorite": false,
+        "src": "../assets/photos/2023-2026-paris-france/06.webp",
+        "fullSrc": "../assets/photos-full/2023-2026-paris-france/06.webp",
+        "alt": "Tall modern tower viewed from its base",
+        "themes": [
+          "architecture",
+          "skyscraper",
+          "perspective",
+          "city"
+        ],
+        "colors": [
+          "charcoal",
+          "blue",
+          "silver",
+          "green"
+        ],
+        "vibe": [
+          "monumental",
+          "urban",
+          "sharp",
+          "upward-looking"
+        ]
+      },
+      {
+        "id": "2023-2026-paris-france-07",
+        "index": 8,
+        "collectionId": "2023-2026-paris-france",
+        "place": "Paris",
+        "country": "France",
+        "file": "07.png",
+        "sourceIndex": 7,
+        "favorite": false,
+        "src": "../assets/photos/2023-2026-paris-france/07.webp",
+        "fullSrc": "../assets/photos-full/2023-2026-paris-france/07.webp",
+        "alt": "Bronze sea-horse fountain figures carrying a globe beneath a clear Paris sky",
+        "themes": [
+          "fountain",
+          "sculpture",
+          "public garden",
+          "heritage"
+        ],
+        "colors": [
+          "bronze",
+          "pale stone",
+          "blue",
+          "green"
+        ],
+        "vibe": [
+          "ornate",
+          "sunlit",
+          "classical",
+          "lively"
+        ]
+      },
+      {
+        "id": "2023-2026-paris-france-08",
+        "index": 9,
+        "collectionId": "2023-2026-paris-france",
+        "place": "Paris",
+        "country": "France",
+        "file": "08.png",
+        "sourceIndex": 8,
+        "favorite": false,
+        "src": "../assets/photos/2023-2026-paris-france/08.webp",
+        "fullSrc": "../assets/photos-full/2023-2026-paris-france/08.webp",
+        "alt": "Ornate Louvre facade glowing in warm late-afternoon light",
+        "themes": [
+          "architecture",
+          "Louvre",
+          "palace",
+          "facade"
+        ],
+        "colors": [
+          "cream",
+          "gold",
+          "slate",
+          "green"
+        ],
+        "vibe": [
+          "grand",
+          "luminous",
+          "historic",
+          "elegant"
+        ]
+      },
+      {
+        "id": "2023-2026-paris-france-10",
+        "index": 10,
+        "collectionId": "2023-2026-paris-france",
+        "place": "Paris",
+        "country": "France",
+        "file": "11.png",
+        "sourceIndex": 10,
+        "favorite": false,
+        "src": "../assets/photos/2023-2026-paris-france/11.webp",
+        "fullSrc": "../assets/photos-full/2023-2026-paris-france/11.webp",
+        "alt": "Busy Paris cafe terrace and Haussmann facades at dusk",
+        "themes": [
+          "cafe",
+          "street scene",
+          "nightlife",
+          "architecture"
+        ],
+        "colors": [
+          "amber",
+          "charcoal",
+          "cream",
+          "red"
+        ],
+        "vibe": [
+          "lively",
+          "intimate",
+          "urban",
+          "glowing"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2023-current-tours-france",
+    "year": 2026,
+    "startYear": 2023,
+    "endYear": 2026,
+    "dateLabel": "2023-current",
+    "order": 10,
+    "place": "Tours",
+    "country": "France",
+    "description": "Wildlife, cats, antiques, and intimate still lifes.",
+    "tags": [],
+    "photos": [
+      {
+        "id": "2023-current-tours-france-05",
+        "index": 1,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "05.png",
+        "sourceIndex": 5,
+        "favorite": true,
+        "src": "../assets/photos/2023-current-tours-france/05.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/05.webp",
+        "alt": "White cat walking along a moss-edged pavement",
+        "themes": [
+          "cat",
+          "street",
+          "everyday life",
+          "path"
+        ],
+        "colors": [
+          "white",
+          "grey",
+          "green",
+          "brown"
+        ],
+        "vibe": [
+          "calm",
+          "candid",
+          "tender",
+          "unhurried"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-12",
+        "index": 2,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "12.png",
+        "sourceIndex": 12,
+        "favorite": true,
+        "src": "../assets/photos/2023-current-tours-france/12.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/12.webp",
+        "alt": "Red squirrel climbing through snow-covered branches",
+        "themes": [
+          "wildlife",
+          "squirrel",
+          "winter",
+          "evergreen"
+        ],
+        "colors": [
+          "green",
+          "white",
+          "brown",
+          "rust"
+        ],
+        "vibe": [
+          "playful",
+          "wintry",
+          "lively",
+          "quiet"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-01",
+        "index": 3,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "01.png",
+        "sourceIndex": 1,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/01.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/01.webp",
+        "alt": "Antique scale and deer bust on a warmly lit shelf",
+        "themes": [
+          "still life",
+          "antiques",
+          "interior",
+          "collection"
+        ],
+        "colors": [
+          "brown",
+          "amber",
+          "black",
+          "brass"
+        ],
+        "vibe": [
+          "scholarly",
+          "intimate",
+          "vintage",
+          "warm"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-02",
+        "index": 4,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "02.png",
+        "sourceIndex": 2,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/02.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/02.webp",
+        "alt": "Red squirrel moving through snow-dusted evergreen branches",
+        "themes": [
+          "wildlife",
+          "squirrel",
+          "winter",
+          "evergreen"
+        ],
+        "colors": [
+          "green",
+          "white",
+          "brown",
+          "rust"
+        ],
+        "vibe": [
+          "wintry",
+          "lively",
+          "quiet",
+          "natural"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-03",
+        "index": 5,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "03.png",
+        "sourceIndex": 3,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/03.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/03.webp",
+        "alt": "Red squirrel perched among frosted pine needles",
+        "themes": [
+          "wildlife",
+          "squirrel",
+          "winter",
+          "evergreen"
+        ],
+        "colors": [
+          "green",
+          "white",
+          "brown",
+          "grey"
+        ],
+        "vibe": [
+          "delicate",
+          "wintry",
+          "observant",
+          "soft"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-04",
+        "index": 6,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "04.png",
+        "sourceIndex": 4,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/04.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/04.webp",
+        "alt": "White cat sitting on a leaf-strewn paved path",
+        "themes": [
+          "cat",
+          "street",
+          "everyday life",
+          "autumn"
+        ],
+        "colors": [
+          "white",
+          "grey",
+          "brown",
+          "green"
+        ],
+        "vibe": [
+          "quiet",
+          "candid",
+          "gentle",
+          "watchful"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-06",
+        "index": 7,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "06.png",
+        "sourceIndex": 6,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/06.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/06.webp",
+        "alt": "Vintage globe and old books in a warm wooden alcove",
+        "themes": [
+          "still life",
+          "books",
+          "globe",
+          "interior"
+        ],
+        "colors": [
+          "brown",
+          "ochre",
+          "tan",
+          "brass"
+        ],
+        "vibe": [
+          "scholarly",
+          "nostalgic",
+          "cozy",
+          "warm"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-07",
+        "index": 8,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "07.png",
+        "sourceIndex": 7,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/07.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/07.webp",
+        "alt": "Close-up of richly textured antique book spines",
+        "themes": [
+          "books",
+          "antiques",
+          "texture",
+          "still life"
+        ],
+        "colors": [
+          "brown",
+          "gold",
+          "ochre",
+          "black"
+        ],
+        "vibe": [
+          "historic",
+          "tactile",
+          "intimate",
+          "moody"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-08",
+        "index": 9,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "08.png",
+        "sourceIndex": 8,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/08.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/08.webp",
+        "alt": "Two carved religious figures in a warmly lit niche",
+        "themes": [
+          "sculpture",
+          "religion",
+          "interior",
+          "antiques"
+        ],
+        "colors": [
+          "brown",
+          "amber",
+          "black",
+          "tan"
+        ],
+        "vibe": [
+          "solemn",
+          "intimate",
+          "historic",
+          "warm"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-09",
+        "index": 10,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "09.png",
+        "sourceIndex": 9,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/09.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/09.webp",
+        "alt": "Sunlit upper facade with a small weather vane",
+        "themes": [
+          "architecture",
+          "facade",
+          "roofline",
+          "city"
+        ],
+        "colors": [
+          "cream",
+          "terracotta",
+          "slate",
+          "blue"
+        ],
+        "vibe": [
+          "bright",
+          "quiet",
+          "sunlit",
+          "crisp"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-10",
+        "index": 11,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "10.png",
+        "sourceIndex": 10,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/10.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/10.webp",
+        "alt": "Extreme close-up of a brown eye",
+        "themes": [
+          "portrait",
+          "eye",
+          "macro",
+          "human detail"
+        ],
+        "colors": [
+          "brown",
+          "amber",
+          "beige",
+          "black"
+        ],
+        "vibe": [
+          "intense",
+          "intimate",
+          "surreal",
+          "detailed"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-11",
+        "index": 12,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "11.png",
+        "sourceIndex": 11,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/11.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/11.webp",
+        "alt": "Red squirrel framed by snowy evergreen branches",
+        "themes": [
+          "wildlife",
+          "squirrel",
+          "winter",
+          "evergreen"
+        ],
+        "colors": [
+          "green",
+          "white",
+          "rust",
+          "brown"
+        ],
+        "vibe": [
+          "wintry",
+          "hidden",
+          "lively",
+          "natural"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-13",
+        "index": 13,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "13.png",
+        "sourceIndex": 13,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/13.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/13.webp",
+        "alt": "Black cat resting on a weathered stone path",
+        "themes": [
+          "cat",
+          "garden",
+          "everyday life",
+          "portrait"
+        ],
+        "colors": [
+          "black",
+          "green",
+          "grey",
+          "brown"
+        ],
+        "vibe": [
+          "relaxed",
+          "quiet",
+          "candid",
+          "soft"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-14",
+        "index": 14,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "14.png",
+        "sourceIndex": 14,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/14.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/14.webp",
+        "alt": "Black cat lying among green garden leaves",
+        "themes": [
+          "cat",
+          "garden",
+          "foliage",
+          "portrait"
+        ],
+        "colors": [
+          "black",
+          "green",
+          "brown",
+          "grey"
+        ],
+        "vibe": [
+          "calm",
+          "intimate",
+          "natural",
+          "gentle"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-15",
+        "index": 15,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "15.png",
+        "sourceIndex": 15,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/15.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/15.webp",
+        "alt": "Village church and river valley beneath a cloudy sky",
+        "themes": [
+          "landscape",
+          "village",
+          "church",
+          "river"
+        ],
+        "colors": [
+          "green",
+          "blue",
+          "grey",
+          "cream"
+        ],
+        "vibe": [
+          "peaceful",
+          "pastoral",
+          "overcast",
+          "expansive"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-16",
+        "index": 16,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "16.png",
+        "sourceIndex": 16,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/16.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/16.webp",
+        "alt": "Paintbrushes in a glass jar beside a small mirror",
+        "themes": [
+          "still life",
+          "art studio",
+          "tools",
+          "interior"
+        ],
+        "colors": [
+          "brown",
+          "amber",
+          "gold",
+          "black"
+        ],
+        "vibe": [
+          "creative",
+          "intimate",
+          "warm",
+          "nostalgic"
+        ]
+      },
+      {
+        "id": "2023-current-tours-france-17",
+        "index": 17,
+        "collectionId": "2023-current-tours-france",
+        "place": "Tours",
+        "country": "France",
+        "file": "17.png",
+        "sourceIndex": 17,
+        "favorite": false,
+        "src": "../assets/photos/2023-current-tours-france/17.webp",
+        "fullSrc": "../assets/photos-full/2023-current-tours-france/17.webp",
+        "alt": "Black leather chair against a vivid red wall",
+        "themes": [
+          "painting",
+          "furniture",
+          "jazz",
+          "still life"
+        ],
+        "colors": [
+          "red",
+          "black",
+          "teal",
+          "white"
+        ],
+        "vibe": [
+          "bold",
+          "graphic",
+          "moody",
+          "theatrical"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2026-firminy-france",
+    "year": 2026,
+    "startYear": 2026,
+    "endYear": 2026,
+    "dateLabel": "2026",
+    "order": 11,
+    "place": "Firminy",
+    "country": "France",
+    "description": "Le Corbusier concrete, sacred interiors, and modernist housing.",
+    "tags": [],
+    "photos": [
+      {
+        "id": "2026-firminy-france-01",
+        "index": 1,
+        "collectionId": "2026-firminy-france",
+        "place": "Firminy",
+        "country": "France",
+        "file": "01.png",
+        "sourceIndex": 1,
+        "favorite": false,
+        "src": "../assets/photos/2026-firminy-france/01.webp",
+        "fullSrc": "../assets/photos-full/2026-firminy-france/01.webp",
+        "alt": "Curving concrete viaduct crossing green grassland under a clear sky",
+        "themes": [
+          "viaduct",
+          "infrastructure",
+          "concrete",
+          "landscape",
+          "engineering"
+        ],
+        "colors": [
+          "concrete grey",
+          "grass green",
+          "sky blue",
+          "beige",
+          "shadow black"
+        ],
+        "vibe": [
+          "open",
+          "monumental",
+          "calm",
+          "utilitarian"
+        ]
+      },
+      {
+        "id": "2026-firminy-france-02",
+        "index": 2,
+        "collectionId": "2026-firminy-france",
+        "place": "Firminy",
+        "country": "France",
+        "file": "02.png",
+        "sourceIndex": 2,
+        "favorite": false,
+        "src": "../assets/photos/2026-firminy-france/02.webp",
+        "fullSrc": "../assets/photos-full/2026-firminy-france/02.webp",
+        "alt": "Steel cable crane tower silhouetted against a pale blue sky",
+        "themes": [
+          "industrial heritage",
+          "crane",
+          "steel structure",
+          "engineering",
+          "geometry"
+        ],
+        "colors": [
+          "pale blue",
+          "charcoal",
+          "black",
+          "steel grey"
+        ],
+        "vibe": [
+          "industrial",
+          "stark",
+          "graphic",
+          "nostalgic"
+        ]
+      },
+      {
+        "id": "2026-firminy-france-03",
+        "index": 3,
+        "collectionId": "2026-firminy-france",
+        "place": "Firminy",
+        "country": "France",
+        "file": "03.png",
+        "sourceIndex": 3,
+        "favorite": false,
+        "src": "../assets/photos/2026-firminy-france/03.webp",
+        "fullSrc": "../assets/photos-full/2026-firminy-france/03.webp",
+        "alt": "Sculptural concrete church tower beneath bright clouds and blue sky",
+        "themes": [
+          "Le Corbusier architecture",
+          "church",
+          "concrete",
+          "brutalism",
+          "landmark"
+        ],
+        "colors": [
+          "concrete grey",
+          "sky blue",
+          "cloud white",
+          "moss green",
+          "yellow"
+        ],
+        "vibe": [
+          "monumental",
+          "sculptural",
+          "serene",
+          "modernist"
+        ]
+      },
+      {
+        "id": "2026-firminy-france-04",
+        "index": 4,
+        "collectionId": "2026-firminy-france",
+        "place": "Firminy",
+        "country": "France",
+        "file": "04.png",
+        "sourceIndex": 4,
+        "favorite": false,
+        "src": "../assets/photos/2026-firminy-france/04.webp",
+        "fullSrc": "../assets/photos-full/2026-firminy-france/04.webp",
+        "alt": "Dim concrete church interior with wooden benches and colored light bands",
+        "themes": [
+          "church interior",
+          "Le Corbusier architecture",
+          "concrete",
+          "stained glass",
+          "benches"
+        ],
+        "colors": [
+          "charcoal",
+          "warm brown",
+          "emerald green",
+          "ruby red",
+          "amber"
+        ],
+        "vibe": [
+          "meditative",
+          "solemn",
+          "atmospheric",
+          "intimate"
+        ]
+      },
+      {
+        "id": "2026-firminy-france-05",
+        "index": 5,
+        "collectionId": "2026-firminy-france",
+        "place": "Firminy",
+        "country": "France",
+        "file": "05.png",
+        "sourceIndex": 5,
+        "favorite": false,
+        "src": "../assets/photos/2026-firminy-france/05.webp",
+        "fullSrc": "../assets/photos-full/2026-firminy-france/05.webp",
+        "alt": "Curving wooden benches beneath low concrete ceilings and colored windows",
+        "themes": [
+          "church interior",
+          "seating",
+          "concrete",
+          "colored light",
+          "modernism"
+        ],
+        "colors": [
+          "warm brown",
+          "concrete grey",
+          "emerald green",
+          "coral red",
+          "gold"
+        ],
+        "vibe": [
+          "quiet",
+          "contemplative",
+          "tactile",
+          "cinematic"
+        ]
+      },
+      {
+        "id": "2026-firminy-france-06",
+        "index": 6,
+        "collectionId": "2026-firminy-france",
+        "place": "Firminy",
+        "country": "France",
+        "file": "06.png",
+        "sourceIndex": 6,
+        "favorite": false,
+        "src": "../assets/photos/2026-firminy-france/06.webp",
+        "fullSrc": "../assets/photos-full/2026-firminy-france/06.webp",
+        "alt": "Concrete church interior with curved wooden seating and a glowing green window band",
+        "themes": [
+          "church interior",
+          "curved seating",
+          "concrete",
+          "colored light",
+          "Le Corbusier architecture"
+        ],
+        "colors": [
+          "concrete grey",
+          "walnut brown",
+          "teal green",
+          "black",
+          "soft yellow"
+        ],
+        "vibe": [
+          "serene",
+          "intimate",
+          "architectural",
+          "contemplative"
+        ]
+      },
+      {
+        "id": "2026-firminy-france-07",
+        "index": 7,
+        "collectionId": "2026-firminy-france",
+        "place": "Firminy",
+        "country": "France",
+        "file": "07.png",
+        "sourceIndex": 7,
+        "favorite": false,
+        "src": "../assets/photos/2026-firminy-france/07.webp",
+        "fullSrc": "../assets/photos-full/2026-firminy-france/07.webp",
+        "alt": "Concrete church rising above a manicured lawn beneath a deep blue sky",
+        "themes": [
+          "Le Corbusier architecture",
+          "church",
+          "concrete",
+          "landscape",
+          "modernism"
+        ],
+        "colors": [
+          "deep blue",
+          "concrete grey",
+          "grass green",
+          "cloud white",
+          "charcoal"
+        ],
+        "vibe": [
+          "monumental",
+          "clear",
+          "peaceful",
+          "sculptural"
+        ]
+      },
+      {
+        "id": "2026-firminy-france-08",
+        "index": 8,
+        "collectionId": "2026-firminy-france",
+        "place": "Firminy",
+        "country": "France",
+        "file": "08.png",
+        "sourceIndex": 8,
+        "favorite": false,
+        "src": "../assets/photos/2026-firminy-france/08.webp",
+        "fullSrc": "../assets/photos-full/2026-firminy-france/08.webp",
+        "alt": "Long concrete residential facade with colorful window panels and deep shadows",
+        "themes": [
+          "Le Corbusier architecture",
+          "housing",
+          "brutalism",
+          "facade",
+          "color accents"
+        ],
+        "colors": [
+          "concrete grey",
+          "black",
+          "red",
+          "yellow",
+          "blue"
+        ],
+        "vibe": [
+          "graphic",
+          "monumental",
+          "urban",
+          "modernist"
+        ]
+      },
+      {
+        "id": "2026-firminy-france-09",
+        "index": 9,
+        "collectionId": "2026-firminy-france",
+        "place": "Firminy",
+        "country": "France",
+        "file": "09.png",
+        "sourceIndex": 9,
+        "favorite": false,
+        "src": "../assets/photos/2026-firminy-france/09.webp",
+        "fullSrc": "../assets/photos-full/2026-firminy-france/09.webp",
+        "alt": "Concrete church seen beyond stepped outdoor seating under scattered clouds",
+        "themes": [
+          "Le Corbusier architecture",
+          "church",
+          "amphitheater",
+          "concrete",
+          "landscape"
+        ],
+        "colors": [
+          "concrete grey",
+          "sky blue",
+          "cloud white",
+          "grass green",
+          "charcoal"
+        ],
+        "vibe": [
+          "spacious",
+          "monumental",
+          "sunlit",
+          "contemplative"
+        ]
+      },
+      {
+        "id": "2026-firminy-france-10",
+        "index": 10,
+        "collectionId": "2026-firminy-france",
+        "place": "Firminy",
+        "country": "France",
+        "file": "10.png",
+        "sourceIndex": 10,
+        "favorite": false,
+        "src": "../assets/photos/2026-firminy-france/10.webp",
+        "fullSrc": "../assets/photos-full/2026-firminy-france/10.webp",
+        "alt": "Modern concrete facade punctuated by tall red, yellow, green, and blue panels",
+        "themes": [
+          "Le Corbusier architecture",
+          "housing",
+          "facade",
+          "color",
+          "modernism"
+        ],
+        "colors": [
+          "concrete grey",
+          "red",
+          "yellow",
+          "green",
+          "blue"
+        ],
+        "vibe": [
+          "graphic",
+          "playful",
+          "geometric",
+          "modernist"
+        ]
+      },
+      {
+        "id": "2026-firminy-france-11",
+        "index": 11,
+        "collectionId": "2026-firminy-france",
+        "place": "Firminy",
+        "country": "France",
+        "file": "11.png",
+        "sourceIndex": 11,
+        "favorite": false,
+        "src": "../assets/photos/2026-firminy-france/11.webp",
+        "fullSrc": "../assets/photos-full/2026-firminy-france/11.webp",
+        "alt": "Close view of a tall residential facade with repeating balconies and colored panels",
+        "themes": [
+          "Le Corbusier architecture",
+          "housing",
+          "balconies",
+          "facade",
+          "repetition"
+        ],
+        "colors": [
+          "concrete grey",
+          "white",
+          "black",
+          "red",
+          "blue"
+        ],
+        "vibe": [
+          "rhythmic",
+          "graphic",
+          "urban",
+          "monumental"
+        ]
+      },
+      {
+        "id": "2026-firminy-france-12",
+        "index": 12,
+        "collectionId": "2026-firminy-france",
+        "place": "Firminy",
+        "country": "France",
+        "file": "12.png",
+        "sourceIndex": 12,
+        "favorite": false,
+        "src": "../assets/photos/2026-firminy-france/12.webp",
+        "fullSrc": "../assets/photos-full/2026-firminy-france/12.webp",
+        "alt": "Tall modernist apartment block with colorful balcony panels beside a green lawn",
+        "themes": [
+          "Le Corbusier architecture",
+          "housing",
+          "apartment block",
+          "landscape",
+          "modernism"
+        ],
+        "colors": [
+          "concrete grey",
+          "white",
+          "red",
+          "blue",
+          "grass green"
+        ],
+        "vibe": [
+          "sunny",
+          "orderly",
+          "monumental",
+          "optimistic"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2024-2026-saint-etienne-france",
+    "year": 2026,
+    "startYear": 2024,
+    "endYear": 2026,
+    "dateLabel": "2024-2026",
+    "order": 12,
+    "place": "Saint-Étienne",
+    "country": "France",
+    "description": "Reservoir landscapes, modern facades, and dramatic skies.",
+    "tags": [],
+    "photos": [
+      {
+        "id": "2024-2026-saint-etienne-france-04",
+        "index": 1,
+        "collectionId": "2024-2026-saint-etienne-france",
+        "place": "Saint-Étienne",
+        "country": "France",
+        "file": "04.png",
+        "sourceIndex": 4,
+        "favorite": true,
+        "src": "../assets/photos/2024-2026-saint-etienne-france/04.webp",
+        "fullSrc": "../assets/photos-full/2024-2026-saint-etienne-france/04.webp",
+        "alt": "Rocky green hillside rising above a calm reservoir with a leafy tree in front",
+        "themes": [
+          "reservoir",
+          "hillside",
+          "landscape",
+          "water",
+          "summer"
+        ],
+        "colors": [
+          "lake blue",
+          "olive green",
+          "limestone grey",
+          "leaf green",
+          "clear blue"
+        ],
+        "vibe": [
+          "sunny",
+          "peaceful",
+          "natural",
+          "spacious"
+        ]
+      },
+      {
+        "id": "2024-2026-saint-etienne-france-07",
+        "index": 2,
+        "collectionId": "2024-2026-saint-etienne-france",
+        "place": "Saint-Étienne",
+        "country": "France",
+        "file": "07.png",
+        "sourceIndex": 7,
+        "favorite": true,
+        "src": "../assets/photos/2024-2026-saint-etienne-france/07.webp",
+        "fullSrc": "../assets/photos-full/2024-2026-saint-etienne-france/07.webp",
+        "alt": "Modern glass-fronted building rising into a soft pink evening sky",
+        "themes": [
+          "modern architecture",
+          "facade",
+          "windows",
+          "city",
+          "dusk"
+        ],
+        "colors": [
+          "dusty pink",
+          "mauve",
+          "charcoal",
+          "steel blue",
+          "black"
+        ],
+        "vibe": [
+          "calm",
+          "cinematic",
+          "minimal",
+          "urban"
+        ]
+      },
+      {
+        "id": "2024-2026-saint-etienne-france-01",
+        "index": 3,
+        "collectionId": "2024-2026-saint-etienne-france",
+        "place": "Saint-Étienne",
+        "country": "France",
+        "file": "01.png",
+        "sourceIndex": 1,
+        "favorite": false,
+        "src": "../assets/photos/2024-2026-saint-etienne-france/01.webp",
+        "fullSrc": "../assets/photos-full/2024-2026-saint-etienne-france/01.webp",
+        "alt": "Orange-lit clouds above a dark wooded ridge at sunset",
+        "themes": [
+          "landscape",
+          "sky",
+          "sunset",
+          "weather"
+        ],
+        "colors": [
+          "navy",
+          "slate blue",
+          "charcoal",
+          "amber",
+          "cream"
+        ],
+        "vibe": [
+          "dramatic",
+          "contemplative",
+          "moody",
+          "tranquil"
+        ]
+      },
+      {
+        "id": "2024-2026-saint-etienne-france-02",
+        "index": 4,
+        "collectionId": "2024-2026-saint-etienne-france",
+        "place": "Saint-Étienne",
+        "country": "France",
+        "file": "02.png",
+        "sourceIndex": 2,
+        "favorite": false,
+        "src": "../assets/photos/2024-2026-saint-etienne-france/02.webp",
+        "fullSrc": "../assets/photos-full/2024-2026-saint-etienne-france/02.webp",
+        "alt": "White cat standing beside a metal railing on a mossy path",
+        "themes": [
+          "cat",
+          "animal portrait",
+          "everyday life",
+          "street detail"
+        ],
+        "colors": [
+          "white",
+          "moss green",
+          "asphalt grey",
+          "rust brown",
+          "pink"
+        ],
+        "vibe": [
+          "gentle",
+          "candid",
+          "quiet",
+          "curious"
+        ]
+      },
+      {
+        "id": "2024-2026-saint-etienne-france-03",
+        "index": 5,
+        "collectionId": "2024-2026-saint-etienne-france",
+        "place": "Saint-Étienne",
+        "country": "France",
+        "file": "03.png",
+        "sourceIndex": 3,
+        "favorite": false,
+        "src": "../assets/photos/2024-2026-saint-etienne-france/03.webp",
+        "fullSrc": "../assets/photos-full/2024-2026-saint-etienne-france/03.webp",
+        "alt": "Stone dam curving through a green mountain valley beneath cloud-filled skies",
+        "themes": [
+          "dam",
+          "mountains",
+          "engineering",
+          "landscape",
+          "water"
+        ],
+        "colors": [
+          "forest green",
+          "stone grey",
+          "sky blue",
+          "white",
+          "grass green"
+        ],
+        "vibe": [
+          "expansive",
+          "fresh",
+          "dramatic",
+          "serene"
+        ]
+      },
+      {
+        "id": "2024-2026-saint-etienne-france-05",
+        "index": 6,
+        "collectionId": "2024-2026-saint-etienne-france",
+        "place": "Saint-Étienne",
+        "country": "France",
+        "file": "05.png",
+        "sourceIndex": 5,
+        "favorite": false,
+        "src": "../assets/photos/2024-2026-saint-etienne-france/05.webp",
+        "fullSrc": "../assets/photos-full/2024-2026-saint-etienne-france/05.webp",
+        "alt": "Orange brick building with a pale green roof against a clear blue sky",
+        "themes": [
+          "architecture",
+          "facade",
+          "geometric composition",
+          "city"
+        ],
+        "colors": [
+          "sky blue",
+          "terracotta",
+          "pale green",
+          "white",
+          "charcoal"
+        ],
+        "vibe": [
+          "clean",
+          "bright",
+          "graphic",
+          "playful"
+        ]
+      },
+      {
+        "id": "2024-2026-saint-etienne-france-06",
+        "index": 7,
+        "collectionId": "2024-2026-saint-etienne-france",
+        "place": "Saint-Étienne",
+        "country": "France",
+        "file": "06.png",
+        "sourceIndex": 6,
+        "favorite": false,
+        "src": "../assets/photos/2024-2026-saint-etienne-france/06.webp",
+        "fullSrc": "../assets/photos-full/2024-2026-saint-etienne-france/06.webp",
+        "alt": "Pink and orange sunset behind a dark city ridge and layered clouds",
+        "themes": [
+          "sunset",
+          "sky",
+          "city silhouette",
+          "weather"
+        ],
+        "colors": [
+          "coral",
+          "peach",
+          "plum",
+          "navy",
+          "black"
+        ],
+        "vibe": [
+          "atmospheric",
+          "warm",
+          "moody",
+          "reflective"
+        ]
+      },
+      {
+        "id": "2024-2026-saint-etienne-france-08",
+        "index": 8,
+        "collectionId": "2024-2026-saint-etienne-france",
+        "place": "Saint-Étienne",
+        "country": "France",
+        "file": "08.png",
+        "sourceIndex": 8,
+        "favorite": false,
+        "src": "../assets/photos/2024-2026-saint-etienne-france/08.webp",
+        "fullSrc": "../assets/photos-full/2024-2026-saint-etienne-france/08.webp",
+        "alt": "Angular dark red modern buildings framed against a pale evening sky",
+        "themes": [
+          "modern architecture",
+          "red facade",
+          "geometric composition",
+          "city"
+        ],
+        "colors": [
+          "burgundy",
+          "crimson",
+          "pale blue",
+          "black",
+          "grey"
+        ],
+        "vibe": [
+          "bold",
+          "graphic",
+          "contemporary",
+          "quiet"
+        ]
+      }
+    ]
+  }
+]
