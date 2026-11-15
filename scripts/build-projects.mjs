@@ -1911,10 +1911,8 @@ const getRelatedProjects = (featured, currentSlug, limit = 2) => {
 };
 
 const renderCaseStudyPage = (project, peers) => {
-  const preview = getProjectPreviewImage(project);
   const relatedProjects = getRelatedProjects(peers, project.slug);
   const pageUrl = `https://pierrelouis.net/projects/${project.slug}/`;
-  const imageUrl = `https://pierrelouis.net/assets/projects/${preview.outputFile}`;
   const header = renderSiteHeader({
     root: "../../",
     active: null,
@@ -1956,7 +1954,19 @@ const renderCaseStudyPage = (project, peers) => {
     <meta property="og:type" content="article" />
     <link rel="canonical" href="${escapeHtml(pageUrl)}" />
     <meta property="og:url" content="${escapeHtml(pageUrl)}" />
-    <meta property="og:image" content="${escapeHtml(imageUrl)}" />
+    <meta property="og:site_name" content="Pierre-Louis" />
+    <meta
+      property="og:image"
+      content="https://pierrelouis.net/assets/og-image.png?v=2"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta
+      property="og:image:alt"
+      content="Pierre-Louis, design engineer: name beside a warm pixel grid"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
     <link
       rel="icon"
       type="image/png"
@@ -2158,16 +2168,8 @@ const updatePage = async (projects) => {
 
   const before = source.slice(0, startIndex + GENERATED_START.length);
   const after = source.slice(endIndex);
-  const preview = getProjectPreviewImage(projects.featured[0]);
-  const ogImageTag = `<meta
-      property="og:image"
-      content="https://pierrelouis.net/assets/projects/${escapeHtml(preview.outputFile)}"
-    />`;
   const output = updatePageMetadata(
-    `${before}\n${renderProjectsContent(projects)}\n${after}`.replace(
-      /<meta\s+property="og:image"\s+content="[^"]+"\s*\/>/,
-      ogImageTag,
-    ),
+    `${before}\n${renderProjectsContent(projects)}\n${after}`,
   );
 
   if (output !== source) {

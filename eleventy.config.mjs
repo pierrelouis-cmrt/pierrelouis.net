@@ -60,20 +60,6 @@ const postAssetUrl = (reference, inputPath) => {
   return `../${relative.split(path.sep).join("/")}`;
 };
 
-const postOgAssetUrl = (reference, inputPath) => {
-  const publicUrl = postAssetUrl(reference, inputPath);
-
-  if (/^https?:\/\//i.test(publicUrl)) {
-    return publicUrl;
-  }
-
-  if (publicUrl.startsWith("/")) {
-    return `${SITE_URL}${publicUrl}`;
-  }
-
-  return `${SITE_URL}/posts/${publicUrl.replace(/^\.\.\//, "")}`;
-};
-
 const archiveGroups = (items) => {
   const sorted = [...items].sort(
     (first, second) =>
@@ -242,7 +228,6 @@ export default async function configureEleventy(eleventyConfig) {
   );
   eleventyConfig.addFilter("json", (value) => JSON.stringify(value));
   eleventyConfig.addFilter("postAsset", postAssetUrl);
-  eleventyConfig.addFilter("postOgAsset", postOgAssetUrl);
   eleventyConfig.addFilter("postBody", (content) =>
     extractPostSection(content, "body"),
   );

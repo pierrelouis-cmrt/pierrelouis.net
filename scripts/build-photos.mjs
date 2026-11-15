@@ -626,11 +626,6 @@ const getCountryPhotoCounts = (collections) => {
   }, new Map());
 };
 
-const getOgImage = (collections) => {
-  return collections[0]?.photos[0]?.src.replace(/^\.\.\//, "https://pierrelouis.net/") ??
-    "https://pierrelouis.net/assets/image_featured_1.webp";
-};
-
 const renderDataAttribute = (items) => escapeHtml(items.join(", "));
 
 const getYearSearchTerms = (collection) => {
@@ -808,10 +803,19 @@ const renderPage = (collections) => {
     <meta property="og:type" content="website" />
     <link rel="canonical" href="${escapeHtml(PHOTOS_PAGE.url)}" />
     <meta property="og:url" content="${escapeHtml(PHOTOS_PAGE.url)}" />
+    <meta property="og:site_name" content="Pierre-Louis" />
     <meta
       property="og:image"
-      content="${escapeHtml(getOgImage(collections))}"
+      content="https://pierrelouis.net/assets/og-image.png?v=2"
     />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta
+      property="og:image:alt"
+      content="Pierre-Louis, design engineer: name beside a warm pixel grid"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
     <link
       rel="icon"
       type="image/png"
