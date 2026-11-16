@@ -525,27 +525,25 @@
   grid-column: 2 / span 2;
 }
 
-/* Uses: a quiet, vertical inventory with clear category resets. */
-.list-sheet-content--tech-and-gear .list-sheet__markdown > h2 {
+/* Shared section headings for Markdown imported from the vault's lists. */
+.list-sheet__markdown[data-list-sheet-markdown-source] > h2 {
   margin: 0;
-  padding-bottom: var(--space-2xs);
-  border-bottom: 1px solid rgb(28 28 28 / 0.22);
-  color: var(--color-ink);
-  font-family: var(--font-family-display-italic);
-  font-size: calc(var(--font-size-base) + 2px);
-  font-style: italic;
+  color: var(--color-subtle);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  font-style: normal;
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-copy);
+  letter-spacing: var(--tracking-normal);
+  text-transform: none;
 }
 
-.list-sheet-content--tech-and-gear
-  .list-sheet__markdown
-  > h2:not(:first-child) {
-  margin-top: var(--space-6xl);
+.list-sheet__markdown[data-list-sheet-markdown-source] > h2:not(:first-child) {
+  margin-top: var(--space-7xl);
 }
 
-.list-sheet-content--tech-and-gear .list-sheet__entry-list {
-  margin-top: var(--space-xl);
+.list-sheet__markdown[data-list-sheet-markdown-source] > h2 + * {
+  margin-top: var(--space-5xl);
 }
 
 .visited-map .world-map__countries path {
@@ -605,22 +603,6 @@
   color: var(--color-caption);
   font-size: var(--font-size-base);
   line-height: var(--line-height-copy);
-}
-
-.list-sheet-content--articles-and-videos .list-sheet__markdown > h2 {
-  margin: var(--space-7xl) 0 0;
-  color: var(--color-subtle);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--line-height-copy);
-  letter-spacing: var(--tracking-normal);
-  text-transform: none;
-}
-
-.list-sheet-content--articles-and-videos
-  .list-sheet__markdown
-  > h2:first-child {
-  margin-top: 0;
 }
 
 .list-sheet-content--articles-and-videos .list-sheet__entry-list {
