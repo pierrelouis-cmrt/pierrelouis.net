@@ -370,9 +370,13 @@
     updateActive();
   };
 
-  const initFootnoteReturns = () => {
-    document.querySelectorAll(".post-footnote-backref").forEach((link) => {
+  const initFootnoteNavigation = () => {
+    document.querySelectorAll(".post-footnote-ref a, .post-footnote-backref").forEach((link) => {
       link.addEventListener("click", (event) => {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+          return;
+        }
+
         const href = link.getAttribute("href") || "";
         const target = href.startsWith("#")
           ? document.getElementById(decodeURIComponent(href.slice(1)))
@@ -384,6 +388,14 @@
 
         event.preventDefault();
         window.history.pushState(null, "", href);
+
+        if (!link.classList.contains("post-footnote-backref")) {
+          target.scrollIntoView({
+            behavior: reducedMotion ? "auto" : "smooth",
+            block: "start",
+          });
+          return;
+        }
 
         let fallbackTimer;
         let highlightTimer;
@@ -420,7 +432,7 @@
 
   const codeHighlightJobs = enhanceCodeBlocks();
   initTableOfContents();
-  initFootnoteReturns();
+  initFootnoteNavigation();
   Promise.allSettled(codeHighlightJobs).then(() => {
     page.classList.add("has-code-highlighting");
   });
