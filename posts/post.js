@@ -122,7 +122,8 @@
         gutter.append(line);
       });
 
-      figure.append(gutter);
+      // Inside the scroll container so line numbers scroll with their lines.
+      pre.prepend(gutter);
 
       if (shouldCopy) {
         const copyButton = document.createElement("button");

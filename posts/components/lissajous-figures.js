@@ -742,7 +742,7 @@ const defineGap = () =>
       front.classList.add("is-visible");
       back.classList.remove("is-visible");
       const percent = Math.round(gap.radius * 100);
-      this.readout.textContent = `${nx}:${ny} · widest gap ${percent}% of the width`;
+      this.readout.textContent = `Widest gap: ${percent}% of the width`;
       this.plot.setAttribute(
         "aria-label",
         `Lissajous curve ${nx} to ${ny}, k = ${this.k}. Its largest gap, a near-parallelogram cell at the centre, is ${percent} percent of the scan width across.`,

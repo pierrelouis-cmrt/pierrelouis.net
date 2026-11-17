@@ -169,9 +169,26 @@
   white-space: nowrap;
 }
 
+.lj-gap .lj-controls {
+  display: grid;
+  grid-template-areas: "chips clock toggle";
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.lj-gap .lj-chips {
+  grid-area: chips;
+}
+
 .lj-gap .lj-clock {
-  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  grid-area: clock;
   text-align: right;
+  text-overflow: ellipsis;
+}
+
+.lj-gap .lj-button {
+  grid-area: toggle;
 }
 
 .lj-button,
@@ -415,6 +432,19 @@
   .lj-meta {
     flex-direction: column;
     gap: 0;
+  }
+
+  /* Presets and Pause share the first row; the measurement gets its own. */
+  .lj-gap .lj-controls {
+    grid-template-areas:
+      "chips toggle"
+      "clock clock";
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding-bottom: var(--space-sm);
+  }
+
+  .lj-gap .lj-clock {
+    text-align: left;
   }
 }
 
