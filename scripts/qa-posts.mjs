@@ -141,8 +141,23 @@ const exerciseArticleComponents = async (
           const media = component.locator("video, audio");
           await media.evaluate((element) => new Promise((resolve, reject) => {
             if (element.readyState >= 1) return resolve();
-            element.addEventListener("loadedmetadata", resolve, { once: true });
-            element.addEventListener("error", () => reject(new Error("media failed to load")), { once: true });
+            const timer = setTimeout(
+              () => reject(new Error("media metadata did not load within 15 s")),
+              15_000,
+            );
+            element.addEventListener("loadedmetadata", () => {
+              clearTimeout(timer);
+              resolve();
+            }, { once: true });
+            element.addEventListener("error", () => {
+              clearTimeout(timer);
+              reject(new Error("media failed to load"));
+            }, { once: true });
+            // preload="none" never fetches metadata on its own.
+            if (element.preload === "none" || element.networkState === element.NETWORK_EMPTY) {
+              element.preload = "metadata";
+              element.load();
+            }
           }));
           await component.getByRole("button").click();
           await page.waitForFunction((element) => !element.media.paused, await component.elementHandle());
