@@ -21,10 +21,10 @@ The curves we call "Lissajous" actually have an earlier origin. In 1815, America
 But it was the French physicist Jules Antoine Lissajous who, in the 1850s, made them visually beautiful. His experiment was simple: mirrors attached to vibrating tuning forks, projecting beams of light onto a screen. Sound, via light, became "visible". The curves took his name and are still pretty useful scientifically to this day.
 
 ![Historical image](historical_experiment_photo.webp)
-Figure 1. Experiment of Lissajous. The light-figures produced by the compound vibrations of two tuning forks vibrating at different pitches. Source: Privat-Deschanel A. and de Ochoa y Ronna E., Tratado elemental de física, Hachette, Paris (1872), pp. 696–697 [^1]
+Experiment of Lissajous. The light-figures produced by the compound vibrations of two tuning forks vibrating at different pitches. Source: Privat-Deschanel A. and de Ochoa y Ronna E., Tratado elemental de física, Hachette, Paris (1872), pp. 696–697 [^1]
 
 ![Experiment](experiment_diagram.webp)
-Figure 2. Modern recreation of Lissajous's experiment. Two tuning forks arranged at 90 degrees, each with a mirror on one tyne. A laser beam reflects off both mirrors in sequence; when the forks are struck, the beam traces a Lissajous pattern on the screen. Source: UC Berkeley Physics Lecture Demonstrations [^2]
+Modern recreation of Lissajous's experiment. Two tuning forks arranged at 90 degrees, each with a mirror on one tyne. A laser beam reflects off both mirrors in sequence; when the forks are struck, the beam traces a Lissajous pattern on the screen. Source: UC Berkeley Physics Lecture Demonstrations [^2]
 
 ---
 
@@ -90,7 +90,7 @@ $$
 The figure below shows how $k$ affects the trajectory for various frequency ratios. Notice that when $k = 2$ or $k = 6$, the figures becomes as symmetrical as possible (about both axes and the origin at the same time).
 
 ![Lissajous basic graphs for different frequency ratios](curves_k.webp)
-Figure 3. Lissajous basic graphs for frequency ratios $n_x : n_y$ of 1:1, 2:1, 3:1, 3:2, 4:3, 5:3, and 5:4 (rows) with phase parameter $k$ from 0 to 7 (columns). When $k$ is constant, trajectory density increases with frequency. At constant frequency ratio, different $k$ values produce different trajectory densities. Source: Wang et al., Microsystems & Nanoengineering (2020) [^3]
+Lissajous basic graphs for frequency ratios $n_x : n_y$ of 1:1, 2:1, 3:1, 3:2, 4:3, 5:3, and 5:4 (rows) with phase parameter $k$ from 0 to 7 (columns). When $k$ is constant, trajectory density increases with frequency. At constant frequency ratio, different $k$ values produce different trajectory densities. Source: Wang et al., Microsystems & Nanoengineering (2020) [^3]
 
 ### Symmetry Properties
 
@@ -118,7 +118,7 @@ A critical property for applications is the **fill factor (FF)**. It's a measure
   <p class="post-component-fallback">A small, approximately parallelogram-shaped cell near the centre contains the largest gap between scan lines.</p>
 </pl-lissajous-gap>
 
-For scanning applications like LIDAR (e.g. self driving cars), minimizing this gap (or maximizing density) is super important. Research has shown that $k = 2$ produces optimal density for most frequency ratios. I'll develop more on the various applications of the curves [here](##Applications) in that same article.
+For scanning applications like LIDAR (e.g. self driving cars), minimizing this gap (or maximizing density) is super important. Research has shown that $k = 2$ produces optimal density for most frequency ratios. I'll develop more on the various applications of the curves [here](#Applications) in that same article.
 
 ---
 
@@ -217,7 +217,7 @@ Perhaps the most famous domain where Lissajous figure hide in plain sight: desig
 More recently, Meta's 2021 rebrand introduced a logo that is essentially an infinite loop: a Lissajous-like figure rotated 90° (close to a $2:1$ ratio curve).
 
 ![Meta Logo](meta-logo.svg)
-Figure 4. Current Meta Logo [^4]
+Current Meta Logo [^4]
 
 ---
 

@@ -173,7 +173,7 @@ must be replaced by a link or a registered component.
 
 ```markdown
 ![Descriptive alternative text](assets/historical-experiment_photo.webp)
-*Figure 1 — Light figures produced by two perpendicular tuning forks.[^1]*
+*Light figures produced by two perpendicular tuning forks.[^1]*
 ```
 
 Text directly below a standalone image, with no blank line between them, becomes

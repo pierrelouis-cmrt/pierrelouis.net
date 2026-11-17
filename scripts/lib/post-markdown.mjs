@@ -449,9 +449,13 @@ const installPostStructure = (md) => {
 
         token.attrSet("id", id);
         usedIds.add(id);
-        continue;
       }
+    }
 
+    // Obsidian Markdown links retain heading text; HTML fragments use our IDs.
+    state.env.postHeadingIds = usedIds;
+
+    for (let index = 0; index < state.tokens.length; index += 1) {
       const media = getImageParagraph(state.tokens, index);
 
       if (!media) {
@@ -506,6 +510,20 @@ const installLinks = (md) => {
   md.renderer.rules.link_open = (tokens, index, options, env, self) => {
     const token = tokens[index];
     let href = token.attrGet("href") || "";
+
+    if (href.startsWith("#")) {
+      let heading;
+      try {
+        heading = decodeURIComponent(href.slice(1));
+      } catch {
+        heading = href.slice(1);
+      }
+      const id = slugifyPost(heading);
+      if (env?.postHeadingIds?.has(id)) {
+        href = `#${id}`;
+        token.attrSet("href", href);
+      }
+    }
 
     if (isRemotePostAsset(href)) {
       token.attrJoin("class", "external-link");

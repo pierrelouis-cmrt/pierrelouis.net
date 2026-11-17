@@ -267,6 +267,55 @@ test("only one audible player plays at a time", async (t) => {
   await page.waitForFunction(() => document.getElementById("video").media.paused);
 });
 
+for (const id of ["audio", "video"]) {
+  test(`${id} clears buffering on pause and end and ignores late waiting events`, async (t) => {
+    const page = await openPage(t);
+    if (!page) return;
+
+    const result = await page.evaluate(async (elementId) => {
+      const player = document.getElementById(elementId);
+      const media = player.media;
+      const loading = () => player.hasAttribute("data-loading");
+      const waiting = () => media.dispatchEvent(new Event("waiting"));
+      media.muted = true;
+      await media.play();
+      // Deterministic buffering notifications around real playback transitions.
+      waiting();
+      const duringPlayback = loading();
+      media.pause();
+      await new Promise((resolve) => media.addEventListener("pause", resolve, { once: true }));
+      const afterPause = loading();
+      waiting();
+      const waitingWhilePaused = loading();
+
+      media.currentTime = media.duration - 0.3;
+      await new Promise((resolve) => media.addEventListener("seeked", resolve, { once: true }));
+      await media.play();
+      waiting();
+      const beforeEnd = loading();
+      await new Promise((resolve) => media.addEventListener("ended", resolve, { once: true }));
+      const afterEnd = loading();
+      waiting();
+      const waitingAfterEnd = loading();
+      // Replay must still work after ending and rejecting that late event.
+      await media.play();
+      const replaying = !media.paused && !media.ended;
+      media.pause();
+      return { duringPlayback, afterPause, waitingWhilePaused, beforeEnd, afterEnd, waitingAfterEnd, replaying };
+    }, id);
+
+    assert.deepEqual(result, {
+      duringPlayback: true,
+      afterPause: false,
+      waitingWhilePaused: false,
+      beforeEnd: true,
+      afterEnd: false,
+      waitingAfterEnd: false,
+      replaying: true,
+    });
+  });
+}
+
 test("reports load errors with a direct link", async (t) => {
   const page = await openPage(t);
   if (!page) return;

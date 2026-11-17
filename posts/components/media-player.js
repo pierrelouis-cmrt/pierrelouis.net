@@ -489,7 +489,11 @@ class MediaPlayer extends HTMLElement {
       on(media, type, () => this.#onMediaEvent(type));
     }
 
-    on(media, "waiting", () => this.toggleAttribute("data-loading", true));
+    on(media, "waiting", () => {
+      // A late waiting event at EOF must not look like more audio/video is due.
+      const atEnd = Number.isFinite(media.duration) && media.currentTime >= media.duration;
+      this.toggleAttribute("data-loading", !media.paused && !media.ended && !atEnd && !media.error);
+    });
     on(media, "seeking", () => this.#render());
     on(media, "canplay", () => this.toggleAttribute("data-loading", false));
     // <source> errors don't bubble, but capture on the media element sees them.
@@ -545,7 +549,7 @@ class MediaPlayer extends HTMLElement {
       }
     }
 
-    if (type === "playing" || type === "seeked") {
+    if (["playing", "seeked", "pause", "ended", "emptied"].includes(type)) {
       this.toggleAttribute("data-loading", false);
     }
 
