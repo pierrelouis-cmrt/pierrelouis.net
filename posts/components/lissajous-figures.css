@@ -10,14 +10,11 @@
   display: block;
 }
 
-.post-body > :is(pl-lissajous-closure, pl-lissajous-gap, pl-lissajous-intervals) + p {
-  margin-top: var(--space-xl);
-}
-
-:is(pl-lissajous-closure, pl-lissajous-gap, pl-lissajous-intervals) > .post-component-fallback {
+:is(pl-lissajous-closure, pl-lissajous-gap, pl-lissajous-intervals)
+  > .post-component-fallback {
   padding: var(--space-xl);
   border: 1px solid var(--post-rule, var(--lj-rule));
-  border-radius: 8px;
+  border-radius: var(--post-media-radius, 8px);
 }
 
 .lj-figure {

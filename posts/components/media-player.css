@@ -2,9 +2,9 @@
    Interaction follows one model for both: a bare play/pause glyph in the
    middle and a persistent progress bar along the bottom edge that swells under
    the pointer, with a time preview, a ghost fill and an origin marker while
-   seeking. Geometry is square, like every figure on the site; captions use
-   the shared .post-caption strip unchanged. Colours come from base.css tokens
-   so Night Shift warms them. */
+   seeking. Corners and spacing come from post.css, which treats every media
+   block alike; captions use the shared .post-caption strip. Colours come from
+   base.css tokens so Night Shift warms them. */
 
 :is(pl-video-player, pl-audio-player) {
   --pl-ease: cubic-bezier(0.23, 1, 0.32, 1);
@@ -16,10 +16,6 @@
   --pl-edge: 16px;
   display: block;
   -webkit-tap-highlight-color: transparent;
-}
-
-.post-body > :is(pl-video-player, pl-audio-player) {
-  margin-block: var(--space-7xl, 80px);
 }
 
 :is(pl-video-player, pl-audio-player) > :not(.pl-player, .post-caption) {

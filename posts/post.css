@@ -15,6 +15,10 @@
   );
   --post-media-overhang: calc(var(--post-column-width) / 5);
   --post-media-max-height: min(64svh, 640px);
+  /* One rhythm and one corner for every block of media in an article:
+     figures, players, demos and embeds. Matches code blocks and demo frames. */
+  --post-media-space: var(--space-5xl);
+  --post-media-radius: 8px;
 
   overflow: visible;
 }
@@ -597,16 +601,13 @@
   display: block;
   width: 100%;
   min-height: 420px;
-  margin-top: var(--space-4xl);
   border: 0;
   background: var(--post-panel);
 }
 
 .post-embed-fallback {
-  margin-top: var(--space-4xl);
   padding: var(--space-2xl) var(--space-3xl);
   border: 1px solid var(--post-rule);
-  border-radius: 4px;
   background: var(--post-panel);
 }
 
@@ -872,13 +873,153 @@
   background: #ffebe9;
 }
 
-.post-media {
-  margin-top: var(--space-7xl);
-  margin-bottom: var(--space-7xl);
+/* Media blocks take the same space above and below. The body is a grid, so
+   margins don't collapse on their own: two blocks in a row share one gap, and
+   a block next to something with its own spacing (a heading, a rule, a table)
+   defers to it instead of adding to it. */
+.post-body
+  > :is(
+    .post-media,
+    .article-embed,
+    .post-embed-fallback,
+    iframe,
+    pl-carousel-demo,
+    pl-full-bleed-demo,
+    pl-lissajous-lab,
+    pl-pixel-grid,
+    pl-video-player,
+    pl-audio-player
+  ) {
+  margin-block: var(--post-media-space);
 }
 
-.post-media + h2 {
-  margin-top: var(--space-5xl);
+.post-body
+  > :is(
+    .post-media,
+    .article-embed,
+    .post-embed-fallback,
+    iframe,
+    pl-carousel-demo,
+    pl-full-bleed-demo,
+    pl-lissajous-lab,
+    pl-pixel-grid,
+    pl-video-player,
+    pl-audio-player
+  ):is(
+    :first-child,
+    :is(
+        .post-media,
+        .article-embed,
+        .post-embed-fallback,
+        iframe,
+        pl-carousel-demo,
+        pl-full-bleed-demo,
+        pl-lissajous-lab,
+        pl-pixel-grid,
+        pl-video-player,
+        pl-audio-player,
+        hr
+      )
+      + *
+  ) {
+  margin-top: 0;
+}
+
+.post-body
+  > :is(
+    .post-media,
+    .article-embed,
+    .post-embed-fallback,
+    iframe,
+    pl-carousel-demo,
+    pl-full-bleed-demo,
+    pl-lissajous-lab,
+    pl-pixel-grid,
+    pl-video-player,
+    pl-audio-player
+  ):has(+ :is(h1, h2, h3, h4, h5, h6, hr)),
+.post-body
+  > :is(table, blockquote, .post-math):has(
+    + :is(
+      .post-media,
+      .article-embed,
+      .post-embed-fallback,
+      iframe,
+      pl-carousel-demo,
+      pl-full-bleed-demo,
+      pl-lissajous-lab,
+      pl-pixel-grid,
+      pl-video-player,
+      pl-audio-player
+    )
+  ) {
+  margin-bottom: 0;
+}
+
+/* Blocks with their own top margin take the media gap instead. */
+.post-body
+  > :is(
+    .post-media,
+    .article-embed,
+    .post-embed-fallback,
+    iframe,
+    pl-carousel-demo,
+    pl-full-bleed-demo,
+    pl-lissajous-lab,
+    pl-pixel-grid,
+    pl-video-player,
+    pl-audio-player
+  )
+  + :is(ul, ol, table, blockquote, .post-callout, .post-code-block, pre) {
+  margin-top: var(--post-media-space);
+}
+
+/* Under a heading, media sits a paragraph gap below it, like text does. */
+.post-body
+  > :is(h1, h2, h3, h4, h5, h6)
+  + :is(
+    .post-media,
+    .article-embed,
+    .post-embed-fallback,
+    iframe,
+    pl-carousel-demo,
+    pl-full-bleed-demo,
+    pl-lissajous-lab,
+    pl-pixel-grid,
+    pl-video-player,
+    pl-audio-player
+  ) {
+  margin-top: var(--space-xl);
+}
+
+.post-body > :last-child {
+  margin-bottom: 0;
+}
+
+/* Every image, video, player, demo and embed gets the same slight corner.
+   Clipping the whole block rounds the media and its caption strip as one. */
+.post-hero__media,
+.post-body
+  > :is(
+    .post-media,
+    .article-embed,
+    .post-embed-fallback,
+    iframe,
+    pl-carousel-demo,
+    pl-full-bleed-demo,
+    pl-lissajous-lab,
+    pl-pixel-grid,
+    pl-video-player,
+    pl-audio-player
+  ) {
+  overflow: clip;
+  border-radius: var(--post-media-radius);
+}
+
+/* Focus rings sit inside the clipped corner rather than under it. */
+.post-hero__frame:focus-visible,
+.post-media__frame:focus-visible {
+  outline-offset: -2px;
 }
 
 .post-media__frame {
