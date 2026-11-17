@@ -38,6 +38,25 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Pierre-Louis" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
+    <script>
+      // Hold back the browser's instant jump to a #section on arrival so
+      // post.js can smooth-scroll there once the layout is ready.
+      (() => {
+        try {
+          const navigation = performance.getEntriesByType("navigation")[0];
+          if (
+            location.hash.length > 1 &&
+            (!navigation || navigation.type === "navigate") &&
+            !matchMedia("(prefers-reduced-motion: reduce)").matches
+          ) {
+            window.__postArrivalHash = location.hash;
+            // Browsers read the fragment from the current URL once parsing
+            // ends; post.js puts it back after that, as it starts scrolling.
+            history.replaceState(history.state, "", location.pathname + location.search);
+          }
+        } catch {}
+      })();
+    </script>
     <link rel="stylesheet" href="../../base.css" />
     <link rel="stylesheet" href="../../assets/vendor/katex/katex.min.css" />
     <link rel="stylesheet" href="../post.css" />

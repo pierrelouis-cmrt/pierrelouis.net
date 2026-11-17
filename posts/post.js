@@ -191,7 +191,7 @@
     const panel = toc?.querySelector("[data-post-toc-panel]");
 
     if (!postBody || !toc || !desktop || !mobile || !toggle || !current || !panel) {
-      return;
+      return null;
     }
 
     const headings = [...postBody.children].filter(
@@ -201,7 +201,7 @@
     const minimumHeadings = toc.dataset.tocMode === "true" ? 1 : 2;
 
     if (headings.length < minimumHeadings) {
-      return;
+      return null;
     }
 
     const usedIds = new Set(
@@ -245,6 +245,9 @@
     let isTicking = false;
     let isTocScrolling = false;
     let scrollSettleTimer;
+    // The section the URL currently reflects; null until the next settled
+    // position is known, so a freshly set #hash is adopted rather than replaced.
+    let syncedSectionId = null;
 
     const closeToc = ({ restoreFocus = false } = {}) => {
       toc.classList.remove("is-open");
@@ -287,24 +290,52 @@
       });
     };
 
+    // Keep the address bar on the section being read so the URL can be shared
+    // as-is. replaceState avoids adding a history entry per section.
+    const syncUrl = (sectionId) => {
+      if (sectionId === syncedSectionId) {
+        return;
+      }
+
+      const isFirstSync = syncedSectionId === null;
+      syncedSectionId = sectionId;
+
+      if (isFirstSync && window.location.hash) {
+        return;
+      }
+
+      const { pathname, search } = window.location;
+      window.history.replaceState(
+        window.history.state,
+        "",
+        sectionId ? `#${sectionId}` : `${pathname}${search}`,
+      );
+    };
+
+    const getScrollOffset = () => {
+      const tocTop = Number.parseFloat(getComputedStyle(toc).top) || 0;
+      return tocTop + (window.innerWidth <= 1100 ? 56 : 16);
+    };
+
     const updateActive = () => {
       if (isTocScrolling) {
         isTicking = false;
         return;
       }
 
-      const tocTop = Number.parseFloat(getComputedStyle(toc).top) || 0;
-      const threshold =
-        tocTop + (window.innerWidth <= 1100 ? 56 : 16);
+      const threshold = getScrollOffset();
       let active = headings[0];
+      let section = null;
 
       headings.forEach((heading) => {
         if (heading.getBoundingClientRect().top <= threshold) {
           active = heading;
+          section = heading;
         }
       });
 
       setActive(active);
+      syncUrl(section?.id || "");
       isTicking = false;
     };
 
@@ -343,6 +374,37 @@
       panel.setAttribute("aria-hidden", String(!willOpen));
     });
 
+    // Headings line up with the active-section threshold; any other target
+    // (a footnote, a figure) uses its own scroll-margin-top.
+    const scrollToTarget = (target) => {
+      const heading = headings.includes(target) ? target : null;
+      const offset = heading
+        ? getScrollOffset()
+        : Number.parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+      const targetY =
+        window.scrollY + target.getBoundingClientRect().top - offset;
+
+      isTocScrolling = !reducedMotion;
+      syncedSectionId = null;
+
+      if (heading) {
+        setActive(heading);
+      }
+
+      closeToc();
+      window.scrollTo({
+        top: targetY,
+        behavior: reducedMotion ? "auto" : "smooth",
+      });
+
+      if (isTocScrolling) {
+        window.clearTimeout(scrollSettleTimer);
+        scrollSettleTimer = window.setTimeout(finishTocScroll, 900);
+      } else {
+        requestActiveUpdate();
+      }
+    };
+
     links.forEach((link) => {
       link.addEventListener("click", (event) => {
         const heading = headings.find(
@@ -354,26 +416,8 @@
         }
 
         event.preventDefault();
-        const tocTop = Number.parseFloat(getComputedStyle(toc).top) || 0;
-        const offset = tocTop + (window.innerWidth <= 1100 ? 56 : 16);
-        const targetY =
-          window.scrollY + heading.getBoundingClientRect().top - offset;
-
         window.history.pushState(null, "", `#${heading.id}`);
-        isTocScrolling = !reducedMotion;
-        setActive(heading);
-        closeToc();
-        window.scrollTo({
-          top: targetY,
-          behavior: reducedMotion ? "auto" : "smooth",
-        });
-
-        if (isTocScrolling) {
-          window.clearTimeout(scrollSettleTimer);
-          scrollSettleTimer = window.setTimeout(finishTocScroll, 900);
-        } else {
-          requestActiveUpdate();
-        }
+        scrollToTarget(heading);
       });
     });
 
@@ -396,12 +440,55 @@
     headings.forEach((heading) => heading.classList.add("post-toc__target"));
     updateStickyState();
     updateActive();
+
+    return { scrollToTarget };
   };
+
+  let tableOfContents = null;
+
+  const scrollToTarget = (target) => {
+    if (tableOfContents) {
+      tableOfContents.scrollToTarget(target);
+      return;
+    }
+
+    target.scrollIntoView({
+      behavior: reducedMotion ? "auto" : "smooth",
+      block: "start",
+    });
+  };
+
+  const normalizePath = (pathname) => pathname.replace(/\/index\.html$/, "/");
+
+  // Resolve a link to an element on this page, whether it is written as
+  // "#section" or as this post's full URL with a hash.
+  const getSamePageTarget = (link) => {
+    const url = new URL(link.href, window.location.href);
+
+    if (
+      url.hash.length < 2 ||
+      url.origin !== window.location.origin ||
+      url.search !== window.location.search ||
+      normalizePath(url.pathname) !== normalizePath(window.location.pathname)
+    ) {
+      return null;
+    }
+
+    const target = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+    return target ? { target, hash: url.hash } : null;
+  };
+
+  const isPlainClick = (event) =>
+    event.button === 0 &&
+    !event.metaKey &&
+    !event.ctrlKey &&
+    !event.shiftKey &&
+    !event.altKey;
 
   const initFootnoteNavigation = () => {
     document.querySelectorAll(".post-footnote-ref a, .post-footnote-backref").forEach((link) => {
       link.addEventListener("click", (event) => {
-        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        if (!isPlainClick(event)) {
           return;
         }
 
@@ -418,10 +505,7 @@
         window.history.pushState(null, "", href);
 
         if (!link.classList.contains("post-footnote-backref")) {
-          target.scrollIntoView({
-            behavior: reducedMotion ? "auto" : "smooth",
-            block: "start",
-          });
+          scrollToTarget(target);
           return;
         }
 
@@ -441,7 +525,7 @@
         };
 
         if (reducedMotion) {
-          target.scrollIntoView({ block: "start" });
+          scrollToTarget(target);
           highlightReference();
           return;
         }
@@ -450,17 +534,94 @@
           once: true,
         });
         fallbackTimer = window.setTimeout(highlightReference, 2000);
-        target.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
+        scrollToTarget(target);
       });
     });
   };
 
+  // Any other link to a spot on this page (e.g. "see [here](#applications)")
+  // glides there instead of jumping.
+  const initInPageLinks = () => {
+    document.addEventListener("click", (event) => {
+      if (event.defaultPrevented || !isPlainClick(event)) {
+        return;
+      }
+
+      const link = event.target.closest?.("a[href]");
+
+      if (
+        !link ||
+        link.hasAttribute("download") ||
+        (link.target && link.target !== "_self")
+      ) {
+        return;
+      }
+
+      const match = getSamePageTarget(link);
+
+      if (!match) {
+        return;
+      }
+
+      event.preventDefault();
+
+      if (window.location.hash !== match.hash) {
+        window.history.pushState(null, "", match.hash);
+      }
+
+      scrollToTarget(match.target);
+    });
+  };
+
+  // The inline head script removed the arrival #hash to stop the browser's
+  // instant jump; put it back and glide to the target once layout settles.
+  const scrollToArrivalHash = () => {
+    const hash = window.__postArrivalHash;
+
+    if (!hash) {
+      return;
+    }
+
+    delete window.__postArrivalHash;
+
+    let target = null;
+
+    try {
+      target = document.getElementById(decodeURIComponent(hash.slice(1)));
+    } catch {
+      // Malformed escape sequence: fall through and only restore the URL.
+    }
+
+    // Restoring the hash before parsing ends would let the browser jump, so
+    // wait for DOMContentLoaded (and fonts, so the target's offset is final).
+    const contentLoaded = new Promise((resolve) => {
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", resolve, { once: true });
+      } else {
+        resolve();
+      }
+    });
+    const fontsReady = document.fonts?.ready ?? Promise.resolve();
+
+    Promise.all([contentLoaded, fontsReady]).then(() => {
+      window.setTimeout(() => {
+        window.history.replaceState(window.history.state, "", hash);
+
+        // Skip if the target is missing or the reader already scrolled.
+        if (!target || window.scrollY > 8) {
+          return;
+        }
+
+        window.requestAnimationFrame(() => scrollToTarget(target));
+      }, 120);
+    });
+  };
+
   const codeHighlightJobs = enhanceCodeBlocks();
-  initTableOfContents();
+  tableOfContents = initTableOfContents();
   initFootnoteNavigation();
+  initInPageLinks();
+  scrollToArrivalHash();
   Promise.allSettled(codeHighlightJobs).then(() => {
     page.classList.add("has-code-highlighting");
   });
