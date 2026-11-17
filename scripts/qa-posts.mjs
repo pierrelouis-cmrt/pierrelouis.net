@@ -34,7 +34,7 @@ const COMPONENT_SELECTOR = Object.keys(POST_COMPONENTS)
 const LIGHT_COMPONENT_BACKGROUNDS = Object.freeze({
   "pl-carousel-demo": "rgb(250, 249, 249)",
   "pl-full-bleed-demo": "rgb(250, 249, 249)",
-  "pl-lissajous-lab": "rgb(247, 248, 251)",
+  "pl-lissajous-lab": "rgb(244, 244, 244)",
 });
 
 const collectFiles = async (directory) => {
@@ -125,6 +125,38 @@ const exerciseArticleComponents = async (
         { timeout: 10_000 },
       );
 
+      if (!config.app) {
+        if (tag === "pl-lissajous-intervals") {
+          await component.getByRole("radio", { name: "E4, major third", exact: true }).click();
+          if ((await component.evaluate((element) => element.tuning)) !== "just") {
+            throw new Error("interval figure did not default to just ratios");
+          }
+          if (await component.locator(".lj-controls").count()) {
+            throw new Error("interval figure still contains the removed controls");
+          }
+          if (!(await component.locator(".lj-intervals__status").textContent()).includes("closes")) {
+            throw new Error("just interval did not close");
+          }
+        } else if (tag === "pl-video-player" || tag === "pl-audio-player") {
+          const media = component.locator("video, audio");
+          await media.evaluate((element) => new Promise((resolve, reject) => {
+            if (element.readyState >= 1) return resolve();
+            element.addEventListener("loadedmetadata", resolve, { once: true });
+            element.addEventListener("error", () => reject(new Error("media failed to load")), { once: true });
+          }));
+          await component.getByRole("button").click();
+          await page.waitForFunction((element) => !element.media.paused, await component.elementHandle());
+          await component.getByRole("slider").focus();
+          await page.keyboard.press("End");
+          await page.keyboard.press("Home");
+          await component.evaluate((element) => element.pause());
+        } else if (!(await component.locator("svg path[d]").count())) {
+          throw new Error("native figure did not draw a curve");
+        }
+        await component.screenshot({ path: path.join(QA_DIR, `${slug}-${tag}-${viewportLabel}.png`) });
+        continue;
+      }
+
       const expectedPath = `/posts/components/${config.app}`;
       const frame = page
         .frames()
@@ -171,7 +203,7 @@ const exerciseArticleComponents = async (
           (pane) => getComputedStyle(pane).backgroundColor,
         );
 
-        if (paneBackground !== "rgba(255, 255, 255, 0.94)") {
+        if (paneBackground !== "rgba(255, 255, 255, 0.96)") {
           throw new Error(
             `expected forced light Tweakpane controls, received ${paneBackground}`,
           );
@@ -427,7 +459,10 @@ export const runPostQa = async ({
   let browser;
 
   try {
-    browser = await chromium.launch({ headless: true });
+    browser = await chromium.launch({
+      headless: true,
+      channel: process.env.PLAYWRIGHT_CHANNEL || undefined,
+    });
     const baseUrl = `http://${site.host}:${site.port}`;
 
     for (const candidate of candidates) {

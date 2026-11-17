@@ -3,6 +3,26 @@
  * article and only loads the styles and modules used by that page.
  */
 export const POST_COMPONENTS = Object.freeze({
+  "pl-lissajous-closure": {
+    script: "lissajous-figures.js",
+    style: "lissajous-figures.css",
+  },
+  "pl-lissajous-gap": {
+    script: "lissajous-figures.js",
+    style: "lissajous-figures.css",
+  },
+  "pl-lissajous-intervals": {
+    script: "lissajous-figures.js",
+    style: "lissajous-figures.css",
+  },
+  "pl-video-player": {
+    script: "media-player.js",
+    style: "media-player.css",
+  },
+  "pl-audio-player": {
+    script: "media-player.js",
+    style: "media-player.css",
+  },
   "pl-carousel-demo": {
     app: "apps/carousel.html",
     label: "Sliding-window carousel",

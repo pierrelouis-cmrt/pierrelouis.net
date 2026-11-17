@@ -393,9 +393,11 @@
   margin-top: var(--space-xl);
 }
 
+/* Rules span the media width, not the text column, so they line up with
+   figures. */
 .post-body hr {
-  width: 100%;
-  margin: var(--space-6xl) 0;
+  width: calc(100% + (var(--post-media-overhang) * 2));
+  margin: var(--space-6xl) calc(var(--post-media-overhang) * -1);
   border: 0;
   border-top: 1px solid var(--post-rule);
 }
@@ -1379,7 +1381,9 @@ body.has-post-lightbox-open {
   }
 
   .post-hero__media,
-  .post-media {
+  .post-media,
+  .post-body > .post-media,
+  .post-body hr {
     width: min(
       calc(100% + (var(--post-media-overhang) * 2)),
       calc(100vw - (var(--page-gutter) * 2))

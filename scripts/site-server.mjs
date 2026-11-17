@@ -19,6 +19,11 @@ const MIME_TYPES = new Map([
   [".js", "text/javascript; charset=utf-8"],
   [".json", "application/json; charset=utf-8"],
   [".mjs", "text/javascript; charset=utf-8"],
+  [".mp3", "audio/mpeg"],
+  [".mp4", "video/mp4"],
+  [".m4a", "audio/mp4"],
+  [".ogg", "audio/ogg"],
+  [".wav", "audio/wav"],
   [".png", "image/png"],
   [".svg", "image/svg+xml"],
   [".webm", "video/webm"],
@@ -182,8 +187,42 @@ export const startSiteServer = async ({
         return;
       }
 
-      response.writeHead(200, { "Content-Type": contentType });
-      createReadStream(filePath).pipe(response);
+      // Browsers request byte ranges when loading and seeking local media.
+      const headers = {
+        "Accept-Ranges": "bytes",
+        "Content-Type": contentType,
+        "Content-Length": fileStat.size,
+      };
+      let start = 0;
+      let end = fileStat.size - 1;
+      let status = 200;
+      const range = request.headers.range;
+
+      if (range) {
+        const match = /^bytes=(\d*)-(\d*)$/.exec(range);
+        if (match && (match[1] || match[2])) {
+          start = match[1] ? Number(match[1]) : Math.max(0, fileStat.size - Number(match[2]));
+          end = match[1] && match[2] ? Math.min(Number(match[2]), end) : end;
+          if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start > end || start >= fileStat.size) {
+            response.writeHead(416, { "Content-Range": `bytes */${fileStat.size}` });
+            response.end();
+            return;
+          }
+          status = 206;
+          headers["Content-Range"] = `bytes ${start}-${end}/${fileStat.size}`;
+          headers["Content-Length"] = end - start + 1;
+        }
+      }
+
+      response.writeHead(status, headers);
+      if (request.method === "HEAD" || fileStat.size === 0) {
+        response.end();
+        return;
+      }
+      const stream = createReadStream(filePath, { start, end });
+      stream.on("error", () => response.destroy());
+      response.on("close", () => stream.destroy());
+      stream.pipe(response);
     } catch {
       response.writeHead(404);
       response.end("Not found");

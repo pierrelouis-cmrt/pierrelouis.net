@@ -34,6 +34,11 @@
   background: #f7f8fb;
 }
 
+.post-body > pl-lissajous-lab > .article-demo__frame {
+  border-radius: 0;
+  background: #f4f4f4;
+}
+
 .post-body > pl-pixel-grid > .article-demo__frame {
   background: #0f0f0f;
 }

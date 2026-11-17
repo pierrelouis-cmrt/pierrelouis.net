@@ -1,0 +1,560 @@
+/* <pl-video-player> and <pl-audio-player>.
+   Interaction follows one model for both: a bare play/pause glyph in the
+   middle and a persistent progress bar along the bottom edge that swells under
+   the pointer, with a time preview, a ghost fill and an origin marker while
+   seeking. Geometry is square, like every figure on the site; captions use
+   the shared .post-caption strip unchanged. Colours come from base.css tokens
+   so Night Shift warms them. */
+
+:is(pl-video-player, pl-audio-player) {
+  --pl-ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --pl-bar: 4px;
+  --pl-bar-active: 14px;
+  --pl-bar-inset: 2px;
+  --pl-bar-bottom: 8px;
+  --pl-hit: 28px;
+  --pl-edge: 16px;
+  display: block;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.post-body > :is(pl-video-player, pl-audio-player) {
+  margin-block: var(--space-7xl, 80px);
+}
+
+:is(pl-video-player, pl-audio-player) > :not(.pl-player, .post-caption) {
+  /* Credits written inside the element, below the media, keep a small gap. */
+  margin-top: var(--space-sm, 10px);
+}
+
+.pl-player {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  contain: paint;
+}
+
+.pl-player__media {
+  display: block;
+}
+
+.pl-player--audio .pl-player__media {
+  display: none;
+}
+
+/* ---------------------------------------------------------------- Toggle */
+
+.pl-player__toggle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--pl-ink);
+  cursor: pointer;
+  touch-action: manipulation;
+  transform: translate(-50%, -50%) scale(1);
+  transition:
+    opacity 260ms ease,
+    transform 260ms var(--pl-ease);
+}
+
+.pl-player__toggle:focus {
+  outline: 0;
+}
+
+.pl-player__toggle:focus-visible {
+  outline: 2px solid var(--pl-ink);
+  outline-offset: -2px;
+}
+
+.pl-player__toggle:active {
+  transform: translate(-50%, -50%) scale(0.92);
+  transition-duration: 90ms;
+}
+
+/* Play and pause trade places with a staggered crossfade: the outgoing glyph
+   leaves quickly, the incoming one arrives a beat later and settles slowly,
+   so the two shapes never compete mid-swap. */
+.pl-player__icon {
+  --pl-icon-x: 4px;
+  --pl-icon-in:
+    opacity 240ms ease 60ms,
+    transform 460ms var(--pl-ease) 20ms,
+    filter 240ms ease 60ms;
+  --pl-icon-out:
+    opacity 150ms ease,
+    transform 300ms var(--pl-ease),
+    filter 150ms ease;
+  grid-area: 1 / 1;
+  width: var(--pl-icon-width, 54px);
+  height: var(--pl-icon-height, 60px);
+  overflow: visible;
+  will-change: transform, opacity;
+}
+
+.pl-player__icon--play {
+  transform: translate(var(--pl-icon-x), 0) rotate(0deg) scale(1);
+  transition: var(--pl-icon-in);
+}
+
+.pl-player__icon--pause {
+  opacity: 0;
+  filter: blur(1.5px);
+  transform: rotate(-40deg) scale(0.6);
+  transition: var(--pl-icon-out);
+}
+
+[data-player-state="playing"] .pl-player__icon--play {
+  opacity: 0;
+  filter: blur(1.5px);
+  transform: translate(var(--pl-icon-x), 0) rotate(40deg) scale(0.6);
+  transition: var(--pl-icon-out);
+}
+
+[data-player-state="playing"] .pl-player__icon--pause {
+  opacity: 1;
+  filter: none;
+  transform: rotate(0deg) scale(1);
+  transition: var(--pl-icon-in);
+}
+
+/* -------------------------------------------------------------- Progress */
+
+.pl-player__scrubber {
+  position: absolute;
+  right: var(--pl-edge);
+  bottom: 0;
+  left: var(--pl-edge);
+  z-index: 4;
+  height: var(--pl-hit);
+  cursor: pointer;
+  touch-action: none;
+  transition: opacity 260ms ease;
+}
+
+.pl-player__scrubber[aria-disabled="true"] {
+  cursor: default;
+}
+
+.pl-player__scrubber:focus {
+  outline: 0;
+}
+
+.pl-player__track {
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--pl-bar-bottom) - var(--pl-bar-inset));
+  left: 0;
+  height: calc(var(--pl-bar) + (var(--pl-bar-inset) * 2));
+  /* Fixed radii: hovering changes only the height, never the corners. */
+  border-radius: 5px;
+  background: var(--pl-surface);
+  transition: height 180ms ease;
+}
+
+.pl-player__ghost,
+.pl-player__fill {
+  position: absolute;
+  top: var(--pl-bar-inset);
+  right: var(--pl-bar-inset);
+  bottom: var(--pl-bar-inset);
+  left: var(--pl-bar-inset);
+  border-radius: 3px;
+  background: var(--pl-ink);
+  /* Clipped rather than scaled, so the rounded ends keep their shape. */
+  clip-path: inset(0 calc((1 - var(--pl-p, 0)) * 100%) 0 0 round 3px);
+}
+
+.pl-player__ghost {
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.pl-player__fill {
+  transition: opacity 120ms ease;
+}
+
+:is([data-hovering], [data-scrubbing]) .pl-player__ghost {
+  opacity: 0.2;
+}
+
+:is([data-hovering], [data-scrubbing]),
+:is(pl-video-player, pl-audio-player):has(.pl-player__scrubber:focus-visible) {
+  --pl-bar: var(--pl-bar-active);
+}
+
+.pl-player__scrubber:focus-visible .pl-player__track {
+  outline: 1px solid var(--pl-ink);
+  outline-offset: 2px;
+}
+
+/* Where the scrub began: a notch that stays put, and becomes a gap once the
+   fill passes it, so the way back is always visible. */
+.pl-player__marker {
+  position: absolute;
+  bottom: calc(var(--pl-bar-bottom) + 1.5px);
+  left: 0;
+  width: 2px;
+  height: max(1px, calc(var(--pl-bar) - 3px));
+  border-radius: 1px;
+  background: var(--pl-ink);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    height 180ms ease,
+    opacity 120ms ease;
+}
+
+.pl-player__marker[data-covered] {
+  background: var(--pl-marker-hole);
+}
+
+[data-scrubbing][data-marker] .pl-player__marker {
+  opacity: 1;
+}
+
+/* Time preview that follows the pointer and lifts into place. */
+.pl-player__bubble {
+  position: absolute;
+  bottom: calc(var(--pl-bar-bottom) + var(--pl-bar) + 6px);
+  left: 0;
+  padding: 2px 6px;
+  color: var(--pl-ink);
+  background: var(--pl-bubble-bg, transparent);
+  font-size: var(--font-size-micro, 12px);
+  font-weight: 500;
+  line-height: 1.35;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  translate: 0 2px;
+  transition:
+    opacity 120ms ease,
+    translate 120ms ease,
+    bottom 180ms ease;
+}
+
+:is([data-hovering], [data-scrubbing]) .pl-player__bubble {
+  opacity: 1;
+  translate: 0 0;
+}
+
+[data-loading] .pl-player__track::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--pl-shimmer) 46%,
+    transparent 100%
+  );
+  animation: pl-player-shimmer 1.35s ease-in-out infinite;
+  content: "";
+}
+
+/* -------------------------------------------------------- Readout, status */
+
+.pl-player__time {
+  position: absolute;
+  z-index: 3;
+  font-size: var(--font-size-micro, 12px);
+  line-height: var(--line-height-copy, 1.45);
+  white-space: nowrap;
+  pointer-events: none;
+  transition:
+    opacity 220ms ease,
+    color var(--duration-fast, 180ms) ease;
+}
+
+.pl-player__status {
+  margin: 0;
+}
+
+.pl-player__status:empty {
+  display: none;
+}
+
+.pl-player__status-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------ Video */
+
+pl-video-player {
+  --pl-player-max-height: var(--post-media-max-height, min(64svh, 640px));
+  --pl-ink: #fff;
+  --pl-surface: rgb(255 255 255 / 0.2);
+  --pl-marker-hole: rgb(0 0 0 / 0.55);
+  --pl-shimmer: rgb(255 255 255 / 0.42);
+  --pl-bubble-bg: rgb(0 0 0 / 0.28);
+}
+
+.post-body > pl-video-player {
+  width: calc(100% + (var(--post-media-overhang, 0px) * 2));
+  margin-inline: calc(var(--post-media-overhang, 0px) * -1);
+}
+
+.pl-player--video {
+  width: min(
+    100%,
+    calc(var(--pl-player-max-height) * var(--pl-player-ratio-value, 1000))
+  );
+  margin-inline: auto;
+  background: var(--color-media-bg, #f4f4f4);
+  aspect-ratio: var(--pl-player-ratio, 16 / 9);
+}
+
+.pl-player--video .pl-player__media {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* The picture dims while the controls are up; clicks on it toggle playback. */
+.pl-player__surface {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgb(0 0 0 / 0.42);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+
+pl-video-player[data-controls] .pl-player__surface {
+  opacity: 1;
+}
+
+pl-video-player:not([data-controls]) .pl-player--video,
+pl-video-player:not([data-controls]) .pl-player__surface {
+  cursor: none;
+}
+
+pl-video-player .pl-player__toggle {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.96);
+}
+
+pl-video-player[data-controls]:not([data-scrubbing], [data-error])
+  .pl-player__toggle,
+pl-video-player[data-pulse] .pl-player__toggle {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+pl-video-player[data-controls]:not([data-scrubbing], [data-error])
+  .pl-player__toggle:active {
+  transform: translate(-50%, -50%) scale(0.92);
+}
+
+pl-video-player[data-pulse]:not([data-controls]) .pl-player__toggle {
+  pointer-events: none;
+  animation: pl-player-pulse 620ms var(--pl-ease) both;
+}
+
+/* Elapsed time sits above the bar's right end and leaves with the controls. */
+pl-video-player .pl-player__time {
+  right: var(--pl-edge);
+  bottom: calc(var(--pl-hit) + 2px);
+  color: rgb(255 255 255 / 0.92);
+  opacity: 0;
+}
+
+pl-video-player[data-controls]:not([data-error], [data-hovering], [data-scrubbing])
+  .pl-player__time {
+  opacity: 1;
+}
+
+pl-video-player .pl-player__status {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-content: center;
+  gap: 6px;
+  padding: var(--space-xl, 20px);
+  color: var(--color-caption, #474747);
+  font-size: var(--font-size-small, 15px);
+  line-height: var(--line-height-copy, 1.45);
+  text-align: center;
+}
+
+pl-video-player:not([data-error]) .pl-player__status:not(:empty) {
+  inset: auto var(--pl-edge) calc(var(--pl-hit) + 24px);
+  display: block;
+  padding: 4px 8px;
+  background: rgb(0 0 0 / 0.5);
+  color: #fff;
+  font-size: var(--font-size-micro, 12px);
+}
+
+pl-video-player[data-error] :is(.pl-player__media, .pl-player__scrubber) {
+  visibility: hidden;
+}
+
+/* ------------------------------------------------------------------ Audio */
+
+/* The same instrument, compact: a bare glyph and the label on one line, the
+   readout at the right, and the progress bar along the bottom edge of a
+   square media plate. */
+pl-audio-player {
+  --pl-ink: var(--color-ink, #1c1c1c);
+  --pl-muted: var(--color-subtle, #757575);
+  --pl-plate: var(--color-media-bg, #f4f4f4);
+  --pl-surface: color-mix(in srgb, var(--pl-ink) 9%, var(--pl-plate));
+  --pl-marker-hole: var(--pl-plate);
+  --pl-shimmer: var(--color-bg, #fff);
+  --pl-icon-width: 22px;
+  --pl-icon-height: 24px;
+  --pl-row: 44px;
+}
+
+.pl-player--audio {
+  display: flex;
+  height: calc(var(--pl-row) + var(--pl-hit) + 18px);
+  padding: 10px var(--pl-edge) 0 calc(var(--pl-edge) - 12px);
+  align-items: flex-start;
+  gap: 2px;
+  background: var(--pl-plate);
+  color: var(--pl-ink);
+  transition: background-color 260ms ease;
+}
+
+@media (any-hover: hover) and (any-pointer: fine) {
+  .pl-player--audio:hover {
+    background: color-mix(in srgb, var(--pl-ink) 3%, var(--pl-plate));
+  }
+}
+
+pl-audio-player .pl-player__toggle {
+  position: relative;
+  top: auto;
+  left: auto;
+  flex: 0 0 auto;
+  width: var(--pl-row);
+  height: var(--pl-row);
+  transform: none;
+}
+
+pl-audio-player .pl-player__toggle:active {
+  transform: scale(0.9);
+}
+
+pl-audio-player .pl-player__icon {
+  --pl-icon-x: 1px;
+}
+
+pl-audio-player .pl-player__title,
+pl-audio-player .pl-player__time {
+  position: static;
+  min-width: 0;
+  line-height: var(--pl-row);
+}
+
+pl-audio-player .pl-player__title {
+  flex: 1 1 auto;
+  overflow: hidden;
+  color: var(--pl-ink);
+  font-size: var(--font-size-small, 15px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+pl-audio-player .pl-player__time {
+  flex: 0 0 auto;
+  padding-left: var(--space-md, 12px);
+  color: var(--pl-muted);
+}
+
+pl-audio-player .pl-player__elapsed {
+  transition: color var(--duration-fast, 180ms) ease;
+}
+
+pl-audio-player:is([data-player-state="playing"], [data-scrubbing])
+  .pl-player__elapsed {
+  color: var(--pl-ink);
+}
+
+/* While seeking, the preview speaks for the time; the readout steps back. */
+pl-audio-player:is([data-hovering], [data-scrubbing]) .pl-player__time {
+  opacity: 0.35;
+}
+
+pl-audio-player .pl-player__status {
+  position: absolute;
+  right: var(--pl-edge);
+  bottom: calc(var(--pl-hit) + 2px);
+  left: calc(var(--pl-edge) + var(--pl-row) - 10px);
+  color: var(--color-caption, #474747);
+  font-size: var(--font-size-micro, 12px);
+  line-height: var(--line-height-copy, 1.45);
+}
+
+pl-audio-player[data-error] :is(.pl-player__scrubber, .pl-player__time) {
+  visibility: hidden;
+}
+
+pl-audio-player[data-error] .pl-player__toggle {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------- Keyframes */
+
+@keyframes pl-player-shimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  58%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes pl-player-pulse {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.86);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pl-player *,
+  .pl-player *::before,
+  .pl-player *::after {
+    animation: none !important;
+    transition-duration: 1ms !important;
+  }
+
+  .pl-player__icon {
+    filter: none !important;
+    transform: none !important;
+  }
+}
