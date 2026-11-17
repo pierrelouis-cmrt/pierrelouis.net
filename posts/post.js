@@ -13,6 +13,34 @@
     "(prefers-reduced-motion: reduce)",
   ).matches;
 
+  // Compare against the unpadded height cap so the inset cannot change its
+  // own eligibility when an image is close to filling the frame's width.
+  const imageFrames = [...document.querySelectorAll(
+    ".post-hero__frame, .post-media__frame:not(.post-media__frame--motion)",
+  )].filter((frame) => frame.querySelector("img"));
+  const updateImageInset = (frame) => {
+    const image = frame.querySelector("img");
+    const width = image.naturalWidth || Number(image.getAttribute("width"));
+    const height = image.naturalHeight || Number(image.getAttribute("height"));
+    if (!width || !height) return;
+
+    const padding = parseFloat(getComputedStyle(frame).paddingTop) || 0;
+    const heightCap = parseFloat(getComputedStyle(image).maxHeight) + padding * 2;
+    frame.classList.toggle(
+      "has-height-limited-image",
+      heightCap * (width / height) < frame.clientWidth - 0.5,
+    );
+  };
+  const imageFrameObserver = new ResizeObserver((entries) => {
+    entries.forEach(({ target }) => updateImageInset(target));
+  });
+  imageFrames.forEach((frame) => {
+    frame.querySelector("img").addEventListener("load", () => updateImageInset(frame));
+    imageFrameObserver.observe(frame);
+    updateImageInset(frame);
+  });
+  window.addEventListener("resize", () => imageFrames.forEach(updateImageInset));
+
   if (headerBackdrop && window.parent !== window) {
     window.addEventListener("message", (event) => {
       if (

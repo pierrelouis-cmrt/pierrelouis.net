@@ -19,6 +19,7 @@
      figures, players, demos and embeds. Matches code blocks and demo frames. */
   --post-media-space: var(--space-5xl);
   --post-media-radius: 8px;
+  --post-image-padding: 5px;
 
   overflow: visible;
 }
@@ -301,12 +302,19 @@
 
 .post-hero__frame,
 .post-media__frame {
+  --post-image-inset: 0px;
+
   display: block;
   width: 100%;
-  padding: 0;
+  padding: var(--post-image-inset);
   overflow: hidden;
   border: 0;
   background: var(--color-media-bg);
+}
+
+.post-hero__frame.has-height-limited-image,
+.post-media__frame.has-height-limited-image {
+  --post-image-inset: var(--post-image-padding);
 }
 
 .post-lightbox__trigger {
@@ -319,7 +327,7 @@
   display: block;
   width: 100%;
   height: auto;
-  max-height: var(--post-media-max-height);
+  max-height: calc(var(--post-media-max-height) - (var(--post-image-inset, 0px) * 2));
   margin-inline: auto;
   object-fit: contain;
 }
@@ -329,7 +337,10 @@
 .post-media__asset {
   width: min(
     100%,
-    calc(var(--post-media-max-height) * var(--media-ratio, 1000))
+    calc(
+      (var(--post-media-max-height) - (var(--post-image-inset, 0px) * 2)) *
+        var(--media-ratio, 1000)
+    )
   );
   aspect-ratio: var(--media-ratio, auto);
 }
