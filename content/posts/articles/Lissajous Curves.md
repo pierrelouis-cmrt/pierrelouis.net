@@ -141,6 +141,13 @@ Pick a note above C, listen to the pair, and watch its curve. This demo uses exa
   <p class="post-component-fallback">Compare piano notes and their curves with JavaScript enabled. Audio starts only when you press a key.</p>
 </pl-lissajous-intervals>
 
+<figure class="post-media">
+  <pl-audio-player label="C and G · a perfect fifth">
+    <audio src="/posts/components/media/perfect-fifth.mp3" preload="metadata" controls></audio>
+  </pl-audio-player>
+  <figcaption class="post-caption"><span>C4, then G4, then both, in piano tuning. Piano-like tones synthesized for this page.</span><span class="post-caption__index">Audio / 01</span></figcaption>
+</figure>
+
 ---
 
 ## Making Your Own
