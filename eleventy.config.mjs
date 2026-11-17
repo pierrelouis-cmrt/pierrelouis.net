@@ -103,7 +103,7 @@ const archiveGroups = (items) => {
 export default async function configureEleventy(eleventyConfig) {
   const manifest = await loadPostManifest();
   const featuredPost = manifest.posts.find(
-    (post) => post.data.slug === "was-maths-invented-or-discovered",
+    (post) => post.data.slug === "lissajous-curves",
   );
   const markdown = createPostMarkdown({ manifest });
   const normalizedFor = (data) =>

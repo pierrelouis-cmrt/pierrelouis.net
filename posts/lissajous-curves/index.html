@@ -440,20 +440,22 @@ Y = A_y \cos\left(2\pi n_y f_0 t + \dfrac{k\pi}{4n_x}\right)
 <h2 id="making-your-own">Making Your Own</h2>
 <h3 id="the-victorian-way-harmonographs">The Victorian Way: Harmonographs</h3>
 <p>Before computers, there were harmonographs: pendulum-based drawing machines popular in the 1800s. Two or more pendulums swing in perpendicular directions, and a pen traces their combined motion onto paper.</p>
+<figure class="post-media">
+  <pl-video-player label="The Harmonograph by The Cardboard Channel" ratio="16 / 9">
+    <video poster="/posts/components/media/harmonograph.jpg" width="1920" height="1080" preload="none" playsinline controls>
+      <source src="/posts/components/media/harmonograph.webm" type='video/webm; codecs="vp9, opus"'>
+      <source src="/posts/components/media/harmonograph.mp4" type='video/mp4; codecs="avc1.64002a, mp4a.40.2"'>
+      <a href="/posts/components/media/harmonograph.mp4">Download The Harmonograph (MP4)</a> or <a href="https://www.youtube.com/watch?v=S92mZcNIS8w">watch the original on YouTube</a>.
+    </video>
+  </pl-video-player>
+  <figcaption class="post-caption"><span>A cardboard harmonograph uses pendulums to guide a pen across paper. <a href="https://www.youtube.com/watch?v=S92mZcNIS8w" target="_blank" rel="noopener noreferrer">The Harmonograph</a> by The Cardboard Channel (May 1, 2020). Video and audio credited to The Cardboard Channel.</span><span class="post-caption__index">Video / 01</span></figcaption>
+</figure>
 <h3 id="simpler-experiments">Simpler Experiments</h3>
 <ul>
 <li><strong>Sand pendulums</strong>: A funnel of sand swinging over paper</li>
 <li><strong>Laser on speakers</strong>: Mount a mirror on one speaker cone, bounce a laser off it onto a wall, play two frequencies through stereo speakers (similar to how Lissajous did it)</li>
 <li><strong>Oscilloscope</strong>: Feed two audio signals into <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> and <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi></mrow><annotation encoding="application/x-tex">Y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span></span></span></span> inputs (easy to do and actually useful)</li>
 </ul>
-<figure class="post-media">
-  <pl-video-player label="A sand pendulum records its oscillation" ratio="16 / 9">
-    <video src="/posts/components/media/sand-pendulum.mp4" poster="/posts/components/media/sand-pendulum.jpg" preload="metadata" playsinline controls>
-      <a href="/posts/components/media/sand-pendulum.mp4">Download the sand-pendulum video</a>
-    </video>
-  </pl-video-player>
-  <figcaption class="post-caption"><span>A sand pendulum draws a wave on a moving belt: one oscillation made visible. Video: <a href="https://hubbs.schule/mediathek/pendel-mit-sandspur" target="_blank" rel="noopener noreferrer">Ecole Science, via HubbS</a>, <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">CC0</a>.</span><span class="post-caption__index">Video / 01</span></figcaption>
-</figure>
 <h3 id="the-modern-way-code-of-course-i-was-going-to-talk-about-code">The Modern Way: Code (of course I was going to talk about code)</h3>
 <p>A few lines in Python will generate infinite variations:</p>
 <pre data-code-copy><code class="language-python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np

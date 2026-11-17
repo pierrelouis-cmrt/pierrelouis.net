@@ -80,50 +80,16 @@
   transition-duration: 90ms;
 }
 
-/* Play and pause trade places with a staggered crossfade: the outgoing glyph
-   leaves quickly, the incoming one arrives a beat later and settles slowly,
-   so the two shapes never compete mid-swap. */
+/* Play and pause are one glyph that morphs between the two (see PlayGlyph in
+   media-player.js). --pl-morph runs 0 → 1 from play to pause and drops the
+   optical nudge that keeps the triangle looking centred. */
 .pl-player__icon {
   --pl-icon-x: 4px;
-  --pl-icon-in:
-    opacity 240ms ease 60ms,
-    transform 460ms var(--pl-ease) 20ms,
-    filter 240ms ease 60ms;
-  --pl-icon-out:
-    opacity 150ms ease,
-    transform 300ms var(--pl-ease),
-    filter 150ms ease;
   grid-area: 1 / 1;
   width: var(--pl-icon-width, 54px);
   height: var(--pl-icon-height, 60px);
   overflow: visible;
-  will-change: transform, opacity;
-}
-
-.pl-player__icon--play {
-  transform: translate(var(--pl-icon-x), 0) rotate(0deg) scale(1);
-  transition: var(--pl-icon-in);
-}
-
-.pl-player__icon--pause {
-  opacity: 0;
-  filter: blur(1.5px);
-  transform: rotate(-40deg) scale(0.6);
-  transition: var(--pl-icon-out);
-}
-
-[data-player-state="playing"] .pl-player__icon--play {
-  opacity: 0;
-  filter: blur(1.5px);
-  transform: translate(var(--pl-icon-x), 0) rotate(40deg) scale(0.6);
-  transition: var(--pl-icon-out);
-}
-
-[data-player-state="playing"] .pl-player__icon--pause {
-  opacity: 1;
-  filter: none;
-  transform: rotate(0deg) scale(1);
-  transition: var(--pl-icon-in);
+  transform: translateX(calc(var(--pl-icon-x) * (1 - var(--pl-morph, 0))));
 }
 
 /* -------------------------------------------------------------- Progress */
@@ -547,10 +513,5 @@ pl-audio-player[data-error] .pl-player__toggle {
   .pl-player *::after {
     animation: none !important;
     transition-duration: 1ms !important;
-  }
-
-  .pl-player__icon {
-    filter: none !important;
-    transform: none !important;
   }
 }

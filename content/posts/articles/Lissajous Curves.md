@@ -156,20 +156,22 @@ Pick a note above C, listen to the pair, and watch its curve. This demo uses exa
 
 Before computers, there were harmonographs: pendulum-based drawing machines popular in the 1800s. Two or more pendulums swing in perpendicular directions, and a pen traces their combined motion onto paper.
 
+<figure class="post-media">
+  <pl-video-player label="The Harmonograph by The Cardboard Channel" ratio="16 / 9">
+    <video poster="/posts/components/media/harmonograph.jpg" width="1920" height="1080" preload="none" playsinline controls>
+      <source src="/posts/components/media/harmonograph.webm" type='video/webm; codecs="vp9, opus"'>
+      <source src="/posts/components/media/harmonograph.mp4" type='video/mp4; codecs="avc1.64002a, mp4a.40.2"'>
+      <a href="/posts/components/media/harmonograph.mp4">Download The Harmonograph (MP4)</a> or <a href="https://www.youtube.com/watch?v=S92mZcNIS8w">watch the original on YouTube</a>.
+    </video>
+  </pl-video-player>
+  <figcaption class="post-caption"><span>A cardboard harmonograph uses pendulums to guide a pen across paper. <a href="https://www.youtube.com/watch?v=S92mZcNIS8w" target="_blank" rel="noopener noreferrer">The Harmonograph</a> by The Cardboard Channel (May 1, 2020). Video and audio credited to The Cardboard Channel.</span><span class="post-caption__index">Video / 01</span></figcaption>
+</figure>
+
 ### Simpler Experiments
 
 - **Sand pendulums**: A funnel of sand swinging over paper
 - **Laser on speakers**: Mount a mirror on one speaker cone, bounce a laser off it onto a wall, play two frequencies through stereo speakers (similar to how Lissajous did it)
 - **Oscilloscope**: Feed two audio signals into $X$ and $Y$ inputs (easy to do and actually useful)
-
-<figure class="post-media">
-  <pl-video-player label="A sand pendulum records its oscillation" ratio="16 / 9">
-    <video src="/posts/components/media/sand-pendulum.mp4" poster="/posts/components/media/sand-pendulum.jpg" preload="metadata" playsinline controls>
-      <a href="/posts/components/media/sand-pendulum.mp4">Download the sand-pendulum video</a>
-    </video>
-  </pl-video-player>
-  <figcaption class="post-caption"><span>A sand pendulum draws a wave on a moving belt: one oscillation made visible. Video: <a href="https://hubbs.schule/mediathek/pendel-mit-sandspur" target="_blank" rel="noopener noreferrer">Ecole Science, via HubbS</a>, <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">CC0</a>.</span><span class="post-caption__index">Video / 01</span></figcaption>
-</figure>
 
 ### The Modern Way: Code (of course I was going to talk about code)
 

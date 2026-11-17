@@ -362,6 +362,12 @@
   text-wrap: pretty;
 }
 
+.post-caption a {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
 .post-caption__index {
   font-variant-numeric: tabular-nums;
 }

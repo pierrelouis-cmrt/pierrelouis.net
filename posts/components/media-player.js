@@ -13,15 +13,146 @@ const players = new Set();
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const MARKER_SNAP = 6;
-const ICON_SHAPES = {
-  play: [
-    ["path", { d: "M3 3.5L15 10L3 16.5Z", fill: "currentColor", stroke: "currentColor", "stroke-width": "1.5", "stroke-linejoin": "round" }],
-  ],
-  pause: [
-    ["rect", { x: "3", y: "3", width: "5", height: "14", rx: "1.5", fill: "currentColor" }],
-    ["rect", { x: "10", y: "3", width: "5", height: "14", rx: "1.5", fill: "currentColor" }],
-  ],
+
+/* The toggle glyph is one shape in two halves. Playing splits the triangle at
+   its waist and each half reshapes into a pause bar; pausing folds them back.
+   Every vertex has a partner in the other state, so the tween is a straight
+   interpolation, and a round-joined stroke keeps the corners soft throughout
+   (the bars are inset by half the stroke so they keep their old footprint). */
+const GLYPH = {
+  play: {
+    halves: [
+      [[3, 3.5], [9, 6.75], [9, 13.25], [3, 16.5]],
+      [[9, 6.75], [15, 10], [15, 10], [9, 13.25]],
+    ],
+    stroke: 1.5,
+  },
+  pause: {
+    halves: [
+      [[4.25, 4.25], [6.75, 4.25], [6.75, 15.75], [4.25, 15.75]],
+      [[11.25, 4.25], [13.75, 4.25], [13.75, 15.75], [11.25, 15.75]],
+    ],
+    stroke: 2.5,
+  },
+  duration: 380,
+  // The trailing half starts a touch later, so the shape opens like a hinge
+  // rather than snapping as one piece.
+  stagger: 0.12,
 };
+
+// cubic-bezier(0.32, 0.72, 0, 1): quick to respond, long gentle settle.
+const glyphEase = (() => {
+  const [x1, y1, x2, y2] = [0.32, 0.72, 0, 1];
+  const axis = (a, b, t) => 3 * a * t * (1 - t) ** 2 + 3 * b * t * t * (1 - t) + t ** 3;
+
+  return (x) => {
+    if (x <= 0 || x >= 1) return clamp(x, 0, 1);
+
+    let lo = 0;
+    let hi = 1;
+    let t = x;
+
+    for (let i = 0; i < 20; i += 1) {
+      if (axis(x1, x2, t) < x) lo = t;
+      else hi = t;
+      t = (lo + hi) / 2;
+    }
+
+    return axis(y1, y2, t);
+  };
+})();
+
+class PlayGlyph {
+  #values = [0, 0];
+  #from = [0, 0];
+  #target = 0;
+  #start = 0;
+  #span = 0;
+  #frame = 0;
+  #primed = false;
+
+  constructor() {
+    this.svg = document.createElementNS(SVG_NS, "svg");
+    this.svg.setAttribute("viewBox", "0 0 18 20");
+    this.svg.setAttribute("aria-hidden", "true");
+    this.svg.setAttribute("focusable", "false");
+    this.svg.setAttribute("class", "pl-player__icon");
+
+    this.paths = GLYPH.play.halves.map(() => {
+      const path = document.createElementNS(SVG_NS, "path");
+
+      path.setAttribute("fill", "currentColor");
+      path.setAttribute("stroke", "currentColor");
+      path.setAttribute("stroke-linejoin", "round");
+      this.svg.append(path);
+      return path;
+    });
+
+    this.#paint();
+  }
+
+  /* Morph toward play (false) or pause (true). A change mid-flight reverses
+     from wherever each half is, over the distance left to cover. */
+  set(playing) {
+    const target = playing ? 1 : 0;
+
+    if (!this.#primed || reducedMotion.matches) {
+      this.#primed = true;
+      this.stop();
+      this.#target = target;
+      this.#values = [target, target];
+      this.#paint();
+      return;
+    }
+
+    if (target === this.#target) return;
+
+    const distance = Math.max(...this.#values.map((v) => Math.abs(target - v)));
+
+    this.#from = [...this.#values];
+    this.#target = target;
+    this.#start = performance.now();
+    this.#span = Math.max(140, GLYPH.duration * distance);
+    cancelAnimationFrame(this.#frame);
+    this.#frame = requestAnimationFrame((now) => this.#tick(now));
+  }
+
+  stop() {
+    cancelAnimationFrame(this.#frame);
+    this.#frame = 0;
+  }
+
+  #tick(now) {
+    const t = clamp((now - this.#start) / this.#span, 0, 1);
+
+    this.#values = this.#from.map((from, index) => {
+      // Each half eases on its own clock; the second is held back slightly.
+      const delay = index * GLYPH.stagger;
+      const local = clamp((t - delay) / (1 - GLYPH.stagger), 0, 1);
+      return from + (this.#target - from) * glyphEase(local);
+    });
+    this.#paint();
+    this.#frame = t < 1 ? requestAnimationFrame((next) => this.#tick(next)) : 0;
+  }
+
+  #paint() {
+    const lerp = (a, b, k) => a + (b - a) * k;
+
+    this.paths.forEach((path, index) => {
+      const k = this.#values[index];
+      const points = GLYPH.play.halves[index].map(([x, y], i) => {
+        const [px, py] = GLYPH.pause.halves[index][i];
+        return `${lerp(x, px, k).toFixed(3)} ${lerp(y, py, k).toFixed(3)}`;
+      });
+
+      path.setAttribute("d", `M${points.join("L")}Z`);
+      path.setAttribute("stroke-width", lerp(GLYPH.play.stroke, GLYPH.pause.stroke, k).toFixed(3));
+    });
+
+    // Play sits slightly right of centre to look centred; pause does not.
+    this.svg.style.setProperty("--pl-morph", this.#values[0].toFixed(4));
+  }
+}
 
 const formatTime = (value) => {
   if (!Number.isFinite(value) || value < 0) {
@@ -54,26 +185,6 @@ const element = (tag, className, attributes = {}) => {
   return node;
 };
 
-const icon = (name) => {
-  const svg = document.createElementNS(SVG_NS, "svg");
-
-  svg.setAttribute("viewBox", "0 0 18 20");
-  svg.setAttribute("aria-hidden", "true");
-  svg.setAttribute("focusable", "false");
-  svg.setAttribute("class", `pl-player__icon pl-player__icon--${name}`);
-
-  for (const [tag, attributes] of ICON_SHAPES[name]) {
-    const shape = document.createElementNS(SVG_NS, tag);
-
-    for (const [key, value] of Object.entries(attributes)) {
-      shape.setAttribute(key, value);
-    }
-    svg.append(shape);
-  }
-
-  return svg;
-};
-
 class MediaPlayer extends HTMLElement {
   static observedAttributes = [
     "autoplay",
@@ -93,6 +204,7 @@ class MediaPlayer extends HTMLElement {
   #controller = null;
   #frame = 0;
   #idleTimer = 0;
+  #glyph = null;
   #scrub = null;
   #hoverRatio = null;
   #surfacePointer = "mouse";
@@ -141,6 +253,7 @@ class MediaPlayer extends HTMLElement {
     this.#controller?.abort();
     this.#controller = null;
     cancelAnimationFrame(this.#frame);
+    this.#glyph?.stop();
     clearTimeout(this.#idleTimer);
     this.#scrub = null;
     this.toggleAttribute("data-scrubbing", false);
@@ -298,7 +411,8 @@ class MediaPlayer extends HTMLElement {
       type: "button",
     });
 
-    toggle.append(icon("play"), icon("pause"));
+    this.#glyph = new PlayGlyph();
+    toggle.append(this.#glyph.svg);
     return toggle;
   }
 
@@ -858,6 +972,7 @@ class MediaPlayer extends HTMLElement {
     const playing = !media.paused && !media.ended;
 
     this.dataset.playerState = playing ? "playing" : "paused";
+    this.#glyph?.set(playing);
     this.toggleAttribute("data-ended", media.ended);
 
     if (!playing) {
