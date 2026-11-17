@@ -173,13 +173,14 @@ must be replaced by a link or a registered component.
 
 ```markdown
 ![Descriptive alternative text](assets/historical-experiment_photo.webp)
-
 *Figure 1 — Light figures produced by two perpendicular tuning forks.[^1]*
 ```
 
-A standalone image followed immediately by a fully italic paragraph becomes a
-lightbox figure and caption. An image without that paragraph becomes an
-uncaptioned figure.
+Text directly below a standalone image, with no blank line between them, becomes
+its caption inside a lightbox figure. Plain text and inline Markdown (italics,
+links, math, and footnotes) are supported. A blank line ends the caption; text
+after a blank line remains article prose. An image with no adjacent caption
+becomes an uncaptioned figure.
 
 Article and hero images must be stored in the local `assets/` folder beside
 the Markdown sources and referenced with a relative path. Remote image URLs

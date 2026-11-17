@@ -387,7 +387,14 @@ const getImageParagraph = (tokens, index) => {
     return { captionChildren: null, image: meaningful[0] };
   }
 
-  if (meaningful[1]?.type === "softbreak") {
+  // A caption belongs to the same Markdown paragraph: text on the line
+  // directly below the image, with no blank line. Accept Markdown hard breaks
+  // too, but never turn another image into caption content.
+  if (
+    ["softbreak", "hardbreak"].includes(meaningful[1]?.type) &&
+    meaningful.slice(2).some((child) => !["softbreak", "hardbreak"].includes(child.type)) &&
+    !meaningful.slice(2).some((child) => child.type === "image")
+  ) {
     return {
       captionChildren: meaningful.slice(2),
       image: meaningful[0],
@@ -395,25 +402,6 @@ const getImageParagraph = (tokens, index) => {
   }
 
   return null;
-};
-
-const getItalicCaption = (tokens, index) => {
-  const open = tokens[index];
-  const inline = tokens[index + 1];
-  const close = tokens[index + 2];
-  const children = inline?.children || [];
-
-  if (
-    open?.type !== "paragraph_open" ||
-    inline?.type !== "inline" ||
-    close?.type !== "paragraph_close" ||
-    children[0]?.type !== "em_open" ||
-    children.at(-1)?.type !== "em_close"
-  ) {
-    return null;
-  }
-
-  return children.slice(1, -1);
 };
 
 const renderMedia = ({
@@ -470,8 +458,7 @@ const installPostStructure = (md) => {
         continue;
       }
 
-      const trailingCaption = getItalicCaption(state.tokens, index + 3);
-      const captionChildren = media.captionChildren || trailingCaption;
+      const captionChildren = media.captionChildren;
       const captionHtml = captionChildren
         ? md.renderer.renderInline(captionChildren, md.options, state.env)
         : "";
@@ -491,8 +478,7 @@ const installPostStructure = (md) => {
       const replacement = new state.Token("html_block", "", 0);
       replacement.content = html;
       replacement.block = true;
-      const removeCount = trailingCaption ? 6 : 3;
-      state.tokens.splice(index, removeCount, replacement);
+      state.tokens.splice(index, 3, replacement);
     }
   });
 };

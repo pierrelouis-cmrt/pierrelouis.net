@@ -28,6 +28,4 @@ A nice counterpoint is **Henri Poincaré**. He argued that in mathematics we <u>
 
 ---
 
-For me, when asking whether maths was invented or discovered, we're missing the point entirely. The truth is that mathematics lives exactly in that tension. When you solve an equation, prove a theorem or even just balance a budget, you’re doing both at once. You’re using a human-made language, but you’re pushing up against constraints you didn’t choose. Something answers back.
-
-We invent the symbols; the universe decides which equations stay true.
+For me, when asking whether maths was invented or discovered, we're missing the point entirely. The truth is that mathematics lives exactly in that middle ground, blurry area. When you solve an equation or prove a theorem, you’re doing both at once. You’re using a human-made language, but you’re pushing up against constraints you didn’t choose. You choose the formalism, but you don't get to say what's true or false.

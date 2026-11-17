@@ -61,8 +61,7 @@ The template supplies the H1. This is an H2 and appears in the TOC.
 ## Images
 
 ![Alternative text describing the image](assets/example-portrait.webp)
-
-*A fully italic paragraph immediately after an image becomes its caption.[^1]*
+*Text directly below an image, without a blank line, becomes its caption.[^1]*
 
 ![[assets/example-uncaptioned.webp|Obsidian image embed alt text]]
 

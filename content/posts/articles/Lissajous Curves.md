@@ -11,25 +11,25 @@ tags:
 lang: en
 toc: auto
 ---
-## Obviously, it all begins with two physicists
+## The beginning
 
-The curves we call "Lissajous" actually have an earlier origin. In 1815, American mathematician Nathaniel Bowditch first described these patterns while studying pendulum motion.
+Like most of the times, it begins with two different scientists. 
 
-But it was French physicist Jules Antoine Lissajous who, in the 1850s, turned them into spectacle. His experiment was simple: mirrors attached to vibrating tuning forks, projecting beams of light onto screens in darkened lecture halls. Audiences could watch sound become "visible". The curves took his name and have remained scientifically useful ever since.
+The curves we call "Lissajous" actually have an earlier origin. In 1815, American mathematician Nathaniel Bowditch first described these curve patterns while studying pendulum motion.
+
+But it was the French physicist Jules Antoine Lissajous who, in the 1850s, made them visually beautiful. His experiment was simple: mirrors attached to vibrating tuning forks, projecting beams of light onto a screen. Sound, via light, became "visible". The curves took his name and are still pretty useful scientifically to this day.
 
 ![Historical image](historical_experiment_photo.webp)
-
 *Figure 1. Experiment of Lissajous. The light-figures produced by the compound vibrations of two tuning forks vibrating at different pitches. Source: Privat-Deschanel A. and de Ochoa y Ronna E., Tratado elemental de física, Hachette, Paris (1872), pp. 696–697 [^1]*
 
 ![Experiment](experiment_diagram.webp)
-
 *Figure 2. Modern recreation of Lissajous's experiment. Two tuning forks arranged at 90 degrees, each with a mirror on one tyne. A laser beam reflects off both mirrors in sequence; when the forks are struck, the beam traces a Lissajous pattern on the screen. Source: UC Berkeley Physics Lecture Demonstrations [^2]*
 
 ---
 
 ## The Mathematics
 
-A Lissajous curve appears when two perpendicular oscillations combine. Here is the math for those two oscillations:
+A Lissajous curve appears when two perpendicular oscillations (aka. waves) combine (thus the two tuning forks turned in different directions). Here is the math for those two oscillations:
 
 $$
 \begin{cases}
@@ -52,16 +52,16 @@ $$
 \frac{f_x}{f_y} = \frac{n_x f_0}{n_y f_0} = \frac{n_x}{n_y}
 $$
 
-where $n_x$ and $n_y$ are coprime integers. This ratio determines everything about the curve's structure. The value $f_0$ becomes the **frame rate**; the frequency at which the entire pattern repeats. Another way of seeing it: every $1/f_0$ seconds, the trajectory traces exactly the same path.
+where $n_x$ and $n_y$ are coprime integers (bare with me, it does get interesting). This ratio determines everything about the curve's structure (or at least most of it). The value $f_0$ becomes the **frame rate**; the frequency at which the entire pattern repeats. Another way of seeing it: every $1/f_0$ seconds, the trajectory traces exactly the same path.
 
 | Ratio $n_x : n_y$ | Result                                          |
 | ----------------- | ----------------------------------------------- |
 | $1:1$             | Ellipse (or circle, or line depending on phase) |
-| $1:2$             | Figure-eight shape                              |
-| $2:3$             | More complex closed loop                        |
+| $1:2$             | The shape of the number 8                       |
+| $2:3$             | More complex **closed** loop                    |
 | $1:\sqrt{2}$      | Never closes: fills the rectangle forever       |
 
-Simple ratios produce closed curves. Irrational ratios create paths that wander eternally without repeating.
+Simple ratios produce closed curves. Irrational ratios create random paths that never comes back to its starting point.
 
 ### The Phase Parameter $k$
 
@@ -71,7 +71,7 @@ $$
 k = \frac{4}{\pi}(n_x \phi_y - n_y \phi_x)
 $$
 
-This parameter has a period of 8, meaning $k$ and $k + 8$ produce identical figures. When $k$ is an integer, eight distinct basic figures exist for any given frequency ratio.
+This parameter has a period of 8, meaning $k$ and $k + 8$ produce identical figures. When $k$ is an integer, *eight distinct basic figures exist for any given frequency ratio*.
 
 Assuming $n_x > n_y$ and setting $\phi_x = 0$, the equations simplify to:
 
@@ -82,15 +82,14 @@ Y = A_y \cos\left(2\pi n_y f_0 t + \dfrac{k\pi}{4n_x}\right)
 \end{cases}
 $$
 
-The figure below shows how $k$ affects the trajectory for various frequency ratios. Notice that when $k = 2$ or $k = 6$, the figures achieve maximum symmetry: symmetric about both axes and the origin simultaneously.
+The figure below shows how $k$ affects the trajectory for various frequency ratios. Notice that when $k = 2$ or $k = 6$, the figures becomes as symmetrical as possible (about both axes and the origin at the same time).
 
 ![Lissajous basic graphs for different frequency ratios](curves_k.webp)
-
 *Figure 3. Lissajous basic graphs for frequency ratios $n_x : n_y$ of 1:1, 2:1, 3:1, 3:2, 4:3, 5:3, and 5:4 (rows) with phase parameter $k$ from 0 to 7 (columns). When $k$ is constant, trajectory density increases with frequency. At constant frequency ratio, different $k$ values produce different trajectory densities. Source: Wang et al., Microsystems & Nanoengineering (2020) [^3]*
 
 ### Symmetry Properties
 
-The symmetry of a Lissajous figure depends on the parity of $n_x$ and $n_y$:
+We can actually predict how symetrical a Lissajous curve will be based on the parity of $n_x$ and $n_y$:
 
 - When $n_x$ is even → symmetric about the $x$-axis
 - When $n_y$ is even → symmetric about the $y$-axis
@@ -104,17 +103,19 @@ $$
 
 where $m$ is any integer.
 
+That's it for the theorical part, let's see how is all of that useful.
+
 ### Fill Factor: Measuring Trajectory Density
 
-A critical property for applications is the **fill factor (FF)**. It's a measure of how densely the curve covers its bounding rectangle. Lissajous trajectories are characteristically dense at the edges and sparse near the center. The maximum gap appears in an approximate parallelogram containing the origin.
+A critical property for applications is the **fill factor (FF)**. It's a measure of how densely the curve covers its bounding rectangle. Lissajous trajectories are know to be dense at the edges and sparse near the center. Mathematically speaking, the maximum gap appears in an approximate parallelogram containing the origin.
 
-For scanning applications like LIDAR (e.g. self driving cars), minimizing this gap (or maximizing density) is super important. Research has shown that $k = 2$ produces optimal density for most frequency ratios, establishing a key design rule for Lissajous-based systems.
+For scanning applications like LIDAR (e.g. self driving cars), minimizing this gap (or maximizing density) is super important. Research has shown that $k = 2$ produces optimal density for most frequency ratios. I'll develop more on the various applications of the curves [here](##Applications) in that same article.
 
 ---
 
 ## Seeing Sound: The Music Connection
 
-Here's where Lissajous curves become magical: those frequency ratios *are* musical intervals.
+This is what Lissajous enderstood from the beginning: those frequency ratios *are* musical intervals.
 
 | Ratio | Musical Interval |
 |-------|------------------|
@@ -123,7 +124,7 @@ Here's where Lissajous curves become magical: those frequency ratios *are* music
 | $3:4$ | Perfect fourth |
 | $4:5$ | Major third |
 
-When two notes form a consonant harmony, their Lissajous figure is clean, closed, symmetrical. Dissonance produces chaos: curves that refuse to close.
+When two notes form a consonant harmony, their Lissajous figure is clean, closed, symmetrical. Dissonance produces chaos (the never closing curves we talked about previously).
 
 **You can literally see whether two notes sound good together.**
 
@@ -133,7 +134,7 @@ When two notes form a consonant harmony, their Lissajous figure is clean, closed
 
 ### The Victorian Way: Harmonographs
 
-Before computers, there were harmonographs: pendulum-driven drawing machines popular in the 1800s. Two or more pendulums swing in perpendicular directions, and a pen traces their combined motion onto paper.
+Before computers, there were harmonographs: pendulum-based drawing machines popular in the 1800s. Two or more pendulums swing in perpendicular directions, and a pen traces their combined motion onto paper.
 
 ### Simpler Experiments
 
@@ -141,7 +142,7 @@ Before computers, there were harmonographs: pendulum-driven drawing machines pop
 - **Laser on speakers**: Mount a mirror on one speaker cone, bounce a laser off it onto a wall, play two frequencies through stereo speakers (similar to how Lissajous did it)
 - **Oscilloscope**: Feed two audio signals into $X$ and $Y$ inputs (easy to do and actually useful)
 
-### The Modern Way: Code
+### The Modern Way: Code (of course I was going to talk about code)
 
 A few lines in Python will generate infinite variations:
 
@@ -170,22 +171,21 @@ Play with `nx`, `ny`, and `k`. Watch the curves change.
 
 ### Science and Engineering
 
-**Oscilloscopes** have used Lissajous figures since the early 20th century to compare signal frequencies. An unknown frequency fed into one axis, a known reference into the other. The resulting shape instantly reveals their ratio and thus the unknown frequency.
+**Oscilloscopes** have used Lissajous figures since the early 20th century to compare signal frequencies. An unknown frequency into one axis, a known reference into the other. The resulting shape instantly reveals their ratio and thus the frequency you're looking for.
 
 ### MEMS LIDAR and Laser Scanning
 
 Modern microelectromechanical systems (MEMS) scanning mirrors exploit Lissajous trajectories for solid-state LIDAR systems. By driving a two-axis mirror with sinusoidal waveforms at carefully chosen frequencies, engineers create scanning patterns that cover a field of view with predictable density and timing.
 
-That enables various applications from autonomous vehicle sensing to 3D imaging microscopy.
+It extremely useful, espcially for autonomous vehicle sensing or 3D imaging microscopy for example.
 
 ### Art and Design
 
-Perhaps the most famous Lissajous figure hidden in plain sight: the **ABC television logo**, a stylized $1:3$ ratio curve that has represented the network since 1965.
+Perhaps the most famous domain where Lissajous figure hide in plain sight: design. On of the most well know appearance of a Lissajous curve is the **ABC television logo**, a stylized $1:3$ ratio curve that has represented the network since 1965.
 
-More recently, Meta's 2021 rebrand introduced a logo that is essentially an infinite loop: a Lissajous-like figure rotated, representing connection and infinity.
+More recently, Meta's 2021 rebrand introduced a logo that is essentially an infinite loop: a Lissajous-like figure rotated 90° (close the a $2:1$ ratio curve).
 
 ![Meta Logo](meta-logo.svg)
-
 *Figure 4. Current Meta Logo [^4]*
 
 ---
@@ -200,23 +200,13 @@ $$
 Z = A_z \cos(2\pi f_z t + \phi_z)
 $$
 
-Now the curve spirals through 3D space. Depending on the frequency ratios, it can form true mathematical knots: curves that loop through themselves in ways that cannot be untangled without cutting.
+Now the curve is in 3D space. That was easy. Depending on the frequency ratios, it can form true mathematical knots: curves that loop through themselves in ways that cannot be untangled without cutting. Similar mathematically to the 2D closed curve patterns.
 
-These *Lissajous knots* have become a subject of serious topological study.
-
-### Related Patterns
-
-- **Spirograph toys** produce related curves called hypotrochoids and epitrochoids
-- Certain **orbital mechanics** problems produce figure-eight trajectories that echo Lissajous geometry
-- **Lissajous orbits** in space (around Lagrange points) share the name, though the mathematics differs
+These *Lissajous knots* have become a subject of topological study.
 
 ---
 
-## Living Curves
-
-Maths tends to be pretty abstract. The more you study it, the less visual it becomes. Lissajous curves change that. They straight up ask to be *experienced*.
-
-Try the online generator I built and play with the parameters by yourself.
+## It's so fun to play with the parameters, I had to make a simulator
 
 <pl-lissajous-lab class="post-media">
   <p class="post-component-fallback">The interactive Lissajous curve generator requires JavaScript.</p>
