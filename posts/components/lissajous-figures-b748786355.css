@@ -1,0 +1,458 @@
+/* Inline Lissajous figures. Monochrome, built from the site's colour tokens,
+   so Night Shift warms them through the tokens rather than a media filter. */
+
+:is(pl-lissajous-closure, pl-lissajous-gap, pl-lissajous-intervals) {
+  --lj-ink: var(--color-ink);
+  --lj-muted: var(--color-subtle);
+  --lj-rule: color-mix(in srgb, var(--color-subtle) 28%, var(--color-media-bg));
+  --lj-surface: var(--color-media-bg);
+
+  display: block;
+}
+
+:is(pl-lissajous-closure, pl-lissajous-gap, pl-lissajous-intervals)
+  > .post-component-fallback {
+  padding: var(--space-xl);
+  border: 1px solid var(--post-rule, var(--lj-rule));
+  border-radius: var(--post-media-radius, 8px);
+}
+
+.lj-figure {
+  margin: 0;
+  container-type: inline-size;
+}
+
+.lj-stage {
+  display: grid;
+  padding: clamp(20px, 5cqi, 44px) clamp(16px, 5cqi, 44px) var(--space-sm);
+  background: var(--lj-surface);
+}
+
+/* Plots ------------------------------------------------------------------ */
+
+.lj-plot {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: none;
+}
+
+.lj-plot__bounds {
+  fill: none;
+  stroke: var(--lj-rule);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.lj-curve {
+  fill: none;
+  stroke: var(--lj-ink);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.lj-closure .lj-curve {
+  stroke-opacity: 0.42;
+}
+
+.lj-curve--dense {
+  stroke-opacity: 0.5;
+}
+
+.lj-curve--swap {
+  opacity: 0;
+  transition: opacity 520ms var(--ease-out);
+}
+
+.lj-curve--swap.is-visible {
+  opacity: 1;
+}
+
+.lj-start {
+  fill: var(--lj-surface);
+  stroke: var(--lj-muted);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  transition:
+    fill var(--duration-medium) var(--ease-out),
+    stroke var(--duration-medium) var(--ease-out);
+}
+
+.is-closed .lj-start {
+  fill: var(--lj-ink);
+  stroke: var(--lj-ink);
+}
+
+.lj-pen {
+  fill: var(--lj-ink);
+}
+
+.lj-cell {
+  fill: color-mix(in srgb, var(--lj-ink) 10%, transparent);
+}
+
+.lj-disc {
+  fill: none;
+  stroke: var(--lj-ink);
+  stroke-dasharray: 2 3;
+  stroke-opacity: 0.7;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Closure ---------------------------------------------------------------- */
+
+.lj-closure__stage {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 6cqi, 56px);
+}
+
+.lj-closure__panel {
+  width: 100%;
+  max-width: 300px;
+  justify-self: center;
+}
+
+.lj-meta {
+  display: flex;
+  margin: var(--space-sm) 0 0;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  color: var(--lj-muted);
+  font-size: var(--font-size-micro);
+  line-height: var(--line-height-copy);
+  font-variant-numeric: tabular-nums;
+}
+
+.lj-meta__ratio {
+  color: var(--lj-ink);
+}
+
+/* Controls --------------------------------------------------------------- */
+
+.lj-controls {
+  display: flex;
+  min-height: 44px;
+  padding: 0 var(--space-md) var(--space-xs);
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 var(--space-md);
+  background: var(--lj-surface);
+  color: var(--lj-muted);
+  font-size: var(--font-size-micro);
+  line-height: var(--line-height-copy);
+}
+
+.lj-timebar {
+  position: relative;
+  height: 1px;
+  min-width: 80px;
+  flex: 1;
+  overflow: hidden;
+  background: var(--lj-rule);
+}
+
+.lj-timebar__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--lj-ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.lj-clock {
+  min-width: 7ch;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.lj-gap .lj-controls {
+  display: grid;
+  grid-template-areas: "chips clock toggle";
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.lj-gap .lj-chips {
+  grid-area: chips;
+}
+
+.lj-gap .lj-clock {
+  min-width: 0;
+  overflow: hidden;
+  grid-area: clock;
+  text-align: right;
+  text-overflow: ellipsis;
+}
+
+.lj-gap .lj-button {
+  grid-area: toggle;
+}
+
+.lj-button,
+.lj-chip {
+  display: inline-flex;
+  min-height: var(--touch-target-compact);
+  padding: 0 var(--space-sm);
+  align-items: center;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--lj-muted);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.lj-button {
+  margin-inline: calc(var(--space-sm) * -0.5);
+}
+
+.lj-button[hidden] {
+  display: none;
+}
+
+.lj-chips {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: calc(var(--space-sm) * -1);
+}
+
+.lj-chip[aria-pressed="true"] {
+  color: var(--lj-ink);
+  background: var(--color-bg);
+}
+
+.lj-button:focus-visible,
+.lj-chip:focus-visible,
+.lj-key:focus-visible {
+  outline: 1px solid var(--lj-ink);
+  outline-offset: 2px;
+  color: var(--lj-ink);
+}
+
+@media (any-hover: hover) and (any-pointer: fine) {
+  .lj-button:hover,
+  .lj-chip:hover {
+    color: var(--lj-ink);
+  }
+}
+
+.lj-caption {
+  margin: 0;
+}
+
+/* Gap -------------------------------------------------------------------- */
+
+.lj-gap .lj-plot {
+  max-width: 380px;
+  justify-self: center;
+}
+
+/* Intervals -------------------------------------------------------------- */
+
+.lj-intervals__stage {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(20px, 6cqi, 48px);
+}
+
+.lj-intervals .lj-plot {
+  max-width: 280px;
+  justify-self: center;
+}
+
+.lj-intervals__panel {
+  min-width: 0;
+}
+
+.lj-intervals__name {
+  color: var(--lj-ink);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-compact);
+}
+
+.lj-facts {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 2px var(--space-md);
+  margin: var(--space-md) 0 0;
+  font-size: var(--font-size-micro);
+  line-height: var(--line-height-copy);
+  font-variant-numeric: tabular-nums;
+}
+
+.lj-facts dt {
+  color: var(--lj-muted);
+}
+
+.lj-facts dd {
+  margin: 0;
+  color: var(--lj-ink);
+}
+
+.lj-intervals__status {
+  margin-top: var(--space-md);
+  color: var(--color-caption);
+  font-size: var(--font-size-micro);
+  line-height: var(--line-height-copy);
+  text-wrap: pretty;
+}
+
+.lj-keys {
+  --white-keys: 8;
+
+  position: relative;
+  height: 104px;
+  padding: 0;
+  background: var(--lj-surface);
+  border-inline: var(--space-md) solid var(--lj-surface);
+  border-block: var(--space-md) solid var(--lj-surface);
+}
+
+.lj-key {
+  position: absolute;
+  top: 0;
+  left: calc(var(--key-index) * 100% / var(--white-keys));
+  display: flex;
+  padding: 0 0 6px;
+  align-items: flex-end;
+  justify-content: center;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lj-key--white {
+  z-index: 1;
+  width: calc(100% / var(--white-keys));
+  height: 100%;
+  border: 1px solid var(--lj-rule);
+  border-radius: 0 0 4px 4px;
+  background: var(--color-bg);
+}
+
+.lj-key--white + .lj-key--white,
+.lj-key--black + .lj-key--white {
+  border-left-width: 0;
+}
+
+.lj-key--black {
+  z-index: 2;
+  width: calc(0.64 * 100% / var(--white-keys));
+  height: 60%;
+  border-radius: 0 0 3px 3px;
+  background: var(--lj-ink);
+}
+
+.lj-key__label {
+  color: var(--lj-muted);
+  font-size: 10px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Selected note: a solid bar at the struck end of the key. */
+.lj-key::after {
+  position: absolute;
+  right: 22%;
+  bottom: 20px;
+  left: 22%;
+  height: 3px;
+  border-radius: 2px;
+  content: "";
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.lj-key--white::after {
+  background: var(--lj-ink);
+}
+
+.lj-key--black::after {
+  bottom: 8px;
+  background: var(--color-bg);
+}
+
+.lj-key[aria-checked="true"]::after {
+  opacity: 1;
+}
+
+/* Fixed root, C4: a small ring above its label. */
+.lj-key.is-root::before {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border: 1px solid var(--lj-muted);
+  border-radius: 50%;
+  content: "";
+}
+
+@media (any-hover: hover) and (any-pointer: fine) {
+  .lj-key--white:hover {
+    background: color-mix(in srgb, var(--lj-ink) 4%, var(--color-bg));
+  }
+
+  .lj-key--black:hover {
+    background: color-mix(in srgb, var(--lj-ink) 82%, var(--color-bg));
+  }
+}
+
+.lj-key--white:active {
+  background: color-mix(in srgb, var(--lj-ink) 8%, var(--color-bg));
+}
+
+.lj-intervals .lj-controls {
+  justify-content: space-between;
+}
+
+@container (max-width: 520px) {
+  .lj-intervals__stage {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lj-intervals .lj-plot {
+    max-width: 220px;
+  }
+
+  .lj-closure__stage {
+    gap: var(--space-lg);
+  }
+
+  .lj-meta {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Presets and Pause share the first row; the measurement gets its own. */
+  .lj-gap .lj-controls {
+    grid-template-areas:
+      "chips toggle"
+      "clock clock";
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding-bottom: var(--space-sm);
+  }
+
+  .lj-gap .lj-clock {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lj-curve--swap,
+  .lj-start,
+  .lj-key,
+  .lj-key::after {
+    transition: none;
+  }
+}
