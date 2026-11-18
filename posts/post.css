@@ -1438,6 +1438,14 @@ body.has-post-lightbox-open {
     display: none;
   }
 
+  /* Returning from a footnote scrolls up, which brings the header back, so
+     the reference must clear both the header and the stuck TOC bar. */
+  .post-page:has(.post-toc:not([hidden])) .post-footnote-ref {
+    scroll-margin-top: calc(
+      var(--mobile-header-height) + var(--post-toc-height) + var(--space-xl)
+    );
+  }
+
   .post-toc__mobile {
     position: fixed;
     top: var(--post-toc-sticky-top);
