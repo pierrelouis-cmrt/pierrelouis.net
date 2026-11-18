@@ -334,7 +334,7 @@ const installFootnotes = (md) => {
   md.renderer.rules.footnote_close = () => "</li>\n";
   md.renderer.rules.footnote_anchor = (tokens, index) => {
     const id = idFor(tokens[index]);
-    return ` <a class="post-footnote-backref" href="#footnote-ref-${id}" aria-label="Return to footnote ${id} reference">↩</a>`;
+    return ` <a class="post-footnote-backref" href="#footnote-ref-${id}" aria-label="Return to footnote ${id} reference"><svg class="post-footnote-backref__icon" viewBox="0 0 12 12" width="12" height="12" aria-hidden="true" focusable="false"><path d="M10 2.5v3.25a2 2 0 0 1-2 2H2.75M5.25 5 2.5 7.75l2.75 2.75" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`;
   };
 };
 

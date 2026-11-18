@@ -1183,6 +1183,8 @@
 
 .post-footnotes__item p {
   margin: 0;
+  /* Long bare URLs must break instead of pushing past the viewport. */
+  overflow-wrap: anywhere;
 }
 
 .post-footnotes__item,
@@ -1198,6 +1200,14 @@
   display: inline-block;
   color: var(--color-subtle);
   text-decoration: none;
+}
+
+/* An SVG, not the ↩ glyph: iOS swaps that character for an emoji. */
+.post-footnote-backref__icon {
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  vertical-align: -0.05em;
 }
 
 @keyframes post-footnote-return-blink {
@@ -1566,6 +1576,17 @@ body.has-post-lightbox-open {
 @media (max-width: 760px) {
   .post-page {
     --post-media-overhang: 0px;
+  }
+
+  /* Stack the "Figure / 01" label above the caption so long captions keep
+     the full strip width. */
+  .post-caption {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+
+  .post-caption__index {
+    order: -1;
   }
 
   .post-lightbox__close {
